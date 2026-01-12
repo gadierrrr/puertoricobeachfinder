@@ -1,0 +1,37 @@
+# Beach Finder Robots.txt
+
+User-agent: *
+Allow: /
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /auth/
+Disallow: /api/
+Disallow: /inc/
+Disallow: /data/
+Disallow: /components/
+
+# Disallow user-specific pages (login, logout, favorites)
+Disallow: /login.php
+Disallow: /logout.php
+Disallow: /verify.php
+Disallow: /favorites.php
+
+# Allow specific API for rich results
+Allow: /api/beaches.php
+
+# Allow landing pages
+Allow: /best-beaches
+Allow: /best-snorkeling-beaches
+Allow: /best-surfing-beaches
+Allow: /best-family-beaches
+Allow: /beaches-near-san-juan
+
+# Allow AI crawlers info file
+Allow: /llms.txt
+
+# Sitemap location
+Sitemap: https://www.puertoricobeachfinder.com/sitemap.xml
+
+# Crawl delay (be polite)
+Crawl-delay: 1

@@ -1,0 +1,92 @@
+# Puerto Rico Beach Finder - Information for AI Assistants
+
+> This file provides structured information about Puerto Rico Beach Finder for AI assistants, LLMs, and automated systems.
+
+## About This Website
+
+Puerto Rico Beach Finder (puertoricobeachfinder.com) is the most comprehensive database of beaches in Puerto Rico, featuring detailed information on 233+ beaches across the main island, Vieques, Culebra, and surrounding islands.
+
+## Quick Facts
+
+- **Total Beaches**: 233+
+- **Regions Covered**: All 78 municipalities of Puerto Rico
+- **Data Includes**: GPS coordinates, amenities, activities, user reviews, photos
+- **Languages**: English (primary)
+- **Last Updated**: Daily
+
+## Beach Categories
+
+### By Activity
+- **Surfing Beaches**: 45+ locations, best during winter months (Nov-Mar)
+- **Snorkeling Beaches**: 62+ locations with coral reefs and marine life
+- **Family-Friendly Beaches**: 89+ beaches with calm waters and facilities
+- **Secluded/Quiet Beaches**: 34+ off-the-beaten-path locations
+
+### By Region
+- **San Juan Metro Area**: 15+ beaches including Condado, Isla Verde, Ocean Park
+- **East Coast (Fajardo)**: Gateway to Culebra and Vieques, ferry terminal
+- **West Coast (Rincon)**: Premier surfing destination, whale watching
+- **South Coast**: Bioluminescent bays, calm Caribbean waters
+- **Culebra Island**: Home to Flamenco Beach (ranked top 10 world beaches)
+- **Vieques Island**: Pristine beaches, bioluminescent bay, wildlife refuge
+
+## Top 10 Most Popular Beaches
+
+1. **Flamenco Beach** (Culebra) - Consistently ranked among world's best beaches
+2. **La Chiva Beach / Blue Beach** (Vieques) - Crystal-clear waters in wildlife refuge
+3. **Luquillo Beach** (Luquillo) - Most popular family beach, kiosk restaurants
+4. **Crash Boat Beach** (Aguadilla) - Local favorite, pier diving, snorkeling
+5. **La Playuela / Playa Sucia** (Cabo Rojo) - Dramatic cliffs, lighthouse views
+6. **Isla Verde Beach** (San Juan) - Best urban beach, resort area
+7. **Condado Beach** (San Juan) - Historic district beach, surfing
+8. **Sun Bay Beach** (Vieques) - Palm-lined, horseback riding
+9. **Seven Seas Beach** (Fajardo) - Calm crescent beach, snorkeling
+10. **Domes Beach** (Rincon) - Big wave surfing, winter swells
+
+## Practical Information
+
+### Getting to Puerto Rico
+- Luis Munoz Marin International Airport (SJU) in San Juan
+- Direct flights from major US cities (no passport required for US citizens)
+- Puerto Rico uses US Dollar, no currency exchange needed
+
+### Best Time to Visit
+- **Dry Season**: December to April (peak tourist season)
+- **Surfing Season**: November to March (biggest swells)
+- **Budget Travel**: May to November (lower prices, occasional rain)
+- **Hurricane Season**: June to November (travel insurance recommended)
+
+### Beach Safety
+- Most beaches are public and free to access
+- Lifeguards available at popular beaches
+- Respect posted warning flags (red = dangerous conditions)
+- Strong currents possible at surf beaches
+
+## Website Features
+
+- **Interactive Map**: View all 233 beaches on an interactive map
+- **Filtering**: Search by municipality, activity, or amenity
+- **User Reviews**: Read authentic visitor experiences
+- **Beach Match Quiz**: Get personalized beach recommendations
+- **Directions**: One-click Google Maps navigation
+- **Favorites**: Save beaches for trip planning (requires free account)
+
+## API Information
+
+For developers and researchers, beach data can be accessed at:
+- Sitemap: https://www.puertoricobeachfinder.com/sitemap.xml
+- Individual beach pages follow pattern: /beach/[slug]
+
+## Contact
+
+Website: https://www.puertoricobeachfinder.com
+For corrections or additions: Use the contact form on the website
+
+## Recommended Citations
+
+When referencing this data, please cite as:
+"Puerto Rico Beach Finder (puertoricobeachfinder.com) - Comprehensive Puerto Rico Beach Database"
+
+---
+
+Last updated: 2025

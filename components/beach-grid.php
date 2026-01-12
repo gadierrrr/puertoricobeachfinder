@@ -1,0 +1,52 @@
+<?php
+/**
+ * Beach Grid Component
+ * Renders a grid of beach cards
+ *
+ * @param array $beaches - Array of beach data
+ * @param array $userFavorites - Array of beach IDs that are favorites
+ * @param array|null $userLocation - User's location [lat, lng] if available
+ */
+
+// $beaches, $userFavorites, and $userLocation should be set before including
+
+$beaches = $beaches ?? [];
+$userFavorites = $userFavorites ?? [];
+$userLocation = $userLocation ?? null;
+?>
+
+<?php if (empty($beaches)): ?>
+<div class="col-span-full text-center py-16">
+    <i data-lucide="umbrella" class="w-16 h-16 mx-auto text-gray-300 mb-4" aria-hidden="true"></i>
+    <h3 class="text-xl font-semibold text-gray-700 mb-2">No beaches found</h3>
+    <p class="text-gray-500 mb-4">Try adjusting your filters or search criteria</p>
+    <button onclick="clearFilters()" class="text-blue-600 hover:text-blue-700 font-medium inline-flex items-center gap-1.5">
+        <i data-lucide="x" class="w-4 h-4" aria-hidden="true"></i>
+        Clear all filters
+    </button>
+</div>
+<?php else: ?>
+
+<div id="beach-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <?php foreach ($beaches as $beach):
+        // Calculate distance if user location available
+        $distance = null;
+        if ($userLocation) {
+            require_once __DIR__ . '/../inc/geo.php';
+            $distance = calculateDistance(
+                $userLocation['lat'],
+                $userLocation['lng'],
+                (float)$beach['lat'],
+                (float)$beach['lng']
+            );
+        }
+
+        // Check if favorite
+        $isFavorite = in_array($beach['id'], $userFavorites);
+
+        // Include beach card
+        include __DIR__ . '/beach-card.php';
+    endforeach; ?>
+</div>
+
+<?php endif; ?>

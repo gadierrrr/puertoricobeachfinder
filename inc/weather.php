@@ -1,0 +1,340 @@
+<?php
+/**
+ * Weather Service
+ * Fetches and caches weather data from Open-Meteo API
+ */
+
+require_once __DIR__ . '/db.php';
+
+/**
+ * Get weather data for a beach location
+ *
+ * @param float $lat Latitude
+ * @param float $lng Longitude
+ * @return array|null Weather data or null on error
+ */
+function getWeatherForLocation(float $lat, float $lng): ?array {
+    // Round coordinates to 2 decimals for caching (approximately 1km accuracy)
+    $cacheKey = round($lat, 2) . '_' . round($lng, 2);
+
+    // Check cache first
+    $cached = getWeatherFromCache($cacheKey);
+    if ($cached !== null) {
+        return $cached;
+    }
+
+    // Fetch fresh data
+    $weather = fetchWeatherFromApi($lat, $lng);
+    if ($weather !== null) {
+        saveWeatherToCache($cacheKey, $weather);
+    }
+
+    return $weather;
+}
+
+/**
+ * Get weather from cache
+ */
+function getWeatherFromCache(string $cacheKey): ?array {
+    $db = getDb();
+    $stmt = $db->prepare("
+        SELECT weather_data FROM weather_cache
+        WHERE location_key = :key AND expires_at > datetime('now')
+    ");
+    $stmt->bindValue(':key', $cacheKey, SQLITE3_TEXT);
+    $result = $stmt->execute();
+    $row = $result->fetchArray(SQLITE3_ASSOC);
+
+    if ($row) {
+        return json_decode($row['weather_data'], true);
+    }
+    return null;
+}
+
+/**
+ * Save weather to cache
+ */
+function saveWeatherToCache(string $cacheKey, array $weather): void {
+    $db = getDb();
+
+    // Cache for 30 minutes
+    $expiresAt = date('Y-m-d H:i:s', strtotime('+30 minutes'));
+
+    $stmt = $db->prepare("
+        INSERT OR REPLACE INTO weather_cache (location_key, weather_data, fetched_at, expires_at)
+        VALUES (:key, :data, datetime('now'), :expires)
+    ");
+    $stmt->bindValue(':key', $cacheKey, SQLITE3_TEXT);
+    $stmt->bindValue(':data', json_encode($weather), SQLITE3_TEXT);
+    $stmt->bindValue(':expires', $expiresAt, SQLITE3_TEXT);
+    $stmt->execute();
+}
+
+/**
+ * Fetch weather from Open-Meteo API
+ */
+function fetchWeatherFromApi(float $lat, float $lng): ?array {
+    $url = sprintf(
+        'https://api.open-meteo.com/v1/forecast?' .
+        'latitude=%s&longitude=%s' .
+        '&current=temperature_2m,relative_humidity_2m,apparent_temperature,' .
+        'precipitation,rain,weather_code,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m,uv_index' .
+        '&hourly=temperature_2m,precipitation_probability,weather_code,uv_index' .
+        '&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_probability_max' .
+        '&timezone=America/Puerto_Rico' .
+        '&forecast_days=3',
+        $lat,
+        $lng
+    );
+
+    $context = stream_context_create([
+        'http' => [
+            'timeout' => 5,
+            'ignore_errors' => true
+        ]
+    ]);
+
+    $response = @file_get_contents($url, false, $context);
+    if ($response === false) {
+        error_log("Weather API request failed for $lat, $lng");
+        return null;
+    }
+
+    $data = json_decode($response, true);
+    if (!$data || isset($data['error'])) {
+        error_log("Weather API error: " . ($data['reason'] ?? 'Unknown'));
+        return null;
+    }
+
+    return parseWeatherResponse($data);
+}
+
+/**
+ * Parse API response into a cleaner format
+ */
+function parseWeatherResponse(array $data): array {
+    $current = $data['current'] ?? [];
+    $daily = $data['daily'] ?? [];
+    $hourly = $data['hourly'] ?? [];
+
+    // Get next 12 hours of hourly data
+    $hourlyForecast = [];
+    $currentHour = (int)date('G');
+    for ($i = 0; $i < 12 && $i < count($hourly['time'] ?? []); $i++) {
+        $hourlyForecast[] = [
+            'time' => $hourly['time'][$i] ?? '',
+            'temp' => $hourly['temperature_2m'][$i] ?? null,
+            'precipitation_probability' => $hourly['precipitation_probability'][$i] ?? 0,
+            'weather_code' => $hourly['weather_code'][$i] ?? 0,
+            'uv_index' => $hourly['uv_index'][$i] ?? 0
+        ];
+    }
+
+    // Get 3-day forecast
+    $dailyForecast = [];
+    for ($i = 0; $i < count($daily['time'] ?? []); $i++) {
+        $dailyForecast[] = [
+            'date' => $daily['time'][$i] ?? '',
+            'weather_code' => $daily['weather_code'][$i] ?? 0,
+            'temp_max' => $daily['temperature_2m_max'][$i] ?? null,
+            'temp_min' => $daily['temperature_2m_min'][$i] ?? null,
+            'sunrise' => $daily['sunrise'][$i] ?? '',
+            'sunset' => $daily['sunset'][$i] ?? '',
+            'uv_index_max' => $daily['uv_index_max'][$i] ?? 0,
+            'precipitation_probability' => $daily['precipitation_probability_max'][$i] ?? 0
+        ];
+    }
+
+    return [
+        'current' => [
+            'temperature' => $current['temperature_2m'] ?? null,
+            'feels_like' => $current['apparent_temperature'] ?? null,
+            'humidity' => $current['relative_humidity_2m'] ?? null,
+            'precipitation' => $current['precipitation'] ?? 0,
+            'rain' => $current['rain'] ?? 0,
+            'weather_code' => $current['weather_code'] ?? 0,
+            'cloud_cover' => $current['cloud_cover'] ?? 0,
+            'wind_speed' => $current['wind_speed_10m'] ?? 0,
+            'wind_direction' => $current['wind_direction_10m'] ?? 0,
+            'wind_gusts' => $current['wind_gusts_10m'] ?? 0,
+            'uv_index' => $current['uv_index'] ?? 0,
+            'description' => getWeatherDescription($current['weather_code'] ?? 0),
+            'icon' => getWeatherIcon($current['weather_code'] ?? 0),
+            'beach_score' => calculateBeachScore($current)
+        ],
+        'hourly' => $hourlyForecast,
+        'daily' => $dailyForecast,
+        'sunrise' => $daily['sunrise'][0] ?? null,
+        'sunset' => $daily['sunset'][0] ?? null
+    ];
+}
+
+/**
+ * Get weather description from WMO code
+ */
+function getWeatherDescription(int $code): string {
+    $descriptions = [
+        0 => 'Clear sky',
+        1 => 'Mainly clear',
+        2 => 'Partly cloudy',
+        3 => 'Overcast',
+        45 => 'Foggy',
+        48 => 'Depositing rime fog',
+        51 => 'Light drizzle',
+        53 => 'Moderate drizzle',
+        55 => 'Dense drizzle',
+        61 => 'Slight rain',
+        63 => 'Moderate rain',
+        65 => 'Heavy rain',
+        66 => 'Light freezing rain',
+        67 => 'Heavy freezing rain',
+        71 => 'Slight snow',
+        73 => 'Moderate snow',
+        75 => 'Heavy snow',
+        77 => 'Snow grains',
+        80 => 'Slight rain showers',
+        81 => 'Moderate rain showers',
+        82 => 'Violent rain showers',
+        85 => 'Slight snow showers',
+        86 => 'Heavy snow showers',
+        95 => 'Thunderstorm',
+        96 => 'Thunderstorm with slight hail',
+        99 => 'Thunderstorm with heavy hail'
+    ];
+
+    return $descriptions[$code] ?? 'Unknown';
+}
+
+/**
+ * Get weather icon emoji from WMO code
+ */
+function getWeatherIcon(int $code): string {
+    if ($code === 0) return '☀️';
+    if ($code <= 3) return '⛅';
+    if ($code <= 48) return '🌫️';
+    if ($code <= 55) return '🌧️';
+    if ($code <= 65) return '🌧️';
+    if ($code <= 67) return '🌨️';
+    if ($code <= 77) return '❄️';
+    if ($code <= 82) return '🌦️';
+    if ($code <= 86) return '🌨️';
+    if ($code >= 95) return '⛈️';
+    return '🌤️';
+}
+
+/**
+ * Calculate beach score (0-100) based on current conditions
+ * Higher = better beach weather
+ */
+function calculateBeachScore(array $current): int {
+    $score = 100;
+
+    // Temperature (ideal: 26-32°C for beach)
+    $temp = $current['temperature_2m'] ?? 25;
+    if ($temp < 20) $score -= 30;
+    elseif ($temp < 24) $score -= 15;
+    elseif ($temp > 35) $score -= 20;
+    elseif ($temp > 32) $score -= 10;
+
+    // Rain (bad for beach)
+    $rain = $current['rain'] ?? 0;
+    if ($rain > 5) $score -= 40;
+    elseif ($rain > 1) $score -= 25;
+    elseif ($rain > 0) $score -= 10;
+
+    // Wind (high wind not ideal)
+    $wind = $current['wind_speed_10m'] ?? 0;
+    if ($wind > 40) $score -= 30;
+    elseif ($wind > 25) $score -= 15;
+    elseif ($wind > 15) $score -= 5;
+
+    // Cloud cover
+    $clouds = $current['cloud_cover'] ?? 0;
+    if ($clouds > 80) $score -= 15;
+    elseif ($clouds > 50) $score -= 5;
+
+    // UV Index (very high can be dangerous)
+    $uv = $current['uv_index'] ?? 5;
+    if ($uv > 10) $score -= 10;
+
+    return max(0, min(100, $score));
+}
+
+/**
+ * Get UV index level and safety message
+ */
+function getUVLevel(float $uvIndex): array {
+    if ($uvIndex < 3) {
+        return ['level' => 'Low', 'color' => 'green', 'message' => 'Minimal protection needed'];
+    } elseif ($uvIndex < 6) {
+        return ['level' => 'Moderate', 'color' => 'yellow', 'message' => 'Wear sunscreen SPF 30+'];
+    } elseif ($uvIndex < 8) {
+        return ['level' => 'High', 'color' => 'orange', 'message' => 'Reduce sun exposure 10am-4pm'];
+    } elseif ($uvIndex < 11) {
+        return ['level' => 'Very High', 'color' => 'red', 'message' => 'Extra protection essential'];
+    } else {
+        return ['level' => 'Extreme', 'color' => 'purple', 'message' => 'Avoid sun exposure'];
+    }
+}
+
+/**
+ * Get wind direction as compass point
+ */
+function getWindDirection(int $degrees): string {
+    $directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+    $index = round($degrees / 22.5) % 16;
+    return $directions[$index];
+}
+
+/**
+ * Format sunrise/sunset time
+ */
+function formatSunTime(string $isoTime): string {
+    if (empty($isoTime)) return '';
+    return date('g:i A', strtotime($isoTime));
+}
+
+/**
+ * Get beach day recommendation based on weather
+ */
+function getBeachRecommendation(array $weather): array {
+    $score = $weather['current']['beach_score'] ?? 50;
+    $uv = $weather['current']['uv_index'] ?? 5;
+    $rain = $weather['current']['rain'] ?? 0;
+    $wind = $weather['current']['wind_speed'] ?? 0;
+
+    if ($score >= 80) {
+        return [
+            'verdict' => 'Perfect Beach Day',
+            'icon' => '🏖️',
+            'color' => 'green',
+            'message' => 'Ideal conditions for the beach!'
+        ];
+    } elseif ($score >= 60) {
+        $tips = [];
+        if ($uv > 7) $tips[] = 'UV is high - bring sunscreen';
+        if ($wind > 15) $tips[] = 'Breezy - great for water sports';
+
+        return [
+            'verdict' => 'Good Beach Day',
+            'icon' => '👍',
+            'color' => 'blue',
+            'message' => implode('. ', $tips) ?: 'Enjoy the beach!'
+        ];
+    } elseif ($score >= 40) {
+        return [
+            'verdict' => 'Fair Conditions',
+            'icon' => '🤔',
+            'color' => 'yellow',
+            'message' => 'Check the forecast - conditions may vary'
+        ];
+    } else {
+        $reason = $rain > 1 ? 'Rain expected' : ($wind > 25 ? 'High winds' : 'Poor conditions');
+        return [
+            'verdict' => 'Not Ideal',
+            'icon' => '⚠️',
+            'color' => 'red',
+            'message' => $reason . ' - consider indoor activities'
+        ];
+    }
+}

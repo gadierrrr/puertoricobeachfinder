@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+
+# Database
+data/*.db
+data/*.db-wal
+data/*.db-shm
+*.backup-*
+
+# Logs
+logs/
+
+# Editor/IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.bak
