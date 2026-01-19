@@ -10,6 +10,7 @@
  * @param int $maxDistance - Max distance filter in km
  */
 
+require_once __DIR__ . '/../inc/helpers.php';
 require_once __DIR__ . '/../inc/constants.php';
 
 $selectedTags = $selectedTags ?? [];

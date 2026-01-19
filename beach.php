@@ -424,10 +424,65 @@ include __DIR__ . '/components/header.php';
                 </div>
                 <?php endif; ?>
             </div>
+
+            <!-- Similar Beaches -->
+            <?php
+            $similarBeaches = getSimilarBeaches($beach['id'], $beach['tags'], 4);
+            if (!empty($similarBeaches)):
+            ?>
+            <div class="pt-8">
+                <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <i data-lucide="sparkles" class="w-5 h-5 text-blue-600" aria-hidden="true"></i>
+                    Similar Beaches You Might Like
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <?php foreach ($similarBeaches as $similar): ?>
+                    <a href="/beach/<?= h($similar['slug']) ?>"
+                       class="group bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                        <div class="aspect-video relative overflow-hidden">
+                            <img src="<?= h(getThumbnailUrl($similar['cover_image'])) ?>"
+                                 alt="<?= h($similar['name']) ?>"
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                 loading="lazy">
+                            <?php if ($similar['shared_tags'] > 1): ?>
+                            <span class="absolute top-2 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
+                                <?= $similar['shared_tags'] ?> shared tags
+                            </span>
+                            <?php endif; ?>
+                        </div>
+                        <div class="p-3">
+                            <h3 class="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-1">
+                                <?= h($similar['name']) ?>
+                            </h3>
+                            <p class="text-sm text-gray-500"><?= h($similar['municipality']) ?></p>
+                            <?php if ($similar['google_rating']): ?>
+                            <div class="flex items-center gap-1 mt-1">
+                                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path fill="#FACC15" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                <span class="text-sm font-medium text-amber-700"><?= number_format($similar['google_rating'], 1) ?></span>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                    </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php endif; ?>
         </div>
 
         <!-- Sidebar -->
         <div class="space-y-6">
+
+            <!-- Weather Widget -->
+            <?php
+            require_once __DIR__ . '/inc/weather.php';
+            $weather = getWeatherForLocation($beach['lat'], $beach['lng']);
+            if ($weather):
+                $size = 'full';
+                include __DIR__ . '/components/weather-widget.php';
+            endif;
+            ?>
 
             <!-- Conditions Card -->
             <?php if ($beach['sargassum'] || $beach['surf'] || $beach['wind']): ?>
@@ -483,6 +538,37 @@ include __DIR__ . '/components/header.php';
                 </button>
             </div>
             <?php endif; ?>
+
+            <!-- Live Check-Ins Card -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-gray-900 flex items-center gap-2">
+                        <i data-lucide="radio" class="w-4 h-4 text-green-500" aria-hidden="true"></i>
+                        <span>Live Updates</span>
+                    </h3>
+                    <?php if (isAuthenticated()): ?>
+                    <button onclick="openCheckinModal('<?= h($beach['id']) ?>', '<?= h(addslashes($beach['name'])) ?>')"
+                            class="text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg font-medium transition-colors flex items-center gap-1">
+                        <i data-lucide="map-pin" class="w-3.5 h-3.5" aria-hidden="true"></i>
+                        <span>Check In</span>
+                    </button>
+                    <?php else: ?>
+                    <a href="/login.php?redirect=<?= urlencode('/beach/' . $beach['slug']) ?>"
+                       class="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                        Sign in to check in
+                    </a>
+                    <?php endif; ?>
+                </div>
+
+                <div id="checkins-list"
+                     hx-get="/api/checkin.php?beach_id=<?= h($beach['id']) ?>&limit=5"
+                     hx-trigger="load"
+                     hx-swap="innerHTML">
+                    <div class="text-center py-4">
+                        <div class="animate-pulse text-gray-400">Loading...</div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Amenities Card -->
             <?php if (!empty($beach['amenities'])): ?>
@@ -844,6 +930,319 @@ async function submitReport(event) {
 // Close on escape
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeReportModal();
+});
+</script>
+
+<!-- Check-In Modal -->
+<div id="checkin-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4"
+     role="dialog" aria-modal="true" onclick="closeCheckinModal()">
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+        <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+            <h2 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                <i data-lucide="map-pin" class="w-5 h-5 text-green-600"></i>
+                <span>Check In</span>
+            </h2>
+            <button onclick="closeCheckinModal()" class="text-gray-400 hover:text-gray-600 p-1" aria-label="Close">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <form id="checkin-form" class="p-6 space-y-5" onsubmit="submitCheckin(event)">
+            <input type="hidden" name="beach_id" id="checkin-beach-id">
+            <input type="hidden" name="csrf_token" value="<?= h(csrfToken()) ?>">
+
+            <p class="text-sm text-gray-600">
+                Share what you're seeing at <strong id="checkin-beach-name"></strong> right now!
+            </p>
+
+            <!-- Crowd Level -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">How crowded is it?</label>
+                <div class="grid grid-cols-5 gap-2">
+                    <label class="checkin-option">
+                        <input type="radio" name="crowd_level" value="empty" class="sr-only">
+                        <div class="checkin-option-box">
+                            <span class="text-lg">🏝️</span>
+                            <span class="text-xs">Empty</span>
+                        </div>
+                    </label>
+                    <label class="checkin-option">
+                        <input type="radio" name="crowd_level" value="light" class="sr-only">
+                        <div class="checkin-option-box">
+                            <span class="text-lg">👥</span>
+                            <span class="text-xs">Light</span>
+                        </div>
+                    </label>
+                    <label class="checkin-option">
+                        <input type="radio" name="crowd_level" value="moderate" class="sr-only">
+                        <div class="checkin-option-box">
+                            <span class="text-lg">👥👥</span>
+                            <span class="text-xs">Moderate</span>
+                        </div>
+                    </label>
+                    <label class="checkin-option">
+                        <input type="radio" name="crowd_level" value="busy" class="sr-only">
+                        <div class="checkin-option-box">
+                            <span class="text-lg">👥👥👥</span>
+                            <span class="text-xs">Busy</span>
+                        </div>
+                    </label>
+                    <label class="checkin-option">
+                        <input type="radio" name="crowd_level" value="packed" class="sr-only">
+                        <div class="checkin-option-box">
+                            <span class="text-lg">🔥</span>
+                            <span class="text-xs">Packed</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Parking Status -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Parking availability?</label>
+                <div class="grid grid-cols-4 gap-2">
+                    <label class="checkin-option">
+                        <input type="radio" name="parking_status" value="plenty" class="sr-only">
+                        <div class="checkin-option-box">
+                            <span class="text-lg">🅿️</span>
+                            <span class="text-xs">Plenty</span>
+                        </div>
+                    </label>
+                    <label class="checkin-option">
+                        <input type="radio" name="parking_status" value="available" class="sr-only">
+                        <div class="checkin-option-box">
+                            <span class="text-lg">✓</span>
+                            <span class="text-xs">Available</span>
+                        </div>
+                    </label>
+                    <label class="checkin-option">
+                        <input type="radio" name="parking_status" value="limited" class="sr-only">
+                        <div class="checkin-option-box">
+                            <span class="text-lg">⚠️</span>
+                            <span class="text-xs">Limited</span>
+                        </div>
+                    </label>
+                    <label class="checkin-option">
+                        <input type="radio" name="parking_status" value="full" class="sr-only">
+                        <div class="checkin-option-box">
+                            <span class="text-lg">🚫</span>
+                            <span class="text-xs">Full</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Water Conditions -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Water conditions?</label>
+                <div class="grid grid-cols-4 gap-2">
+                    <label class="checkin-option">
+                        <input type="radio" name="water_condition" value="calm" class="sr-only">
+                        <div class="checkin-option-box">
+                            <span class="text-lg">😌</span>
+                            <span class="text-xs">Calm</span>
+                        </div>
+                    </label>
+                    <label class="checkin-option">
+                        <input type="radio" name="water_condition" value="small-waves" class="sr-only">
+                        <div class="checkin-option-box">
+                            <span class="text-lg">🌊</span>
+                            <span class="text-xs">Small</span>
+                        </div>
+                    </label>
+                    <label class="checkin-option">
+                        <input type="radio" name="water_condition" value="choppy" class="sr-only">
+                        <div class="checkin-option-box">
+                            <span class="text-lg">🌊🌊</span>
+                            <span class="text-xs">Choppy</span>
+                        </div>
+                    </label>
+                    <label class="checkin-option">
+                        <input type="radio" name="water_condition" value="rough" class="sr-only">
+                        <div class="checkin-option-box">
+                            <span class="text-lg">⚠️</span>
+                            <span class="text-xs">Rough</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Sargassum -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Sargassum level?</label>
+                <div class="grid grid-cols-4 gap-2">
+                    <label class="checkin-option">
+                        <input type="radio" name="sargassum_level" value="none" class="sr-only">
+                        <div class="checkin-option-box">
+                            <span class="text-lg">✨</span>
+                            <span class="text-xs">None</span>
+                        </div>
+                    </label>
+                    <label class="checkin-option">
+                        <input type="radio" name="sargassum_level" value="light" class="sr-only">
+                        <div class="checkin-option-box">
+                            <span class="text-lg">🌿</span>
+                            <span class="text-xs">Light</span>
+                        </div>
+                    </label>
+                    <label class="checkin-option">
+                        <input type="radio" name="sargassum_level" value="moderate" class="sr-only">
+                        <div class="checkin-option-box">
+                            <span class="text-lg">🌿🌿</span>
+                            <span class="text-xs">Moderate</span>
+                        </div>
+                    </label>
+                    <label class="checkin-option">
+                        <input type="radio" name="sargassum_level" value="heavy" class="sr-only">
+                        <div class="checkin-option-box">
+                            <span class="text-lg">🌿🌿🌿</span>
+                            <span class="text-xs">Heavy</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Notes -->
+            <div>
+                <label for="checkin-notes" class="block text-sm font-medium text-gray-700 mb-1">
+                    Any other notes? <span class="text-gray-400">(optional)</span>
+                </label>
+                <textarea name="notes" id="checkin-notes" rows="2" maxlength="280"
+                          placeholder="Share a quick tip for others..."
+                          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 resize-none text-sm"></textarea>
+            </div>
+
+            <div class="flex gap-3 pt-2">
+                <button type="submit" id="checkin-submit-btn"
+                        class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2.5 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+                    <i data-lucide="check" class="w-4 h-4"></i>
+                    <span>Submit Check-In</span>
+                </button>
+                <button type="button" onclick="closeCheckinModal()"
+                        class="px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                    Cancel
+                </button>
+            </div>
+
+            <div id="checkin-message" class="hidden text-sm px-4 py-3 rounded-lg"></div>
+        </form>
+    </div>
+</div>
+
+<style>
+.checkin-option input:checked + .checkin-option-box {
+    background-color: rgb(220 252 231);
+    border-color: rgb(34 197 94);
+    color: rgb(21 128 61);
+}
+.checkin-option-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border: 2px solid rgb(229 231 235);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    min-height: 3.5rem;
+}
+.checkin-option-box:hover {
+    border-color: rgb(156 163 175);
+    background-color: rgb(249 250 251);
+}
+</style>
+
+<script>
+function openCheckinModal(beachId, beachName) {
+    document.getElementById('checkin-beach-id').value = beachId;
+    document.getElementById('checkin-beach-name').textContent = beachName || 'this beach';
+    document.getElementById('checkin-modal').classList.remove('hidden');
+    document.getElementById('checkin-modal').classList.add('flex');
+    document.body.style.overflow = 'hidden';
+
+    // Reset form
+    document.getElementById('checkin-form').reset();
+    document.getElementById('checkin-message').classList.add('hidden');
+
+    // Re-init Lucide icons
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function closeCheckinModal() {
+    document.getElementById('checkin-modal').classList.add('hidden');
+    document.getElementById('checkin-modal').classList.remove('flex');
+    document.body.style.overflow = '';
+}
+
+async function submitCheckin(event) {
+    event.preventDefault();
+
+    const form = document.getElementById('checkin-form');
+    const submitBtn = document.getElementById('checkin-submit-btn');
+    const messageDiv = document.getElementById('checkin-message');
+
+    // Check if at least one option is selected
+    const hasSelection = form.querySelector('input[type="radio"]:checked') || form.querySelector('#checkin-notes').value.trim();
+    if (!hasSelection) {
+        messageDiv.textContent = 'Please select at least one condition or add a note.';
+        messageDiv.className = 'bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg';
+        messageDiv.classList.remove('hidden');
+        return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="animate-pulse">Submitting...</span>';
+    messageDiv.classList.add('hidden');
+
+    try {
+        const formData = new FormData(form);
+        const response = await fetch('/api/checkin.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            messageDiv.textContent = data.message || 'Thanks for checking in!';
+            messageDiv.className = 'bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-lg';
+            messageDiv.classList.remove('hidden');
+
+            if (typeof showToast === 'function') {
+                showToast('Check-in submitted!', 'success', 3000);
+            }
+
+            // Refresh check-ins list
+            if (typeof htmx !== 'undefined') {
+                htmx.trigger('#checkins-list', 'load');
+            }
+
+            setTimeout(() => {
+                closeCheckinModal();
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i><span>Submit Check-In</span>';
+            }, 1000);
+        } else {
+            messageDiv.textContent = data.error || 'Failed to submit check-in';
+            messageDiv.className = 'bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg';
+            messageDiv.classList.remove('hidden');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i><span>Submit Check-In</span>';
+        }
+    } catch (error) {
+        console.error('Check-in error:', error);
+        messageDiv.textContent = 'Network error. Please try again.';
+        messageDiv.className = 'bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg';
+        messageDiv.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i><span>Submit Check-In</span>';
+    }
+}
+
+// Close checkin modal on escape
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeCheckinModal();
 });
 </script>
 

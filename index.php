@@ -114,6 +114,97 @@ include __DIR__ . '/components/header.php';
     </div>
 </section>
 
+<!-- Discovery Sections -->
+<?php
+$trendingBeaches = getTrendingBeaches(4);
+$hiddenGems = getHiddenGems(4);
+$showDiscovery = !empty($selectedTags) || !empty($selectedMunicipality) ? false : true;
+?>
+<?php if ($showDiscovery && (!empty($trendingBeaches) || !empty($hiddenGems))): ?>
+<section class="py-8 bg-gradient-to-b from-blue-50 to-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Trending Now -->
+            <?php if (!empty($trendingBeaches)): ?>
+            <div>
+                <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <i data-lucide="trending-up" class="w-5 h-5 text-orange-500" aria-hidden="true"></i>
+                    <span>Trending Now</span>
+                </h2>
+                <div class="space-y-3">
+                    <?php foreach ($trendingBeaches as $i => $tb): ?>
+                    <a href="/beach/<?= h($tb['slug']) ?>"
+                       class="flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow group">
+                        <div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                            <img src="<?= h(getThumbnailUrl($tb['cover_image'])) ?>"
+                                 alt="<?= h($tb['name']) ?>"
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                                 loading="lazy">
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors truncate">
+                                <?= h($tb['name']) ?>
+                            </h3>
+                            <p class="text-sm text-gray-500"><?= h($tb['municipality']) ?></p>
+                            <?php if ($tb['google_rating']): ?>
+                            <div class="flex items-center gap-1 mt-0.5">
+                                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24"><path fill="#FACC15" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                <span class="text-sm font-medium text-amber-700"><?= number_format($tb['google_rating'], 1) ?></span>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                        <span class="text-2xl font-bold text-gray-200 group-hover:text-blue-200 transition-colors">
+                            <?= $i + 1 ?>
+                        </span>
+                    </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php endif; ?>
+
+            <!-- Hidden Gems -->
+            <?php if (!empty($hiddenGems)): ?>
+            <div>
+                <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <i data-lucide="gem" class="w-5 h-5 text-purple-500" aria-hidden="true"></i>
+                    <span>Hidden Gems</span>
+                </h2>
+                <div class="space-y-3">
+                    <?php foreach ($hiddenGems as $hg): ?>
+                    <a href="/beach/<?= h($hg['slug']) ?>"
+                       class="flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow group">
+                        <div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                            <img src="<?= h(getThumbnailUrl($hg['cover_image'])) ?>"
+                                 alt="<?= h($hg['name']) ?>"
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                                 loading="lazy">
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors truncate">
+                                <?= h($hg['name']) ?>
+                            </h3>
+                            <p class="text-sm text-gray-500"><?= h($hg['municipality']) ?></p>
+                            <?php if ($hg['google_rating']): ?>
+                            <div class="flex items-center gap-1 mt-0.5">
+                                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24"><path fill="#FACC15" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                <span class="text-sm font-medium text-amber-700"><?= number_format($hg['google_rating'], 1) ?></span>
+                                <?php if ($hg['google_review_count'] < 50): ?>
+                                <span class="text-xs text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded ml-1">Undiscovered</span>
+                                <?php endif; ?>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                        <i data-lucide="sparkles" class="w-5 h-5 text-purple-300 group-hover:text-purple-400 transition-colors flex-shrink-0" aria-hidden="true"></i>
+                    </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
+
 <!-- Main Content -->
 <section class="py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

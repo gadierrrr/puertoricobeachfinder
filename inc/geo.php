@@ -4,6 +4,15 @@
  * Haversine formula for calculating distances between coordinates
  */
 
+// Include guard to prevent duplicate declarations
+if (defined('GEO_PHP_INCLUDED')) {
+    return;
+}
+define('GEO_PHP_INCLUDED', true);
+
+// Ensure helpers.php is loaded for formatDistanceDisplay()
+require_once __DIR__ . '/helpers.php';
+
 /**
  * Calculate the distance between two points using the Haversine formula
  *
@@ -28,18 +37,7 @@ function calculateDistance(float $lat1, float $lng1, float $lat2, float $lng2): 
     return $R * $c;
 }
 
-/**
- * Format a distance in meters for display
- *
- * @param float $meters Distance in meters
- * @return string Formatted distance (e.g., "500m" or "2.5km")
- */
-function formatDistanceDisplay(float $meters): string {
-    if ($meters < 1000) {
-        return round($meters) . 'm';
-    }
-    return round($meters / 1000, 1) . 'km';
-}
+// NOTE: formatDistanceDisplay() is defined in helpers.php to avoid duplicates
 
 /**
  * Sort beaches by distance from a given point

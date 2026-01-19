@@ -524,3 +524,112 @@ function getBestForSummary($tags, $maxItems = 3) {
 
     return $bestFor;
 }
+
+// ========================================
+// Similar Beaches Helper
+// ========================================
+
+/**
+ * Find beaches similar to a given beach based on shared tags
+ * @param string $beachId The beach to find similar beaches for
+ * @param array $beachTags Tags of the current beach
+ * @param int $limit Maximum number of similar beaches to return
+ * @return array Array of similar beaches with similarity scores
+ */
+function getSimilarBeaches($beachId, $beachTags, $limit = 4) {
+    if (empty($beachTags)) return [];
+
+    require_once __DIR__ . '/db.php';
+
+    // Build query to find beaches with overlapping tags
+    $placeholders = [];
+    $params = [':beach_id' => $beachId];
+    foreach ($beachTags as $i => $tag) {
+        $placeholders[] = ':tag' . $i;
+        $params[':tag' . $i] = $tag;
+    }
+
+    $sql = "
+        SELECT
+            b.id, b.slug, b.name, b.municipality, b.cover_image,
+            b.google_rating, b.google_review_count,
+            COUNT(DISTINCT bt.tag) as shared_tags
+        FROM beaches b
+        INNER JOIN beach_tags bt ON b.id = bt.beach_id
+        WHERE b.id != :beach_id
+          AND b.publish_status = 'published'
+          AND bt.tag IN (" . implode(',', $placeholders) . ")
+        GROUP BY b.id
+        ORDER BY shared_tags DESC, b.google_rating DESC
+        LIMIT " . intval($limit);
+
+    $similarBeaches = query($sql, $params);
+
+    // Attach tags to similar beaches
+    if (!empty($similarBeaches)) {
+        attachBeachMetadata($similarBeaches);
+    }
+
+    return $similarBeaches;
+}
+
+/**
+ * Get trending beaches based on recent favorites and views
+ * @param int $limit Maximum number of beaches to return
+ * @param int $days Number of days to look back
+ * @return array Array of trending beaches
+ */
+function getTrendingBeaches($limit = 6, $days = 7) {
+    require_once __DIR__ . '/db.php';
+
+    $sql = "
+        SELECT
+            b.*,
+            COUNT(DISTINCT uf.id) as recent_favorites
+        FROM beaches b
+        LEFT JOIN user_favorites uf ON b.id = uf.beach_id
+            AND uf.created_at >= datetime('now', '-' || :days || ' days')
+        WHERE b.publish_status = 'published'
+        GROUP BY b.id
+        ORDER BY recent_favorites DESC, b.google_rating DESC
+        LIMIT :limit
+    ";
+
+    $beaches = query($sql, [':days' => $days, ':limit' => $limit]);
+
+    if (!empty($beaches)) {
+        attachBeachMetadata($beaches);
+    }
+
+    return $beaches;
+}
+
+/**
+ * Get hidden gem beaches (high rating, low review count, secluded tag)
+ * @param int $limit Maximum number of beaches to return
+ * @return array Array of hidden gem beaches
+ */
+function getHiddenGems($limit = 6) {
+    require_once __DIR__ . '/db.php';
+
+    $sql = "
+        SELECT b.*
+        FROM beaches b
+        LEFT JOIN beach_tags bt ON b.id = bt.beach_id AND bt.tag = 'secluded'
+        WHERE b.publish_status = 'published'
+          AND b.google_rating >= 4.3
+          AND (b.google_review_count < 100 OR bt.tag IS NOT NULL)
+        ORDER BY
+            CASE WHEN bt.tag IS NOT NULL THEN 1 ELSE 2 END,
+            b.google_rating DESC
+        LIMIT :limit
+    ";
+
+    $beaches = query($sql, [':limit' => $limit]);
+
+    if (!empty($beaches)) {
+        attachBeachMetadata($beaches);
+    }
+
+    return $beaches;
+}
