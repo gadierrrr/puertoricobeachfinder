@@ -40,14 +40,29 @@ $appName = $_ENV['APP_NAME'] ?? 'Beach Finder';
     <?php endif; ?>
     <?php if (isset($ogImage)): ?>
     <meta property="og:image" content="<?= h($ogImage) ?>">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="<?= isset($pageTitle) ? h($pageTitle) : 'Puerto Rico Beach' ?>">
     <?php else: ?>
     <meta property="og:image" content="<?= h($_ENV['APP_URL'] ?? '') ?>/assets/icons/icon-512x512.png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
     <?php endif; ?>
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@PRBeachFinder">
     <meta name="twitter:creator" content="@PRBeachFinder">
+    <meta name="twitter:title" content="<?= isset($pageTitle) ? h($pageTitle) : h($appName) ?>">
+    <?php if (isset($pageDescription)): ?>
+    <meta name="twitter:description" content="<?= h($pageDescription) ?>">
+    <?php endif; ?>
+    <?php if (isset($ogImage)): ?>
+    <meta name="twitter:image" content="<?= h($ogImage) ?>">
+    <meta name="twitter:image:alt" content="<?= isset($pageTitle) ? h($pageTitle) : 'Puerto Rico Beach' ?>">
+    <?php else: ?>
+    <meta name="twitter:image" content="<?= h($_ENV['APP_URL'] ?? '') ?>/assets/icons/icon-512x512.png">
+    <?php endif; ?>
 
     <!-- Canonical URL -->
     <?php
@@ -133,6 +148,10 @@ $appName = $_ENV['APP_NAME'] ?? 'Beach Finder';
                         <i data-lucide="compass" class="w-4 h-4"></i>
                         <span>Explore</span>
                     </a>
+                    <a href="/api/random-beach.php" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium inline-flex items-center gap-1.5" title="Discover a random beach">
+                        <i data-lucide="shuffle" class="w-4 h-4"></i>
+                        <span>Random</span>
+                    </a>
                     <a href="/quiz.php" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium inline-flex items-center gap-1.5">
                         <i data-lucide="sparkles" class="w-4 h-4"></i>
                         <span>Beach Match</span>
@@ -196,6 +215,10 @@ $appName = $_ENV['APP_NAME'] ?? 'Beach Finder';
                 <a href="/" class="flex items-center gap-2 text-gray-600 hover:text-gray-900 py-2">
                     <i data-lucide="compass" class="w-5 h-5"></i>
                     <span>Explore</span>
+                </a>
+                <a href="/api/random-beach.php" class="flex items-center gap-2 text-gray-600 hover:text-gray-900 py-2">
+                    <i data-lucide="shuffle" class="w-5 h-5"></i>
+                    <span>Random Beach</span>
                 </a>
                 <a href="/quiz.php" class="flex items-center gap-2 text-gray-600 hover:text-gray-900 py-2">
                     <i data-lucide="sparkles" class="w-5 h-5"></i>

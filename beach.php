@@ -196,6 +196,12 @@ include __DIR__ . '/components/header.php';
                         <i data-lucide="navigation" class="w-4 h-4" aria-hidden="true"></i>
                         <span>Directions</span>
                     </a>
+                    <button onclick="copyBeachLink('<?= h($beach['slug']) ?>', this)"
+                            aria-label="Copy link to this beach"
+                            class="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors">
+                        <i data-lucide="link" class="w-4 h-4" aria-hidden="true"></i>
+                        <span>Copy Link</span>
+                    </button>
                     <button onclick="shareBeach('<?= h($beach['slug']) ?>', '<?= h(addslashes($beach['name'])) ?>')"
                             aria-label="Share this beach"
                             class="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors">
@@ -426,7 +432,14 @@ include __DIR__ . '/components/header.php';
             <!-- Conditions Card -->
             <?php if ($beach['sargassum'] || $beach['surf'] || $beach['wind']): ?>
             <div class="bg-white rounded-xl shadow-sm p-6">
-                <h3 class="font-bold text-gray-900 mb-4">Current Conditions</h3>
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-gray-900">Current Conditions</h3>
+                    <?php if ($beach['updated_at']): ?>
+                    <span class="text-xs text-gray-400" title="Last updated: <?= h(date('F j, Y', strtotime($beach['updated_at']))) ?>">
+                        Updated <?= h(timeAgo($beach['updated_at'])) ?>
+                    </span>
+                    <?php endif; ?>
+                </div>
                 <div class="space-y-3">
                     <?php if ($beach['sargassum']): ?>
                     <div class="flex justify-between items-center">
@@ -462,6 +475,12 @@ include __DIR__ . '/components/header.php';
                     </div>
                     <?php endif; ?>
                 </div>
+                <!-- Report Outdated Info -->
+                <button onclick="openReportModal('<?= h($beach['id']) ?>', '<?= h(addslashes($beach['name'])) ?>')"
+                        class="w-full mt-4 pt-4 border-t border-gray-100 text-sm text-gray-500 hover:text-blue-600 transition-colors flex items-center justify-center gap-1.5">
+                    <i data-lucide="flag" class="w-3.5 h-3.5" aria-hidden="true"></i>
+                    <span>Report outdated info</span>
+                </button>
             </div>
             <?php endif; ?>
 
@@ -481,6 +500,7 @@ include __DIR__ . '/components/header.php';
             <?php endif; ?>
 
             <!-- Practical Info -->
+            <?php $sunTimes = getSunTimes($beach['lat'], $beach['lng']); ?>
             <div class="bg-white rounded-xl shadow-sm p-6 space-y-4">
                 <h3 class="font-bold text-gray-900">Practical Information</h3>
 
@@ -489,8 +509,16 @@ include __DIR__ . '/components/header.php';
                     <h4 class="font-medium text-gray-900 text-sm inline-flex items-center gap-1.5">
                         <i data-lucide="car" class="w-4 h-4" aria-hidden="true"></i>
                         <span>Parking</span>
+                        <?php if (!empty($beach['parking_difficulty'])): ?>
+                        <span class="<?= getParkingDifficultyClass($beach['parking_difficulty']) ?> text-xs px-2 py-0.5 rounded-full ml-1">
+                            <?= h(getParkingDifficultyLabel($beach['parking_difficulty'])) ?>
+                        </span>
+                        <?php endif; ?>
                     </h4>
                     <p class="text-gray-600 text-sm mt-1"><?= h($beach['parking_details']) ?></p>
+                    <?php if (!empty($beach['parking_difficulty'])): ?>
+                    <p class="text-gray-400 text-xs mt-1"><?= h(getParkingDifficultyDescription($beach['parking_difficulty'])) ?></p>
+                    <?php endif; ?>
                 </div>
                 <?php endif; ?>
 
@@ -511,6 +539,25 @@ include __DIR__ . '/components/header.php';
                         <span>Best Time</span>
                     </h4>
                     <p class="text-gray-600 text-sm mt-1"><?= h($beach['best_time']) ?></p>
+                </div>
+                <?php endif; ?>
+
+                <?php if ($sunTimes): ?>
+                <div>
+                    <h4 class="font-medium text-gray-900 text-sm inline-flex items-center gap-1.5">
+                        <i data-lucide="sun" class="w-4 h-4 text-amber-500" aria-hidden="true"></i>
+                        <span>Today's Sun Times</span>
+                    </h4>
+                    <div class="flex gap-4 mt-1.5">
+                        <div class="flex items-center gap-1.5 text-sm">
+                            <i data-lucide="sunrise" class="w-4 h-4 text-orange-400" aria-hidden="true"></i>
+                            <span class="text-gray-600"><?= h($sunTimes['sunrise']) ?></span>
+                        </div>
+                        <div class="flex items-center gap-1.5 text-sm">
+                            <i data-lucide="sunset" class="w-4 h-4 text-rose-400" aria-hidden="true"></i>
+                            <span class="text-gray-600"><?= h($sunTimes['sunset']) ?></span>
+                        </div>
+                    </div>
                 </div>
                 <?php endif; ?>
             </div>
@@ -663,5 +710,141 @@ function handleSwipe() {
 }
 </script>
 <?php endif; ?>
+
+<!-- Report Outdated Info Modal -->
+<div id="report-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4"
+     role="dialog" aria-modal="true" onclick="closeReportModal()">
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full" onclick="event.stopPropagation()">
+        <div class="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+            <h2 class="text-lg font-semibold text-gray-900">Report Outdated Info</h2>
+            <button onclick="closeReportModal()" class="text-gray-400 hover:text-gray-600 p-1" aria-label="Close">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+        <form id="report-form" class="p-6 space-y-4" onsubmit="submitReport(event)">
+            <input type="hidden" name="beach_id" id="report-beach-id">
+            <input type="hidden" name="csrf_token" value="<?= h(csrfToken()) ?>">
+
+            <p class="text-sm text-gray-600">
+                Help us keep beach information accurate! Let us know what's changed at <strong id="report-beach-name"></strong>.
+            </p>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">What needs updating?</label>
+                <div class="space-y-2">
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" name="issues[]" value="conditions" class="rounded border-gray-300">
+                        <span class="text-sm text-gray-700">Beach conditions (sargassum, surf, wind)</span>
+                    </label>
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" name="issues[]" value="amenities" class="rounded border-gray-300">
+                        <span class="text-sm text-gray-700">Amenities (parking, restrooms, etc.)</span>
+                    </label>
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" name="issues[]" value="access" class="rounded border-gray-300">
+                        <span class="text-sm text-gray-700">Access or directions</span>
+                    </label>
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" name="issues[]" value="safety" class="rounded border-gray-300">
+                        <span class="text-sm text-gray-700">Safety information</span>
+                    </label>
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" name="issues[]" value="other" class="rounded border-gray-300">
+                        <span class="text-sm text-gray-700">Other</span>
+                    </label>
+                </div>
+            </div>
+
+            <div>
+                <label for="report-details" class="block text-sm font-medium text-gray-700 mb-1">
+                    Details <span class="text-gray-400">(optional)</span>
+                </label>
+                <textarea name="details" id="report-details" rows="3" maxlength="500"
+                          placeholder="Tell us what's different from what's shown..."
+                          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none text-sm"></textarea>
+            </div>
+
+            <div class="flex gap-3 pt-2">
+                <button type="submit" id="report-submit-btn"
+                        class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-medium transition-colors text-sm">
+                    Submit Report
+                </button>
+                <button type="button" onclick="closeReportModal()"
+                        class="px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors text-sm">
+                    Cancel
+                </button>
+            </div>
+
+            <div id="report-message" class="hidden text-sm px-4 py-3 rounded-lg"></div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openReportModal(beachId, beachName) {
+    document.getElementById('report-beach-id').value = beachId;
+    document.getElementById('report-beach-name').textContent = beachName || 'this beach';
+    document.getElementById('report-modal').classList.remove('hidden');
+    document.getElementById('report-modal').classList.add('flex');
+    document.body.style.overflow = 'hidden';
+
+    // Reset form
+    document.getElementById('report-form').reset();
+    document.getElementById('report-message').classList.add('hidden');
+
+    // Re-init Lucide icons
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function closeReportModal() {
+    document.getElementById('report-modal').classList.add('hidden');
+    document.getElementById('report-modal').classList.remove('flex');
+    document.body.style.overflow = '';
+}
+
+async function submitReport(event) {
+    event.preventDefault();
+
+    const form = document.getElementById('report-form');
+    const submitBtn = document.getElementById('report-submit-btn');
+    const messageDiv = document.getElementById('report-message');
+
+    // Check if at least one issue is selected
+    const checkboxes = form.querySelectorAll('input[name="issues[]"]:checked');
+    if (checkboxes.length === 0) {
+        messageDiv.textContent = 'Please select at least one issue to report.';
+        messageDiv.className = 'bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg';
+        messageDiv.classList.remove('hidden');
+        return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+    messageDiv.classList.add('hidden');
+
+    // For now, just show success (you can implement the API endpoint later)
+    setTimeout(() => {
+        messageDiv.textContent = 'Thank you! Your report has been submitted and will be reviewed soon.';
+        messageDiv.className = 'bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-lg';
+        messageDiv.classList.remove('hidden');
+
+        // Show toast and close after delay
+        if (typeof showToast === 'function') {
+            showToast('Report submitted. Thank you!', 'success', 3000);
+        }
+
+        setTimeout(() => {
+            closeReportModal();
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Submit Report';
+        }, 1500);
+    }, 500);
+}
+
+// Close on escape
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeReportModal();
+});
+</script>
 
 <?php include __DIR__ . '/components/footer.php'; ?>

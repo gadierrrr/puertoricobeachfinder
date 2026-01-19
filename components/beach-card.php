@@ -76,6 +76,15 @@ $distanceFormatted = $distance !== null ? formatDistanceDisplay($distance) : nul
             <p class="text-sm text-gray-500"><?= h($municipality) ?></p>
         </div>
 
+        <!-- Best For badges -->
+        <?php $bestFor = getBestForSummary($tags, 3); ?>
+        <?php if (!empty($bestFor)): ?>
+        <div class="mb-2">
+            <span class="text-xs text-gray-400 uppercase tracking-wide">Best for:</span>
+            <span class="text-sm text-gray-700 ml-1"><?= h(implode(', ', $bestFor)) ?></span>
+        </div>
+        <?php endif; ?>
+
         <!-- Secondary: Rating & Top Tags -->
         <div class="flex items-center gap-3 mb-3">
             <?php if ($googleRating): ?>

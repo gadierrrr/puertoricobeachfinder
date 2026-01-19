@@ -2,7 +2,16 @@
 /**
  * Beach vocabulary constants - central source of truth for controlled vocabularies
  * Ported from beachVocab.ts
+ *
+ * NOTE: Display label functions (getTagLabel, getAmenityLabel, getConditionLabel)
+ * are defined in inc/helpers.php to avoid duplicates.
  */
+
+// Include guard to prevent duplicate declarations
+if (defined('CONSTANTS_PHP_INCLUDED')) {
+    return;
+}
+define('CONSTANTS_PHP_INCLUDED', true);
 
 const TAGS = [
     'calm-waters',
@@ -60,6 +69,23 @@ const PR_BOUNDS = [
     'lng' => ['min' => -67.4, 'max' => -65.2]
 ];
 
+// Parking difficulty levels
+const PARKING_DIFFICULTY = ['easy', 'moderate', 'difficult', 'very-difficult'];
+
+const PARKING_DIFFICULTY_LABELS = [
+    'easy' => 'Easy Parking',
+    'moderate' => 'Moderate',
+    'difficult' => 'Difficult',
+    'very-difficult' => 'Very Difficult'
+];
+
+const PARKING_DIFFICULTY_DESCRIPTIONS = [
+    'easy' => 'Plenty of parking available, rarely fills up',
+    'moderate' => 'Usually find parking, may fill on weekends',
+    'difficult' => 'Limited spots, arrive early on busy days',
+    'very-difficult' => 'Very limited parking, consider alternate transport'
+];
+
 // Display labels for tags
 const TAG_LABELS = [
     'calm-waters' => 'Calm Waters',
@@ -112,19 +138,7 @@ const CONDITION_LABELS = [
     ]
 ];
 
-// Helper functions
-function getTagLabel($tag) {
-    return TAG_LABELS[$tag] ?? ucwords(str_replace('-', ' ', $tag));
-}
-
-function getAmenityLabel($amenity) {
-    return AMENITY_LABELS[$amenity] ?? ucwords(str_replace('-', ' ', $amenity));
-}
-
-function getConditionLabel($type, $value) {
-    return CONDITION_LABELS[$type][$value] ?? ucwords($value);
-}
-
+// Validation helper functions (keep these in constants.php as they only use constants)
 function isValidTag($tag) {
     return in_array($tag, TAGS);
 }
@@ -143,3 +157,7 @@ function isWithinPRBounds($lat, $lng) {
            $lng >= PR_BOUNDS['lng']['min'] &&
            $lng <= PR_BOUNDS['lng']['max'];
 }
+
+// NOTE: Display label functions (getTagLabel, getAmenityLabel, getConditionLabel)
+// are defined in inc/helpers.php to avoid duplicate declarations.
+// Include helpers.php if you need these functions.

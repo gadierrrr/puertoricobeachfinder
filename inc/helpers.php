@@ -1,5 +1,14 @@
 <?php
 // inc/helpers.php - Utility functions
+//
+// IMPORTANT: This file should be included with require_once to prevent
+// duplicate function declarations. All display label functions live here.
+
+// Include guard to prevent duplicate declarations
+if (defined('HELPERS_PHP_INCLUDED')) {
+    return;
+}
+define('HELPERS_PHP_INCLUDED', true);
 
 function h($str) {
     return htmlspecialchars($str ?? '', ENT_QUOTES, 'UTF-8');
@@ -302,6 +311,25 @@ function getTagLabel($tag) {
     return $labels[$tag] ?? ucwords(str_replace('-', ' ', $tag));
 }
 
+/**
+ * Get display label for an amenity
+ */
+function getAmenityLabel($amenity) {
+    $labels = [
+        'restrooms' => 'Restrooms',
+        'showers' => 'Showers',
+        'lifeguard' => 'Lifeguard',
+        'parking' => 'Parking',
+        'food' => 'Food & Drinks',
+        'equipment-rental' => 'Equipment Rental',
+        'accessibility' => 'Wheelchair Accessible',
+        'picnic-areas' => 'Picnic Areas',
+        'shade-structures' => 'Shade/Umbrellas',
+        'water-sports' => 'Water Sports',
+    ];
+    return $labels[$amenity] ?? ucwords(str_replace('-', ' ', $amenity));
+}
+
 // ========================================
 // Beach Badge Helpers
 // ========================================
@@ -372,4 +400,127 @@ function renderBeachBadge($badgeKey) {
          . '<span>' . $badge['emoji'] . '</span>'
          . '<span>' . h($badge['label']) . '</span>'
          . '</span>';
+}
+
+// ========================================
+// Parking Difficulty Helpers
+// ========================================
+
+/**
+ * Get parking difficulty label
+ */
+function getParkingDifficultyLabel($difficulty) {
+    $labels = [
+        'easy' => 'Easy Parking',
+        'moderate' => 'Moderate',
+        'difficult' => 'Difficult',
+        'very-difficult' => 'Very Difficult'
+    ];
+    return $labels[$difficulty] ?? ucwords(str_replace('-', ' ', $difficulty ?? ''));
+}
+
+/**
+ * Get parking difficulty description
+ */
+function getParkingDifficultyDescription($difficulty) {
+    $descriptions = [
+        'easy' => 'Plenty of parking available, rarely fills up',
+        'moderate' => 'Usually find parking, may fill on weekends',
+        'difficult' => 'Limited spots, arrive early on busy days',
+        'very-difficult' => 'Very limited parking, consider alternate transport'
+    ];
+    return $descriptions[$difficulty] ?? '';
+}
+
+/**
+ * Get parking difficulty CSS classes
+ */
+function getParkingDifficultyClass($difficulty) {
+    $classes = [
+        'easy' => 'bg-green-100 text-green-700',
+        'moderate' => 'bg-yellow-100 text-yellow-700',
+        'difficult' => 'bg-orange-100 text-orange-700',
+        'very-difficult' => 'bg-red-100 text-red-700'
+    ];
+    return $classes[$difficulty] ?? 'bg-gray-100 text-gray-600';
+}
+
+/**
+ * Get parking difficulty icon
+ */
+function getParkingDifficultyIcon($difficulty) {
+    $icons = [
+        'easy' => 'circle-check',
+        'moderate' => 'circle-minus',
+        'difficult' => 'circle-alert',
+        'very-difficult' => 'circle-x'
+    ];
+    return $icons[$difficulty] ?? 'car';
+}
+
+// ========================================
+// Sunrise/Sunset Helpers
+// ========================================
+
+/**
+ * Calculate sunrise and sunset times for a given location and date
+ * Uses standard solar calculations
+ */
+function getSunTimes($lat, $lng, $date = null) {
+    $date = $date ?? date('Y-m-d');
+    $timestamp = strtotime($date);
+
+    // Puerto Rico timezone (AST - Atlantic Standard Time, no DST)
+    $timezone = new DateTimeZone('America/Puerto_Rico');
+
+    $sunrise = date_sunrise($timestamp, SUNFUNCS_RET_TIMESTAMP, $lat, $lng, 90.833333, -4);
+    $sunset = date_sunset($timestamp, SUNFUNCS_RET_TIMESTAMP, $lat, $lng, 90.833333, -4);
+
+    if ($sunrise === false || $sunset === false) {
+        return null;
+    }
+
+    $sunriseDateTime = new DateTime('@' . $sunrise);
+    $sunriseDateTime->setTimezone($timezone);
+
+    $sunsetDateTime = new DateTime('@' . $sunset);
+    $sunsetDateTime->setTimezone($timezone);
+
+    return [
+        'sunrise' => $sunriseDateTime->format('g:i A'),
+        'sunset' => $sunsetDateTime->format('g:i A'),
+        'sunrise_timestamp' => $sunrise,
+        'sunset_timestamp' => $sunset
+    ];
+}
+
+/**
+ * Get "Best For" summary based on beach tags
+ */
+function getBestForSummary($tags, $maxItems = 3) {
+    if (empty($tags)) return [];
+
+    // Priority order for "Best For" display
+    $priority = [
+        'family-friendly' => 'Families',
+        'surfing' => 'Surfing',
+        'snorkeling' => 'Snorkeling',
+        'diving' => 'Diving',
+        'swimming' => 'Swimming',
+        'calm-waters' => 'Relaxing',
+        'scenic' => 'Photography',
+        'secluded' => 'Quiet Escape',
+        'fishing' => 'Fishing',
+        'camping' => 'Camping'
+    ];
+
+    $bestFor = [];
+    foreach ($priority as $tag => $label) {
+        if (in_array($tag, $tags)) {
+            $bestFor[] = $label;
+            if (count($bestFor) >= $maxItems) break;
+        }
+    }
+
+    return $bestFor;
 }
