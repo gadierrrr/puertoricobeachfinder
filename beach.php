@@ -369,6 +369,87 @@ include __DIR__ . '/components/header.php';
             </div>
             <?php endif; ?>
 
+            <!-- User Photos Gallery -->
+            <?php
+            $userPhotos = query("
+                SELECT p.id, p.filename, p.caption, p.created_at, u.name as user_name
+                FROM beach_photos p
+                LEFT JOIN users u ON p.user_id = u.id
+                WHERE p.beach_id = :beach_id AND p.status = 'published'
+                ORDER BY p.created_at DESC
+                LIMIT 12
+            ", [':beach_id' => $beach['id']]);
+            $totalUserPhotos = queryOne("SELECT COUNT(*) as count FROM beach_photos WHERE beach_id = :beach_id AND status = 'published'", [':beach_id' => $beach['id']]);
+            ?>
+            <div id="user-photos" class="pt-4">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                        <i data-lucide="camera" class="w-5 h-5 text-purple-600" aria-hidden="true"></i>
+                        <span>Visitor Photos</span>
+                        <?php if ($totalUserPhotos['count'] > 0): ?>
+                        <span class="text-sm font-normal text-gray-500">(<?= $totalUserPhotos['count'] ?>)</span>
+                        <?php endif; ?>
+                    </h2>
+                    <?php if (isAuthenticated()): ?>
+                    <button onclick="openPhotoUploadModal('<?= h($beach['id']) ?>', '<?= h(addslashes($beach['name'])) ?>')"
+                            class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 text-sm">
+                        <i data-lucide="upload" class="w-4 h-4"></i>
+                        <span>Add Photos</span>
+                    </button>
+                    <?php else: ?>
+                    <a href="/login.php?redirect=<?= urlencode('/beach/' . $beach['slug'] . '#user-photos') ?>"
+                       class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 text-sm">
+                        <i data-lucide="upload" class="w-4 h-4"></i>
+                        <span>Sign in to Add Photos</span>
+                    </a>
+                    <?php endif; ?>
+                </div>
+
+                <?php if (!empty($userPhotos)): ?>
+                <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                    <?php foreach ($userPhotos as $photo): ?>
+                    <button onclick="openPhotoModal('/uploads/photos/<?= h($photo['filename']) ?>', '<?= h(addslashes($photo['caption'] ?? '')) ?>')"
+                            class="aspect-square rounded-lg overflow-hidden hover:opacity-90 transition-opacity group relative">
+                        <img src="/uploads/photos/thumbs/<?= h($photo['filename']) ?>"
+                             alt="<?= h($photo['caption'] ?? 'Beach photo by ' . ($photo['user_name'] ?? 'visitor')) ?>"
+                             class="w-full h-full object-cover"
+                             loading="lazy">
+                        <?php if ($photo['user_name']): ?>
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span class="text-white text-xs truncate block"><?= h($photo['user_name']) ?></span>
+                        </div>
+                        <?php endif; ?>
+                    </button>
+                    <?php endforeach; ?>
+                </div>
+                <?php if ($totalUserPhotos['count'] > 12): ?>
+                <div class="text-center mt-4">
+                    <button onclick="loadMorePhotos('<?= h($beach['id']) ?>')"
+                            class="text-purple-600 hover:text-purple-700 font-medium text-sm">
+                        View all <?= $totalUserPhotos['count'] ?> photos
+                    </button>
+                </div>
+                <?php endif; ?>
+                <?php else: ?>
+                <div class="text-center py-12 bg-gray-50 rounded-xl">
+                    <div class="text-5xl mb-4">📸</div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-2">No visitor photos yet</h3>
+                    <p class="text-gray-500 mb-4">Be the first to share photos of <?= h($beach['name']) ?>!</p>
+                    <?php if (isAuthenticated()): ?>
+                    <button onclick="openPhotoUploadModal('<?= h($beach['id']) ?>', '<?= h(addslashes($beach['name'])) ?>')"
+                            class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                        Upload the First Photo
+                    </button>
+                    <?php else: ?>
+                    <a href="/login.php?redirect=<?= urlencode('/beach/' . $beach['slug'] . '#user-photos') ?>"
+                       class="inline-block bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                        Sign in to Upload Photos
+                    </a>
+                    <?php endif; ?>
+                </div>
+                <?php endif; ?>
+            </div>
+
             <!-- Reviews Section -->
             <div id="reviews" class="pt-4">
                 <div class="flex items-center justify-between mb-6">
@@ -1243,6 +1324,543 @@ async function submitCheckin(event) {
 // Close checkin modal on escape
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeCheckinModal();
+});
+</script>
+
+<!-- Review Form Modal -->
+<div id="review-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4"
+     role="dialog" aria-modal="true" onclick="closeReviewModal()">
+    <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+        <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+            <h2 class="text-lg font-semibold text-gray-900">Write a Review</h2>
+            <button onclick="closeReviewModal()" class="text-gray-400 hover:text-gray-600 p-1" aria-label="Close">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <form id="review-form" class="p-6 space-y-5" onsubmit="submitReview(event)">
+            <input type="hidden" name="beach_id" id="review-beach-id">
+            <input type="hidden" name="csrf_token" value="<?= h(csrfToken()) ?>">
+
+            <p class="text-sm text-gray-600">
+                Share your experience at <strong id="review-beach-name"></strong>
+            </p>
+
+            <!-- Rating -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Your Rating <span class="text-red-500">*</span></label>
+                <div class="flex gap-1" id="star-rating">
+                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                    <button type="button" onclick="setRating(<?= $i ?>)" data-star="<?= $i ?>"
+                            class="star-btn text-3xl text-gray-300 hover:text-amber-400 transition-colors">
+                        ★
+                    </button>
+                    <?php endfor; ?>
+                </div>
+                <input type="hidden" name="rating" id="review-rating" value="0" required>
+            </div>
+
+            <!-- Title -->
+            <div>
+                <label for="review-title" class="block text-sm font-medium text-gray-700 mb-1">
+                    Review Title <span class="text-gray-400">(optional)</span>
+                </label>
+                <input type="text" name="title" id="review-title" maxlength="100"
+                       placeholder="Sum up your experience in a few words..."
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <!-- Review Text -->
+            <div>
+                <label for="review-text" class="block text-sm font-medium text-gray-700 mb-1">
+                    Your Review <span class="text-red-500">*</span>
+                </label>
+                <textarea name="review_text" id="review-text" rows="4" minlength="20" maxlength="5000" required
+                          placeholder="What did you like or dislike? Share tips for other visitors..."
+                          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"></textarea>
+                <p class="text-xs text-gray-400 mt-1">Minimum 20 characters</p>
+            </div>
+
+            <!-- Pros/Cons -->
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="review-pros" class="block text-sm font-medium text-green-700 mb-1">
+                        Pros <span class="text-gray-400">(optional)</span>
+                    </label>
+                    <textarea name="pros" id="review-pros" rows="2" maxlength="500"
+                              placeholder="What you liked..."
+                              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 resize-none text-sm"></textarea>
+                </div>
+                <div>
+                    <label for="review-cons" class="block text-sm font-medium text-red-700 mb-1">
+                        Cons <span class="text-gray-400">(optional)</span>
+                    </label>
+                    <textarea name="cons" id="review-cons" rows="2" maxlength="500"
+                              placeholder="What could be better..."
+                              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 resize-none text-sm"></textarea>
+                </div>
+            </div>
+
+            <!-- Visit Details -->
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="review-visit-date" class="block text-sm font-medium text-gray-700 mb-1">
+                        When did you visit?
+                    </label>
+                    <input type="month" name="visit_date" id="review-visit-date"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="review-visited-with" class="block text-sm font-medium text-gray-700 mb-1">
+                        Who did you go with?
+                    </label>
+                    <select name="visited_with" id="review-visited-with"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Select...</option>
+                        <option value="solo">Solo</option>
+                        <option value="partner">Partner/Couple</option>
+                        <option value="family">Family</option>
+                        <option value="friends">Friends</option>
+                        <option value="group">Group</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Photo Upload -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Add Photos <span class="text-gray-400">(optional)</span>
+                </label>
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors">
+                    <input type="file" name="photos[]" id="review-photos" accept="image/jpeg,image/png,image/webp" multiple
+                           class="hidden" onchange="previewPhotos(this)">
+                    <label for="review-photos" class="cursor-pointer">
+                        <i data-lucide="camera" class="w-8 h-8 mx-auto text-gray-400 mb-2"></i>
+                        <p class="text-sm text-gray-600">Click to upload photos</p>
+                        <p class="text-xs text-gray-400 mt-1">JPG, PNG, or WebP (max 10MB each)</p>
+                    </label>
+                </div>
+                <div id="photo-preview" class="flex gap-2 mt-2 flex-wrap"></div>
+            </div>
+
+            <div class="flex gap-3 pt-2">
+                <button type="submit" id="review-submit-btn"
+                        class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-medium transition-colors">
+                    Submit Review
+                </button>
+                <button type="button" onclick="closeReviewModal()"
+                        class="px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                    Cancel
+                </button>
+            </div>
+
+            <div id="review-message" class="hidden text-sm px-4 py-3 rounded-lg"></div>
+        </form>
+    </div>
+</div>
+
+<!-- Photo Upload Modal (standalone) -->
+<div id="photo-upload-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4"
+     role="dialog" aria-modal="true" onclick="closePhotoUploadModal()">
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full" onclick="event.stopPropagation()">
+        <div class="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+            <h2 class="text-lg font-semibold text-gray-900">Upload Photos</h2>
+            <button onclick="closePhotoUploadModal()" class="text-gray-400 hover:text-gray-600 p-1" aria-label="Close">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <form id="photo-upload-form" class="p-6 space-y-4" onsubmit="submitPhotoUpload(event)">
+            <input type="hidden" name="beach_id" id="upload-beach-id">
+            <input type="hidden" name="csrf_token" value="<?= h(csrfToken()) ?>">
+
+            <p class="text-sm text-gray-600">
+                Share your photos of <strong id="upload-beach-name"></strong>
+            </p>
+
+            <div>
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-purple-400 transition-colors">
+                    <input type="file" name="photo" id="upload-photo" accept="image/jpeg,image/png,image/webp" required
+                           class="hidden" onchange="previewUploadPhoto(this)">
+                    <label for="upload-photo" class="cursor-pointer">
+                        <i data-lucide="image-plus" class="w-10 h-10 mx-auto text-gray-400 mb-2"></i>
+                        <p class="text-sm text-gray-600">Click to select a photo</p>
+                        <p class="text-xs text-gray-400 mt-1">JPG, PNG, or WebP (max 10MB)</p>
+                    </label>
+                </div>
+                <div id="upload-preview" class="mt-3 hidden">
+                    <img id="upload-preview-img" src="" alt="Preview" class="max-h-48 mx-auto rounded-lg">
+                </div>
+            </div>
+
+            <div>
+                <label for="upload-caption" class="block text-sm font-medium text-gray-700 mb-1">
+                    Caption <span class="text-gray-400">(optional)</span>
+                </label>
+                <input type="text" name="caption" id="upload-caption" maxlength="200"
+                       placeholder="Add a caption to your photo..."
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+            </div>
+
+            <div class="flex gap-3 pt-2">
+                <button type="submit" id="upload-submit-btn"
+                        class="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-2.5 rounded-lg font-medium transition-colors">
+                    Upload Photo
+                </button>
+                <button type="button" onclick="closePhotoUploadModal()"
+                        class="px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                    Cancel
+                </button>
+            </div>
+
+            <div id="upload-message" class="hidden text-sm px-4 py-3 rounded-lg"></div>
+        </form>
+    </div>
+</div>
+
+<!-- Photo Lightbox Modal -->
+<div id="photo-lightbox" class="fixed inset-0 bg-black/90 z-50 hidden items-center justify-center"
+     role="dialog" aria-modal="true" onclick="closePhotoModal()">
+    <button onclick="closePhotoModal()" class="absolute top-4 right-4 text-white/70 hover:text-white p-2" aria-label="Close">
+        <i data-lucide="x" class="w-8 h-8"></i>
+    </button>
+    <div class="max-w-5xl max-h-[90vh] p-4" onclick="event.stopPropagation()">
+        <img id="photo-lightbox-img" src="" alt="" class="max-w-full max-h-[85vh] object-contain rounded-lg">
+        <p id="photo-lightbox-caption" class="text-white/80 text-center mt-3 text-sm"></p>
+    </div>
+</div>
+
+<script>
+// Star rating
+function setRating(rating) {
+    document.getElementById('review-rating').value = rating;
+    const stars = document.querySelectorAll('#star-rating .star-btn');
+    stars.forEach((star, idx) => {
+        if (idx < rating) {
+            star.classList.remove('text-gray-300');
+            star.classList.add('text-amber-400');
+        } else {
+            star.classList.remove('text-amber-400');
+            star.classList.add('text-gray-300');
+        }
+    });
+}
+
+// Review modal
+function openReviewForm(beachId, beachName) {
+    document.getElementById('review-beach-id').value = beachId;
+    document.getElementById('review-beach-name').textContent = beachName || 'this beach';
+    document.getElementById('review-modal').classList.remove('hidden');
+    document.getElementById('review-modal').classList.add('flex');
+    document.body.style.overflow = 'hidden';
+
+    // Reset form
+    document.getElementById('review-form').reset();
+    document.getElementById('review-rating').value = '0';
+    document.querySelectorAll('#star-rating .star-btn').forEach(s => {
+        s.classList.remove('text-amber-400');
+        s.classList.add('text-gray-300');
+    });
+    document.getElementById('photo-preview').innerHTML = '';
+    document.getElementById('review-message').classList.add('hidden');
+
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function closeReviewModal() {
+    document.getElementById('review-modal').classList.add('hidden');
+    document.getElementById('review-modal').classList.remove('flex');
+    document.body.style.overflow = '';
+}
+
+function previewPhotos(input) {
+    const preview = document.getElementById('photo-preview');
+    preview.innerHTML = '';
+
+    if (input.files) {
+        Array.from(input.files).slice(0, 5).forEach((file, idx) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const div = document.createElement('div');
+                div.className = 'relative w-16 h-16 rounded-lg overflow-hidden';
+                div.innerHTML = `
+                    <img src="${e.target.result}" class="w-full h-full object-cover" alt="Preview">
+                    <button type="button" onclick="removePhoto(${idx})" class="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 text-xs">×</button>
+                `;
+                preview.appendChild(div);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+}
+
+async function submitReview(event) {
+    event.preventDefault();
+
+    const form = document.getElementById('review-form');
+    const submitBtn = document.getElementById('review-submit-btn');
+    const messageDiv = document.getElementById('review-message');
+
+    const rating = document.getElementById('review-rating').value;
+    if (!rating || rating === '0') {
+        messageDiv.textContent = 'Please select a rating.';
+        messageDiv.className = 'bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg';
+        messageDiv.classList.remove('hidden');
+        return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+    messageDiv.classList.add('hidden');
+
+    try {
+        const formData = new FormData(form);
+        const response = await fetch('/api/reviews.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            messageDiv.textContent = data.message || 'Review submitted!';
+            messageDiv.className = 'bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-lg';
+            messageDiv.classList.remove('hidden');
+
+            if (typeof showToast === 'function') {
+                showToast('Review submitted!', 'success', 3000);
+            }
+
+            setTimeout(() => {
+                closeReviewModal();
+                location.reload();
+            }, 1500);
+        } else {
+            messageDiv.textContent = data.error || 'Failed to submit review';
+            messageDiv.className = 'bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg';
+            messageDiv.classList.remove('hidden');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Submit Review';
+        }
+    } catch (error) {
+        console.error('Review error:', error);
+        messageDiv.textContent = 'Network error. Please try again.';
+        messageDiv.className = 'bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg';
+        messageDiv.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Review';
+    }
+}
+
+// Photo upload modal
+function openPhotoUploadModal(beachId, beachName) {
+    document.getElementById('upload-beach-id').value = beachId;
+    document.getElementById('upload-beach-name').textContent = beachName || 'this beach';
+    document.getElementById('photo-upload-modal').classList.remove('hidden');
+    document.getElementById('photo-upload-modal').classList.add('flex');
+    document.body.style.overflow = 'hidden';
+
+    document.getElementById('photo-upload-form').reset();
+    document.getElementById('upload-preview').classList.add('hidden');
+    document.getElementById('upload-message').classList.add('hidden');
+
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function closePhotoUploadModal() {
+    document.getElementById('photo-upload-modal').classList.add('hidden');
+    document.getElementById('photo-upload-modal').classList.remove('flex');
+    document.body.style.overflow = '';
+}
+
+function previewUploadPhoto(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            document.getElementById('upload-preview-img').src = e.target.result;
+            document.getElementById('upload-preview').classList.remove('hidden');
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+async function submitPhotoUpload(event) {
+    event.preventDefault();
+
+    const form = document.getElementById('photo-upload-form');
+    const submitBtn = document.getElementById('upload-submit-btn');
+    const messageDiv = document.getElementById('upload-message');
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Uploading...';
+    messageDiv.classList.add('hidden');
+
+    try {
+        const formData = new FormData(form);
+        const response = await fetch('/api/photos.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            messageDiv.textContent = data.message || 'Photo uploaded!';
+            messageDiv.className = 'bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-lg';
+            messageDiv.classList.remove('hidden');
+
+            if (typeof showToast === 'function') {
+                showToast('Photo uploaded!', 'success', 3000);
+            }
+
+            setTimeout(() => {
+                closePhotoUploadModal();
+                location.reload();
+            }, 1500);
+        } else {
+            messageDiv.textContent = data.error || 'Failed to upload photo';
+            messageDiv.className = 'bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg';
+            messageDiv.classList.remove('hidden');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Upload Photo';
+        }
+    } catch (error) {
+        console.error('Upload error:', error);
+        messageDiv.textContent = 'Network error. Please try again.';
+        messageDiv.className = 'bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg';
+        messageDiv.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Upload Photo';
+    }
+}
+
+// Photo lightbox
+function openPhotoModal(url, caption) {
+    document.getElementById('photo-lightbox-img').src = url;
+    document.getElementById('photo-lightbox-caption').textContent = caption || '';
+    document.getElementById('photo-lightbox').classList.remove('hidden');
+    document.getElementById('photo-lightbox').classList.add('flex');
+    document.body.style.overflow = 'hidden';
+
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function closePhotoModal() {
+    document.getElementById('photo-lightbox').classList.add('hidden');
+    document.getElementById('photo-lightbox').classList.remove('flex');
+    document.body.style.overflow = '';
+}
+
+// Review voting
+async function voteReview(reviewId, btn) {
+    <?php if (!isAuthenticated()): ?>
+    window.location.href = '/login.php?redirect=' + encodeURIComponent(window.location.pathname + '#reviews');
+    return;
+    <?php endif; ?>
+
+    try {
+        const formData = new FormData();
+        formData.append('action', 'vote');
+        formData.append('review_id', reviewId);
+        formData.append('csrf_token', '<?= h(csrfToken()) ?>');
+
+        const response = await fetch('/api/reviews.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            const isVoted = btn.dataset.voted === 'true';
+            btn.dataset.voted = isVoted ? 'false' : 'true';
+
+            if (isVoted) {
+                btn.classList.remove('text-blue-600');
+                btn.classList.add('text-gray-500');
+            } else {
+                btn.classList.remove('text-gray-500');
+                btn.classList.add('text-blue-600');
+            }
+
+            // Update count
+            let countEl = btn.querySelector('.helpful-count');
+            if (countEl) {
+                const count = parseInt(countEl.textContent) + (isVoted ? -1 : 1);
+                if (count > 0) {
+                    countEl.textContent = count;
+                } else {
+                    countEl.remove();
+                }
+            } else if (!isVoted) {
+                const span = document.createElement('span');
+                span.className = 'helpful-count text-xs bg-gray-100 px-1.5 py-0.5 rounded-full';
+                span.textContent = '1';
+                btn.appendChild(span);
+            }
+        }
+    } catch (error) {
+        console.error('Vote error:', error);
+    }
+}
+
+// Delete review
+async function deleteReview(reviewId) {
+    if (!confirm('Are you sure you want to delete your review? This cannot be undone.')) return;
+
+    try {
+        const formData = new FormData();
+        formData.append('action', 'delete');
+        formData.append('review_id', reviewId);
+        formData.append('csrf_token', '<?= h(csrfToken()) ?>');
+
+        const response = await fetch('/api/reviews.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            if (typeof showToast === 'function') {
+                showToast('Review deleted', 'success', 3000);
+            }
+            location.reload();
+        } else {
+            alert(data.error || 'Failed to delete review');
+        }
+    } catch (error) {
+        console.error('Delete error:', error);
+        alert('Network error. Please try again.');
+    }
+}
+
+// Share review
+function shareReview(reviewId) {
+    const url = window.location.origin + window.location.pathname + '#review-' + reviewId;
+    if (navigator.share) {
+        navigator.share({ url: url });
+    } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(() => {
+            if (typeof showToast === 'function') {
+                showToast('Link copied!', 'success', 2000);
+            }
+        });
+    }
+}
+
+// Report review
+function reportReview(reviewId) {
+    alert('Report functionality coming soon. For now, please contact us at support@puertoricobeachfinder.com');
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeReviewModal();
+        closePhotoUploadModal();
+        closePhotoModal();
+    }
 });
 </script>
 

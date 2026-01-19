@@ -2,7 +2,7 @@
 /**
  * Review Card Component
  *
- * @param array $review - Review data
+ * @param array $review - Review data with photos
  */
 
 $review = $review ?? [];
@@ -11,57 +11,98 @@ $reviewId = $review['id'] ?? '';
 $rating = $review['rating'] ?? 0;
 $title = $review['title'] ?? '';
 $reviewText = $review['review_text'] ?? '';
+$pros = $review['pros'] ?? '';
+$cons = $review['cons'] ?? '';
 $visitDate = $review['visit_date'] ?? '';
-$visitType = $review['visit_type'] ?? '';
+$visitedWith = $review['visited_with'] ?? $review['visit_type'] ?? '';
 $helpfulCount = $review['helpful_count'] ?? 0;
 $createdAt = $review['created_at'] ?? '';
-$userName = $review['user_name'] ?? 'Anonymous';
+$userName = $review['user_name'] ?? 'Beach Visitor';
+$userAvatar = $review['avatar_url'] ?? null;
 $userInitial = strtoupper(substr($userName, 0, 1));
+$userId = $review['user_id'] ?? null;
+$isOwnReview = isAuthenticated() && $userId === ($_SESSION['user_id'] ?? null);
 
-// Format date
-$dateFormatted = $createdAt ? date('M j, Y', strtotime($createdAt)) : '';
-$visitDateFormatted = $visitDate ? date('F Y', strtotime($visitDate)) : '';
+// Check if user has voted on this review
+$userVoted = false;
+if (isAuthenticated() && $reviewId) {
+    $vote = queryOne('SELECT id FROM review_votes WHERE review_id = :review_id AND user_id = :user_id', [
+        ':review_id' => $reviewId,
+        ':user_id' => $_SESSION['user_id']
+    ]);
+    $userVoted = (bool)$vote;
+}
+
+// Get photos for this review
+$photos = [];
+if ($reviewId) {
+    $photos = query("
+        SELECT id, filename, caption FROM beach_photos
+        WHERE review_id = :review_id AND status = 'published'
+        ORDER BY created_at ASC
+    ", [':review_id' => $reviewId]);
+}
+
+// Format dates
+$timeAgo = $createdAt ? timeAgo($createdAt) : '';
+$visitDateFormatted = $visitDate ? date('M Y', strtotime($visitDate)) : '';
 
 // Visit type labels
-$visitTypeLabels = [
-    'solo' => '👤 Solo',
-    'couple' => '💑 Couple',
-    'family' => '👨‍👩‍👧 Family',
-    'friends' => '👥 Friends',
-    'group' => '👥 Group'
+$visitedWithLabels = [
+    'solo' => 'Solo',
+    'partner' => 'Couple',
+    'couple' => 'Couple',
+    'family' => 'Family',
+    'friends' => 'Friends',
+    'group' => 'Group'
 ];
-$visitTypeLabel = $visitTypeLabels[$visitType] ?? '';
+$visitedWithLabel = $visitedWithLabels[$visitedWith] ?? '';
+
+// Star display
+$stars = str_repeat('★', $rating) . str_repeat('☆', 5 - $rating);
 ?>
 
-<div class="review-card bg-white border border-gray-100 rounded-lg p-4" data-review-id="<?= h($reviewId) ?>">
+<div class="review-card bg-white border border-gray-200 rounded-xl p-4 mb-4" data-review-id="<?= h($reviewId) ?>">
     <!-- Header -->
     <div class="flex items-start gap-3 mb-3">
         <!-- Avatar -->
-        <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-semibold">
+        <?php if ($userAvatar): ?>
+        <img src="<?= h($userAvatar) ?>" alt="" class="w-10 h-10 rounded-full flex-shrink-0">
+        <?php else: ?>
+        <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-semibold flex-shrink-0">
             <?= h($userInitial) ?>
         </div>
+        <?php endif; ?>
 
         <div class="flex-1 min-w-0">
-            <!-- User name and date -->
+            <!-- User name and badges -->
             <div class="flex items-center gap-2 flex-wrap">
                 <span class="font-medium text-gray-900"><?= h($userName) ?></span>
-                <?php if ($dateFormatted): ?>
-                <span class="text-gray-400 text-sm">•</span>
-                <span class="text-gray-500 text-sm"><?= $dateFormatted ?></span>
+                <?php if ($visitedWithLabel): ?>
+                <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full"><?= h($visitedWithLabel) ?></span>
                 <?php endif; ?>
             </div>
 
-            <!-- Rating stars -->
-            <div class="flex items-center gap-1 mt-0.5">
-                <?php for ($i = 1; $i <= 5; $i++): ?>
-                <span class="<?= $i <= $rating ? 'text-yellow-400' : 'text-gray-300' ?> text-sm">★</span>
-                <?php endfor; ?>
-                <?php if ($visitTypeLabel): ?>
-                <span class="text-gray-300 mx-1">•</span>
-                <span class="text-gray-500 text-xs"><?= $visitTypeLabel ?></span>
+            <!-- Rating and date -->
+            <div class="flex items-center gap-2 mt-0.5 flex-wrap">
+                <span class="text-amber-500 text-sm tracking-tight"><?= $stars ?></span>
+                <?php if ($timeAgo): ?>
+                <span class="text-xs text-gray-400"><?= h($timeAgo) ?></span>
+                <?php endif; ?>
+                <?php if ($visitDateFormatted): ?>
+                <span class="text-xs text-gray-400">Visited <?= $visitDateFormatted ?></span>
                 <?php endif; ?>
             </div>
         </div>
+
+        <!-- Delete button for own reviews -->
+        <?php if ($isOwnReview): ?>
+        <button onclick="deleteReview(<?= intval($reviewId) ?>)"
+                class="text-gray-400 hover:text-red-500 p-1 transition-colors"
+                title="Delete your review">
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+        </button>
+        <?php endif; ?>
     </div>
 
     <!-- Title -->
@@ -71,35 +112,75 @@ $visitTypeLabel = $visitTypeLabels[$visitType] ?? '';
 
     <!-- Review text -->
     <?php if ($reviewText): ?>
-    <p class="text-gray-600 text-sm leading-relaxed mb-3"><?= nl2br(h($reviewText)) ?></p>
+    <p class="text-gray-700 text-sm leading-relaxed mb-3"><?= nl2br(h($reviewText)) ?></p>
     <?php endif; ?>
 
-    <!-- Visit info -->
-    <?php if ($visitDateFormatted): ?>
-    <p class="text-gray-500 text-xs mb-3">
-        Visited in <?= $visitDateFormatted ?>
-    </p>
+    <!-- Pros/Cons -->
+    <?php if ($pros || $cons): ?>
+    <div class="flex flex-col sm:flex-row gap-3 mb-3 text-sm">
+        <?php if ($pros): ?>
+        <div class="flex-1 bg-green-50 rounded-lg p-3">
+            <div class="flex items-center gap-1 text-green-700 font-medium mb-1">
+                <i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i>
+                <span>Pros</span>
+            </div>
+            <p class="text-green-800 text-xs"><?= h($pros) ?></p>
+        </div>
+        <?php endif; ?>
+        <?php if ($cons): ?>
+        <div class="flex-1 bg-red-50 rounded-lg p-3">
+            <div class="flex items-center gap-1 text-red-700 font-medium mb-1">
+                <i data-lucide="thumbs-down" class="w-3.5 h-3.5"></i>
+                <span>Cons</span>
+            </div>
+            <p class="text-red-800 text-xs"><?= h($cons) ?></p>
+        </div>
+        <?php endif; ?>
+    </div>
     <?php endif; ?>
 
-    <!-- Footer -->
-    <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+    <!-- Photos -->
+    <?php if (!empty($photos)): ?>
+    <div class="flex gap-2 mb-3 overflow-x-auto pb-2 -mx-1 px-1">
+        <?php foreach ($photos as $photo): ?>
+        <button onclick="openPhotoModal('/uploads/photos/<?= h($photo['filename']) ?>', '<?= h(addslashes($photo['caption'] ?? '')) ?>')"
+                class="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden hover:opacity-90 transition-opacity">
+            <img src="/uploads/photos/thumbs/<?= h($photo['filename']) ?>"
+                 alt="<?= h($photo['caption'] ?? 'Beach photo') ?>"
+                 class="w-full h-full object-cover"
+                 loading="lazy">
+        </button>
+        <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
+
+    <!-- Footer actions -->
+    <div class="flex items-center gap-4 pt-3 border-t border-gray-100">
         <!-- Helpful button -->
-        <button class="helpful-btn flex items-center gap-1.5 text-gray-500 hover:text-blue-600 text-sm transition-colors"
-                hx-post="/api/reviews/helpful.php"
-                hx-vals='{"review_id": "<?= h($reviewId) ?>"}'
-                hx-target="this"
-                hx-swap="outerHTML">
-            <span>👍</span>
+        <button onclick="voteReview(<?= intval($reviewId) ?>, this)"
+                class="helpful-btn flex items-center gap-1.5 text-sm <?= $userVoted ? 'text-blue-600' : 'text-gray-500 hover:text-blue-600' ?> transition-colors"
+                data-voted="<?= $userVoted ? 'true' : 'false' ?>"
+                data-review-id="<?= h($reviewId) ?>">
+            <i data-lucide="thumbs-up" class="w-4 h-4"></i>
             <span>Helpful</span>
             <?php if ($helpfulCount > 0): ?>
-            <span class="text-gray-400">(<?= $helpfulCount ?>)</span>
+            <span class="helpful-count text-xs bg-gray-100 px-1.5 py-0.5 rounded-full"><?= $helpfulCount ?></span>
             <?php endif; ?>
         </button>
 
-        <!-- Report -->
-        <button class="text-gray-400 hover:text-gray-600 text-xs transition-colors"
-                onclick="reportReview('<?= h($reviewId) ?>')">
+        <!-- Share button -->
+        <button onclick="shareReview(<?= intval($reviewId) ?>)"
+                class="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors">
+            <i data-lucide="share-2" class="w-4 h-4"></i>
+            <span>Share</span>
+        </button>
+
+        <!-- Report button (only for others' reviews) -->
+        <?php if (!$isOwnReview): ?>
+        <button onclick="reportReview(<?= intval($reviewId) ?>)"
+                class="ml-auto text-gray-400 hover:text-gray-600 text-xs transition-colors">
             Report
         </button>
+        <?php endif; ?>
     </div>
 </div>
