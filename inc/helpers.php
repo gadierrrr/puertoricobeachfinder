@@ -137,6 +137,111 @@ function getConditionClass($value, $type) {
     return $classes[$type][$value] ?? 'bg-gray-100 text-gray-600';
 }
 
+/**
+ * Get dark theme CSS class for condition badges
+ */
+function getConditionClassDark($value, $type = null) {
+    if (!$value) return 'bg-white/10 text-gray-400 border-white/10';
+
+    $colors = [
+        'low' => 'bg-green-500/20 text-green-400 border-green-500/30',
+        'moderate' => 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
+        'high' => 'bg-orange-500/20 text-orange-400 border-orange-500/30',
+        'very_high' => 'bg-red-500/20 text-red-400 border-red-500/30',
+        'none' => 'bg-green-500/20 text-green-400 border-green-500/30',
+        'flat' => 'bg-green-500/20 text-green-400 border-green-500/30',
+        'calm' => 'bg-green-500/20 text-green-400 border-green-500/30',
+        'light' => 'bg-green-500/20 text-green-400 border-green-500/30',
+        'small' => 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+        'medium' => 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
+        'large' => 'bg-orange-500/20 text-orange-400 border-orange-500/30',
+        'heavy' => 'bg-red-500/20 text-red-400 border-red-500/30',
+        'strong' => 'bg-orange-500/20 text-orange-400 border-orange-500/30',
+        'gusty' => 'bg-red-500/20 text-red-400 border-red-500/30',
+    ];
+
+    return $colors[strtolower($value)] ?? 'bg-white/10 text-gray-400 border-white/10';
+}
+
+/**
+ * Get compact CSS class for condition indicator dots on beach cards
+ * Returns color based on condition severity (good/moderate/warning/danger)
+ */
+function getConditionDotClass($value) {
+    if (!$value) return 'text-gray-500';
+
+    // Map conditions to severity colors
+    $colors = [
+        // Good conditions (green)
+        'none' => 'text-green-400',
+        'flat' => 'text-green-400',
+        'calm' => 'text-green-400',
+        'light' => 'text-green-400',
+        'low' => 'text-green-400',
+        // Neutral/informational (blue)
+        'small' => 'text-blue-400',
+        // Moderate conditions (yellow)
+        'moderate' => 'text-yellow-400',
+        'medium' => 'text-yellow-400',
+        // Warning conditions (orange)
+        'high' => 'text-orange-400',
+        'large' => 'text-orange-400',
+        'strong' => 'text-orange-400',
+        // Danger conditions (red)
+        'very_high' => 'text-red-400',
+        'heavy' => 'text-red-400',
+        'gusty' => 'text-red-400',
+    ];
+
+    return $colors[strtolower($value)] ?? 'text-gray-500';
+}
+
+// ========================================
+// Swim Difficulty Helpers
+// ========================================
+
+/**
+ * Get descriptive label for swim difficulty level
+ */
+function getSwimDifficultyLabel($level) {
+    $labels = [
+        1 => 'Very Easy',
+        2 => 'Easy',
+        3 => 'Moderate',
+        4 => 'Challenging',
+        5 => 'Experts Only'
+    ];
+    return $labels[$level] ?? 'Unknown';
+}
+
+/**
+ * Get light theme CSS class for swim difficulty badge
+ */
+function getSwimDifficultyClass($level) {
+    $classes = [
+        1 => 'bg-green-50 text-green-700',
+        2 => 'bg-green-50 text-green-700',
+        3 => 'bg-yellow-50 text-yellow-700',
+        4 => 'bg-orange-50 text-orange-700',
+        5 => 'bg-red-50 text-red-700'
+    ];
+    return $classes[$level] ?? 'bg-gray-50 text-gray-700';
+}
+
+/**
+ * Get dark theme CSS class for swim difficulty badge
+ */
+function getSwimDifficultyClassDark($level) {
+    $classes = [
+        1 => 'bg-green-500/20 text-green-400 border-green-500/30',
+        2 => 'bg-green-500/20 text-green-400 border-green-500/30',
+        3 => 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
+        4 => 'bg-orange-500/20 text-orange-400 border-orange-500/30',
+        5 => 'bg-red-500/20 text-red-400 border-red-500/30'
+    ];
+    return $classes[$level] ?? 'bg-white/10 text-gray-400 border-white/10';
+}
+
 function formatDistance($meters) {
     if ($meters < 1000) {
         return round($meters) . 'm';
@@ -169,7 +274,7 @@ function timeAgo($datetime) {
 
 function getThumbnailUrl($imagePath) {
     if (empty($imagePath)) {
-        return '/assets/images/placeholder.jpg';
+        return '/images/beaches/placeholder-beach.webp';
     }
 
     // Extract filename without extension
@@ -186,6 +291,154 @@ function getThumbnailUrl($imagePath) {
     }
 
     return $imagePath;
+}
+
+/**
+ * Get WebP image path if available, with fallback to original
+ * @param string $imagePath Original image path (e.g., /images/beaches/foo.jpg)
+ * @return array ['webp' => webp path or null, 'fallback' => original path]
+ */
+function getWebPImage($imagePath) {
+    if (empty($imagePath)) {
+        return [
+            'webp' => null,
+            'fallback' => '/images/beaches/placeholder-beach.webp'
+        ];
+    }
+
+    $pathInfo = pathinfo($imagePath);
+    $dir = $pathInfo['dirname'];
+    $baseName = $pathInfo['filename'];
+    $docRoot = $_SERVER['DOCUMENT_ROOT'] ?? '';
+
+    // Check for WebP version in same directory
+    $webpPath = $dir . '/' . $baseName . '.webp';
+    $webpExists = file_exists($docRoot . $webpPath);
+
+    return [
+        'webp' => $webpExists ? $webpPath : null,
+        'fallback' => $imagePath
+    ];
+}
+
+/**
+ * Render a <picture> element with WebP and fallback
+ * @param string $imagePath Original image path
+ * @param string $alt Alt text for the image
+ * @param string $class CSS classes
+ * @param string $loading Loading attribute (lazy or eager)
+ * @param array $attrs Additional attributes as key => value
+ * @return string HTML picture element
+ */
+function renderWebPPicture($imagePath, $alt = '', $class = '', $loading = 'lazy', $attrs = []) {
+    $images = getWebPImage($imagePath);
+    $fallback = h($images['fallback']);
+    $altText = h($alt);
+    $classAttr = $class ? ' class="' . h($class) . '"' : '';
+    $loadingAttr = $loading ? ' loading="' . h($loading) . '"' : '';
+
+    // Build additional attributes string
+    $extraAttrs = '';
+    foreach ($attrs as $key => $value) {
+        $extraAttrs .= ' ' . h($key) . '="' . h($value) . '"';
+    }
+
+    // If WebP exists, use picture element
+    if ($images['webp']) {
+        $webp = h($images['webp']);
+        return <<<HTML
+<picture>
+    <source srcset="{$webp}" type="image/webp">
+    <img src="{$fallback}" alt="{$altText}"{$classAttr}{$loadingAttr}{$extraAttrs}>
+</picture>
+HTML;
+    }
+
+    // No WebP, just return img
+    return '<img src="' . $fallback . '" alt="' . $altText . '"' . $classAttr . $loadingAttr . $extraAttrs . '>';
+}
+
+/**
+ * Get image attributes for use in templates (allows more flexibility than renderWebPPicture)
+ * @param string $imagePath Original image path
+ * @return array ['src' => fallback, 'webp_src' => webp or null, 'has_webp' => bool]
+ */
+function getImageAttrs($imagePath) {
+    $images = getWebPImage($imagePath);
+    return [
+        'src' => $images['fallback'],
+        'webp_src' => $images['webp'],
+        'has_webp' => $images['webp'] !== null
+    ];
+}
+
+/**
+ * Get responsive image attributes (srcset, sizes, src)
+ * Returns array with 'src', 'srcset', and 'sizes' keys
+ *
+ * @param string $imagePath - Original image path
+ * @param string $sizes - Sizes attribute (default for card grid)
+ * @return array
+ */
+function getResponsiveImageAttrs($imagePath, $sizes = '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') {
+    if (empty($imagePath)) {
+        return [
+            'src' => '/images/beaches/placeholder-beach.webp',
+            'srcset' => '',
+            'sizes' => ''
+        ];
+    }
+
+    $pathInfo = pathinfo($imagePath);
+    $baseName = $pathInfo['filename'];
+    $docRoot = $_SERVER['DOCUMENT_ROOT'] ?? '';
+
+    // Check for different sized thumbnails
+    $thumbnailSizes = [
+        'sm' => ['width' => 400, 'suffix' => '-400w'],
+        'md' => ['width' => 800, 'suffix' => '-800w'],
+        'lg' => ['width' => 1200, 'suffix' => '-1200w'],
+    ];
+
+    $srcsetParts = [];
+    $defaultSrc = $imagePath;
+
+    // Check for sized thumbnails first
+    foreach ($thumbnailSizes as $size => $config) {
+        $sizedPath = '/images/thumbnails/' . $baseName . $config['suffix'] . '.webp';
+        if (file_exists($docRoot . $sizedPath)) {
+            $srcsetParts[] = $sizedPath . ' ' . $config['width'] . 'w';
+            if ($size === 'sm') {
+                $defaultSrc = $sizedPath;
+            }
+        }
+    }
+
+    // If no sized thumbnails, check for standard thumbnail
+    if (empty($srcsetParts)) {
+        $thumbnailPath = '/images/thumbnails/' . $baseName . '.webp';
+        if (file_exists($docRoot . $thumbnailPath)) {
+            // Use thumbnail for smaller screens (assume ~400w), original for larger
+            $srcsetParts[] = $thumbnailPath . ' 400w';
+            $srcsetParts[] = $imagePath . ' 800w';
+            $defaultSrc = $thumbnailPath;
+        }
+    }
+
+    // If still no srcset, just return the original image
+    if (empty($srcsetParts)) {
+        return [
+            'src' => $imagePath,
+            'srcset' => '',
+            'sizes' => ''
+        ];
+    }
+
+    return [
+        'src' => $defaultSrc,
+        'srcset' => implode(', ', $srcsetParts),
+        'sizes' => $sizes
+    ];
 }
 
 // ========================================
@@ -605,6 +858,18 @@ function getTrendingBeaches($limit = 6, $days = 7) {
 }
 
 /**
+ * Format view count for display (e.g., 1500 -> "1.5k")
+ * @param int $count The view count
+ * @return string Formatted view count
+ */
+function formatViewCount($count) {
+    if ($count >= 1000) {
+        return number_format($count / 1000, 1) . 'k';
+    }
+    return (string)$count;
+}
+
+/**
  * Get hidden gem beaches (high rating, low review count, secluded tag)
  * @param int $limit Maximum number of beaches to return
  * @return array Array of hidden gem beaches
@@ -632,4 +897,355 @@ function getHiddenGems($limit = 6) {
     }
 
     return $beaches;
+}
+
+// ========================================
+// Hero Section Helpers
+// ========================================
+
+/**
+ * Get beach counts by tag for hero filter cards
+ * @return array Associative array of tag => count
+ */
+function getBeachCountsByTag() {
+    require_once __DIR__ . '/db.php';
+
+    $sql = "
+        SELECT bt.tag, COUNT(DISTINCT bt.beach_id) as count
+        FROM beach_tags bt
+        INNER JOIN beaches b ON bt.beach_id = b.id
+        WHERE b.publish_status = 'published'
+        GROUP BY bt.tag
+    ";
+
+    $results = query($sql, []);
+    $counts = [];
+    foreach ($results as $row) {
+        $counts[$row['tag']] = (int)$row['count'];
+    }
+    return $counts;
+}
+
+/**
+ * Get popular beaches for hero quick links
+ * @param int $limit Maximum number of beaches
+ * @return array Array of popular beaches with name and slug
+ */
+function getPopularBeaches($limit = 4) {
+    require_once __DIR__ . '/db.php';
+
+    $sql = "
+        SELECT b.name, b.slug, b.municipality
+        FROM beaches b
+        WHERE b.publish_status = 'published'
+          AND b.google_rating >= 4.5
+          AND b.google_review_count >= 100
+        ORDER BY b.google_review_count DESC
+        LIMIT :limit
+    ";
+
+    return query($sql, [':limit' => $limit]);
+}
+
+/**
+ * Get aggregated site statistics for social proof
+ * @return array Stats including total beaches, total reviews, avg rating
+ */
+function getSiteStats() {
+    require_once __DIR__ . '/db.php';
+
+    $sql = "
+        SELECT
+            COUNT(*) as total_beaches,
+            SUM(google_review_count) as total_reviews,
+            AVG(google_rating) as avg_rating
+        FROM beaches
+        WHERE publish_status = 'published'
+          AND google_rating IS NOT NULL
+    ";
+
+    $stats = queryOne($sql, []);
+
+    // Get total user count
+    $userSql = "SELECT COUNT(*) as total_users FROM users";
+    $userStats = queryOne($userSql, []);
+
+    return [
+        'total_beaches' => (int)($stats['total_beaches'] ?? 0),
+        'total_reviews' => (int)($stats['total_reviews'] ?? 0),
+        'avg_rating' => round((float)($stats['avg_rating'] ?? 0), 1),
+        'total_users' => (int)($userStats['total_users'] ?? 0)
+    ];
+}
+
+/**
+ * Get SVG icon for a tag (for hero cards)
+ * @param string $tag The tag identifier
+ * @return string SVG path content
+ */
+function getTagIconSvg($tag) {
+    $icons = [
+        'surfing' => '<path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>',
+        'snorkeling' => '<circle cx="6" cy="15" r="4"/><circle cx="18" cy="15" r="4"/><path d="M14 15a2 2 0 0 0-2-2 2 2 0 0 0-2 2"/><path d="M2.5 13 5 7c.7-1.3 1.4-2 3-2"/><path d="M21.5 13 19 7c-.7-1.3-1.5-2-3-2"/>',
+        'family-friendly' => '<circle cx="12" cy="5" r="3"/><path d="M12 8v4"/><path d="m8 14 4 4 4-4"/><path d="M5 19h14"/><circle cx="7" cy="11" r="2"/><circle cx="17" cy="11" r="2"/>',
+        'secluded' => '<path d="M10 10v.2A3 3 0 0 1 8.9 16v0H5v0h0a3 3 0 0 1-1-5.8V10a3 3 0 0 1 6 0Z"/><path d="M7 16v6"/><path d="M13 19v3"/><path d="M12 19h8.3a1 1 0 0 0 .7-1.7L18 14h.3a1 1 0 0 0 .7-1.7L16 9h.2a1 1 0 0 0 .8-1.7L13 3l-1.4 1.5"/>',
+        'calm-waters' => '<path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>',
+        'swimming' => '<circle cx="12" cy="5" r="3"/><path d="M4 22c0-5 8-5 8-10"/><path d="M20 22c0-5-8-5-8-10"/>',
+        'diving' => '<path d="M2 12h20"/><path d="M12 2v20"/><circle cx="12" cy="12" r="4"/>',
+        'scenic' => '<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/>',
+        'fishing' => '<path d="M3 14a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1z"/><path d="M12 14v-4"/><path d="m8 6 4 4 4-4"/>',
+        'camping' => '<path d="M3 20h18"/><path d="M12 4v16"/><path d="m4 20 8-14 8 14"/>',
+    ];
+    return $icons[$tag] ?? '<circle cx="12" cy="12" r="10"/>';
+}
+
+// ========================================
+// Explorer Level Helpers
+// ========================================
+
+/**
+ * Get explorer level info for a user
+ * @param string $level The explorer level (newcomer, explorer, guide, expert, legend)
+ * @return array Level info including label, icon, color, and thresholds
+ */
+function getExplorerLevelInfo($level) {
+    $levels = [
+        'newcomer' => [
+            'label' => 'Newcomer',
+            'icon' => '⭐',
+            'color' => 'amber',
+            'colorClass' => 'text-amber-400 bg-amber-500/20 border-amber-500/30',
+            'min_beaches' => 0,
+            'max_beaches' => 2,
+            'next_level' => 'explorer',
+            'rank' => 1
+        ],
+        'explorer' => [
+            'label' => 'Explorer',
+            'icon' => '⭐⭐',
+            'color' => 'gray',
+            'colorClass' => 'text-gray-300 bg-white/10 border-white/20',
+            'min_beaches' => 3,
+            'max_beaches' => 10,
+            'next_level' => 'guide',
+            'rank' => 2
+        ],
+        'guide' => [
+            'label' => 'Guide',
+            'icon' => '⭐⭐⭐',
+            'color' => 'yellow',
+            'colorClass' => 'text-yellow-400 bg-yellow-500/20 border-yellow-500/30',
+            'min_beaches' => 11,
+            'max_beaches' => 25,
+            'next_level' => 'expert',
+            'rank' => 3
+        ],
+        'expert' => [
+            'label' => 'Expert',
+            'icon' => '⭐⭐⭐⭐',
+            'color' => 'cyan',
+            'colorClass' => 'text-cyan-400 bg-cyan-500/20 border-cyan-500/30',
+            'min_beaches' => 26,
+            'max_beaches' => 50,
+            'next_level' => 'legend',
+            'rank' => 4
+        ],
+        'legend' => [
+            'label' => 'Legend',
+            'icon' => '👑',
+            'color' => 'purple',
+            'colorClass' => 'text-purple-400 bg-purple-500/20 border-purple-500/30',
+            'min_beaches' => 51,
+            'max_beaches' => null,
+            'next_level' => null,
+            'rank' => 5
+        ]
+    ];
+
+    return $levels[$level] ?? $levels['newcomer'];
+}
+
+/**
+ * Calculate progress to next explorer level
+ * @param int $beachesVisited Number of beaches the user has visited
+ * @param string $currentLevel Current explorer level
+ * @return array Progress info with percentage and beaches needed
+ */
+function getExplorerProgress($beachesVisited, $currentLevel) {
+    $levelInfo = getExplorerLevelInfo($currentLevel);
+
+    // If already at max level
+    if ($levelInfo['next_level'] === null) {
+        return [
+            'percentage' => 100,
+            'beaches_needed' => 0,
+            'next_level' => null,
+            'message' => 'You\'ve reached the highest level!'
+        ];
+    }
+
+    $nextLevelInfo = getExplorerLevelInfo($levelInfo['next_level']);
+    $minForNext = $nextLevelInfo['min_beaches'];
+    $minForCurrent = $levelInfo['min_beaches'];
+
+    $rangeSize = $minForNext - $minForCurrent;
+    $progress = $beachesVisited - $minForCurrent;
+    $percentage = min(100, max(0, ($progress / $rangeSize) * 100));
+    $beachesNeeded = max(0, $minForNext - $beachesVisited);
+
+    return [
+        'percentage' => round($percentage),
+        'beaches_needed' => $beachesNeeded,
+        'next_level' => $levelInfo['next_level'],
+        'next_level_info' => $nextLevelInfo,
+        'message' => $beachesNeeded . ' more beach' . ($beachesNeeded !== 1 ? 'es' : '') . ' to ' . $nextLevelInfo['label']
+    ];
+}
+
+/**
+ * Update user's explorer level based on beaches visited
+ * @param string $userId User ID
+ */
+function updateUserExplorerLevel($userId) {
+    require_once __DIR__ . '/db.php';
+
+    // Count unique beaches from check-ins
+    $result = queryOne(
+        'SELECT COUNT(DISTINCT beach_id) as count FROM beach_checkins WHERE user_id = :user_id',
+        [':user_id' => $userId]
+    );
+    $beachesVisited = (int)($result['count'] ?? 0);
+
+    // Determine level
+    $level = 'newcomer';
+    if ($beachesVisited >= 51) $level = 'legend';
+    elseif ($beachesVisited >= 26) $level = 'expert';
+    elseif ($beachesVisited >= 11) $level = 'guide';
+    elseif ($beachesVisited >= 3) $level = 'explorer';
+
+    // Update user
+    execute(
+        'UPDATE users SET explorer_level = :level, total_beaches_visited = :count WHERE id = :id',
+        [':level' => $level, ':count' => $beachesVisited, ':id' => $userId]
+    );
+
+    return ['level' => $level, 'beaches_visited' => $beachesVisited];
+}
+
+// ========================================
+// Admin Beach Image Helpers
+// ========================================
+
+/**
+ * Get optimized beach image URL for a specific size
+ *
+ * For beaches with admin-uploaded images (stored in beach_images table),
+ * returns the WebP URL for the requested size. For legacy beaches using
+ * cover_image URLs, returns the original URL.
+ *
+ * @param array $beach Beach data with 'id' and 'cover_image'
+ * @param string $size Size variant: 'original', 'large', 'medium', 'thumb', 'placeholder'
+ * @return string Image URL
+ */
+function getBeachImageUrl($beach, $size = 'medium') {
+    $coverImage = $beach['cover_image'] ?? '';
+
+    // Check if this is an admin-uploaded image (in /uploads/admin/beaches/)
+    if (strpos($coverImage, '/uploads/admin/beaches/') === 0) {
+        // Extract base filename (without size suffix and extension)
+        $filename = basename($coverImage);
+
+        // Remove any existing size suffix and extension
+        $baseName = preg_replace('/(_\d+|_placeholder)?\.webp$/', '', $filename);
+
+        // Build URL for requested size
+        $suffix = match($size) {
+            'original' => '',
+            'large' => '_1200',
+            'medium' => '_800',
+            'thumb' => '_400',
+            'placeholder' => '_placeholder',
+            default => '_800'
+        };
+
+        return '/uploads/admin/beaches/' . $baseName . $suffix . '.webp';
+    }
+
+    // Legacy image - return as-is
+    return $coverImage ?: '/images/beaches/placeholder-beach.webp';
+}
+
+/**
+ * Get srcset attribute for responsive beach images
+ *
+ * Returns a srcset string for use with responsive images. For admin-uploaded
+ * images, includes all available sizes. For legacy images, returns empty string.
+ *
+ * @param array $beach Beach data with 'id' and 'cover_image'
+ * @return string Srcset attribute value
+ */
+function getBeachImageSrcset($beach) {
+    $coverImage = $beach['cover_image'] ?? '';
+
+    // Only generate srcset for admin-uploaded images
+    if (strpos($coverImage, '/uploads/admin/beaches/') !== 0) {
+        return '';
+    }
+
+    // Extract base filename
+    $filename = basename($coverImage);
+    $baseName = preg_replace('/(_\d+|_placeholder)?\.webp$/', '', $filename);
+    $basePath = '/uploads/admin/beaches/' . $baseName;
+
+    $srcset = [
+        $basePath . '_400.webp 400w',
+        $basePath . '_800.webp 800w',
+        $basePath . '_1200.webp 1200w',
+        $basePath . '.webp 2400w',
+    ];
+
+    return implode(', ', $srcset);
+}
+
+/**
+ * Render a responsive beach image element with srcset and sizes
+ *
+ * @param array $beach Beach data
+ * @param string $alt Alt text
+ * @param string $class CSS classes
+ * @param string $sizes Sizes attribute (default for card grid)
+ * @param string $loading Loading strategy ('lazy' or 'eager')
+ * @return string HTML img element
+ */
+function renderBeachImage($beach, $alt = '', $class = '', $sizes = '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw', $loading = 'lazy') {
+    $src = h(getBeachImageUrl($beach, 'medium'));
+    $srcset = getBeachImageSrcset($beach);
+    $altText = h($alt ?: ($beach['name'] ?? 'Beach'));
+    $classAttr = $class ? ' class="' . h($class) . '"' : '';
+    $loadingAttr = $loading ? ' loading="' . h($loading) . '"' : '';
+
+    if ($srcset) {
+        $srcsetAttr = ' srcset="' . h($srcset) . '"';
+        $sizesAttr = ' sizes="' . h($sizes) . '"';
+        return '<img src="' . $src . '"' . $srcsetAttr . $sizesAttr . ' alt="' . $altText . '"' . $classAttr . $loadingAttr . '>';
+    }
+
+    return '<img src="' . $src . '" alt="' . $altText . '"' . $classAttr . $loadingAttr . '>';
+}
+
+/**
+ * Check if a beach has admin-uploaded images
+ *
+ * @param string $beachId Beach ID
+ * @return bool True if beach has images in beach_images table
+ */
+function beachHasAdminImages($beachId) {
+    require_once __DIR__ . '/db.php';
+
+    $result = queryOne(
+        'SELECT COUNT(*) as count FROM beach_images WHERE beach_id = :beach_id',
+        [':beach_id' => $beachId]
+    );
+
+    return ((int)($result['count'] ?? 0)) > 0;
 }
