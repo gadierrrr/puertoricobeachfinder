@@ -18,7 +18,6 @@ $faqs = [['question' => 'What are the best family-friendly beaches in Puerto Ric
 echo howToSchema('How to Plan Family Beach Vacation to Puerto Rico','Complete planning guide for families',[['name'=>'Choose Best Time to Visit','text'=>'Select travel dates based on school schedules, weather preferences, and budget. April-May offers best value.'],['name'=>'Book Flights Early','text'=>'Book 2-3 months ahead for best prices. Nonstop flights to San Juan from major U.S. cities available.'],['name'=>'Reserve Family Accommodation','text'=>'Book hotels with pools and kids clubs, or condos with kitchens to save on dining costs.'],['name'=>'Rent Appropriate Vehicle','text'=>'Reserve car seats with rental car or bring portable boosters. SUV provides space for family gear.'],['name'=>'Plan Balanced Itinerary','text'=>'Mix beach days with cultural sites, rainforest, and adventure activities. Don\'t overschedule.'],['name'=>'Pack Smart for Kids','text'=>'Bring beach toys, life jackets, first aid kit, snacks, entertainment for travel, and sun protection.'],['name'=>'Build in Downtime','text'=>'Schedule rest days at hotel pool or easy beaches. Avoid burnout with realistic daily plans.']]);
 echo faqSchema($faqs);
 echo breadcrumbSchema([['name'=>'Home','url'=>'https://puertoricobeachfinder.com/'],['name'=>'Guides','url'=>'https://puertoricobeachfinder.com/guides/'],['name'=>'Family Vacation Planning','url'=>'https://puertoricobeachfinder.com/guides/family-beach-vacation-planning.php']]);?>
-<style>.toc-sticky{position:sticky;top:100px;max-height:calc(100vh - 120px);overflow-y:auto;}</style>
 </head>
 <body class="bg-gray-50" data-theme="light">
 <?php include __DIR__.'/../components/header.php';?>
@@ -28,13 +27,12 @@ echo breadcrumbSchema([['name'=>'Home','url'=>'https://puertoricobeachfinder.com
 <h1 class="text-4xl md:text-5xl font-bold mb-4">Family Beach Vacation Planning for Puerto Rico</h1>
 <p class="text-xl text-green-50 max-w-3xl">Complete guide to planning an unforgettable, stress-free family beach vacation with kids of all ages.</p>
 </div></section>
-<main class="container mx-auto px-4 container-padding py-12">
-<div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-<aside class="lg:col-span-1"><div class="toc-sticky bg-white rounded-lg shadow-card p-6">
+<main class="guide-layout">
+<aside class="guide-sidebar"><div class="guide-toc">
 <h2 class="text-lg font-bold text-gray-900 mb-4">Table of Contents</h2>
-<nav class="space-y-2"><a href="#why-pr" class="block text-green-600 hover:text-green-700 text-sm">Why Puerto Rico?</a><a href="#best-beaches" class="block text-green-600 hover:text-green-700 text-sm">Best Family Beaches</a><a href="#where-stay" class="block text-green-600 hover:text-green-700 text-sm">Where to Stay</a><a href="#itineraries" class="block text-green-600 hover:text-green-700 text-sm">Sample Itineraries</a><a href="#budget" class="block text-green-600 hover:text-green-700 text-sm">Budgeting</a><a href="#activities" class="block text-green-600 hover:text-green-700 text-sm">Kid Activities</a><a href="#faq" class="block text-green-600 hover:text-green-700 text-sm">FAQ</a></nav>
+<nav class="space-y-2"><a href="#why-pr" class="guide-toc-link">Why Puerto Rico?</a><a href="#best-beaches" class="guide-toc-link">Best Family Beaches</a><a href="#where-stay" class="guide-toc-link">Where to Stay</a><a href="#itineraries" class="guide-toc-link">Sample Itineraries</a><a href="#budget" class="guide-toc-link">Budgeting</a><a href="#activities" class="guide-toc-link">Kid Activities</a><a href="#faq" class="guide-toc-link">FAQ</a></nav>
 </div></aside>
-<article class="lg:col-span-3 bg-white rounded-lg shadow-card p-8">
+<article class="guide-article bg-white rounded-lg shadow-card p-8">
 <div class="prose prose-lg max-w-none">
 <p class="lead text-xl text-gray-700 mb-8">Puerto Rico delivers the perfect family beach vacation—stunning beaches with calm water, no passport requirement for U.S. citizens, rich culture, rainforest adventures, and kid-friendly infrastructure. This comprehensive guide helps you plan every detail from choosing beaches to budgeting, ensuring a memorable stress-free trip for families with children of all ages.</p>
 <h2 id="why-pr" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Why Puerto Rico for Families?</h2>
@@ -82,8 +80,8 @@ echo breadcrumbSchema([['name'=>'Home','url'=>'https://puertoricobeachfinder.com
 <a href="/?amenities=lifeguards" class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">View Family Beaches</a>
 </div></div>
 <div class="mt-12 pt-8 border-t border-gray-200"><h3 class="text-xl font-bold text-gray-900 mb-4">Related Guides</h3>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4"><?php foreach($relatedGuides as $guide):?>
-<a href="/guides/<?php echo h($guide['slug']);?>.php" class="block p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"><span class="text-green-600 font-semibold"><?php echo h($guide['title']);?></span></a>
+<div class="related-guides-grid"><?php foreach($relatedGuides as $guide):?>
+<a href="/guides/<?php echo h($guide['slug']);?>.php" class="related-guide-card"><span class="related-guide-title"><?php echo h($guide['title']);?></span></a>
 <?php endforeach;?></div></div>
 </article></div></main>
 <?php include __DIR__.'/../components/footer.php';?>

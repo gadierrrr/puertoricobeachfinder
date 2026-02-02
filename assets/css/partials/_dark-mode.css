@@ -166,3 +166,42 @@
     background: var(--color-bg-tertiary);
 }
 
+/* ========================================
+   GUIDE PAGES DARK MODE
+   ======================================== */
+
+[data-theme="dark"] .guide-toc {
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .guide-toc-link {
+    color: var(--color-accent);
+}
+
+[data-theme="dark"] .guide-toc-link:hover {
+    color: var(--color-accent-hover);
+}
+
+[data-theme="dark"] .guide-article {
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .related-guide-card {
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .related-guide-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .checklist-item {
+    color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .prose-brand p {
+    color: var(--color-text-secondary);
+}
+

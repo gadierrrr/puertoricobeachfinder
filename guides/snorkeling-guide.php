@@ -50,7 +50,6 @@ $faqs = [
         ['name' => 'Snorkeling Guide', 'url' => 'https://puertoricobeachfinder.com/guides/snorkeling-guide.php']
     ]);
     ?>
-    <style>.toc-sticky { position: sticky; top: 100px; max-height: calc(100vh - 120px); overflow-y: auto; }</style>
 </head>
 <body class="bg-gray-50" data-theme="light">
     <?php include __DIR__ . '/../components/header.php'; ?>
@@ -71,24 +70,23 @@ $faqs = [
         </div>
     </section>
 
-    <main class="container mx-auto px-4 container-padding py-12">
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <aside class="lg:col-span-1">
-                <div class="toc-sticky bg-white rounded-lg shadow-card p-6">
+    <main class="guide-layout">
+        <aside class="guide-sidebar">
+            <div class="guide-toc">
                     <h2 class="text-lg font-bold text-gray-900 mb-4">Table of Contents</h2>
                     <nav class="space-y-2">
-                        <a href="#why" class="block text-green-600 hover:text-green-700 text-sm">Why Puerto Rico?</a>
-                        <a href="#equipment" class="block text-green-600 hover:text-green-700 text-sm">Equipment</a>
-                        <a href="#technique" class="block text-green-600 hover:text-green-700 text-sm">Techniques</a>
-                        <a href="#top-spots" class="block text-green-600 hover:text-green-700 text-sm">Top 10 Spots</a>
-                        <a href="#marine-life" class="block text-green-600 hover:text-green-700 text-sm">Marine Life</a>
-                        <a href="#safety" class="block text-green-600 hover:text-green-700 text-sm">Safety</a>
-                        <a href="#faq" class="block text-green-600 hover:text-green-700 text-sm">FAQ</a>
+                        <a href="#why" class="guide-toc-link">Why Puerto Rico?</a>
+                        <a href="#equipment" class="guide-toc-link">Equipment</a>
+                        <a href="#technique" class="guide-toc-link">Techniques</a>
+                        <a href="#top-spots" class="guide-toc-link">Top 10 Spots</a>
+                        <a href="#marine-life" class="guide-toc-link">Marine Life</a>
+                        <a href="#safety" class="guide-toc-link">Safety</a>
+                        <a href="#faq" class="guide-toc-link">FAQ</a>
                     </nav>
                 </div>
             </aside>
 
-            <article class="lg:col-span-3 bg-white rounded-lg shadow-card p-8">
+        <article class="guide-article bg-white rounded-lg shadow-card p-8">
                 <div class="prose prose-lg max-w-none">
                     <p class="lead text-xl text-gray-700 mb-8">
                         Puerto Rico offers world-class snorkeling with pristine coral reefs, abundant marine life, and crystal-clear Caribbean waters. From the protected reefs of Culebra to the underwater landscapes of Vieques, snorkeling here reveals a vibrant underwater world accessible to beginners and experts alike. This guide covers everything you need for unforgettable snorkeling experiences.
@@ -227,10 +225,10 @@ $faqs = [
 
                 <div class="mt-12 pt-8 border-t border-gray-200">
                     <h3 class="text-xl font-bold text-gray-900 mb-4">Related Guides</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="related-guides-grid">
                         <?php foreach ($relatedGuides as $guide): ?>
-                        <a href="/guides/<?php echo h($guide['slug']); ?>.php" class="block p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                            <span class="text-green-600 font-semibold"><?php echo h($guide['title']); ?></span>
+                        <a href="/guides/<?php echo h($guide['slug']); ?>.php" class="related-guide-card">
+                            <span class="related-guide-title"><?php echo h($guide['title']); ?></span>
                         </a>
                         <?php endforeach; ?>
                     </div>

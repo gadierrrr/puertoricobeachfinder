@@ -51,11 +51,6 @@ $faqs = [
         ['name' => 'Beach Packing List', 'url' => 'https://puertoricobeachfinder.com/guides/beach-packing-list.php']
     ]);
     ?>
-    <style>
-        .toc-sticky { position: sticky; top: 100px; max-height: calc(100vh - 120px); overflow-y: auto; }
-        .checklist-item { padding-left: 2rem; position: relative; }
-        .checklist-item:before { content: '☐'; position: absolute; left: 0; font-size: 1.25rem; color: #10b981; }
-    </style>
 </head>
 <body class="bg-gray-50" data-theme="light">
     <?php include __DIR__ . '/../components/header.php'; ?>
@@ -76,25 +71,24 @@ $faqs = [
         </div>
     </section>
 
-    <main class="container mx-auto px-4 container-padding py-12">
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <aside class="lg:col-span-1">
-                <div class="toc-sticky bg-white rounded-lg shadow-card p-6">
+    <main class="guide-layout">
+        <aside class="guide-sidebar">
+            <div class="guide-toc">
                     <h2 class="text-lg font-bold text-gray-900 mb-4">Categories</h2>
                     <nav class="space-y-2">
-                        <a href="#essentials" class="block text-green-600 hover:text-green-700 text-sm">Essential Items</a>
-                        <a href="#sun-protection" class="block text-green-600 hover:text-green-700 text-sm">Sun Protection</a>
-                        <a href="#swim-gear" class="block text-green-600 hover:text-green-700 text-sm">Swim Gear</a>
-                        <a href="#comfort" class="block text-green-600 hover:text-green-700 text-sm">Comfort Items</a>
-                        <a href="#safety" class="block text-green-600 hover:text-green-700 text-sm">Safety & First Aid</a>
-                        <a href="#electronics" class="block text-green-600 hover:text-green-700 text-sm">Electronics</a>
-                        <a href="#optional" class="block text-green-600 hover:text-green-700 text-sm">Optional Extras</a>
-                        <a href="#faq" class="block text-green-600 hover:text-green-700 text-sm">FAQ</a>
+                        <a href="#essentials" class="guide-toc-link">Essential Items</a>
+                        <a href="#sun-protection" class="guide-toc-link">Sun Protection</a>
+                        <a href="#swim-gear" class="guide-toc-link">Swim Gear</a>
+                        <a href="#comfort" class="guide-toc-link">Comfort Items</a>
+                        <a href="#safety" class="guide-toc-link">Safety & First Aid</a>
+                        <a href="#electronics" class="guide-toc-link">Electronics</a>
+                        <a href="#optional" class="guide-toc-link">Optional Extras</a>
+                        <a href="#faq" class="guide-toc-link">FAQ</a>
                     </nav>
                 </div>
             </aside>
 
-            <article class="lg:col-span-3 bg-white rounded-lg shadow-card p-8">
+        <article class="guide-article bg-white rounded-lg shadow-card p-8">
                 <div class="prose prose-lg max-w-none">
                     <p class="lead text-xl text-gray-700 mb-8">
                         Packing efficiently for Puerto Rico beaches ensures you have everything needed for comfort, safety, and fun without overpacking. This comprehensive checklist covers absolute essentials, recommended items, and optional extras based on your planned activities. Whether you're visiting calm Caribbean beaches or adventurous north coast surf breaks, this guide has you covered.
@@ -309,11 +303,10 @@ $faqs = [
 
                 <div class="mt-12 pt-8 border-t border-gray-200">
                     <h3 class="text-xl font-bold text-gray-900 mb-4">Related Guides</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="related-guides-grid">
                         <?php foreach ($relatedGuides as $guide): ?>
-                        <a href="/guides/<?php echo h($guide['slug']); ?>.php"
-                           class="block p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                            <span class="text-green-600 font-semibold"><?php echo h($guide['title']); ?></span>
+                        <a href="/guides/<?php echo h($guide['slug']); ?>.php" class="related-guide-card">
+                            <span class="related-guide-title"><?php echo h($guide['title']); ?></span>
                         </a>
                         <?php endforeach; ?>
                     </div>

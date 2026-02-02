@@ -42,11 +42,6 @@ $faqs = [
         ['name' => 'Best Time to Visit', 'url' => 'https://puertoricobeachfinder.com/guides/best-time-visit-puerto-rico-beaches.php']
     ]);
     ?>
-    <style>
-        .toc-sticky { position: sticky; top: 100px; max-height: calc(100vh - 120px); overflow-y: auto; }
-        .month-card { transition: all 0.3s; }
-        .month-card:hover { transform: translateY(-4px); }
-    </style>
 </head>
 <body class="bg-gray-50" data-theme="light">
     <?php include __DIR__ . '/../components/header.php'; ?>
@@ -67,24 +62,23 @@ $faqs = [
         </div>
     </section>
 
-    <main class="container mx-auto px-4 container-padding py-12">
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <aside class="lg:col-span-1">
-                <div class="toc-sticky bg-white rounded-lg shadow-card p-6">
+    <main class="guide-layout">
+        <aside class="guide-sidebar">
+            <div class="guide-toc">
                     <h2 class="text-lg font-bold text-gray-900 mb-4">Table of Contents</h2>
                     <nav class="space-y-2">
-                        <a href="#overview" class="block text-green-600 hover:text-green-700 text-sm">Season Overview</a>
-                        <a href="#winter" class="block text-green-600 hover:text-green-700 text-sm">Winter (Dec-Feb)</a>
-                        <a href="#spring" class="block text-green-600 hover:text-green-700 text-sm">Spring (Mar-May)</a>
-                        <a href="#summer" class="block text-green-600 hover:text-green-700 text-sm">Summer (Jun-Aug)</a>
-                        <a href="#fall" class="block text-green-600 hover:text-green-700 text-sm">Fall (Sep-Nov)</a>
-                        <a href="#events" class="block text-green-600 hover:text-green-700 text-sm">Events & Holidays</a>
-                        <a href="#faq" class="block text-green-600 hover:text-green-700 text-sm">FAQ</a>
+                        <a href="#overview" class="guide-toc-link">Season Overview</a>
+                        <a href="#winter" class="guide-toc-link">Winter (Dec-Feb)</a>
+                        <a href="#spring" class="guide-toc-link">Spring (Mar-May)</a>
+                        <a href="#summer" class="guide-toc-link">Summer (Jun-Aug)</a>
+                        <a href="#fall" class="guide-toc-link">Fall (Sep-Nov)</a>
+                        <a href="#events" class="guide-toc-link">Events & Holidays</a>
+                        <a href="#faq" class="guide-toc-link">FAQ</a>
                     </nav>
                 </div>
             </aside>
 
-            <article class="lg:col-span-3 bg-white rounded-lg shadow-card p-8">
+        <article class="guide-article bg-white rounded-lg shadow-card p-8">
                 <div class="prose prose-lg max-w-none">
                     <p class="lead text-xl text-gray-700 mb-8">
                         Puerto Rico enjoys tropical climate year-round, making it a fantastic beach destination in any season. However, understanding seasonal patterns helps you choose the best time based on your priorities—whether that's perfect weather, smaller crowds, lower prices, or specific activities like surfing or whale watching.
@@ -313,11 +307,10 @@ $faqs = [
 
                 <div class="mt-12 pt-8 border-t border-gray-200">
                     <h3 class="text-xl font-bold text-gray-900 mb-4">Related Guides</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="related-guides-grid">
                         <?php foreach ($relatedGuides as $guide): ?>
-                        <a href="/guides/<?php echo h($guide['slug']); ?>.php"
-                           class="block p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                            <span class="text-green-600 font-semibold"><?php echo h($guide['title']); ?></span>
+                        <a href="/guides/<?php echo h($guide['slug']); ?>.php" class="related-guide-card">
+                            <span class="related-guide-title"><?php echo h($guide['title']); ?></span>
                         </a>
                         <?php endforeach; ?>
                     </div>

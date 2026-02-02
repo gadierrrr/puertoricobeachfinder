@@ -87,14 +87,6 @@ $faqs = [
         ['name' => 'Getting to Puerto Rico Beaches', 'url' => 'https://puertoricobeachfinder.com/guides/getting-to-puerto-rico-beaches.php']
     ]);
     ?>
-    <style>
-        .toc-sticky {
-            position: sticky;
-            top: 100px;
-            max-height: calc(100vh - 120px);
-            overflow-y: auto;
-        }
-    </style>
 </head>
 <body class="bg-gray-50" data-theme="light">
     <?php include __DIR__ . '/../components/header.php'; ?>
@@ -118,27 +110,26 @@ $faqs = [
     </section>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 container-padding py-12">
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <!-- Table of Contents -->
-            <aside class="lg:col-span-1">
-                <div class="toc-sticky bg-white rounded-lg shadow-card p-6">
+    <main class="guide-layout">
+        <!-- Table of Contents -->
+        <aside class="guide-sidebar">
+            <div class="guide-toc">
                     <h2 class="text-lg font-bold text-gray-900 mb-4">Table of Contents</h2>
                     <nav class="space-y-2">
-                        <a href="#car-rental" class="block text-green-600 hover:text-green-700 text-sm">Car Rentals</a>
-                        <a href="#driving" class="block text-green-600 hover:text-green-700 text-sm">Driving Tips</a>
-                        <a href="#uber-taxi" class="block text-green-600 hover:text-green-700 text-sm">Uber & Taxis</a>
-                        <a href="#public-transit" class="block text-green-600 hover:text-green-700 text-sm">Public Transit</a>
-                        <a href="#ferries" class="block text-green-600 hover:text-green-700 text-sm">Island Ferries</a>
-                        <a href="#flights" class="block text-green-600 hover:text-green-700 text-sm">Inter-Island Flights</a>
-                        <a href="#costs" class="block text-green-600 hover:text-green-700 text-sm">Cost Breakdown</a>
-                        <a href="#faq" class="block text-green-600 hover:text-green-700 text-sm">FAQ</a>
+                        <a href="#car-rental" class="guide-toc-link">Car Rentals</a>
+                        <a href="#driving" class="guide-toc-link">Driving Tips</a>
+                        <a href="#uber-taxi" class="guide-toc-link">Uber & Taxis</a>
+                        <a href="#public-transit" class="guide-toc-link">Public Transit</a>
+                        <a href="#ferries" class="guide-toc-link">Island Ferries</a>
+                        <a href="#flights" class="guide-toc-link">Inter-Island Flights</a>
+                        <a href="#costs" class="guide-toc-link">Cost Breakdown</a>
+                        <a href="#faq" class="guide-toc-link">FAQ</a>
                     </nav>
                 </div>
             </aside>
 
             <!-- Article Content -->
-            <article class="lg:col-span-3 bg-white rounded-lg shadow-card p-8">
+        <article class="guide-article bg-white rounded-lg shadow-card p-8">
                 <div class="prose prose-lg max-w-none">
                     <p class="lead text-xl text-gray-700 mb-8">
                         Puerto Rico offers incredible beach diversity, from the pristine shores of Culebra to the surf breaks of Rincón.
@@ -482,11 +473,10 @@ $faqs = [
                 <!-- Related Guides -->
                 <div class="mt-12 pt-8 border-t border-gray-200">
                     <h3 class="text-xl font-bold text-gray-900 mb-4">Related Guides</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="related-guides-grid">
                         <?php foreach ($relatedGuides as $guide): ?>
-                        <a href="/guides/<?php echo h($guide['slug']); ?>.php"
-                           class="block p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                            <span class="text-green-600 font-semibold"><?php echo h($guide['title']); ?></span>
+                        <a href="/guides/<?php echo h($guide['slug']); ?>.php" class="related-guide-card">
+                            <span class="related-guide-title"><?php echo h($guide['title']); ?></span>
                         </a>
                         <?php endforeach; ?>
                     </div>
