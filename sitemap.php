@@ -33,9 +33,23 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         <priority>0.8</priority>
     </url>
 
-    <!-- SEO Landing Pages -->
+    <!-- Compare Beaches -->
+    <url>
+        <loc><?= h($appUrl) ?>/compare.php</loc>
+        <lastmod><?= date('Y-m-d') ?></lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <!-- Editorial Beach Pages -->
     <url>
         <loc><?= h($appUrl) ?>/best-beaches</loc>
+        <lastmod><?= date('Y-m-d') ?></lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc><?= h($appUrl) ?>/best-beaches-san-juan</loc>
         <lastmod><?= date('Y-m-d') ?></lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
@@ -63,6 +77,86 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         <lastmod><?= date('Y-m-d') ?></lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
+    </url>
+    <url>
+        <loc><?= h($appUrl) ?>/beaches-near-san-juan-airport</loc>
+        <lastmod><?= date('Y-m-d') ?></lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc><?= h($appUrl) ?>/hidden-beaches-puerto-rico</loc>
+        <lastmod><?= date('Y-m-d') ?></lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Beach Planning Guides -->
+    <url>
+        <loc><?= h($appUrl) ?>/guides</loc>
+        <lastmod><?= date('Y-m-d') ?></lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc><?= h($appUrl) ?>/guides/getting-to-puerto-rico-beaches</loc>
+        <lastmod><?= date('Y-m-d') ?></lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc><?= h($appUrl) ?>/guides/beach-safety-tips</loc>
+        <lastmod><?= date('Y-m-d') ?></lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc><?= h($appUrl) ?>/guides/best-time-visit-puerto-rico-beaches</loc>
+        <lastmod><?= date('Y-m-d') ?></lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc><?= h($appUrl) ?>/guides/beach-packing-list</loc>
+        <lastmod><?= date('Y-m-d') ?></lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc><?= h($appUrl) ?>/guides/culebra-vs-vieques</loc>
+        <lastmod><?= date('Y-m-d') ?></lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc><?= h($appUrl) ?>/guides/bioluminescent-bays</loc>
+        <lastmod><?= date('Y-m-d') ?></lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc><?= h($appUrl) ?>/guides/snorkeling-guide</loc>
+        <lastmod><?= date('Y-m-d') ?></lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc><?= h($appUrl) ?>/guides/surfing-guide</loc>
+        <lastmod><?= date('Y-m-d') ?></lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc><?= h($appUrl) ?>/guides/beach-photography-tips</loc>
+        <lastmod><?= date('Y-m-d') ?></lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc><?= h($appUrl) ?>/guides/family-beach-vacation-planning</loc>
+        <lastmod><?= date('Y-m-d') ?></lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
     </url>
 
     <!-- Individual Beach Pages -->
@@ -94,7 +188,7 @@ foreach ($beaches as $beach):
     </url>
 <?php endforeach; ?>
 
-    <!-- Municipality Filter Pages -->
+    <!-- Municipality Landing Pages -->
 <?php
 $municipalities = array_column(
     query("SELECT DISTINCT municipality FROM beaches WHERE publish_status = 'published' ORDER BY municipality"),
@@ -102,29 +196,13 @@ $municipalities = array_column(
 );
 
 foreach ($municipalities as $municipality):
+    $slug = strtolower(str_replace(' ', '-', $municipality));
 ?>
     <url>
-        <loc><?= h($appUrl) ?>/?municipality=<?= urlencode($municipality) ?></loc>
+        <loc><?= h($appUrl) ?>/beaches-in-<?= h($slug) ?></loc>
         <lastmod><?= date('Y-m-d') ?></lastmod>
         <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-    </url>
-<?php endforeach; ?>
-
-    <!-- Tag Filter Pages -->
-<?php
-$tags = array_column(
-    query("SELECT DISTINCT tag FROM beach_tags ORDER BY tag"),
-    'tag'
-);
-
-foreach ($tags as $tag):
-?>
-    <url>
-        <loc><?= h($appUrl) ?>/?tags[]=<?= urlencode($tag) ?></loc>
-        <lastmod><?= date('Y-m-d') ?></lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.5</priority>
+        <priority>0.7</priority>
     </url>
 <?php endforeach; ?>
 

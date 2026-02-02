@@ -1,0 +1,2722 @@
+{
+  "beaches": [
+    {
+      "name": "Aguada Beach",
+      "coordinates": {
+        "lat": 18.3815797,
+        "lng": -67.2182178
+      }
+    },
+    {
+      "name": "Almendro's Beach",
+      "coordinates": {
+        "lat": 18.3101085,
+        "lng": -67.2401811
+      }
+    },
+    {
+      "name": "Ama's Beach",
+      "coordinates": {
+        "lat": 18.327361,
+        "lng": -67.2504309
+      }
+    },
+    {
+      "name": "Arecibo Harbor",
+      "coordinates": {
+        "lat": 18.4808607,
+        "lng": -66.7015131
+      }
+    },
+    {
+      "name": "Arecibo Lighthouse and Historical Park",
+      "coordinates": {
+        "lat": 18.481861,
+        "lng": -66.698644
+      }
+    },
+    {
+      "name": "Arecibo Oceanfront Paradise",
+      "coordinates": {
+        "lat": 18.492439,
+        "lng": -66.633602
+      }
+    },
+    {
+      "name": "Arecibo Pool",
+      "coordinates": {
+        "lat": 18.4817143,
+        "lng": -66.6967257
+      }
+    },
+    {
+      "name": "Arecibo Promenade",
+      "coordinates": {
+        "lat": 18.473437,
+        "lng": -66.7144065
+      }
+    },
+    {
+      "name": "Atlantic Beach",
+      "coordinates": {
+        "lat": 18.4572457,
+        "lng": -66.0719557
+      }
+    },
+    {
+      "name": "Bahía de Aguadilla",
+      "coordinates": {
+        "lat": 18.4262725,
+        "lng": -67.1834905
+      }
+    },
+    {
+      "name": "Bahía Lima Beach",
+      "coordinates": {
+        "lat": 18.1844492,
+        "lng": -65.6983789
+      }
+    },
+    {
+      "name": "Bahía Salinas Beach",
+      "coordinates": {
+        "lat": 17.950799,
+        "lng": -67.195735
+      }
+    },
+    {
+      "name": "Bajuras Beach",
+      "coordinates": {
+        "lat": 18.5151125,
+        "lng": -67.0928281
+      }
+    },
+    {
+      "name": "Balneario Condado",
+      "coordinates": {
+        "lat": 18.4605007,
+        "lng": -66.0837771
+      }
+    },
+    {
+      "name": "Balneario De Arroyo",
+      "coordinates": {
+        "lat": 17.9621896,
+        "lng": -66.0390529
+      }
+    },
+    {
+      "name": "Balneario de Dorado",
+      "coordinates": {
+        "lat": 18.4750658,
+        "lng": -66.2802282
+      }
+    },
+    {
+      "name": "Balneario de Punta Santiago",
+      "coordinates": {
+        "lat": 18.1557562,
+        "lng": -65.760735
+      }
+    },
+    {
+      "name": "Balneario del Escambrón",
+      "coordinates": {
+        "lat": 18.4669267,
+        "lng": -66.0899411
+      }
+    },
+    {
+      "name": "Balneario Dorado",
+      "coordinates": {
+        "lat": 18.4756167,
+        "lng": -66.2801045
+      }
+    },
+    {
+      "name": "Balneario El Tuque",
+      "coordinates": {
+        "lat": 17.9808004,
+        "lng": -66.6432286
+      }
+    },
+    {
+      "name": "Balneario Isla Verde",
+      "coordinates": {
+        "lat": 18.4488345,
+        "lng": -65.9990541
+      }
+    },
+    {
+      "name": "Balneario Isla Verde",
+      "coordinates": {
+        "lat": 18.4454968,
+        "lng": -66.0033965
+      }
+    },
+    {
+      "name": "Balneario Municipal De Aguda",
+      "coordinates": {
+        "lat": 18.3955016,
+        "lng": -67.1918475
+      }
+    },
+    {
+      "name": "Balneario Público de Boquerón",
+      "coordinates": {
+        "lat": 18.0132963,
+        "lng": -67.1718457
+      }
+    },
+    {
+      "name": "Balneario Público de Humacao",
+      "coordinates": {
+        "lat": 18.1549609,
+        "lng": -65.762384
+      }
+    },
+    {
+      "name": "Balneario Público de Rincón",
+      "coordinates": {
+        "lat": 18.3409669,
+        "lng": -67.2555341
+      }
+    },
+    {
+      "name": "Balneario Punta Salinas Beach",
+      "coordinates": {
+        "lat": 18.4737841,
+        "lng": -66.1861149
+      }
+    },
+    {
+      "name": "Balneario Punta Santiago",
+      "coordinates": {
+        "lat": 18.1692942,
+        "lng": -65.7410465
+      }
+    },
+    {
+      "name": "Balneario Seven seas",
+      "coordinates": {
+        "lat": 18.3696875,
+        "lng": -65.6344375
+      }
+    },
+    {
+      "name": "Balneario Tres Hermanos",
+      "coordinates": {
+        "lat": 18.2902664,
+        "lng": -67.1917176
+      }
+    },
+    {
+      "name": "Balneario. Vega Baja",
+      "coordinates": {
+        "lat": 18.48885,
+        "lng": -66.4018833
+      }
+    },
+    {
+      "name": "Bandera de Playa Buyé",
+      "coordinates": {
+        "lat": 18.0521471,
+        "lng": -67.1999083
+      }
+    },
+    {
+      "name": "Banquito Frente al Mar",
+      "coordinates": {
+        "lat": 18.3600093,
+        "lng": -67.2702537
+      }
+    },
+    {
+      "name": "Beach San Juan",
+      "coordinates": {
+        "lat": 18.4669482,
+        "lng": -66.0897988
+      }
+    },
+    {
+      "name": "Bizarreta Beach",
+      "coordinates": {
+        "lat": 17.9905743,
+        "lng": -66.4619818
+      }
+    },
+    {
+      "name": "Black Eagle Beach",
+      "coordinates": {
+        "lat": 18.344191,
+        "lng": -67.2596452
+      }
+    },
+    {
+      "name": "Blue Beach",
+      "coordinates": {
+        "lat": 18.1486835,
+        "lng": -65.4443074
+      }
+    },
+    {
+      "name": "Boquillas Beach",
+      "coordinates": {
+        "lat": 18.4771694,
+        "lng": -66.5101204
+      }
+    },
+    {
+      "name": "Boulder Beach",
+      "coordinates": {
+        "lat": 18.4418346,
+        "lng": -67.1574923
+      }
+    },
+    {
+      "name": "Bridges Surf Beach",
+      "coordinates": {
+        "lat": 18.4269466,
+        "lng": -67.1555709
+      }
+    },
+    {
+      "name": "Buyé Beach",
+      "coordinates": {
+        "lat": 18.0496771,
+        "lng": -67.1985378
+      }
+    },
+    {
+      "name": "Buyones Beach",
+      "coordinates": {
+        "lat": 17.9738385,
+        "lng": -66.5505885
+      }
+    },
+    {
+      "name": "Cabeza Chiquita Beach",
+      "coordinates": {
+        "lat": 18.3718409,
+        "lng": -65.649139
+      }
+    },
+    {
+      "name": "Caja de Muertos Beach",
+      "coordinates": {
+        "lat": 17.8886488,
+        "lng": -66.5267888
+      }
+    },
+    {
+      "name": "Camuy Playa spot",
+      "coordinates": {
+        "lat": 18.4899991,
+        "lng": -66.8560594
+      }
+    },
+    {
+      "name": "Canal Beach",
+      "coordinates": {
+        "lat": 18.3335982,
+        "lng": -67.2532193
+      }
+    },
+    {
+      "name": "Canto Las Piedras Beach",
+      "coordinates": {
+        "lat": 18.4390248,
+        "lng": -67.1563919
+      }
+    },
+    {
+      "name": "Caracas Beach",
+      "coordinates": {
+        "lat": 18.1083904,
+        "lng": -65.4130697
+      }
+    },
+    {
+      "name": "Carolina Public Beach",
+      "coordinates": {
+        "lat": 18.4494216,
+        "lng": -65.9971013
+      }
+    },
+    {
+      "name": "Caza y Pesca Playa",
+      "coordinates": {
+        "lat": 18.4812123,
+        "lng": -66.6842876
+      }
+    },
+    {
+      "name": "Charco El Hippie",
+      "coordinates": {
+        "lat": 18.2473933,
+        "lng": -65.7860867
+      }
+    },
+    {
+      "name": "Colón Beach",
+      "coordinates": {
+        "lat": 18.4141807,
+        "lng": -67.1616839
+      }
+    },
+    {
+      "name": "Columpio Playa Escalera",
+      "coordinates": {
+        "lat": 18.3472958,
+        "lng": -67.2631304
+      }
+    },
+    {
+      "name": "Combate Beach",
+      "coordinates": {
+        "lat": 17.9763375,
+        "lng": -67.2107274
+      }
+    },
+    {
+      "name": "Combate Playa Bohios ( el Poblado combate)",
+      "coordinates": {
+        "lat": 17.98221,
+        "lng": -67.2145497
+      }
+    },
+    {
+      "name": "Condado Beach",
+      "coordinates": {
+        "lat": 18.4599451,
+        "lng": -66.0779437
+      }
+    },
+    {
+      "name": "Condado playa",
+      "coordinates": {
+        "lat": 18.4573138,
+        "lng": -66.0719856
+      }
+    },
+    {
+      "name": "Corazón de Isabela",
+      "coordinates": {
+        "lat": 18.5148579,
+        "lng": -67.0525757
+      }
+    },
+    {
+      "name": "Crash Boat Beach",
+      "coordinates": {
+        "lat": 18.4587557,
+        "lng": -67.1639648
+      }
+    },
+    {
+      "name": "Cueva de las Golondrinas",
+      "coordinates": {
+        "lat": 18.4779518,
+        "lng": -66.5092752
+      }
+    },
+    {
+      "name": "Culebra Beach Flamenco",
+      "coordinates": {
+        "lat": 18.3279551,
+        "lng": -65.3150269
+      }
+    },
+    {
+      "name": "Culebrita Beach",
+      "coordinates": {
+        "lat": 18.3174559,
+        "lng": -65.2276561
+      }
+    },
+    {
+      "name": "Domes Beach",
+      "coordinates": {
+        "lat": 18.3646675,
+        "lng": -67.2699094
+      }
+    },
+    {
+      "name": "Don Antonio's Beach",
+      "coordinates": {
+        "lat": 18.3714937,
+        "lng": -67.2537739
+      }
+    },
+    {
+      "name": "Dorado Beach East North Gate",
+      "coordinates": {
+        "lat": 18.4663931,
+        "lng": -66.2900014
+      }
+    },
+    {
+      "name": "Dorado Beach East South Gate",
+      "coordinates": {
+        "lat": 18.455438,
+        "lng": -66.2898061
+      }
+    },
+    {
+      "name": "Dorado Beach, a Ritz-Carlton Reserve",
+      "coordinates": {
+        "lat": 18.4753725,
+        "lng": -66.3004613
+      }
+    },
+    {
+      "name": "Dorado Reef Beach playa pública",
+      "coordinates": {
+        "lat": 18.475747,
+        "lng": -66.3116134
+      }
+    },
+    {
+      "name": "El Cocal Beach",
+      "coordinates": {
+        "lat": 18.0132612,
+        "lng": -65.8477041
+      }
+    },
+    {
+      "name": "El Faro Beach",
+      "coordinates": {
+        "lat": 18.479037,
+        "lng": -66.7000825
+      }
+    },
+    {
+      "name": "El Faro de Rincón",
+      "coordinates": {
+        "lat": 18.3619771,
+        "lng": -67.2708163
+      }
+    },
+    {
+      "name": "El Gallito ( Gringo Beach )",
+      "coordinates": {
+        "lat": 18.141831,
+        "lng": -65.4755142
+      }
+    },
+    {
+      "name": "El Malecón La Esperanza",
+      "coordinates": {
+        "lat": 18.0946399,
+        "lng": -65.4721588
+      }
+    },
+    {
+      "name": "Emajaguas Beach House",
+      "coordinates": {
+        "lat": 18.0066619,
+        "lng": -65.8703649
+      }
+    },
+    {
+      "name": "Embassy Suites by Hilton Dorado del Mar Beach Resort",
+      "coordinates": {
+        "lat": 18.477351,
+        "lng": -66.273601
+      }
+    },
+    {
+      "name": "Escambron Beach",
+      "coordinates": {
+        "lat": 18.4655005,
+        "lng": -66.0871105
+      }
+    },
+    {
+      "name": "Escambrón Beach Club",
+      "coordinates": {
+        "lat": 18.4669539,
+        "lng": -66.0889287
+      }
+    },
+    {
+      "name": "Escondida Beach",
+      "coordinates": {
+        "lat": 18.4688499,
+        "lng": -66.4691909
+      }
+    },
+    {
+      "name": "Esperanza idrach",
+      "coordinates": {
+        "lat": 17.9650716,
+        "lng": -66.9069971
+      }
+    },
+    {
+      "name": "Esquinita María Playita",
+      "coordinates": {
+        "lat": 17.963661,
+        "lng": -66.613429
+      }
+    },
+    {
+      "name": "Estacionamiento Playa Peñón Amador",
+      "coordinates": {
+        "lat": 18.4908378,
+        "lng": -66.8660827
+      }
+    },
+    {
+      "name": "Fishing Spot La Guancha",
+      "coordinates": {
+        "lat": 17.9671236,
+        "lng": -66.6089417
+      }
+    },
+    {
+      "name": "Flamenco Beach",
+      "coordinates": {
+        "lat": 18.3279908,
+        "lng": -65.3152816
+      }
+    },
+    {
+      "name": "Flamenco Beach",
+      "coordinates": {
+        "lat": 18.3285175,
+        "lng": -65.3169454
+      }
+    },
+    {
+      "name": "Flecha's Beach House",
+      "coordinates": {
+        "lat": 18.1577935,
+        "lng": -65.7600115
+      }
+    },
+    {
+      "name": "Fuerte Caprón",
+      "coordinates": {
+        "lat": 17.9609985,
+        "lng": -66.9028625
+      }
+    },
+    {
+      "name": "Gasolina Beach Club",
+      "coordinates": {
+        "lat": 18.422888,
+        "lng": -66.074363
+      }
+    },
+    {
+      "name": "Gilligans Island",
+      "coordinates": {
+        "lat": 17.9424679,
+        "lng": -66.8710087
+      }
+    },
+    {
+      "name": "Guánica",
+      "coordinates": {
+        "lat": 17.9981273,
+        "lng": -66.9273193
+      }
+    },
+    {
+      "name": "Heaven Beach",
+      "coordinates": {
+        "lat": 17.9316952,
+        "lng": -66.9355338
+      }
+    },
+    {
+      "name": "Hidden Beach",
+      "coordinates": {
+        "lat": 17.9341514,
+        "lng": -66.9566838
+      }
+    },
+    {
+      "name": "Hobie Beach",
+      "coordinates": {
+        "lat": 18.4439083,
+        "lng": -66.0240062
+      }
+    },
+    {
+      "name": "Húcares Beachfront Escape",
+      "coordinates": {
+        "lat": 18.1903968,
+        "lng": -65.7196255
+      }
+    },
+    {
+      "name": "Humacao Nature Preserve",
+      "coordinates": {
+        "lat": 18.1506454,
+        "lng": -65.7720919
+      }
+    },
+    {
+      "name": "Icacos Beach",
+      "coordinates": {
+        "lat": 18.3836491,
+        "lng": -65.5912707
+      }
+    },
+    {
+      "name": "Isabela",
+      "coordinates": {
+        "lat": 18.5143677,
+        "lng": -67.0751373
+      }
+    },
+    {
+      "name": "Isla Caja de Muertos - Coffin Island",
+      "coordinates": {
+        "lat": 17.8931885,
+        "lng": -66.5211113
+      }
+    },
+    {
+      "name": "Isla Mata La Gata",
+      "coordinates": {
+        "lat": 17.959968,
+        "lng": -67.0382413
+      }
+    },
+    {
+      "name": "Isla Verde Beach",
+      "coordinates": {
+        "lat": 18.4449457,
+        "lng": -66.0140543
+      }
+    },
+    {
+      "name": "Isla Verde Beach",
+      "coordinates": {
+        "lat": 18.4440833,
+        "lng": -66.0204991
+      }
+    },
+    {
+      "name": "Isla Verde Beach",
+      "coordinates": {
+        "lat": 18.4443271,
+        "lng": -66.0264078
+      }
+    },
+    {
+      "name": "Isla Verde Beach West",
+      "coordinates": {
+        "lat": 18.4447958,
+        "lng": -66.0186136
+      }
+    },
+    {
+      "name": "Isla Verde Ocean View",
+      "coordinates": {
+        "lat": 18.446792,
+        "lng": -66.034635
+      }
+    },
+    {
+      "name": "Islabela Beach Resort",
+      "coordinates": {
+        "lat": 18.5110944,
+        "lng": -67.0677933
+      }
+    },
+    {
+      "name": "Isle Verde Beach",
+      "coordinates": {
+        "lat": 18.4448691,
+        "lng": -66.0142925
+      }
+    },
+    {
+      "name": "Joyuda Beach",
+      "coordinates": {
+        "lat": 18.1132918,
+        "lng": -67.1821244
+      }
+    },
+    {
+      "name": "Karen's Beach",
+      "coordinates": {
+        "lat": 18.4529514,
+        "lng": -66.0495132
+      }
+    },
+    {
+      "name": "Kikita Beach House",
+      "coordinates": {
+        "lat": 18.4765236,
+        "lng": -66.2593744
+      }
+    },
+    {
+      "name": "Kikita Surf Beach",
+      "coordinates": {
+        "lat": 18.4775248,
+        "lng": -66.2622866
+      }
+    },
+    {
+      "name": "La Endija De Blanca",
+      "coordinates": {
+        "lat": 18.3583661,
+        "lng": -67.269329
+      }
+    },
+    {
+      "name": "La Guancha",
+      "coordinates": {
+        "lat": 17.9659567,
+        "lng": -66.6125523
+      }
+    },
+    {
+      "name": "La Marginal",
+      "coordinates": {
+        "lat": 18.4742076,
+        "lng": -66.7267631
+      }
+    },
+    {
+      "name": "La Pared Beach",
+      "coordinates": {
+        "lat": 18.3775288,
+        "lng": -65.715662
+      }
+    },
+    {
+      "name": "La Piedra de Guanica",
+      "coordinates": {
+        "lat": 17.9647094,
+        "lng": -66.9080271
+      }
+    },
+    {
+      "name": "La Playuela, Cabo Rojo, Puerto Rico",
+      "coordinates": {
+        "lat": 18.0866265,
+        "lng": -67.1457347
+      }
+    },
+    {
+      "name": "La Pocita de Mimosa",
+      "coordinates": {
+        "lat": 18.3803955,
+        "lng": -65.6267221
+      }
+    },
+    {
+      "name": "La Poza de las Mujeres",
+      "coordinates": {
+        "lat": 18.4769675,
+        "lng": -66.5067307
+      }
+    },
+    {
+      "name": "La Poza del Escambrón Beach",
+      "coordinates": {
+        "lat": 18.4654262,
+        "lng": -66.0874401
+      }
+    },
+    {
+      "name": "La Poza del Obispo",
+      "coordinates": {
+        "lat": 18.4817143,
+        "lng": -66.6967257
+      }
+    },
+    {
+      "name": "Lamela Beach",
+      "coordinates": {
+        "lat": 18.0657938,
+        "lng": -67.1968466
+      }
+    },
+    {
+      "name": "Las Criollas Beach",
+      "coordinates": {
+        "lat": 18.4844004,
+        "lng": -66.5774582
+      }
+    },
+    {
+      "name": "Las Palmas Beach",
+      "coordinates": {
+        "lat": 18.4752252,
+        "lng": -66.5004215
+      }
+    },
+    {
+      "name": "Las Positas Del Lido",
+      "coordinates": {
+        "lat": 18.4897325,
+        "lng": -66.4099184
+      }
+    },
+    {
+      "name": "Los Almendros Beach",
+      "coordinates": {
+        "lat": 18.4889319,
+        "lng": -66.8778351
+      }
+    },
+    {
+      "name": "Los Bohios Playa Guayanes",
+      "coordinates": {
+        "lat": 18.0621889,
+        "lng": -65.8206555
+      }
+    },
+    {
+      "name": "Los Pescadores",
+      "coordinates": {
+        "lat": 17.9725488,
+        "lng": -67.0514488
+      }
+    },
+    {
+      "name": "Los Pinos Beach",
+      "coordinates": {
+        "lat": 18.4905866,
+        "lng": -66.8498868
+      }
+    },
+    {
+      "name": "Los Pozos",
+      "coordinates": {
+        "lat": 18.0002142,
+        "lng": -67.2022269
+      }
+    },
+    {
+      "name": "Los Pozos Beach",
+      "coordinates": {
+        "lat": 18.0000602,
+        "lng": -67.2022319
+      }
+    },
+    {
+      "name": "Los Pozos Beach",
+      "coordinates": {
+        "lat": 18.0021856,
+        "lng": -67.1976796
+      }
+    },
+    {
+      "name": "Los Tubos Beach",
+      "coordinates": {
+        "lat": 18.4694548,
+        "lng": -66.4556088
+      }
+    },
+    {
+      "name": "Lucia Beach Resort",
+      "coordinates": {
+        "lat": 18.0435335,
+        "lng": -65.8350117
+      }
+    },
+    {
+      "name": "Luis Pena Beach",
+      "coordinates": {
+        "lat": 18.3110672,
+        "lng": -65.3329363
+      }
+    },
+    {
+      "name": "Luquillo",
+      "coordinates": {
+        "lat": 18.3578547,
+        "lng": -65.7540113
+      }
+    },
+    {
+      "name": "Luquillo Beach",
+      "coordinates": {
+        "lat": 18.3843827,
+        "lng": -65.7295596
+      }
+    },
+    {
+      "name": "Macho Beach",
+      "coordinates": {
+        "lat": 18.2635673,
+        "lng": -65.6307149
+      }
+    },
+    {
+      "name": "Mameyal Beach",
+      "coordinates": {
+        "lat": 18.4793378,
+        "lng": -66.2672346
+      }
+    },
+    {
+      "name": "Manglillo Chiquito",
+      "coordinates": {
+        "lat": 17.9328378,
+        "lng": -66.9520766
+      }
+    },
+    {
+      "name": "Mansiones de Playa Húcares",
+      "coordinates": {
+        "lat": 18.1920034,
+        "lng": -65.7195921
+      }
+    },
+    {
+      "name": "Mar Chiquita beach",
+      "coordinates": {
+        "lat": 18.4728157,
+        "lng": -66.4849854
+      }
+    },
+    {
+      "name": "Mar Chiquita Beach",
+      "coordinates": {
+        "lat": 18.4727098,
+        "lng": -66.485429
+      }
+    },
+    {
+      "name": "Mar Chiquita Village",
+      "coordinates": {
+        "lat": 18.4683556,
+        "lng": -66.481789
+      }
+    },
+    {
+      "name": "Mar Del Sur",
+      "coordinates": {
+        "lat": 18.0618737,
+        "lng": -65.8207119
+      }
+    },
+    {
+      "name": "Melones Beach",
+      "coordinates": {
+        "lat": 18.3030119,
+        "lng": -65.3107136
+      }
+    },
+    {
+      "name": "Middles Beach",
+      "coordinates": {
+        "lat": 18.512524,
+        "lng": -67.0412511
+      }
+    },
+    {
+      "name": "Mirador Playa Crash Boat",
+      "coordinates": {
+        "lat": 18.4571273,
+        "lng": -67.1626734
+      }
+    },
+    {
+      "name": "Montones Beach",
+      "coordinates": {
+        "lat": 18.5134912,
+        "lng": -67.0654865
+      }
+    },
+    {
+      "name": "Mosquito Bay Beach",
+      "coordinates": {
+        "lat": 18.0980202,
+        "lng": -65.4412696
+      }
+    },
+    {
+      "name": "Muelle Combate",
+      "coordinates": {
+        "lat": 17.9814559,
+        "lng": -67.2142662
+      }
+    },
+    {
+      "name": "Muelle de Azúcar Beach",
+      "coordinates": {
+        "lat": 18.4454919,
+        "lng": -67.159515
+      }
+    },
+    {
+      "name": "My Country Beach House",
+      "coordinates": {
+        "lat": 18.1864512,
+        "lng": -65.7085516
+      }
+    },
+    {
+      "name": "Natural Pools of Manati",
+      "coordinates": {
+        "lat": 18.476958,
+        "lng": -66.4988018
+      }
+    },
+    {
+      "name": "Ocean Park Beach",
+      "coordinates": {
+        "lat": 18.4543678,
+        "lng": -66.053651
+      }
+    },
+    {
+      "name": "Ojo de Agua Beach",
+      "coordinates": {
+        "lat": 18.4688973,
+        "lng": -66.4664657
+      }
+    },
+    {
+      "name": "Palm palace",
+      "coordinates": {
+        "lat": 18.4692544,
+        "lng": -66.4546452
+      }
+    },
+    {
+      "name": "Palmas del mar beach",
+      "coordinates": {
+        "lat": 18.0879236,
+        "lng": -65.7942374
+      }
+    },
+    {
+      "name": "Parada Vista al Mar",
+      "coordinates": {
+        "lat": 17.9772346,
+        "lng": -66.6972718
+      }
+    },
+    {
+      "name": "Parda Beach",
+      "coordinates": {
+        "lat": 17.9424756,
+        "lng": -66.9314837
+      }
+    },
+    {
+      "name": "Parque Nacional Balneario Seven Seas",
+      "coordinates": {
+        "lat": 18.3696247,
+        "lng": -65.6346872
+      }
+    },
+    {
+      "name": "Paseo de Aguadilla",
+      "coordinates": {
+        "lat": 18.4195599,
+        "lng": -67.1562525
+      }
+    },
+    {
+      "name": "Paseo Lineal Isabela",
+      "coordinates": {
+        "lat": 18.512168,
+        "lng": -67.0467418
+      }
+    },
+    {
+      "name": "Paseo lineal oeste",
+      "coordinates": {
+        "lat": 18.5126626,
+        "lng": -67.0673637
+      }
+    },
+    {
+      "name": "Paseo Tablado \"El Malecón de Naguabo\"",
+      "coordinates": {
+        "lat": 18.1891992,
+        "lng": -65.7135147
+      }
+    },
+    {
+      "name": "Peña Blanca Aguadilla",
+      "coordinates": {
+        "lat": 18.4722425,
+        "lng": -67.1689469
+      }
+    },
+    {
+      "name": "Peña Blanca Beach",
+      "coordinates": {
+        "lat": 18.4722425,
+        "lng": -67.1689469
+      }
+    },
+    {
+      "name": "Peña Martinica Beach",
+      "coordinates": {
+        "lat": 18.5080441,
+        "lng": -67.1352397
+      }
+    },
+    {
+      "name": "Peñon Brusi",
+      "coordinates": {
+        "lat": 18.4924437,
+        "lng": -66.8548998
+      }
+    },
+    {
+      "name": "Piedra Las Guaretas (Cueva de las Cabras)",
+      "coordinates": {
+        "lat": 18.032906,
+        "lng": -65.831043
+      }
+    },
+    {
+      "name": "Piedras Beach",
+      "coordinates": {
+        "lat": 17.9786566,
+        "lng": -66.4441799
+      }
+    },
+    {
+      "name": "Piñones Spot",
+      "coordinates": {
+        "lat": 18.4470354,
+        "lng": -65.9074059
+      }
+    },
+    {
+      "name": "Pitahaya",
+      "coordinates": {
+        "lat": 17.9524971,
+        "lng": -67.1365744
+      }
+    },
+    {
+      "name": "Playa",
+      "coordinates": {
+        "lat": 18.5080132,
+        "lng": -67.0237667
+      }
+    },
+    {
+      "name": "Playa",
+      "coordinates": {
+        "lat": 18.0728804,
+        "lng": -65.8263392
+      }
+    },
+    {
+      "name": "Playa",
+      "coordinates": {
+        "lat": 17.986143,
+        "lng": -66.6116916
+      }
+    },
+    {
+      "name": "Playa \"Tres Tubos\" Beach",
+      "coordinates": {
+        "lat": 18.1358346,
+        "lng": -67.1860028
+      }
+    },
+    {
+      "name": "Playa Abacoa",
+      "coordinates": {
+        "lat": 18.4722452,
+        "lng": -66.7063377
+      }
+    },
+    {
+      "name": "Playa Aguadilla",
+      "coordinates": {
+        "lat": 18.4587312,
+        "lng": -67.1640156
+      }
+    },
+    {
+      "name": "Playa Arena Negra",
+      "coordinates": {
+        "lat": 17.9918648,
+        "lng": -65.8931
+      }
+    },
+    {
+      "name": "Playa Ashford",
+      "coordinates": {
+        "lat": 18.4565734,
+        "lng": -66.0648532
+      }
+    },
+    {
+      "name": "Playa Azul",
+      "coordinates": {
+        "lat": 18.3822272,
+        "lng": -65.7204951
+      }
+    },
+    {
+      "name": "Playa Bajura",
+      "coordinates": {
+        "lat": 18.5148694,
+        "lng": -67.1011495
+      }
+    },
+    {
+      "name": "Playa Barlovento Beach",
+      "coordinates": {
+        "lat": 18.4737382,
+        "lng": -66.2942327
+      }
+    },
+    {
+      "name": "Playa Blaydin",
+      "coordinates": {
+        "lat": 18.129999,
+        "lng": -65.5150862
+      }
+    },
+    {
+      "name": "Playa Boqueron",
+      "coordinates": {
+        "lat": 18.0245094,
+        "lng": -67.1734646
+      }
+    },
+    {
+      "name": "Playa Boquerón",
+      "coordinates": {
+        "lat": 18.0233904,
+        "lng": -67.1725321
+      }
+    },
+    {
+      "name": "Playa Brava",
+      "coordinates": {
+        "lat": 18.3310321,
+        "lng": -65.2870068
+      }
+    },
+    {
+      "name": "Playa Buye",
+      "coordinates": {
+        "lat": 18.0402393,
+        "lng": -67.2060134
+      }
+    },
+    {
+      "name": "Playa Buye",
+      "coordinates": {
+        "lat": 18.0472237,
+        "lng": -67.1988553
+      }
+    },
+    {
+      "name": "Playa California",
+      "coordinates": {
+        "lat": 17.9828265,
+        "lng": -65.9075541
+      }
+    },
+    {
+      "name": "Playa Caña Gorda",
+      "coordinates": {
+        "lat": 17.9529302,
+        "lng": -66.884031
+      }
+    },
+    {
+      "name": "Playa Canalejo",
+      "coordinates": {
+        "lat": 18.377729,
+        "lng": -65.6176616
+      }
+    },
+    {
+      "name": "Playa Caracoles",
+      "coordinates": {
+        "lat": 18.4930779,
+        "lng": -66.6252183
+      }
+    },
+    {
+      "name": "Playa Carlos Rosario",
+      "coordinates": {
+        "lat": 18.3245085,
+        "lng": -65.3297529
+      }
+    },
+    {
+      "name": "Playa Colora",
+      "coordinates": {
+        "lat": 18.3768981,
+        "lng": -65.6411742
+      }
+    },
+    {
+      "name": "Playa Colorá",
+      "coordinates": {
+        "lat": 18.3768981,
+        "lng": -65.6411742
+      }
+    },
+    {
+      "name": "Playa Córcega",
+      "coordinates": {
+        "lat": 18.3129815,
+        "lng": -67.2409409
+      }
+    },
+    {
+      "name": "Playa Corecega",
+      "coordinates": {
+        "lat": 18.3291148,
+        "lng": -67.2421251
+      }
+    },
+    {
+      "name": "Playa Costa Dorado Este",
+      "coordinates": {
+        "lat": 18.4790481,
+        "lng": -66.2712023
+      }
+    },
+    {
+      "name": "Playa Costa Dorado oeste",
+      "coordinates": {
+        "lat": 18.4789813,
+        "lng": -66.2737758
+      }
+    },
+    {
+      "name": "Playa CV Sea",
+      "coordinates": {
+        "lat": 18.449984,
+        "lng": -66.036835
+      }
+    },
+    {
+      "name": "Playa Dátiles",
+      "coordinates": {
+        "lat": 18.296146,
+        "lng": -65.3006352
+      }
+    },
+    {
+      "name": "Playa De Cascajo",
+      "coordinates": {
+        "lat": 18.2924567,
+        "lng": -65.2959912
+      }
+    },
+    {
+      "name": "Playa De Elohim",
+      "coordinates": {
+        "lat": 18.4860256,
+        "lng": -66.6767094
+      }
+    },
+    {
+      "name": "Playa de Fajardo",
+      "coordinates": {
+        "lat": 18.3699703,
+        "lng": -65.6383615
+      }
+    },
+    {
+      "name": "Playa De Guayanilla",
+      "coordinates": {
+        "lat": 18.006632,
+        "lng": -66.7662862
+      }
+    },
+    {
+      "name": "Playa De Jaboncillo",
+      "coordinates": {
+        "lat": 17.9532739,
+        "lng": -66.904327
+      }
+    },
+    {
+      "name": "Playa De Levittown",
+      "coordinates": {
+        "lat": 18.4527234,
+        "lng": -66.1757225
+      }
+    },
+    {
+      "name": "Playa De Los Cabes",
+      "coordinates": {
+        "lat": 18.4716114,
+        "lng": -66.1198886
+      }
+    },
+    {
+      "name": "Playa De Luquillo",
+      "coordinates": {
+        "lat": 18.3860611,
+        "lng": -65.729607
+      }
+    },
+    {
+      "name": "Playa de Muertos Beach",
+      "coordinates": {
+        "lat": 18.1492531,
+        "lng": -65.4442983
+      }
+    },
+    {
+      "name": "Playa de Piñones",
+      "coordinates": {
+        "lat": 18.453205,
+        "lng": -65.9672567
+      }
+    },
+    {
+      "name": "Playa de Ponce",
+      "coordinates": {
+        "lat": 17.9828367,
+        "lng": -66.6286767
+      }
+    },
+    {
+      "name": "Playa De Salinas",
+      "coordinates": {
+        "lat": 17.9624666,
+        "lng": -66.3004461
+      }
+    },
+    {
+      "name": "Playa De Sardinas",
+      "coordinates": {
+        "lat": 18.3021787,
+        "lng": -65.3037692
+      }
+    },
+    {
+      "name": "Playa De Sardinera",
+      "coordinates": {
+        "lat": 18.476033,
+        "lng": -66.2967416
+      }
+    },
+    {
+      "name": "Playa De Vega",
+      "coordinates": {
+        "lat": 18.4891111,
+        "lng": -66.3918366
+      }
+    },
+    {
+      "name": "Playa del Capitolio",
+      "coordinates": {
+        "lat": 18.467698,
+        "lng": -66.1053642
+      }
+    },
+    {
+      "name": "Playa Del Dorado",
+      "coordinates": {
+        "lat": 18.4771674,
+        "lng": -66.257668
+      }
+    },
+    {
+      "name": "Playa del Pueblo",
+      "coordinates": {
+        "lat": 18.4544136,
+        "lng": -66.0568951
+      }
+    },
+    {
+      "name": "Playa del Tamarindo",
+      "coordinates": {
+        "lat": 18.4365958,
+        "lng": -67.1565314
+      }
+    },
+    {
+      "name": "Playa Dienero",
+      "coordinates": {
+        "lat": 18.2869014,
+        "lng": -65.2843241
+      }
+    },
+    {
+      "name": "Playa Domes",
+      "coordinates": {
+        "lat": 18.3629041,
+        "lng": -67.2711118
+      }
+    },
+    {
+      "name": "Playa Doña Lala Beach",
+      "coordinates": {
+        "lat": 18.3364437,
+        "lng": -67.2537574
+      }
+    },
+    {
+      "name": "Playa Dorado Del Mar Beach",
+      "coordinates": {
+        "lat": 18.4654103,
+        "lng": -66.2991956
+      }
+    },
+    {
+      "name": "Playa El Cocal",
+      "coordinates": {
+        "lat": 18.0132633,
+        "lng": -65.8477056
+      }
+    },
+    {
+      "name": "Playa El Combate",
+      "coordinates": {
+        "lat": 17.9699646,
+        "lng": -67.212402
+      }
+    },
+    {
+      "name": "Playa El Combate Beach",
+      "coordinates": {
+        "lat": 17.9766404,
+        "lng": -67.2127867
+      }
+    },
+    {
+      "name": "Playa El Convento",
+      "coordinates": {
+        "lat": 18.3621741,
+        "lng": -65.6487727
+      }
+    },
+    {
+      "name": "Playa El Guano",
+      "coordinates": {
+        "lat": 18.0149493,
+        "lng": -65.8461117
+      }
+    },
+    {
+      "name": "playa El Negro",
+      "coordinates": {
+        "lat": 18.0263724,
+        "lng": -65.832377
+      }
+    },
+    {
+      "name": "Playa El Tamarindo",
+      "coordinates": {
+        "lat": 18.3183236,
+        "lng": -65.3178111
+      }
+    },
+    {
+      "name": "Playa El Único",
+      "coordinates": {
+        "lat": 18.4676704,
+        "lng": -66.2368945
+      }
+    },
+    {
+      "name": "Playa Ensenada",
+      "coordinates": {
+        "lat": 18.3442041,
+        "lng": -67.2606943
+      }
+    },
+    {
+      "name": "Playa Escalera - Reserva Marina Tres Palmas",
+      "coordinates": {
+        "lat": 18.3496717,
+        "lng": -67.2642174
+      }
+    },
+    {
+      "name": "Playa Escondida",
+      "coordinates": {
+        "lat": 18.3766925,
+        "lng": -65.6452632
+      }
+    },
+    {
+      "name": "Playa Escondida",
+      "coordinates": {
+        "lat": 18.3768591,
+        "lng": -65.6451917
+      }
+    },
+    {
+      "name": "Playa Escondida",
+      "coordinates": {
+        "lat": 18.1149272,
+        "lng": -65.3773751
+      }
+    },
+    {
+      "name": "Playa Espinar",
+      "coordinates": {
+        "lat": 18.3915925,
+        "lng": -67.1962738
+      }
+    },
+    {
+      "name": "Playa Espinar",
+      "coordinates": {
+        "lat": 18.4090168,
+        "lng": -67.1701946
+      }
+    },
+    {
+      "name": "Playa Flamenco Beach",
+      "coordinates": {
+        "lat": 18.3287973,
+        "lng": -65.3172491
+      }
+    },
+    {
+      "name": "Playa Grande",
+      "coordinates": {
+        "lat": 18.0896744,
+        "lng": -65.5130475
+      }
+    },
+    {
+      "name": "Playa Grande",
+      "coordinates": {
+        "lat": 18.1577402,
+        "lng": -65.3748804
+      }
+    },
+    {
+      "name": "Playa Icacos",
+      "coordinates": {
+        "lat": 18.0630211,
+        "lng": -65.7996054
+      }
+    },
+    {
+      "name": "Playa India",
+      "coordinates": {
+        "lat": 18.4627517,
+        "lng": -67.1677263
+      }
+    },
+    {
+      "name": "Playa Isabela",
+      "coordinates": {
+        "lat": 18.5083912,
+        "lng": -67.0260379
+      }
+    },
+    {
+      "name": "Playa Isla Mattei",
+      "coordinates": {
+        "lat": 17.9675098,
+        "lng": -67.0128394
+      }
+    },
+    {
+      "name": "Playa Isla Verde",
+      "coordinates": {
+        "lat": 18.4448788,
+        "lng": -66.005752
+      }
+    },
+    {
+      "name": "Playa Jaboncillo",
+      "coordinates": {
+        "lat": 17.953259,
+        "lng": -66.9042928
+      }
+    },
+    {
+      "name": "Playa Jenchris Arena Negra",
+      "coordinates": {
+        "lat": 18.4742566,
+        "lng": -66.7372602
+      }
+    },
+    {
+      "name": "Playa Jobos",
+      "coordinates": {
+        "lat": 18.5141598,
+        "lng": -67.0752276
+      }
+    },
+    {
+      "name": "Playa Jobos",
+      "coordinates": {
+        "lat": 18.514767,
+        "lng": -67.0756078
+      }
+    },
+    {
+      "name": "Playa La Chiva",
+      "coordinates": {
+        "lat": 18.1128874,
+        "lng": -65.3874707
+      }
+    },
+    {
+      "name": "Playa La Chiva",
+      "coordinates": {
+        "lat": 18.1125783,
+        "lng": -65.3829512
+      }
+    },
+    {
+      "name": "Playa La Esperanza",
+      "coordinates": {
+        "lat": 18.4840624,
+        "lng": -66.5257662
+      }
+    },
+    {
+      "name": "Playa La Esperanza Beach",
+      "coordinates": {
+        "lat": 18.4838999,
+        "lng": -66.5257593
+      }
+    },
+    {
+      "name": "Playa La Fanduca",
+      "coordinates": {
+        "lat": 18.1845942,
+        "lng": -65.7069784
+      }
+    },
+    {
+      "name": "Playa La Jungla",
+      "coordinates": {
+        "lat": 17.9455071,
+        "lng": -66.9653858
+      }
+    },
+    {
+      "name": "Playa La Jungla",
+      "coordinates": {
+        "lat": 17.94593,
+        "lng": -66.9657519
+      }
+    },
+    {
+      "name": "Playa La Jungla, Guanica.",
+      "coordinates": {
+        "lat": 17.94593,
+        "lng": -66.9657519
+      }
+    },
+    {
+      "name": "Playa La Mela Cabo Rojo",
+      "coordinates": {
+        "lat": 18.063353,
+        "lng": -67.197315
+      }
+    },
+    {
+      "name": "Playa La Palmita",
+      "coordinates": {
+        "lat": 18.4856466,
+        "lng": -66.5646292
+      }
+    },
+    {
+      "name": "Playa La Pared",
+      "coordinates": {
+        "lat": 18.3763889,
+        "lng": -65.7147222
+      }
+    },
+    {
+      "name": "Playa La Pitahaya",
+      "coordinates": {
+        "lat": 17.9521644,
+        "lng": -67.1329172
+      }
+    },
+    {
+      "name": "Playa La Plata",
+      "coordinates": {
+        "lat": 18.1177157,
+        "lng": -65.3760499
+      }
+    },
+    {
+      "name": "Playa La Pocita De Kikita",
+      "coordinates": {
+        "lat": 18.4773033,
+        "lng": -66.2595729
+      }
+    },
+    {
+      "name": "Playa La Pollera",
+      "coordinates": {
+        "lat": 17.9376243,
+        "lng": -67.1968321
+      }
+    },
+    {
+      "name": "Playa La Ruina",
+      "coordinates": {
+        "lat": 18.488831,
+        "lng": -67.1618476
+      }
+    },
+    {
+      "name": "Playa Lala",
+      "coordinates": {
+        "lat": 18.3363912,
+        "lng": -67.2537531
+      }
+    },
+    {
+      "name": "Playa Larga",
+      "coordinates": {
+        "lat": 18.3198966,
+        "lng": -65.2550563
+      }
+    },
+    {
+      "name": "Playa Las Golondrinas",
+      "coordinates": {
+        "lat": 18.5140094,
+        "lng": -67.0567874
+      }
+    },
+    {
+      "name": "Playa Las Golondrinas",
+      "coordinates": {
+        "lat": 18.4779034,
+        "lng": -66.5089985
+      }
+    },
+    {
+      "name": "Playa Las Marías",
+      "coordinates": {
+        "lat": 18.4790055,
+        "lng": -66.5164272
+      }
+    },
+    {
+      "name": "Playa loiza",
+      "coordinates": {
+        "lat": 18.4450593,
+        "lng": -65.9238069
+      }
+    },
+    {
+      "name": "Playa Los Almendros",
+      "coordinates": {
+        "lat": 18.3099879,
+        "lng": -67.2404215
+      }
+    },
+    {
+      "name": "Playa Los Bohios",
+      "coordinates": {
+        "lat": 17.9913823,
+        "lng": -65.8938238
+      }
+    },
+    {
+      "name": "Playa Los Machos",
+      "coordinates": {
+        "lat": 18.2651619,
+        "lng": -65.6311517
+      }
+    },
+    {
+      "name": "Playa Los Machos",
+      "coordinates": {
+        "lat": 18.2626694,
+        "lng": -65.6300551
+      }
+    },
+    {
+      "name": "Playa Mar Chiquita",
+      "coordinates": {
+        "lat": 18.471612,
+        "lng": -66.4821157
+      }
+    },
+    {
+      "name": "Playa María",
+      "coordinates": {
+        "lat": 18.35794,
+        "lng": -67.2695332
+      }
+    },
+    {
+      "name": "Playa Maunabo",
+      "coordinates": {
+        "lat": 17.9894117,
+        "lng": -65.8865509
+      }
+    },
+    {
+      "name": "Playa Mosquito",
+      "coordinates": {
+        "lat": 18.2963676,
+        "lng": -65.2639099
+      }
+    },
+    {
+      "name": "Playa Música",
+      "coordinates": {
+        "lat": 18.2992353,
+        "lng": -67.2337126
+      }
+    },
+    {
+      "name": "Playa Ocean Park",
+      "coordinates": {
+        "lat": 18.4529514,
+        "lng": -66.0495132
+      }
+    },
+    {
+      "name": "Playa Pastillo, Coto",
+      "coordinates": {
+        "lat": 18.491963,
+        "lng": -66.979623
+      }
+    },
+    {
+      "name": "Playa Pata Pata",
+      "coordinates": {
+        "lat": 18.4685128,
+        "lng": -66.4648759
+      }
+    },
+    {
+      "name": "Playa Pata Prieta",
+      "coordinates": {
+        "lat": 18.1109539,
+        "lng": -65.4002015
+      }
+    },
+    {
+      "name": "Playa Peñón Amador",
+      "coordinates": {
+        "lat": 18.4908499,
+        "lng": -66.8670282
+      }
+    },
+    {
+      "name": "Playa Peñon Brusi",
+      "coordinates": {
+        "lat": 18.4901411,
+        "lng": -66.8558688
+      }
+    },
+    {
+      "name": "Playa perdida",
+      "coordinates": {
+        "lat": 17.9736513,
+        "lng": -66.6783911
+      }
+    },
+    {
+      "name": "Playa Piñones",
+      "coordinates": {
+        "lat": 18.4475762,
+        "lng": -65.9069741
+      }
+    },
+    {
+      "name": "Playa Pocita Montones",
+      "coordinates": {
+        "lat": 18.5141749,
+        "lng": -67.064924
+      }
+    },
+    {
+      "name": "Playa Pública Ocean Park",
+      "coordinates": {
+        "lat": 18.4529514,
+        "lng": -66.0495132
+      }
+    },
+    {
+      "name": "Playa Puerta De Tierra",
+      "coordinates": {
+        "lat": 18.4661446,
+        "lng": -66.0959078
+      }
+    },
+    {
+      "name": "Playa Puerto Nuevo",
+      "coordinates": {
+        "lat": 18.4893889,
+        "lng": -66.4032256
+      }
+    },
+    {
+      "name": "Playa Puerto Real",
+      "coordinates": {
+        "lat": 18.332731,
+        "lng": -65.628217
+      }
+    },
+    {
+      "name": "Playa Punta Boca",
+      "coordinates": {
+        "lat": 18.0552511,
+        "lng": -67.2011194
+      }
+    },
+    {
+      "name": "Playa Punta Borinquen",
+      "coordinates": {
+        "lat": 18.5082748,
+        "lng": -67.137403
+      }
+    },
+    {
+      "name": "Playa Punta Caracoles",
+      "coordinates": {
+        "lat": 18.4876562,
+        "lng": -66.6679238
+      }
+    },
+    {
+      "name": "Playa punta Manati",
+      "coordinates": {
+        "lat": 18.483953,
+        "lng": -66.5256779
+      }
+    },
+    {
+      "name": "Playa Punta Santiago Punta",
+      "coordinates": {
+        "lat": 18.1537223,
+        "lng": -65.7631597
+      }
+    },
+    {
+      "name": "Playa Resaca",
+      "coordinates": {
+        "lat": 18.3323917,
+        "lng": -65.3044468
+      }
+    },
+    {
+      "name": "Playa Rincon Bella",
+      "coordinates": {
+        "lat": 18.3366589,
+        "lng": -67.2536532
+      }
+    },
+    {
+      "name": "Playa Rústica Cabo Rojo",
+      "coordinates": {
+        "lat": 17.9996321,
+        "lng": -67.2032724
+      }
+    },
+    {
+      "name": "Playa Salinas",
+      "coordinates": {
+        "lat": 17.9552432,
+        "lng": -67.1907349
+      }
+    },
+    {
+      "name": "Playa Santa",
+      "coordinates": {
+        "lat": 17.936994,
+        "lng": -66.9548538
+      }
+    },
+    {
+      "name": "Playa Sardinera",
+      "coordinates": {
+        "lat": 18.5102871,
+        "lng": -67.020755
+      }
+    },
+    {
+      "name": "Playa Sardinera",
+      "coordinates": {
+        "lat": 18.4736874,
+        "lng": -66.2815264
+      }
+    },
+    {
+      "name": "Playa Sardinera",
+      "coordinates": {
+        "lat": 18.347091,
+        "lng": -65.6360517
+      }
+    },
+    {
+      "name": "Playa Sucia",
+      "coordinates": {
+        "lat": 17.9360306,
+        "lng": -67.1890376
+      }
+    },
+    {
+      "name": "Playa Tamarindo",
+      "coordinates": {
+        "lat": 17.9534517,
+        "lng": -66.8469653
+      }
+    },
+    {
+      "name": "Playa Tamarindo Grande Beach",
+      "coordinates": {
+        "lat": 18.323892,
+        "lng": -65.3285057
+      }
+    },
+    {
+      "name": "Playa Teresa",
+      "coordinates": {
+        "lat": 18.0157485,
+        "lng": -65.834804
+      }
+    },
+    {
+      "name": "Playa Tómbolo",
+      "coordinates": {
+        "lat": 18.4817857,
+        "lng": -66.5184986
+      }
+    },
+    {
+      "name": "Playa Tombolo y and Playa Esperanza",
+      "coordinates": {
+        "lat": 18.4807106,
+        "lng": -66.5200968
+      }
+    },
+    {
+      "name": "Playa Tortuga",
+      "coordinates": {
+        "lat": 18.3184249,
+        "lng": -65.2280577
+      }
+    },
+    {
+      "name": "Playa Tortuguero",
+      "coordinates": {
+        "lat": 18.469112,
+        "lng": -66.458782
+      }
+    },
+    {
+      "name": "Playa Tres Palmas",
+      "coordinates": {
+        "lat": 18.3494728,
+        "lng": -67.2638992
+      }
+    },
+    {
+      "name": "Playa Vacía",
+      "coordinates": {
+        "lat": 18.450901,
+        "lng": -65.904653
+      }
+    },
+    {
+      "name": "Playa Villa Pesquera Isabela",
+      "coordinates": {
+        "lat": 18.5080593,
+        "lng": -67.0228223
+      }
+    },
+    {
+      "name": "Playa Yabucoa",
+      "coordinates": {
+        "lat": 18.0484994,
+        "lng": -65.8323507
+      }
+    },
+    {
+      "name": "Playas Los Tubos",
+      "coordinates": {
+        "lat": 18.470853,
+        "lng": -66.4485741
+      }
+    },
+    {
+      "name": "Playita de la Laguna del Condado",
+      "coordinates": {
+        "lat": 18.4582764,
+        "lng": -66.0856652
+      }
+    },
+    {
+      "name": "Playita del Condado",
+      "coordinates": {
+        "lat": 18.4610538,
+        "lng": -66.0823199
+      }
+    },
+    {
+      "name": "Playita Puerta de San Juan",
+      "coordinates": {
+        "lat": 18.4651413,
+        "lng": -66.1196259
+      }
+    },
+    {
+      "name": "Playita Rosada",
+      "coordinates": {
+        "lat": 17.9722279,
+        "lng": -67.0321097
+      }
+    },
+    {
+      "name": "Playuela Beach",
+      "coordinates": {
+        "lat": 17.9327441,
+        "lng": -67.1876793
+      }
+    },
+    {
+      "name": "Plaza Luis Muñoz Rivera",
+      "coordinates": {
+        "lat": 18.012198,
+        "lng": -66.6140476
+      }
+    },
+    {
+      "name": "Pocita de la Princes Beach",
+      "coordinates": {
+        "lat": 18.5092048,
+        "lng": -67.0147713
+      }
+    },
+    {
+      "name": "Pocita De Teodoro",
+      "coordinates": {
+        "lat": 18.5126763,
+        "lng": -67.0365515
+      }
+    },
+    {
+      "name": "Pozo De Jacinto",
+      "coordinates": {
+        "lat": 18.5149883,
+        "lng": -67.0738634
+      }
+    },
+    {
+      "name": "Pozo Teodoro",
+      "coordinates": {
+        "lat": 18.5126852,
+        "lng": -67.0365478
+      }
+    },
+    {
+      "name": "Pozuelo Exclusive Beach",
+      "coordinates": {
+        "lat": 17.9362754,
+        "lng": -66.1959539
+      }
+    },
+    {
+      "name": "Puerto de Humacao",
+      "coordinates": {
+        "lat": 18.1578919,
+        "lng": -65.7475764
+      }
+    },
+    {
+      "name": "Puerto Nuevo Playa de Vega Baja Beach",
+      "coordinates": {
+        "lat": 18.4922868,
+        "lng": -66.3972875
+      }
+    },
+    {
+      "name": "Punta Bandera Luquillo PR",
+      "coordinates": {
+        "lat": 18.3882726,
+        "lng": -65.7211965
+      }
+    },
+    {
+      "name": "Punta Boquilla",
+      "coordinates": {
+        "lat": 18.4770251,
+        "lng": -66.4998244
+      }
+    },
+    {
+      "name": "Punta Borinquen Beach",
+      "coordinates": {
+        "lat": 18.4906436,
+        "lng": -67.1557946
+      }
+    },
+    {
+      "name": "Punta Brea Shorebreak",
+      "coordinates": {
+        "lat": 17.928981,
+        "lng": -66.922686
+      }
+    },
+    {
+      "name": "Punta Cibuco Beach",
+      "coordinates": {
+        "lat": 18.4891888,
+        "lng": -66.378152
+      }
+    },
+    {
+      "name": "Punta del Obispo Beach",
+      "coordinates": {
+        "lat": 17.953487,
+        "lng": -66.980848
+      }
+    },
+    {
+      "name": "Punta Del Viento Patillas",
+      "coordinates": {
+        "lat": 17.9808889,
+        "lng": -65.9898533
+      }
+    },
+    {
+      "name": "Punta Jorobado Beach",
+      "coordinates": {
+        "lat": 17.931428,
+        "lng": -66.956453
+      }
+    },
+    {
+      "name": "Punta Las Cucharas",
+      "coordinates": {
+        "lat": 17.9688637,
+        "lng": -66.6631427
+      }
+    },
+    {
+      "name": "Punta Lima Beach",
+      "coordinates": {
+        "lat": 18.1861674,
+        "lng": -65.694125
+      }
+    },
+    {
+      "name": "Punta Santiago Beach",
+      "coordinates": {
+        "lat": 18.1572159,
+        "lng": -65.7574399
+      }
+    },
+    {
+      "name": "Punta Tuna Beach",
+      "coordinates": {
+        "lat": 17.9903051,
+        "lng": -65.8839798
+      }
+    },
+    {
+      "name": "Rampa Guayanilla",
+      "coordinates": {
+        "lat": 18.0065735,
+        "lng": -66.7677328
+      }
+    },
+    {
+      "name": "Reserva Humacao Beach",
+      "coordinates": {
+        "lat": 18.1462866,
+        "lng": -65.7678091
+      }
+    },
+    {
+      "name": "Reserva Natural Bosque Pterocarpus",
+      "coordinates": {
+        "lat": 18.1798458,
+        "lng": -65.7354109
+      }
+    },
+    {
+      "name": "Reserva Natural de Culebra / Culebra Natural Reserve",
+      "coordinates": {
+        "lat": 18.3364831,
+        "lng": -65.3313157
+      }
+    },
+    {
+      "name": "Reserva Natural de Manati",
+      "coordinates": {
+        "lat": 18.479853,
+        "lng": -66.5179745
+      }
+    },
+    {
+      "name": "Rincón",
+      "coordinates": {
+        "lat": 18.3389587,
+        "lng": -67.2497793
+      }
+    },
+    {
+      "name": "Rincon Beach North",
+      "coordinates": {
+        "lat": 18.3403961,
+        "lng": -67.2549749
+      }
+    },
+    {
+      "name": "Rio Mar Beach",
+      "coordinates": {
+        "lat": 18.4876893,
+        "lng": -66.8342496
+      }
+    },
+    {
+      "name": "Rompeolas Beach",
+      "coordinates": {
+        "lat": 18.433181,
+        "lng": -67.1555299
+      }
+    },
+    {
+      "name": "Salinas Beach",
+      "coordinates": {
+        "lat": 17.9778953,
+        "lng": -66.3321984
+      }
+    },
+    {
+      "name": "Salinas, playa",
+      "coordinates": {
+        "lat": 17.9649029,
+        "lng": -66.304695
+      }
+    },
+    {
+      "name": "SANDY BEACH",
+      "coordinates": {
+        "lat": 18.3704625,
+        "lng": -67.2586568
+      }
+    },
+    {
+      "name": "Sandy Beach East",
+      "coordinates": {
+        "lat": 18.3708602,
+        "lng": -67.2568626
+      }
+    },
+    {
+      "name": "Santa Beach",
+      "coordinates": {
+        "lat": 17.939757,
+        "lng": -66.9566372
+      }
+    },
+    {
+      "name": "Sardinera Dorado Beach East",
+      "coordinates": {
+        "lat": 18.4717158,
+        "lng": -66.2868826
+      }
+    },
+    {
+      "name": "Secret Beach",
+      "coordinates": {
+        "lat": 18.0663021,
+        "lng": -65.7977867
+      }
+    },
+    {
+      "name": "Secret Beach, Humacao",
+      "coordinates": {
+        "lat": 18.1088416,
+        "lng": -65.7838288
+      }
+    },
+    {
+      "name": "Seven Seas Beach",
+      "coordinates": {
+        "lat": 18.3694509,
+        "lng": -65.6359042
+      }
+    },
+    {
+      "name": "Shacks Beach",
+      "coordinates": {
+        "lat": 18.5152016,
+        "lng": -67.1011421
+      }
+    },
+    {
+      "name": "Shore Island Beach",
+      "coordinates": {
+        "lat": 18.5088875,
+        "lng": -67.0284219
+      }
+    },
+    {
+      "name": "Stoner Beach",
+      "coordinates": {
+        "lat": 18.4762056,
+        "lng": -66.7479347
+      }
+    },
+    {
+      "name": "Sun Bay Beach",
+      "coordinates": {
+        "lat": 18.0946208,
+        "lng": -65.4549001
+      }
+    },
+    {
+      "name": "Survival Beach",
+      "coordinates": {
+        "lat": 18.5079655,
+        "lng": -67.1361469
+      }
+    },
+    {
+      "name": "Tanga Beach",
+      "coordinates": {
+        "lat": 18.0197617,
+        "lng": -67.1719622
+      }
+    },
+    {
+      "name": "The Beach House Rincón",
+      "coordinates": {
+        "lat": 18.3593385,
+        "lng": -67.2671826
+      }
+    },
+    {
+      "name": "the Beaches thong",
+      "coordinates": {
+        "lat": 18.4572134,
+        "lng": -66.0717249
+      }
+    },
+    {
+      "name": "The Cottages at Dorado Beach",
+      "coordinates": {
+        "lat": 18.4742879,
+        "lng": -66.3117172
+      }
+    },
+    {
+      "name": "The Tuque Beach",
+      "coordinates": {
+        "lat": 17.9735639,
+        "lng": -66.6783874
+      }
+    },
+    {
+      "name": "The Women's Pool",
+      "coordinates": {
+        "lat": 18.4752548,
+        "lng": -66.5036821
+      }
+    },
+    {
+      "name": "Torre",
+      "coordinates": {
+        "lat": 17.9639704,
+        "lng": -66.6137455
+      }
+    },
+    {
+      "name": "Tropical Beach",
+      "coordinates": {
+        "lat": 18.1877875,
+        "lng": -65.7254689
+      }
+    },
+    {
+      "name": "Tropical Beach House",
+      "coordinates": {
+        "lat": 18.4386645,
+        "lng": -67.1561757
+      }
+    },
+    {
+      "name": "Tropical Beach Naguabo",
+      "coordinates": {
+        "lat": 18.1866198,
+        "lng": -65.7273968
+      }
+    },
+    {
+      "name": "Uva 'E Playa | Isabela, PR",
+      "coordinates": {
+        "lat": 18.5061939,
+        "lng": -67.0638654
+      }
+    },
+    {
+      "name": "Ventana Al Mar",
+      "coordinates": {
+        "lat": 18.3367527,
+        "lng": -67.2527587
+      }
+    },
+    {
+      "name": "Villa del Mar Castle",
+      "coordinates": {
+        "lat": 18.1891252,
+        "lng": -65.7150086
+      }
+    },
+    {
+      "name": "Wilderness Beach, Base Ramey",
+      "coordinates": {
+        "lat": 18.4837946,
+        "lng": -67.1667472
+      }
+    },
+    {
+      "name": "Yabucoa Beach",
+      "coordinates": {
+        "lat": 18.0484994,
+        "lng": -65.8323507
+      }
+    },
+    {
+      "name": "Yabucoa Beach",
+      "coordinates": {
+        "lat": 18.050408,
+        "lng": -65.8313324
+      }
+    },
+    {
+      "name": "Yabucoa Harbor Boulevard",
+      "coordinates": {
+        "lat": 18.0500615,
+        "lng": -65.8319168
+      }
+    },
+    {
+      "name": "Zoni Beach",
+      "coordinates": {
+        "lat": 18.319692,
+        "lng": -65.2551024
+      }
+    },
+    {
+      "name": "Zoni Beach",
+      "coordinates": {
+        "lat": 18.3227979,
+        "lng": -65.2597973
+      }
+    }
+  ],
+  "totalCount": 388,
+  "extractedAt": "2026-01-26T10:00:47.988Z"
+}

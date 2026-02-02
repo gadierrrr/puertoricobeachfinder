@@ -26,9 +26,12 @@ Allow: /best-snorkeling-beaches
 Allow: /best-surfing-beaches
 Allow: /best-family-beaches
 Allow: /beaches-near-san-juan
+Allow: /beaches-in-*
+Allow: /municipality.php
 
-# Allow AI crawlers info file
+# Allow AI crawlers info files
 Allow: /llms.txt
+Allow: /llms-full.txt
 
 # Sitemap location
 Sitemap: https://www.puertoricobeachfinder.com/sitemap.xml

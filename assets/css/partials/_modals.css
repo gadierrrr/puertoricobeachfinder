@@ -1,0 +1,452 @@
+/* ========================================
+   SHARE MODAL
+   ======================================== */
+
+.share-modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-overlay);
+    z-index: var(--z-modal);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.share-modal.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.share-modal-content {
+    background-color: var(--color-surface);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    max-width: 400px;
+    width: 90%;
+    transform: scale(0.9);
+    transition: transform 0.2s ease;
+}
+
+.share-modal.open .share-modal-content {
+    transform: scale(1);
+}
+
+/* ========================================
+   GALLERY
+   ======================================== */
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+    .gallery-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.gallery-grid img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.gallery-grid img:hover {
+    transform: scale(1.03);
+    opacity: 0.9;
+}
+
+/* ========================================
+   LIGHTBOX
+   ======================================== */
+
+.lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: var(--color-overlay-dark);
+    z-index: var(--z-lightbox);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.lightbox-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.lightbox-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lightbox-content {
+    max-width: 90vw;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lightbox-image {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 0.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-counter {
+    margin-top: 1rem;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    z-index: var(--z-lightbox-controls);
+}
+
+.lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    z-index: var(--z-lightbox-controls);
+}
+
+.lightbox-nav:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.lightbox-nav:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 2px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.lightbox-close:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 2px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.lightbox-prev {
+    left: 1rem;
+}
+
+.lightbox-next {
+    right: 1rem;
+}
+
+@media (max-width: 640px) {
+    .lightbox-nav {
+        width: 40px;
+        height: 40px;
+    }
+
+    .lightbox-prev {
+        left: 0.5rem;
+    }
+
+    .lightbox-next {
+        right: 0.5rem;
+    }
+}
+
+/* ========================================
+   WELCOME POPUP (Registration CTA)
+   ======================================== */
+
+.welcome-popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: var(--z-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.welcome-popup-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.welcome-popup {
+    max-width: 24rem;
+    width: 100%;
+    background: var(--color-brand-darker, #0f172a);
+    border-radius: 1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.3s ease;
+}
+
+.welcome-popup-overlay.active .welcome-popup {
+    transform: scale(1) translateY(0);
+}
+
+.welcome-popup-hero {
+    position: relative;
+    height: 140px;
+    overflow: hidden;
+}
+
+.welcome-popup-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.welcome-popup-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom,
+        rgba(15, 23, 42, 0) 0%,
+        rgba(15, 23, 42, 0.8) 70%,
+        rgba(15, 23, 42, 1) 100%);
+}
+
+.welcome-popup-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    border: none;
+    border-radius: 50%;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    z-index: 10;
+}
+
+.welcome-popup-close:hover {
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+}
+
+.welcome-popup-body {
+    padding: 1.5rem;
+    padding-top: 0.75rem;
+}
+
+.welcome-popup-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.welcome-popup-subtitle {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 1.25rem;
+}
+
+.welcome-popup-benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.welcome-popup-benefits li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.welcome-popup-benefits li svg,
+.welcome-popup-benefits li i {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--color-brand-yellow, #FACC15);
+    flex-shrink: 0;
+}
+
+.welcome-popup-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.welcome-popup-btn-google {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: white;
+    color: #1f2937;
+    font-weight: 600;
+    font-size: 0.875rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    text-decoration: none;
+}
+
+.welcome-popup-btn-google:hover {
+    background: #f3f4f6;
+}
+
+.welcome-popup-btn-google:active {
+    transform: scale(0.98);
+}
+
+.welcome-popup-btn-google svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.welcome-popup-btn-email {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--color-brand-yellow, #FACC15);
+    color: var(--color-brand-darker, #0f172a);
+    font-weight: 600;
+    font-size: 0.875rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    text-decoration: none;
+}
+
+.welcome-popup-btn-email:hover {
+    background: #fde047;
+}
+
+.welcome-popup-btn-email:active {
+    transform: scale(0.98);
+}
+
+.welcome-popup-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.welcome-popup-divider::before,
+.welcome-popup-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.welcome-popup-btn-dismiss {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.875rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.welcome-popup-btn-dismiss:hover {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.welcome-popup-trust {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.welcome-popup-trust svg,
+.welcome-popup-trust i {
+    width: 0.875rem;
+    height: 0.875rem;
+}
+
+/* Hide hero image on mobile for cleaner look */
+@media (max-width: 480px) {
+    .welcome-popup-hero {
+        height: 100px;
+    }
+}
+

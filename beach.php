@@ -71,6 +71,14 @@ $beach['tips'] = query(
     [':id' => $beach['id']]
 );
 
+// Get extended content sections
+$extendedSections = query("
+    SELECT section_type, heading, content, display_order
+    FROM beach_content_sections
+    WHERE beach_id = :id AND status = 'published'
+    ORDER BY display_order ASC
+", [':id' => $beach['id']]);
+
 // Fetch user reviews
 $reviews = query("
     SELECT
@@ -92,23 +100,17 @@ $pageDescription = $beach['description']
     ? substr($beach['description'], 0, 160)
     : 'Discover ' . $beach['name'] . ' in ' . $beach['municipality'] . ', Puerto Rico. View beach conditions, amenities, photos, and directions.';
 
-// Generate structured data using SEO component
-$extraHead = beachSchema($beach);
+// Generate structured data using SEO component (consolidated with reviews)
+$extraHead = beachSchema($beach, $reviews);
 
 // Add TouristAttraction schema for travel queries
 $extraHead .= touristAttractionSchema($beach);
 
-// Add reviews schema if reviews exist (enables rich snippets)
-if (!empty($reviews)) {
-    $beach['avg_user_rating'] = $avgUserRating;
-    $beach['user_review_count'] = $userReviewCount;
-    $extraHead .= reviewsSchema($beach, $reviews);
-}
-
 // Add breadcrumbs
+$municipalitySlug = strtolower(str_replace(' ', '-', $beach['municipality']));
 $extraHead .= breadcrumbSchema([
     ['name' => 'Home', 'url' => '/'],
-    ['name' => $beach['municipality'], 'url' => '/?municipality=' . urlencode($beach['municipality'])],
+    ['name' => $beach['municipality'], 'url' => '/beaches-in-' . $municipalitySlug],
     ['name' => $beach['name'], 'url' => '/beach/' . $beach['slug']]
 ]);
 
@@ -122,638 +124,550 @@ $extraHead .= speakableSchema();
 // Set Open Graph image
 $ogImage = $beach['cover_image'] ? ($_ENV['APP_URL'] ?? '') . $beach['cover_image'] : null;
 
+// Get WebP version of cover image for optimized delivery
+$webpImage = getWebPImage($beach['cover_image'] ?? '');
+
 include __DIR__ . '/components/header.php';
 ?>
 
-<!-- Hero Image -->
-<div class="relative h-64 md:h-96 overflow-hidden">
+<!-- Hero Image - IslaFinder Style (80vh) -->
+<div class="relative h-[70vh] md:h-[80vh] overflow-hidden">
     <?php if ($beach['cover_image']): ?>
-    <img src="<?= h($beach['cover_image']) ?>"
-         alt="<?= h($beach['name']) ?>"
-         class="w-full h-full object-cover">
+    <picture>
+        <?php if ($webpImage['webp']): ?>
+        <source srcset="<?= h($webpImage['webp']) ?>" type="image/webp">
+        <?php endif; ?>
+        <img src="<?= h($beach['cover_image']) ?>"
+             alt="<?= h(getBeachImageAlt($beach, 'scenic beach view')) ?>"
+             class="w-full h-full object-cover">
+    </picture>
     <?php else: ?>
-    <div class="w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
+    <div class="w-full h-full bg-gradient-to-br from-brand-dark to-brand-darker flex items-center justify-center">
         <span class="text-8xl">🏖️</span>
     </div>
     <?php endif; ?>
-    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+    <div class="absolute inset-0 hero-gradient-beach"></div>
 
-    <!-- Title overlay -->
-    <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+    <!-- Title overlay - positioned at bottom -->
+    <div class="absolute bottom-0 left-0 right-0 p-6 md:p-10 lg:p-16">
         <div class="max-w-7xl mx-auto">
-            <nav class="text-white/70 text-sm mb-2">
-                <a href="/" class="hover:text-white">Beaches</a>
-                <span class="mx-2">›</span>
-                <a href="/?municipality=<?= urlencode($beach['municipality']) ?>" class="hover:text-white"><?= h($beach['municipality']) ?></a>
+            <!-- Breadcrumbs -->
+            <nav class="text-white/50 text-sm mb-4" aria-label="Breadcrumb">
+                <a href="/" class="hover:text-brand-yellow transition-colors">Home</a>
+                <span class="mx-2">/</span>
+                <a href="/" class="hover:text-brand-yellow transition-colors">Beaches</a>
+                <span class="mx-2">/</span>
+                <a href="/beaches-in-<?= h(strtolower(str_replace(' ', '-', $beach['municipality']))) ?>" class="hover:text-brand-yellow transition-colors"><?= h($beach['municipality']) ?></a>
+                <span class="mx-2">/</span>
+                <span class="text-white/70"><?= h($beach['name']) ?></span>
             </nav>
-            <h1 class="text-3xl md:text-4xl font-bold text-white"><?= h($beach['name']) ?></h1>
-            <p class="text-white/80 mt-1"><?= h($beach['municipality']) ?>, Puerto Rico</p>
+
+            <!-- Beach Name - Large Uppercase with Location -->
+            <h1 class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-white uppercase tracking-tight leading-none">
+                <?= h($beach['name']) ?>
+                <span class="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mt-2 md:mt-4 text-brand-yellow font-serif normal-case italic">
+                    <?= h($beach['municipality']) ?>, Puerto Rico
+                </span>
+            </h1>
         </div>
     </div>
 </div>
 
 <!-- Main Content -->
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="bg-brand-dark">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
-        <!-- Main Column -->
-        <div class="lg:col-span-2 space-y-8">
+    <!-- Quick Info Bar -->
+    <div class="flex flex-wrap items-center gap-3 p-3 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 mb-6">
+        <?php if ($beach['google_rating']): ?>
+        <div class="flex items-center gap-1.5 bg-brand-yellow/10 border border-brand-yellow/30 px-3 py-1.5 rounded-lg" aria-label="Google rating: <?= number_format($beach['google_rating'], 1) ?> out of 5">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="#FACC15" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            <span class="font-bold text-brand-yellow"><?= number_format($beach['google_rating'], 1) ?></span>
+            <?php if ($beach['google_review_count']): ?>
+            <span class="text-white/50 text-sm">(<?= number_format($beach['google_review_count']) ?>)</span>
+            <?php endif; ?>
+        </div>
+        <?php endif; ?>
 
-            <!-- Quick Info Bar -->
-            <div class="flex flex-wrap items-center gap-4 p-4 bg-white rounded-xl shadow-sm">
-                <?php if ($beach['google_rating']): ?>
-                <div class="flex items-center gap-1.5 bg-amber-50 border border-amber-200 px-3 py-2 rounded-lg" aria-label="Google rating: <?= number_format($beach['google_rating'], 1) ?> out of 5">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">
-                        <path fill="#FACC15" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                    </svg>
-                    <span class="font-bold text-lg text-amber-800"><?= number_format($beach['google_rating'], 1) ?></span>
-                    <span class="text-amber-700 text-sm font-medium">Google</span>
-                    <?php if ($beach['google_review_count']): ?>
-                    <span class="text-amber-600/70 text-sm">(<?= number_format($beach['google_review_count']) ?>)</span>
+        <?php if ($avgUserRating): ?>
+        <div class="flex items-center gap-1.5 bg-cyan-500/10 border border-cyan-500/30 px-3 py-1.5 rounded-lg" aria-label="Community rating: <?= number_format($avgUserRating, 1) ?> out of 5">
+            <i data-lucide="star" class="w-4 h-4 text-cyan-400 fill-cyan-400" aria-hidden="true"></i>
+            <span class="font-bold text-cyan-400"><?= number_format($avgUserRating, 1) ?></span>
+            <span class="text-white/50 text-sm">(<?= $userReviewCount ?>)</span>
+        </div>
+        <?php endif; ?>
+
+        <?php if (!empty($beach['tags'])): ?>
+        <div class="flex flex-wrap gap-1.5">
+            <?php foreach (array_slice($beach['tags'], 0, 3) as $tag): ?>
+            <a href="/?tags[]=<?= h($tag) ?>" class="text-xs bg-white/10 hover:bg-white/20 text-white/80 px-2 py-1 rounded-full transition-colors">
+                <?= h(getTagLabel($tag)) ?>
+            </a>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+
+        <div class="ml-auto flex gap-2">
+            <a href="<?= h(getDirectionsUrl($beach)) ?>" target="_blank"
+               class="inline-flex items-center gap-1.5 bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-4 py-2 rounded-lg font-semibold text-sm transition-colors">
+                <i data-lucide="navigation" class="w-4 h-4" aria-hidden="true"></i>
+                <span>Directions</span>
+            </a>
+            <button onclick="shareBeach('<?= h($beach['slug']) ?>', '<?= h(addslashes($beach['name'])) ?>')" aria-label="Share this beach"
+                    class="inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/20 text-white px-3 py-2 rounded-lg text-sm transition-colors">
+                <i data-lucide="share-2" class="w-4 h-4" aria-hidden="true"></i>
+                <span class="hidden sm:inline">Share</span>
+            </button>
+        </div>
+    </div>
+
+    <?php
+    // Pre-fetch data needed for sidebar
+    require_once __DIR__ . '/inc/weather.php';
+    require_once __DIR__ . '/inc/crowd.php';
+    $weather = getWeatherForLocation($beach['lat'], $beach['lng']);
+    $recommendation = $weather ? getBeachRecommendation($weather) : null;
+    $crowdLevel = getBeachCrowdLevel($beach['id'], 4);
+    $sunTimes = getSunTimes($beach['lat'], $beach['lng']);
+    ?>
+
+    <!-- Two-Column Layout -->
+    <div class="lg:flex lg:gap-8">
+
+        <!-- Left Column: Main Content -->
+        <div class="lg:w-[63%] space-y-6">
+
+            <!-- Quick Facts - Condensed 2x2 Grid -->
+            <section>
+                <h2 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                    <i data-lucide="clipboard-list" class="w-5 h-5 text-brand-yellow" aria-hidden="true"></i>
+                    <span>Quick Facts</span>
+                </h2>
+                <div class="grid grid-cols-2 gap-3">
+                    <?php if (!empty($beach['tags'])): ?>
+                    <?php $icon = 'activity'; $label = 'Best For'; $value = getTagLabel($beach['tags'][0]); $subtext = count($beach['tags']) > 1 ? '+' . (count($beach['tags']) - 1) . ' more' : ''; ?>
+                    <?php include __DIR__ . '/components/quick-fact-card.php'; ?>
+                    <?php endif; ?>
+
+                    <?php if ($beach['best_time']): ?>
+                    <?php $icon = 'clock'; $label = 'Best Time'; $value = $beach['best_time']; $subtext = ''; ?>
+                    <?php include __DIR__ . '/components/quick-fact-card.php'; ?>
+                    <?php endif; ?>
+
+                    <?php if ($beach['parking_details']): ?>
+                    <?php $icon = 'car'; $label = 'Parking'; $value = strlen($beach['parking_details']) > 20 ? substr($beach['parking_details'], 0, 20) . '...' : $beach['parking_details']; $subtext = ''; ?>
+                    <?php include __DIR__ . '/components/quick-fact-card.php'; ?>
+                    <?php endif; ?>
+
+                    <?php if ($beach['access_label']): ?>
+                    <?php $icon = 'accessibility'; $label = 'Access'; $value = $beach['access_label']; $subtext = ''; ?>
+                    <?php include __DIR__ . '/components/quick-fact-card.php'; ?>
                     <?php endif; ?>
                 </div>
+            </section>
+
+            <!-- About + Highlights Merged -->
+            <section>
+                <h2 class="text-xl font-bold text-white mb-3">About <?= h($beach['name']) ?></h2>
+                <?php if ($beach['description']): ?>
+                <p class="text-gray-300 leading-relaxed mb-4"><?= nl2br(h($beach['description'])) ?></p>
                 <?php endif; ?>
 
-                <?php if ($avgUserRating): ?>
-                <div class="flex items-center gap-1.5 bg-blue-50 border border-blue-200 px-3 py-2 rounded-lg" aria-label="Community rating: <?= number_format($avgUserRating, 1) ?> out of 5">
-                    <i data-lucide="star" class="w-5 h-5 text-blue-500 fill-blue-500" aria-hidden="true"></i>
-                    <span class="font-bold text-lg text-blue-800"><?= number_format($avgUserRating, 1) ?></span>
-                    <span class="text-blue-700 text-sm font-medium">Community</span>
-                    <span class="text-blue-600/70 text-sm">(<?= $userReviewCount ?>)</span>
+                <?php if (!empty($beach['features'])): ?>
+                <div class="flex flex-wrap gap-2 mt-3">
+                    <?php foreach ($beach['features'] as $feature): ?>
+                    <span class="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 text-white/80 px-3 py-1.5 rounded-lg text-sm">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-brand-yellow" aria-hidden="true"></i>
+                        <?= h($feature['title']) ?>
+                    </span>
+                    <?php endforeach; ?>
                 </div>
                 <?php endif; ?>
+            </section>
 
-                <?php if ($beach['access_label']): ?>
-                <div class="text-gray-600">
-                    <span class="font-medium">Access:</span> <?= h($beach['access_label']) ?>
-                </div>
-                <?php endif; ?>
+            <!-- Visitor Tips -->
+            <?php if (!empty($beach['tips'])): ?>
+            <section>
+                <h2 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                    <i data-lucide="lightbulb" class="w-5 h-5 text-brand-yellow" aria-hidden="true"></i>
+                    <span>Visitor Tips</span>
+                </h2>
+                <ul class="space-y-2">
+                    <?php foreach ($beach['tips'] as $tip): ?>
+                    <li class="flex items-start gap-2 text-sm">
+                        <span class="yellow-bullet mt-1.5 flex-shrink-0"></span>
+                        <span class="text-gray-300"><?= h($tip['tip']) ?></span>
+                    </li>
+                    <?php endforeach; ?>
+                </ul>
+            </section>
+            <?php endif; ?>
 
-                <div class="ml-auto flex gap-2">
-                    <a href="<?= h(getDirectionsUrl($beach)) ?>"
-                       target="_blank"
-                       class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-                        <i data-lucide="navigation" class="w-4 h-4" aria-hidden="true"></i>
-                        <span>Directions</span>
-                    </a>
-                    <button onclick="copyBeachLink('<?= h($beach['slug']) ?>', this)"
-                            aria-label="Copy link to this beach"
-                            class="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors">
-                        <i data-lucide="link" class="w-4 h-4" aria-hidden="true"></i>
-                        <span>Copy Link</span>
-                    </button>
-                    <button onclick="shareBeach('<?= h($beach['slug']) ?>', '<?= h(addslashes($beach['name'])) ?>')"
-                            aria-label="Share this beach"
-                            class="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors">
-                        <i data-lucide="share-2" class="w-4 h-4" aria-hidden="true"></i>
-                        <span>Share</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Tags -->
-            <?php if (!empty($beach['tags'])): ?>
-            <div class="flex flex-wrap gap-2">
-                <?php foreach ($beach['tags'] as $tag): ?>
-                <a href="/?tags[]=<?= h($tag) ?>"
-                   class="inline-block bg-blue-50 hover:bg-blue-100 text-blue-700 px-4 py-2 rounded-full transition-colors">
-                    <?= h(getTagLabel($tag)) ?>
-                </a>
+            <!-- Extended Content Sections -->
+            <?php if (!empty($extendedSections)): ?>
+            <div class="extended-content space-y-6 mt-8">
+                <?php foreach ($extendedSections as $section): ?>
+                    <section class="beach-detail-card p-6 rounded-xl" id="section-<?= h($section['section_type']) ?>">
+                        <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                            <i data-lucide="<?= h(CONTENT_SECTIONS[$section['section_type']]['icon'] ?? 'info') ?>" class="w-5 h-5 text-brand-yellow"></i>
+                            <?= h($section['heading']) ?>
+                        </h2>
+                        <div class="prose prose-invert prose-brand max-w-none">
+                            <?= $section['content'] ?>
+                        </div>
+                    </section>
                 <?php endforeach; ?>
             </div>
             <?php endif; ?>
 
-            <!-- Entity-Rich Quick Facts Box -->
-            <div class="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-6 border border-blue-100">
-                <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <i data-lucide="clipboard-list" class="w-5 h-5 text-blue-600" aria-hidden="true"></i>
-                    <span>Quick Facts: <?= h($beach['name']) ?></span>
-                </h2>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    <div class="bg-white rounded-lg p-3 shadow-sm">
-                        <div class="text-xs text-gray-500 uppercase tracking-wide">Location</div>
-                        <div class="font-semibold text-gray-900"><?= h($beach['municipality']) ?></div>
-                        <div class="text-sm text-gray-600">Puerto Rico</div>
-                    </div>
-
-                    <?php if ($beach['google_rating']): ?>
-                    <div class="bg-white rounded-lg p-3 shadow-sm">
-                        <div class="text-xs text-amber-600 uppercase tracking-wide font-medium">Google Rating</div>
-                        <div class="font-semibold text-gray-900 flex items-center gap-1">
-                            <svg class="w-4 h-4" viewBox="0 0 24 24" aria-hidden="true">
-                                <path fill="#FACC15" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                            </svg>
-                            <?= number_format($beach['google_rating'], 1) ?>/5
-                        </div>
-                        <div class="text-sm text-gray-600"><?= number_format($beach['google_review_count']) ?> reviews</div>
-                    </div>
-                    <?php endif; ?>
-
-                    <?php if ($beach['lat'] && $beach['lng']): ?>
-                    <div class="bg-white rounded-lg p-3 shadow-sm">
-                        <div class="text-xs text-gray-500 uppercase tracking-wide">GPS</div>
-                        <div class="font-semibold text-gray-900 text-sm"><?= number_format($beach['lat'], 4) ?>°N</div>
-                        <div class="text-sm text-gray-600"><?= number_format(abs($beach['lng']), 4) ?>°W</div>
-                    </div>
-                    <?php endif; ?>
-
-                    <?php if ($beach['access_label']): ?>
-                    <div class="bg-white rounded-lg p-3 shadow-sm">
-                        <div class="text-xs text-gray-500 uppercase tracking-wide">Access</div>
-                        <div class="font-semibold text-gray-900"><?= h($beach['access_label']) ?></div>
-                        <div class="text-sm text-gray-600">Public beach</div>
-                    </div>
-                    <?php endif; ?>
-
-                    <?php if (!empty($beach['tags'])): ?>
-                    <div class="bg-white rounded-lg p-3 shadow-sm">
-                        <div class="text-xs text-gray-500 uppercase tracking-wide">Best For</div>
-                        <div class="font-semibold text-gray-900"><?= h(getTagLabel($beach['tags'][0])) ?></div>
-                        <?php if (count($beach['tags']) > 1): ?>
-                        <div class="text-sm text-gray-600">+<?= count($beach['tags']) - 1 ?> more activities</div>
-                        <?php endif; ?>
-                    </div>
-                    <?php endif; ?>
-
-                    <?php if (!empty($beach['amenities'])): ?>
-                    <div class="bg-white rounded-lg p-3 shadow-sm">
-                        <div class="text-xs text-gray-500 uppercase tracking-wide">Amenities</div>
-                        <div class="font-semibold text-gray-900"><?= count($beach['amenities']) ?> available</div>
-                        <div class="text-sm text-gray-600">
-                            <?= in_array('parking', $beach['amenities']) ? 'Parking' : '' ?>
-                            <?= in_array('restrooms', $beach['amenities']) ? (in_array('parking', $beach['amenities']) ? ', ' : '') . 'Restrooms' : '' ?>
-                        </div>
-                    </div>
-                    <?php endif; ?>
-                </div>
-
-                <?php if ($beach['best_time'] || $beach['parking_details']): ?>
-                <div class="mt-4 pt-4 border-t border-blue-100 grid md:grid-cols-2 gap-4 text-sm">
-                    <?php if ($beach['best_time']): ?>
-                    <div class="flex items-start gap-2">
-                        <i data-lucide="clock" class="w-4 h-4 text-blue-600 mt-0.5" aria-hidden="true"></i>
-                        <div>
-                            <span class="font-medium text-gray-900">Best Time:</span>
-                            <span class="text-gray-600"><?= h($beach['best_time']) ?></span>
-                        </div>
-                    </div>
-                    <?php endif; ?>
-                    <?php if ($beach['parking_details']): ?>
-                    <div class="flex items-start gap-2">
-                        <i data-lucide="car" class="w-4 h-4 text-blue-600 mt-0.5" aria-hidden="true"></i>
-                        <div>
-                            <span class="font-medium text-gray-900">Parking:</span>
-                            <span class="text-gray-600"><?= h($beach['parking_details']) ?></span>
-                        </div>
-                    </div>
-                    <?php endif; ?>
-                </div>
-                <?php endif; ?>
-            </div>
-
-            <!-- Description -->
-            <?php if ($beach['description']): ?>
-            <div class="prose max-w-none">
-                <h2 class="text-xl font-bold text-gray-900 mb-3">About <?= h($beach['name']) ?></h2>
-                <p class="text-gray-600 leading-relaxed"><?= nl2br(h($beach['description'])) ?></p>
-            </div>
-            <?php endif; ?>
-
-            <!-- Features -->
-            <?php if (!empty($beach['features'])): ?>
-            <div>
-                <h2 class="text-xl font-bold text-gray-900 mb-4">Beach Highlights</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <?php foreach ($beach['features'] as $feature): ?>
-                    <div class="bg-gray-50 p-4 rounded-xl">
-                        <h3 class="font-semibold text-gray-900"><?= h($feature['title']) ?></h3>
-                        <p class="text-gray-600 text-sm mt-1"><?= h($feature['description']) ?></p>
-                    </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-            <?php endif; ?>
-
-            <!-- Tips -->
-            <?php if (!empty($beach['tips'])): ?>
-            <div>
-                <h2 class="text-xl font-bold text-gray-900 mb-4">Visitor Tips</h2>
-                <div class="space-y-3">
-                    <?php foreach ($beach['tips'] as $tip): ?>
-                    <div class="flex gap-3 p-3 bg-blue-50 rounded-lg">
-                        <span class="text-blue-600 font-semibold shrink-0"><?= h($tip['category']) ?></span>
-                        <span class="text-gray-700"><?= h($tip['tip']) ?></span>
-                    </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-            <?php endif; ?>
-
-            <!-- Gallery -->
+            <!-- Gallery (if exists) -->
             <?php if (!empty($beach['gallery'])): ?>
-            <div>
-                <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <i data-lucide="images" class="w-5 h-5 text-blue-600" aria-hidden="true"></i>
+            <section>
+                <h2 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                    <i data-lucide="images" class="w-5 h-5 text-brand-yellow" aria-hidden="true"></i>
                     Photos
                 </h2>
                 <div class="gallery-grid">
                     <?php foreach ($beach['gallery'] as $idx => $image): ?>
-                    <img src="<?= h($image) ?>"
-                         alt="<?= h($beach['name']) ?> - Photo <?= $idx + 1 ?>"
+                    <img src="<?= h($image) ?>" alt="<?= h($beach['name']) ?> - Photo <?= $idx + 1 ?>"
                          class="rounded-lg cursor-pointer hover:opacity-90 transition-opacity gallery-image"
-                         data-gallery-index="<?= $idx ?>"
-                         onclick="openLightbox(<?= $idx ?>)"
-                         loading="lazy">
+                         data-gallery-index="<?= $idx ?>" onclick="openLightbox(<?= $idx ?>)" loading="lazy">
                     <?php endforeach; ?>
                 </div>
-            </div>
+            </section>
             <?php endif; ?>
 
-            <!-- User Photos Gallery -->
-            <?php
-            $userPhotos = query("
-                SELECT p.id, p.filename, p.caption, p.created_at, u.name as user_name
-                FROM beach_photos p
-                LEFT JOIN users u ON p.user_id = u.id
-                WHERE p.beach_id = :beach_id AND p.status = 'published'
-                ORDER BY p.created_at DESC
-                LIMIT 12
-            ", [':beach_id' => $beach['id']]);
-            $totalUserPhotos = queryOne("SELECT COUNT(*) as count FROM beach_photos WHERE beach_id = :beach_id AND status = 'published'", [':beach_id' => $beach['id']]);
-            ?>
-            <div id="user-photos" class="pt-4">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
-                        <i data-lucide="camera" class="w-5 h-5 text-purple-600" aria-hidden="true"></i>
+            <!-- Visitor Photos - Compact -->
+            <section id="user-photos">
+                <?php
+                $userPhotos = query("SELECT p.id, p.filename, p.caption, p.created_at, u.name as user_name FROM beach_photos p LEFT JOIN users u ON p.user_id = u.id WHERE p.beach_id = :beach_id AND p.status = 'published' ORDER BY p.created_at DESC LIMIT 12", [':beach_id' => $beach['id']]);
+                $totalUserPhotos = queryOne("SELECT COUNT(*) as count FROM beach_photos WHERE beach_id = :beach_id AND status = 'published'", [':beach_id' => $beach['id']]);
+                ?>
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i data-lucide="camera" class="w-5 h-5 text-purple-400" aria-hidden="true"></i>
                         <span>Visitor Photos</span>
                         <?php if ($totalUserPhotos['count'] > 0): ?>
-                        <span class="text-sm font-normal text-gray-500">(<?= $totalUserPhotos['count'] ?>)</span>
+                        <span class="text-sm font-normal text-gray-400">(<?= $totalUserPhotos['count'] ?>)</span>
                         <?php endif; ?>
                     </h2>
                     <?php if (isAuthenticated()): ?>
                     <button onclick="openPhotoUploadModal('<?= h($beach['id']) ?>', '<?= h(addslashes($beach['name'])) ?>')"
-                            class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 text-sm">
-                        <i data-lucide="upload" class="w-4 h-4"></i>
-                        <span>Add Photos</span>
+                            class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-lg font-medium transition-colors flex items-center gap-1.5 text-sm">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        <span>Add</span>
                     </button>
                     <?php else: ?>
                     <a href="/login.php?redirect=<?= urlencode('/beach/' . $beach['slug'] . '#user-photos') ?>"
-                       class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 text-sm">
-                        <i data-lucide="upload" class="w-4 h-4"></i>
-                        <span>Sign in to Add Photos</span>
-                    </a>
+                       class="text-sm text-purple-400 hover:text-purple-300 font-medium">Sign in to add</a>
                     <?php endif; ?>
                 </div>
-
                 <?php if (!empty($userPhotos)): ?>
-                <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                <div class="grid grid-cols-4 sm:grid-cols-6 gap-2">
                     <?php foreach ($userPhotos as $photo): ?>
                     <button onclick="openPhotoModal('/uploads/photos/<?= h($photo['filename']) ?>', '<?= h(addslashes($photo['caption'] ?? '')) ?>')"
-                            class="aspect-square rounded-lg overflow-hidden hover:opacity-90 transition-opacity group relative">
-                        <img src="/uploads/photos/thumbs/<?= h($photo['filename']) ?>"
-                             alt="<?= h($photo['caption'] ?? 'Beach photo by ' . ($photo['user_name'] ?? 'visitor')) ?>"
-                             class="w-full h-full object-cover"
-                             loading="lazy">
-                        <?php if ($photo['user_name']): ?>
-                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <span class="text-white text-xs truncate block"><?= h($photo['user_name']) ?></span>
-                        </div>
-                        <?php endif; ?>
+                            class="aspect-square rounded-lg overflow-hidden hover:opacity-90 transition-opacity">
+                        <img src="/uploads/photos/thumbs/<?= h($photo['filename']) ?>" alt="<?= h($photo['caption'] ?? 'Visitor photo') ?>" class="w-full h-full object-cover" loading="lazy">
                     </button>
                     <?php endforeach; ?>
                 </div>
-                <?php if ($totalUserPhotos['count'] > 12): ?>
-                <div class="text-center mt-4">
-                    <button onclick="loadMorePhotos('<?= h($beach['id']) ?>')"
-                            class="text-purple-600 hover:text-purple-700 font-medium text-sm">
-                        View all <?= $totalUserPhotos['count'] ?> photos
-                    </button>
-                </div>
-                <?php endif; ?>
                 <?php else: ?>
-                <div class="text-center py-12 bg-gray-50 rounded-xl">
-                    <div class="text-5xl mb-4">📸</div>
-                    <h3 class="text-lg font-semibold text-gray-700 mb-2">No visitor photos yet</h3>
-                    <p class="text-gray-500 mb-4">Be the first to share photos of <?= h($beach['name']) ?>!</p>
-                    <?php if (isAuthenticated()): ?>
-                    <button onclick="openPhotoUploadModal('<?= h($beach['id']) ?>', '<?= h(addslashes($beach['name'])) ?>')"
-                            class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
-                        Upload the First Photo
-                    </button>
-                    <?php else: ?>
-                    <a href="/login.php?redirect=<?= urlencode('/beach/' . $beach['slug'] . '#user-photos') ?>"
-                       class="inline-block bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
-                        Sign in to Upload Photos
-                    </a>
-                    <?php endif; ?>
-                </div>
+                <p class="text-sm text-gray-500">No photos yet. Be the first to share!</p>
                 <?php endif; ?>
-            </div>
+            </section>
 
-            <!-- Reviews Section -->
-            <div id="reviews" class="pt-4">
-                <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <h2 class="text-xl font-bold text-gray-900">Visitor Reviews</h2>
+            <!-- Reviews - Compact -->
+            <section id="reviews">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-3">
+                        <h2 class="text-lg font-bold text-white">Reviews</h2>
                         <?php if ($avgUserRating): ?>
-                        <div class="flex items-center gap-2 mt-1">
-                            <div class="flex text-yellow-500">
-                                <?php for ($i = 1; $i <= 5; $i++): ?>
-                                <span><?= $i <= round($avgUserRating) ? '★' : '☆' ?></span>
-                                <?php endfor; ?>
-                            </div>
-                            <span class="font-semibold"><?= number_format($avgUserRating, 1) ?></span>
-                            <span class="text-gray-500">(<?= $userReviewCount ?> review<?= $userReviewCount !== 1 ? 's' : '' ?>)</span>
+                        <div class="flex items-center gap-1 text-sm">
+                            <span class="text-brand-yellow">★</span>
+                            <span class="text-white"><?= number_format($avgUserRating, 1) ?></span>
+                            <span class="text-gray-400">(<?= $userReviewCount ?>)</span>
                         </div>
                         <?php endif; ?>
                     </div>
                     <?php if (isAuthenticated()): ?>
                     <button onclick="openReviewForm('<?= h($beach['id']) ?>', '<?= h(addslashes($beach['name'])) ?>')"
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-                        Write a Review
+                            class="bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-3 py-1.5 rounded-lg font-medium text-sm transition-colors">
+                        Write Review
                     </button>
                     <?php else: ?>
                     <a href="/login.php?redirect=<?= urlencode('/beach/' . $beach['slug'] . '#reviews') ?>"
-                       class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-                        Sign in to Review
-                    </a>
+                       class="text-sm text-brand-yellow hover:text-yellow-300 font-medium">Sign in to review</a>
                     <?php endif; ?>
                 </div>
-
                 <?php if (!empty($reviews)): ?>
-                <div class="space-y-4">
+                <div class="space-y-3">
                     <?php foreach ($reviews as $review): ?>
                     <?php include __DIR__ . '/components/review-card.php'; ?>
                     <?php endforeach; ?>
                 </div>
                 <?php else: ?>
-                <div class="text-center py-12 bg-gray-50 rounded-xl">
-                    <div class="text-5xl mb-4">📝</div>
-                    <h3 class="text-lg font-semibold text-gray-700 mb-2">No reviews yet</h3>
-                    <p class="text-gray-500 mb-4">Be the first to share your experience at <?= h($beach['name']) ?>!</p>
-                    <?php if (isAuthenticated()): ?>
-                    <button onclick="openReviewForm('<?= h($beach['id']) ?>', '<?= h(addslashes($beach['name'])) ?>')"
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
-                        Write the First Review
-                    </button>
-                    <?php else: ?>
-                    <a href="/login.php?redirect=<?= urlencode('/beach/' . $beach['slug'] . '#reviews') ?>"
-                       class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
-                        Sign in to Write a Review
-                    </a>
-                    <?php endif; ?>
+                <p class="text-sm text-gray-500">No reviews yet. Be the first to share your experience!</p>
+                <?php endif; ?>
+            </section>
+
+        </div><!-- End Left Column -->
+
+        <!-- Right Column: Sidebar -->
+        <div class="lg:w-[37%] mt-8 lg:mt-0">
+            <div class="lg:sticky lg:top-24 space-y-4">
+
+                <!-- Weather Widget -->
+                <?php if ($weather): ?>
+                <div class="beach-detail-card p-4">
+                    <?php $size = 'sidebar'; include __DIR__ . '/components/weather-widget.php'; ?>
                 </div>
                 <?php endif; ?>
-            </div>
 
-            <!-- Similar Beaches -->
-            <?php
-            $similarBeaches = getSimilarBeaches($beach['id'], $beach['tags'], 4);
-            if (!empty($similarBeaches)):
-            ?>
-            <div class="pt-8">
-                <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <i data-lucide="sparkles" class="w-5 h-5 text-blue-600" aria-hidden="true"></i>
-                    Similar Beaches You Might Like
-                </h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <?php foreach ($similarBeaches as $similar): ?>
-                    <a href="/beach/<?= h($similar['slug']) ?>"
-                       class="group bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-                        <div class="aspect-video relative overflow-hidden">
-                            <img src="<?= h(getThumbnailUrl($similar['cover_image'])) ?>"
-                                 alt="<?= h($similar['name']) ?>"
-                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                 loading="lazy">
-                            <?php if ($similar['shared_tags'] > 1): ?>
-                            <span class="absolute top-2 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
-                                <?= $similar['shared_tags'] ?> shared tags
-                            </span>
-                            <?php endif; ?>
-                        </div>
-                        <div class="p-3">
-                            <h3 class="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-1">
-                                <?= h($similar['name']) ?>
-                            </h3>
-                            <p class="text-sm text-gray-500"><?= h($similar['municipality']) ?></p>
-                            <?php if ($similar['google_rating']): ?>
-                            <div class="flex items-center gap-1 mt-1">
-                                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path fill="#FACC15" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                                </svg>
-                                <span class="text-sm font-medium text-amber-700"><?= number_format($similar['google_rating'], 1) ?></span>
-                            </div>
-                            <?php endif; ?>
-                        </div>
-                    </a>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-            <?php endif; ?>
-        </div>
-
-        <!-- Sidebar -->
-        <div class="space-y-6">
-
-            <!-- Weather Widget -->
-            <?php
-            require_once __DIR__ . '/inc/weather.php';
-            $weather = getWeatherForLocation($beach['lat'], $beach['lng']);
-            if ($weather):
-                $size = 'full';
-                include __DIR__ . '/components/weather-widget.php';
-            endif;
-            ?>
-
-            <!-- Conditions Card -->
-            <?php if ($beach['sargassum'] || $beach['surf'] || $beach['wind']): ?>
-            <div class="bg-white rounded-xl shadow-sm p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-bold text-gray-900">Current Conditions</h3>
-                    <?php if ($beach['updated_at']): ?>
-                    <span class="text-xs text-gray-400" title="Last updated: <?= h(date('F j, Y', strtotime($beach['updated_at']))) ?>">
-                        Updated <?= h(timeAgo($beach['updated_at'])) ?>
-                    </span>
-                    <?php endif; ?>
-                </div>
-                <div class="space-y-3">
-                    <?php if ($beach['sargassum']): ?>
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600 inline-flex items-center gap-2">
-                            <i data-lucide="leaf" class="w-4 h-4" aria-hidden="true"></i>
-                            <span>Sargassum</span>
-                        </span>
-                        <span class="<?= getConditionClass($beach['sargassum'], 'sargassum') ?> px-3 py-1 rounded-lg text-sm">
-                            <?= h(getConditionLabel('sargassum', $beach['sargassum'])) ?>
-                        </span>
-                    </div>
-                    <?php endif; ?>
-                    <?php if ($beach['surf']): ?>
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600 inline-flex items-center gap-2">
-                            <i data-lucide="waves" class="w-4 h-4" aria-hidden="true"></i>
-                            <span>Surf</span>
-                        </span>
-                        <span class="<?= getConditionClass($beach['surf'], 'surf') ?> px-3 py-1 rounded-lg text-sm">
-                            <?= h(getConditionLabel('surf', $beach['surf'])) ?>
-                        </span>
-                    </div>
-                    <?php endif; ?>
-                    <?php if ($beach['wind']): ?>
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600 inline-flex items-center gap-2">
-                            <i data-lucide="wind" class="w-4 h-4" aria-hidden="true"></i>
-                            <span>Wind</span>
-                        </span>
-                        <span class="<?= getConditionClass($beach['wind'], 'wind') ?> px-3 py-1 rounded-lg text-sm">
-                            <?= h(getConditionLabel('wind', $beach['wind'])) ?>
-                        </span>
-                    </div>
-                    <?php endif; ?>
-                </div>
-                <!-- Report Outdated Info -->
-                <button onclick="openReportModal('<?= h($beach['id']) ?>', '<?= h(addslashes($beach['name'])) ?>')"
-                        class="w-full mt-4 pt-4 border-t border-gray-100 text-sm text-gray-500 hover:text-blue-600 transition-colors flex items-center justify-center gap-1.5">
-                    <i data-lucide="flag" class="w-3.5 h-3.5" aria-hidden="true"></i>
-                    <span>Report outdated info</span>
-                </button>
-            </div>
-            <?php endif; ?>
-
-            <!-- Live Check-Ins Card -->
-            <div class="bg-white rounded-xl shadow-sm p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-bold text-gray-900 flex items-center gap-2">
-                        <i data-lucide="radio" class="w-4 h-4 text-green-500" aria-hidden="true"></i>
-                        <span>Live Updates</span>
-                    </h3>
-                    <?php if (isAuthenticated()): ?>
-                    <button onclick="openCheckinModal('<?= h($beach['id']) ?>', '<?= h(addslashes($beach['name'])) ?>')"
-                            class="text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg font-medium transition-colors flex items-center gap-1">
-                        <i data-lucide="map-pin" class="w-3.5 h-3.5" aria-hidden="true"></i>
-                        <span>Check In</span>
-                    </button>
-                    <?php else: ?>
-                    <a href="/login.php?redirect=<?= urlencode('/beach/' . $beach['slug']) ?>"
-                       class="text-sm text-blue-600 hover:text-blue-700 font-medium">
-                        Sign in to check in
-                    </a>
-                    <?php endif; ?>
-                </div>
-
-                <div id="checkins-list"
-                     hx-get="/api/checkin.php?beach_id=<?= h($beach['id']) ?>&limit=5"
-                     hx-trigger="load"
-                     hx-swap="innerHTML">
-                    <div class="text-center py-4">
-                        <div class="animate-pulse text-gray-400">Loading...</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Amenities Card -->
-            <?php if (!empty($beach['amenities'])): ?>
-            <div class="bg-white rounded-xl shadow-sm p-6">
-                <h3 class="font-bold text-gray-900 mb-4">Amenities</h3>
-                <div class="space-y-2">
-                    <?php foreach ($beach['amenities'] as $amenity): ?>
-                    <div class="flex items-center gap-2 text-gray-600">
-                        <i data-lucide="check" class="w-4 h-4 text-green-500" aria-hidden="true"></i>
-                        <span><?= h(getAmenityLabel($amenity)) ?></span>
-                    </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-            <?php endif; ?>
-
-            <!-- Practical Info -->
-            <?php $sunTimes = getSunTimes($beach['lat'], $beach['lng']); ?>
-            <div class="bg-white rounded-xl shadow-sm p-6 space-y-4">
-                <h3 class="font-bold text-gray-900">Practical Information</h3>
-
-                <?php if ($beach['parking_details']): ?>
-                <div>
-                    <h4 class="font-medium text-gray-900 text-sm inline-flex items-center gap-1.5">
-                        <i data-lucide="car" class="w-4 h-4" aria-hidden="true"></i>
-                        <span>Parking</span>
-                        <?php if (!empty($beach['parking_difficulty'])): ?>
-                        <span class="<?= getParkingDifficultyClass($beach['parking_difficulty']) ?> text-xs px-2 py-0.5 rounded-full ml-1">
-                            <?= h(getParkingDifficultyLabel($beach['parking_difficulty'])) ?>
-                        </span>
+                <!-- Current Conditions -->
+                <?php if ($beach['sargassum'] || $beach['surf'] || $beach['wind']): ?>
+                <div class="beach-detail-card p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-bold text-white text-sm">Conditions</h3>
+                        <?php if ($beach['updated_at']): ?>
+                        <span class="text-xs text-gray-500"><?= h(timeAgo($beach['updated_at'])) ?></span>
                         <?php endif; ?>
-                    </h4>
-                    <p class="text-gray-600 text-sm mt-1"><?= h($beach['parking_details']) ?></p>
-                    <?php if (!empty($beach['parking_difficulty'])): ?>
-                    <p class="text-gray-400 text-xs mt-1"><?= h(getParkingDifficultyDescription($beach['parking_difficulty'])) ?></p>
-                    <?php endif; ?>
-                </div>
-                <?php endif; ?>
-
-                <?php if ($beach['safety_info']): ?>
-                <div>
-                    <h4 class="font-medium text-gray-900 text-sm inline-flex items-center gap-1.5">
-                        <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-500" aria-hidden="true"></i>
-                        <span>Safety</span>
-                    </h4>
-                    <p class="text-gray-600 text-sm mt-1"><?= h($beach['safety_info']) ?></p>
-                </div>
-                <?php endif; ?>
-
-                <?php if ($beach['best_time']): ?>
-                <div>
-                    <h4 class="font-medium text-gray-900 text-sm inline-flex items-center gap-1.5">
-                        <i data-lucide="clock" class="w-4 h-4" aria-hidden="true"></i>
-                        <span>Best Time</span>
-                    </h4>
-                    <p class="text-gray-600 text-sm mt-1"><?= h($beach['best_time']) ?></p>
-                </div>
-                <?php endif; ?>
-
-                <?php if ($sunTimes): ?>
-                <div>
-                    <h4 class="font-medium text-gray-900 text-sm inline-flex items-center gap-1.5">
-                        <i data-lucide="sun" class="w-4 h-4 text-amber-500" aria-hidden="true"></i>
-                        <span>Today's Sun Times</span>
-                    </h4>
-                    <div class="flex gap-4 mt-1.5">
-                        <div class="flex items-center gap-1.5 text-sm">
-                            <i data-lucide="sunrise" class="w-4 h-4 text-orange-400" aria-hidden="true"></i>
-                            <span class="text-gray-600"><?= h($sunTimes['sunrise']) ?></span>
+                    </div>
+                    <div class="space-y-2">
+                        <?php if ($beach['sargassum']): ?>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-400 inline-flex items-center gap-1.5">
+                                <i data-lucide="leaf" class="w-3.5 h-3.5" aria-hidden="true"></i>Sargassum
+                            </span>
+                            <span class="<?= getConditionClass($beach['sargassum'], 'sargassum') ?> px-2 py-0.5 rounded text-xs">
+                                <?= h(getConditionLabel('sargassum', $beach['sargassum'])) ?>
+                            </span>
                         </div>
-                        <div class="flex items-center gap-1.5 text-sm">
-                            <i data-lucide="sunset" class="w-4 h-4 text-rose-400" aria-hidden="true"></i>
-                            <span class="text-gray-600"><?= h($sunTimes['sunset']) ?></span>
+                        <?php endif; ?>
+                        <?php if ($beach['surf']): ?>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-400 inline-flex items-center gap-1.5">
+                                <i data-lucide="waves" class="w-3.5 h-3.5" aria-hidden="true"></i>Surf
+                            </span>
+                            <span class="<?= getConditionClass($beach['surf'], 'surf') ?> px-2 py-0.5 rounded text-xs">
+                                <?= h(getConditionLabel('surf', $beach['surf'])) ?>
+                            </span>
                         </div>
+                        <?php endif; ?>
+                        <?php if ($beach['wind']): ?>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-400 inline-flex items-center gap-1.5">
+                                <i data-lucide="wind" class="w-3.5 h-3.5" aria-hidden="true"></i>Wind
+                            </span>
+                            <span class="<?= getConditionClass($beach['wind'], 'wind') ?> px-2 py-0.5 rounded text-xs">
+                                <?= h(getConditionLabel('wind', $beach['wind'])) ?>
+                            </span>
+                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <?php endif; ?>
-            </div>
 
-            <!-- Map Preview -->
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                <div id="beach-map" class="h-48"></div>
-                <div class="p-4">
-                    <p class="text-sm text-gray-600 mb-3 inline-flex items-center gap-1.5">
-                        <i data-lucide="map-pin" class="w-4 h-4" aria-hidden="true"></i>
-                        <span><?= h($beach['municipality']) ?>, Puerto Rico</span>
-                    </p>
-                    <a href="<?= h(getDirectionsUrl($beach)) ?>"
-                       target="_blank"
-                       class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition-colors">
-                        Get Directions
-                    </a>
+                <!-- Live Updates / Crowd -->
+                <div class="beach-detail-card p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-bold text-white text-sm flex items-center gap-1.5">
+                            <i data-lucide="radio" class="w-3.5 h-3.5 text-green-400" aria-hidden="true"></i>
+                            Live Updates
+                        </h3>
+                        <?php if (isAuthenticated()): ?>
+                        <button onclick="openCheckinModal('<?= h($beach['id']) ?>', '<?= h(addslashes($beach['name'])) ?>')"
+                                class="text-xs bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded font-medium transition-colors">
+                            Check In
+                        </button>
+                        <?php endif; ?>
+                    </div>
+                    <?php if ($crowdLevel): ?>
+                    <?php
+                    $crowdColors = [
+                        'green' => 'bg-green-500/10 text-green-400 border-green-500/20',
+                        'yellow' => 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
+                        'orange' => 'bg-orange-500/10 text-orange-400 border-orange-500/20',
+                        'red' => 'bg-red-500/10 text-red-400 border-red-500/20',
+                        'gray' => 'bg-white/5 text-gray-400 border-white/10'
+                    ];
+                    $crowdColorClass = $crowdColors[$crowdLevel['color']] ?? $crowdColors['gray'];
+                    ?>
+                    <div class="p-2 rounded-lg border <?= $crowdColorClass ?> text-sm">
+                        <div class="flex items-center gap-2">
+                            <span>👥</span>
+                            <span class="font-medium"><?= h($crowdLevel['label']) ?></span>
+                            <span class="text-xs opacity-75 ml-auto"><?= h($crowdLevel['time_label']) ?></span>
+                        </div>
+                    </div>
+                    <?php else: ?>
+                    <p class="text-xs text-gray-500 text-center py-2">No recent crowd data</p>
+                    <?php endif; ?>
                 </div>
+
+                <!-- Map + Directions -->
+                <div class="beach-detail-card overflow-hidden">
+                    <div id="beach-map" class="h-40"></div>
+                    <div class="p-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-gray-400 inline-flex items-center gap-1">
+                                <i data-lucide="map-pin" class="w-3 h-3 text-brand-yellow" aria-hidden="true"></i>
+                                <?= h($beach['municipality']) ?>
+                            </span>
+                            <?php if ($beach['lat'] && $beach['lng']): ?>
+                            <span class="text-xs text-gray-500"><?= number_format($beach['lat'], 4) ?>°N, <?= number_format(abs($beach['lng']), 4) ?>°W</span>
+                            <?php endif; ?>
+                        </div>
+                        <a href="<?= h(getDirectionsUrl($beach)) ?>" target="_blank"
+                           class="mt-2 block w-full text-center bg-brand-yellow hover:bg-yellow-300 text-brand-darker py-2 rounded-lg font-medium text-sm transition-colors">
+                            Get Directions
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Amenities -->
+                <?php if (!empty($beach['amenities'])): ?>
+                <div class="beach-detail-card p-4">
+                    <h3 class="font-bold text-white text-sm mb-3">Amenities</h3>
+                    <div class="flex flex-wrap gap-1.5">
+                        <?php foreach ($beach['amenities'] as $amenity): ?>
+                        <span class="inline-flex items-center gap-1 text-xs bg-white/5 text-gray-300 px-2 py-1 rounded">
+                            <i data-lucide="check" class="w-3 h-3 text-green-400" aria-hidden="true"></i>
+                            <?= h(getAmenityLabel($amenity)) ?>
+                        </span>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+
+                <!-- Practical Info -->
+                <div class="beach-detail-card p-4 space-y-3">
+                    <h3 class="font-bold text-white text-sm">Practical Info</h3>
+                    <?php if ($beach['safety_info']): ?>
+                    <div class="text-sm">
+                        <span class="text-amber-400 inline-flex items-center gap-1"><i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> Safety</span>
+                        <p class="text-gray-400 text-xs mt-0.5"><?= h($beach['safety_info']) ?></p>
+                    </div>
+                    <?php endif; ?>
+                    <?php if ($sunTimes): ?>
+                    <div class="flex gap-4 text-xs">
+                        <span class="text-gray-400 inline-flex items-center gap-1"><i data-lucide="sunrise" class="w-3.5 h-3.5 text-orange-400"></i> <?= h($sunTimes['sunrise']) ?></span>
+                        <span class="text-gray-400 inline-flex items-center gap-1"><i data-lucide="sunset" class="w-3.5 h-3.5 text-rose-400"></i> <?= h($sunTimes['sunset']) ?></span>
+                    </div>
+                    <?php endif; ?>
+                </div>
+
             </div>
+        </div><!-- End Right Column -->
+
+    </div><!-- End Two-Column Layout -->
+
+    <!-- Related Planning Guides -->
+    <?php
+    $relatedGuides = getRelatedGuides($beach['tags'], 3);
+    if (!empty($relatedGuides)):
+    ?>
+    <section class="mt-8 pt-6 border-t border-white/10">
+        <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <i data-lucide="book-open" class="w-5 h-5 text-brand-yellow" aria-hidden="true"></i>
+            Planning Your Visit
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <?php foreach ($relatedGuides as $guide): ?>
+            <a href="<?= h($guide['url']) ?>" class="block bg-white/5 hover:bg-white/10 rounded-xl p-5 border border-white/10 hover:border-brand-yellow/50 transition-all group">
+                <div class="flex items-start gap-3">
+                    <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-brand-yellow/20 flex items-center justify-center group-hover:bg-brand-yellow/30 transition-colors">
+                        <i data-lucide="<?= h($guide['icon']) ?>" class="w-5 h-5 text-brand-yellow" aria-hidden="true"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-white text-sm mb-1 group-hover:text-brand-yellow transition-colors">
+                            <?= h($guide['title']) ?>
+                        </h3>
+                        <p class="text-xs text-gray-400">Essential tips & information</p>
+                    </div>
+                    <i data-lucide="arrow-right" class="w-4 h-4 text-gray-500 group-hover:text-brand-yellow transition-colors flex-shrink-0" aria-hidden="true"></i>
+                </div>
+            </a>
+            <?php endforeach; ?>
+        </div>
+    </section>
+    <?php endif; ?>
+
+    <!-- Similar Beaches - Full Width Below -->
+    <?php
+    $similarBeaches = getSimilarBeaches($beach['id'], $beach['tags'], 4);
+    if (!empty($similarBeaches)):
+    ?>
+    <section class="mt-8 pt-6 border-t border-white/10">
+        <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-5 h-5 text-brand-yellow" aria-hidden="true"></i>
+            Similar Beaches
+        </h2>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <?php foreach ($similarBeaches as $similar): ?>
+            <a href="/beach/<?= h($similar['slug']) ?>" class="group beach-detail-card overflow-hidden hover:border-brand-yellow/30 transition-all">
+                <div class="aspect-video relative overflow-hidden">
+                    <img src="<?= h(getThumbnailUrl($similar['cover_image'])) ?>" alt="<?= h($similar['name']) ?>"
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                </div>
+                <div class="p-3">
+                    <h3 class="font-semibold text-white text-sm group-hover:text-brand-yellow transition-colors line-clamp-1"><?= h($similar['name']) ?></h3>
+                    <p class="text-xs text-gray-400"><?= h($similar['municipality']) ?></p>
+                    <?php if ($similar['google_rating']): ?>
+                    <div class="flex items-center gap-1 mt-1">
+                        <svg class="w-3 h-3" viewBox="0 0 24 24"><path fill="#FACC15" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <span class="text-xs font-medium text-brand-yellow"><?= number_format($similar['google_rating'], 1) ?></span>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            </a>
+            <?php endforeach; ?>
+        </div>
+    </section>
+    <?php endif; ?>
+
+</div>
+</div>
+
+<!-- Sticky Quick Actions Bar (Mobile Only) -->
+<?php
+$stickyWeatherIcon = $weather['current']['icon'] ?? '☀️';
+$stickyWeatherTemp = isset($weather['current']['temperature']) ? round($weather['current']['temperature']) . '°F' : '--';
+$stickyWeatherVerdict = $recommendation['verdict'] ?? 'Check weather';
+$stickyCrowdLabel = $crowdLevel['label'] ?? 'No data';
+$stickyCrowdColor = $crowdLevel['color'] ?? 'gray';
+$directionsUrl = getDirectionsUrl($beach);
+?>
+<div class="beach-sticky-bar" aria-label="Quick actions">
+    <div class="sticky-weather">
+        <span class="sticky-icon"><?= h($stickyWeatherIcon) ?></span>
+        <div class="sticky-text">
+            <span class="sticky-value"><?= h($stickyWeatherTemp) ?></span>
+            <span class="sticky-label"><?= h($stickyWeatherVerdict) ?></span>
         </div>
     </div>
+    <div class="sticky-crowd sticky-crowd-<?= h($stickyCrowdColor) ?>">
+        <span class="sticky-icon">👥</span>
+        <div class="sticky-text">
+            <span class="sticky-value"><?= h($stickyCrowdLabel) ?></span>
+            <span class="sticky-label">crowd</span>
+        </div>
+    </div>
+    <a href="<?= h($directionsUrl) ?>" target="_blank" rel="noopener" class="sticky-directions">
+        <i data-lucide="navigation" class="w-4 h-4"></i>
+        <span>Go</span>
+    </a>
 </div>
 
 <!-- Share Modal -->
-<div id="share-modal" class="share-modal" onclick="closeShareModal()">
+<div id="share-modal" class="share-modal" role="dialog" aria-modal="true" aria-labelledby="share-modal-title" onclick="closeShareModal()">
     <div class="share-modal-content" onclick="event.stopPropagation()">
         <div class="flex justify-between items-center mb-4">
-            <h3 class="text-lg font-semibold">Share Beach</h3>
-            <button onclick="closeShareModal()" class="text-gray-400 hover:text-gray-600">✕</button>
+            <h3 id="share-modal-title" class="text-lg font-semibold">Share Beach</h3>
+            <button onclick="closeShareModal()" class="text-gray-400 hover:text-gray-600" aria-label="Close share dialog">
+                <i data-lucide="x" class="w-5 h-5" aria-hidden="true"></i>
+            </button>
         </div>
         <div id="share-modal-body"></div>
     </div>
@@ -880,10 +794,10 @@ function handleSwipe() {
 
 <!-- Report Outdated Info Modal -->
 <div id="report-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4"
-     role="dialog" aria-modal="true" onclick="closeReportModal()">
+     role="dialog" aria-modal="true" aria-labelledby="report-modal-title" onclick="closeReportModal()">
     <div class="bg-white rounded-xl shadow-2xl max-w-md w-full" onclick="event.stopPropagation()">
         <div class="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-            <h2 class="text-lg font-semibold text-gray-900">Report Outdated Info</h2>
+            <h2 id="report-modal-title" class="text-lg font-semibold text-gray-900">Report Outdated Info</h2>
             <button onclick="closeReportModal()" class="text-gray-400 hover:text-gray-600 p-1" aria-label="Close">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
@@ -1016,11 +930,11 @@ document.addEventListener('keydown', (e) => {
 
 <!-- Check-In Modal -->
 <div id="checkin-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4"
-     role="dialog" aria-modal="true" onclick="closeCheckinModal()">
+     role="dialog" aria-modal="true" aria-labelledby="checkin-modal-title" onclick="closeCheckinModal()">
     <div class="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
         <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-            <h2 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                <i data-lucide="map-pin" class="w-5 h-5 text-green-600"></i>
+            <h2 id="checkin-modal-title" class="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                <i data-lucide="map-pin" class="w-5 h-5 text-green-600" aria-hidden="true"></i>
                 <span>Check In</span>
             </h2>
             <button onclick="closeCheckinModal()" class="text-gray-400 hover:text-gray-600 p-1" aria-label="Close">
@@ -1329,10 +1243,10 @@ document.addEventListener('keydown', (e) => {
 
 <!-- Review Form Modal -->
 <div id="review-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4"
-     role="dialog" aria-modal="true" onclick="closeReviewModal()">
+     role="dialog" aria-modal="true" aria-labelledby="review-modal-title" onclick="closeReviewModal()">
     <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
         <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-            <h2 class="text-lg font-semibold text-gray-900">Write a Review</h2>
+            <h2 id="review-modal-title" class="text-lg font-semibold text-gray-900">Write a Review</h2>
             <button onclick="closeReviewModal()" class="text-gray-400 hover:text-gray-600 p-1" aria-label="Close">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
@@ -1461,10 +1375,10 @@ document.addEventListener('keydown', (e) => {
 
 <!-- Photo Upload Modal (standalone) -->
 <div id="photo-upload-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4"
-     role="dialog" aria-modal="true" onclick="closePhotoUploadModal()">
+     role="dialog" aria-modal="true" aria-labelledby="photo-upload-modal-title" onclick="closePhotoUploadModal()">
     <div class="bg-white rounded-xl shadow-2xl max-w-md w-full" onclick="event.stopPropagation()">
         <div class="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-            <h2 class="text-lg font-semibold text-gray-900">Upload Photos</h2>
+            <h2 id="photo-upload-modal-title" class="text-lg font-semibold text-gray-900">Upload Photos</h2>
             <button onclick="closePhotoUploadModal()" class="text-gray-400 hover:text-gray-600 p-1" aria-label="Close">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>

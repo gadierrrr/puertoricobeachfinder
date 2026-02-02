@@ -82,6 +82,8 @@ function fetchWeatherFromApi(float $lat, float $lng): ?array {
         '&hourly=temperature_2m,precipitation_probability,weather_code,uv_index' .
         '&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_probability_max' .
         '&timezone=America/Puerto_Rico' .
+        '&temperature_unit=fahrenheit' .
+        '&wind_speed_unit=mph' .
         '&forecast_days=3',
         $lat,
         $lng
@@ -229,12 +231,12 @@ function getWeatherIcon(int $code): string {
 function calculateBeachScore(array $current): int {
     $score = 100;
 
-    // Temperature (ideal: 26-32°C for beach)
-    $temp = $current['temperature_2m'] ?? 25;
-    if ($temp < 20) $score -= 30;
-    elseif ($temp < 24) $score -= 15;
-    elseif ($temp > 35) $score -= 20;
-    elseif ($temp > 32) $score -= 10;
+    // Temperature (ideal: 79-90°F for beach)
+    $temp = $current['temperature_2m'] ?? 77;
+    if ($temp < 68) $score -= 30;      // Below 68°F - too cold
+    elseif ($temp < 75) $score -= 15;  // 68-75°F - cool
+    elseif ($temp > 95) $score -= 20;  // Above 95°F - too hot
+    elseif ($temp > 90) $score -= 10;  // 90-95°F - warm
 
     // Rain (bad for beach)
     $rain = $current['rain'] ?? 0;
@@ -242,11 +244,11 @@ function calculateBeachScore(array $current): int {
     elseif ($rain > 1) $score -= 25;
     elseif ($rain > 0) $score -= 10;
 
-    // Wind (high wind not ideal)
+    // Wind (high wind not ideal) - thresholds in mph
     $wind = $current['wind_speed_10m'] ?? 0;
-    if ($wind > 40) $score -= 30;
-    elseif ($wind > 25) $score -= 15;
-    elseif ($wind > 15) $score -= 5;
+    if ($wind > 25) $score -= 30;      // Above 25 mph - very windy
+    elseif ($wind > 15) $score -= 15;  // 15-25 mph - windy
+    elseif ($wind > 10) $score -= 5;   // 10-15 mph - breezy
 
     // Cloud cover
     $clouds = $current['cloud_cover'] ?? 0;
@@ -313,7 +315,7 @@ function getBeachRecommendation(array $weather): array {
     } elseif ($score >= 60) {
         $tips = [];
         if ($uv > 7) $tips[] = 'UV is high - bring sunscreen';
-        if ($wind > 15) $tips[] = 'Breezy - great for water sports';
+        if ($wind > 10) $tips[] = 'Breezy - great for water sports';
 
         return [
             'verdict' => 'Good Beach Day',
@@ -329,7 +331,7 @@ function getBeachRecommendation(array $weather): array {
             'message' => 'Check the forecast - conditions may vary'
         ];
     } else {
-        $reason = $rain > 1 ? 'Rain expected' : ($wind > 25 ? 'High winds' : 'Poor conditions');
+        $reason = $rain > 1 ? 'Rain expected' : ($wind > 15 ? 'High winds' : 'Poor conditions');
         return [
             'verdict' => 'Not Ideal',
             'icon' => '⚠️',
@@ -337,4 +339,57 @@ function getBeachRecommendation(array $weather): array {
             'message' => $reason . ' - consider indoor activities'
         ];
     }
+}
+
+/**
+ * Batch fetch weather for multiple beaches efficiently
+ * Groups beaches by location zone (rounded coordinates) to minimize API calls
+ *
+ * @param array $beaches Array of beach records with lat/lng
+ * @param int $limit Max number of unique locations to fetch (for performance)
+ * @return array Map of beach_id => weather data
+ */
+function getBatchWeatherForBeaches(array $beaches, int $limit = 20): array {
+    if (empty($beaches)) {
+        return [];
+    }
+
+    // Group beaches by rounded coordinates (cache key)
+    $locationGroups = [];
+    foreach ($beaches as $beach) {
+        $lat = (float)($beach['lat'] ?? 0);
+        $lng = (float)($beach['lng'] ?? 0);
+
+        if ($lat === 0.0 || $lng === 0.0) {
+            continue;
+        }
+
+        // Round to 2 decimals (same as cache key in getWeatherForLocation)
+        $cacheKey = round($lat, 2) . '_' . round($lng, 2);
+
+        if (!isset($locationGroups[$cacheKey])) {
+            $locationGroups[$cacheKey] = [
+                'lat' => $lat,
+                'lng' => $lng,
+                'beach_ids' => []
+            ];
+        }
+        $locationGroups[$cacheKey]['beach_ids'][] = $beach['id'];
+    }
+
+    // Limit number of locations to fetch
+    $locationGroups = array_slice($locationGroups, 0, $limit, true);
+
+    // Fetch weather for each unique location
+    $weatherMap = [];
+    foreach ($locationGroups as $cacheKey => $group) {
+        $weather = getWeatherForLocation($group['lat'], $group['lng']);
+
+        // Map weather to all beaches in this location zone
+        foreach ($group['beach_ids'] as $beachId) {
+            $weatherMap[$beachId] = $weather;
+        }
+    }
+
+    return $weatherMap;
 }

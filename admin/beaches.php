@@ -36,15 +36,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $db = getDb();
         $stmt = $db->prepare($isNew ? "
-            INSERT INTO beaches (id, slug, name, municipality, lat, lng, description, cover_image,
+            INSERT INTO beaches (id, slug, name, municipality, lat, lng, place_id, description, cover_image,
                 sargassum, surf, wind, access_label, notes, parking_details, safety_info, local_tips,
                 best_time, publish_status, created_at, updated_at)
-            VALUES (:id, :slug, :name, :municipality, :lat, :lng, :description, :cover_image,
+            VALUES (:id, :slug, :name, :municipality, :lat, :lng, :place_id, :description, :cover_image,
                 :sargassum, :surf, :wind, :access_label, :notes, :parking_details, :safety_info, :local_tips,
                 :best_time, :publish_status, datetime('now'), datetime('now'))
         " : "
             UPDATE beaches SET
-                name = :name, municipality = :municipality, lat = :lat, lng = :lng,
+                name = :name, municipality = :municipality, lat = :lat, lng = :lng, place_id = :place_id,
                 description = :description, cover_image = :cover_image, sargassum = :sargassum,
                 surf = :surf, wind = :wind, access_label = :access_label, notes = :notes,
                 parking_details = :parking_details, safety_info = :safety_info, local_tips = :local_tips,
@@ -60,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindValue(':municipality', trim($_POST['municipality']), SQLITE3_TEXT);
         $stmt->bindValue(':lat', floatval($_POST['lat']), SQLITE3_FLOAT);
         $stmt->bindValue(':lng', floatval($_POST['lng']), SQLITE3_FLOAT);
+        $stmt->bindValue(':place_id', trim($_POST['place_id'] ?? '') ?: null, SQLITE3_TEXT);
         $stmt->bindValue(':description', trim($_POST['description'] ?? ''), SQLITE3_TEXT);
         $stmt->bindValue(':cover_image', trim($_POST['cover_image'] ?? '/images/beaches/placeholder-beach.jpg'), SQLITE3_TEXT);
         $stmt->bindValue(':sargassum', $_POST['sargassum'] ?? null, SQLITE3_TEXT);
@@ -328,17 +329,52 @@ if ($action === 'list'):
                         </div>
                     </div>
 
+                    <!-- Google Maps URL Coordinate Extractor -->
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <div class="flex items-center gap-2 mb-2">
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            <span class="text-sm font-medium text-blue-800">Extract Coordinates from Google Maps</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <input type="text" id="google-maps-url" placeholder="Paste Google Maps URL here..."
+                                   class="flex-1 px-3 py-2 text-sm border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <button type="button" id="extract-coords-btn"
+                                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                                </svg>
+                                Extract
+                            </button>
+                        </div>
+                        <div id="extract-status" class="mt-2 text-sm hidden"></div>
+                        <p class="text-xs text-blue-600 mt-2">
+                            Supports: Google Maps links, Place URLs, short URLs (goo.gl)
+                        </p>
+                    </div>
+
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Latitude *</label>
-                            <input type="number" step="any" name="lat" value="<?= h($beach['lat'] ?? '') ?>" required
+                            <input type="number" step="any" name="lat" id="lat-input" value="<?= h($beach['lat'] ?? '') ?>" required
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Longitude *</label>
-                            <input type="number" step="any" name="lng" value="<?= h($beach['lng'] ?? '') ?>" required
+                            <input type="number" step="any" name="lng" id="lng-input" value="<?= h($beach['lng'] ?? '') ?>" required
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                         </div>
+                    </div>
+
+                    <!-- Google Place ID (populated by coordinate extractor) -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Google Place ID</label>
+                        <input type="text" name="place_id" id="place-id-input" value="<?= h($beach['place_id'] ?? '') ?>"
+                               placeholder="Auto-populated when extracting coordinates"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 bg-gray-50 text-gray-600 text-sm font-mono">
+                        <p class="text-xs text-gray-500 mt-1">Used for fetching Google reviews and ratings</p>
                     </div>
 
                     <div>
@@ -540,9 +576,134 @@ if ($action === 'list'):
 <?php endif; ?>
 
 <?php
-// Add admin images script for edit page
+// Add scripts for edit/new page
+$extraScripts = '';
+
+// Coordinate extraction script (for both new and edit)
+if ($action === 'edit' || $action === 'new'):
+    $extraScripts .= <<<'SCRIPT'
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const urlInput = document.getElementById('google-maps-url');
+    const extractBtn = document.getElementById('extract-coords-btn');
+    const statusDiv = document.getElementById('extract-status');
+    const latInput = document.getElementById('lat-input');
+    const lngInput = document.getElementById('lng-input');
+    const placeIdInput = document.getElementById('place-id-input');
+
+    if (!extractBtn) return;
+
+    extractBtn.addEventListener('click', async function() {
+        const url = urlInput.value.trim();
+
+        if (!url) {
+            showStatus('Please enter a Google Maps URL', 'error');
+            return;
+        }
+
+        // Show loading state
+        extractBtn.disabled = true;
+        extractBtn.innerHTML = `
+            <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Extracting...
+        `;
+
+        try {
+            const response = await fetch('/api/extract-coordinates.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ url: url })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Update coordinate fields
+                latInput.value = data.data.lat;
+                lngInput.value = data.data.lng;
+
+                // Update Place ID if available
+                if (data.data.place_id && placeIdInput) {
+                    placeIdInput.value = data.data.place_id;
+                    placeIdInput.classList.add('ring-2', 'ring-green-500');
+                    setTimeout(() => {
+                        placeIdInput.classList.remove('ring-2', 'ring-green-500');
+                    }, 2000);
+                }
+
+                // Highlight the coordinate fields
+                latInput.classList.add('ring-2', 'ring-green-500');
+                lngInput.classList.add('ring-2', 'ring-green-500');
+                setTimeout(() => {
+                    latInput.classList.remove('ring-2', 'ring-green-500');
+                    lngInput.classList.remove('ring-2', 'ring-green-500');
+                }, 2000);
+
+                // Build status message
+                let msg = `Coordinates extracted: ${data.data.lat}, ${data.data.lng}`;
+                if (data.data.name) {
+                    msg += ` (${data.data.name})`;
+                }
+                if (data.data.place_id) {
+                    msg += ' + Place ID';
+                }
+
+                showStatus(msg, 'success');
+
+                // Show warning if outside PR
+                if (data.data.warning) {
+                    setTimeout(() => showStatus(data.data.warning, 'warning'), 100);
+                }
+            } else {
+                showStatus(data.error || 'Could not extract coordinates', 'error');
+            }
+        } catch (err) {
+            console.error('Extract error:', err);
+            showStatus('Network error. Please try again.', 'error');
+        } finally {
+            extractBtn.disabled = false;
+            extractBtn.innerHTML = `
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                </svg>
+                Extract
+            `;
+        }
+    });
+
+    // Allow pressing Enter in the URL input
+    urlInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            extractBtn.click();
+        }
+    });
+
+    function showStatus(message, type) {
+        statusDiv.classList.remove('hidden', 'text-green-700', 'text-red-700', 'text-yellow-700', 'bg-green-50', 'bg-red-50', 'bg-yellow-50');
+
+        const colors = {
+            success: ['text-green-700', 'bg-green-50'],
+            error: ['text-red-700', 'bg-red-50'],
+            warning: ['text-yellow-700', 'bg-yellow-50']
+        };
+
+        statusDiv.classList.add(...(colors[type] || colors.success), 'p-2', 'rounded');
+        statusDiv.textContent = message;
+    }
+});
+</script>
+SCRIPT;
+endif;
+
+// Add admin images script for edit page only
 if ($action === 'edit' && isset($beach)):
-    $extraScripts = '<script src="/assets/js/admin-images.js"></script>';
+    $extraScripts .= '<script src="/assets/js/admin-images.js"></script>';
 endif;
 ?>
 

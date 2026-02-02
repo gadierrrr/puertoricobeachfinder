@@ -73,4 +73,9 @@ if (!str_starts_with($redirectUrl, '/')) {
     $redirectUrl = '/';
 }
 
+// Redirect new users to onboarding (if not already completed)
+if (empty($user['onboarding_completed'])) {
+    $redirectUrl = '/onboarding.php' . ($redirectUrl !== '/' ? '?redirect=' . urlencode($redirectUrl) : '');
+}
+
 redirect($redirectUrl);

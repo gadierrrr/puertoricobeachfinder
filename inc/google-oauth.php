@@ -137,9 +137,11 @@ function getGoogleUserInfo(string $accessToken): ?array {
 
 /**
  * Find or create user from Google profile
+ * Returns user array with '_is_new_user' flag if newly created
  */
 function findOrCreateGoogleUser(array $googleUser): ?array {
     require_once __DIR__ . '/db.php';
+    require_once __DIR__ . '/email.php';
 
     $db = getDb();
 
@@ -161,7 +163,9 @@ function findOrCreateGoogleUser(array $googleUser): ?array {
         $stmt->bindValue(':id', $user['id'], SQLITE3_TEXT);
         $stmt->execute();
 
-        return queryOne('SELECT * FROM users WHERE id = :id', [':id' => $user['id']]);
+        $user = queryOne('SELECT * FROM users WHERE id = :id', [':id' => $user['id']]);
+        $user['_is_new_user'] = false;
+        return $user;
     }
 
     // Try to find user by email (link existing account)
@@ -184,7 +188,9 @@ function findOrCreateGoogleUser(array $googleUser): ?array {
         $stmt->bindValue(':id', $user['id'], SQLITE3_TEXT);
         $stmt->execute();
 
-        return queryOne('SELECT * FROM users WHERE id = :id', [':id' => $user['id']]);
+        $user = queryOne('SELECT * FROM users WHERE id = :id', [':id' => $user['id']]);
+        $user['_is_new_user'] = false;
+        return $user;
     }
 
     // Create new user
@@ -211,7 +217,15 @@ function findOrCreateGoogleUser(array $googleUser): ?array {
         return null;
     }
 
-    return queryOne('SELECT * FROM users WHERE id = :id', [':id' => $userId]);
+    $user = queryOne('SELECT * FROM users WHERE id = :id', [':id' => $userId]);
+
+    // Send welcome email to new user
+    if ($user) {
+        sendWelcomeEmail($user['email'], $user['name']);
+        $user['_is_new_user'] = true;
+    }
+
+    return $user;
 }
 
 /**

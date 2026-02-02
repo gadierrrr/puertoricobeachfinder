@@ -4,8 +4,8 @@
   "description": "Discover 230+ beautiful beaches across Puerto Rico. Find your perfect beach with real-time weather, reviews, and personalized recommendations.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#2563eb",
+  "background_color": "#132024",
+  "theme_color": "#1a2c32",
   "orientation": "portrait-primary",
   "scope": "/",
   "icons": [
@@ -70,18 +70,25 @@
   "categories": ["travel", "lifestyle", "navigation"],
   "shortcuts": [
     {
-      "name": "Beach Match Quiz",
-      "short_name": "Quiz",
-      "description": "Find your perfect beach",
-      "url": "/quiz.php",
-      "icons": [{"src": "/assets/icons/quiz-96x96.png", "sizes": "96x96"}]
+      "name": "Find Nearby",
+      "short_name": "Nearby",
+      "description": "Find beaches near you",
+      "url": "/?action=nearby",
+      "icons": [{"src": "/assets/icons/icon-96x96.png", "sizes": "96x96"}]
     },
     {
-      "name": "My Favorites",
-      "short_name": "Favorites",
-      "description": "View saved beaches",
-      "url": "/favorites.php",
-      "icons": [{"src": "/assets/icons/heart-96x96.png", "sizes": "96x96"}]
+      "name": "My Profile",
+      "short_name": "Profile",
+      "description": "View your favorites and reviews",
+      "url": "/profile.php",
+      "icons": [{"src": "/assets/icons/icon-96x96.png", "sizes": "96x96"}]
+    },
+    {
+      "name": "Compare Beaches",
+      "short_name": "Compare",
+      "description": "Compare beaches side by side",
+      "url": "/compare.php",
+      "icons": [{"src": "/assets/icons/icon-96x96.png", "sizes": "96x96"}]
     }
   ],
   "related_applications": [],

@@ -6,21 +6,35 @@
  * @param array $beaches - Array of beach data
  * @param array $userFavorites - Array of beach IDs that are favorites
  * @param array|null $userLocation - User's location [lat, lng] if available
+ * @param bool $showLiveData - Whether to show crowd/weather data
  */
 
-// $beaches, $userFavorites, and $userLocation should be set before including
+// $beaches, $userFavorites, $userLocation, $showLiveData should be set before including
 
 $beaches = $beaches ?? [];
 $userFavorites = $userFavorites ?? [];
 $userLocation = $userLocation ?? null;
+$showLiveData = $showLiveData ?? true;
+
+// Batch fetch crowd data if enabled
+$crowdDataMap = [];
+if ($showLiveData && !empty($beaches)) {
+    require_once __DIR__ . '/../inc/crowd.php';
+    $beachIds = array_column($beaches, 'id');
+    $crowdDataMap = getBatchCrowdLevels($beachIds, 4);
+}
+
+// Weather data is now loaded asynchronously via AJAX to prevent slow page loads
+// See /api/weather-batch.php and assets/js/app.js for implementation
+$weatherDataMap = [];
 ?>
 
 <?php if (empty($beaches)): ?>
 <div class="col-span-full text-center py-16">
-    <i data-lucide="umbrella" class="w-16 h-16 mx-auto text-gray-300 mb-4" aria-hidden="true"></i>
-    <h3 class="text-xl font-semibold text-gray-700 mb-2">No beaches found</h3>
-    <p class="text-gray-500 mb-4">Try adjusting your filters or search criteria</p>
-    <button onclick="clearFilters()" class="text-blue-600 hover:text-blue-700 font-medium inline-flex items-center gap-1.5">
+    <i data-lucide="umbrella" class="w-16 h-16 mx-auto text-white/30 mb-4" aria-hidden="true"></i>
+    <h3 class="text-xl font-semibold text-white mb-2">No beaches found</h3>
+    <p class="text-white/60 mb-4">Try adjusting your filters or search criteria</p>
+    <button onclick="clearFilters()" class="text-brand-yellow hover:text-yellow-300 font-medium inline-flex items-center gap-1.5">
         <i data-lucide="x" class="w-4 h-4" aria-hidden="true"></i>
         Clear all filters
     </button>
@@ -43,6 +57,12 @@ $userLocation = $userLocation ?? null;
 
         // Check if favorite
         $isFavorite = in_array($beach['id'], $userFavorites);
+
+        // Get crowd data for this beach
+        $crowdData = $crowdDataMap[$beach['id']] ?? null;
+
+        // Get weather data for this beach (from batch fetch)
+        $weatherData = $weatherDataMap[$beach['id']] ?? null;
 
         // Include beach card
         include __DIR__ . '/beach-card.php';

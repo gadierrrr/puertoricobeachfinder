@@ -72,12 +72,23 @@ $pageFaqs = [
 ];
 $extraHead .= faqSchema($pageFaqs);
 
+// Breadcrumbs
+$breadcrumbs = [
+    ['name' => 'Home', 'url' => '/'],
+    ['name' => 'Best Beaches', 'url' => '/best-beaches'],
+    ['name' => 'Surfing Beaches']
+];
+
 include __DIR__ . '/components/header.php';
 ?>
 
 <!-- Hero Section -->
 <section class="hero-gradient text-white py-16 md:py-20">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <!-- Breadcrumbs -->
+        <div class="mb-6">
+            <?php include __DIR__ . '/components/breadcrumbs.php'; ?>
+        </div>
         <h1 class="text-3xl md:text-5xl font-bold mb-6">
             Best Surfing Beaches in Puerto Rico
         </h1>

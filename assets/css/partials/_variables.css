@@ -1,0 +1,118 @@
+/* Beach Finder Custom Styles - Dark Glassmorphism Version */
+/* Inspired by premium travel platforms */
+
+/* ========================================
+   CSS VARIABLES & THEMING
+   ======================================== */
+
+:root {
+    /* ===== BRAND COLORS ===== */
+    --color-bg-primary: #1a2c32;
+    --color-bg-secondary: #132024;
+    --color-bg-tertiary: #1f3a42;
+    --color-bg-card-dark: #1c2128;
+
+    /* ===== TEXT COLORS ===== */
+    --color-text-primary: #f1f5f9;
+    --color-text-secondary: #cbd5e1;
+    --color-text-muted: #94a3b8;
+    --color-text-dark: #374151;
+    --color-text-darker: #111827;
+
+    /* ===== INTERACTIVE / PRIMARY (Blue) ===== */
+    --color-primary: #3b82f6;
+    --color-primary-hover: #2563eb;
+    --color-primary-dark: #1d4ed8;
+    --color-primary-darker: #1e40af;
+    --color-primary-light: #eff6ff;
+    --color-primary-light-hover: #dbeafe;
+    --color-primary-muted: #93c5fd;
+    --color-focus-ring: rgba(59, 130, 246, 0.5);
+    --color-focus-ring-light: rgba(59, 130, 246, 0.3);
+    --color-focus-ring-lighter: rgba(59, 130, 246, 0.2);
+    --color-focus-ring-faint: rgba(59, 130, 246, 0.1);
+
+    /* ===== ACCENT (Yellow) ===== */
+    --color-accent: #fde047;
+    --color-accent-hover: #facc15;
+    --color-accent-light: rgba(253, 224, 71, 0.1);
+    --color-accent-light-hover: rgba(253, 224, 71, 0.3);
+
+    /* ===== SUCCESS (Green) ===== */
+    --color-success: #10b981;
+    --color-success-dark: #059669;
+
+    /* ===== ERROR (Red) ===== */
+    --color-error: #ef4444;
+    --color-error-dark: #dc2626;
+    --color-error-light: rgba(239, 68, 68, 0.1);
+    --color-error-light-hover: rgba(239, 68, 68, 0.2);
+    --color-error-bg: #fef2f2;
+    --color-error-bg-hover: #fee2e2;
+
+    /* ===== WARNING (Amber) ===== */
+    --color-warning: #f59e0b;
+    --color-warning-dark: #d97706;
+
+    /* ===== NEUTRAL / GRAY ===== */
+    --color-gray-50: #f9fafb;
+    --color-gray-100: #f3f4f6;
+    --color-gray-200: #e5e7eb;
+    --color-gray-300: #d1d5db;
+    --color-gray-400: #9ca3af;
+    --color-gray-500: #6b7280;
+    --color-gray-600: #4b5563;
+    --color-gray-700: #374151;
+    --color-gray-800: #1f2937;
+
+    /* ===== SURFACES ===== */
+    --color-surface: white;
+    --color-surface-hover: #f3f4f6;
+    --color-surface-muted: #f9fafb;
+    --color-overlay: rgba(0, 0, 0, 0.5);
+    --color-overlay-dark: rgba(0, 0, 0, 0.95);
+
+    /* ===== BORDERS ===== */
+    --color-border: rgba(255, 255, 255, 0.1);
+    --color-border-light: rgba(255, 255, 255, 0.05);
+    --color-border-solid: #e5e7eb;
+    --color-border-solid-light: #f3f4f6;
+
+    /* ===== GLASS EFFECT ===== */
+    --color-card-bg: rgba(255, 255, 255, 0.05);
+    --glass-bg: rgba(0, 0, 0, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --glass-blur: 12px;
+
+    /* ===== SCORE BADGES ===== */
+    --score-exceptional-bg: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    --score-excellent-bg: linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%);
+    --score-good-bg: linear-gradient(135deg, #fde047 0%, #facc15 100%);
+    --score-average-bg: rgba(255, 255, 255, 0.1);
+
+    /* ===== SHADOWS ===== */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+    --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
+    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --shadow-popup: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+    --shadow-dropdown: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+
+    /* ===== Z-INDEX SCALE ===== */
+    --z-sticky: 30;
+    --z-nav: 40;
+    --z-drawer: 50;
+    --z-drawer-content: 51;
+    --z-modal: 60;
+    --z-lightbox: 65;
+    --z-lightbox-controls: 66;
+    --z-toast: 100;
+    --z-skip-link: 9999;
+}
+
+/* Apply theme colors to body */
+body {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+}

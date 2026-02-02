@@ -100,10 +100,17 @@ function getBeachDetailUrl($beach) {
 }
 
 function getDirectionsUrl($beach) {
-    $lat = $beach['lat'];
-    $lng = $beach['lng'];
     $name = urlencode($beach['name']);
-    return "https://www.google.com/maps/dir/?api=1&destination={$lat},{$lng}&destination_place_id={$name}";
+
+    // Use beach name + place_id for accurate destination display
+    // When destination is a name (not coordinates), Google Maps uses place_id to resolve the exact location
+    if (!empty($beach['place_id'])) {
+        return "https://www.google.com/maps/dir/?api=1&destination={$name}&destination_place_id={$beach['place_id']}";
+    }
+
+    // Fallback: use name + Puerto Rico (Google will search for it)
+    $destination = urlencode($beach['name'] . ', Puerto Rico');
+    return "https://www.google.com/maps/dir/?api=1&destination={$destination}";
 }
 
 function getShareText($beach) {
@@ -439,6 +446,51 @@ function getResponsiveImageAttrs($imagePath, $sizes = '(max-width: 640px) 100vw,
         'srcset' => implode(', ', $srcsetParts),
         'sizes' => $sizes
     ];
+}
+
+/**
+ * Generate descriptive alt text for beach images (SEO optimized)
+ * Format: "{Beach Name} in {Municipality}, Puerto Rico - {description}"
+ *
+ * @param array $beach Beach data array with name, municipality, tags
+ * @param string $context Optional context like 'aerial view', 'sunset', 'snorkeling'
+ * @return string SEO-friendly alt text
+ */
+function getBeachImageAlt($beach, $context = '') {
+    $name = $beach['name'] ?? 'Beach';
+    $municipality = $beach['municipality'] ?? 'Puerto Rico';
+
+    // Build base alt text
+    $alt = "{$name} in {$municipality}, Puerto Rico";
+
+    // Add descriptive context based on tags or provided context
+    if (!empty($context)) {
+        $alt .= " - {$context}";
+    } elseif (!empty($beach['tags'])) {
+        $tags = is_array($beach['tags']) ? $beach['tags'] : [];
+
+        // Priority order for most visual/descriptive tags
+        $visualTags = [
+            'calm-waters' => 'showing calm turquoise waters',
+            'white-sand' => 'featuring white sand beach',
+            'snorkeling' => 'with clear waters for snorkeling',
+            'surfing' => 'with surfing waves',
+            'secluded' => 'secluded tropical beach',
+            'family-friendly' => 'family-friendly beach',
+            'scenic' => 'scenic coastal view',
+            'coral-reef' => 'with coral reefs',
+            'swimming' => 'ideal for swimming'
+        ];
+
+        foreach ($visualTags as $tag => $description) {
+            if (in_array($tag, $tags)) {
+                $alt .= " - {$description}";
+                break;
+            }
+        }
+    }
+
+    return $alt;
 }
 
 // ========================================
@@ -1248,4 +1300,235 @@ function beachHasAdminImages($beachId) {
     );
 
     return ((int)($result['count'] ?? 0)) > 0;
+}
+
+// ========================================
+// Schema Markup Helper Functions
+// ========================================
+
+/**
+ * Get image dimensions with in-memory caching
+ * Returns width and height for an image path, or defaults to 1200x900
+ *
+ * @param string $imagePath Image path (relative or absolute URL)
+ * @return array ['width' => int, 'height' => int]
+ */
+function getImageDimensions($imagePath) {
+    static $cache = [];
+
+    // Return cached value if available
+    if (isset($cache[$imagePath])) {
+        return $cache[$imagePath];
+    }
+
+    // Default dimensions
+    $default = ['width' => 1200, 'height' => 900];
+
+    if (empty($imagePath)) {
+        return $default;
+    }
+
+    // Build full file path
+    $docRoot = $_SERVER['DOCUMENT_ROOT'] ?? '';
+    $fullPath = $imagePath;
+
+    // If relative path, prepend document root
+    if (strpos($imagePath, 'http') !== 0 && strpos($imagePath, '/') === 0) {
+        $fullPath = $docRoot . $imagePath;
+    }
+
+    // If HTTP URL, can't get dimensions easily - return default
+    if (strpos($imagePath, 'http') === 0) {
+        $cache[$imagePath] = $default;
+        return $default;
+    }
+
+    // Try to get image size
+    if (file_exists($fullPath)) {
+        $size = @getimagesize($fullPath);
+        if ($size !== false && isset($size[0]) && isset($size[1])) {
+            $dimensions = ['width' => $size[0], 'height' => $size[1]];
+            $cache[$imagePath] = $dimensions;
+            return $dimensions;
+        }
+    }
+
+    // Fallback to default
+    $cache[$imagePath] = $default;
+    return $default;
+}
+
+/**
+ * Parse JSON string of external URLs and validate
+ * Returns array of valid URLs
+ *
+ * @param string|null $jsonUrls JSON-encoded array of URLs
+ * @return array Valid URLs
+ */
+function parseExternalUrls($jsonUrls) {
+    if (empty($jsonUrls)) {
+        return [];
+    }
+
+    // Decode JSON
+    $urls = json_decode($jsonUrls, true);
+    if (!is_array($urls)) {
+        return [];
+    }
+
+    // Filter and validate URLs
+    $validUrls = [];
+    foreach ($urls as $url) {
+        if (is_string($url) && filter_var($url, FILTER_VALIDATE_URL)) {
+            $validUrls[] = $url;
+        }
+    }
+
+    return $validUrls;
+}
+
+/**
+ * Build sameAs array from external_urls field + auto-generate Google Maps URL
+ * Used for schema.org sameAs property to link beach to external references
+ *
+ * @param array $beach Beach data with 'external_urls' and 'place_id'
+ * @return array Array of valid URLs
+ */
+function buildSameAsLinks(array $beach) {
+    $sameAs = [];
+
+    // Parse external URLs from JSON field
+    if (!empty($beach['external_urls'])) {
+        $externalUrls = parseExternalUrls($beach['external_urls']);
+        $sameAs = array_merge($sameAs, $externalUrls);
+    }
+
+    // Add Google Maps URL if place_id exists
+    if (!empty($beach['place_id'])) {
+        $placeId = urlencode($beach['place_id']);
+        $sameAs[] = "https://www.google.com/maps/place/?q=place_id:{$placeId}";
+    }
+
+    return array_unique($sameAs);
+}
+
+// ========================================
+// Internal Linking Helper Functions
+// ========================================
+
+/**
+ * Get related guide pages based on beach tags
+ * Maps beach characteristics to relevant planning guides
+ *
+ * @param array $beachTags Array of tag strings from beach
+ * @param int $limit Maximum number of guides to return (default 3)
+ * @return array Array of guide objects with 'title', 'url', 'icon'
+ */
+function getRelatedGuides($beachTags = [], $limit = 3) {
+    // Guide mapping: tag => guide data
+    $guideMap = [
+        'surfing' => [
+            'title' => 'Puerto Rico Surfing Guide',
+            'url' => '/guides/surfing-guide.php',
+            'icon' => 'waves',
+            'priority' => 10
+        ],
+        'snorkeling' => [
+            'title' => 'Snorkeling in Puerto Rico',
+            'url' => '/guides/snorkeling-guide.php',
+            'icon' => 'fish',
+            'priority' => 10
+        ],
+        'family' => [
+            'title' => 'Family Beach Vacation Planning',
+            'url' => '/guides/family-beach-vacation-planning.php',
+            'icon' => 'users',
+            'priority' => 9
+        ],
+        'photography' => [
+            'title' => 'Beach Photography Tips',
+            'url' => '/guides/beach-photography-tips.php',
+            'icon' => 'camera',
+            'priority' => 8
+        ],
+        'secluded' => [
+            'title' => 'Getting to Puerto Rico Beaches',
+            'url' => '/guides/getting-to-puerto-rico-beaches.php',
+            'icon' => 'map-pin',
+            'priority' => 7
+        ],
+        'remote' => [
+            'title' => 'Getting to Puerto Rico Beaches',
+            'url' => '/guides/getting-to-puerto-rico-beaches.php',
+            'icon' => 'map-pin',
+            'priority' => 7
+        ],
+        'wild' => [
+            'title' => 'Beach Safety Tips',
+            'url' => '/guides/beach-safety-tips.php',
+            'icon' => 'shield',
+            'priority' => 8
+        ],
+        'camping' => [
+            'title' => 'Beach Packing List',
+            'url' => '/guides/beach-packing-list.php',
+            'icon' => 'backpack',
+            'priority' => 6
+        ]
+    ];
+
+    // Universal guides (always relevant, lower priority)
+    $universalGuides = [
+        [
+            'title' => 'Best Time to Visit Puerto Rico Beaches',
+            'url' => '/guides/best-time-visit-puerto-rico-beaches.php',
+            'icon' => 'calendar',
+            'priority' => 5
+        ],
+        [
+            'title' => 'Beach Packing List',
+            'url' => '/guides/beach-packing-list.php',
+            'icon' => 'backpack',
+            'priority' => 4
+        ],
+        [
+            'title' => 'Beach Safety Tips',
+            'url' => '/guides/beach-safety-tips.php',
+            'icon' => 'shield',
+            'priority' => 3
+        ]
+    ];
+
+    $relatedGuides = [];
+    $usedUrls = []; // Track to avoid duplicates
+
+    // Match tag-specific guides
+    foreach ($beachTags as $tag) {
+        if (isset($guideMap[$tag])) {
+            $guide = $guideMap[$tag];
+            if (!in_array($guide['url'], $usedUrls)) {
+                $relatedGuides[] = $guide;
+                $usedUrls[] = $guide['url'];
+            }
+        }
+    }
+
+    // Fill with universal guides if needed
+    foreach ($universalGuides as $guide) {
+        if (count($relatedGuides) >= $limit) {
+            break;
+        }
+        if (!in_array($guide['url'], $usedUrls)) {
+            $relatedGuides[] = $guide;
+            $usedUrls[] = $guide['url'];
+        }
+    }
+
+    // Sort by priority (descending)
+    usort($relatedGuides, function($a, $b) {
+        return ($b['priority'] ?? 0) - ($a['priority'] ?? 0);
+    });
+
+    // Limit results
+    return array_slice($relatedGuides, 0, $limit);
 }

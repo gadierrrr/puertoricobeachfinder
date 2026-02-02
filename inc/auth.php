@@ -29,13 +29,18 @@ function sendMagicLink($email) {
 
     // Create user if doesn't exist - SAME CODE PATH FOR ALL (prevents enumeration)
     $user = queryOne('SELECT * FROM users WHERE email = :email', [':email' => $email]);
+    $isNewUser = false;
     if (!$user) {
+        $isNewUser = true;
         $userId = uuid();
         $name = explode('@', $email)[0]; // Use email prefix as default name
         execute(
             'INSERT INTO users (id, email, name, created_at) VALUES (:id, :email, :name, datetime("now"))',
             [':id' => $userId, ':email' => $email, ':name' => $name]
         );
+
+        // Send welcome email to new users (async - don't block the flow)
+        sendWelcomeEmail($email, $name);
     }
 
     // Generate token
@@ -54,16 +59,23 @@ function sendMagicLink($email) {
     $appName = $_ENV['APP_NAME'] ?? 'Beach Finder';
     $loginUrl = $appUrl . '/verify.php?token=' . $token;
 
-    $subject = 'Login to ' . $appName;
-    $html = "
-        <h2>Login to {$appName}</h2>
-        <p>Click the link below to log in to your account:</p>
-        <p><a href=\"{$loginUrl}\">{$loginUrl}</a></p>
-        <p>This link expires in 15 minutes.</p>
-        <p>If you didn't request this, you can safely ignore this email.</p>
-    ";
+    // Try to use database template first
+    $emailSent = sendTemplateEmail('magic-link', $email, [
+        'login_url' => $loginUrl
+    ]);
 
-    $emailSent = sendEmail($email, $subject, $html);
+    // Fallback to simple HTML if template fails
+    if (!$emailSent) {
+        $subject = 'Login to ' . $appName;
+        $html = "
+            <h2>Login to {$appName}</h2>
+            <p>Click the link below to log in to your account:</p>
+            <p><a href=\"{$loginUrl}\">{$loginUrl}</a></p>
+            <p>This link expires in 15 minutes.</p>
+            <p>If you didn't request this, you can safely ignore this email.</p>
+        ";
+        $emailSent = sendEmail($email, $subject, $html);
+    }
 
     // Add random delay to prevent timing attacks (100-300ms)
     usleep(rand(100000, 300000));

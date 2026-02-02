@@ -3,17 +3,23 @@
  * Handles offline caching and background sync
  */
 
-const CACHE_VERSION = 'v1.0.0';
+const CACHE_VERSION = 'v1.1.1';
 const CACHE_NAME = `beach-finder-${CACHE_VERSION}`;
+const DATA_CACHE_NAME = `beach-finder-data-${CACHE_VERSION}`;
 
 // Assets to cache immediately on install
 const PRECACHE_ASSETS = [
     '/',
-    '/assets/css/styles.css',
-    '/assets/icons/icon-192x192.png',
-    '/assets/icons/icon-512x512.png',
+    '/offline.php',
     '/manifest.json',
-    '/offline.php'
+    '/assets/css/styles.css',
+    '/assets/css/tailwind.min.css',
+    '/assets/js/app.js',
+    '/assets/js/map.js',
+    '/assets/js/filters.js',
+    '/assets/js/geolocation.js',
+    '/assets/icons/icon-192x192.png',
+    '/assets/icons/icon-512x512.png'
 ];
 
 // External resources to cache
@@ -49,12 +55,14 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
     console.log('[SW] Activating service worker...');
 
+    const currentCaches = [CACHE_NAME, DATA_CACHE_NAME];
+
     event.waitUntil(
         caches.keys()
             .then((cacheNames) => {
                 return Promise.all(
                     cacheNames
-                        .filter((name) => name.startsWith('beach-finder-') && name !== CACHE_NAME)
+                        .filter((name) => name.startsWith('beach-finder-') && !currentCaches.includes(name))
                         .map((name) => {
                             console.log('[SW] Deleting old cache:', name);
                             return caches.delete(name);
@@ -77,12 +85,40 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Skip API requests (always fetch fresh)
+    // API requests - Network first with data cache fallback
     if (url.pathname.startsWith('/api/')) {
+        // For beach list/detail APIs, cache the response
+        if (url.pathname.includes('beaches') || url.pathname.includes('beach-detail')) {
+            event.respondWith(
+                fetch(event.request)
+                    .then((response) => {
+                        if (response.ok) {
+                            const clone = response.clone();
+                            caches.open(DATA_CACHE_NAME).then((cache) => {
+                                cache.put(event.request, clone);
+                            });
+                        }
+                        return response;
+                    })
+                    .catch(() => {
+                        // Try data cache for offline access
+                        return caches.match(event.request)
+                            .then((cached) => {
+                                if (cached) return cached;
+                                return new Response(
+                                    JSON.stringify({ success: false, error: 'Offline - data not cached' }),
+                                    { headers: { 'Content-Type': 'application/json' } }
+                                );
+                            });
+                    })
+            );
+            return;
+        }
+
+        // Other API requests - network only
         event.respondWith(
             fetch(event.request)
                 .catch(() => {
-                    // Return error JSON for failed API requests
                     return new Response(
                         JSON.stringify({ success: false, error: 'Offline' }),
                         { headers: { 'Content-Type': 'application/json' } }

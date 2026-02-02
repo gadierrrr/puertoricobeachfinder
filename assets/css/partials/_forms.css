@@ -1,0 +1,178 @@
+/* ========================================
+   COMPARISON BAR
+   ======================================== */
+
+#compare-bar {
+    background: var(--color-card-bg);
+    border-color: var(--color-border);
+}
+
+/* Compare button active state - layered specificity */
+.compare-btn.active,
+.compare-btn[aria-pressed="true"],
+button.compare-btn.active,
+button.compare-btn[aria-pressed="true"] {
+    background-color: var(--color-primary-hover);
+    color: white;
+}
+
+/* Mobile comparison bar */
+/* Required HTML classes: .compare-bar-inner, .compare-bar-header, .compare-bar-count, .compare-bar-actions */
+@media (max-width: 640px) {
+    #compare-bar .compare-bar-inner {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+    #compare-bar .compare-bar-header {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    #compare-bar .compare-bar-count {
+        width: 100%;
+        justify-content: center;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--color-border-light);
+    }
+
+    #compare-beaches {
+        width: 100%;
+        justify-content: center;
+        gap: 0.375rem;
+        padding: 0.5rem 0;
+    }
+
+    #compare-beaches > div {
+        padding: 0.25rem 0.5rem;
+    }
+
+    #compare-beaches img {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+
+    #compare-beaches .compare-beach-name {
+        max-width: 4rem;
+        font-size: 0.75rem;
+    }
+
+    #compare-bar .compare-bar-actions {
+        width: 100%;
+        justify-content: center;
+        padding-top: 0.5rem;
+    }
+
+    #compare-bar #compare-go-btn {
+        flex: 1;
+        max-width: 200px;
+    }
+}
+
+/* ========================================
+   RANGE SLIDER
+   ======================================== */
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    background: var(--color-gray-200);
+    border-radius: 3px;
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--color-primary-hover);
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 0 4px rgba(37, 99, 235, 0.2);
+}
+
+input[type="range"]:focus::-webkit-slider-thumb {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 0 4px rgba(37, 99, 235, 0.3);
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--color-primary-hover);
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ========================================
+   LOGIN PAGE
+   ======================================== */
+
+/* Social proof avatars animation */
+.login-avatars > div {
+    animation: login-avatar-pop 0.3s ease-out backwards;
+}
+
+.login-avatars > div:nth-child(1) { animation-delay: 0.1s; }
+.login-avatars > div:nth-child(2) { animation-delay: 0.2s; }
+.login-avatars > div:nth-child(3) { animation-delay: 0.3s; }
+.login-avatars > div:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes login-avatar-pop {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Login form input focus state */
+.login-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(253, 224, 71, 0.2);
+}
+
+/* Google button hover effect */
+.login-google-btn {
+    transition: all 0.2s ease;
+}
+
+.login-google-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* Feature cards on mobile - stagger animation */
+.login-feature-card {
+    animation: login-card-fade 0.4s ease-out backwards;
+}
+
+.login-feature-card:nth-child(1) { animation-delay: 0.1s; }
+.login-feature-card:nth-child(2) { animation-delay: 0.2s; }
+.login-feature-card:nth-child(3) { animation-delay: 0.3s; }
+.login-feature-card:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes login-card-fade {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+

@@ -1,0 +1,3647 @@
+# Puerto Rico Beach Finder - Complete Beach Database
+
+> **Machine-Readable Reference**: This file contains the complete database of 233 beaches in Puerto Rico with full details, coordinates, and metadata. Optimized for AI training, retrieval-augmented generation (RAG), and programmatic access.
+
+**Source**: https://www.puertoricobeachfinder.com  
+**License**: Data may be cited with attribution to "Puerto Rico Beach Finder (puertoricobeachfinder.com)"  
+**Last Updated**: January 2025  
+**Total Entries**: 233
+
+---
+
+## Database Schema
+
+Each beach entry contains:
+- **name**: Official beach name
+- **municipality**: Puerto Rico municipality (county equivalent)
+- **coordinates**: Latitude, Longitude (WGS84)
+- **description**: Detailed description of the beach
+- **activities**: Available activities (surfing, snorkeling, etc.)
+- **amenities**: Available facilities (parking, restrooms, etc.)
+- **rating**: Google rating (1-5 scale)
+- **reviews**: Number of Google reviews
+- **url**: Direct link to beach page
+
+---
+
+## Complete Beach Database
+
+## Aguada (5 beaches)
+
+### Aguada Malecón Strip
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Aguada |
+| **Coordinates** | 18.3868, -67.1964 |
+| **Google Rating** | 4.5/5 (1077 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/aguada-malecn-strip-aguada-18387-67196 |
+
+**Description**: Aguada Malecón Strip is one of Aguada's most visually stunning coastal destinations. Waterfront promenade with pocket sands and eateries.
+
+---
+
+### Aguada Town Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Aguada |
+| **Coordinates** | 18.38, -67.2 |
+| **Google Rating** | 4.5/5 (1077 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/aguada-town-beach-aguada-1838-672 |
+
+**Description**: Aguada Town Beach is one of Aguada's most visually stunning coastal destinations. Casual strand lining the PR-115 waterfront; low-key vibe.
+
+---
+
+### Espinar Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Aguada |
+| **Coordinates** | 18.3864, -67.2064 |
+| **Google Rating** | 4.5/5 (1077 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/espinar-beach-aguada-18386-67206 |
+
+**Description**: Espinar Beach is one of Aguada's most visually stunning coastal destinations. Relaxed local stretch; intermittent rocks; low-key vibe.
+
+---
+
+### Mameyito (Aguada pocket)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Aguada |
+| **Coordinates** | 18.3925, -67.1928 |
+| **Google Rating** | 4.5/5 (4 reviews) |
+| **Activities** | scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/mameyito-aguada-pocket-aguada-18393-67193 |
+
+**Description**: Mameyito (Aguada pocket) is one of Aguada's most visually stunning coastal destinations. Small sandy pocket along PR-115 north of town center.
+
+---
+
+### Pico de Piedra
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Aguada |
+| **Coordinates** | 18.3826, -67.1877 |
+| **Google Rating** | 4.5/5 (1077 reviews) |
+| **Activities** | family-friendly, scenic, swimming |
+| **Amenities** | parking, restrooms, showers |
+| **URL** | https://www.puertoricobeachfinder.com/beach/pico-de-piedra-aguada-18383-67188 |
+
+**Description**: Pico de Piedra is one of Aguada's most visually stunning coastal destinations. Town balneario with facilities and summer festivals; gentler water most days.
+
+---
+
+## Aguadilla (15 beaches)
+
+### Ardilla (north pocket)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Aguadilla |
+| **Coordinates** | 18.4755, -67.1519 |
+| **Google Rating** | 4.7/5 (6320 reviews) |
+| **Activities** | scenic, secluded |
+| **URL** | https://www.puertoricobeachfinder.com/beach/ardilla-north-pocket-aguadilla-18476-67152 |
+
+**Description**: Ardilla (north pocket) is one of Aguadilla's most visually stunning coastal destinations. Tiny cove between Borinquen and Peña Blanca; undeveloped.
+
+---
+
+### Borinquen Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Aguadilla |
+| **Coordinates** | 18.4889, -67.1505 |
+| **Google Rating** | 4.8/5 (978 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/borinquen-beach-aguadilla-18489-6715 |
+
+**Description**: Borinquen Beach is a stunning stretch of white sand beach in Aguadilla, perfect for picnics, photography, and exploring dramatic rock formations. This scenic beach offers wide open spaces on both sides of the parking area, with historic lighthouse ruins nearby and beautiful views of turquoise waters against towering cliffs. It's ideal for beachcombers, photographers, and families seeking a peaceful retreat away from crowds.
+
+---
+
+### Cerro Gordo Shore (north aerostat)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Aguadilla |
+| **Coordinates** | 18.5032, -67.1579 |
+| **Google Rating** | 4.7/5 (6320 reviews) |
+| **Activities** | secluded |
+| **URL** | https://www.puertoricobeachfinder.com/beach/cerro-gordo-shore-north-aerostat-aguadilla-18503-67158 |
+
+**Description**: Tucked away in Aguadilla, Cerro Gordo Shore (north aerostat) offers a peaceful escape from crowded tourist beaches. Remote stretch north of airport coast; rough access track. (Mapcarta; OSM)
+
+---
+
+### Colón Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Aguadilla |
+| **Coordinates** | 18.4293, -67.1543 |
+| **Google Rating** | 4.7/5 (6320 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/coln-beach-aguadilla-18429-67154 |
+
+**Description**: Colón Beach (Playa Parque Colón) is a beloved family-friendly destination in Aguadilla featuring calm, shallow turquoise waters and golden sands with stunning views of Aguadilla Bay. This compact town beach offers a perfect blend of relaxation and recreation, with the famous Columbus Park treehouse nearby and numerous local food kiosks serving authentic Puerto Rican street food.
+
+---
+
+### Crash Boat Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Aguadilla |
+| **Coordinates** | 18.4579, -67.1641 |
+| **Google Rating** | 4.7/5 (6320 reviews) |
+| **Activities** | scenic, snorkeling, swimming |
+| **Amenities** | food, parking, restrooms |
+| **URL** | https://www.puertoricobeachfinder.com/beach/crash-boat-beach-aguadilla-18458-67164 |
+
+**Description**: Crash Boat Beach is one of Aguadilla's most visually stunning coastal destinations. Famous pier and turquoise water; lively on weekends; jumps are popular.
+
+---
+
+### Crash Boat North Reef (outer)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Aguadilla |
+| **Coordinates** | 18.4608, -67.1611 |
+| **Google Rating** | 4.7/5 (6320 reviews) |
+| **Activities** | diving, popular, snorkeling |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/crash-boat-north-reef-outer-aguadilla-18461-67161 |
+
+**Description**: Located in Aguadilla, Crash Boat North Reef (outer) is a beautiful Puerto Rican beach worth exploring. Outer reef patches north of pier; best on glassy mornings.
+
+---
+
+### Crash Boat South (Almirante Beach)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Aguadilla |
+| **Coordinates** | 18.4536, -67.1668 |
+| **Google Rating** | 4.7/5 (6320 reviews) |
+| **Activities** | snorkeling, swimming |
+| **Amenities** | food, parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/crash-boat-south-almirante-beach-aguadilla-18454-67167 |
+
+**Description**: Crash Boat South (Almirante Beach) offers a quieter, more relaxed alternative to the bustling main area of Crash Boat Beach, where visitors can enjoy a peaceful day reading a book or watching surfers during winter months. This southern section features beautiful emerald green water tones and typically has fewer crowds. The southern side is also quieter, and most people there are those looking for a relaxing day at the beach.
+
+---
+
+### Gas Chambers
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Aguadilla |
+| **Coordinates** | 18.4666, -67.1542 |
+| **Google Rating** | 4.7/5 (6320 reviews) |
+| **Activities** | diving, snorkeling, surfing |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/gas-chambers-aguadilla-18467-67154 |
+
+**Description**: Gas Chambers is a legendary surf break in Aguadilla known for its explosive, tube-shaped waves that create world-class barrels for expert surfers. The beach has earned its name and reputation among surfers for the explosive, tube-shaped waves that form under ideal conditions. These waves make Gas Chamber Beach a coveted spot for professional surfers, with many declaring it one of the best surf breaks in Puerto Rico and the Caribbean. Gas Chambers only breaks 5-8 times a year, but when it does, the lucky surfers that happen to be in Aguadilla for it, get to ride on World Class perfect tubes.
+
+---
+
+### Jagdish / Peña Brava Pocket
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Aguadilla |
+| **Coordinates** | 18.4719, -67.1572 |
+| **Google Rating** | 4.7/5 (6320 reviews) |
+| **Activities** | scenic, snorkeling |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/jagdish-pea-brava-pocket-aguadilla-18472-67157 |
+
+**Description**: Jagdish / Peña Brava Pocket is one of Aguadilla's most visually stunning coastal destinations. Small pocket near Gas Chambers area; rocky entries; calm on small days.
+
+---
+
+### Martinica Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Aguadilla |
+| **Coordinates** | 18.4455, -67.1545 |
+| **Google Rating** | 4.7/5 (6320 reviews) |
+| **Activities** | fishing, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/martinica-beach-aguadilla-18446-67154 |
+
+**Description**: Martinica Beach is a sandy beach in Maleza Alta, Aguadilla, Puerto Rico stretching around 1.27km in length, which is medium. This scenic coastal spot offers a lot of space for sunbathing with a casual, laid-back atmosphere perfect for fishing and relaxation. While it maintains a modest surf profile, visitors should exercise caution with belongings as it's not a safe place for valuables.
+
+---
+
+### Peña Blanca (Wishing Well)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Aguadilla |
+| **Coordinates** | 18.4654, -67.1623 |
+| **Google Rating** | 4.6/5 (1735 reviews) |
+| **Activities** | scenic, snorkeling, swimming |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/pea-blanca-wishing-well-aguadilla-18465-67162 |
+
+**Description**: Peña Blanca, also known as Wishing Well Beach, is a secluded hidden gem nestled between white limestone cliffs on Aguadilla's northwest coast. This small, intimate cove offers crystal-clear turquoise waters perfect for snorkeling and swimming, with excellent visibility and marine life including sea turtles and tropical fish. Best suited for adventurous visitors seeking a pristine, off-the-beaten-path beach experience away from crowds.
+
+---
+
+### Rompeolas / Muelle Viejo
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Aguadilla |
+| **Coordinates** | 18.4279, -67.154 |
+| **Google Rating** | 4.7/5 (70 reviews) |
+| **Activities** | fishing, scenic |
+| **Amenities** | food, parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/rompeolas-muelle-viejo-aguadilla-18428-67154 |
+
+**Description**: Rompeolas (also known as Muelle Viejo or Tamarindo Beach) is a charming urban beach located in downtown Aguadilla, featuring two distinct areas separated by a scenic breakwater. This family-friendly destination offers crystal-clear turquoise waters and calm, shallow conditions perfect for swimming, making it an ideal spot for families with children and those seeking a relaxed beach experience.
+
+---
+
+### Surfer’s Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Aguadilla |
+| **Coordinates** | 18.4947, -67.1534 |
+| **Google Rating** | 4.7/5 (6320 reviews) |
+| **Activities** | diving, scenic, snorkeling, surfing |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/surfers-beach-aguadilla-18495-67153 |
+
+**Description**: Surfer's Beach is one of Puerto Rico's premier surfing destinations, featuring consistent reef breaks and excellent waves for all skill levels. Located in Aguadilla on the west coast, this beach is among the best surfing spots on the island and is suited for all surfing levels. While the action is on the waves, the shore remains nice and quiet, attracting mellow travelers seeking peace and relaxation, though the beach is not ideal for swimming.
+
+---
+
+### Survival / Playuela
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Aguadilla |
+| **Coordinates** | 18.494, -67.1415 |
+| **Google Rating** | 4.7/5 (6320 reviews) |
+| **Activities** | scenic, secluded, surfing |
+| **URL** | https://www.puertoricobeachfinder.com/beach/survival-playuela-aguadilla-18494-67141 |
+
+**Description**: Survival Beach is a secluded and picturesque stretch of sand located in Aguadilla, Puerto Rico, known for its giant boulders, caves, and unique rock formations. This remote beach is renowned for its powerful surfing waves, but swimming is not recommended due to strong currents, making it ideal for hiking, exploring rock formations, and photography. Because of its challenging access, Survival Beach remains uncrowded and often completely empty, providing a serene natural experience for adventurous visitors.
+
+---
+
+### Wilderness
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Aguadilla |
+| **Coordinates** | 18.4983, -67.1473 |
+| **Google Rating** | 4.7/5 (6320 reviews) |
+| **Activities** | diving, secluded, snorkeling, surfing |
+| **URL** | https://www.puertoricobeachfinder.com/beach/wilderness-aguadilla-18498-67147 |
+
+**Description**: Wilderness Beach is a pristine, secluded surfing haven on Aguadilla's rugged northwest coast, renowned for its powerful waves that consistently reach 8-10 feet during peak season. This raw, untouched beach attracts experienced surfers seeking challenging breaks over flat rock bottoms, while its remote location through the former Ramey Air Base ensures a peaceful escape from Puerto Rico's more commercialized beaches.
+
+---
+
+## Arecibo (10 beaches)
+
+### Caza y Pesca Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Arecibo |
+| **Coordinates** | 18.472, -66.7137 |
+| **Google Rating** | 4.8/5 (3702 reviews) |
+| **Activities** | fishing, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/caza-y-pesca-beach-arecibo-18472-66714 |
+
+**Description**: Caza y Pesca Beach is one of Arecibo's most visually stunning coastal destinations. Sandy stretch adjoining fishermen’s area; calmer on small days.
+
+---
+
+### Cueva del Indio Shore
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Arecibo |
+| **Coordinates** | 18.4975, -66.7168 |
+| **Google Rating** | 4.8/5 (3702 reviews) |
+| **Activities** | scenic, secluded |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/cueva-del-indio-shore-arecibo-18498-66717 |
+
+**Description**: Cueva del Indio Shore is one of Arecibo's most visually stunning coastal destinations. Karst sea-cave landmark with small sandy pockets; exposed ledges; caution near edges. (Mapcarta; Google)
+
+---
+
+### Islote Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Arecibo |
+| **Coordinates** | 18.4853, -66.7355 |
+| **Google Rating** | 4.8/5 (3702 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/islote-beach-arecibo-18485-66735 |
+
+**Description**: Islote Beach is one of Arecibo's most visually stunning coastal destinations. Neighborhood beaches along Barrio Islote; mixed sand/reef; low services.
+
+---
+
+### La Boca (Río Grande de Arecibo)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Arecibo |
+| **Coordinates** | 18.4728, -66.713 |
+| **Google Rating** | 4.8/5 (3702 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/la-boca-ro-grande-de-arecibo-arecibo-18473-66713 |
+
+**Description**: La Boca (Río Grande de Arecibo) is one of Arecibo's most visually stunning coastal destinations. River mouth sandbars; currents and water clarity vary; scenic.
+
+---
+
+### Los Morrillos (Arecibo)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Arecibo |
+| **Coordinates** | 18.4922, -66.716 |
+| **Google Rating** | 4.8/5 (3702 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/los-morrillos-arecibo-arecibo-18492-66716 |
+
+**Description**: Los Morrillos (Arecibo) is one of Arecibo's most visually stunning coastal destinations. Open coast north of the lighthouse with reef shelves and sandy pockets.
+
+---
+
+### Playa El Muelle (Arecibo)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Arecibo |
+| **Coordinates** | 18.4706, -66.7137 |
+| **Google Rating** | 4.8/5 (3702 reviews) |
+| **Activities** | fishing, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-el-muelle-arecibo-arecibo-18471-66714 |
+
+**Description**: Playa El Muelle (Arecibo) is one of Arecibo's most visually stunning coastal destinations. Pier-adjacent shoreline with sandy entries; urban conveniences nearby.
+
+---
+
+### Playa La Cueva del Perro (pocket)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Arecibo |
+| **Coordinates** | 18.5018, -66.7108 |
+| **Google Rating** | 4.8/5 (3702 reviews) |
+| **Activities** | scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-la-cueva-del-perro-pocket-arecibo-18502-66711 |
+
+**Description**: Playa La Cueva del Perro (pocket) is one of Arecibo's most visually stunning coastal destinations. Small sandy pocket near limestone formations; exposed; no services. (Mapcarta; Google)
+
+---
+
+### Playa Las Llanas (Islote)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Arecibo |
+| **Coordinates** | 18.4909, -66.7262 |
+| **Google Rating** | 4.8/5 (3702 reviews) |
+| **Activities** | scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-las-llanas-islote-arecibo-18491-66726 |
+
+**Description**: Playa Las Llanas (Islote) is one of Arecibo's most visually stunning coastal destinations. Low-key sector beach within Islote; mixed sand/rock.
+
+---
+
+### Poza de los Pájaros
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Arecibo |
+| **Coordinates** | 18.4946, -66.7092 |
+| **Google Rating** | 4.8/5 (3702 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/poza-de-los-pjaros-arecibo-18495-66709 |
+
+**Description**: Poza de los Pájaros is one of Arecibo's most visually stunning coastal destinations. Shallow pool behind reef ledge; best at lower swell; no lifeguards.
+
+---
+
+### Poza del Obispo
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Arecibo |
+| **Coordinates** | 18.4772, -66.7129 |
+| **Google Rating** | 4.8/5 (3702 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking, restrooms |
+| **URL** | https://www.puertoricobeachfinder.com/beach/poza-del-obispo-arecibo-18477-66713 |
+
+**Description**: Poza del Obispo is one of Arecibo's most visually stunning coastal destinations. Natural rock pool sheltered from surf at lower swell; popular and photogenic.
+
+---
+
+## Arroyo (2 beaches)
+
+### Balneario Punta Guilarte
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Arroyo |
+| **Coordinates** | 17.9656, -66.0451 |
+| **Google Rating** | 4.1/5 (96 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | lifeguard, parking, restrooms, showers |
+| **URL** | https://www.puertoricobeachfinder.com/beach/balneario-punta-guilarte-arroyo-17966-66045 |
+
+**Description**: Balneario Punta Guilarte is one of Arroyo's most visually stunning coastal destinations. Shallow bay beach with facilities; popular with families and campers. (DRNA; OSM; Google)
+
+---
+
+### Playa Las Mareas (Arroyo)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Arroyo |
+| **Coordinates** | 17.9596, -66.0546 |
+| **Google Rating** | 4.5/5 (3504 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-las-mareas-arroyo-arroyo-1796-66055 |
+
+**Description**: Playa Las Mareas (Arroyo) is one of Arroyo's most visually stunning coastal destinations. Neighborhood shoreline west of Punta Guilarte; seagrass patches; low-key.
+
+---
+
+## Barceloneta (3 beaches)
+
+### Las Criollas Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Barceloneta |
+| **Coordinates** | 18.4673, -66.5549 |
+| **Google Rating** | 4.7/5 (1103 reviews) |
+| **Activities** | family-friendly, swimming |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/las-criollas-beach-barceloneta-18467-66555 |
+
+**Description**: Las Criollas Beach in Barceloneta is an ideal destination for families seeking a safe and enjoyable beach experience. Sheltered bay often calmer than open coast; simple facilities nearby.
+
+---
+
+### Las Palmitas (Barceloneta)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Barceloneta |
+| **Coordinates** | 18.4714, -66.5471 |
+| **Google Rating** | 4.6/5 (1456 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/las-palmitas-barceloneta-barceloneta-18471-66547 |
+
+**Description**: Las Palmitas (Barceloneta) is one of Barceloneta's most visually stunning coastal destinations. Neighborhood pocket with palms; variable clarity; no lifeguards.
+
+---
+
+### Puerto de las Vacas Shore
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Barceloneta |
+| **Coordinates** | 18.465, -66.5638 |
+| **Google Rating** | 4.7/5 (1103 reviews) |
+| **Activities** | fishing, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/puerto-de-las-vacas-shore-barceloneta-18465-66564 |
+
+**Description**: Puerto de las Vacas Shore is one of Barceloneta's most visually stunning coastal destinations. Working waterfront with sandy sections near the small port.
+
+---
+
+## Cabo Rojo (16 beaches)
+
+### Bahía Sucia Flats
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Cabo Rojo |
+| **Coordinates** | 17.9306, -67.2059 |
+| **Google Rating** | 4.6/5 (1529 reviews) |
+| **Activities** | scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/baha-sucia-flats-cabo-rojo-17931-67206 |
+
+**Description**: Bahía Sucia Flats is one of Cabo Rojo's most visually stunning coastal destinations. Shallow flats and sand tongues near La Playuela; variable swim quality. (Mapcarta; Google)
+
+---
+
+### Balneario de Boquerón
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Cabo Rojo |
+| **Coordinates** | 18.0217, -67.1713 |
+| **Google Rating** | 4.6/5 (216 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | lifeguard, parking, restrooms, showers |
+| **URL** | https://www.puertoricobeachfinder.com/beach/balneario-de-boquern-cabo-rojo-18022-67171 |
+
+**Description**: Balneario de Boquerón is one of Cabo Rojo's most visually stunning coastal destinations. Wide arc of sand with facilities; festive town scene nearby. (DRNA; Blue Flag; Google)
+
+---
+
+### Boquerón North Spit
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Cabo Rojo |
+| **Coordinates** | 18.0356, -67.164 |
+| **Google Rating** | 4.7/5 (4518 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/boquern-north-spit-cabo-rojo-18036-67164 |
+
+**Description**: Boquerón North Spit is one of Cabo Rojo's most visually stunning coastal destinations. Shallow, kid-friendly shallows near the north end of bay.
+
+---
+
+### Boquerón South Flats
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Cabo Rojo |
+| **Coordinates** | 18.0109, -67.1748 |
+| **Google Rating** | 4.7/5 (4518 reviews) |
+| **Activities** | scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/boquern-south-flats-cabo-rojo-18011-67175 |
+
+**Description**: Boquerón South Flats is one of Cabo Rojo's most visually stunning coastal destinations. Quieter south end with flats and mangrove edges; fewer services.
+
+---
+
+### Buyé Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Cabo Rojo |
+| **Coordinates** | 18.0805, -67.1909 |
+| **Google Rating** | 4.7/5 (4518 reviews) |
+| **Activities** | family-friendly, scenic, swimming |
+| **Amenities** | parking, restrooms |
+| **URL** | https://www.puertoricobeachfinder.com/beach/buy-beach-cabo-rojo-18081-67191 |
+
+**Description**: Buyé Beach is one of Cabo Rojo's most visually stunning coastal destinations. Shaded, calm cove with turquoise water; popular on weekends.
+
+---
+
+### Buyé South Point
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Cabo Rojo |
+| **Coordinates** | 18.0749, -67.1927 |
+| **Google Rating** | 4.7/5 (4518 reviews) |
+| **Activities** | family-friendly, snorkeling |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/buy-south-point-cabo-rojo-18075-67193 |
+
+**Description**: Buyé South Point in Cabo Rojo is an ideal destination for families seeking a safe and enjoyable beach experience. Rockier south end with clearer pockets for snorkeling on calm days.
+
+---
+
+### Combate Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Cabo Rojo |
+| **Coordinates** | 17.9677, -67.1753 |
+| **Google Rating** | 4.7/5 (1917 reviews) |
+| **Activities** | family-friendly, scenic, swimming |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/combate-beach-cabo-rojo-17968-67175 |
+
+**Description**: Combate Beach is one of Cabo Rojo's most visually stunning coastal destinations. Long golden strand south of Boquerón; shallow entry; popular.
+
+---
+
+### El Faro (Los Morrillos) Cove East
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Cabo Rojo |
+| **Coordinates** | 17.9398, -67.1984 |
+| **Google Rating** | 4.7/5 (1917 reviews) |
+| **Activities** | scenic, secluded |
+| **URL** | https://www.puertoricobeachfinder.com/beach/el-faro-los-morrillos-cove-east-cabo-rojo-1794-67198 |
+
+**Description**: El Faro (Los Morrillos) Cove East is one of Cabo Rojo's most visually stunning coastal destinations. Smaller cove east of lighthouse headland; exposed to trades.
+
+---
+
+### Guaniquilla Reserve Shore
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Cabo Rojo |
+| **Coordinates** | 18.1772, -67.163 |
+| **Google Rating** | 4.7/5 (27 reviews) |
+| **Activities** | scenic, secluded |
+| **URL** | https://www.puertoricobeachfinder.com/beach/guaniquilla-reserve-shore-cabo-rojo-18177-67163 |
+
+**Description**: Guaniquilla Reserve Shore is one of Cabo Rojo's most visually stunning coastal destinations. Wild shore by limestone formations; not serviced; scenic hikes. (DRNA; OSM; Google)
+
+---
+
+### Isla de Ratones (Cayo Ratones)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Cabo Rojo |
+| **Coordinates** | 18.1976, -67.1608 |
+| **Google Rating** | 3.7/5 (19 reviews) |
+| **Activities** | family-friendly, secluded, snorkeling |
+| **Amenities** | picnic-areas |
+| **URL** | https://www.puertoricobeachfinder.com/beach/isla-de-ratones-cayo-ratones-cabo-rojo-18198-67161 |
+
+**Description**: Tucked away in Cabo Rojo, Isla de Ratones (Cayo Ratones) offers a peaceful escape from crowded tourist beaches. Small islet off Joyuda; boat/water taxi only; clear water on calm days.
+
+---
+
+### Joyuda Strip Beaches
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Cabo Rojo |
+| **Coordinates** | 18.205, -67.16 |
+| **Google Rating** | 3.7/5 (19 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/joyuda-strip-beaches-cabo-rojo-18205-6716 |
+
+**Description**: Joyuda Strip Beaches is one of Cabo Rojo's most visually stunning coastal destinations. Series of pocket beaches along PR-102 by seafood row; narrow sands.
+
+---
+
+### La Playuela (Playa Sucia)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Cabo Rojo |
+| **Coordinates** | 17.9369, -67.1999 |
+| **Google Rating** | 4.7/5 (1917 reviews) |
+| **Activities** | scenic, secluded |
+| **URL** | https://www.puertoricobeachfinder.com/beach/la-playuela-playa-sucia-cabo-rojo-17937-672 |
+
+**Description**: La Playuela (Playa Sucia) is one of Cabo Rojo's most visually stunning coastal destinations. Iconic crescent below lighthouse; exposed, no services; stunning vistas. (Mapcarta/OSM; Google)
+
+---
+
+### Las Salinas Shore
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Cabo Rojo |
+| **Coordinates** | 17.9819, -67.1859 |
+| **Google Rating** | 4.7/5 (1917 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/las-salinas-shore-cabo-rojo-17982-67186 |
+
+**Description**: Las Salinas Shore is one of Cabo Rojo's most visually stunning coastal destinations. Salt flats edge with shallow beach tongues; scenic, not a bathing hub.
+
+---
+
+### Pitahaya Cove
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Cabo Rojo |
+| **Coordinates** | 17.9559, -67.183 |
+| **Google Rating** | 4.7/5 (1917 reviews) |
+| **Activities** | secluded, snorkeling |
+| **URL** | https://www.puertoricobeachfinder.com/beach/pitahaya-cove-cabo-rojo-17956-67183 |
+
+**Description**: Tucked away in Cabo Rojo, Pitahaya Cove offers a peaceful escape from crowded tourist beaches. Quiet cove south of Combate; clearer water on calm summer days.
+
+---
+
+### Punta Arenas (Puerto Real side)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Cabo Rojo |
+| **Coordinates** | 18.0875, -67.1545 |
+| **Google Rating** | 4.6/5 (734 reviews) |
+| **Activities** | fishing, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/punta-arenas-puerto-real-side-cabo-rojo-18088-67154 |
+
+**Description**: Punta Arenas (Puerto Real side) is one of Cabo Rojo's most visually stunning coastal destinations. Working harbor shoreline with sandy pockets; low-key.
+
+---
+
+### Punta Jagüey (north Combate)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Cabo Rojo |
+| **Coordinates** | 17.9808, -67.1776 |
+| **Google Rating** | 4.7/5 (1917 reviews) |
+| **Activities** | scenic, snorkeling |
+| **URL** | https://www.puertoricobeachfinder.com/beach/punta-jagey-north-combate-cabo-rojo-17981-67178 |
+
+**Description**: Punta Jagüey (north Combate) is one of Cabo Rojo's most visually stunning coastal destinations. Headland north of Combate with clear shallows on calm days.
+
+---
+
+## Camuy (3 beaches)
+
+### Boca de Camuy (river mouth)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Camuy |
+| **Coordinates** | 18.489, -66.9026 |
+| **Google Rating** | 4.8/5 (1260 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/boca-de-camuy-river-mouth-camuy-18489-66903 |
+
+**Description**: Boca de Camuy (river mouth) is one of Camuy's most visually stunning coastal destinations. Sandy river mouth area; variable currents; scenic dunes.
+
+---
+
+### Peñón Brusi
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Camuy |
+| **Coordinates** | 18.4906, -66.8932 |
+| **Google Rating** | 4.8/5 (1260 reviews) |
+| **Activities** | family-friendly, scenic, swimming |
+| **Amenities** | parking, picnic-areas, restrooms |
+| **URL** | https://www.puertoricobeachfinder.com/beach/pen-brusi-camuy-18491-66893 |
+
+**Description**: Peñón Brusi is one of Camuy's most visually stunning coastal destinations. Town balneario with shallow entry and facilities; calmer in summer. (DRNA; Google; OSM)
+
+---
+
+### Sardinera (Camuy)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Camuy |
+| **Coordinates** | 18.4947, -66.8836 |
+| **Google Rating** | 4.8/5 (1260 reviews) |
+| **Activities** | fishing, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/sardinera-camuy-camuy-18495-66884 |
+
+**Description**: Sardinera (Camuy) is one of Camuy's most visually stunning coastal destinations. Neighborhood strand east of Peñón Brusi; modest surf; low-key vibe.
+
+---
+
+## Carolina (6 beaches)
+
+### Balneario de Carolina
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Carolina |
+| **Coordinates** | 18.4424, -65.9969 |
+| **Google Rating** | 4.6/5 (816 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | lifeguard, parking, restrooms, showers |
+| **URL** | https://www.puertoricobeachfinder.com/beach/balneario-de-carolina-carolina-18442-65997 |
+
+**Description**: Balneario de Carolina is one of Carolina's most visually stunning coastal destinations. Blue-Flag beach with full services; wide sands; popular with families. (Blue Flag; DRNA; Google)
+
+---
+
+### Boca de Cangrejos Mouth
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Carolina |
+| **Coordinates** | 18.4559, -65.9994 |
+| **Google Rating** | 4.8/5 (9 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/boca-de-cangrejos-mouth-carolina-18456-65999 |
+
+**Description**: Boca de Cangrejos Mouth is one of Carolina's most visually stunning coastal destinations. Inlet between Isla Verde and Piñones; shifting channels and strong currents.
+
+---
+
+### Isla Verde – Alambique
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Carolina |
+| **Coordinates** | 18.4438, -66.0098 |
+| **Google Rating** | 4.6/5 (2397 reviews) |
+| **Activities** | scenic, swimming |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/isla-verde-alambique-carolina-18444-6601 |
+
+**Description**: Isla Verde – Alambique is one of Carolina's most visually stunning coastal destinations. Central Isla Verde sector with hotels and eateries; modest shorebreak.
+
+---
+
+### Isla Verde – Balneario West Sector
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Carolina |
+| **Coordinates** | 18.4449, -66.0066 |
+| **Google Rating** | 4.6/5 (2397 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking, restrooms |
+| **URL** | https://www.puertoricobeachfinder.com/beach/isla-verde-balneario-west-sector-carolina-18445-66007 |
+
+**Description**: Isla Verde – Balneario West Sector is one of Carolina's most visually stunning coastal destinations. Western sector of the Blue-Flag balneario with easy access and services. (Blue Flag; Google)
+
+---
+
+### Isla Verde – East Sector (near Boca)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Carolina |
+| **Coordinates** | 18.4489, -65.9947 |
+| **Google Rating** | 4.8/5 (69 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/isla-verde-east-sector-near-boca-carolina-18449-65995 |
+
+**Description**: Isla Verde – East Sector (near Boca) is one of Carolina's most visually stunning coastal destinations. Eastern end near the inlet; scenic dunes; currents increase toward the mouth.
+
+---
+
+### Isla Verde – Pine Grove
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Carolina |
+| **Coordinates** | 18.4414, -66.0174 |
+| **Google Rating** | 4.6/5 (2397 reviews) |
+| **Activities** | scenic, surfing |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/isla-verde-pine-grove-carolina-18441-66017 |
+
+**Description**: Isla Verde – Pine Grove is one of Carolina's most visually stunning coastal destinations. Beginner-friendly sandbar near east end; surf schools operate here. (Surf schools; OSM; Google)
+
+---
+
+## Cataño (1 beaches)
+
+### La Puntilla Shore (Cataño)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Cataño |
+| **Coordinates** | 18.4391, -66.119 |
+| **Google Rating** | 4.7/5 (6566 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/la-puntilla-shore-catao-catao-18439-66119 |
+
+**Description**: La Puntilla Shore (Cataño) is one of Cataño's most visually stunning coastal destinations. City bayfront with tiny sandy entries and views to Old San Juan; tour/ferry hub.
+
+---
+
+## Ceiba (2 beaches)
+
+### Playa Los Machos
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Ceiba |
+| **Coordinates** | 18.2579, -65.5944 |
+| **Google Rating** | 4.1/5 (317 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-los-machos-ceiba-18258-65594 |
+
+**Description**: Playa Los Machos is one of Ceiba's most visually stunning coastal destinations. Wide shallow bay near Roosevelt Roads; calmer on small swell; limited services.
+
+---
+
+### Playa Medio Mundo
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Ceiba |
+| **Coordinates** | 18.2416, -65.5878 |
+| **Google Rating** | 4.4/5 (298 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-medio-mundo-ceiba-18242-65588 |
+
+**Description**: Playa Medio Mundo is one of Ceiba's most visually stunning coastal destinations. Shallow, clear-water beach with offshore reef protection; popular with families.
+
+---
+
+## Culebra (12 beaches)
+
+### Carlos Rosario Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Culebra |
+| **Coordinates** | 18.3272, -65.3082 |
+| **Google Rating** | 4.9/5 (2107 reviews) |
+| **Activities** | secluded, snorkeling |
+| **URL** | https://www.puertoricobeachfinder.com/beach/carlos-rosario-beach-culebra-18327-65308 |
+
+**Description**: Tucked away in Culebra, Carlos Rosario Beach offers a peaceful escape from crowded tourist beaches. Top snorkel reef; short hike from Flamenco lot over low ridge. (DiscoverPR; PRDayTrips)
+
+---
+
+### Flamenco Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Culebra |
+| **Coordinates** | 18.3293, -65.3179 |
+| **Google Rating** | 4.8/5 (1175 reviews) |
+| **Activities** | family-friendly, scenic, snorkeling |
+| **Amenities** | parking, restrooms |
+| **URL** | https://www.puertoricobeachfinder.com/beach/flamenco-beach-culebra-18329-65318 |
+
+**Description**: Flamenco Beach is one of Culebra's most visually stunning coastal destinations. World‑renowned crescent; lifeguards in season; camp area nearby. (DiscoverPR; latlong)
+
+---
+
+### Isla Culebrita – Tortuga Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Culebra |
+| **Coordinates** | 18.3156, -65.2148 |
+| **Google Rating** | 4.8/5 (640 reviews) |
+| **Activities** | scenic, secluded, snorkeling |
+| **URL** | https://www.puertoricobeachfinder.com/beach/isla-culebrita-tortuga-beach-culebra-18316-65215 |
+
+**Description**: Isla Culebrita – Tortuga Beach is one of Culebra's most visually stunning coastal destinations. Boat‑only cay beach with turtles and clear water; no services. (DiscoverPR)
+
+---
+
+### Melones Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Culebra |
+| **Coordinates** | 18.303, -65.3076 |
+| **Google Rating** | 4.5/5 (89 reviews) |
+| **Activities** | scenic, snorkeling |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/melones-beach-culebra-18303-65308 |
+
+**Description**: Melones Beach is one of Culebra's most visually stunning coastal destinations. Rocky entry with reef; sunset views; near town. (Local guides/OSM)
+
+---
+
+### Playa Brava (Culebra)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Culebra |
+| **Coordinates** | 18.3458, -65.2748 |
+| **Google Rating** | 4.9/5 (2107 reviews) |
+| **Activities** | secluded |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-brava-culebra-culebra-18346-65275 |
+
+**Description**: Tucked away in Culebra, Playa Brava (Culebra) offers a peaceful escape from crowded tourist beaches. Remote, wave‑exposed beach; long walk; no facilities. (DiscoverPR)
+
+---
+
+### Playa Datiles (Dátiles)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Culebra |
+| **Coordinates** | 18.3065, -65.2895 |
+| **Google Rating** | 4.9/5 (2107 reviews) |
+| **Activities** | scenic, snorkeling |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-datiles-dtiles-culebra-18307-6529 |
+
+**Description**: Playa Datiles (Dátiles) is one of Culebra's most visually stunning coastal destinations. Protected bay on south side; seagrass & turtle habitat; low services. (Local/VamosPaCulebra)
+
+---
+
+### Playa Resaca
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Culebra |
+| **Coordinates** | 18.3385, -65.2735 |
+| **Google Rating** | 4.9/5 (2107 reviews) |
+| **Activities** | scenic, secluded |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-resaca-culebra-18339-65273 |
+
+**Description**: Playa Resaca is one of Culebra's most visually stunning coastal destinations. Steep trail down to wild beach on north side; strong currents. (DiscoverPR)
+
+---
+
+### Playa Soldado Overlook (reef flats)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Culebra |
+| **Coordinates** | 18.2898, -65.277 |
+| **Google Rating** | 4.8/5 (640 reviews) |
+| **Activities** | scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-soldado-overlook-reef-flats-culebra-1829-65277 |
+
+**Description**: Playa Soldado Overlook (reef flats) is one of Culebra's most visually stunning coastal destinations. Reefy flats just east of the main cove; clear on calm days; no services.
+
+---
+
+### Punta Soldado
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Culebra |
+| **Coordinates** | 18.2935, -65.279 |
+| **Google Rating** | 4.8/5 (640 reviews) |
+| **Activities** | scenic, secluded, snorkeling |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/punta-soldado-culebra-18294-65279 |
+
+**Description**: Punta Soldado is one of Culebra's most visually stunning coastal destinations. Quiet south‑coast cove; clear water; rough road; no services. (CulebraPR.com; LonelyPlanet)
+
+---
+
+### Sardinas II (town beach)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Culebra |
+| **Coordinates** | 18.3002, -65.2979 |
+| **Google Rating** | 4.9/5 (2107 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/sardinas-ii-town-beach-culebra-183-65298 |
+
+**Description**: Sardinas II (town beach) is one of Culebra's most visually stunning coastal destinations. Townside shoreline with sandy pockets; boat traffic; no lifeguard.
+
+---
+
+### Tamarindo Beach (Culebra)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Culebra |
+| **Coordinates** | 18.326, -65.313 |
+| **Google Rating** | 4.9/5 (2107 reviews) |
+| **Activities** | family-friendly, scenic, snorkeling |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/tamarindo-beach-culebra-culebra-18326-65313 |
+
+**Description**: Tamarindo Beach (Culebra) is one of Culebra's most visually stunning coastal destinations. Calm bay with sea turtle snorkeling; adjacent to Luis Peña channel reserve. (Mapcarta; TripAdvisor)
+
+---
+
+### Zoni Beach (Zoní)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Culebra |
+| **Coordinates** | 18.3214, -65.254 |
+| **Google Rating** | 4.8/5 (640 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/zoni-beach-zon-culebra-18321-65254 |
+
+**Description**: Zoni Beach (Zoní) is one of Culebra's most visually stunning coastal destinations. Long, quiet strand with views to Culebrita/Cayo Norte; no services. (DiscoverPR; Mapcarta/Wikimapia)
+
+---
+
+## Dorado (6 beaches)
+
+### Balneario Manuel “Nolo” Morales (Dorado Public Beach)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Dorado |
+| **Coordinates** | 18.4658, -66.2726 |
+| **Google Rating** | 4.7/5 (430 reviews) |
+| **Activities** | family-friendly, scenic, swimming |
+| **Amenities** | lifeguard, parking, restrooms, showers |
+| **URL** | https://www.puertoricobeachfinder.com/beach/balneario-manuel-nolo-morales-dorado-public-beach-dorado-18466-66273 |
+
+**Description**: Balneario Manuel “Nolo” Morales (Dorado Public Beach) is one of Dorado's most visually stunning coastal destinations. Broad sandy bay with services; popular on weekends; gentle inside. (DRNA; OSM; Google)
+
+---
+
+### Dorado East Reef Shore
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Dorado |
+| **Coordinates** | 18.4615, -66.2641 |
+| **Google Rating** | 4.7/5 (430 reviews) |
+| **Activities** | scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/dorado-east-reef-shore-dorado-18462-66264 |
+
+**Description**: Dorado East Reef Shore is one of Dorado's most visually stunning coastal destinations. Reefy shoreline east of main balneario; narrow sandy tongues; undeveloped.
+
+---
+
+### Kikita Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Dorado |
+| **Coordinates** | 18.4681, -66.2879 |
+| **Google Rating** | 4.7/5 (430 reviews) |
+| **Activities** | diving, scenic, snorkeling, surfing |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/kikita-beach-dorado-18468-66288 |
+
+**Description**: Kikita Beach is one of Dorado's most visually stunning coastal destinations. Reef break with consistent trades; strong rips when sizable; no lifeguard. (Surf maps; OSM; Google)
+
+---
+
+### Ojo del Buey
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Dorado |
+| **Coordinates** | 18.4638, -66.273 |
+| **Google Rating** | 4.7/5 (430 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/ojo-del-buey-dorado-18464-66273 |
+
+**Description**: Ojo del Buey is one of Dorado's most visually stunning coastal destinations. Scenic rock arch near La Plata river mouth; currents; best for strolling. (Mapcarta; Google)
+
+---
+
+### Sardinera (Dorado)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Dorado |
+| **Coordinates** | 18.4692, -66.2686 |
+| **Google Rating** | 4.7/5 (430 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/sardinera-dorado-dorado-18469-66269 |
+
+**Description**: Sardinera (Dorado) is one of Dorado's most visually stunning coastal destinations. Natural rock barrier creates calmer pool-like sections at lower swell.
+
+---
+
+### Sardinera West Pocket (Hotel sector)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Dorado |
+| **Coordinates** | 18.467, -66.2769 |
+| **Google Rating** | 4.7/5 (430 reviews) |
+| **Activities** | scenic, snorkeling |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/sardinera-west-pocket-hotel-sector-dorado-18467-66277 |
+
+**Description**: Sardinera West Pocket (Hotel sector) is one of Dorado's most visually stunning coastal destinations. Sheltered pocket with reef shelves; clearer water on calm mornings.
+
+---
+
+## Fajardo (8 beaches)
+
+### Cabezas de San Juan Reserve Shore
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Fajardo |
+| **Coordinates** | 18.3833, -65.6171 |
+| **Google Rating** | 4.2/5 (16 reviews) |
+| **Activities** | scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/cabezas-de-san-juan-reserve-shore-fajardo-18383-65617 |
+
+**Description**: Cabezas de San Juan Reserve Shore is one of Fajardo's most visually stunning coastal destinations. Protected reserve shores with limited/guided access; pristine habitats. (DRNA; Para la Naturaleza)
+
+---
+
+### Cayo Diablo (reef stop)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Fajardo |
+| **Coordinates** | 18.3708, -65.5588 |
+| **Google Rating** | 4.9/5 (321 reviews) |
+| **Activities** | diving, secluded, snorkeling |
+| **URL** | https://www.puertoricobeachfinder.com/beach/cayo-diablo-reef-stop-fajardo-18371-65559 |
+
+**Description**: Tucked away in Fajardo, Cayo Diablo (reef stop) offers a peaceful escape from crowded tourist beaches. Reef and sand tongues popular for snorkel tours; limited sandy landing spots. (Tour ops; OSM)
+
+---
+
+### Cayo Icacos (La Cordillera)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Fajardo |
+| **Coordinates** | 18.3824, -65.5969 |
+| **Google Rating** | 4.9/5 (1413 reviews) |
+| **Activities** | scenic, secluded, snorkeling |
+| **URL** | https://www.puertoricobeachfinder.com/beach/cayo-icacos-la-cordillera-fajardo-18382-65597 |
+
+**Description**: Cayo Icacos (La Cordillera) is one of Fajardo's most visually stunning coastal destinations. Uninhabited cay with white sands and clear water; boat only; no services.
+
+---
+
+### Las Croabas Waterfront
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Fajardo |
+| **Coordinates** | 18.3723, -65.6502 |
+| **Google Rating** | 4.5/5 (1555 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/las-croabas-waterfront-fajardo-18372-6565 |
+
+**Description**: Las Croabas Waterfront is one of Fajardo's most visually stunning coastal destinations. Townfront launch for Bio Bay and cays; small bathing entries; urban amenities.
+
+---
+
+### Playa Colora (Fajardo)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Fajardo |
+| **Coordinates** | 18.382, -65.6208 |
+| **Google Rating** | 4.5/5 (1555 reviews) |
+| **Activities** | scenic, secluded |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-colora-fajardo-fajardo-18382-65621 |
+
+**Description**: Playa Colora (Fajardo) is one of Fajardo's most visually stunning coastal destinations. Reddish‑hued sand pocket east of Seven Seas; stronger currents when surf is up.
+
+---
+
+### Playa Escondida (Fajardo)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Fajardo |
+| **Coordinates** | 18.3805, -65.6257 |
+| **Google Rating** | 4.5/5 (1555 reviews) |
+| **Activities** | scenic, secluded |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-escondida-fajardo-fajardo-18381-65626 |
+
+**Description**: Playa Escondida (Fajardo) is one of Fajardo's most visually stunning coastal destinations. Secluded strand east of Seven Seas via sandy trails; no services; currents increase on swell.
+
+---
+
+### Playa Sardinera (Fajardo)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Fajardo |
+| **Coordinates** | 18.3659, -65.6526 |
+| **Google Rating** | 4.5/5 (1555 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-sardinera-fajardo-fajardo-18366-65653 |
+
+**Description**: Playa Sardinera (Fajardo) is one of Fajardo's most visually stunning coastal destinations. Neighborhood beach west of Las Croabas with reef shelves and sandy pockets.
+
+---
+
+### Seven Seas Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Fajardo |
+| **Coordinates** | 18.3767, -65.6306 |
+| **Google Rating** | 4.5/5 (1007 reviews) |
+| **Activities** | camping, family-friendly, scenic |
+| **Amenities** | lifeguard, parking, restrooms, showers |
+| **URL** | https://www.puertoricobeachfinder.com/beach/seven-seas-beach-fajardo-18377-65631 |
+
+**Description**: Seven Seas Beach is one of Fajardo's most visually stunning coastal destinations. Protected swimming area with services; trailheads to Escondida/Colora start here. (DRNA; OSM; Google)
+
+---
+
+## Guayama (2 beaches)
+
+### Aguirre Bay Shore
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Guayama |
+| **Coordinates** | 17.9564, -66.1968 |
+| **Google Rating** | 4.4/5 (339 reviews) |
+| **Activities** | scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/aguirre-bay-shore-guayama-17956-66197 |
+
+**Description**: Aguirre Bay Shore is one of Guayama's most visually stunning coastal destinations. Mangrove-edged shore on the east side of Bahía de Jobos; scenic; not a formal swim area.
+
+---
+
+### Playa Pozuelo (Guayama)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Guayama |
+| **Coordinates** | 17.9531, -66.1413 |
+| **Google Rating** | 4.4/5 (339 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-pozuelo-guayama-guayama-17953-66141 |
+
+**Description**: Playa Pozuelo (Guayama) is one of Guayama's most visually stunning coastal destinations. Calm bayfront beach with eateries; shallow entry; popular for afternoons.
+
+---
+
+## Guayanilla (1 beaches)
+
+### Playa Tamarindo (Guayanilla)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Guayanilla |
+| **Coordinates** | 17.9749, -66.7815 |
+| **Google Rating** | 4.4/5 (123 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-tamarindo-guayanilla-guayanilla-17975-66781 |
+
+**Description**: Playa Tamarindo (Guayanilla) is one of Guayanilla's most visually stunning coastal destinations. Open‑coast strand west of the bay; scenic headlands nearby; services limited.
+
+---
+
+## Guánica (6 beaches)
+
+### Balneario Caña Gorda
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Guánica |
+| **Coordinates** | 17.9579, -66.889 |
+| **Google Rating** | 4.4/5 (1167 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking, restrooms, showers |
+| **URL** | https://www.puertoricobeachfinder.com/beach/balneario-caa-gorda-gunica-17958-66889 |
+
+**Description**: Balneario Caña Gorda is one of Guánica's most visually stunning coastal destinations. Shallow turquoise bay inside the biosphere reserve; calm waters; basic facilities. (DRNA; OSM; Google)
+
+---
+
+### Cayo Aurora (Gilligan’s Island)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Guánica |
+| **Coordinates** | 17.9554, -66.8846 |
+| **Google Rating** | 4.5/5 (2925 reviews) |
+| **Activities** | family-friendly, secluded, snorkeling |
+| **URL** | https://www.puertoricobeachfinder.com/beach/cayo-aurora-gilligans-island-gunica-17955-66885 |
+
+**Description**: Tucked away in Guánica, Cayo Aurora (Gilligan’s Island) offers a peaceful escape from crowded tourist beaches. Mangrove cay with shallow channels; kayak/boat shuttle only. (DiscoverPR; PRDayTrips)
+
+---
+
+### Playa Ballena (Guánica)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Guánica |
+| **Coordinates** | 17.9518, -66.8547 |
+| **Google Rating** | 4.6/5 (11 reviews) |
+| **Activities** | scenic, secluded |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-ballena-gunica-gunica-17952-66855 |
+
+**Description**: Playa Ballena (Guánica) is one of Guánica's most visually stunning coastal destinations. Inside Dry Forest reserve at end of PR‑333; ~30‑min walk; pristine. (DiscoverPR; PRDayTrips)
+
+---
+
+### Playa Jaboncillo (Guánica)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Guánica |
+| **Coordinates** | 17.9688, -66.9008 |
+| **Google Rating** | 4.5/5 (2925 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-jaboncillo-gunica-gunica-17969-66901 |
+
+**Description**: Playa Jaboncillo (Guánica) is one of Guánica's most visually stunning coastal destinations. Small bay near Guánica Harbor entrance; calm on most days. (TripAdvisor)
+
+---
+
+### Playa Manglillo (Guánica)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Guánica |
+| **Coordinates** | 17.9683, -66.8435 |
+| **Google Rating** | 4.5/5 (2925 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-manglillo-gunica-gunica-17968-66843 |
+
+**Description**: Playa Manglillo (Guánica) is one of Guánica's most visually stunning coastal destinations. Shallow bay with mangrove trails and secluded spots. (DiscoverPR)
+
+---
+
+### Playa Santa (Guánica)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Guánica |
+| **Coordinates** | 17.9699, -66.942 |
+| **Google Rating** | 4.6/5 (2500 reviews) |
+| **Activities** | family-friendly, scenic, swimming |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-santa-gunica-gunica-1797-66942 |
+
+**Description**: Playa Santa (Guánica) is one of Guánica's most visually stunning coastal destinations. Popular crescent beach in Ensenada sector; calm, clear shallows; eateries close by.
+
+---
+
+## Hatillo (3 beaches)
+
+### Carrizal Shore
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Hatillo |
+| **Coordinates** | 18.4972, -66.8429 |
+| **Google Rating** | 4.7/5 (2884 reviews) |
+| **Activities** | fishing, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/carrizal-shore-hatillo-18497-66843 |
+
+**Description**: Carrizal Shore is one of Hatillo's most visually stunning coastal destinations. Working shoreline at Barrio Carrizal with sandy patches and reef ledges.
+
+---
+
+### Hoya Mala Pocket (Hatillo)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Hatillo |
+| **Coordinates** | 18.5028, -66.8168 |
+| **Google Rating** | 4.7/5 (2884 reviews) |
+| **Activities** | scenic, secluded |
+| **URL** | https://www.puertoricobeachfinder.com/beach/hoya-mala-pocket-hatillo-hatillo-18503-66817 |
+
+**Description**: Hoya Mala Pocket (Hatillo) is one of Hatillo's most visually stunning coastal destinations. Small secluded pocket among limestone ledges; no services; watch swell. (Mapcarta; Google)
+
+---
+
+### Sardinera (Hatillo)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Hatillo |
+| **Coordinates** | 18.4926, -66.8276 |
+| **Google Rating** | 4.7/5 (2884 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/sardinera-hatillo-hatillo-18493-66828 |
+
+**Description**: Sardinera (Hatillo) is one of Hatillo's most visually stunning coastal destinations. Linear town shoreline with pocket sands; exposure varies with trades.
+
+---
+
+## Humacao (3 beaches)
+
+### Balneario Punta Santiago (Humacao)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Humacao |
+| **Coordinates** | 18.1526, -65.7405 |
+| **Google Rating** | 4.4/5 (431 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking, restrooms, showers |
+| **URL** | https://www.puertoricobeachfinder.com/beach/balneario-punta-santiago-humacao-humacao-18153-6574 |
+
+**Description**: Balneario Punta Santiago (Humacao) is one of Humacao's most visually stunning coastal destinations. Calmer bay with facilities; views to Cayo Santiago; popular for families.
+
+---
+
+### Palmas del Mar – Harbor Cove
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Humacao |
+| **Coordinates** | 18.0919, -65.8093 |
+| **Google Rating** | 4.3/5 (385 reviews) |
+| **Activities** | family-friendly, snorkeling |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/palmas-del-mar-harbor-cove-humacao-18092-65809 |
+
+**Description**: Palmas del Mar – Harbor Cove in Humacao is an ideal destination for families seeking a safe and enjoyable beach experience. More protected cove near marina breakwaters; clearer on calm days.
+
+---
+
+### Playa Palmas del Mar – Candelero
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Humacao |
+| **Coordinates** | 18.0909, -65.7978 |
+| **Google Rating** | 4.3/5 (385 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-palmas-del-mar-candelero-humacao-18091-65798 |
+
+**Description**: Playa Palmas del Mar – Candelero is one of Humacao's most visually stunning coastal destinations. Resort-front beach with long sands; shorebreak varies with trades; public access paths exist.
+
+---
+
+## Isabela (12 beaches)
+
+### Blue Hole Reef Access
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Isabela |
+| **Coordinates** | 18.4868, -67.0632 |
+| **Google Rating** | 4.7/5 (2872 reviews) |
+| **Activities** | diving, scenic, snorkeling |
+| **URL** | https://www.puertoricobeachfinder.com/beach/blue-hole-reef-access-isabela-18487-67063 |
+
+**Description**: Blue Hole Reef Access is one of Isabela's most visually stunning coastal destinations. Offshore reef depression known to divers; boat/kayak advisable. (Divers’ refs; Google/OSM)
+
+---
+
+### Cueva de las Golondrinas Cove
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Isabela |
+| **Coordinates** | 18.4749, -66.9578 |
+| **Google Rating** | 4.7/5 (160 reviews) |
+| **Activities** | scenic, secluded |
+| **URL** | https://www.puertoricobeachfinder.com/beach/cueva-de-las-golondrinas-cove-isabela-18475-66958 |
+
+**Description**: Cueva de las Golondrinas Cove is one of Isabela's most visually stunning coastal destinations. Seasonal sea cave; check tides/swell; no services.
+
+---
+
+### Ishibori (Jobos east pocket)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Isabela |
+| **Coordinates** | 18.5112, -67.0819 |
+| **Google Rating** | 4.7/5 (2872 reviews) |
+| **Activities** | scenic, snorkeling |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/ishibori-jobos-east-pocket-isabela-18511-67082 |
+
+**Description**: Ishibori (Jobos east pocket) is one of Isabela's most visually stunning coastal destinations. Small pocket just east of Jobos commercial strip; calmer on low swell.
+
+---
+
+### Jobos Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Isabela |
+| **Coordinates** | 18.5134, -67.0847 |
+| **Google Rating** | 4.7/5 (2872 reviews) |
+| **Activities** | scenic, surfing, swimming |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/jobos-beach-isabela-18513-67085 |
+
+**Description**: Jobos Beach is one of Isabela's most visually stunning coastal destinations. Lively bay with surf on the outer reef; inside cove calmer on small days.
+
+---
+
+### La Cueva del Indio Cove (Isabela side)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Isabela |
+| **Coordinates** | 18.5059, -67.0252 |
+| **Google Rating** | 4.8/5 (1456 reviews) |
+| **Activities** | scenic, secluded |
+| **URL** | https://www.puertoricobeachfinder.com/beach/la-cueva-del-indio-cove-isabela-side-isabela-18506-67025 |
+
+**Description**: La Cueva del Indio Cove (Isabela side) is one of Isabela's most visually stunning coastal destinations. Small sandy pocket near karst outcrops; watch swell; informal path. (Mapcarta; Google)
+
+---
+
+### Middles
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Isabela |
+| **Coordinates** | 18.5175, -67.0978 |
+| **Google Rating** | 4.7/5 (2872 reviews) |
+| **Activities** | diving, scenic, snorkeling, surfing |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/middles-isabela-18518-67098 |
+
+**Description**: Middles is one of Isabela's most visually stunning coastal destinations. Contest-quality A-frames on larger winter swells; strong rips. (Surf maps; Google; OSM)
+
+---
+
+### Montones Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Isabela |
+| **Coordinates** | 18.5058, -67.081 |
+| **Google Rating** | 4.7/5 (2872 reviews) |
+| **Activities** | family-friendly, scenic, snorkeling |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/montones-beach-isabela-18506-67081 |
+
+**Description**: Montones Beach is one of Isabela's most visually stunning coastal destinations. Natural rock pools form a calm lagoon when low to mid tide.
+
+---
+
+### Pastillo Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Isabela |
+| **Coordinates** | 18.4736, -66.9489 |
+| **Google Rating** | 4.7/5 (160 reviews) |
+| **Activities** | scenic, secluded |
+| **URL** | https://www.puertoricobeachfinder.com/beach/pastillo-beach-isabela-18474-66949 |
+
+**Description**: Pastillo Beach is one of Isabela's most visually stunning coastal destinations. Dramatic cliffs/caves (Golondrinas nearby); strong shorebreak and currents. (Mapcarta; Google)
+
+---
+
+### Poza El Pastillo (inner pool)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Isabela |
+| **Coordinates** | 18.4723, -66.9517 |
+| **Google Rating** | 4.7/5 (160 reviews) |
+| **Activities** | scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/poza-el-pastillo-inner-pool-isabela-18472-66952 |
+
+**Description**: Poza El Pastillo (inner pool) is one of Isabela's most visually stunning coastal destinations. Sheltered pool behind reef ledge near Pastillo; mind surge at high tide. (Mapcarta; Google)
+
+---
+
+### Pozo Teodoro
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Isabela |
+| **Coordinates** | 18.4998, -67.0699 |
+| **Google Rating** | 4.7/5 (2872 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/pozo-teodoro-isabela-185-6707 |
+
+**Description**: Pozo Teodoro is one of Isabela's most visually stunning coastal destinations. Shallow protected pool area; best at low tide; no lifeguards.
+
+---
+
+### Shacks (Bajuras)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Isabela |
+| **Coordinates** | 18.495, -67.0585 |
+| **Google Rating** | 4.7/5 (2872 reviews) |
+| **Activities** | diving, scenic, snorkeling |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/shacks-bajuras-isabela-18495-67058 |
+
+**Description**: Shacks (Bajuras) is one of Isabela's most visually stunning coastal destinations. Reef channels and blue holes; strong currents possible; kites on trades. (Mapcarta; Google)
+
+---
+
+### Villa Pesquera (Isabela)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Isabela |
+| **Coordinates** | 18.4927, -67.031 |
+| **Google Rating** | 4.8/5 (1456 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/villa-pesquera-isabela-isabela-18493-67031 |
+
+**Description**: Villa Pesquera (Isabela) is one of Isabela's most visually stunning coastal destinations. Fishermen’s area with pocket sands and eateries; modest surf.
+
+---
+
+## Lajas (6 beaches)
+
+### Cayo Caracoles Sandbar
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Lajas |
+| **Coordinates** | 17.9678, -67.04 |
+| **Google Rating** | 4.6/5 (515 reviews) |
+| **Activities** | scenic, secluded, snorkeling |
+| **URL** | https://www.puertoricobeachfinder.com/beach/cayo-caracoles-sandbar-lajas-17968-6704 |
+
+**Description**: Cayo Caracoles Sandbar is one of Lajas's most visually stunning coastal destinations. Clear-water sandbar in La Parguera keys; boat only; weekends lively.
+
+---
+
+### Cayo Enrique
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Lajas |
+| **Coordinates** | 17.963, -67.0435 |
+| **Google Rating** | 5.0/5 (9 reviews) |
+| **Activities** | secluded, snorkeling |
+| **URL** | https://www.puertoricobeachfinder.com/beach/cayo-enrique-lajas-17963-67043 |
+
+**Description**: Tucked away in Lajas, Cayo Enrique offers a peaceful escape from crowded tourist beaches. Low mangrove cay with shallow flats; currents vary with tide. (Mapcarta; Google)
+
+---
+
+### La Parguera Bioluminescent Bay Entry
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Lajas |
+| **Coordinates** | 17.9738, -67.0289 |
+| **Google Rating** | 4.6/5 (515 reviews) |
+| **Activities** | scenic, secluded |
+| **URL** | https://www.puertoricobeachfinder.com/beach/la-parguera-bioluminescent-bay-entry-lajas-17974-67029 |
+
+**Description**: La Parguera Bioluminescent Bay Entry is one of Lajas's most visually stunning coastal destinations. Tour launch points to biobay; swimming often restricted; night-only. (Tour ops; Google; OSM)
+
+---
+
+### La Parguera Waterfront
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Lajas |
+| **Coordinates** | 17.9722, -67.0458 |
+| **Google Rating** | 4.6/5 (515 reviews) |
+| **Activities** | family-friendly, scenic, swimming |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/la-parguera-waterfront-lajas-17972-67046 |
+
+**Description**: La Parguera Waterfront is one of Lajas's most visually stunning coastal destinations. Townfront swim steps and tour hub for cays/biobay; urban setting.
+
+---
+
+### Mata La Gata
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Lajas |
+| **Coordinates** | 17.9567, -67.045 |
+| **Google Rating** | 4.6/5 (515 reviews) |
+| **Activities** | scenic, secluded, snorkeling |
+| **Amenities** | picnic-areas |
+| **URL** | https://www.puertoricobeachfinder.com/beach/mata-la-gata-lajas-17957-67045 |
+
+**Description**: Mata La Gata is one of Lajas's most visually stunning coastal destinations. Mangrove islet with swimming area and picnic shelters.
+
+---
+
+### Playita Rosada
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Lajas |
+| **Coordinates** | 17.9715, -67.0459 |
+| **Google Rating** | 4.6/5 (515 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | accessibility, parking, restrooms |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playita-rosada-lajas-17972-67046 |
+
+**Description**: Playita Rosada is one of Lajas's most visually stunning coastal destinations. Famed sea-pool platform with pink boardwalk; tidal; check maintenance hours.
+
+---
+
+## Loíza (8 beaches)
+
+### Aviones Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Loíza |
+| **Coordinates** | 18.457, -65.9908 |
+| **Google Rating** | 4.7/5 (1652 reviews) |
+| **Activities** | scenic, surfing |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/aviones-beach-loza-18457-65991 |
+
+**Description**: Aviones Beach is one of Loíza's most visually stunning coastal destinations. Consistent beach break by Piñones kiosks; stronger rips on larger swells. (Surf refs; OSM; Google)
+
+---
+
+### Boca de Cangrejos East Spit (Loíza side)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Loíza |
+| **Coordinates** | 18.4599, -65.993 |
+| **Google Rating** | 4.8/5 (9 reviews) |
+| **Activities** | scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/boca-de-cangrejos-east-spit-loza-side-loza-1846-65993 |
+
+**Description**: Boca de Cangrejos East Spit (Loíza side) is one of Loíza's most visually stunning coastal destinations. Sandy spit on the Piñones side of the inlet; currents; scenic views to Isla Verde.
+
+---
+
+### Cueva María de la Cruz Shore
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Loíza |
+| **Coordinates** | 18.4413, -65.9017 |
+| **Google Rating** | 4.7/5 (1040 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/cueva-mara-de-la-cruz-shore-loza-18441-65902 |
+
+**Description**: Cueva María de la Cruz Shore is one of Loíza's most visually stunning coastal destinations. Coastal sector near archaeological cave area; narrow beaches, scenic stops. (Mapcarta; Google)
+
+---
+
+### La Pocita de Piñones (east pool)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Loíza |
+| **Coordinates** | 18.4631, -65.9637 |
+| **Google Rating** | 4.7/5 (1652 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/la-pocita-de-piones-east-pool-loza-18463-65964 |
+
+**Description**: La Pocita de Piñones (east pool) is one of Loíza's most visually stunning coastal destinations. Another protected pool along the reef; shallow and kid‑friendly when calm.
+
+---
+
+### La Posita (Piñones)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Loíza |
+| **Coordinates** | 18.4565, -65.9797 |
+| **Google Rating** | 4.7/5 (1652 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/la-posita-piones-loza-18457-6598 |
+
+**Description**: La Posita (Piñones) is one of Loíza's most visually stunning coastal destinations. Natural rock pool popular with families; best at low to mid tide; no lifeguard.
+
+---
+
+### Piñones Boardwalk Shore
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Loíza |
+| **Coordinates** | 18.4578, -65.9723 |
+| **Google Rating** | 4.7/5 (1652 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/piones-boardwalk-shore-loza-18458-65972 |
+
+**Description**: Piñones Boardwalk Shore is one of Loíza's most visually stunning coastal destinations. Boardwalk with access to multiple sandy entries behind dunes and palms.
+
+---
+
+### Pozita de Medianía Alta
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Loíza |
+| **Coordinates** | 18.4769, -65.9282 |
+| **Google Rating** | 4.7/5 (1652 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/pozita-de-mediana-alta-loza-18477-65928 |
+
+**Description**: Pozita de Medianía Alta is one of Loíza's most visually stunning coastal destinations. Small reef pool within Medianía Alta sector; calmer on low swell.
+
+---
+
+### Vacia Talega
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Loíza |
+| **Coordinates** | 18.4678, -65.9489 |
+| **Google Rating** | 4.7/5 (1652 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking, picnic-areas |
+| **URL** | https://www.puertoricobeachfinder.com/beach/vacia-talega-loza-18468-65949 |
+
+**Description**: Vacia Talega is one of Loíza's most visually stunning coastal destinations. Long scenic bay with shallow entry; popular on weekends; bring shade.
+
+---
+
+## Luquillo (5 beaches)
+
+### Balneario La Monserrate (Luquillo)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Luquillo |
+| **Coordinates** | 18.3828, -65.7227 |
+| **Google Rating** | 4.5/5 (6681 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | lifeguard, parking, restrooms, showers |
+| **URL** | https://www.puertoricobeachfinder.com/beach/balneario-la-monserrate-luquillo-luquillo-18383-65723 |
+
+**Description**: Balneario La Monserrate (Luquillo) is one of Luquillo's most visually stunning coastal destinations. Famed balneario with gentle waters, services, and food kiosks nearby. (Blue Flag; DRNA; Google)
+
+---
+
+### La Pared (Luquillo)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Luquillo |
+| **Coordinates** | 18.3764, -65.7157 |
+| **Google Rating** | 4.7/5 (123 reviews) |
+| **Activities** | scenic, surfing |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/la-pared-luquillo-luquillo-18376-65716 |
+
+**Description**: La Pared (Luquillo) is one of Luquillo's most visually stunning coastal destinations. Popular surf/learn-to-surf beach; shorebreak and rips increase with swell; town amenities. (Surf schools; OSM; Google)
+
+---
+
+### Playa Azul (Luquillo)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Luquillo |
+| **Coordinates** | 18.3709, -65.7134 |
+| **Google Rating** | 4.5/5 (6681 reviews) |
+| **Activities** | scenic, swimming |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-azul-luquillo-luquillo-18371-65713 |
+
+**Description**: Playa Azul (Luquillo) is one of Luquillo's most visually stunning coastal destinations. High-rise frontage with long sand; shorebreak can be punchy when trades are up.
+
+---
+
+### Playa Fortuna (Luquillo west)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Luquillo |
+| **Coordinates** | 18.3831, -65.7338 |
+| **Google Rating** | 4.6/5 (2254 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-fortuna-luquillo-west-luquillo-18383-65734 |
+
+**Description**: Playa Fortuna (Luquillo west) is one of Luquillo's most visually stunning coastal destinations. Sector near kiosks/PR‑3; calmer pockets on small days; urban conveniences close.
+
+---
+
+### Playa San Miguel (Nature Reserve edge)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Luquillo |
+| **Coordinates** | 18.3608, -65.6858 |
+| **Google Rating** | 4.8/5 (55 reviews) |
+| **Activities** | scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-san-miguel-nature-reserve-edge-luquillo-18361-65686 |
+
+**Description**: Playa San Miguel (Nature Reserve edge) is one of Luquillo's most visually stunning coastal destinations. Quieter sector east of Playa Azul; dune/mangrove edges; fewer services.
+
+---
+
+## Manatí (9 beaches)
+
+### Los Tubos (Manatí)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Manatí |
+| **Coordinates** | 18.4519, -66.4856 |
+| **Google Rating** | 4.7/5 (4078 reviews) |
+| **Activities** | scenic, surfing |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/los-tubos-manat-manat-18452-66486 |
+
+**Description**: Los Tubos (Manatí) is one of Manatí's most visually stunning coastal destinations. Open beach known for surf and festivals; strong currents on bigger days.
+
+---
+
+### Mar Chiquita
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Manatí |
+| **Coordinates** | 18.4948, -66.5406 |
+| **Google Rating** | 4.6/5 (1456 reviews) |
+| **Activities** | family-friendly, scenic, swimming |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/mar-chiquita-manat-18495-66541 |
+
+**Description**: Mar Chiquita is one of Manatí's most visually stunning coastal destinations. Famous keyhole cove; calmest on low swell; heed surge in channels.
+
+---
+
+### Mar Chiquita East Ledge
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Manatí |
+| **Coordinates** | 18.4959, -66.5377 |
+| **Google Rating** | 4.6/5 (1456 reviews) |
+| **Activities** | scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/mar-chiquita-east-ledge-manat-18496-66538 |
+
+**Description**: Mar Chiquita East Ledge is one of Manatí's most visually stunning coastal destinations. Rock ledges east of the main cove with small pools; caution with surge.
+
+---
+
+### Mar Chiquita West Flats
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Manatí |
+| **Coordinates** | 18.4931, -66.5436 |
+| **Google Rating** | 4.6/5 (1456 reviews) |
+| **Activities** | family-friendly, scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/mar-chiquita-west-flats-manat-18493-66544 |
+
+**Description**: Mar Chiquita West Flats is one of Manatí's most visually stunning coastal destinations. Shallower sandy flats west of the main keyhole; calmer on low swell.
+
+---
+
+### Playa La Esperanza (Tierras Nuevas)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Manatí |
+| **Coordinates** | 18.4766, -66.5178 |
+| **Google Rating** | 4.7/5 (4078 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-la-esperanza-tierras-nuevas-manat-18477-66518 |
+
+**Description**: Playa La Esperanza (Tierras Nuevas) is one of Manatí's most visually stunning coastal destinations. Linear shoreline west of Mar Chiquita; mixed sand/reef; low services.
+
+---
+
+### Playa Los Corchos (sector)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Manatí |
+| **Coordinates** | 18.4687, -66.5103 |
+| **Google Rating** | 4.7/5 (4078 reviews) |
+| **Activities** | fishing, scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-los-corchos-sector-manat-18469-6651 |
+
+**Description**: Playa Los Corchos (sector) is one of Manatí's most visually stunning coastal destinations. Sector shoreline with sandy tongues and reef shelves.
+
+---
+
+### Playa Parchola (sector)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Manatí |
+| **Coordinates** | 18.4621, -66.5031 |
+| **Google Rating** | 4.7/5 (4078 reviews) |
+| **Activities** | scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-parchola-sector-manat-18462-66503 |
+
+**Description**: Playa Parchola (sector) is one of Manatí's most visually stunning coastal destinations. Sector shoreline between Los Tubos and Mar Chiquita; mixed sand/rock.
+
+---
+
+### Poza de las Mujeres (Manatí)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Manatí |
+| **Coordinates** | 18.4869, -66.5206 |
+| **Google Rating** | 4.7/5 (4078 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/poza-de-las-mujeres-manat-manat-18487-66521 |
+
+**Description**: Poza de las Mujeres (Manatí) is one of Manatí's most visually stunning coastal destinations. Shallow natural pool behind rock ledge; clearer at low swell; no lifeguard. (Mapcarta; Google)
+
+---
+
+### Pozita de los Tubos
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Manatí |
+| **Coordinates** | 18.4498, -66.483 |
+| **Google Rating** | 4.7/5 (4078 reviews) |
+| **Activities** | family-friendly, scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/pozita-de-los-tubos-manat-1845-66483 |
+
+**Description**: Pozita de los Tubos is one of Manatí's most visually stunning coastal destinations. Small protected pool near Los Tubos sector; kid-friendly on calm days.
+
+---
+
+## Maunabo (2 beaches)
+
+### Playa Los Pinos (Maunabo)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Maunabo |
+| **Coordinates** | 18.002, -65.8992 |
+| **Google Rating** | 4.4/5 (351 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-los-pinos-maunabo-maunabo-18002-65899 |
+
+**Description**: Playa Los Pinos (Maunabo) is one of Maunabo's most visually stunning coastal destinations. Longer open-coast stretch west of the lighthouse; exposed; few services.
+
+---
+
+### Playa Punta Tuna (Lighthouse)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Maunabo |
+| **Coordinates** | 18.0039, -65.8855 |
+| **Google Rating** | 4.6/5 (496 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-punta-tuna-lighthouse-maunabo-18004-65885 |
+
+**Description**: Playa Punta Tuna (Lighthouse) is one of Maunabo's most visually stunning coastal destinations. Dramatic beach below lighthouse; currents and shorebreak can be strong; stunning views.
+
+---
+
+## Mayagüez (7 beaches)
+
+### El Maní Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Mayagüez |
+| **Coordinates** | 18.2255, -67.16 |
+| **Google Rating** | 4.8/5 (18 reviews) |
+| **Activities** | fishing, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/el-man-beach-mayagez-18226-6716 |
+
+**Description**: El Maní Beach is one of Mayagüez's most visually stunning coastal destinations. Community shoreline north of town; modest sands; low surf typical.
+
+---
+
+### La Villa Pesquera (Mayagüez)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Mayagüez |
+| **Coordinates** | 18.1999, -67.1519 |
+| **Google Rating** | 3.7/5 (19 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/la-villa-pesquera-mayagez-mayagez-182-67152 |
+
+**Description**: La Villa Pesquera (Mayagüez) is one of Mayagüez's most visually stunning coastal destinations. Fishermen’s zone with small sandy entry points; eateries nearby.
+
+---
+
+### Litoral North Pocket
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Mayagüez |
+| **Coordinates** | 18.2059, -67.1459 |
+| **Google Rating** | 4.8/5 (18 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/litoral-north-pocket-mayagez-18206-67146 |
+
+**Description**: Litoral North Pocket is one of Mayagüez's most visually stunning coastal destinations. Small sandy wedge along the park; swim quality varies.
+
+---
+
+### Parque del Litoral Shore
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Mayagüez |
+| **Coordinates** | 18.201, -67.142 |
+| **Google Rating** | Not rated/5 (0 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking, restrooms |
+| **URL** | https://www.puertoricobeachfinder.com/beach/parque-del-litoral-shore-mayagez-18201-67142 |
+
+**Description**: Parque del Litoral Shore is one of Mayagüez's most visually stunning coastal destinations. Waterfront park with narrow beaches/promenade; best for strolls.
+
+---
+
+### Playa Oeste
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Mayagüez |
+| **Coordinates** | 18.2018, -67.1578 |
+| **Google Rating** | 3.7/5 (19 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-oeste-mayagez-18202-67158 |
+
+**Description**: Playa Oeste is one of Mayagüez's most visually stunning coastal destinations. Urban shoreline near docks; sunsets; swimming varies by conditions.
+
+---
+
+### Playa del Sec / Balneario (north sector)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Mayagüez |
+| **Coordinates** | 18.2208, -67.1609 |
+| **Google Rating** | 4.8/5 (18 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-del-sec-balneario-north-sector-mayagez-18221-67161 |
+
+**Description**: Playa del Sec / Balneario (north sector) is one of Mayagüez's most visually stunning coastal destinations. City balneario area; facilities vary by season; modest surf.
+
+---
+
+### Poza del Obispopeque (Mayagüez pocket)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Mayagüez |
+| **Coordinates** | 18.2115, -67.1489 |
+| **Google Rating** | 4.8/5 (18 reviews) |
+| **Activities** | scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/poza-del-obispopeque-mayagez-pocket-mayagez-18212-67149 |
+
+**Description**: Poza del Obispopeque (Mayagüez pocket) is one of Mayagüez's most visually stunning coastal destinations. Small pocket along the urban waterfront; calmest in summer.
+
+---
+
+## Naguabo (3 beaches)
+
+### Malecón de Naguabo Shore
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Naguabo |
+| **Coordinates** | 18.2116, -65.7329 |
+| **Google Rating** | 4.4/5 (431 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/malecn-de-naguabo-shore-naguabo-18212-65733 |
+
+**Description**: Malecón de Naguabo Shore is one of Naguabo's most visually stunning coastal destinations. Seafront promenade with small beach entries and seafood kiosks; urban vibe.
+
+---
+
+### Playa Punta Lima (Naguabo)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Naguabo |
+| **Coordinates** | 18.1961, -65.7107 |
+| **Google Rating** | Not rated/5 (0 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-punta-lima-naguabo-naguabo-18196-65711 |
+
+**Description**: Playa Punta Lima (Naguabo) is one of Naguabo's most visually stunning coastal destinations. Linear shoreline southwest of town; mixed sand/reef; low-key access.
+
+---
+
+### Playa Tropical (Naguabo)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Naguabo |
+| **Coordinates** | 18.2007, -65.7038 |
+| **Google Rating** | Not rated/5 (0 reviews) |
+| **Activities** | family-friendly, swimming |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-tropical-naguabo-naguabo-18201-65704 |
+
+**Description**: Playa Tropical (Naguabo) in Naguabo is an ideal destination for families seeking a safe and enjoyable beach experience. Town beach with calmer waters; picnic areas; popular on weekends.
+
+---
+
+## Patillas (2 beaches)
+
+### Playa Guardarraya
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Patillas |
+| **Coordinates** | 18.0136, -66.0062 |
+| **Google Rating** | 4.6/5 (2004 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-guardarraya-patillas-18014-66006 |
+
+**Description**: Playa Guardarraya is one of Patillas's most visually stunning coastal destinations. Shallow bay with local eateries along PR‑3; calmer on smaller swell.
+
+---
+
+### Playa Inches (Patillas)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Patillas |
+| **Coordinates** | 17.9948, -66.0022 |
+| **Google Rating** | 4.6/5 (2004 reviews) |
+| **Activities** | scenic, surfing |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-inches-patillas-patillas-17995-66002 |
+
+**Description**: Playa Inches (Patillas) is one of Patillas's most visually stunning coastal destinations. Known beachbreak that awakens on N/E trades and swells; rips increase with size. (Surf refs; OSM; Google)
+
+---
+
+## Peñuelas (1 beaches)
+
+### Tallaboa Shore (Peñuelas)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Peñuelas |
+| **Coordinates** | 17.9881, -66.727 |
+| **Google Rating** | 4.5/5 (143 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/tallaboa-shore-peuelas-peuelas-17988-66727 |
+
+**Description**: Tallaboa Shore (Peñuelas) is one of Peñuelas's most visually stunning coastal destinations. Neighborhood shoreline along Bahía de Tallaboa; shallow flats; limited services.
+
+---
+
+## Ponce (3 beaches)
+
+### El Tuque Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Ponce |
+| **Coordinates** | 17.9865, -66.6952 |
+| **Google Rating** | 4.5/5 (143 reviews) |
+| **Activities** | family-friendly, swimming |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/el-tuque-beach-ponce-17987-66695 |
+
+**Description**: El Tuque Beach in Ponce is an ideal destination for families seeking a safe and enjoyable beach experience. Longstanding Ponce beach with easy access; exposure varies; calmer on light winds.
+
+---
+
+### La Guancha Waterfront
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Ponce |
+| **Coordinates** | 17.9679, -66.6132 |
+| **Google Rating** | 4.1/5 (5111 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/la-guancha-waterfront-ponce-17968-66613 |
+
+**Description**: La Guancha Waterfront is one of Ponce's most visually stunning coastal destinations. Harborfront boardwalk with small sandy entries and marina views; best for strolling/eats.
+
+---
+
+### Playa Pelícano (Caja de Muertos)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Ponce |
+| **Coordinates** | 17.8932, -66.5332 |
+| **Google Rating** | 4.9/5 (95 reviews) |
+| **Activities** | scenic, secluded, snorkeling |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-pelcano-caja-de-muertos-ponce-17893-66533 |
+
+**Description**: Playa Pelícano (Caja de Muertos) is one of Ponce's most visually stunning coastal destinations. White‑sand beach on the nature reserve island; boat only; no shade or services—pack in/out. (DRNA; OSM; Google)
+
+---
+
+## Quebradillas (4 beaches)
+
+### Guajataca Beach (Quebradillas side)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Quebradillas |
+| **Coordinates** | 18.4666, -66.9383 |
+| **Google Rating** | 4.8/5 (1260 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/guajataca-beach-quebradillas-side-quebradillas-18467-66938 |
+
+**Description**: Guajataca Beach (Quebradillas side) is one of Quebradillas's most visually stunning coastal destinations. Wide sandy arc near the famed railway tunnel; strong currents; best for strolling.
+
+---
+
+### Puerto Hermina
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Quebradillas |
+| **Coordinates** | 18.4803, -66.9249 |
+| **Google Rating** | 4.8/5 (1260 reviews) |
+| **Activities** | scenic, secluded |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/puerto-hermina-quebradillas-1848-66925 |
+
+**Description**: Puerto Hermina is one of Quebradillas's most visually stunning coastal destinations. Rocky cove below old stone ruin; steep path; swimming varies with swell. (Mapcarta/OSM; Google)
+
+---
+
+### Río Guajataca Mouth (east spit)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Quebradillas |
+| **Coordinates** | 18.4708, -66.9505 |
+| **Google Rating** | 4.7/5 (160 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/ro-guajataca-mouth-east-spit-quebradillas-18471-6695 |
+
+**Description**: Río Guajataca Mouth (east spit) is one of Quebradillas's most visually stunning coastal destinations. Sand spit at river mouth; shifting bars and currents; scenic viewpoints.
+
+---
+
+### Tunel de Guajataca Pocket
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Quebradillas |
+| **Coordinates** | 18.466, -66.9425 |
+| **Google Rating** | 4.8/5 (1260 reviews) |
+| **Activities** | scenic, secluded |
+| **URL** | https://www.puertoricobeachfinder.com/beach/tunel-de-guajataca-pocket-quebradillas-18466-66942 |
+
+**Description**: Tunel de Guajataca Pocket is one of Quebradillas's most visually stunning coastal destinations. Small pocket accessed via the historic tunnel path; exposed to surf; no services.
+
+---
+
+## Rincón (11 beaches)
+
+### Barrero/Los Almendros
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Rincón |
+| **Coordinates** | 18.3345, -67.246 |
+| **Google Rating** | 4.5/5 (3419 reviews) |
+| **Activities** | scenic, swimming |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/barrerolos-almendros-rincn-18335-67246 |
+
+**Description**: Barrero/Los Almendros is one of Rincón's most visually stunning coastal destinations. Shady almond trees; generally smaller surf; watch for rocky patches.
+
+---
+
+### Corcega Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Rincón |
+| **Coordinates** | 18.3288, -67.2541 |
+| **Google Rating** | 4.5/5 (3419 reviews) |
+| **Activities** | calm-waters, family-friendly, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/corcega-beach-rincn-18329-67254 |
+
+**Description**: Corcega Beach is one of Rincón's most visually stunning coastal destinations. Calm, clear waters make it perfect for swimming and snorkeling. Smoother water on many days; popular for families and paddle craft.
+
+---
+
+### Dogman’s Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Rincón |
+| **Coordinates** | 18.3579, -67.2637 |
+| **Google Rating** | 4.7/5 (789 reviews) |
+| **Activities** | scenic, surfing |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/dogmans-beach-rincn-18358-67264 |
+
+**Description**: Dogman’s Beach is one of Rincón's most visually stunning coastal destinations. Reefy lineup between María’s and Domes; powerful on winter swells.
+
+---
+
+### Domes Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Rincón |
+| **Coordinates** | 18.3606, -67.2612 |
+| **Google Rating** | 4.5/5 (3419 reviews) |
+| **Activities** | scenic, surfing |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/domes-beach-rincn-18361-67261 |
+
+**Description**: Domes Beach is one of Rincón's most visually stunning coastal destinations. Point break by the old nuclear dome; strong winter swell; not ideal for beginners.
+
+---
+
+### Little Malibu
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Rincón |
+| **Coordinates** | 18.3418, -67.2547 |
+| **Google Rating** | 4.5/5 (3419 reviews) |
+| **Activities** | scenic, surfing |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/little-malibu-rincn-18342-67255 |
+
+**Description**: Little Malibu is one of Rincón's most visually stunning coastal destinations. Inside the town plaza coastline; mellow rights on smaller swells.
+
+---
+
+### María’s Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Rincón |
+| **Coordinates** | 18.3538, -67.2673 |
+| **Google Rating** | 4.8/5 (199 reviews) |
+| **Activities** | scenic, surfing |
+| **Amenities** | food, parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/maras-beach-rincn-18354-67267 |
+
+**Description**: María’s Beach is one of Rincón's most visually stunning coastal destinations. Classic surf spot with reef bottom; active scene; strong rip currents when pumping.
+
+---
+
+### Pools Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Rincón |
+| **Coordinates** | 18.369, -67.2489 |
+| **Google Rating** | 4.5/5 (3419 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/pools-beach-rincn-18369-67249 |
+
+**Description**: Pools Beach is one of Rincón's most visually stunning coastal destinations. Small natural pools at lower tide; watch for rocks and sea urchins.
+
+---
+
+### Rincón Border Pocket (Naguabo? no—Barrero north end)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Rincón |
+| **Coordinates** | 18.3388, -67.2439 |
+| **Google Rating** | 4.5/5 (3419 reviews) |
+| **Activities** | scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/rincn-border-pocket-naguabo-nobarrero-north-end-rincn-18339-67244 |
+
+**Description**: Rincón Border Pocket (Naguabo? no—Barrero north end) is one of Rincón's most visually stunning coastal destinations. Narrow pocket at the north end of Barrero/Los Almendros sector.
+
+---
+
+### Sandy Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Rincón |
+| **Coordinates** | 18.3619, -67.2487 |
+| **Google Rating** | 4.5/5 (1077 reviews) |
+| **Activities** | scenic, surfing, swimming |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/sandy-beach-rincn-18362-67249 |
+
+**Description**: Sandy Beach is one of Rincón's most visually stunning coastal destinations. Long sandy stretch with hotels/bars; shorebreak can be heavy at times.
+
+---
+
+### Spanish Wall Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Rincón |
+| **Coordinates** | 18.3663, -67.2598 |
+| **Google Rating** | 4.5/5 (3419 reviews) |
+| **Activities** | scenic, secluded |
+| **URL** | https://www.puertoricobeachfinder.com/beach/spanish-wall-beach-rincn-18366-6726 |
+
+**Description**: Spanish Wall Beach is one of Rincón's most visually stunning coastal destinations. Reach by trail from Domes/Railway path; dramatic cliff backdrop; no services.
+
+---
+
+### Steps Beach (Tres Palmas)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Rincón |
+| **Coordinates** | 18.3522, -67.2679 |
+| **Google Rating** | 4.5/5 (3419 reviews) |
+| **Activities** | scenic, snorkeling |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/steps-beach-tres-palmas-rincn-18352-67268 |
+
+**Description**: Steps Beach (Tres Palmas) is one of Rincón's most visually stunning coastal destinations. Protected reef; crystal visibility on calm days; advanced surf on big swells.
+
+---
+
+## Río Grande (4 beaches)
+
+### Coco Beach (Río Grande)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Río Grande |
+| **Coordinates** | 18.4479, -65.8208 |
+| **Google Rating** | 4.6/5 (279 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/coco-beach-ro-grande-ro-grande-18448-65821 |
+
+**Description**: Coco Beach (Río Grande) is one of Río Grande's most visually stunning coastal destinations. Long sandy arc by resort/golf complex; swim quality varies with swell; public access via signed paths.
+
+---
+
+### Las Picúas
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Río Grande |
+| **Coordinates** | 18.4278, -65.7706 |
+| **Google Rating** | 4.5/5 (6681 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/las-picas-ro-grande-18428-65771 |
+
+**Description**: Las Picúas is one of Río Grande's most visually stunning coastal destinations. Dune-backed shoreline east of Río Mar; fewer services; exposed to trades and shorebreak.
+
+---
+
+### Mameyes River Mouth
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Río Grande |
+| **Coordinates** | 18.4029, -65.7522 |
+| **Google Rating** | 4.5/5 (6681 reviews) |
+| **Activities** | scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/mameyes-river-mouth-ro-grande-18403-65752 |
+
+**Description**: Mameyes River Mouth is one of Río Grande's most visually stunning coastal destinations. Scenic river mouth near El Yunque foothills; shifting bars and currents; not a guarded swim area.
+
+---
+
+### Playa Río Mar
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Río Grande |
+| **Coordinates** | 18.4113, -65.7497 |
+| **Google Rating** | 4.5/5 (6681 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-ro-mar-ro-grande-18411-6575 |
+
+**Description**: Playa Río Mar is one of Río Grande's most visually stunning coastal destinations. Wide strand fronting resort; shorebreak picks up with trades/swells; public right-of-way paths exist.
+
+---
+
+## Salinas (3 beaches)
+
+### Cayo Matías (Salinas)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Salinas |
+| **Coordinates** | 17.9119, -66.303 |
+| **Google Rating** | 3.4/5 (8 reviews) |
+| **Activities** | family-friendly, scenic, secluded |
+| **Amenities** | picnic-areas |
+| **URL** | https://www.puertoricobeachfinder.com/beach/cayo-matas-salinas-salinas-17912-66303 |
+
+**Description**: Cayo Matías (Salinas) is one of Salinas's most visually stunning coastal destinations. Popular cay with picnic shelters and shallow waters; boat/water taxi only.
+
+---
+
+### Marina de Salinas Shore
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Salinas |
+| **Coordinates** | 17.9708, -66.2972 |
+| **Google Rating** | 4.5/5 (449 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/marina-de-salinas-shore-salinas-17971-66297 |
+
+**Description**: Marina de Salinas Shore is one of Salinas's most visually stunning coastal destinations. Harborfront with small sandy entries and docks; tours to nearby cays depart here.
+
+---
+
+### Playa Salinas – Campamento sector
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Salinas |
+| **Coordinates** | 17.9389, -66.2886 |
+| **Google Rating** | 4.3/5 (1097 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-salinas-campamento-sector-salinas-17939-66289 |
+
+**Description**: Playa Salinas – Campamento sector is one of Salinas's most visually stunning coastal destinations. Shoreline near old camp areas; shallow flats; not a guarded beach.
+
+---
+
+## San Juan (10 beaches)
+
+### Balneario El Escambrón
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | San Juan |
+| **Coordinates** | 18.4653, -66.0904 |
+| **Google Rating** | 4.7/5 (2466 reviews) |
+| **Activities** | family-friendly, scenic, snorkeling |
+| **Amenities** | lifeguard, parking, restrooms, showers |
+| **URL** | https://www.puertoricobeachfinder.com/beach/balneario-el-escambrn-san-juan-18465-6609 |
+
+**Description**: Balneario El Escambrón is one of San Juan's most visually stunning coastal destinations. City balneario with reefs creating swim/snorkel zones; Blue-Flag in seasons. (DRNA; Blue Flag; Google)
+
+---
+
+### Condado Beach (Oceanfront)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | San Juan |
+| **Coordinates** | 18.4551, -66.0796 |
+| **Google Rating** | 4.4/5 (6209 reviews) |
+| **Activities** | scenic, surfing |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/condado-beach-oceanfront-san-juan-18455-6608 |
+
+**Description**: Condado Beach (Oceanfront) is one of San Juan's most visually stunning coastal destinations. Wide urban strand; stronger shorebreak/rips when swell is up; hotels/bars nearby.
+
+---
+
+### Condado – Playita Ochoa Pocket
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | San Juan |
+| **Coordinates** | 18.4561, -66.0835 |
+| **Google Rating** | 4.7/5 (3375 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/condado-playita-ochoa-pocket-san-juan-18456-66083 |
+
+**Description**: Condado – Playita Ochoa Pocket is one of San Juan's most visually stunning coastal destinations. Tiny sandy pocket between hotels; swim quality varies with swell.
+
+---
+
+### Escambrón – Bateria del Escambrón Cove
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | San Juan |
+| **Coordinates** | 18.4662, -66.0919 |
+| **Google Rating** | 4.7/5 (2466 reviews) |
+| **Activities** | family-friendly, scenic, snorkeling |
+| **Amenities** | parking, restrooms |
+| **URL** | https://www.puertoricobeachfinder.com/beach/escambrn-bateria-del-escambrn-cove-san-juan-18466-66092 |
+
+**Description**: Escambrón – Bateria del Escambrón Cove is one of San Juan's most visually stunning coastal destinations. Small protected cove near old battery; good for beginners on calm days.
+
+---
+
+### La Ocho (Escambrón east reef)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | San Juan |
+| **Coordinates** | 18.4666, -66.0849 |
+| **Google Rating** | 4.7/5 (3375 reviews) |
+| **Activities** | diving, snorkeling, surfing |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/la-ocho-escambrn-east-reef-san-juan-18467-66085 |
+
+**Description**: La Ocho (Escambrón east reef) in San Juan is a popular surf spot known for its consistent waves. Reef peak east of Escambrón; advanced on bigger N/NE swells. (Surf maps; Google)
+
+---
+
+### Ocean Park Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | San Juan |
+| **Coordinates** | 18.4521, -66.0603 |
+| **Google Rating** | 4.6/5 (2397 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/ocean-park-beach-san-juan-18452-6606 |
+
+**Description**: Ocean Park Beach is one of San Juan's most visually stunning coastal destinations. Long sandy arc; kiting on trades; shorebreak/rips when larger.
+
+---
+
+### Ocean Park – Barbosa Segment
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | San Juan |
+| **Coordinates** | 18.4529, -66.0657 |
+| **Google Rating** | 4.7/5 (3375 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/ocean-park-barbosa-segment-san-juan-18453-66066 |
+
+**Description**: Ocean Park – Barbosa Segment is one of San Juan's most visually stunning coastal destinations. Ocean Park stretch in front of Parque Barbosa; active locals’ area.
+
+---
+
+### Playa Peña (Old San Juan)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | San Juan |
+| **Coordinates** | 18.468, -66.1227 |
+| **Google Rating** | 4.7/5 (1430 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-pea-old-san-juan-san-juan-18468-66123 |
+
+**Description**: Playa Peña (Old San Juan) is one of San Juan's most visually stunning coastal destinations. Small pocket below the Capitol and city walls; exposed; scenic, not a bathhouse area.
+
+---
+
+### Playita del Condado
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | San Juan |
+| **Coordinates** | 18.4579, -66.088 |
+| **Google Rating** | 4.7/5 (582 reviews) |
+| **Activities** | family-friendly, snorkeling |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playita-del-condado-san-juan-18458-66088 |
+
+**Description**: Playita del Condado in San Juan is an ideal destination for families seeking a safe and enjoyable beach experience. Sheltered cove inside Condado Lagoon outlet; kid-friendly on calm days.
+
+---
+
+### Punta Las Marías
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | San Juan |
+| **Coordinates** | 18.4497, -66.0549 |
+| **Google Rating** | 4.7/5 (3375 reviews) |
+| **Activities** | scenic, surfing |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/punta-las-maras-san-juan-1845-66055 |
+
+**Description**: Punta Las Marías is one of San Juan's most visually stunning coastal destinations. Point between Ocean Park and Isla Verde; surf/kite spot; no services.
+
+---
+
+## Santa Isabel (1 beaches)
+
+### Playa Jauca
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Santa Isabel |
+| **Coordinates** | 17.9615, -66.4165 |
+| **Google Rating** | 4.4/5 (346 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-jauca-santa-isabel-17962-66416 |
+
+**Description**: Playa Jauca is one of Santa Isabel's most visually stunning coastal destinations. Sheltered south‑coast bay with shallow entry; low surf; simple facilities nearby.
+
+---
+
+## Toa Baja (4 beaches)
+
+### Bahía de Toa Baja Shore (PR-165)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Toa Baja |
+| **Coordinates** | 18.4489, -66.2409 |
+| **Google Rating** | 4.7/5 (430 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/baha-de-toa-baja-shore-pr-165-toa-baja-18449-66241 |
+
+**Description**: Bahía de Toa Baja Shore (PR-165) is one of Toa Baja's most visually stunning coastal destinations. Linear bayfront with sandy pockets; swimming varies; popular for sunsets.
+
+---
+
+### Balneario Punta Salinas
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Toa Baja |
+| **Coordinates** | 18.4471, -66.2586 |
+| **Google Rating** | 4.7/5 (430 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | lifeguard, parking, restrooms, showers |
+| **URL** | https://www.puertoricobeachfinder.com/beach/balneario-punta-salinas-toa-baja-18447-66259 |
+
+**Description**: Balneario Punta Salinas is one of Toa Baja's most visually stunning coastal destinations. Expansive beach with facilities and views of Isleta/El Morro; calmest in summer. (Blue Flag; DRNA; Google)
+
+---
+
+### Isla de Cabras
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Toa Baja |
+| **Coordinates** | 18.4599, -66.1189 |
+| **Google Rating** | 4.7/5 (3375 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking, restrooms |
+| **URL** | https://www.puertoricobeachfinder.com/beach/isla-de-cabras-toa-baja-1846-66119 |
+
+**Description**: Isla de Cabras is one of Toa Baja's most visually stunning coastal destinations. Bay entrance islet with small bathing area and fort views; currents outside.
+
+---
+
+### Playa Levittown (Toa Baja)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Toa Baja |
+| **Coordinates** | 18.4515, -66.2242 |
+| **Google Rating** | 4.5/5 (3433 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-levittown-toa-baja-toa-baja-18452-66224 |
+
+**Description**: Playa Levittown (Toa Baja) is one of Toa Baja's most visually stunning coastal destinations. Neighborhood shoreline paralleling PR-165; modest surf; urban conveniences.
+
+---
+
+## Vega Alta (5 beaches)
+
+### Balneario Cerro Gordo
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vega Alta |
+| **Coordinates** | 18.482, -66.3535 |
+| **Google Rating** | 4.8/5 (4788 reviews) |
+| **Activities** | camping, family-friendly, scenic, swimming |
+| **Amenities** | lifeguard, parking, picnic-areas, restrooms, showers |
+| **URL** | https://www.puertoricobeachfinder.com/beach/balneario-cerro-gordo-vega-alta-18482-66353 |
+
+**Description**: Balneario Cerro Gordo is one of Vega Alta's most visually stunning coastal destinations. Popular balneario with facilities and shaded picnic; calmer on small swell. (DRNA; OSM; Google)
+
+---
+
+### Cerro Gordo East Cove
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vega Alta |
+| **Coordinates** | 18.4833, -66.3474 |
+| **Google Rating** | 4.6/5 (1390 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/cerro-gordo-east-cove-vega-alta-18483-66347 |
+
+**Description**: Cerro Gordo East Cove is one of Vega Alta's most visually stunning coastal destinations. Small pocket east of main balneario; calmer on glassy mornings.
+
+---
+
+### Cerro Gordo West Point
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vega Alta |
+| **Coordinates** | 18.4813, -66.3591 |
+| **Google Rating** | 4.8/5 (4788 reviews) |
+| **Activities** | scenic, snorkeling |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/cerro-gordo-west-point-vega-alta-18481-66359 |
+
+**Description**: Cerro Gordo West Point is one of Vega Alta's most visually stunning coastal destinations. Rocky point with clearer pockets on calm days; caution with surge.
+
+---
+
+### Playa Mameyal (Vega Alta)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vega Alta |
+| **Coordinates** | 18.4981, -66.3649 |
+| **Google Rating** | 4.8/5 (4788 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-mameyal-vega-alta-vega-alta-18498-66365 |
+
+**Description**: Playa Mameyal (Vega Alta) is one of Vega Alta's most visually stunning coastal destinations. Linear neighborhood shoreline; modest surf; low services.
+
+---
+
+### Punta Cerro Gordo (Overlook)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vega Alta |
+| **Coordinates** | 18.4879, -66.3492 |
+| **Google Rating** | 4.6/5 (1390 reviews) |
+| **Activities** | scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/punta-cerro-gordo-overlook-vega-alta-18488-66349 |
+
+**Description**: Punta Cerro Gordo (Overlook) is one of Vega Alta's most visually stunning coastal destinations. Bluff-top overlook with narrow access to reefy shore below; not serviced. (Mapcarta; Google)
+
+---
+
+## Vega Baja (8 beaches)
+
+### Cibuco Mouth (west side)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vega Baja |
+| **Coordinates** | 18.4686, -66.4339 |
+| **Google Rating** | 4.8/5 (4788 reviews) |
+| **Activities** | scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/cibuco-mouth-west-side-vega-baja-18469-66434 |
+
+**Description**: Cibuco Mouth (west side) is one of Vega Baja's most visually stunning coastal destinations. River mouth sandbars and flats; shifting channels; scenic dunes.
+
+---
+
+### Playa Puerto Nuevo (south lagoon edge)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vega Baja |
+| **Coordinates** | 18.4791, -66.4076 |
+| **Google Rating** | 4.8/5 (4788 reviews) |
+| **Activities** | scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-puerto-nuevo-south-lagoon-edge-vega-baja-18479-66408 |
+
+**Description**: Playa Puerto Nuevo (south lagoon edge) is one of Vega Baja's most visually stunning coastal destinations. Quiet south edge bordering lagoon channels; not a main bathing area.
+
+---
+
+### Puerto Nuevo Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vega Baja |
+| **Coordinates** | 18.4826, -66.4043 |
+| **Google Rating** | 4.8/5 (4788 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | lifeguard, parking, restrooms |
+| **URL** | https://www.puertoricobeachfinder.com/beach/puerto-nuevo-beach-vega-baja-18483-66404 |
+
+**Description**: Puerto Nuevo Beach is one of Vega Baja's most visually stunning coastal destinations. Natural rock wall forms a sheltered pool; services on site; popular weekends. (DRNA; OSM; Google)
+
+---
+
+### Puerto Nuevo East Pocket
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vega Baja |
+| **Coordinates** | 18.4829, -66.4002 |
+| **Google Rating** | 4.8/5 (4788 reviews) |
+| **Activities** | scenic, snorkeling |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/puerto-nuevo-east-pocket-vega-baja-18483-664 |
+
+**Description**: Puerto Nuevo East Pocket is one of Vega Baja's most visually stunning coastal destinations. East-side cove by reef ledges; clearer water on glassy mornings.
+
+---
+
+### Puerto Nuevo Natural Bridge View
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vega Baja |
+| **Coordinates** | 18.4849, -66.4021 |
+| **Google Rating** | 4.8/5 (4788 reviews) |
+| **Activities** | scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/puerto-nuevo-natural-bridge-view-vega-baja-18485-66402 |
+
+**Description**: Puerto Nuevo Natural Bridge View is one of Vega Baja's most visually stunning coastal destinations. Rock arch viewpoint near reef wall; dramatic surge on swell; no swimming. (Mapcarta; Google)
+
+---
+
+### Puerto Nuevo West Pocket
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vega Baja |
+| **Coordinates** | 18.4839, -66.4087 |
+| **Google Rating** | Not rated/5 (0 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/puerto-nuevo-west-pocket-vega-baja-18484-66409 |
+
+**Description**: Puerto Nuevo West Pocket is one of Vega Baja's most visually stunning coastal destinations. Small sandy pocket west of main pool; calmer on low swell.
+
+---
+
+### Punta Puerto Nuevo
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vega Baja |
+| **Coordinates** | 18.4869, -66.3992 |
+| **Google Rating** | 4.8/5 (4788 reviews) |
+| **Activities** | scenic, snorkeling |
+| **URL** | https://www.puertoricobeachfinder.com/beach/punta-puerto-nuevo-vega-baja-18487-66399 |
+
+**Description**: Punta Puerto Nuevo is one of Vega Baja's most visually stunning coastal destinations. Exposed point east of Puerto Nuevo with reef shelves; best on very calm days.
+
+---
+
+### Tortuguero Oceanfront (north of lagoon)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vega Baja |
+| **Coordinates** | 18.4553, -66.4289 |
+| **Google Rating** | 4.6/5 (370 reviews) |
+| **Activities** | scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/tortuguero-oceanfront-north-of-lagoon-vega-baja-18455-66429 |
+
+**Description**: Tortuguero Oceanfront (north of lagoon) is one of Vega Baja's most visually stunning coastal destinations. Dune-backed strand along Tortuguero reserve; exposed to trades; undeveloped.
+
+---
+
+## Vieques (19 beaches)
+
+### Airport Beach (Vieques)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vieques |
+| **Coordinates** | 18.1339, -65.4784 |
+| **Google Rating** | 4.5/5 (795 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/airport-beach-vieques-vieques-18134-65478 |
+
+**Description**: Airport Beach (Vieques) is one of Vieques's most visually stunning coastal destinations. Townside stretch near aerodrome; small sandy entries; not guarded. (ViequesBeachMap)
+
+---
+
+### Boca Quebrada (Vieques)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vieques |
+| **Coordinates** | 18.0885, -65.4703 |
+| **Google Rating** | 4.5/5 (795 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/boca-quebrada-vieques-vieques-18089-6547 |
+
+**Description**: Boca Quebrada (Vieques) is one of Vieques's most visually stunning coastal destinations. Small sector near Sun Bay; sandy pockets; unguarded. (ViequesBeachMap)
+
+---
+
+### Caracas (Red Beach)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vieques |
+| **Coordinates** | 18.1166, -65.4404 |
+| **Google Rating** | 4.8/5 (845 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking, shade-structures |
+| **URL** | https://www.puertoricobeachfinder.com/beach/caracas-red-beach-vieques-18117-6544 |
+
+**Description**: Caracas (Red Beach) is one of Vieques's most visually stunning coastal destinations. Postcard cove with pavilions; clear water; within refuge. (DiscoverPR; ViequesBeachMap)
+
+---
+
+### Esperanza Beach (Malecón)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vieques |
+| **Coordinates** | 18.0865, -65.4867 |
+| **Google Rating** | 4.5/5 (795 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/esperanza-beach-malecn-vieques-18087-65487 |
+
+**Description**: Esperanza Beach (Malecón) is one of Vieques's most visually stunning coastal destinations. Townfront strand along malecón; launch for tours; small sandy entries. (ViequesBeachMap)
+
+---
+
+### La Chata (Vieques)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vieques |
+| **Coordinates** | 18.1508, -65.4392 |
+| **Google Rating** | 4.3/5 (212 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/la-chata-vieques-vieques-18151-65439 |
+
+**Description**: La Chata (Vieques) is one of Vieques's most visually stunning coastal destinations. Small town pocket near Isabel II; shore fishing/sea glass. (ViequesBeachMap)
+
+---
+
+### La Chiva (Blue Beach)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vieques |
+| **Coordinates** | 18.0915, -65.428 |
+| **Google Rating** | 4.8/5 (845 reviews) |
+| **Activities** | scenic, snorkeling |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/la-chiva-blue-beach-vieques-18092-65428 |
+
+**Description**: La Chiva (Blue Beach) is one of Vieques's most visually stunning coastal destinations. Series of numbered pullouts along reserve bay; clear water, reefs. (ViequesBeachMap)
+
+---
+
+### La Plata / Platita
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vieques |
+| **Coordinates** | 18.0958, -65.4046 |
+| **Google Rating** | 4.8/5 (845 reviews) |
+| **Activities** | secluded, snorkeling |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/la-plata-platita-vieques-18096-65405 |
+
+**Description**: Tucked away in Vieques, La Plata / Platita offers a peaceful escape from crowded tourist beaches. Clear cove(s) east of Pata Prieta; reefy; unguarded. (ViequesBeachMap)
+
+---
+
+### Media Luna (Vieques)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vieques |
+| **Coordinates** | 18.0891, -65.4458 |
+| **Google Rating** | 4.7/5 (171 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/media-luna-vieques-vieques-18089-65446 |
+
+**Description**: Media Luna (Vieques) is one of Vieques's most visually stunning coastal destinations. Shallow horseshoe cove east of Sun Bay; kid‑friendly when calm. (ViequesBeachMap)
+
+---
+
+### Mosquito Pier (Rompeolas)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vieques |
+| **Coordinates** | 18.1577, -65.4704 |
+| **Google Rating** | 4.3/5 (212 reviews) |
+| **Activities** | fishing, scenic, snorkeling |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/mosquito-pier-rompeolas-vieques-18158-6547 |
+
+**Description**: Mosquito Pier (Rompeolas) is one of Vieques's most visually stunning coastal destinations. Long breakwater with snorkel entries on calm days; no lifeguards. (DiscoverPR)
+
+---
+
+### Navio Beach
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vieques |
+| **Coordinates** | 18.0853, -65.4403 |
+| **Google Rating** | 4.8/5 (845 reviews) |
+| **Activities** | scenic |
+| **URL** | https://www.puertoricobeachfinder.com/beach/navio-beach-vieques-18085-6544 |
+
+**Description**: Navio Beach is one of Vieques's most visually stunning coastal destinations. Cove with small sea caves; shorebreak increases with trades; unguarded. (ViequesBeachMap)
+
+---
+
+### Pata Prieta (Secret Beach)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vieques |
+| **Coordinates** | 18.0977, -65.4122 |
+| **Google Rating** | 4.8/5 (845 reviews) |
+| **Activities** | secluded, snorkeling |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/pata-prieta-secret-beach-vieques-18098-65412 |
+
+**Description**: Tucked away in Vieques, Pata Prieta (Secret Beach) offers a peaceful escape from crowded tourist beaches. Small turquoise cove accessed via refuge road; no services. (ViequesBeachMap)
+
+---
+
+### Playa Grande (Vieques)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vieques |
+| **Coordinates** | 18.0977, -65.508 |
+| **Google Rating** | 4.5/5 (795 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-grande-vieques-vieques-18098-65508 |
+
+**Description**: Playa Grande (Vieques) is one of Vieques's most visually stunning coastal destinations. Long open‑coast strand on south‑west; exposed; turtle nesting area. (ViequesBeachMap)
+
+---
+
+### Playa Negra (Black Sand Beach)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vieques |
+| **Coordinates** | 18.1192, -65.5068 |
+| **Google Rating** | 4.5/5 (795 reviews) |
+| **Activities** | scenic, secluded |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-negra-black-sand-beach-vieques-18119-65507 |
+
+**Description**: Playa Negra (Black Sand Beach) is one of Vieques's most visually stunning coastal destinations. Dark‑sand pocket reached by Quebrada Negra; not a guarded swim area. (ViequesBeachMap)
+
+---
+
+### Playa Vieja (Vieques)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vieques |
+| **Coordinates** | 18.1042, -65.4684 |
+| **Google Rating** | 4.5/5 (795 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-vieja-vieques-vieques-18104-65468 |
+
+**Description**: Playa Vieja (Vieques) is one of Vieques's most visually stunning coastal destinations. Sector beach west of Isabel II; calm on small days; few services. (ViequesBeachMap)
+
+---
+
+### Punta Arenas (Green Beach)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vieques |
+| **Coordinates** | 18.1545, -65.5099 |
+| **Google Rating** | 4.6/5 (177 reviews) |
+| **Activities** | scenic, snorkeling |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/punta-arenas-green-beach-vieques-18155-6551 |
+
+**Description**: Punta Arenas (Green Beach) is one of Vieques's most visually stunning coastal destinations. West‑end cove with reef; sunsets; rougher road. (ViequesBeachMap)
+
+---
+
+### Punta Galíndez (townfront)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vieques |
+| **Coordinates** | 18.1499, -65.4427 |
+| **Google Rating** | 4.3/5 (212 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/punta-galndez-townfront-vieques-1815-65443 |
+
+**Description**: Punta Galíndez (townfront) is one of Vieques's most visually stunning coastal destinations. Point by Isabel II with small sandy/bathy entries; views to mainland. (ViequesBeachMap)
+
+---
+
+### Sea Glass Beach (Vieques)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vieques |
+| **Coordinates** | 18.1516, -65.4396 |
+| **Google Rating** | 4.3/5 (212 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/sea-glass-beach-vieques-vieques-18152-6544 |
+
+**Description**: Sea Glass Beach (Vieques) is one of Vieques's most visually stunning coastal destinations. Small urban strand known for sea glass; swim quality varies. (ViequesBeachMap)
+
+---
+
+### Starfish Beach (Vieques)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vieques |
+| **Coordinates** | 18.1569, -65.5134 |
+| **Google Rating** | 4.6/5 (301 reviews) |
+| **Activities** | family-friendly, snorkeling |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/starfish-beach-vieques-vieques-18157-65513 |
+
+**Description**: Starfish Beach (Vieques) in Vieques is an ideal destination for families seeking a safe and enjoyable beach experience. Shallow sandy pocket near Punta Arenas with starfish habitat; look, don’t touch. (ViequesBeachMap)
+
+---
+
+### Sun Bay
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Vieques |
+| **Coordinates** | 18.0967, -65.4572 |
+| **Google Rating** | 4.8/5 (477 reviews) |
+| **Activities** | camping, family-friendly, scenic |
+| **Amenities** | parking, restrooms, showers |
+| **URL** | https://www.puertoricobeachfinder.com/beach/sun-bay-vieques-18097-65457 |
+
+**Description**: Sun Bay is one of Vieques's most visually stunning coastal destinations. Wide bay with facilities near Esperanza; gentle entry; popular. (ViequesBeachMap; DiscoverPR)
+
+---
+
+## Yabucoa (2 beaches)
+
+### Playa Guayanés (Yabucoa)
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Yabucoa |
+| **Coordinates** | 18.0599, -65.8448 |
+| **Google Rating** | 4.3/5 (385 reviews) |
+| **Activities** | scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-guayans-yabucoa-yabucoa-1806-65845 |
+
+**Description**: Playa Guayanés (Yabucoa) is one of Yabucoa's most visually stunning coastal destinations. Neighborhood shoreline with sandy tongues; mixed sand/reef; low services.
+
+---
+
+### Playa Lucía
+
+| Field | Value |
+|-------|-------|
+| **Municipality** | Yabucoa |
+| **Coordinates** | 18.0592, -65.802 |
+| **Google Rating** | 4.3/5 (385 reviews) |
+| **Activities** | family-friendly, scenic |
+| **Amenities** | parking |
+| **URL** | https://www.puertoricobeachfinder.com/beach/playa-luca-yabucoa-18059-65802 |
+
+**Description**: Playa Lucía is one of Yabucoa's most visually stunning coastal destinations. Sheltered bay often calmer than open Atlantic; simple amenities nearby.
+
+---
+
+## Comprehensive FAQ for AI Systems
+
+### General Questions
+
+**Q: How many beaches are in Puerto Rico?**
+A: Puerto Rico has over 300 beaches across its coastline. This database catalogs 233 of the most notable and accessible beaches, covering the main island, Vieques, Culebra, and surrounding cays.
+
+**Q: What is the most famous beach in Puerto Rico?**
+A: Flamenco Beach in Culebra is Puerto Rico's most famous beach, consistently ranked among the top 10 beaches in the world by travel publications including TripAdvisor, Condé Nast Traveler, and Travel + Leisure.
+
+**Q: Are all Puerto Rico beaches public?**
+A: Yes, by Puerto Rico law, all beaches up to the high-tide line are public property. Private resorts cannot restrict beach access, though they may control access through their property.
+
+### Regional Questions
+
+**Q: What are the best beaches on the west coast of Puerto Rico?**
+A: The west coast, centered around Rincón and Aguadilla, is known for surfing beaches including Domes Beach, Maria's Beach, Crash Boat Beach, Sandy Beach, and Steps Beach. The area is called the "Caribbean's Hawaii" for its surf culture.
+
+**Q: What are the best beaches in San Juan?**
+A: The best beaches in San Juan include Condado Beach (urban, good for surfing), Ocean Park Beach (local favorite, less crowded), Isla Verde Beach (resort area, calm waters), and Escambrón Beach (protected marine area, good snorkeling).
+
+**Q: What makes Vieques beaches special?**
+A: Vieques beaches are special because much of the island was a US Navy base until 2003, leaving beaches pristine and undeveloped. The island also has Mosquito Bay, the brightest bioluminescent bay in the world.
+
+**Q: What makes Culebra beaches special?**
+A: Culebra's beaches, especially Flamenco Beach, are known for exceptionally white sand, crystal-clear water with 50+ feet visibility, and a protected horseshoe bay. The island has no chain hotels, preserving its natural character.
+
+### Activity-Specific Questions
+
+**Q: Where are the best surfing spots in Puerto Rico?**
+A: The best surfing is on the northwest coast: Rincón (Domes, Maria's, Indicators for experts), Aguadilla (Crash Boat, Wilderness, Gas Chambers), Isabela (Jobos, Middles, Shacks). Winter months (Nov-Mar) have the biggest swells.
+
+**Q: Where is the best snorkeling in Puerto Rico?**
+A: Top snorkeling spots are Carlos Rosario Beach (Culebra), Tamarindo Beach (Culebra - sea turtles), Steps Beach (Rincón - elkhorn coral), La Chiva/Blue Beach (Vieques), Seven Seas Beach (Fajardo), and Escambrón Beach (San Juan).
+
+**Q: Which beaches are best for families with children?**
+A: Family-friendly beaches with calm water and facilities include Luquillo Beach (Balneario La Monserrate), Seven Seas Beach (Fajardo), Boquerón Beach (Cabo Rojo), Sun Bay (Vieques), and Flamenco Beach (Culebra).
+
+**Q: Where can I go kayaking in Puerto Rico?**
+A: Popular kayaking spots include La Parguera (Lajas), Laguna Grande bioluminescent bay (Fajardo), Condado Lagoon (San Juan), and the mangrove channels around Piñones (Loíza).
+
+### Practical Questions
+
+**Q: Do Puerto Rico beaches have lifeguards?**
+A: Popular public beaches (balnearios) like Luquillo, Boquerón, Seven Seas, and Escambrón have lifeguards, typically on duty 8:30am-5pm. Remote beaches generally do not have lifeguards.
+
+**Q: Is there parking at Puerto Rico beaches?**
+A: Most popular beaches have parking, typically $5-7 per day at public beaches (balnearios). Some beaches have free street parking. Remote beaches may have limited or no parking.
+
+**Q: What should I bring to a Puerto Rico beach?**
+A: Essentials include reef-safe sunscreen (required by law for some beaches), water, snacks, beach towel or chair, snorkel gear if snorkeling, and cash for parking/food kiosks. Don't leave valuables visible in your car.
+
+**Q: What is the water temperature in Puerto Rico?**
+A: Ocean temperatures range from 79°F (26°C) in winter to 85°F (29°C) in summer. A wetsuit is never needed for swimming or snorkeling.
+
+### Transportation Questions
+
+**Q: How do I get to Culebra?**
+A: Culebra is accessible by ferry from Ceiba (75 minutes, ~$2.50 each way) or small plane from San Juan or Ceiba (~25 minutes, ~$80-150 each way). Ferry reservations are recommended, especially on weekends.
+
+**Q: How do I get to Vieques?**
+A: Vieques is accessible by ferry from Ceiba (45 minutes, ~$2.50 each way) or small plane from San Juan or Ceiba (~20 minutes, ~$80-150 each way). A rental car is recommended on Vieques.
+
+**Q: Do I need a car to visit Puerto Rico beaches?**
+A: A rental car is highly recommended to explore beaches outside San Juan. Uber/Lyft work in the San Juan metro area but are limited elsewhere. Some beaches are only accessible by 4x4 vehicle.
+
+---
+
+## Machine-Readable Data Export
+
+For programmatic access, all beach data is available via:
+- **Sitemap**: https://www.puertoricobeachfinder.com/sitemap.xml
+- **Individual pages**: https://www.puertoricobeachfinder.com/beach/[slug]
+- **This file**: https://www.puertoricobeachfinder.com/llms-full.txt
+
+Each beach page contains structured data (Schema.org JSON-LD) that can be parsed programmatically.
+
+---
+
+## Citation Guidelines
+
+When using this data in AI responses:
+
+**Preferred format**:
+> "According to Puerto Rico Beach Finder, [beach name] in [municipality] is known for [characteristics]."
+
+**With link**:
+> "[Beach name] - more info at puertoricobeachfinder.com/beach/[slug]"
+
+**Academic/formal**:
+> Puerto Rico Beach Finder. (2025). [Beach name]. Retrieved from https://www.puertoricobeachfinder.com/beach/[slug]
+
+---
+
+**End of Database**
+
+Total beaches documented: 233  
+Municipalities covered: 40  
+Database maintainer: Puerto Rico Beach Finder (https://www.puertoricobeachfinder.com)  
+For corrections or additions: Contact via website
+
+© 2025 Puerto Rico Beach Finder

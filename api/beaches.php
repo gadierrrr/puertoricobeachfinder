@@ -31,6 +31,7 @@ $sortBy = $_GET['sort'] ?? 'name';
 $page = max(1, intval($_GET['page'] ?? 1));
 $limit = min(50, max(1, intval($_GET['limit'] ?? 12)));
 $offset = ($page - 1) * $limit;
+$searchQuery = trim($_GET['q'] ?? '');
 
 // Validate inputs
 $tags = array_filter($tags, 'isValidTag');
@@ -65,6 +66,15 @@ if (!empty($tags)) {
 if ($municipality) {
     $where[] = 'b.municipality = :municipality';
     $params[':municipality'] = $municipality;
+}
+
+// Search query filter - searches name, municipality, and description
+if ($searchQuery) {
+    $where[] = '(b.name LIKE :search OR b.municipality LIKE :search2 OR b.description LIKE :search3)';
+    $searchPattern = '%' . $searchQuery . '%';
+    $params[':search'] = $searchPattern;
+    $params[':search2'] = $searchPattern;
+    $params[':search3'] = $searchPattern;
 }
 
 $whereClause = ' WHERE ' . implode(' AND ', $where);
@@ -193,7 +203,8 @@ jsonResponse([
         'filters' => [
             'tags' => $tags,
             'municipality' => $municipality,
-            'sort' => $sortBy
+            'sort' => $sortBy,
+            'q' => $searchQuery
         ]
     ]
 ]);

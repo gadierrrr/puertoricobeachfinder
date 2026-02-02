@@ -38,13 +38,24 @@ foreach ($favorites as &$beach) {
 
 $userFavorites = array_column($favorites, 'id');
 
+// Breadcrumbs
+$breadcrumbs = [
+    ['name' => 'Home', 'url' => '/'],
+    ['name' => 'My Profile', 'url' => '/profile.php'],
+    ['name' => 'Favorites']
+];
+
 include __DIR__ . '/components/header.php';
 ?>
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Breadcrumbs -->
+    <div class="mb-6">
+        <?php include __DIR__ . '/components/breadcrumbs.php'; ?>
+    </div>
     <div class="flex items-center justify-between mb-8">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900">❤️ My Favorite Beaches</h1>
+            <h1 class="text-3xl font-bold text-gray-900">My Favorite Beaches</h1>
             <p class="text-gray-600 mt-1">
                 <?= count($favorites) ?> saved beach<?= count($favorites) !== 1 ? 'es' : '' ?>
             </p>

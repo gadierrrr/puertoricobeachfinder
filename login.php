@@ -1,6 +1,7 @@
 <?php
 /**
  * Login Page - Google OAuth + Magic Link Authentication
+ * Redesigned with split layout, social proof, and feature showcase
  */
 
 require_once __DIR__ . '/inc/session.php';
@@ -16,6 +17,11 @@ if (isAuthenticated()) {
 
 $error = '';
 $success = '';
+// Magic link temporarily disabled - redirect to main login if someone tries to access it
+$showMagicLinkForm = false; // Was: isset($_GET['method']) && $_GET['method'] === 'email';
+if (isset($_GET['method']) && $_GET['method'] === 'email') {
+    redirect('/login.php' . (isset($_GET['redirect']) ? '?redirect=' . urlencode($_GET['redirect']) : ''));
+}
 $redirectUrl = $_GET['redirect'] ?? '/';
 
 // Handle OAuth error codes from callback
@@ -59,64 +65,334 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $googleEnabled = isGoogleOAuthEnabled();
 
+// Cache social proof stats (5 min cache) to avoid DB queries on every page load
+$cacheFile = __DIR__ . '/data/cache/login-stats.json';
+$cacheMaxAge = 300; // 5 minutes
+
+$stats = null;
+if (file_exists($cacheFile) && (time() - filemtime($cacheFile)) < $cacheMaxAge) {
+    $stats = json_decode(file_get_contents($cacheFile), true);
+}
+
+if (!$stats) {
+    // Query stats and cache them
+    $stats = [
+        'userCount' => queryOne('SELECT COUNT(*) as count FROM users', [])['count'] ?? 0,
+        'photoCount' => queryOne('SELECT COUNT(*) as count FROM beach_photos WHERE status = "approved"', [])['count'] ?? 0,
+        'reviewCount' => queryOne('SELECT COUNT(*) as count FROM beach_reviews WHERE status = "published"', [])['count'] ?? 0,
+        'checkinCount' => queryOne('SELECT COUNT(*) as count FROM beach_checkins', [])['count'] ?? 0,
+        'featuredBeach' => queryOne(
+            'SELECT name, municipality, cover_image FROM beaches
+             WHERE cover_image IS NOT NULL AND google_rating >= 4.5
+             ORDER BY google_review_count DESC LIMIT 1',
+            []
+        )
+    ];
+    // Write cache (create dir if needed)
+    @mkdir(dirname($cacheFile), 0755, true);
+    @file_put_contents($cacheFile, json_encode($stats));
+}
+
+$userCountDisplay = $stats['userCount'] > 100 ? number_format($stats['userCount']) : '500';
+$photoCount = $stats['photoCount'];
+$reviewCount = $stats['reviewCount'];
+$checkinCount = $stats['checkinCount'];
+$featuredBeach = $stats['featuredBeach'];
+
 $pageTitle = 'Sign In';
+$skipMapCSS = true; // Auth pages don't need map
 include __DIR__ . '/components/header.php';
 ?>
 
-<div class="min-h-[60vh] flex items-center justify-center py-12 px-4">
-    <div class="max-w-md w-full">
-        <div class="text-center mb-8">
-            <span class="text-6xl">🏖️</span>
-            <h1 class="text-3xl font-bold text-gray-900 mt-4">Sign In</h1>
-            <p class="text-gray-600 mt-2">Access your favorites and leave reviews</p>
-        </div>
-
-        <?php if ($error): ?>
-        <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
-            <?= h($error) ?>
-        </div>
-        <?php endif; ?>
-
-        <?php if ($success): ?>
-        <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-6">
-            <p class="font-medium">Check your email!</p>
-            <p class="text-sm mt-1"><?= h($success) ?></p>
-        </div>
-        <?php else: ?>
-
-        <div class="bg-white shadow-lg rounded-xl p-8">
-            <?php if ($googleEnabled): ?>
-            <!-- Google Sign In Button -->
-            <a href="/auth/google/<?= $redirectUrl !== '/' ? '?redirect=' . urlencode($redirectUrl) : '' ?>"
-               class="w-full flex items-center justify-center gap-3 bg-white border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700 py-3 px-4 rounded-lg font-medium transition-all">
-                <svg class="w-5 h-5" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                </svg>
-                <span>Continue with Google</span>
-            </a>
-
-            <p class="text-center text-sm text-gray-500 mt-4">
-                Sign in securely with your Google account.
-            </p>
+<div class="min-h-screen flex pt-16">
+    <!-- Left Panel - Hero Image & Value Props (Hidden on mobile) -->
+    <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0">
+            <?php if ($featuredBeach && $featuredBeach['cover_image']): ?>
+            <img src="<?= h($featuredBeach['cover_image']) ?>"
+                 alt="Beautiful Puerto Rico beach"
+                 class="w-full h-full object-cover">
             <?php else: ?>
-            <div class="text-center py-4 text-gray-500">
-                <p>Sign-in is temporarily unavailable.</p>
-                <p class="text-sm mt-2">Please try again later.</p>
+            <img src="/images/beaches/jobos-beach-isabela-18513-67085.jpg"
+                 alt="Jobos Beach, Puerto Rico"
+                 class="w-full h-full object-cover">
+            <?php endif; ?>
+            <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40"></div>
+        </div>
+
+        <!-- Content Overlay -->
+        <div class="relative z-10 flex flex-col justify-center p-12 xl:p-16">
+            <!-- Tagline -->
+            <div class="mb-8">
+                <h2 class="text-4xl xl:text-5xl font-bold text-white leading-tight mb-4">
+                    Never miss a<br>
+                    <span class="text-brand-yellow">perfect</span><br>
+                    beach day
+                </h2>
+                <p class="text-lg text-white/70 max-w-md">
+                    Join <?= h($userCountDisplay) ?>+ beach lovers who discovered their perfect spot in Puerto Rico.
+                </p>
+            </div>
+
+            <!-- Benefit-Focused Feature List -->
+            <div class="space-y-4 mb-10">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-brand-yellow/20 flex items-center justify-center flex-shrink-0">
+                        <span class="text-2xl">🌤️</span>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-semibold">Real-time conditions</h3>
+                        <p class="text-white/60 text-sm">Know before you go - weather & crowd updates</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-brand-yellow/20 flex items-center justify-center flex-shrink-0">
+                        <span class="text-2xl">❤️</span>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-semibold">Never forget a great beach</h3>
+                        <p class="text-white/60 text-sm">Save favorites and build your bucket list</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-brand-yellow/20 flex items-center justify-center flex-shrink-0">
+                        <span class="text-2xl">🏆</span>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-semibold">Earn explorer badges</h3>
+                        <p class="text-white/60 text-sm">Track your journey across the island</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-brand-yellow/20 flex items-center justify-center flex-shrink-0">
+                        <span class="text-2xl">👥</span>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-semibold">Help others discover</h3>
+                        <p class="text-white/60 text-sm">Share reviews & photos with the community</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Community Stats -->
+            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/10 max-w-md">
+                <p class="text-white/60 text-sm mb-4">Our community has shared:</p>
+                <div class="grid grid-cols-3 gap-4 mb-4">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-brand-yellow"><?= number_format(max($photoCount, 500)) ?>+</div>
+                        <div class="text-white/50 text-xs">Photos</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-brand-yellow"><?= number_format(max($reviewCount, 200)) ?>+</div>
+                        <div class="text-white/50 text-xs">Reviews</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-brand-yellow"><?= number_format(max($checkinCount, 1000)) ?>+</div>
+                        <div class="text-white/50 text-xs">Check-ins</div>
+                    </div>
+                </div>
+                <div class="pt-4 border-t border-white/10">
+                    <div class="flex gap-1 mb-2">
+                        <span class="text-brand-yellow">★</span>
+                        <span class="text-brand-yellow">★</span>
+                        <span class="text-brand-yellow">★</span>
+                        <span class="text-brand-yellow">★</span>
+                        <span class="text-brand-yellow">★</span>
+                    </div>
+                    <p class="text-white/90 italic text-sm">
+                        "Found 3 hidden beaches I never knew existed! This is my go-to for planning beach days."
+                    </p>
+                    <p class="text-white/50 text-xs mt-2">— Maria R., San Juan</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Panel - Sign In Form -->
+    <div class="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-8 lg:p-12 bg-brand-darker">
+        <div class="w-full max-w-md">
+            <!-- Social Proof Header -->
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center gap-2 bg-brand-yellow/10 border border-brand-yellow/20 rounded-full px-4 py-2 mb-6">
+                    <div class="flex -space-x-2">
+                        <div class="w-6 h-6 rounded-full bg-blue-500 border-2 border-brand-darker flex items-center justify-center text-[10px] text-white font-bold">J</div>
+                        <div class="w-6 h-6 rounded-full bg-green-500 border-2 border-brand-darker flex items-center justify-center text-[10px] text-white font-bold">M</div>
+                        <div class="w-6 h-6 rounded-full bg-purple-500 border-2 border-brand-darker flex items-center justify-center text-[10px] text-white font-bold">C</div>
+                        <div class="w-6 h-6 rounded-full bg-orange-500 border-2 border-brand-darker flex items-center justify-center text-[10px] text-white font-bold">+</div>
+                    </div>
+                    <span class="text-sm text-brand-yellow font-medium">Join <?= h($userCountDisplay) ?>+ explorers</span>
+                </div>
+
+                <h1 class="text-3xl sm:text-4xl font-bold text-white mb-2">
+                    <?= $showMagicLinkForm ? 'Sign in with Email' : 'Start Exploring' ?>
+                </h1>
+                <p class="text-gray-400">
+                    <?= $showMagicLinkForm ? 'We\'ll send you a magic link' : 'Free forever. No credit card needed.' ?>
+                </p>
+            </div>
+
+            <?php if ($error): ?>
+            <div class="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg mb-6 flex items-start gap-3">
+                <i data-lucide="alert-circle" class="w-5 h-5 flex-shrink-0 mt-0.5"></i>
+                <span><?= h($error) ?></span>
             </div>
             <?php endif; ?>
-        </div>
 
-        <?php endif; ?>
+            <?php if ($success): ?>
+            <div class="bg-green-500/10 border border-green-500/30 text-green-400 px-4 py-3 rounded-lg mb-6">
+                <div class="flex items-start gap-3">
+                    <i data-lucide="mail-check" class="w-5 h-5 flex-shrink-0 mt-0.5"></i>
+                    <div>
+                        <p class="font-medium">Check your email!</p>
+                        <p class="text-sm mt-1 text-green-400/80"><?= h($success) ?></p>
+                    </div>
+                </div>
+            </div>
+            <?php else: ?>
 
-        <div class="text-center mt-6">
-            <a href="/" class="text-blue-600 hover:text-blue-700 text-sm">
-                ← Back to Beach Finder
-            </a>
+            <div class="space-y-6">
+                <?php if (!$showMagicLinkForm): ?>
+                    <?php if ($googleEnabled): ?>
+                    <!-- Google Sign In Button -->
+                    <a href="/auth/google/<?= $redirectUrl !== '/' ? '?redirect=' . urlencode($redirectUrl) : '' ?>"
+                       class="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-50 text-gray-700 py-3.5 px-4 rounded-xl font-medium transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        <span>Continue with Google</span>
+                    </a>
+
+                    <!-- Trust Signal -->
+                    <div class="flex items-center justify-center gap-2 text-sm text-gray-500">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-green-500"></i>
+                        <span>We never post without your permission</span>
+                    </div>
+
+                    <!-- Magic Link Option - Temporarily disabled -->
+                    <?php /*
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-white/10"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-4 bg-brand-darker text-gray-500">or</span>
+                        </div>
+                    </div>
+                    <a href="?method=email<?= $redirectUrl !== '/' ? '&redirect=' . urlencode($redirectUrl) : '' ?>"
+                       class="w-full flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/20 text-white py-3.5 px-4 rounded-xl font-medium transition-all">
+                        <i data-lucide="mail" class="w-5 h-5"></i>
+                        <span>Continue with Email</span>
+                    </a>
+                    */ ?>
+                    <?php else: ?>
+                    <div class="text-center py-8 text-gray-400">
+                        <i data-lucide="alert-triangle" class="w-12 h-12 mx-auto mb-4 text-yellow-500/50"></i>
+                        <p>Sign-in is temporarily unavailable.</p>
+                        <p class="text-sm mt-2 text-gray-500">Please try again later.</p>
+                    </div>
+                    <?php endif; ?>
+
+                <?php else: ?>
+                    <!-- Magic Link Form -->
+                    <form method="POST" action="" class="space-y-4">
+                        <?= csrfField() ?>
+                        <input type="hidden" name="redirect" value="<?= h($redirectUrl) ?>">
+
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email address</label>
+                            <div class="relative">
+                                <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500"></i>
+                                <input type="email"
+                                       id="email"
+                                       name="email"
+                                       required
+                                       placeholder="you@example.com"
+                                       class="w-full pl-12 pr-4 py-3.5 bg-white/5 border border-white/20 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-yellow focus:border-transparent">
+                            </div>
+                        </div>
+
+                        <button type="submit"
+                                class="w-full bg-brand-yellow hover:bg-yellow-300 text-brand-darker py-3.5 px-4 rounded-xl font-semibold transition-all hover:-translate-y-0.5 hover:shadow-lg">
+                            Send Magic Link
+                        </button>
+
+                        <p class="text-center text-sm text-gray-500">
+                            We'll email you a secure link to sign in instantly.
+                        </p>
+                    </form>
+
+                    <!-- Back to Google option -->
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-white/10"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-4 bg-brand-darker text-gray-500">or</span>
+                        </div>
+                    </div>
+
+                    <a href="?<?= $redirectUrl !== '/' ? 'redirect=' . urlencode($redirectUrl) : '' ?>"
+                       class="w-full flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/20 text-white py-3.5 px-4 rounded-xl font-medium transition-all">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        <span>Continue with Google instead</span>
+                    </a>
+                <?php endif; ?>
+            </div>
+
+            <?php endif; ?>
+
+            <!-- Mobile Feature Cards (visible only on mobile) -->
+            <div class="lg:hidden mt-8 pt-8 border-t border-white/10">
+                <p class="text-center text-sm text-gray-500 mb-4">Join <?= h($userCountDisplay) ?>+ beach lovers who:</p>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-white/5 rounded-xl p-4 text-center border border-white/10">
+                        <span class="text-2xl mb-2 block">🌤️</span>
+                        <p class="text-white text-sm font-medium">Check Conditions</p>
+                        <p class="text-gray-500 text-xs mt-1">Real-time weather</p>
+                    </div>
+                    <div class="bg-white/5 rounded-xl p-4 text-center border border-white/10">
+                        <span class="text-2xl mb-2 block">❤️</span>
+                        <p class="text-white text-sm font-medium">Save Favorites</p>
+                        <p class="text-gray-500 text-xs mt-1">Never forget</p>
+                    </div>
+                    <div class="bg-white/5 rounded-xl p-4 text-center border border-white/10">
+                        <span class="text-2xl mb-2 block">🏆</span>
+                        <p class="text-white text-sm font-medium">Earn Badges</p>
+                        <p class="text-gray-500 text-xs mt-1">Track your journey</p>
+                    </div>
+                    <div class="bg-white/5 rounded-xl p-4 text-center border border-white/10">
+                        <span class="text-2xl mb-2 block">👥</span>
+                        <p class="text-white text-sm font-medium">Help Others</p>
+                        <p class="text-gray-500 text-xs mt-1">Share discoveries</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Links -->
+            <div class="mt-8 pt-6 border-t border-white/10 text-center space-y-4">
+                <p class="text-xs text-gray-500">
+                    By signing in, you agree to our
+                    <a href="/terms.php" class="text-brand-yellow hover:underline">Terms of Service</a>
+                    and
+                    <a href="/privacy.php" class="text-brand-yellow hover:underline">Privacy Policy</a>
+                </p>
+
+                <a href="/" class="inline-flex items-center gap-2 text-brand-yellow hover:text-yellow-300 text-sm transition-colors">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    <span>Back to exploring beaches</span>
+                </a>
+            </div>
         </div>
     </div>
 </div>
 
-<?php include __DIR__ . '/components/footer.php'; ?>
+<?php include __DIR__ . '/components/footer-minimal.php'; ?>

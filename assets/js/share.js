@@ -80,7 +80,7 @@ function openShareModal(slug, name, url) {
                    class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 bg-gray-50">
             <button onclick="copyShareLink()"
                     id="copy-link-btn"
-                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors">
+                    class="px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg text-sm font-medium transition-colors">
                 Copy Link
             </button>
         </div>
@@ -106,11 +106,11 @@ async function copyShareLink() {
         if (btn) {
             const originalText = btn.textContent;
             btn.textContent = 'Copied!';
-            btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+            btn.classList.remove('bg-cyan-500', 'hover:bg-cyan-600');
             btn.classList.add('bg-green-600');
             setTimeout(() => {
                 btn.textContent = originalText;
-                btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                btn.classList.add('bg-cyan-500', 'hover:bg-cyan-600');
                 btn.classList.remove('bg-green-600');
             }, 2000);
         }
@@ -135,7 +135,7 @@ async function copyBeachLink(slug, btn) {
         const originalText = text ? text.textContent : 'Copy Link';
 
         if (text) text.textContent = 'Copied!';
-        btn.classList.remove('bg-gray-100', 'hover:bg-gray-200', 'text-gray-700');
+        btn.classList.remove('bg-stone-100', 'hover:bg-stone-200', 'text-stone-700');
         btn.classList.add('bg-green-100', 'text-green-700');
 
         // Show toast
@@ -145,7 +145,7 @@ async function copyBeachLink(slug, btn) {
 
         setTimeout(() => {
             if (text) text.textContent = originalText;
-            btn.classList.add('bg-gray-100', 'hover:bg-gray-200', 'text-gray-700');
+            btn.classList.add('bg-stone-100', 'hover:bg-stone-200', 'text-stone-700');
             btn.classList.remove('bg-green-100', 'text-green-700');
         }, 2000);
     } catch (e) {

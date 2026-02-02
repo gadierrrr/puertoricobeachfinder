@@ -14,11 +14,21 @@ $pageDescription = 'Find your perfect Puerto Rico beach! Answer a few quick ques
 
 // Include header
 include __DIR__ . '/components/header.php';
+
+// Breadcrumbs
+$breadcrumbs = [
+    ['name' => 'Home', 'url' => '/'],
+    ['name' => 'Beach Match Quiz']
+];
 ?>
 
 <!-- Quiz Hero -->
 <section class="hero-gradient text-white py-12 md:py-16">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <!-- Breadcrumbs -->
+        <div class="mb-6">
+            <?php include __DIR__ . '/components/breadcrumbs.php'; ?>
+        </div>
         <h1 class="text-3xl md:text-5xl font-bold mb-4">
             Find Your Perfect Beach
         </h1>
@@ -33,11 +43,11 @@ include __DIR__ . '/components/header.php';
     <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- Quiz Card -->
-        <div id="quiz-container" class="bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div id="quiz-container" class="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl shadow-glass overflow-hidden">
 
             <!-- Progress Bar -->
-            <div class="bg-gray-100 h-2">
-                <div id="progress-bar" class="h-full bg-blue-600 transition-all duration-300" style="width: 0%"></div>
+            <div class="bg-white/10 h-2">
+                <div id="progress-bar" class="h-full bg-brand-yellow transition-all duration-300" style="width: 0%"></div>
             </div>
 
             <!-- Quiz Content -->
@@ -46,35 +56,35 @@ include __DIR__ . '/components/header.php';
                 <!-- Question 1: Activity -->
                 <div class="quiz-step" data-step="1">
                     <div class="text-center mb-8">
-                        <span class="text-sm text-blue-600 font-semibold">Question 1 of 5</span>
-                        <h2 class="text-2xl font-bold text-gray-900 mt-2">What's your main activity?</h2>
-                        <p class="text-gray-500 mt-1">What do you want to do at the beach?</p>
+                        <span class="text-sm text-brand-yellow font-semibold">Question 1 of 5</span>
+                        <h2 class="text-2xl font-bold text-brand-text mt-2">What's your main activity?</h2>
+                        <p class="text-brand-muted mt-1">What do you want to do at the beach?</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <button class="quiz-option" data-question="activity" data-value="swimming">
                             <span class="text-4xl mb-2">🏊</span>
-                            <span class="font-medium">Swimming</span>
-                            <span class="text-sm text-gray-500">Calm water, relaxing dips</span>
+                            <span class="font-medium text-brand-text">Swimming</span>
+                            <span class="text-sm text-brand-muted">Calm water, relaxing dips</span>
                         </button>
                         <button class="quiz-option" data-question="activity" data-value="surfing">
                             <span class="text-4xl mb-2">🏄</span>
-                            <span class="font-medium">Surfing</span>
-                            <span class="text-sm text-gray-500">Waves & water sports</span>
+                            <span class="font-medium text-brand-text">Surfing</span>
+                            <span class="text-sm text-brand-muted">Waves & water sports</span>
                         </button>
                         <button class="quiz-option" data-question="activity" data-value="snorkeling">
                             <span class="text-4xl mb-2">🤿</span>
-                            <span class="font-medium">Snorkeling</span>
-                            <span class="text-sm text-gray-500">Clear water, marine life</span>
+                            <span class="font-medium text-brand-text">Snorkeling</span>
+                            <span class="text-sm text-brand-muted">Clear water, marine life</span>
                         </button>
                         <button class="quiz-option" data-question="activity" data-value="relaxing">
                             <span class="text-4xl mb-2">🧘</span>
-                            <span class="font-medium">Relaxing</span>
-                            <span class="text-sm text-gray-500">Sunbathing, reading</span>
+                            <span class="font-medium text-brand-text">Relaxing</span>
+                            <span class="text-sm text-brand-muted">Sunbathing, reading</span>
                         </button>
                     </div>
 
-                    <button class="quiz-next-btn w-full mt-6 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium transition-colors" onclick="nextStep()" disabled>
+                    <button class="quiz-next-btn w-full mt-6 bg-brand-yellow hover:bg-yellow-300 disabled:bg-white/10 disabled:cursor-not-allowed text-brand-darker py-3 rounded-lg font-medium transition-colors" onclick="nextStep()" disabled>
                         Continue <span class="ml-1">→</span>
                     </button>
                 </div>
@@ -82,35 +92,35 @@ include __DIR__ . '/components/header.php';
                 <!-- Question 2: Group -->
                 <div class="quiz-step hidden" data-step="2">
                     <div class="text-center mb-8">
-                        <span class="text-sm text-blue-600 font-semibold">Question 2 of 5</span>
-                        <h2 class="text-2xl font-bold text-gray-900 mt-2">Who's going with you?</h2>
-                        <p class="text-gray-500 mt-1">This helps us find family-friendly or romantic spots</p>
+                        <span class="text-sm text-brand-yellow font-semibold">Question 2 of 5</span>
+                        <h2 class="text-2xl font-bold text-brand-text mt-2">Who's going with you?</h2>
+                        <p class="text-brand-muted mt-1">This helps us find family-friendly or romantic spots</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <button class="quiz-option" data-question="group" data-value="solo">
                             <span class="text-4xl mb-2">👤</span>
-                            <span class="font-medium">Solo</span>
-                            <span class="text-sm text-gray-500">Just me, myself, and I</span>
+                            <span class="font-medium text-brand-text">Solo</span>
+                            <span class="text-sm text-brand-muted">Just me, myself, and I</span>
                         </button>
                         <button class="quiz-option" data-question="group" data-value="couple">
                             <span class="text-4xl mb-2">💑</span>
-                            <span class="font-medium">Couple</span>
-                            <span class="text-sm text-gray-500">Romantic getaway</span>
+                            <span class="font-medium text-brand-text">Couple</span>
+                            <span class="text-sm text-brand-muted">Romantic getaway</span>
                         </button>
                         <button class="quiz-option" data-question="group" data-value="family">
                             <span class="text-4xl mb-2">👨‍👩‍👧‍👦</span>
-                            <span class="font-medium">Family</span>
-                            <span class="text-sm text-gray-500">Kids coming along</span>
+                            <span class="font-medium text-brand-text">Family</span>
+                            <span class="text-sm text-brand-muted">Kids coming along</span>
                         </button>
                         <button class="quiz-option" data-question="group" data-value="friends">
                             <span class="text-4xl mb-2">👥</span>
-                            <span class="font-medium">Friends</span>
-                            <span class="text-sm text-gray-500">Group adventure</span>
+                            <span class="font-medium text-brand-text">Friends</span>
+                            <span class="text-sm text-brand-muted">Group adventure</span>
                         </button>
                     </div>
 
-                    <button class="quiz-next-btn w-full mt-6 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium transition-colors" onclick="nextStep()" disabled>
+                    <button class="quiz-next-btn w-full mt-6 bg-brand-yellow hover:bg-yellow-300 disabled:bg-white/10 disabled:cursor-not-allowed text-brand-darker py-3 rounded-lg font-medium transition-colors" onclick="nextStep()" disabled>
                         Continue <span class="ml-1">→</span>
                     </button>
                 </div>
@@ -118,39 +128,39 @@ include __DIR__ . '/components/header.php';
                 <!-- Question 3: Facilities -->
                 <div class="quiz-step hidden" data-step="3">
                     <div class="text-center mb-8">
-                        <span class="text-sm text-blue-600 font-semibold">Question 3 of 5</span>
-                        <h2 class="text-2xl font-bold text-gray-900 mt-2">What facilities do you need?</h2>
-                        <p class="text-gray-500 mt-1">Select all that apply</p>
+                        <span class="text-sm text-brand-yellow font-semibold">Question 3 of 5</span>
+                        <h2 class="text-2xl font-bold text-brand-text mt-2">What facilities do you need?</h2>
+                        <p class="text-brand-muted mt-1">Select all that apply</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <button class="quiz-option-multi" data-question="facilities" data-value="restrooms">
                             <span class="text-3xl mb-2">🚻</span>
-                            <span class="font-medium">Restrooms</span>
+                            <span class="font-medium text-brand-text">Restrooms</span>
                         </button>
                         <button class="quiz-option-multi" data-question="facilities" data-value="parking">
                             <span class="text-3xl mb-2">🅿️</span>
-                            <span class="font-medium">Parking</span>
+                            <span class="font-medium text-brand-text">Parking</span>
                         </button>
                         <button class="quiz-option-multi" data-question="facilities" data-value="food">
                             <span class="text-3xl mb-2">🍔</span>
-                            <span class="font-medium">Food/Drinks</span>
+                            <span class="font-medium text-brand-text">Food/Drinks</span>
                         </button>
                         <button class="quiz-option-multi" data-question="facilities" data-value="lifeguard">
                             <span class="text-3xl mb-2">🛟</span>
-                            <span class="font-medium">Lifeguard</span>
+                            <span class="font-medium text-brand-text">Lifeguard</span>
                         </button>
                         <button class="quiz-option-multi" data-question="facilities" data-value="shade">
                             <span class="text-3xl mb-2">⛱️</span>
-                            <span class="font-medium">Shade/Palapas</span>
+                            <span class="font-medium text-brand-text">Shade/Palapas</span>
                         </button>
                         <button class="quiz-option-multi" data-question="facilities" data-value="none">
                             <span class="text-3xl mb-2">🏝️</span>
-                            <span class="font-medium">None needed</span>
+                            <span class="font-medium text-brand-text">None needed</span>
                         </button>
                     </div>
 
-                    <button id="facilities-next" class="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition-colors">
+                    <button id="facilities-next" class="w-full mt-6 bg-brand-yellow hover:bg-yellow-300 text-brand-darker py-3 rounded-lg font-medium transition-colors">
                         Continue →
                     </button>
                 </div>
@@ -158,9 +168,9 @@ include __DIR__ . '/components/header.php';
                 <!-- Question 4: Crowd -->
                 <div class="quiz-step hidden" data-step="4">
                     <div class="text-center mb-8">
-                        <span class="text-sm text-blue-600 font-semibold">Question 4 of 5</span>
-                        <h2 class="text-2xl font-bold text-gray-900 mt-2">How do you feel about crowds?</h2>
-                        <p class="text-gray-500 mt-1">Some beaches are more popular than others</p>
+                        <span class="text-sm text-brand-yellow font-semibold">Question 4 of 5</span>
+                        <h2 class="text-2xl font-bold text-brand-text mt-2">How do you feel about crowds?</h2>
+                        <p class="text-brand-muted mt-1">Some beaches are more popular than others</p>
                     </div>
 
                     <div class="space-y-3">
@@ -168,8 +178,8 @@ include __DIR__ . '/components/header.php';
                             <div class="flex items-center gap-4">
                                 <span class="text-3xl">🎉</span>
                                 <div class="text-left">
-                                    <span class="font-medium block">Popular & Social</span>
-                                    <span class="text-sm text-gray-500">I enjoy busy beaches with people around</span>
+                                    <span class="font-medium block text-brand-text">Popular & Social</span>
+                                    <span class="text-sm text-brand-muted">I enjoy busy beaches with people around</span>
                                 </div>
                             </div>
                         </button>
@@ -177,8 +187,8 @@ include __DIR__ . '/components/header.php';
                             <div class="flex items-center gap-4">
                                 <span class="text-3xl">👥</span>
                                 <div class="text-left">
-                                    <span class="font-medium block">Balanced</span>
-                                    <span class="text-sm text-gray-500">Some people around but not too crowded</span>
+                                    <span class="font-medium block text-brand-text">Balanced</span>
+                                    <span class="text-sm text-brand-muted">Some people around but not too crowded</span>
                                 </div>
                             </div>
                         </button>
@@ -186,8 +196,8 @@ include __DIR__ . '/components/header.php';
                             <div class="flex items-center gap-4">
                                 <span class="text-3xl">🏝️</span>
                                 <div class="text-left">
-                                    <span class="font-medium block">Secluded & Peaceful</span>
-                                    <span class="text-sm text-gray-500">I prefer quiet, less-visited beaches</span>
+                                    <span class="font-medium block text-brand-text">Secluded & Peaceful</span>
+                                    <span class="text-sm text-brand-muted">I prefer quiet, less-visited beaches</span>
                                 </div>
                             </div>
                         </button>
@@ -197,9 +207,9 @@ include __DIR__ . '/components/header.php';
                 <!-- Question 5: Location -->
                 <div class="quiz-step hidden" data-step="5">
                     <div class="text-center mb-8">
-                        <span class="text-sm text-blue-600 font-semibold">Question 5 of 5</span>
-                        <h2 class="text-2xl font-bold text-gray-900 mt-2">Where will you be staying?</h2>
-                        <p class="text-gray-500 mt-1">We'll find beaches near your area</p>
+                        <span class="text-sm text-brand-yellow font-semibold">Question 5 of 5</span>
+                        <h2 class="text-2xl font-bold text-brand-text mt-2">Where will you be staying?</h2>
+                        <p class="text-brand-muted mt-1">We'll find beaches near your area</p>
                     </div>
 
                     <div class="space-y-3">
@@ -207,8 +217,8 @@ include __DIR__ . '/components/header.php';
                             <div class="flex items-center gap-4">
                                 <span class="text-3xl">🏙️</span>
                                 <div class="text-left">
-                                    <span class="font-medium block">San Juan Area</span>
-                                    <span class="text-sm text-gray-500">San Juan, Carolina, Isla Verde</span>
+                                    <span class="font-medium block text-brand-text">San Juan Area</span>
+                                    <span class="text-sm text-brand-muted">San Juan, Carolina, Isla Verde</span>
                                 </div>
                             </div>
                         </button>
@@ -216,8 +226,8 @@ include __DIR__ . '/components/header.php';
                             <div class="flex items-center gap-4">
                                 <span class="text-3xl">🌅</span>
                                 <div class="text-left">
-                                    <span class="font-medium block">West Coast</span>
-                                    <span class="text-sm text-gray-500">Rincón, Aguadilla, Mayagüez</span>
+                                    <span class="font-medium block text-brand-text">West Coast</span>
+                                    <span class="text-sm text-brand-muted">Rincón, Aguadilla, Mayagüez</span>
                                 </div>
                             </div>
                         </button>
@@ -225,8 +235,8 @@ include __DIR__ . '/components/header.php';
                             <div class="flex items-center gap-4">
                                 <span class="text-3xl">🌴</span>
                                 <div class="text-left">
-                                    <span class="font-medium block">East Coast</span>
-                                    <span class="text-sm text-gray-500">Fajardo, Luquillo, Humacao</span>
+                                    <span class="font-medium block text-brand-text">East Coast</span>
+                                    <span class="text-sm text-brand-muted">Fajardo, Luquillo, Humacao</span>
                                 </div>
                             </div>
                         </button>
@@ -234,8 +244,8 @@ include __DIR__ . '/components/header.php';
                             <div class="flex items-center gap-4">
                                 <span class="text-3xl">☀️</span>
                                 <div class="text-left">
-                                    <span class="font-medium block">South Coast</span>
-                                    <span class="text-sm text-gray-500">Ponce, Guánica, Cabo Rojo</span>
+                                    <span class="font-medium block text-brand-text">South Coast</span>
+                                    <span class="text-sm text-brand-muted">Ponce, Guánica, Cabo Rojo</span>
                                 </div>
                             </div>
                         </button>
@@ -243,8 +253,8 @@ include __DIR__ . '/components/header.php';
                             <div class="flex items-center gap-4">
                                 <span class="text-3xl">🏝️</span>
                                 <div class="text-left">
-                                    <span class="font-medium block">Islands</span>
-                                    <span class="text-sm text-gray-500">Vieques, Culebra</span>
+                                    <span class="font-medium block text-brand-text">Islands</span>
+                                    <span class="text-sm text-brand-muted">Vieques, Culebra</span>
                                 </div>
                             </div>
                         </button>
@@ -252,8 +262,8 @@ include __DIR__ . '/components/header.php';
                             <div class="flex items-center gap-4">
                                 <span class="text-3xl">🗺️</span>
                                 <div class="text-left">
-                                    <span class="font-medium block">Anywhere</span>
-                                    <span class="text-sm text-gray-500">I'm flexible, show me all options</span>
+                                    <span class="font-medium block text-brand-text">Anywhere</span>
+                                    <span class="text-sm text-brand-muted">I'm flexible, show me all options</span>
                                 </div>
                             </div>
                         </button>
@@ -262,33 +272,33 @@ include __DIR__ . '/components/header.php';
 
                 <!-- Loading State -->
                 <div id="quiz-loading" class="hidden text-center py-12">
-                    <div class="loading-spinner loading-spinner-lg text-blue-600 mx-auto mb-4"></div>
-                    <h2 class="text-xl font-bold text-gray-900">Finding your perfect beaches...</h2>
-                    <p class="text-gray-500 mt-2">Analyzing 230+ beaches to find your matches</p>
+                    <div class="loading-spinner loading-spinner-lg text-brand-yellow mx-auto mb-4"></div>
+                    <h2 class="text-xl font-bold text-brand-text">Finding your perfect beaches...</h2>
+                    <p class="text-brand-muted mt-2">Analyzing 230+ beaches to find your matches</p>
                 </div>
 
                 <!-- Results -->
                 <div id="quiz-results" class="hidden">
                     <div class="text-center mb-8">
-                        <i data-lucide="trophy" class="w-12 h-12 mx-auto text-yellow-500 mb-4" aria-hidden="true"></i>
-                        <h2 class="text-2xl font-bold text-gray-900">Your Beach Matches!</h2>
-                        <p class="text-gray-500 mt-1">Based on your preferences, here are your top beaches</p>
+                        <i data-lucide="trophy" class="w-12 h-12 mx-auto text-brand-yellow mb-4" aria-hidden="true"></i>
+                        <h2 class="text-2xl font-bold text-brand-text">Your Beach Matches!</h2>
+                        <p class="text-brand-muted mt-1">Based on your preferences, here are your top beaches</p>
                     </div>
 
                     <div id="results-list" class="space-y-4">
                         <!-- Results populated by JavaScript -->
                     </div>
 
-                    <div class="mt-8 pt-6 border-t border-gray-200 text-center">
-                        <button onclick="restartQuiz()" class="text-blue-600 hover:text-blue-700 font-medium">
+                    <div class="mt-8 pt-6 border-t border-white/10 text-center">
+                        <button onclick="restartQuiz()" class="text-brand-yellow hover:text-yellow-300 font-medium">
                             ← Take the quiz again
                         </button>
                     </div>
                 </div>
 
                 <!-- Navigation -->
-                <div id="quiz-nav" class="flex justify-between mt-8 pt-6 border-t border-gray-200">
-                    <button id="prev-btn" class="text-gray-500 hover:text-gray-700 font-medium hidden" onclick="prevStep()">
+                <div id="quiz-nav" class="flex justify-between mt-8 pt-6 border-t border-white/10">
+                    <button id="prev-btn" class="text-brand-muted hover:text-brand-text font-medium hidden" onclick="prevStep()">
                         ← Back
                     </button>
                     <div></div>
@@ -297,12 +307,12 @@ include __DIR__ . '/components/header.php';
         </div>
 
         <!-- Info Box -->
-        <div class="mt-6 bg-blue-50 border border-blue-100 rounded-lg p-4">
+        <div class="mt-6 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4">
             <div class="flex gap-3">
-                <i data-lucide="lightbulb" class="w-6 h-6 text-blue-600 shrink-0" aria-hidden="true"></i>
+                <i data-lucide="lightbulb" class="w-6 h-6 text-brand-yellow shrink-0" aria-hidden="true"></i>
                 <div>
-                    <h3 class="font-medium text-blue-900">How it works</h3>
-                    <p class="text-blue-700 text-sm mt-1">
+                    <h3 class="font-medium text-brand-text">How it works</h3>
+                    <p class="text-brand-muted text-sm mt-1">
                         Our algorithm analyzes beach features like water conditions, amenities, crowd levels,
                         and location to find beaches that match your preferences.
                     </p>
@@ -319,21 +329,21 @@ include __DIR__ . '/components/header.php';
     align-items: center;
     text-align: center;
     padding: 1.5rem;
-    border: 2px solid #e5e7eb;
+    border: 2px solid rgba(255, 255, 255, 0.1);
     border-radius: 1rem;
-    background: white;
+    background: rgba(255, 255, 255, 0.05);
     transition: all 0.2s ease;
     cursor: pointer;
 }
 
 .quiz-option:hover {
-    border-color: #3b82f6;
-    background: #eff6ff;
+    border-color: rgba(253, 224, 71, 0.5);
+    background: rgba(253, 224, 71, 0.1);
 }
 
 .quiz-option.selected {
-    border-color: #2563eb;
-    background: #dbeafe;
+    border-color: #fde047;
+    background: rgba(253, 224, 71, 0.15);
 }
 
 .quiz-option-multi {
@@ -342,57 +352,57 @@ include __DIR__ . '/components/header.php';
     align-items: center;
     text-align: center;
     padding: 1rem;
-    border: 2px solid #e5e7eb;
+    border: 2px solid rgba(255, 255, 255, 0.1);
     border-radius: 0.75rem;
-    background: white;
+    background: rgba(255, 255, 255, 0.05);
     transition: all 0.2s ease;
     cursor: pointer;
 }
 
 .quiz-option-multi:hover {
-    border-color: #3b82f6;
+    border-color: rgba(253, 224, 71, 0.5);
 }
 
 .quiz-option-multi.selected {
-    border-color: #2563eb;
-    background: #dbeafe;
+    border-color: #fde047;
+    background: rgba(253, 224, 71, 0.15);
 }
 
 .quiz-option-wide {
     display: block;
     width: 100%;
     padding: 1rem 1.25rem;
-    border: 2px solid #e5e7eb;
+    border: 2px solid rgba(255, 255, 255, 0.1);
     border-radius: 0.75rem;
-    background: white;
+    background: rgba(255, 255, 255, 0.05);
     transition: all 0.2s ease;
     cursor: pointer;
     text-align: left;
 }
 
 .quiz-option-wide:hover {
-    border-color: #3b82f6;
-    background: #eff6ff;
+    border-color: rgba(253, 224, 71, 0.5);
+    background: rgba(253, 224, 71, 0.1);
 }
 
 .quiz-option-wide.selected {
-    border-color: #2563eb;
-    background: #dbeafe;
+    border-color: #fde047;
+    background: rgba(253, 224, 71, 0.15);
 }
 
 .result-card {
     display: flex;
     gap: 1rem;
     padding: 1rem;
-    border: 1px solid #e5e7eb;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 0.75rem;
-    background: white;
+    background: rgba(255, 255, 255, 0.05);
     transition: all 0.2s ease;
 }
 
 .result-card:hover {
-    border-color: #3b82f6;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-color: rgba(253, 224, 71, 0.5);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .match-score {
@@ -406,9 +416,9 @@ include __DIR__ . '/components/header.php';
     font-size: 0.875rem;
 }
 
-.match-score.excellent { background: #dcfce7; color: #166534; }
-.match-score.great { background: #dbeafe; color: #1e40af; }
-.match-score.good { background: #fef9c3; color: #854d0e; }
+.match-score.excellent { background: linear-gradient(135deg, #059669, #10b981); color: white; }
+.match-score.great { background: linear-gradient(135deg, #06b6d4, #22d3ee); color: white; }
+.match-score.good { background: linear-gradient(135deg, #fde047, #facc15); color: #132024; }
 </style>
 
 <script>
@@ -586,14 +596,14 @@ function displayResults(matches) {
     const resultsList = document.getElementById('results-list');
     resultsList.innerHTML = matches.map((beach, index) => `
         <div class="result-card">
-            <img src="${beach.cover_image || '/assets/images/placeholder.jpg'}"
+            <img src="${beach.cover_image || '/images/beaches/placeholder-beach.webp'}"
                  alt="${beach.name}"
                  class="w-24 h-24 object-cover rounded-lg shrink-0">
             <div class="flex-1 min-w-0">
                 <div class="flex items-start justify-between gap-2">
                     <div>
-                        <h3 class="font-semibold text-gray-900">${beach.name}</h3>
-                        <p class="text-sm text-gray-500">${beach.municipality}</p>
+                        <h3 class="font-semibold text-brand-text">${beach.name}</h3>
+                        <p class="text-sm text-brand-muted">${beach.municipality}</p>
                     </div>
                     <div class="match-score ${beach.score >= 90 ? 'excellent' : beach.score >= 75 ? 'great' : 'good'}">
                         ${beach.score}%
@@ -602,13 +612,13 @@ function displayResults(matches) {
                 ${beach.match_reasons ? `
                     <div class="flex flex-wrap gap-1 mt-2">
                         ${beach.match_reasons.slice(0, 3).map(reason => `
-                            <span class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">${reason}</span>
+                            <span class="text-xs bg-brand-yellow/20 text-brand-yellow px-2 py-0.5 rounded-full">${reason}</span>
                         `).join('')}
                     </div>
                 ` : ''}
                 <div class="mt-3">
                     <button onclick="openBeachDrawer('${beach.id}')"
-                            class="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                            class="text-sm text-brand-yellow hover:text-yellow-300 font-medium">
                         View Details →
                     </button>
                 </div>

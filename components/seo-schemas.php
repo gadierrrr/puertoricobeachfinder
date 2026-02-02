@@ -4,10 +4,114 @@
  * Generates JSON-LD structured data for beaches
  */
 
+// Include helper functions for schema generation
+require_once __DIR__ . '/../inc/helpers.php';
+require_once __DIR__ . '/../inc/constants.php';
+
+/**
+ * Wrap an image URL in ImageObject schema with dimensions
+ *
+ * @param string $imageUrl Image URL (relative or absolute)
+ * @param string|null $caption Optional image caption
+ * @return array ImageObject schema
+ */
+function imageObjectSchema($imageUrl, $caption = null) {
+    $appUrl = $_ENV['APP_URL'] ?? 'http://localhost:8082';
+
+    // Ensure absolute URL
+    $absoluteUrl = strpos($imageUrl, 'http') === 0
+        ? $imageUrl
+        : $appUrl . $imageUrl;
+
+    // Get dimensions
+    $dimensions = getImageDimensions($imageUrl);
+
+    $schema = [
+        '@type' => 'ImageObject',
+        'url' => $absoluteUrl,
+        'width' => $dimensions['width'],
+        'height' => $dimensions['height']
+    ];
+
+    if ($caption) {
+        $schema['caption'] = $caption;
+    }
+
+    return $schema;
+}
+
+/**
+ * Get intelligent rating schema for a beach
+ * Chooses between user ratings (if >10 reviews) or Google ratings
+ * Returns single AggregateRating or null
+ *
+ * @param array $beach Beach data with rating fields
+ * @return array|null AggregateRating schema or null
+ */
+function getRatingSchema(array $beach) {
+    // Prefer user ratings if we have enough (>10 reviews)
+    $userReviewCount = $beach['user_review_count'] ?? 0;
+    $avgUserRating = $beach['avg_user_rating'] ?? null;
+
+    if ($userReviewCount > 10 && $avgUserRating) {
+        return [
+            '@type' => 'AggregateRating',
+            'ratingValue' => round($avgUserRating, 1),
+            'reviewCount' => $userReviewCount,
+            'bestRating' => 5,
+            'worstRating' => 1
+        ];
+    }
+
+    // Fall back to Google ratings
+    if (!empty($beach['google_rating'])) {
+        return [
+            '@type' => 'AggregateRating',
+            'ratingValue' => $beach['google_rating'],
+            'reviewCount' => $beach['google_review_count'] ?? 1,
+            'bestRating' => 5,
+            'worstRating' => 1
+        ];
+    }
+
+    return null;
+}
+
+/**
+ * Get accessibility features as LocationFeatureSpecification array
+ * Maps 'accessibility' amenity to structured schema
+ *
+ * @param array $beach Beach data with amenities
+ * @return array Array of LocationFeatureSpecification objects
+ */
+function getAccessibilityFeatures(array $beach) {
+    $amenities = $beach['amenities'] ?? [];
+
+    if (!in_array('accessibility', $amenities)) {
+        return [];
+    }
+
+    return [
+        [
+            '@type' => 'LocationFeatureSpecification',
+            'name' => 'Wheelchair Accessible',
+            'value' => true,
+            'hoursAvailable' => [
+                '@type' => 'OpeningHoursSpecification',
+                'dayOfWeek' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+            ]
+        ]
+    ];
+}
+
 /**
  * Generate Beach structured data (schema.org/Beach)
+ *
+ * @param array $beach Beach data
+ * @param array|null $reviews Optional array of user reviews to include
+ * @return string JSON-LD script tag
  */
-function beachSchema(array $beach): string {
+function beachSchema(array $beach, $reviews = null): string {
     $appUrl = $_ENV['APP_URL'] ?? 'http://localhost:8082';
 
     $schema = [
@@ -32,22 +136,15 @@ function beachSchema(array $beach): string {
         'publicAccess' => true
     ];
 
-    // Add image
+    // Add image with ImageObject wrapper (includes dimensions)
     if (!empty($beach['cover_image'])) {
-        $schema['image'] = strpos($beach['cover_image'], 'http') === 0
-            ? $beach['cover_image']
-            : $appUrl . $beach['cover_image'];
+        $schema['image'] = imageObjectSchema($beach['cover_image'], $beach['name']);
     }
 
-    // Add rating if available
-    if (!empty($beach['google_rating'])) {
-        $schema['aggregateRating'] = [
-            '@type' => 'AggregateRating',
-            'ratingValue' => $beach['google_rating'],
-            'reviewCount' => $beach['google_review_count'] ?? 1,
-            'bestRating' => 5,
-            'worstRating' => 1
-        ];
+    // Add intelligent rating (user or Google)
+    $rating = getRatingSchema($beach);
+    if ($rating) {
+        $schema['aggregateRating'] = $rating;
     }
 
     // Add amenities
@@ -61,6 +158,44 @@ function beachSchema(array $beach): string {
             ];
         }
         $schema['amenityFeature'] = $amenityList;
+    }
+
+    // Add accessibility features if applicable
+    $accessibilityFeatures = getAccessibilityFeatures($beach);
+    if (!empty($accessibilityFeatures)) {
+        if (!isset($schema['amenityFeature'])) {
+            $schema['amenityFeature'] = [];
+        }
+        $schema['amenityFeature'] = array_merge($schema['amenityFeature'], $accessibilityFeatures);
+    }
+
+    // Add sameAs links (external URLs + Google Maps)
+    $sameAs = buildSameAsLinks($beach);
+    if (!empty($sameAs)) {
+        $schema['sameAs'] = $sameAs;
+    }
+
+    // Add reviews if provided
+    if (!empty($reviews) && is_array($reviews)) {
+        $reviewItems = [];
+        foreach ($reviews as $review) {
+            $reviewItems[] = [
+                '@type' => 'Review',
+                'reviewRating' => [
+                    '@type' => 'Rating',
+                    'ratingValue' => $review['rating'],
+                    'bestRating' => 5,
+                    'worstRating' => 1
+                ],
+                'author' => [
+                    '@type' => 'Person',
+                    'name' => $review['user_name'] ?? 'Anonymous'
+                ],
+                'reviewBody' => $review['review_text'] ?? '',
+                'datePublished' => $review['created_at'] ?? date('Y-m-d')
+            ];
+        }
+        $schema['review'] = $reviewItems;
     }
 
     return '<script type="application/ld+json">' . json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . '</script>';
@@ -101,14 +236,41 @@ function organizationSchema(): string {
     $appUrl = $_ENV['APP_URL'] ?? 'http://localhost:8082';
     $appName = $_ENV['APP_NAME'] ?? 'Puerto Rico Beach Finder';
 
+    // Social media profiles - add/remove as needed
+    $socialLinks = [
+        'https://www.instagram.com/puertoricobeachfinder'
+    ];
+
     $schema = [
         '@context' => 'https://schema.org',
         '@type' => 'Organization',
         'name' => $appName,
+        'alternateName' => 'PR Beach Finder',
         'url' => $appUrl,
-        'logo' => $appUrl . '/assets/icons/icon-512x512.png',
-        'description' => 'Discover 230+ beautiful beaches across Puerto Rico with detailed information, weather conditions, and user reviews.',
-        'sameAs' => []
+        'logo' => [
+            '@type' => 'ImageObject',
+            'url' => $appUrl . '/assets/icons/icon-512x512.png',
+            'width' => 512,
+            'height' => 512
+        ],
+        'description' => 'The most comprehensive database of beaches in Puerto Rico. Discover 233+ beaches with GPS coordinates, amenities, conditions, photos, and reviews.',
+        'foundingDate' => '2024',
+        'areaServed' => [
+            '@type' => 'Place',
+            'name' => 'Puerto Rico',
+            'geo' => [
+                '@type' => 'GeoCoordinates',
+                'latitude' => 18.2208,
+                'longitude' => -66.5901
+            ]
+        ],
+        'sameAs' => $socialLinks,
+        'contactPoint' => [
+            '@type' => 'ContactPoint',
+            'contactType' => 'customer support',
+            'url' => $appUrl . '/contact',
+            'availableLanguage' => ['English', 'Spanish']
+        ]
     ];
 
     return '<script type="application/ld+json">' . json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . '</script>';
@@ -191,6 +353,7 @@ function faqSchema(array $faqs): string {
 
 /**
  * Generate Review schema for user reviews
+ * @deprecated Use beachSchema() with $reviews parameter instead
  */
 function reviewsSchema(array $beach, array $reviews): string {
     if (empty($reviews)) return '';
@@ -238,19 +401,93 @@ function reviewsSchema(array $beach, array $reviews): string {
 }
 
 /**
+ * Generate HowTo schema for guide pages
+ * Perfect for step-by-step beach guides, travel tips, etc.
+ *
+ * @param string $name Guide title (e.g., "How to Find the Best Beaches in Puerto Rico")
+ * @param string $description Brief description of the guide
+ * @param array $steps Array of steps, each with 'name', 'text', optional 'image', 'url'
+ * @param string|null $image Optional hero image for the guide
+ * @param string|null $totalTime Optional time estimate (ISO 8601 duration, e.g., "PT30M" for 30 minutes)
+ * @return string JSON-LD script tag
+ */
+function howToSchema($name, $description, $steps, $image = null, $totalTime = null): string {
+    $appUrl = $_ENV['APP_URL'] ?? 'http://localhost:8082';
+
+    // Validate inputs
+    if (empty($name) || empty($steps) || !is_array($steps)) {
+        return '';
+    }
+
+    $schema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'HowTo',
+        'name' => $name,
+        'description' => $description
+    ];
+
+    // Add total time if provided
+    if ($totalTime) {
+        $schema['totalTime'] = $totalTime;
+    }
+
+    // Add image if provided
+    if ($image) {
+        $schema['image'] = imageObjectSchema($image, $name);
+    }
+
+    // Build steps
+    $stepItems = [];
+    foreach ($steps as $index => $step) {
+        if (empty($step['name']) || empty($step['text'])) {
+            continue; // Skip invalid steps
+        }
+
+        $stepItem = [
+            '@type' => 'HowToStep',
+            'position' => $index + 1,
+            'name' => $step['name'],
+            'text' => $step['text']
+        ];
+
+        // Add step image if provided
+        if (!empty($step['image'])) {
+            $stepItem['image'] = imageObjectSchema($step['image'], $step['name']);
+        }
+
+        // Add step URL if provided
+        if (!empty($step['url'])) {
+            $stepItem['url'] = strpos($step['url'], 'http') === 0
+                ? $step['url']
+                : $appUrl . $step['url'];
+        }
+
+        $stepItems[] = $stepItem;
+    }
+
+    $schema['step'] = $stepItems;
+
+    return '<script type="application/ld+json">' . json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . '</script>';
+}
+
+/**
  * Generate TouristAttraction schema for travel search visibility
+ *
+ * @param array $beach Beach data
+ * @return string JSON-LD script tag
  */
 function touristAttractionSchema(array $beach): string {
     $appUrl = $_ENV['APP_URL'] ?? 'https://www.puertoricobeachfinder.com';
 
-    // Map tags to tourist types
+    // Map tags to tourist types using TOURIST_TYPE_MAPPINGS constant
     $touristTypes = ['Beach Lovers', 'Nature Enthusiasts'];
     $tags = $beach['tags'] ?? [];
-    if (in_array('family-friendly', $tags)) $touristTypes[] = 'Families';
-    if (in_array('surfing', $tags)) $touristTypes[] = 'Surfers';
-    if (in_array('snorkeling', $tags) || in_array('scuba-diving', $tags)) $touristTypes[] = 'Divers';
-    if (in_array('romantic', $tags)) $touristTypes[] = 'Couples';
-    if (in_array('hiking', $tags)) $touristTypes[] = 'Adventure Seekers';
+
+    foreach ($tags as $tag) {
+        if (isset(TOURIST_TYPE_MAPPINGS[$tag])) {
+            $touristTypes[] = TOURIST_TYPE_MAPPINGS[$tag];
+        }
+    }
 
     $schema = [
         '@context' => 'https://schema.org',
@@ -258,7 +495,7 @@ function touristAttractionSchema(array $beach): string {
         'name' => $beach['name'],
         'description' => $beach['description'] ?? "Beautiful beach in {$beach['municipality']}, Puerto Rico",
         'url' => $appUrl . '/beach/' . $beach['slug'],
-        'touristType' => array_unique($touristTypes),
+        'touristType' => array_values(array_unique($touristTypes)),
         'geo' => [
             '@type' => 'GeoCoordinates',
             'latitude' => $beach['lat'],
@@ -274,22 +511,15 @@ function touristAttractionSchema(array $beach): string {
         'publicAccess' => true
     ];
 
-    // Add image
+    // Add image with ImageObject wrapper
     if (!empty($beach['cover_image'])) {
-        $schema['image'] = strpos($beach['cover_image'], 'http') === 0
-            ? $beach['cover_image']
-            : $appUrl . $beach['cover_image'];
+        $schema['image'] = imageObjectSchema($beach['cover_image'], $beach['name']);
     }
 
-    // Add rating if available
-    if (!empty($beach['google_rating'])) {
-        $schema['aggregateRating'] = [
-            '@type' => 'AggregateRating',
-            'ratingValue' => $beach['google_rating'],
-            'reviewCount' => $beach['google_review_count'] ?? 1,
-            'bestRating' => 5,
-            'worstRating' => 1
-        ];
+    // Add intelligent rating
+    $rating = getRatingSchema($beach);
+    if ($rating) {
+        $schema['aggregateRating'] = $rating;
     }
 
     return '<script type="application/ld+json">' . json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . '</script>';

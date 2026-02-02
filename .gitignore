@@ -25,3 +25,17 @@ Thumbs.db
 
 # Backup files
 *.bak
+
+# Claude Code configuration
+.claude/
+.agents/
+
+# Uploads
+uploads/
+
+# Reports
+lighthouse-*.html
+lighthouse-*.json
+
+# Temporary files
+*.tmp

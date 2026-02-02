@@ -138,6 +138,40 @@ const CONDITION_LABELS = [
     ]
 ];
 
+// Content sections for extended beach content
+const CONTENT_SECTIONS = [
+    'history' => [
+        'label' => 'History & Background',
+        'icon' => 'book-open',
+        'order' => 1
+    ],
+    'best_time' => [
+        'label' => 'Best Time to Visit',
+        'icon' => 'calendar',
+        'order' => 2
+    ],
+    'getting_there' => [
+        'label' => 'Getting There',
+        'icon' => 'map-pin',
+        'order' => 3
+    ],
+    'what_to_bring' => [
+        'label' => 'What to Bring',
+        'icon' => 'backpack',
+        'order' => 4
+    ],
+    'nearby' => [
+        'label' => 'Nearby Attractions',
+        'icon' => 'compass',
+        'order' => 5
+    ],
+    'local_tips' => [
+        'label' => 'Local Tips',
+        'icon' => 'lightbulb',
+        'order' => 6
+    ]
+];
+
 // Validation helper functions (keep these in constants.php as they only use constants)
 function isValidTag($tag) {
     return in_array($tag, TAGS);
@@ -157,6 +191,27 @@ function isWithinPRBounds($lat, $lng) {
            $lng >= PR_BOUNDS['lng']['min'] &&
            $lng <= PR_BOUNDS['lng']['max'];
 }
+
+// Tourist type mappings for schema.org TouristAttraction
+// Maps beach tags to tourist demographics
+const TOURIST_TYPE_MAPPINGS = [
+    'family-friendly' => 'Families',
+    'surfing' => 'Surfers',
+    'snorkeling' => 'Divers',
+    'diving' => 'Divers',
+    'scuba-diving' => 'Divers',
+    'romantic' => 'Couples',
+    'secluded' => 'Couples',
+    'hiking' => 'Adventure Seekers',
+    'camping' => 'Adventure Seekers',
+    'fishing' => 'Anglers',
+    'kayaking' => 'Water Sports Enthusiasts',
+    'paddleboarding' => 'Water Sports Enthusiasts',
+    'water-sports' => 'Water Sports Enthusiasts',
+    'scenic' => 'Photographers',
+    'calm-waters' => 'Relaxation Seekers',
+    'swimming' => 'Beach Lovers'
+];
 
 // NOTE: Display label functions (getTagLabel, getAmenityLabel, getConditionLabel)
 // are defined in inc/helpers.php to avoid duplicate declarations.

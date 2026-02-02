@@ -1,0 +1,64 @@
+/* ========================================
+   TYPOGRAPHY - PLAYFAIR DISPLAY ITALIC
+   ======================================== */
+
+.font-uncharted {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+}
+
+/* ========================================
+   SCROLLBAR HIDING FOR CAROUSELS
+   ======================================== */
+
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* ========================================
+   SUN ICON ROTATION ANIMATION
+   ======================================== */
+
+@keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.hover-spin:hover {
+    animation: spin-slow 2s linear infinite;
+}
+
+.hover-spin {
+    transition: transform 0.3s ease;
+}
+
+/* ========================================
+   GLASSMORPHISM UTILITIES
+   ======================================== */
+
+.glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+}
+
+.glass-light {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-dark {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
