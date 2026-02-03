@@ -30,8 +30,8 @@ $sanJuanBeaches = query("
     WHERE b.publish_status = 'published'
     AND b.lat IS NOT NULL
     AND b.lng IS NOT NULL
-    HAVING distance < 30
     GROUP BY b.id
+    HAVING distance < 30
     ORDER BY distance ASC
     LIMIT 15
 ", [$sanJuanLat, $sanJuanLng, $sanJuanLat]);
@@ -83,15 +83,35 @@ include __DIR__ . '/components/header.php';
 ?>
 
 <!-- Hero Section -->
-<section class="hero-gradient text-white py-16 md:py-20">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h1 class="text-3xl md:text-5xl font-bold mb-6">
+<section class="relative w-full py-16 md:py-20 overflow-hidden">
+    <!-- Dark background with overlay -->
+    <div class="absolute inset-0 -z-10">
+        <div class="w-full h-full hero-gradient-dark"></div>
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+    </div>
+
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <!-- ADD breadcrumbs -->
+        <nav class="text-white/60 text-sm mb-6" aria-label="Breadcrumb">
+            <a href="/" class="hover:text-brand-yellow transition-colors">Home</a>
+            <span class="mx-2 text-white/40">/</span>
+            <a href="/" class="hover:text-brand-yellow transition-colors">Beaches</a>
+            <span class="mx-2 text-white/40">/</span>
+            <span class="text-white/80">Near San Juan</span>
+        </nav>
+
+        <!-- Add explicit text-white -->
+        <h1 class="text-3xl md:text-5xl font-bold text-white mb-6">
             Beaches Near San Juan, Puerto Rico
         </h1>
-        <p class="text-lg md:text-xl opacity-90 max-w-3xl mx-auto page-description">
+
+        <!-- Change opacity-90 to text-gray-200 -->
+        <p class="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto">
             Discover beautiful beaches just minutes from Puerto Rico's capital. From the urban shores of Condado to the resort paradise of Isla Verde.
         </p>
-        <p class="text-sm mt-4 opacity-75">Updated January 2025 | All beaches within 30 minutes of San Juan</p>
+
+        <!-- Change opacity-75 to text-white/60 -->
+        <p class="text-sm text-white/60 mt-4">Updated January 2025 | All beaches within 30 minutes of San Juan</p>
     </div>
 </section>
 

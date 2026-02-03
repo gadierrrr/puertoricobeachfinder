@@ -516,11 +516,8 @@ function touristAttractionSchema(array $beach): string {
         $schema['image'] = imageObjectSchema($beach['cover_image'], $beach['name']);
     }
 
-    // Add intelligent rating
-    $rating = getRatingSchema($beach);
-    if ($rating) {
-        $schema['aggregateRating'] = $rating;
-    }
+    // Note: AggregateRating is already included in the Beach schema
+    // We don't duplicate it here to avoid schema validation errors
 
     return '<script type="application/ld+json">' . json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . '</script>';
 }
@@ -670,7 +667,8 @@ function articleSchema(string $title, string $description, string $url, ?string 
     ];
 
     if ($image) {
-        $schema['image'] = strpos($image, 'http') === 0 ? $image : $appUrl . $image;
+        // Use ImageObject wrapper for proper schema structure
+        $schema['image'] = imageObjectSchema($image);
     }
 
     return '<script type="application/ld+json">' . json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . '</script>';

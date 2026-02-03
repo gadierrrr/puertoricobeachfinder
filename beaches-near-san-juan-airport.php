@@ -193,19 +193,41 @@ include __DIR__ . '/components/header.php';
 ?>
 
 <!-- Hero Section -->
-<section class="hero-gradient-amber text-white py-16 md:py-20">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div class="inline-flex items-center gap-2 bg-amber-500 bg-opacity-20 rounded-full px-4 py-2 mb-6 text-sm">
+<section class="relative w-full py-16 md:py-20 overflow-hidden">
+    <!-- Dark background with overlay -->
+    <div class="absolute inset-0 -z-10">
+        <div class="w-full h-full hero-gradient-dark"></div>
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+    </div>
+
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <!-- ADD breadcrumbs FIRST -->
+        <nav class="text-white/60 text-sm mb-6" aria-label="Breadcrumb">
+            <a href="/" class="hover:text-brand-yellow transition-colors">Home</a>
+            <span class="mx-2 text-white/40">/</span>
+            <a href="/beaches-near-san-juan" class="hover:text-brand-yellow transition-colors">Near San Juan</a>
+            <span class="mx-2 text-white/40">/</span>
+            <span class="text-white/80">Near Airport</span>
+        </nav>
+
+        <!-- Keep existing badge, update colors to match dark theme -->
+        <div class="inline-flex items-center gap-2 bg-brand-yellow/20 border border-brand-yellow/30 rounded-full px-4 py-2 mb-6 text-sm text-brand-yellow">
             <span>✈️</span>
             <span>Perfect for Layovers & First/Last Day Visits</span>
         </div>
-        <h1 class="text-3xl md:text-5xl font-bold mb-6">
+
+        <!-- Add explicit text-white -->
+        <h1 class="text-3xl md:text-5xl font-bold text-white mb-6">
             Beaches Near San Juan Airport
         </h1>
-        <p class="text-lg md:text-xl opacity-90 max-w-3xl mx-auto">
-            Maximize your beach time! Discover beaches just 5-20 minutes from Luis Muñoz Marín International Airport (SJU). Perfect for layovers, first-day arrivals, or last-day departures.
+
+        <!-- Change opacity-90 to text-gray-200 -->
+        <p class="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto">
+            Maximize your beach time! Discover beaches just 5-20 minutes from Luis Muñoz Marín International Airport (SJU). Perfect for arrival day, layovers, or your last morning in paradise.
         </p>
-        <p class="text-sm mt-4 opacity-75">Updated January 2025 | All beaches within 15km of SJU Airport</p>
+
+        <!-- Change opacity-75 to text-white/60 -->
+        <p class="text-sm text-white/60 mt-4">Updated January 2025 | All beaches within 15km of SJU Airport</p>
     </div>
 </section>
 
@@ -835,12 +857,5 @@ include __DIR__ . '/components/header.php';
         </a>
     </div>
 </section>
-
-<style>
-/* Amber gradient for hero */
-.hero-gradient-amber {
-    background: linear-gradient(135deg, #d97706 0%, #f59e0b 50%, #fbbf24 100%);
-}
-</style>
 
 <?php include __DIR__ . '/components/footer.php'; ?>
