@@ -26,6 +26,41 @@ function redirect($url) {
     exit;
 }
 
+function sanitizeInternalRedirect($value, $fallback = '/') {
+    if (!is_string($value)) {
+        return $fallback;
+    }
+
+    $value = trim($value);
+    if ($value === '') {
+        return $fallback;
+    }
+
+    // Reject control characters and encoded line breaks.
+    if (preg_match('/[\x00-\x1F\x7F]/', $value) || preg_match('/%0d|%0a/i', $value)) {
+        return $fallback;
+    }
+
+    // Only allow local absolute paths.
+    if (!str_starts_with($value, '/')) {
+        return $fallback;
+    }
+
+    if (str_starts_with($value, '//')) {
+        return $fallback;
+    }
+
+    if (strpos($value, '\\') !== false) {
+        return $fallback;
+    }
+
+    return $value;
+}
+
+function redirectInternal($value, $fallback = '/') {
+    redirect(sanitizeInternalRedirect($value, $fallback));
+}
+
 function currentUser() {
     if (!isset($_SESSION['user_id'])) return null;
     require_once __DIR__ . '/db.php';
@@ -38,14 +73,14 @@ function isAuthenticated() {
 
 function requireAuth() {
     if (!isAuthenticated()) {
-        redirect("/login.php?redirect=" . urlencode($_SERVER["REQUEST_URI"]));
+        redirect("/login.php?redirect=" . urlencode(sanitizeInternalRedirect($_SERVER["REQUEST_URI"] ?? '/')));
     }
 
     // Check session timeout (30 minutes of inactivity)
     if (isset($_SESSION["LAST_ACTIVITY"]) && (time() - $_SESSION["LAST_ACTIVITY"] > 1800)) {
         session_unset();
         session_destroy();
-        redirect("/login.php?timeout=1&redirect=" . urlencode($_SERVER["REQUEST_URI"]));
+        redirect("/login.php?timeout=1&redirect=" . urlencode(sanitizeInternalRedirect($_SERVER["REQUEST_URI"] ?? '/')));
     }
 
     // Validate session fingerprint (prevent session hijacking)

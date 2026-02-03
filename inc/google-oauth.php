@@ -39,6 +39,9 @@ function getGoogleAuthUrl(?string $redirectAfterLogin = null): string {
 
     // Store redirect URL in session
     if ($redirectAfterLogin) {
+        if (function_exists('sanitizeInternalRedirect')) {
+            $redirectAfterLogin = sanitizeInternalRedirect($redirectAfterLogin, '/');
+        }
         $_SESSION['google_oauth_redirect'] = $redirectAfterLogin;
     }
 

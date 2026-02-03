@@ -3,7 +3,7 @@
  * Handles offline caching and background sync
  */
 
-const CACHE_VERSION = 'v1.1.1';
+const CACHE_VERSION = 'v1.1.2';
 const CACHE_NAME = `beach-finder-${CACHE_VERSION}`;
 const DATA_CACHE_NAME = `beach-finder-data-${CACHE_VERSION}`;
 
@@ -14,7 +14,7 @@ const PRECACHE_ASSETS = [
     '/manifest.json',
     '/assets/css/styles.css',
     '/assets/css/tailwind.min.css',
-    '/assets/js/app.js',
+    '/assets/js/app.min.js',
     '/assets/js/map.js',
     '/assets/js/filters.js',
     '/assets/js/geolocation.js',

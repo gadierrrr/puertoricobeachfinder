@@ -39,3 +39,9 @@ lighthouse-*.json
 
 # Temporary files
 *.tmp
+
+# Runtime artifacts
+audit-results/
+data/cache/login-stats.json
+data/migration-output.log
+data/logs/

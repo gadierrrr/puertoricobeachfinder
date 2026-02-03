@@ -142,7 +142,7 @@
             crossorigin="anonymous"></script>
 
     <!-- App JavaScript (defer for non-blocking load) -->
-    <script defer src="/assets/js/app.js"></script>
+    <script defer src="/assets/js/app.min.js"></script>
     <script defer src="/assets/js/geolocation.js"></script>
     <script defer src="/assets/js/filters.js"></script>
     <script defer src="/assets/js/share.js"></script>

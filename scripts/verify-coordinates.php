@@ -11,7 +11,7 @@
 require_once __DIR__ . '/../inc/db.php';
 
 // Google Maps API Key
-$apiKey = 'AIzaSyBJzRm5Qpwxmep93ZoPdXAb8w_4zbNomps';
+$apiKey = envRequire('GOOGLE_MAPS_API_KEY');
 
 // Parse command line arguments
 $args = getopt('', ['fix', 'limit:']);

@@ -46,11 +46,11 @@ if (!$result['success']) {
 
 // Success - check if user needs onboarding
 $user = currentUser();
-$redirect = $_GET['redirect'] ?? '/';
+$redirect = sanitizeInternalRedirect($_GET['redirect'] ?? '/');
 
 // Redirect new users to onboarding (if not already completed)
 if ($user && empty($user['onboarding_completed'])) {
     $redirect = '/onboarding.php' . ($redirect !== '/' ? '?redirect=' . urlencode($redirect) : '');
 }
 
-redirect($redirect);
+redirectInternal($redirect);

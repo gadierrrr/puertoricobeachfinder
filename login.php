@@ -10,9 +10,11 @@ require_once __DIR__ . '/inc/db.php';
 require_once __DIR__ . '/inc/helpers.php';
 require_once __DIR__ . '/inc/google-oauth.php';
 
+$redirectUrl = sanitizeInternalRedirect($_GET['redirect'] ?? '/');
+
 // If already logged in, redirect
 if (isAuthenticated()) {
-    redirect($_GET['redirect'] ?? '/');
+    redirectInternal($redirectUrl);
 }
 
 $error = '';
@@ -20,9 +22,8 @@ $success = '';
 // Magic link temporarily disabled - redirect to main login if someone tries to access it
 $showMagicLinkForm = false; // Was: isset($_GET['method']) && $_GET['method'] === 'email';
 if (isset($_GET['method']) && $_GET['method'] === 'email') {
-    redirect('/login.php' . (isset($_GET['redirect']) ? '?redirect=' . urlencode($_GET['redirect']) : ''));
+    redirect('/login.php' . ($redirectUrl !== '/' ? '?redirect=' . urlencode($redirectUrl) : ''));
 }
-$redirectUrl = $_GET['redirect'] ?? '/';
 
 // Handle OAuth error codes from callback
 if (isset($_GET['error'])) {

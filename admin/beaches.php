@@ -590,6 +590,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const latInput = document.getElementById('lat-input');
     const lngInput = document.getElementById('lng-input');
     const placeIdInput = document.getElementById('place-id-input');
+    const csrfToken = document.querySelector('meta[name=\"csrf-token\"]')?.content || '';
 
     if (!extractBtn) return;
 
@@ -617,7 +618,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ url: url })
+                body: JSON.stringify({ url: url, csrf_token: csrfToken })
             });
 
             const data = await response.json();

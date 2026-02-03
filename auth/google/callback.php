@@ -68,14 +68,11 @@ loginUser($user);
 $redirectUrl = $_SESSION['google_oauth_redirect'] ?? '/';
 unset($_SESSION['google_oauth_redirect']);
 
-// Validate redirect URL (prevent open redirect)
-if (!str_starts_with($redirectUrl, '/')) {
-    $redirectUrl = '/';
-}
+$redirectUrl = sanitizeInternalRedirect($redirectUrl, '/');
 
 // Redirect new users to onboarding (if not already completed)
 if (empty($user['onboarding_completed'])) {
     $redirectUrl = '/onboarding.php' . ($redirectUrl !== '/' ? '?redirect=' . urlencode($redirectUrl) : '');
 }
 
-redirect($redirectUrl);
+redirectInternal($redirectUrl);

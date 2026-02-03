@@ -1,29 +1,30 @@
 <?php
 // inc/db.php - Database connection and helpers
 
-function loadEnv($path) {
-    if (!file_exists($path)) return;
-    $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    foreach ($lines as $line) {
-        if (strpos(trim($line), '#') === 0) continue;
-        if (strpos($line, '=') === false) continue;
-        list($key, $value) = explode('=', $line, 2);
-        $_ENV[trim($key)] = trim($value);
-        putenv(trim($key)."=".trim($value));
-    }
-}
-
-loadEnv(__DIR__ . '/../.env');
+require_once __DIR__ . '/bootstrap.php';
 
 function getDB() {
     static $db = null;
+
     if ($db === null) {
-        $dbPath = $_ENV['DB_PATH'] ?? '/var/www/beach-finder/data/beach-finder.db';
-        $db = new SQLite3($dbPath);
+        $dbPath = envRequire('DB_PATH');
+        $dbDir = dirname($dbPath);
+
+        if (!is_dir($dbDir) && !@mkdir($dbDir, 0755, true) && !is_dir($dbDir)) {
+            throw new RuntimeException("Database directory is not writable or cannot be created: {$dbDir}");
+        }
+
+        try {
+            $db = new SQLite3($dbPath);
+        } catch (Throwable $e) {
+            throw new RuntimeException("Unable to open database at {$dbPath}: " . $e->getMessage(), 0, $e);
+        }
+
         $db->exec('PRAGMA journal_mode=WAL;');
         $db->exec('PRAGMA foreign_keys=ON;');
         $db->exec('PRAGMA busy_timeout=5000;');
     }
+
     return $db;
 }
 
@@ -38,22 +39,27 @@ function uuid() {
 function query($sql, $params = []) {
     $db = getDB();
     $stmt = $db->prepare($sql);
+
     if (!$stmt) {
-        error_log("SQL Error: " . $db->lastErrorMsg());
+        error_log('SQL Error: ' . $db->lastErrorMsg());
         return false;
     }
+
     foreach ($params as $key => $value) {
         $stmt->bindValue(is_int($key) ? $key + 1 : $key, $value);
     }
+
     $result = $stmt->execute();
     if (!$result) {
-        error_log("Query Error: " . $db->lastErrorMsg());
+        error_log('Query Error: ' . $db->lastErrorMsg());
         return false;
     }
+
     $rows = [];
     while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
         $rows[] = $row;
     }
+
     return $rows;
 }
 
@@ -65,13 +71,16 @@ function queryOne($sql, $params = []) {
 function execute($sql, $params = []) {
     $db = getDB();
     $stmt = $db->prepare($sql);
+
     if (!$stmt) {
-        error_log("SQL Error: " . $db->lastErrorMsg());
+        error_log('SQL Error: ' . $db->lastErrorMsg());
         return false;
     }
+
     foreach ($params as $key => $value) {
         $stmt->bindValue(is_int($key) ? $key + 1 : $key, $value);
     }
+
     $result = $stmt->execute();
     return $result !== false;
 }

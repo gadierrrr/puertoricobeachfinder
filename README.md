@@ -1,0 +1,111 @@
+# Puerto Rico Beach Finder
+
+A PHP + SQLite web application for exploring beaches in Puerto Rico.
+
+## Local setup
+
+1. Copy environment template and configure values:
+
+```bash
+cp .env.example .env
+```
+
+2. Install frontend dependencies:
+
+```bash
+npm ci
+```
+
+3. Build frontend assets:
+
+```bash
+npm run build
+```
+
+4. Initialize database (first run only):
+
+```bash
+php init-db.php
+```
+
+5. Run migrations:
+
+```bash
+php scripts/migrate.php
+```
+
+## Required environment variables
+
+Defined in `.env.example`:
+
+- `DB_PATH`
+- `APP_URL`
+- `APP_NAME`
+- `GOOGLE_MAPS_API_KEY`
+- `GOOGLE_CLIENT_ID`
+- `GOOGLE_CLIENT_SECRET`
+- `RESEND_API_KEY`
+- `ANTHROPIC_API_KEY`
+- `APP_ENV` (`dev`, `staging`, `prod`)
+- `APP_DEBUG` (`0` or `1`)
+
+## Migration commands
+
+```bash
+# List pending automatic migrations
+php scripts/migrate.php --dry-run
+
+# Apply pending automatic migrations
+php scripts/migrate.php
+
+# Fail if pending migrations exist
+php scripts/migrate.php --check
+
+# One-time baseline for existing DBs
+php scripts/migrate.php --baseline
+
+# Include manual/data migrations (default excludes manual set)
+php scripts/migrate.php --include-manual
+```
+
+## Deploy command
+
+Use the unified deploy script:
+
+```bash
+./deploy.sh
+```
+
+It runs:
+
+1. PHP syntax lint
+2. `npm ci`
+3. `npm run build`
+4. generated asset consistency check
+5. migrations (`php scripts/migrate.php`)
+6. smoke checks (migration check + secret grep)
+
+## Rollback notes
+
+1. Back up DB before deploy:
+
+```bash
+cp "$DB_PATH" "${DB_PATH}.backup.$(date +%Y%m%d%H%M%S)"
+```
+
+2. If deploy fails after migration:
+
+- Roll back application code to previous commit.
+- Restore DB backup.
+- Re-run `php scripts/migrate.php --check`.
+
+3. If migration runner was newly adopted on an existing DB:
+
+- Use `php scripts/migrate.php --baseline` once to mark already-applied migrations.
+
+## Security operations
+
+- Secret scanning is enforced in CI and pre-commit (`gitleaks`).
+- Google key rotation checklist is documented in `docs/google-key-rotation.md`.
+- See `docs/secret-history-cleanup.md` for history rewrite runbook if secrets were previously committed.
+- Nginx hardening template lives at `deploy/nginx/beach-finder.conf`.

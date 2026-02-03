@@ -16,7 +16,10 @@ if (!isGoogleOAuthEnabled()) {
 }
 
 // Get optional redirect URL
-$redirectAfterLogin = $_GET['redirect'] ?? null;
+$redirectAfterLogin = null;
+if (isset($_GET['redirect'])) {
+    $redirectAfterLogin = sanitizeInternalRedirect($_GET['redirect'], '/');
+}
 
 // Redirect to Google's authorization page
 $authUrl = getGoogleAuthUrl($redirectAfterLogin);

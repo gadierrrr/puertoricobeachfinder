@@ -166,4 +166,4 @@ $db->exec('CREATE INDEX IF NOT EXISTS idx_rate_limits ON rate_limits(identifier,
 echo "- Created rate_limits table\n";
 
 echo "\nDatabase initialization complete!\n";
-echo "Database location: " . ($_ENV['DB_PATH'] ?? '/var/www/beach-finder/data/beach-finder.db') . "\n";
+echo "Database location: " . envRequire('DB_PATH') . "\n";
