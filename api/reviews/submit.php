@@ -34,7 +34,7 @@ $visitType = trim($input['visit_type'] ?? '');
 $csrfToken = $input['csrf_token'] ?? '';
 
 // CSRF validation
-if (!validateCsrfToken($csrfToken)) {
+if (!validateCsrf($csrfToken)) {
     jsonResponse(['success' => false, 'error' => 'Invalid request'], 403);
 }
 

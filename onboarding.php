@@ -14,10 +14,11 @@ require_once __DIR__ . '/inc/constants.php';
 requireAuth();
 
 $user = currentUser();
+$redirectUrl = sanitizeInternalRedirect($_GET['redirect'] ?? '/');
 
 // If already onboarded, redirect to profile or home
 if (!empty($user['onboarding_completed'])) {
-    redirect($_GET['redirect'] ?? '/');
+    redirectInternal($redirectUrl);
 }
 
 // Handle skip request
@@ -26,7 +27,7 @@ if (isset($_GET['skip']) || isset($_COOKIE['skip_onboarding'])) {
         'UPDATE users SET onboarding_completed = 1 WHERE id = :id',
         [':id' => $user['id']]
     );
-    redirect($_GET['redirect'] ?? '/');
+    redirectInternal($redirectUrl);
 }
 
 $pageTitle = 'Welcome to Beach Finder';
@@ -60,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Redirect to home with welcome message
         $_SESSION['show_welcome'] = true;
-        redirect($_GET['redirect'] ?? '/');
+        redirectInternal($redirectUrl);
     }
 }
 
@@ -162,7 +163,7 @@ include __DIR__ . '/components/header.php';
 
             <!-- Submit -->
             <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <a href="/onboarding.php?skip=1<?= isset($_GET['redirect']) ? '&redirect=' . urlencode($_GET['redirect']) : '' ?>"
+                <a href="/onboarding.php?skip=1<?= $redirectUrl !== '/' ? '&redirect=' . urlencode($redirectUrl) : '' ?>"
                    class="text-gray-500 hover:text-gray-300 text-sm transition-colors order-2 sm:order-1">
                     Skip for now
                 </a>

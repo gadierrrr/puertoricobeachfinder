@@ -47,7 +47,7 @@ if (empty($url)) {
 }
 
 // Google Maps API Key
-$apiKey = 'AIzaSyBJzRm5Qpwxmep93ZoPdXAb8w_4zbNomps';
+$apiKey = envRequire('GOOGLE_MAPS_API_KEY');
 
 // Puerto Rico bounding box
 $prBounds = [

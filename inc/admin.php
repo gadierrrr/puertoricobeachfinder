@@ -27,7 +27,7 @@ function isAdmin(): bool {
  */
 function requireAdmin(): void {
     if (!isAuthenticated()) {
-        redirect('/login.php?redirect=' . urlencode($_SERVER['REQUEST_URI']));
+        redirect('/login.php?redirect=' . urlencode(sanitizeInternalRedirect($_SERVER['REQUEST_URI'] ?? '/')));
     }
 
     if (!isAdmin()) {

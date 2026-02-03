@@ -59,7 +59,7 @@ require_once __DIR__ . '/../inc/constants.php';
 require_once __DIR__ . '/../inc/image-optimizer.php';
 
 // Google Places API (New) Key
-$GOOGLE_API_KEY = 'AIzaSyB5qQIlp_TxbxntiJN5MDQnZhr3NPVde3A';
+$GOOGLE_API_KEY = envRequire('GOOGLE_MAPS_API_KEY');
 
 // Rate limiting delay between API calls (milliseconds)
 $API_DELAY_MS = 200;

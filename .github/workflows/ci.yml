@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.14.0'
+          cache: 'npm'
+
+      - name: Prepare CI environment
+        run: |
+          cat > .env <<'ENV'
+          DB_PATH=/tmp/beach-finder-ci.db
+          APP_URL=http://localhost:8082
+          APP_NAME=Beach Finder CI
+          GOOGLE_MAPS_API_KEY=test-google-key
+          GOOGLE_CLIENT_ID=test-google-client-id
+          GOOGLE_CLIENT_SECRET=test-google-client-secret
+          RESEND_API_KEY=test-resend-key
+          ANTHROPIC_API_KEY=test-anthropic-key
+          APP_ENV=dev
+          APP_DEBUG=0
+          ENV
+
+      - name: PHP lint
+        run: |
+          find . -type f -name '*.php' \
+            -not -path './.git/*' \
+            -not -path './node_modules/*' \
+            -print0 | xargs -0 -n1 php -l
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Verify generated assets are committed
+        run: git diff --exit-code -- assets/css/tailwind.min.css assets/js/app.min.js
+
+      - name: Initialize base schema
+        run: php init-db.php
+
+      - name: Migration dry-run
+        run: php scripts/migrate.php --dry-run
+
+      - name: Apply migrations and verify check mode
+        run: |
+          php scripts/migrate.php
+          php scripts/migrate.php --check
+
+      - name: Ensure no hardcoded Google keys in active code
+        run: |
+          GOOGLE_KEY_PREFIX="AI""za"
+          if grep -R "$GOOGLE_KEY_PREFIX" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=audit-results --exclude-dir=data --exclude='*.md'; then
+            echo "Found hardcoded Google API key pattern in active code"
+            exit 1
+          fi
+
+  secret-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

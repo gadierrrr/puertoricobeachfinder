@@ -36,8 +36,15 @@ if (!isAdmin()) {
 }
 
 // Get the URL from POST data
-$input = json_decode(file_get_contents('php://input'), true);
+$input = json_decode(file_get_contents('php://input'), true) ?: [];
+$csrfToken = $input['csrf_token'] ?? '';
 $url = trim($input['url'] ?? '');
+
+if (!validateCsrf($csrfToken)) {
+    http_response_code(403);
+    echo json_encode(['error' => 'Invalid CSRF token']);
+    exit;
+}
 
 if (empty($url)) {
     http_response_code(400);
@@ -46,7 +53,7 @@ if (empty($url)) {
 }
 
 // Google Maps API Key
-$apiKey = 'AIzaSyBJzRm5Qpwxmep93ZoPdXAb8w_4zbNomps';
+$apiKey = envRequire('GOOGLE_MAPS_API_KEY');
 
 /**
  * Follow redirects and get final URL
