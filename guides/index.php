@@ -86,8 +86,6 @@ $guides = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo h($pageTitle); ?> - Puerto Rico Beach Finder</title>
     <meta name="description" content="<?php echo h($pageDescription); ?>">
-    <link rel="stylesheet" href="/assets/css/tailwind.min.css">
-    <link rel="stylesheet" href="/assets/css/styles.css">
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -119,20 +117,13 @@ $guides = [
     <?php include __DIR__ . '/../components/header.php'; ?>
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-green-600 to-green-700 text-white py-16">
-        <div class="container mx-auto px-4 container-padding">
-            <nav class="text-sm mb-6 text-green-100">
-                <a href="/" class="hover:text-white">Home</a>
-                <span class="mx-2">&gt;</span>
-                <span>Guides</span>
-            </nav>
-            <h1 class="text-4xl md:text-5xl font-bold mb-4">Puerto Rico Beach Guides</h1>
-            <p class="text-xl text-green-50 max-w-3xl">
-                Expert guides to help you plan the perfect beach vacation. From transportation tips to safety advice,
-                we've got everything you need for an unforgettable Puerto Rico beach experience.
-            </p>
-        </div>
-    </section>
+    <?php
+    $breadcrumbs = [
+        ['name' => 'Home', 'url' => '/'],
+        ['name' => 'Guides']
+    ];
+    include __DIR__ . '/../components/hero-guide.php';
+    ?>
 
     <!-- Guides Grid -->
     <main class="container mx-auto px-4 container-padding py-12">

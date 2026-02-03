@@ -205,3 +205,36 @@
     color: var(--color-text-secondary);
 }
 
+/* Complete prose-brand dark mode support */
+[data-theme="dark"] .prose-brand strong {
+    color: var(--color-white);
+}
+
+[data-theme="dark"] .prose-brand h2,
+[data-theme="dark"] .prose-brand h3 {
+    color: var(--color-white);
+}
+
+[data-theme="dark"] .prose-brand ul,
+[data-theme="dark"] .prose-brand ol {
+    color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .prose-brand a {
+    color: var(--color-accent);
+}
+
+[data-theme="dark"] .prose-brand a:hover {
+    color: var(--color-accent-light);
+}
+
+/* Beach description dark mode support */
+[data-theme="dark"] .beach-description,
+[data-theme="dark"] .beach-description p {
+    color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .beach-description strong {
+    color: var(--color-white);
+}
+

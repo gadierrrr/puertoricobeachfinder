@@ -13,7 +13,6 @@ $faqs = [['question' => 'What are the best family-friendly beaches in Puerto Ric
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?php echo h($pageTitle);?> - Puerto Rico Beach Finder</title>
 <meta name="description" content="<?php echo h($pageDescription);?>">
-<link rel="stylesheet" href="/assets/css/tailwind.min.css"><link rel="stylesheet" href="/assets/css/styles.css">
 <?php echo articleSchema($pageTitle,$pageDescription,'https://puertoricobeachfinder.com/guides/family-beach-vacation-planning.php','2024-01-15');
 echo howToSchema('How to Plan Family Beach Vacation to Puerto Rico','Complete planning guide for families',[['name'=>'Choose Best Time to Visit','text'=>'Select travel dates based on school schedules, weather preferences, and budget. April-May offers best value.'],['name'=>'Book Flights Early','text'=>'Book 2-3 months ahead for best prices. Nonstop flights to San Juan from major U.S. cities available.'],['name'=>'Reserve Family Accommodation','text'=>'Book hotels with pools and kids clubs, or condos with kitchens to save on dining costs.'],['name'=>'Rent Appropriate Vehicle','text'=>'Reserve car seats with rental car or bring portable boosters. SUV provides space for family gear.'],['name'=>'Plan Balanced Itinerary','text'=>'Mix beach days with cultural sites, rainforest, and adventure activities. Don\'t overschedule.'],['name'=>'Pack Smart for Kids','text'=>'Bring beach toys, life jackets, first aid kit, snacks, entertainment for travel, and sun protection.'],['name'=>'Build in Downtime','text'=>'Schedule rest days at hotel pool or easy beaches. Avoid burnout with realistic daily plans.']]);
 echo faqSchema($faqs);
@@ -21,12 +20,14 @@ echo breadcrumbSchema([['name'=>'Home','url'=>'https://puertoricobeachfinder.com
 </head>
 <body class="bg-gray-50" data-theme="light">
 <?php include __DIR__.'/../components/header.php';?>
-<section class="bg-gradient-to-br from-green-600 to-green-700 text-white py-16">
-<div class="container mx-auto px-4 container-padding">
-<nav class="text-sm mb-6 text-green-100"><a href="/" class="hover:text-white">Home</a><span class="mx-2">&gt;</span><a href="/guides/" class="hover:text-white">Guides</a><span class="mx-2">&gt;</span><span>Family Planning</span></nav>
-<h1 class="text-4xl md:text-5xl font-bold mb-4">Family Beach Vacation Planning for Puerto Rico</h1>
-<p class="text-xl text-green-50 max-w-3xl">Complete guide to planning an unforgettable, stress-free family beach vacation with kids of all ages.</p>
-</div></section>
+<?php
+$breadcrumbs = [
+    ['name' => 'Home', 'url' => '/'],
+    ['name' => 'Guides', 'url' => '/guides/'],
+    ['name' => 'Family Planning']
+];
+include __DIR__.'/../components/hero-guide.php';
+?>
 <main class="guide-layout">
 <aside class="guide-sidebar"><div class="guide-toc">
 <h2 class="text-lg font-bold text-gray-900 mb-4">Table of Contents</h2>

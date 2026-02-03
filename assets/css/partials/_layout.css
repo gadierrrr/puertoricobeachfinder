@@ -15,6 +15,19 @@
     background: linear-gradient(135deg, #1a2c32 0%, #132024 100%);
 }
 
+/* Green gradient for guide pages (reliable CSS class instead of Tailwind utilities) */
+.hero-gradient-guide {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    /* Equivalent to from-green-600 to-green-700 */
+}
+
+/* Deprecation notice - DO NOT USE in new pages */
+/* .hero-gradient and .hero-gradient-purple are deprecated in favor of:
+ * - .hero-gradient-dark (collection pages, matches homepage dark theme)
+ * - .hero-gradient-guide (guide pages, green gradient)
+ * These classes remain for backwards compatibility only.
+ */
+
 .hero-cta {
     display: inline-flex;
     align-items: center;

@@ -62,8 +62,6 @@ $faqs = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo h($pageTitle); ?> - Puerto Rico Beach Finder</title>
     <meta name="description" content="<?php echo h($pageDescription); ?>">
-    <link rel="stylesheet" href="/assets/css/tailwind.min.css">
-    <link rel="stylesheet" href="/assets/css/styles.css">
     <?php
     echo articleSchema($pageTitle, $pageDescription, 'https://puertoricobeachfinder.com/guides/beach-safety-tips.php', '2024-01-15');
     echo howToSchema(
@@ -89,23 +87,14 @@ $faqs = [
 </head>
 <body class="bg-gray-50" data-theme="light">
     <?php include __DIR__ . '/../components/header.php'; ?>
-
-    <section class="bg-gradient-to-br from-green-600 to-green-700 text-white py-16">
-        <div class="container mx-auto px-4 container-padding">
-            <nav class="text-sm mb-6 text-green-100">
-                <a href="/" class="hover:text-white">Home</a>
-                <span class="mx-2">&gt;</span>
-                <a href="/guides/" class="hover:text-white">Guides</a>
-                <span class="mx-2">&gt;</span>
-                <span>Beach Safety Tips</span>
-            </nav>
-            <h1 class="text-4xl md:text-5xl font-bold mb-4">Beach Safety Tips for Puerto Rico</h1>
-            <p class="text-xl text-green-50 max-w-3xl">
-                Essential safety guidance to help you enjoy Puerto Rico's beautiful beaches while staying protected
-                from rip currents, sun exposure, marine life, and other hazards.
-            </p>
-        </div>
-    </section>
+    <?php
+    $breadcrumbs = [
+        ['name' => 'Home', 'url' => '/'],
+        ['name' => 'Guides', 'url' => '/guides/'],
+        ['name' => 'Beach Safety Tips']
+    ];
+    include __DIR__ . '/../components/hero-guide.php';
+    ?>
 
     <main class="guide-layout">
         <aside class="guide-sidebar">

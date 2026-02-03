@@ -13,7 +13,6 @@ $faqs = [['question' => 'What is the best time of day for beach photography?', '
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?php echo h($pageTitle); ?> - Puerto Rico Beach Finder</title>
 <meta name="description" content="<?php echo h($pageDescription); ?>">
-<link rel="stylesheet" href="/assets/css/tailwind.min.css"><link rel="stylesheet" href="/assets/css/styles.css">
 <?php echo articleSchema($pageTitle,$pageDescription,'https://puertoricobeachfinder.com/guides/beach-photography-tips.php','2024-01-15');
 echo howToSchema('How to Photograph Puerto Rico Beaches','Expert photography guide for beach images',[['name'=>'Scout Location','text'=>'Visit beach before golden hour to find best compositions, interesting foreground elements, and vantage points.'],['name'=>'Use Golden Hour Light','text'=>'Shoot during first hour after sunrise or last hour before sunset for warm, flattering light.'],['name'=>'Add Foreground Interest','text'=>'Include rocks, palm trees, shells, or people in foreground to create depth and context.'],['name'=>'Use Polarizing Filter','text'=>'Reduce glare from water and wet sand, enhance blue skies and water clarity.'],['name'=>'Experiment with Angles','text'=>'Shoot from low angles for drama, high vantage points for context, eye-level for intimacy.'],['name'=>'Protect Equipment','text'=>'Keep camera in sealed bag between shots, use UV filter, clean regularly with proper tools.']]);
 echo faqSchema($faqs);
@@ -21,12 +20,14 @@ echo breadcrumbSchema([['name'=>'Home','url'=>'https://puertoricobeachfinder.com
 </head>
 <body class="bg-gray-50" data-theme="light">
 <?php include __DIR__.'/../components/header.php';?>
-<section class="bg-gradient-to-br from-green-600 to-green-700 text-white py-16">
-<div class="container mx-auto px-4 container-padding">
-<nav class="text-sm mb-6 text-green-100"><a href="/" class="hover:text-white">Home</a><span class="mx-2">&gt;</span><a href="/guides/" class="hover:text-white">Guides</a><span class="mx-2">&gt;</span><span>Beach Photography</span></nav>
-<h1 class="text-4xl md:text-5xl font-bold mb-4">Beach Photography Tips for Puerto Rico</h1>
-<p class="text-xl text-green-50 max-w-3xl">Master beach photography with expert techniques for lighting, composition, and equipment to capture Puerto Rico's stunning coastlines.</p>
-</div></section>
+<?php
+$breadcrumbs = [
+    ['name' => 'Home', 'url' => '/'],
+    ['name' => 'Guides', 'url' => '/guides/'],
+    ['name' => 'Beach Photography']
+];
+include __DIR__.'/../components/hero-guide.php';
+?>
 <main class="guide-layout">
 <aside class="guide-sidebar"><div class="guide-toc">
 <h2 class="text-lg font-bold text-gray-900 mb-4">Table of Contents</h2>

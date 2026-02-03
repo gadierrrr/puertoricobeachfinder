@@ -13,11 +13,22 @@
     --color-bg-card-dark: #1c2128;
 
     /* ===== TEXT COLORS ===== */
+    --color-white: #ffffff;
     --color-text-primary: #f1f5f9;
     --color-text-secondary: #cbd5e1;
     --color-text-muted: #94a3b8;
     --color-text-dark: #374151;
     --color-text-darker: #111827;
+
+    /* Text Colors - Light Mode Support */
+    --color-text-on-light: #1f2937;        /* Dark text for light backgrounds (gray-800) */
+    --color-text-secondary-light: #4b5563;  /* Medium gray for light backgrounds (gray-600) */
+    --color-text-muted-light: #6b7280;      /* Muted gray for light backgrounds (gray-500) */
+
+    /* Background Colors - Light Mode Support */
+    --color-bg-light-primary: #ffffff;      /* White background */
+    --color-bg-light-secondary: #f9fafb;    /* Off-white (gray-50) */
+    --color-bg-light-tertiary: #f3f4f6;     /* Light gray (gray-100) */
 
     /* ===== INTERACTIVE / PRIMARY (Blue) ===== */
     --color-primary: #3b82f6;
@@ -32,15 +43,21 @@
     --color-focus-ring-lighter: rgba(59, 130, 246, 0.2);
     --color-focus-ring-faint: rgba(59, 130, 246, 0.1);
 
-    /* ===== ACCENT (Yellow) ===== */
-    --color-accent: #fde047;
-    --color-accent-hover: #facc15;
-    --color-accent-light: rgba(253, 224, 71, 0.1);
-    --color-accent-light-hover: rgba(253, 224, 71, 0.3);
+    /* ===== SECONDARY (Green - for guide pages, success states) ===== */
+    --color-secondary: #10b981;            /* Emerald-500 */
+    --color-secondary-light: #34d399;      /* Emerald-400 */
+    --color-secondary-hover: #059669;      /* Emerald-600 */
+    --color-secondary-dark: #047857;       /* Emerald-700 */
 
-    /* ===== SUCCESS (Green) ===== */
-    --color-success: #10b981;
-    --color-success-dark: #059669;
+    /* ===== ACCENT (Yellow - highlights, CTAs on dark backgrounds) ===== */
+    --color-accent: #fde047;               /* Yellow-300 */
+    --color-accent-light: #fef08a;         /* Yellow-200 */
+    --color-accent-hover: #facc15;         /* Yellow-400 */
+    --color-accent-dark: #eab308;          /* Yellow-500 */
+
+    /* Legacy aliases for backward compatibility */
+    --color-success: var(--color-secondary);
+    --color-success-dark: var(--color-secondary-hover);
 
     /* ===== ERROR (Red) ===== */
     --color-error: #ef4444;

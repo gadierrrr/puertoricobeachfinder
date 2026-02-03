@@ -63,8 +63,6 @@ $faqs = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo h($pageTitle); ?> - Puerto Rico Beach Finder</title>
     <meta name="description" content="<?php echo h($pageDescription); ?>">
-    <link rel="stylesheet" href="/assets/css/tailwind.min.css">
-    <link rel="stylesheet" href="/assets/css/styles.css">
     <?php
     echo articleSchema($pageTitle, $pageDescription, 'https://puertoricobeachfinder.com/guides/getting-to-puerto-rico-beaches.php', '2024-01-15');
     echo howToSchema(
@@ -92,22 +90,14 @@ $faqs = [
     <?php include __DIR__ . '/../components/header.php'; ?>
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-green-600 to-green-700 text-white py-16">
-        <div class="container mx-auto px-4 container-padding">
-            <nav class="text-sm mb-6 text-green-100">
-                <a href="/" class="hover:text-white">Home</a>
-                <span class="mx-2">&gt;</span>
-                <a href="/guides/" class="hover:text-white">Guides</a>
-                <span class="mx-2">&gt;</span>
-                <span>Getting to Beaches</span>
-            </nav>
-            <h1 class="text-4xl md:text-5xl font-bold mb-4">Getting to Puerto Rico Beaches</h1>
-            <p class="text-xl text-green-50 max-w-3xl">
-                Your complete guide to transportation options for reaching every beach in Puerto Rico,
-                from rental cars to ferries to public transit.
-            </p>
-        </div>
-    </section>
+    <?php
+    $breadcrumbs = [
+        ['name' => 'Home', 'url' => '/'],
+        ['name' => 'Guides', 'url' => '/guides/'],
+        ['name' => 'Getting to Beaches']
+    ];
+    include __DIR__ . '/../components/hero-guide.php';
+    ?>
 
     <!-- Main Content -->
     <main class="guide-layout">

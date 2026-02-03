@@ -83,20 +83,10 @@ include __DIR__ . '/components/header.php';
 ?>
 
 <!-- Hero Section -->
-<section class="hero-gradient text-white py-16 md:py-20">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <!-- Breadcrumbs -->
-        <div class="mb-6">
-            <?php include __DIR__ . '/components/breadcrumbs.php'; ?>
-        </div>
-        <h1 class="text-3xl md:text-5xl font-bold mb-6">
-            Best Surfing Beaches in Puerto Rico
-        </h1>
-        <p class="text-lg md:text-xl opacity-90 max-w-3xl mx-auto page-description">
-            Ride world-class waves in the Caribbean. From Rincon's legendary breaks to hidden gems across the island, discover Puerto Rico's best surf spots.
-        </p>
-        <p class="text-sm mt-4 opacity-75">Updated January 2025 | 45+ surf breaks reviewed</p>
-    </div>
+<?php
+$heroSubtext = 'Updated January 2025 | 45+ surf breaks reviewed';
+include __DIR__ . '/components/hero-collection.php';
+?>
 </section>
 
 <!-- Quick Navigation -->

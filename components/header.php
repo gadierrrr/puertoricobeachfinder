@@ -116,7 +116,7 @@ $currentLang = getCurrentLanguage();
     <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,400;1,500;1,600;1,700&display=swap" rel="stylesheet"></noscript>
 
     <!-- Tailwind CSS (local build - no render-blocking JS) -->
-    <link rel="stylesheet" href="/assets/css/tailwind.min.css?v=3.0">
+    <link rel="stylesheet" href="/assets/css/tailwind.min.css?v=3.2">
 
     <?php if (!isset($skipMapCSS) || !$skipMapCSS): ?>
     <!-- MapLibre GL CSS - loaded asynchronously to avoid render blocking -->
@@ -140,7 +140,7 @@ $currentLang = getCurrentLanguage();
             onload="window.lucideLoaded=true;if(typeof lucide!=='undefined')lucide.createIcons()"></script>
 
     <!-- Custom styles -->
-    <link rel="stylesheet" href="/assets/css/styles.css?v=3.1">
+    <link rel="stylesheet" href="/assets/css/styles.css?v=3.3">
 
     <!-- Deferred scripts (non-blocking) -->
     <script defer

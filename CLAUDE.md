@@ -114,13 +114,14 @@ assets/css/
 │   ├── _variables.css     # CSS custom properties (colors, shadows, z-index)
 │   ├── _base.css          # Typography, animations, glass utilities
 │   ├── _loading.css       # Toasts, skeletons, spinners, HTMX states
-│   ├── _cards.css         # Beach cards, score badges
+│   ├── _cards.css         # Beach cards, score badges, prose classes
 │   ├── _filters.css       # Filter chips, tag buttons, view toggle
 │   ├── _conditions.css    # Beach conditions meter widget
 │   ├── _map.css           # Map container, markers, popups
 │   ├── _drawers.css       # Drawer/modal components
 │   ├── _modals.css        # Share modal, lightbox
-│   ├── _layout.css        # Hero section, empty states
+│   ├── _layout.css        # Hero section, empty states, hero gradients
+│   ├── _guides.css        # Guide page layout, TOC, related guides
 │   ├── _forms.css         # Range slider, Tom Select, compare bar
 │   ├── _accessibility.css # Focus states, reduced motion, contrast
 │   ├── _dark-mode.css     # All [data-theme="dark"] overrides
@@ -142,13 +143,30 @@ assets/css/
 All colors, shadows, and z-index values are defined as CSS variables in `_variables.css`:
 
 ```css
-/* Colors - use these instead of hardcoded hex values */
+/* Color Hierarchy - Unified System */
+/* Primary (Blue) - Interactive elements, links, filters */
 --color-primary: #3b82f6;
 --color-primary-hover: #2563eb;
---color-success: #10b981;
+
+/* Secondary (Green) - Guide pages, success states */
+--color-secondary: #10b981;
+--color-secondary-hover: #059669;
+
+/* Accent (Yellow) - Highlights, CTAs on dark backgrounds */
+--color-accent: #fde047;
+--color-accent-hover: #facc15;
+
+/* Legacy aliases for backward compatibility */
+--color-success: var(--color-secondary);
+
+/* Light Mode Variables */
+--color-white: #ffffff;
+--color-text-on-light: #1f2937;        /* Dark text for light backgrounds */
+--color-bg-light-primary: #ffffff;     /* White background */
+
+/* Error/Warning */
 --color-error: #ef4444;
 --color-warning: #f59e0b;
---color-gray-500: #6b7280;
 
 /* Surfaces */
 --color-surface: white;
@@ -161,6 +179,13 @@ All colors, shadows, and z-index values are defined as CSS variables in `_variab
 --z-toast: 100;
 ```
 
+### Color Usage Guidelines
+
+- **Primary (Blue)** - Use for main interactive elements, links, filter chips
+- **Secondary (Green)** - Use for guide pages, success states, positive actions
+- **Accent (Yellow)** - Use for highlights and CTAs on dark backgrounds only
+- Always use semantic variables, never hardcode hex values
+
 ### Adding New Styles
 
 1. **Identify the correct partial** based on component type
@@ -168,6 +193,41 @@ All colors, shadows, and z-index values are defined as CSS variables in `_variab
 3. **Add dark mode overrides** in `_dark-mode.css` (not inline with component)
 4. **Add responsive overrides** in `_responsive.css` for mobile-specific styles
 5. **Run `npm run build:css`** to regenerate `styles.css`
+
+### Prose Content Classes
+
+For rich text content sections, use these semantic classes:
+
+- **`.prose-brand`** - For content on dark backgrounds (collection pages, beach detail pages)
+  - Light text colors optimized for dark backgrounds
+  - Full dark mode support in `_dark-mode.css`
+
+- **`.prose-light`** - For content on light backgrounds (guide pages, light sections)
+  - Dark text colors optimized for light backgrounds
+  - Proper heading and link styling
+
+- **`.beach-description`** - For collection page introduction sections
+  - Styled for light gray backgrounds
+  - Includes dark mode overrides
+
+**Important:** Always pair prose classes with appropriate backgrounds to ensure readability.
+
+### CSS Loading (CRITICAL)
+
+**All pages MUST load CSS exclusively through `components/header.php`.** Never add `<link>` tags for CSS files directly in page `<head>` sections.
+
+```php
+<!-- WRONG - Don't do this in individual pages -->
+<head>
+    <link rel="stylesheet" href="/assets/css/tailwind.min.css">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+
+<!-- CORRECT - CSS loaded automatically via header.php -->
+<?php include __DIR__ . '/components/header.php'; ?>
+```
+
+Duplicate CSS loading causes race conditions and prevents styles from rendering properly. Cache-busting versions are managed centrally in `header.php`.
 
 ### Dark Mode Rules
 
@@ -201,6 +261,11 @@ Use semantic class names for CSS hooks instead of targeting Tailwind utilities:
 Required semantic classes for mobile overrides:
 - `.beach-hero`, `.beach-hero-overlay` - Beach detail hero
 - `.beach-sidebar`, `.beach-main` - Beach detail layout
+
+Hero gradient classes (defined in `_layout.css`):
+- `.hero-gradient-dark` - Collection pages, dark blue/green gradient
+- `.hero-gradient-guide` - Guide pages, green gradient (secondary color)
+- Legacy: `.hero-gradient`, `.hero-gradient-purple` (deprecated, kept for compatibility)
 - `.profile-stats`, `.profile-stat` - Profile page stats
 - `.review-item`, `.review-item-content` - Review list items
 - `.compare-bar-inner`, `.compare-bar-header` - Comparison bar
