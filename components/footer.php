@@ -27,7 +27,7 @@
                     </p>
                     <!-- Tools -->
                     <div class="space-y-2 mt-6">
-                        <h5 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Tools</h5>
+                        <h5 class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Tools</h5>
                         <ul class="space-y-2 text-sm">
                             <li><a href="/quiz.php" class="text-gray-400 hover:text-brand-yellow transition-colors flex items-center gap-2">
                                 <i data-lucide="compass" class="w-4 h-4"></i>
@@ -61,7 +61,7 @@
                     </ul>
                     <!-- Beaches by Location -->
                     <div class="mt-6">
-                        <h5 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">By Location</h5>
+                        <h5 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">By Location</h5>
                         <ul class="space-y-2 text-sm">
                             <li><a href="/beaches-near-san-juan.php" class="text-gray-400 hover:text-brand-yellow transition-colors">Near San Juan</a></li>
                             <li><a href="/beaches-near-san-juan-airport.php" class="text-gray-400 hover:text-brand-yellow transition-colors">Near Airport</a></li>
@@ -102,7 +102,7 @@
                     <?php if (isAuthenticated()): ?>
                     <!-- Authenticated User -->
                     <div class="mt-6">
-                        <h5 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Your Account</h5>
+                        <h5 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Your Account</h5>
                         <ul class="space-y-2 text-sm">
                             <li><a href="/favorites.php" class="text-gray-400 hover:text-brand-yellow transition-colors flex items-center gap-2">
                                 <i data-lucide="heart" class="w-4 h-4"></i>
@@ -128,7 +128,7 @@
 
             <!-- Copyright -->
             <div class="border-t border-white/5 pt-8 mt-12">
-                <p class="text-xs text-gray-600 text-center">
+                <p class="text-xs text-gray-400 text-center">
                     &copy; <?= date('Y') ?> Beach Finder. All rights reserved.
                 </p>
             </div>

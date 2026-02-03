@@ -267,7 +267,7 @@ include __DIR__ . '/components/header.php';
                     </a>
 
                     <!-- Trust Signal -->
-                    <div class="flex items-center justify-center gap-2 text-sm text-gray-500">
+                    <div class="flex items-center justify-center gap-2 text-sm text-gray-400">
                         <i data-lucide="shield-check" class="w-4 h-4 text-green-500"></i>
                         <span>We never post without your permission</span>
                     </div>
@@ -279,7 +279,7 @@ include __DIR__ . '/components/header.php';
                             <div class="w-full border-t border-white/10"></div>
                         </div>
                         <div class="relative flex justify-center text-sm">
-                            <span class="px-4 bg-brand-darker text-gray-500">or</span>
+                            <span class="px-4 bg-brand-darker text-gray-400">or</span>
                         </div>
                     </div>
                     <a href="?method=email<?= $redirectUrl !== '/' ? '&redirect=' . urlencode($redirectUrl) : '' ?>"
@@ -292,7 +292,7 @@ include __DIR__ . '/components/header.php';
                     <div class="text-center py-8 text-gray-400">
                         <i data-lucide="alert-triangle" class="w-12 h-12 mx-auto mb-4 text-yellow-500/50"></i>
                         <p>Sign-in is temporarily unavailable.</p>
-                        <p class="text-sm mt-2 text-gray-500">Please try again later.</p>
+                        <p class="text-sm mt-2 text-gray-400">Please try again later.</p>
                     </div>
                     <?php endif; ?>
 
@@ -305,7 +305,7 @@ include __DIR__ . '/components/header.php';
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email address</label>
                             <div class="relative">
-                                <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500"></i>
+                                <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i>
                                 <input type="email"
                                        id="email"
                                        name="email"
@@ -320,7 +320,7 @@ include __DIR__ . '/components/header.php';
                             Send Magic Link
                         </button>
 
-                        <p class="text-center text-sm text-gray-500">
+                        <p class="text-center text-sm text-gray-400">
                             We'll email you a secure link to sign in instantly.
                         </p>
                     </form>
@@ -331,7 +331,7 @@ include __DIR__ . '/components/header.php';
                             <div class="w-full border-t border-white/10"></div>
                         </div>
                         <div class="relative flex justify-center text-sm">
-                            <span class="px-4 bg-brand-darker text-gray-500">or</span>
+                            <span class="px-4 bg-brand-darker text-gray-400">or</span>
                         </div>
                     </div>
 
@@ -352,34 +352,34 @@ include __DIR__ . '/components/header.php';
 
             <!-- Mobile Feature Cards (visible only on mobile) -->
             <div class="lg:hidden mt-8 pt-8 border-t border-white/10">
-                <p class="text-center text-sm text-gray-500 mb-4">Join <?= h($userCountDisplay) ?>+ beach lovers who:</p>
+                <p class="text-center text-sm text-gray-400 mb-4">Join <?= h($userCountDisplay) ?>+ beach lovers who:</p>
                 <div class="grid grid-cols-2 gap-3">
                     <div class="bg-white/5 rounded-xl p-4 text-center border border-white/10">
                         <span class="text-2xl mb-2 block">🌤️</span>
                         <p class="text-white text-sm font-medium">Check Conditions</p>
-                        <p class="text-gray-500 text-xs mt-1">Real-time weather</p>
+                        <p class="text-gray-400 text-xs mt-1">Real-time weather</p>
                     </div>
                     <div class="bg-white/5 rounded-xl p-4 text-center border border-white/10">
                         <span class="text-2xl mb-2 block">❤️</span>
                         <p class="text-white text-sm font-medium">Save Favorites</p>
-                        <p class="text-gray-500 text-xs mt-1">Never forget</p>
+                        <p class="text-gray-400 text-xs mt-1">Never forget</p>
                     </div>
                     <div class="bg-white/5 rounded-xl p-4 text-center border border-white/10">
                         <span class="text-2xl mb-2 block">🏆</span>
                         <p class="text-white text-sm font-medium">Earn Badges</p>
-                        <p class="text-gray-500 text-xs mt-1">Track your journey</p>
+                        <p class="text-gray-400 text-xs mt-1">Track your journey</p>
                     </div>
                     <div class="bg-white/5 rounded-xl p-4 text-center border border-white/10">
                         <span class="text-2xl mb-2 block">👥</span>
                         <p class="text-white text-sm font-medium">Help Others</p>
-                        <p class="text-gray-500 text-xs mt-1">Share discoveries</p>
+                        <p class="text-gray-400 text-xs mt-1">Share discoveries</p>
                     </div>
                 </div>
             </div>
 
             <!-- Footer Links -->
             <div class="mt-8 pt-6 border-t border-white/10 text-center space-y-4">
-                <p class="text-xs text-gray-500">
+                <p class="text-xs text-gray-400">
                     By signing in, you agree to our
                     <a href="/terms.php" class="text-brand-yellow hover:underline">Terms of Service</a>
                     and

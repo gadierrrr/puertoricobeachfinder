@@ -19,7 +19,7 @@ $subtext = $subtext ?? '';
         <i data-lucide="<?= h($icon) ?>" aria-hidden="true"></i>
     </div>
     <div class="quick-fact-content min-w-0">
-        <div class="quick-fact-label text-xs text-gray-500 uppercase tracking-wide"><?= h($label) ?></div>
+        <div class="quick-fact-label text-xs text-gray-400 uppercase tracking-wide"><?= h($label) ?></div>
         <div class="quick-fact-value text-white font-medium"><?= h($value) ?></div>
         <?php if ($subtext): ?>
         <div class="quick-fact-subtext text-sm text-gray-400"><?= h($subtext) ?></div>

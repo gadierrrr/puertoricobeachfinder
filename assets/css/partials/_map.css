@@ -276,6 +276,15 @@
     outline-color: var(--color-primary);
 }
 
+/* MapLibre attribution control - fix contrast issue */
+.maplibregl-ctrl-attrib-inner {
+    color: rgba(0, 0, 0, 0.75) !important;
+}
+
+[data-theme="dark"] .maplibregl-ctrl-attrib-inner {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
 /* Mobile map controls */
 @media (max-width: 640px) {
     #map-container {

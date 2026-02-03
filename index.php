@@ -132,7 +132,7 @@ include __DIR__ . '/components/header.php';
         <!-- Subtitle with integrated stats -->
         <p class="text-sm sm:text-base text-gray-200 max-w-2xl mx-auto mt-6 md:mt-8 mb-8 md:mb-10 animate-fade-in-up delay-300">
             <?= number_format($totalBeaches) ?> beaches filtered by vibe, crowd level, and activity
-            <span class="text-white/50 mx-1">•</span>
+            <span class="text-white/70 mx-1">•</span>
             <span class="inline-flex items-center gap-1">
                 <svg class="w-3.5 h-3.5 text-brand-yellow inline" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                 <?= number_format($siteStats['avg_rating'], 1) ?> from <?= number_format($siteStats['total_reviews'] / 1000) ?>K+ reviews
@@ -143,7 +143,7 @@ include __DIR__ . '/components/header.php';
         <div class="animate-fade-in-up delay-400 mb-8 md:mb-10">
             <form action="/#beaches" method="GET" class="hero-search-form bg-black/40 backdrop-blur-md border border-white/20 rounded-2xl sm:rounded-full p-1.5 sm:p-2 max-w-xl md:max-w-2xl mx-auto" id="hero-search-form">
                 <div class="flex items-center">
-                    <i data-lucide="search" class="w-5 h-5 text-white/50 ml-3 sm:ml-4 flex-shrink-0" aria-hidden="true"></i>
+                    <i data-lucide="search" class="w-5 h-5 text-white/70 ml-3 sm:ml-4 flex-shrink-0" aria-hidden="true"></i>
                     <input type="text"
                            name="q"
                            id="hero-search-input"
@@ -185,7 +185,7 @@ include __DIR__ . '/components/header.php';
                    aria-pressed="<?= $isActive ? 'true' : 'false' ?>">
                     <span><?= $cat['emoji'] ?></span>
                     <span class="font-medium"><?= h($cat['label']) ?></span>
-                    <span class="text-xs <?= $isActive ? 'text-brand-yellow/70' : 'text-white/50' ?>"><?= $count ?></span>
+                    <span class="text-xs <?= $isActive ? 'text-brand-yellow/70' : 'text-white/70' ?>"><?= $count ?></span>
                 </a>
                 <?php endforeach; ?>
                 <a href="#beaches"
@@ -245,7 +245,7 @@ include __DIR__ . '/components/header.php';
                     '</div>' +
                     '<div class="flex-1 min-w-0">' +
                     '<div class="text-white font-medium truncate">' + beach.name + '</div>' +
-                    '<div class="text-xs text-white/50">' + beach.municipality + '</div>' +
+                    '<div class="text-xs text-white/70">' + beach.municipality + '</div>' +
                     '</div>' +
                     '<svg class="w-4 h-4 text-white/30 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>' +
                     '</a>';

@@ -1,0 +1,24 @@
+URL,Performance,Accessibility,Best Practices,SEO,Status
+"/",58,85,96,92,OK
+"/login.php",99,94,96,58,OK
+"/onboarding.php",100,94,96,58,OK
+"/profile.php",99,94,96,58,OK
+"/favorites.php",100,94,96,58,OK
+"/quiz.php",97,92,96,100,OK
+"/compare.php",89,93,96,100,OK
+"/offline.php",95,100,96,91,OK
+"/sitemap.php",0,0,0,0,FAILED
+"/best-beaches.php",90,93,96,100,OK
+"/best-beaches-san-juan.php",75,93,96,100,OK
+"/best-family-beaches.php",70,93,96,100,OK
+"/best-snorkeling-beaches.php",82,93,96,100,OK
+"/best-surfing-beaches.php",82,93,96,100,OK
+"/beaches-near-san-juan.php",85,93,96,100,OK
+"/beaches-near-san-juan-airport.php",73,93,96,100,OK
+"/hidden-beaches-puerto-rico.php",67,93,96,100,OK
+"/municipality.php?name=Guayanilla",44,85,96,92,OK
+"/municipality.php?name=Arroyo",49,85,96,92,OK
+"/municipality.php?name=Rincon",53,85,96,92,OK
+"/municipality.php?name=Dorado",48,85,96,92,OK
+"/municipality.php?name=Isabela",44,85,96,92,OK
+"/municipality.php?name=Quebradillas",52,85,96,92,OK

@@ -94,7 +94,13 @@
       "Bash(sudo crontab:*)",
       "Bash(do php -l \"$file\")",
       "Bash(do echo \"Checking guides/$file...\" grep -n \"stylesheet.*tailwind\\\\|stylesheet.*styles.css\" guides/$file)",
-      "Bash(git diff:*)"
+      "Bash(git diff:*)",
+      "Bash(systemctl is-active:*)",
+      "Bash(systemctl is-active nginx php*-fpm)",
+      "Bash(sudo cat:*)",
+      "Bash(node:*)",
+      "Bash(npm --version:*)",
+      "Bash(bash:*)"
     ]
   }
 }

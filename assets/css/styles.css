@@ -1473,6 +1473,15 @@ a.btn-loading,
     outline-color: var(--color-primary);
 }
 
+/* MapLibre attribution control - fix contrast issue */
+.maplibregl-ctrl-attrib-inner {
+    color: rgba(0, 0, 0, 0.75) !important;
+}
+
+[data-theme="dark"] .maplibregl-ctrl-attrib-inner {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
 /* Mobile map controls */
 @media (max-width: 640px) {
     #map-container {
@@ -2013,7 +2022,7 @@ a.btn-loading,
     display: flex;
     align-items: center;
     gap: 1rem;
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.7);
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -2052,7 +2061,7 @@ a.btn-loading,
     padding-top: 1rem;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
     font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .welcome-popup-trust svg,

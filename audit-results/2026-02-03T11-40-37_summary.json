@@ -1,0 +1,176 @@
+{
+  "timestamp": "2026-02-03T11:48:04.386Z",
+  "totalPages": 23,
+  "successful": 22,
+  "failed": 1,
+  "averageScores": {
+    "performance": 72,
+    "accessibility": 87,
+    "bestPractices": 92,
+    "seo": 86
+  },
+  "results": [
+    {
+      "url": "/",
+      "performance": 58,
+      "accessibility": 85,
+      "bestPractices": 96,
+      "seo": 92
+    },
+    {
+      "url": "/login.php",
+      "performance": 99,
+      "accessibility": 94,
+      "bestPractices": 96,
+      "seo": 58
+    },
+    {
+      "url": "/onboarding.php",
+      "performance": 100,
+      "accessibility": 94,
+      "bestPractices": 96,
+      "seo": 58
+    },
+    {
+      "url": "/profile.php",
+      "performance": 99,
+      "accessibility": 94,
+      "bestPractices": 96,
+      "seo": 58
+    },
+    {
+      "url": "/favorites.php",
+      "performance": 100,
+      "accessibility": 94,
+      "bestPractices": 96,
+      "seo": 58
+    },
+    {
+      "url": "/quiz.php",
+      "performance": 97,
+      "accessibility": 92,
+      "bestPractices": 96,
+      "seo": 100
+    },
+    {
+      "url": "/compare.php",
+      "performance": 89,
+      "accessibility": 93,
+      "bestPractices": 96,
+      "seo": 100
+    },
+    {
+      "url": "/offline.php",
+      "performance": 95,
+      "accessibility": 100,
+      "bestPractices": 96,
+      "seo": 91
+    },
+    {
+      "url": "/sitemap.php",
+      "performance": 0,
+      "accessibility": 0,
+      "bestPractices": 0,
+      "seo": 0,
+      "error": "Command failed: lighthouse \"https://www.puertoricobeachfinder.com/sitemap.php\"                 --output=json                 --output-path=\"/var/www/beach-finder/audit-results/2026-02-03T11-40-37__sitemap_php.json\"                 --chrome-flags=\"--headless --no-sandbox --disable-dev-shm-usage\"                 --quiet                 --only-categories=performance,accessibility,best-practices,seo\nRuntime error encountered: The page provided is not HTML (served as MIME type application/xml).\n"
+    },
+    {
+      "url": "/best-beaches.php",
+      "performance": 90,
+      "accessibility": 93,
+      "bestPractices": 96,
+      "seo": 100
+    },
+    {
+      "url": "/best-beaches-san-juan.php",
+      "performance": 75,
+      "accessibility": 93,
+      "bestPractices": 96,
+      "seo": 100
+    },
+    {
+      "url": "/best-family-beaches.php",
+      "performance": 70,
+      "accessibility": 93,
+      "bestPractices": 96,
+      "seo": 100
+    },
+    {
+      "url": "/best-snorkeling-beaches.php",
+      "performance": 82,
+      "accessibility": 93,
+      "bestPractices": 96,
+      "seo": 100
+    },
+    {
+      "url": "/best-surfing-beaches.php",
+      "performance": 82,
+      "accessibility": 93,
+      "bestPractices": 96,
+      "seo": 100
+    },
+    {
+      "url": "/beaches-near-san-juan.php",
+      "performance": 85,
+      "accessibility": 93,
+      "bestPractices": 96,
+      "seo": 100
+    },
+    {
+      "url": "/beaches-near-san-juan-airport.php",
+      "performance": 73,
+      "accessibility": 93,
+      "bestPractices": 96,
+      "seo": 100
+    },
+    {
+      "url": "/hidden-beaches-puerto-rico.php",
+      "performance": 67,
+      "accessibility": 93,
+      "bestPractices": 96,
+      "seo": 100
+    },
+    {
+      "url": "/municipality.php?name=Guayanilla",
+      "performance": 44,
+      "accessibility": 85,
+      "bestPractices": 96,
+      "seo": 92
+    },
+    {
+      "url": "/municipality.php?name=Arroyo",
+      "performance": 49,
+      "accessibility": 85,
+      "bestPractices": 96,
+      "seo": 92
+    },
+    {
+      "url": "/municipality.php?name=Rincon",
+      "performance": 53,
+      "accessibility": 85,
+      "bestPractices": 96,
+      "seo": 92
+    },
+    {
+      "url": "/municipality.php?name=Dorado",
+      "performance": 48,
+      "accessibility": 85,
+      "bestPractices": 96,
+      "seo": 92
+    },
+    {
+      "url": "/municipality.php?name=Isabela",
+      "performance": 44,
+      "accessibility": 85,
+      "bestPractices": 96,
+      "seo": 92
+    },
+    {
+      "url": "/municipality.php?name=Quebradillas",
+      "performance": 52,
+      "accessibility": 85,
+      "bestPractices": 96,
+      "seo": 92
+    }
+  ]
+}

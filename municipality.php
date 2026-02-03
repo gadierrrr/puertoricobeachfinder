@@ -126,7 +126,7 @@ include __DIR__ . '/components/header.php';
 <section class="hero-gradient text-white py-12 md:py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Breadcrumbs -->
-        <nav class="text-white/50 text-sm mb-4" aria-label="Breadcrumb">
+        <nav class="text-white/70 text-sm mb-4" aria-label="Breadcrumb">
             <a href="/" class="hover:text-brand-yellow transition-colors">Home</a>
             <span class="mx-2">/</span>
             <a href="/#beaches" class="hover:text-brand-yellow transition-colors">Beaches</a>
@@ -173,7 +173,7 @@ include __DIR__ . '/components/header.php';
             <a href="/?municipality=<?= urlencode($municipality) ?>&tags[]=<?= h($tag) ?>#beaches"
                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-brand-yellow/20 border border-white/10 hover:border-brand-yellow/30 text-white/80 hover:text-brand-yellow text-sm transition-colors whitespace-nowrap">
                 <?= h(getTagLabel($tag)) ?>
-                <span class="text-xs text-white/50"><?= $tagCounts[$tag] ?></span>
+                <span class="text-xs text-white/70"><?= $tagCounts[$tag] ?></span>
             </a>
             <?php endforeach; ?>
         </div>

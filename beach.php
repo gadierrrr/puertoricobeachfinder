@@ -152,7 +152,7 @@ include __DIR__ . '/components/header.php';
     <div class="absolute bottom-0 left-0 right-0 p-6 md:p-10 lg:p-16">
         <div class="max-w-7xl mx-auto">
             <!-- Breadcrumbs -->
-            <nav class="text-white/50 text-sm mb-4" aria-label="Breadcrumb">
+            <nav class="text-white/70 text-sm mb-4" aria-label="Breadcrumb">
                 <a href="/" class="hover:text-brand-yellow transition-colors">Home</a>
                 <span class="mx-2">/</span>
                 <a href="/" class="hover:text-brand-yellow transition-colors">Beaches</a>
@@ -186,7 +186,7 @@ include __DIR__ . '/components/header.php';
             </svg>
             <span class="font-bold text-brand-yellow"><?= number_format($beach['google_rating'], 1) ?></span>
             <?php if ($beach['google_review_count']): ?>
-            <span class="text-white/50 text-sm">(<?= number_format($beach['google_review_count']) ?>)</span>
+            <span class="text-white/70 text-sm">(<?= number_format($beach['google_review_count']) ?>)</span>
             <?php endif; ?>
         </div>
         <?php endif; ?>
@@ -195,7 +195,7 @@ include __DIR__ . '/components/header.php';
         <div class="flex items-center gap-1.5 bg-cyan-500/10 border border-cyan-500/30 px-3 py-1.5 rounded-lg" aria-label="Community rating: <?= number_format($avgUserRating, 1) ?> out of 5">
             <i data-lucide="star" class="w-4 h-4 text-cyan-400 fill-cyan-400" aria-hidden="true"></i>
             <span class="font-bold text-cyan-400"><?= number_format($avgUserRating, 1) ?></span>
-            <span class="text-white/50 text-sm">(<?= $userReviewCount ?>)</span>
+            <span class="text-white/70 text-sm">(<?= $userReviewCount ?>)</span>
         </div>
         <?php endif; ?>
 
@@ -374,7 +374,7 @@ include __DIR__ . '/components/header.php';
                     <?php endforeach; ?>
                 </div>
                 <?php else: ?>
-                <p class="text-sm text-gray-500">No photos yet. Be the first to share!</p>
+                <p class="text-sm text-gray-400">No photos yet. Be the first to share!</p>
                 <?php endif; ?>
             </section>
 
@@ -408,7 +408,7 @@ include __DIR__ . '/components/header.php';
                     <?php endforeach; ?>
                 </div>
                 <?php else: ?>
-                <p class="text-sm text-gray-500">No reviews yet. Be the first to share your experience!</p>
+                <p class="text-sm text-gray-400">No reviews yet. Be the first to share your experience!</p>
                 <?php endif; ?>
             </section>
 
@@ -431,7 +431,7 @@ include __DIR__ . '/components/header.php';
                     <div class="flex items-center justify-between mb-3">
                         <h3 class="font-bold text-white text-sm">Conditions</h3>
                         <?php if ($beach['updated_at']): ?>
-                        <span class="text-xs text-gray-500"><?= h(timeAgo($beach['updated_at'])) ?></span>
+                        <span class="text-xs text-gray-400"><?= h(timeAgo($beach['updated_at'])) ?></span>
                         <?php endif; ?>
                     </div>
                     <div class="space-y-2">
@@ -502,7 +502,7 @@ include __DIR__ . '/components/header.php';
                         </div>
                     </div>
                     <?php else: ?>
-                    <p class="text-xs text-gray-500 text-center py-2">No recent crowd data</p>
+                    <p class="text-xs text-gray-400 text-center py-2">No recent crowd data</p>
                     <?php endif; ?>
                 </div>
 
@@ -516,7 +516,7 @@ include __DIR__ . '/components/header.php';
                                 <?= h($beach['municipality']) ?>
                             </span>
                             <?php if ($beach['lat'] && $beach['lng']): ?>
-                            <span class="text-xs text-gray-500"><?= number_format($beach['lat'], 4) ?>°N, <?= number_format(abs($beach['lng']), 4) ?>°W</span>
+                            <span class="text-xs text-gray-400"><?= number_format($beach['lat'], 4) ?>°N, <?= number_format(abs($beach['lng']), 4) ?>°W</span>
                             <?php endif; ?>
                         </div>
                         <a href="<?= h(getDirectionsUrl($beach)) ?>" target="_blank"
