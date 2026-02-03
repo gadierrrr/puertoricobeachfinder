@@ -85,9 +85,20 @@ $faqs = [
         ['name' => 'Getting to Puerto Rico Beaches', 'url' => 'https://puertoricobeachfinder.com/guides/getting-to-puerto-rico-beaches.php']
     ]);
     ?>
+
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="/assets/css/tailwind.min.css?v=3.2">
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="/assets/css/styles.css?v=3.3">
+    <!-- Lucide Icons -->
+    <script defer
+            src="https://unpkg.com/lucide@0.294.0/dist/umd/lucide.min.js"
+            integrity="sha384-43WP8IQ+5H0ncT+LNM4dZnu+hPINYmeOuNMhTvHfszzXdFjBEji77gkq7TyjQl/U"
+            crossorigin="anonymous"
+            onload="window.lucideLoaded=true;if(typeof lucide!=='undefined')lucide.createIcons()"></script>
 </head>
 <body class="bg-gray-50" data-theme="light">
-    <?php include __DIR__ . '/../components/header.php'; ?>
+    <?php include __DIR__ . '/../components/header-nav-only.php'; ?>
 
     <!-- Hero Section -->
     <?php
@@ -169,10 +180,10 @@ $faqs = [
                     </p>
 
                     <?php if (!empty($featuredBeaches[0])): ?>
-                    <div class="bg-green-50 border-l-4 border-green-600 p-6 my-8">
-                        <h4 class="font-bold text-green-900 mb-2">Start Here: Nearby Beach</h4>
-                        <p class="text-green-800 mb-3">
-                            <a href="/beach.php?id=<?php echo $featuredBeaches[0]['id']; ?>" class="text-green-600 font-semibold hover:underline">
+                    <div class="bg-slate-50 border-l-4 border-yellow-400 p-6 my-8">
+                        <h4 class="font-bold text-gray-900 mb-2">Start Here: Nearby Beach</h4>
+                        <p class="text-gray-800 mb-3">
+                            <a href="/beach.php?id=<?php echo $featuredBeaches[0]['id']; ?>" class="text-gray-700 font-semibold hover:underline">
                                 <?php echo h($featuredBeaches[0]['name']); ?>
                             </a> in <?php echo h($featuredBeaches[0]['municipality']); ?> is easily accessible
                             and makes a perfect first stop after picking up your rental car.
@@ -230,10 +241,10 @@ $faqs = [
                     </p>
 
                     <?php if (!empty($featuredBeaches[1])): ?>
-                    <div class="bg-green-50 border-l-4 border-green-600 p-6 my-8">
-                        <h4 class="font-bold text-green-900 mb-2">Uber-Accessible Beach</h4>
-                        <p class="text-green-800 mb-3">
-                            <a href="/beach.php?id=<?php echo $featuredBeaches[1]['id']; ?>" class="text-green-600 font-semibold hover:underline">
+                    <div class="bg-slate-50 border-l-4 border-yellow-400 p-6 my-8">
+                        <h4 class="font-bold text-gray-900 mb-2">Uber-Accessible Beach</h4>
+                        <p class="text-gray-800 mb-3">
+                            <a href="/beach.php?id=<?php echo $featuredBeaches[1]['id']; ?>" class="text-gray-700 font-semibold hover:underline">
                                 <?php echo h($featuredBeaches[1]['name']); ?>
                             </a> is within Uber's service area and perfect for a car-free beach day.
                         </p>
@@ -311,10 +322,10 @@ $faqs = [
                     </p>
 
                     <?php if (!empty($featuredBeaches[2])): ?>
-                    <div class="bg-green-50 border-l-4 border-green-600 p-6 my-8">
-                        <h4 class="font-bold text-green-900 mb-2">Island Beach Worth the Ferry</h4>
-                        <p class="text-green-800 mb-3">
-                            <a href="/beach.php?id=<?php echo $featuredBeaches[2]['id']; ?>" class="text-green-600 font-semibold hover:underline">
+                    <div class="bg-slate-50 border-l-4 border-yellow-400 p-6 my-8">
+                        <h4 class="font-bold text-gray-900 mb-2">Island Beach Worth the Ferry</h4>
+                        <p class="text-gray-800 mb-3">
+                            <a href="/beach.php?id=<?php echo $featuredBeaches[2]['id']; ?>" class="text-gray-700 font-semibold hover:underline">
                                 <?php echo h($featuredBeaches[2]['name']); ?>
                             </a> is a spectacular destination accessible via ferry.
                             The boat ride adds to the adventure.
@@ -413,10 +424,10 @@ $faqs = [
                     </ul>
 
                     <?php if (!empty($featuredBeaches[3])): ?>
-                    <div class="bg-green-50 border-l-4 border-green-600 p-6 my-8">
-                        <h4 class="font-bold text-green-900 mb-2">Budget-Friendly Beach</h4>
-                        <p class="text-green-800 mb-3">
-                            <a href="/beach.php?id=<?php echo $featuredBeaches[3]['id']; ?>" class="text-green-600 font-semibold hover:underline">
+                    <div class="bg-slate-50 border-l-4 border-yellow-400 p-6 my-8">
+                        <h4 class="font-bold text-gray-900 mb-2">Budget-Friendly Beach</h4>
+                        <p class="text-gray-800 mb-3">
+                            <a href="/beach.php?id=<?php echo $featuredBeaches[3]['id']; ?>" class="text-gray-700 font-semibold hover:underline">
                                 <?php echo h($featuredBeaches[3]['name']); ?>
                             </a> offers free parking and easy access,
                             keeping your transportation costs minimal.
@@ -442,19 +453,19 @@ $faqs = [
 
                     <div class="space-y-6">
                         <?php foreach ($faqs as $faq): ?>
-                        <div class="border-l-4 border-green-600 pl-4">
+                        <div class="border-l-4 border-yellow-400 pl-4">
                             <h3 class="text-xl font-bold text-gray-900 mb-2"><?php echo h($faq['question']); ?></h3>
                             <p class="text-gray-700"><?php echo h($faq['answer']); ?></p>
                         </div>
                         <?php endforeach; ?>
                     </div>
 
-                    <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-8 mt-12">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Ready to Hit the Beach?</h2>
-                        <p class="text-gray-700 mb-6">
+                    <div class="bg-gray-800 rounded-lg p-8 mt-12">
+                        <h2 class="text-2xl font-bold text-white mb-4">Ready to Hit the Beach?</h2>
+                        <p class="text-gray-100 mb-6">
                             Now that you know how to get there, explore our database of 230+ beaches to plan your perfect itinerary.
                         </p>
-                        <a href="/" class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                        <a href="/" class="inline-block bg-yellow-400 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-500 transition-colors">
                             Browse All Beaches
                         </a>
                     </div>

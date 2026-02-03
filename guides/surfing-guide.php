@@ -90,19 +90,19 @@ $faqs = [
                     <?php if (!empty($surf_beaches)): ?>
                     <div class="space-y-4 mb-8">
                         <?php foreach ($surf_beaches as $beach): ?>
-                        <div class="bg-green-50 border-l-4 border-green-600 p-4">
-                            <a href="/beach.php?id=<?php echo $beach['id']; ?>" class="text-green-900 font-bold hover:underline">
+                        <div class="bg-slate-50 border-l-4 border-green-600 p-4">
+                            <a href="/beach.php?id=<?php echo $beach['id']; ?>" class="text-gray-900 font-bold hover:underline">
                                 <?php echo h($beach['name']); ?>
                             </a>
-                            <p class="text-green-800 text-sm"><?php echo h($beach['municipality']); ?></p>
+                            <p class="text-amber-700 text-sm"><?php echo h($beach['municipality']); ?></p>
                         </div>
                         <?php endforeach; ?>
                     </div>
                     <?php endif; ?>
                     <h2 id="seasons" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Surf Seasons</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
-                        <div class="bg-blue-50 rounded-lg p-6">
-                            <h3 class="text-xl font-bold text-blue-900 mb-3">Winter (Nov-Mar)</h3>
+                        <div class="bg-slate-50 rounded-lg p-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-3">Winter (Nov-Mar)</h3>
                             <ul class="space-y-2 text-gray-700">
                                 <li><strong>Swell:</strong> 6-15+ feet</li>
                                 <li><strong>Best for:</strong> Experienced surfers</li>
@@ -110,8 +110,8 @@ $faqs = [
                                 <li><strong>Spots:</strong> North/west coasts fire</li>
                             </ul>
                         </div>
-                        <div class="bg-green-50 rounded-lg p-6">
-                            <h3 class="text-xl font-bold text-green-900 mb-3">Summer (May-Sep)</h3>
+                        <div class="bg-slate-50 rounded-lg p-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-3">Summer (May-Sep)</h3>
                             <ul class="space-y-2 text-gray-700">
                                 <li><strong>Swell:</strong> 2-5 feet</li>
                                 <li><strong>Best for:</strong> Beginners, longboarders</li>

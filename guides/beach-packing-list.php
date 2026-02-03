@@ -92,8 +92,8 @@ $faqs = [
                         <strong>These items are non-negotiable</strong> for any beach day in Puerto Rico. The Caribbean sun is intense year-round, and being unprepared can ruin your vacation with painful sunburn, dehydration, or lost valuables.
                     </p>
 
-                    <div class="bg-green-50 border-l-4 border-green-600 p-6 my-6">
-                        <h3 class="text-xl font-bold text-green-900 mb-4">Must-Have Checklist</h3>
+                    <div class="bg-slate-50 border-l-4 border-green-600 p-6 my-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Must-Have Checklist</h3>
                         <div class="space-y-2">
                             <div class="checklist-item">Reef-safe sunscreen (SPF 30-50+, broad spectrum)</div>
                             <div class="checklist-item">Swimsuit (bring 2-3 so you always have a dry option)</div>
@@ -184,8 +184,8 @@ $faqs = [
                         <strong>A compact first aid kit handles most minor beach injuries</strong>—cuts from shells, scrapes from rocks, jellyfish stings, or splinters. Packing these items prevents minor issues from derailing your day.
                     </p>
 
-                    <div class="bg-yellow-50 border-l-4 border-yellow-600 p-6 my-6">
-                        <h3 class="text-xl font-bold text-yellow-900 mb-4">Beach First Aid Kit</h3>
+                    <div class="bg-amber-50 border-l-4 border-yellow-600 p-6 my-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Beach First Aid Kit</h3>
                         <div class="space-y-3">
                             <div class="checklist-item"><strong>Adhesive bandages</strong> - Various sizes for cuts and blisters</div>
                             <div class="checklist-item"><strong>Antibiotic ointment</strong> - Apply to any cuts before bandaging</div>

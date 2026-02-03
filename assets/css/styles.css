@@ -59,6 +59,10 @@
     --color-success: var(--color-secondary);
     --color-success-dark: var(--color-secondary-hover);
 
+    /* ===== GUIDE PAGE LINKS (Homepage-aligned + Tailwind Neutrals) ===== */
+    --color-guide-link: #ca8a04;               /* Dark gold - WCAG AA (4.7:1 on white) */
+    --color-guide-link-hover: #b45309;         /* Darker amber - WCAG AA (5.8:1 on white) */
+
     /* ===== ERROR (Red) ===== */
     --color-error: #ef4444;
     --color-error-dark: #dc2626;
@@ -2264,6 +2268,24 @@ a.btn-loading,
    GUIDE PAGES - LAYOUT & COMPONENTS
    ======================================== */
 
+/* ==========================================
+   GUIDE PAGE COLOR SYSTEM
+   Homepage-aligned palette + Tailwind neutrals
+   ==========================================
+
+   ALLOWED COLORS:
+   - Body text: Tailwind text-gray-900, text-gray-800 (neutrals)
+   - Links: var(--color-guide-link) with underline, hover to var(--color-guide-link-hover)
+   - Date ranges: Tailwind text-amber-700 (neutral amber)
+   - Card backgrounds: Tailwind bg-slate-50 (neutral slate)
+   - Decorative borders: Tailwind border-yellow-400 (homepage accent)
+
+   ❌ NEVER USE:
+   - --color-secondary (#10b981 green)
+   - bg-blue-*, bg-green-*, text-blue-*, text-green-* (any blue/green utilities)
+   - Yellow text on light backgrounds (fails WCAG contrast)
+   ========================================== */
+
 /* Guide Layout - Wider Content Area (fixes ~40% width issue) */
 .guide-layout {
     display: grid;
@@ -2340,15 +2362,17 @@ a.btn-loading,
 
 .guide-toc-link {
     display: block;
-    color: var(--color-secondary);
-    text-decoration: none;
+    color: var(--color-guide-link);
+    text-decoration: underline;
+    text-decoration-color: currentColor;
+    text-underline-offset: 2px;
     font-size: 0.875rem;
     padding: 0.375rem 0;
     transition: color 0.2s ease;
 }
 
 .guide-toc-link:hover {
-    color: var(--color-secondary-hover);
+    color: var(--color-guide-link-hover);
 }
 
 /* Mobile: Horizontal scroll TOC */
@@ -2387,7 +2411,7 @@ a.btn-loading,
     position: absolute;
     left: 0;
     font-size: 1.25rem;
-    color: var(--color-secondary);
+    color: var(--color-guide-link);
     line-height: 1.6;
 }
 
@@ -2421,7 +2445,7 @@ a.btn-loading,
 }
 
 .related-guide-title {
-    color: var(--color-secondary);
+    color: var(--color-guide-link);
     font-weight: 600;
     overflow-wrap: break-word;  /* Break at word boundaries - CRITICAL */
     word-wrap: break-word;      /* Legacy support */
@@ -2989,6 +3013,17 @@ a:not([class]):hover {
 [data-theme="dark"] .guide-article {
     background: var(--color-card-bg);
     border: 1px solid var(--color-border);
+}
+
+/* Guide page card backgrounds - glass effect in dark mode */
+[data-theme="dark"] .bg-slate-50 {
+    background: var(--color-card-bg) !important;
+    border: 1px solid var(--color-border-light);
+}
+
+/* Amber text stays visible in dark mode */
+[data-theme="dark"] .text-amber-700 {
+    color: #fbbf24 !important; /* amber-400 - brighter for dark backgrounds */
 }
 
 [data-theme="dark"] .related-guide-card {

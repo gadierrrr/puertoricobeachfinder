@@ -124,24 +124,14 @@ $breadcrumbs = [
 ];
 
 include __DIR__ . '/components/header.php';
-?>
 
-<!-- Hero Section -->
-<section class="bg-gradient-to-br from-teal-600 via-cyan-600 to-blue-600 text-white py-16 md:py-20">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <!-- Breadcrumbs -->
-        <div class="mb-6">
-            <?php include __DIR__ . '/components/breadcrumbs.php'; ?>
-        </div>
-        <h1 class="text-3xl md:text-5xl font-bold mb-6">
-            15 Hidden Beaches in Puerto Rico
-        </h1>
-        <p class="text-lg md:text-xl opacity-90 max-w-3xl mx-auto page-description">
-            Escape the crowds and discover Puerto Rico's best-kept secrets. From remote island cays to secluded mainland coves, these hidden gems offer pristine beauty and authentic Caribbean adventure.
-        </p>
-        <p class="text-sm mt-4 opacity-75">Updated January 2025 | Secret spots for adventurous travelers</p>
-    </div>
-</section>
+// Override page title and description for hero component
+$pageTitle = '15 Hidden Beaches in Puerto Rico';
+$pageDescription = 'Escape the crowds and discover Puerto Rico\'s best-kept secrets. From remote island cays to secluded mainland coves, these hidden gems offer pristine beauty and authentic Caribbean adventure.';
+
+// Include hero component
+include __DIR__ . '/components/hero-guide.php';
+?>
 
 <!-- Quick Navigation -->
 <section class="bg-white border-b">

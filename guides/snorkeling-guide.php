@@ -145,9 +145,9 @@ $faqs = [
                     <?php if (!empty($snorkel_beaches)): ?>
                     <div class="space-y-4 mb-8">
                         <?php $counter = 1; foreach ($snorkel_beaches as $beach): ?>
-                        <div class="bg-green-50 border-l-4 border-green-600 p-4">
-                            <h4 class="font-bold text-green-900"><?php echo $counter; ?>. <a href="/beach.php?id=<?php echo $beach['id']; ?>" class="hover:underline"><?php echo h($beach['name']); ?></a></h4>
-                            <p class="text-green-800 text-sm"><?php echo h($beach['municipality']); ?></p>
+                        <div class="bg-slate-50 border-l-4 border-green-600 p-4">
+                            <h4 class="font-bold text-gray-900"><?php echo $counter; ?>. <a href="/beach.php?id=<?php echo $beach['id']; ?>" class="hover:underline"><?php echo h($beach['name']); ?></a></h4>
+                            <p class="text-amber-700 text-sm"><?php echo h($beach['municipality']); ?></p>
                         </div>
                         <?php $counter++; endforeach; ?>
                     </div>
@@ -156,8 +156,8 @@ $faqs = [
                     <h2 id="marine-life" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Marine Life You'll Encounter</h2>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
-                        <div class="bg-blue-50 rounded-lg p-6">
-                            <h3 class="text-xl font-bold text-blue-900 mb-3">Common Fish Species</h3>
+                        <div class="bg-slate-50 rounded-lg p-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-3">Common Fish Species</h3>
                             <ul class="space-y-1 text-gray-700">
                                 <li>• Parrotfish (rainbow colors, "beak" mouth)</li>
                                 <li>• Blue Tang (bright blue, "Dory" fish)</li>
@@ -166,8 +166,8 @@ $faqs = [
                                 <li>• Stoplight Parrotfish (males: green/pink/blue)</li>
                             </ul>
                         </div>
-                        <div class="bg-green-50 rounded-lg p-6">
-                            <h3 class="text-xl font-bold text-green-900 mb-3">Special Encounters</h3>
+                        <div class="bg-slate-50 rounded-lg p-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-3">Special Encounters</h3>
                             <ul class="space-y-1 text-gray-700">
                                 <li>• Green Sea Turtles (common, surface to breathe)</li>
                                 <li>• Southern Stingrays (often buried in sand)</li>

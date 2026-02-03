@@ -59,6 +59,10 @@
     --color-success: var(--color-secondary);
     --color-success-dark: var(--color-secondary-hover);
 
+    /* ===== GUIDE PAGE LINKS (Homepage-aligned + Tailwind Neutrals) ===== */
+    --color-guide-link: #ca8a04;               /* Dark gold - WCAG AA (4.7:1 on white) */
+    --color-guide-link-hover: #b45309;         /* Darker amber - WCAG AA (5.8:1 on white) */
+
     /* ===== ERROR (Red) ===== */
     --color-error: #ef4444;
     --color-error-dark: #dc2626;

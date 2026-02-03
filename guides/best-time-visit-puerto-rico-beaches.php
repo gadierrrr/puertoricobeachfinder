@@ -81,19 +81,19 @@ $faqs = [
                     </p>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
-                        <div class="bg-blue-50 rounded-lg p-6">
-                            <h3 class="text-xl font-bold text-blue-900 mb-2">Peak Season</h3>
-                            <p class="text-sm text-blue-800 mb-2">December - March</p>
+                        <div class="bg-slate-50 rounded-lg p-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Peak Season</h3>
+                            <p class="text-sm text-amber-700 mb-2">December - March</p>
                             <p class="text-gray-700">Perfect weather, largest crowds, highest prices. Book 3-6 months ahead.</p>
                         </div>
-                        <div class="bg-green-50 rounded-lg p-6">
-                            <h3 class="text-xl font-bold text-green-900 mb-2">Shoulder Season</h3>
-                            <p class="text-sm text-green-800 mb-2">April-May, November</p>
+                        <div class="bg-slate-50 rounded-lg p-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Shoulder Season</h3>
+                            <p class="text-sm text-amber-700 mb-2">April-May, November</p>
                             <p class="text-gray-700">Great weather, moderate crowds, good value. Sweet spot for many travelers.</p>
                         </div>
-                        <div class="bg-yellow-50 rounded-lg p-6">
-                            <h3 class="text-xl font-bold text-yellow-900 mb-2">Low Season</h3>
-                            <p class="text-sm text-yellow-800 mb-2">June-October</p>
+                        <div class="bg-amber-50 rounded-lg p-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Low Season</h3>
+                            <p class="text-sm text-amber-700 mb-2">June-October</p>
                             <p class="text-gray-700">Warm, some rain, smallest crowds, best deals. Hurricane season but low risk.</p>
                         </div>
                     </div>

@@ -1,7 +1,7 @@
 <?php
 /**
  * Guide Hero Component
- * Consistent green gradient hero for all guide pages
+ * Consistent dark gradient hero for all guide pages (matches homepage palette)
  *
  * Required variables:
  * - $pageTitle (string): Main heading
@@ -10,10 +10,10 @@
  * - $breadcrumbs (array): Breadcrumb navigation items
  */
 ?>
-<section class="hero-gradient-guide text-white py-16">
+<section class="hero-gradient-dark text-white py-16">
     <div class="container mx-auto px-4 container-padding">
         <?php if (isset($breadcrumbs) && !empty($breadcrumbs)): ?>
-        <nav class="text-sm mb-6 text-green-100" aria-label="Breadcrumb">
+        <nav class="text-sm mb-6 text-gray-200" aria-label="Breadcrumb">
             <?php foreach ($breadcrumbs as $index => $crumb): ?>
                 <?php if ($index > 0): ?><span class="mx-2" aria-hidden="true">&gt;</span><?php endif; ?>
                 <?php if (isset($crumb['url'])): ?>
@@ -26,6 +26,6 @@
         <?php endif; ?>
 
         <h1 class="text-4xl md:text-5xl font-bold mb-4"><?= h($pageTitle) ?></h1>
-        <p class="text-xl text-green-50 max-w-3xl"><?= h($pageDescription) ?></p>
+        <p class="text-xl text-gray-100 max-w-3xl"><?= h($pageDescription) ?></p>
     </div>
 </section>
