@@ -100,7 +100,9 @@
       "Bash(sudo cat:*)",
       "Bash(node:*)",
       "Bash(npm --version:*)",
-      "Bash(bash:*)"
+      "Bash(bash:*)",
+      "Bash(wc:*)",
+      "Bash(tree:*)"
     ]
   }
 }
