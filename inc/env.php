@@ -13,10 +13,10 @@ const ENV_SCHEMA = [
     'APP_URL' => ['required' => true, 'type' => 'url'],
     'APP_NAME' => ['required' => true, 'type' => 'string'],
     'GOOGLE_MAPS_API_KEY' => ['required' => true, 'type' => 'string'],
-    'GOOGLE_CLIENT_ID' => ['required' => true, 'type' => 'string'],
-    'GOOGLE_CLIENT_SECRET' => ['required' => true, 'type' => 'string'],
-    'RESEND_API_KEY' => ['required' => true, 'type' => 'string'],
-    'ANTHROPIC_API_KEY' => ['required' => true, 'type' => 'string'],
+    'GOOGLE_CLIENT_ID' => ['required' => false, 'type' => 'string'],
+    'GOOGLE_CLIENT_SECRET' => ['required' => false, 'type' => 'string'],
+    'RESEND_API_KEY' => ['required' => false, 'type' => 'string'],
+    'ANTHROPIC_API_KEY' => ['required' => false, 'type' => 'string'],
     'APP_ENV' => ['required' => true, 'type' => 'enum', 'allowed' => ['dev', 'staging', 'prod']],
     'APP_DEBUG' => ['required' => true, 'type' => 'bool'],
 ];
@@ -202,6 +202,12 @@ function validateEnvironment(): void {
             default:
                 break;
         }
+    }
+
+    $googleClientId = env('GOOGLE_CLIENT_ID');
+    $googleClientSecret = env('GOOGLE_CLIENT_SECRET');
+    if (($googleClientId === null) !== ($googleClientSecret === null)) {
+        $errors[] = 'GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET must both be set to enable Google OAuth';
     }
 
     if (!empty($errors)) {
