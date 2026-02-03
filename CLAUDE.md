@@ -85,6 +85,11 @@ php migrations/001-add-reviews-safety-quiz.php
 
 **Controlled Vocabularies:** Tags, amenities, municipalities, and condition scales are defined in `inc/constants.php`. Use validation helpers like `isValidTag()`, `isValidMunicipality()`.
 
+**Shared Components:** Reusable UI components in `components/` directory:
+- `hero-guide.php` - Used by all guide pages, requires `$pageTitle`, `$pageDescription`, optional `$breadcrumbs`
+- `hero-collection.php` - Used by collection pages (best beaches, snorkeling, etc.)
+- Always use shared components for consistency; avoid creating inline variants of existing components
+
 ### Database Schema (Key Tables)
 - `beaches` - Main beach records with coordinates, ratings, conditions
 - `beach_tags` - Many-to-many: beach activities (surfing, snorkeling, etc.)
@@ -193,6 +198,7 @@ All colors, shadows, and z-index values are defined as CSS variables in `_variab
 3. **Add dark mode overrides** in `_dark-mode.css` (not inline with component)
 4. **Add responsive overrides** in `_responsive.css` for mobile-specific styles
 5. **Run `npm run build:css`** to regenerate `styles.css`
+6. **Update components when removing/renaming CSS classes** - If you remove or rename a CSS class, search for and update all PHP components that reference it to prevent broken styling
 
 ### Prose Content Classes
 
