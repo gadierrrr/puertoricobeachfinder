@@ -108,8 +108,8 @@ $currentLang = getCurrentLanguage();
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
     <!-- Preload critical CSS -->
-    <link rel="preload" href="/assets/css/tailwind.min.css?v=3.0" as="style">
-    <link rel="preload" href="/assets/css/styles.css?v=3.1" as="style">
+    <link rel="preload" href="/assets/css/tailwind.min.css?v=3.2" as="style">
+    <link rel="preload" href="/assets/css/styles.css?v=3.3" as="style">
 
     <!-- Inter + Playfair Display Fonts - loaded asynchronously to avoid render blocking -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,400;1,500;1,600;1,700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
