@@ -36,11 +36,12 @@ function getCollectionContext(string $key): array {
 /**
  * Normalize collection filters from request/query params.
  */
-function collectionFiltersFromRequest(string $key, array $input): array {
+function collectionFiltersFromRequest(string $key, array $input, int $maxLimit = 120): array {
     $context = getCollectionContext($key);
     $defaultSort = $context['default_sort'] ?? 'rating';
     $defaultLimit = intval($context['default_limit'] ?? 15);
     $defaultView = 'cards';
+    $maxLimit = max(1, $maxLimit);
 
     $rawTags = [];
     if (isset($input['tags'])) {
@@ -73,7 +74,7 @@ function collectionFiltersFromRequest(string $key, array $input): array {
 
     $page = max(1, intval($input['page'] ?? 1));
     $limit = intval($input['limit'] ?? $defaultLimit);
-    $limit = min(120, max(1, $limit));
+    $limit = min($maxLimit, max(1, $limit));
 
     $includeAllRaw = $input['include_all'] ?? '0';
     $includeAll = in_array((string)$includeAllRaw, ['1', 'true', 'yes', 'on'], true);
@@ -92,9 +93,9 @@ function collectionFiltersFromRequest(string $key, array $input): array {
     ];
 }
 
-function countCollectionBeaches(string $key, array $filters): int {
+function countCollectionBeaches(string $key, array $filters, int $maxLimit = 120): int {
     $context = getCollectionContext($key);
-    $normalized = collectionFiltersFromRequest($key, $filters);
+    $normalized = collectionFiltersFromRequest($key, $filters, $maxLimit);
 
     $params = [];
     $distanceExpr = null;
@@ -111,9 +112,9 @@ function countCollectionBeaches(string $key, array $filters): int {
  *
  * @return array<string,mixed>
  */
-function fetchCollectionBeaches(string $key, array $filters): array {
+function fetchCollectionBeaches(string $key, array $filters, int $maxLimit = 120): array {
     $context = getCollectionContext($key);
-    $normalized = collectionFiltersFromRequest($key, $filters);
+    $normalized = collectionFiltersFromRequest($key, $filters, $maxLimit);
 
     $contextFallback = false;
     $result = collectionRunQuery($context, $normalized);

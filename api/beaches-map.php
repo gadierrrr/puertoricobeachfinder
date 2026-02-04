@@ -24,11 +24,13 @@ $meta = [
 ];
 
 if ($collectionKey !== '' && isValidCollectionKey($collectionKey)) {
-    $filters = collectionFiltersFromRequest($collectionKey, $_GET);
-    $filters['page'] = 1;
-    $filters['limit'] = min(500, max(1, intval($_GET['limit'] ?? 500)));
+    $mapLimit = min(500, max(1, intval($_GET['limit'] ?? 500)));
+    $filtersInput = $_GET;
+    $filtersInput['page'] = 1;
+    $filtersInput['limit'] = $mapLimit;
+    $filters = collectionFiltersFromRequest($collectionKey, $filtersInput, 500);
 
-    $collectionData = fetchCollectionBeaches($collectionKey, $filters);
+    $collectionData = fetchCollectionBeaches($collectionKey, $filters, 500);
     $beaches = $collectionData['beaches'] ?? [];
     $meta['collection'] = $collectionKey;
     $meta['context_fallback'] = !empty($collectionData['context_fallback']);

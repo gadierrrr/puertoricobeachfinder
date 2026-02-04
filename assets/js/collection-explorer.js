@@ -103,6 +103,9 @@
 
     function paramsForMap() {
         const params = paramsForExplorer();
+        // Map view should show the full matching set, not paged list slices.
+        params.delete('page');
+        params.delete('limit');
         params.set('view', 'map');
         return params;
     }
