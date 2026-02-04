@@ -87,7 +87,7 @@ php migrations/001-add-reviews-safety-quiz.php
 
 **Shared Components:** Reusable UI components in `components/` directory:
 - `hero-guide.php` - Used by all guide pages, requires `$pageTitle`, `$pageDescription`, optional `$breadcrumbs`
-- `hero-collection.php` - Used by collection pages (best beaches, snorkeling, etc.)
+- `components/collection/explorer.php` - Shared collection explorer (hero + toolbar + results)
 - Always use shared components for consistency; avoid creating inline variants of existing components
 
 ### Database Schema (Key Tables)
