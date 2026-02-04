@@ -71,25 +71,26 @@ $breadcrumbs = [
     ['name' => 'Surfing Beaches']
 ];
 
-$navVariant = 'collection';
-$bodyVariant = 'collection-light';
+$bodyVariant = 'collection-dark';
 $skipMapCSS = true;
 include __DIR__ . '/components/header.php';
 ?>
 <?php include __DIR__ . '/components/collection/explorer.php'; ?>
 
+<div class="collection-legacy-content">
+
 <!-- Quick Navigation -->
-<section class="bg-white border-b">
+<section class="collection-content-nav bg-white border-b">
     <div class="max-w-7xl mx-auto px-4 py-4">
         <div class="flex flex-wrap gap-2 justify-center text-sm">
             <span class="text-gray-500">Jump to:</span>
-            <a href="#top-beaches" class="text-blue-600 hover:underline">Top Spots</a>
+            <a href="#top-beaches" class="text-amber-700 hover:underline">Top Spots</a>
             <span class="text-gray-300">|</span>
-            <a href="#by-level" class="text-blue-600 hover:underline">By Level</a>
+            <a href="#by-level" class="text-amber-700 hover:underline">By Level</a>
             <span class="text-gray-300">|</span>
-            <a href="#season" class="text-blue-600 hover:underline">Surf Season</a>
+            <a href="#season" class="text-amber-700 hover:underline">Surf Season</a>
             <span class="text-gray-300">|</span>
-            <a href="#faq" class="text-blue-600 hover:underline">FAQs</a>
+            <a href="#faq" class="text-amber-700 hover:underline">FAQs</a>
         </div>
     </div>
 </section>
@@ -157,7 +158,7 @@ include __DIR__ . '/components/header.php';
         </h2>
 
         <div class="grid md:grid-cols-2 gap-8">
-            <div class="bg-blue-50 rounded-xl p-6">
+            <div class="bg-slate-50 rounded-xl p-6">
                 <h3 class="text-xl font-bold text-gray-900 mb-4">🌊 Winter Season (Nov-Mar)</h3>
                 <ul class="text-gray-700 space-y-2">
                     <li><strong>Swell:</strong> North Atlantic winter storms</li>
@@ -169,7 +170,7 @@ include __DIR__ . '/components/header.php';
                 </ul>
             </div>
 
-            <div class="bg-green-50 rounded-xl p-6">
+            <div class="bg-slate-50 rounded-xl p-6">
                 <h3 class="text-xl font-bold text-gray-900 mb-4">☀️ Summer Season (Apr-Oct)</h3>
                 <ul class="text-gray-700 space-y-2">
                     <li><strong>Swell:</strong> Southern Caribbean swells</li>
@@ -194,19 +195,19 @@ include __DIR__ . '/components/header.php';
         <div class="grid md:grid-cols-3 gap-6">
             <a href="/best-beaches" class="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow group">
                 <div class="text-4xl mb-4">🏖️</div>
-                <h3 class="text-lg font-bold text-gray-900 group-hover:text-blue-600">Best Overall Beaches</h3>
+                <h3 class="text-lg font-bold text-gray-900 group-hover:text-brand-darker">Best Overall Beaches</h3>
                 <p class="text-gray-600 text-sm mt-2">Top 15 beaches in Puerto Rico</p>
             </a>
 
             <a href="/best-snorkeling-beaches" class="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow group">
                 <div class="text-4xl mb-4">🤿</div>
-                <h3 class="text-lg font-bold text-gray-900 group-hover:text-blue-600">Best for Snorkeling</h3>
+                <h3 class="text-lg font-bold text-gray-900 group-hover:text-brand-darker">Best for Snorkeling</h3>
                 <p class="text-gray-600 text-sm mt-2">Crystal-clear waters and coral reefs</p>
             </a>
 
             <a href="/best-family-beaches" class="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow group">
                 <div class="text-4xl mb-4">👨‍👩‍👧‍👦</div>
-                <h3 class="text-lg font-bold text-gray-900 group-hover:text-blue-600">Best for Families</h3>
+                <h3 class="text-lg font-bold text-gray-900 group-hover:text-brand-darker">Best for Families</h3>
                 <p class="text-gray-600 text-sm mt-2">Calm waters and kid-friendly facilities</p>
             </a>
         </div>
@@ -225,7 +226,7 @@ include __DIR__ . '/components/header.php';
             <details class="bg-white rounded-lg shadow-md group">
                 <summary class="flex items-center justify-between p-6 cursor-pointer font-semibold text-gray-900">
                     <?= h($faq['question']) ?>
-                    <span class="text-blue-600 group-open:rotate-180 transition-transform">▼</span>
+                    <span class="text-amber-700 group-open:rotate-180 transition-transform">▼</span>
                 </summary>
                 <div class="px-6 pb-6 text-gray-700">
                     <?= h($faq['answer']) ?>
@@ -262,6 +263,8 @@ include __DIR__ . '/components/header.php';
         </a>
     </div>
 </section>
+
+</div>
 
 <?php
 $skipMapScripts = true;

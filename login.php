@@ -269,7 +269,7 @@ include __DIR__ . '/components/header.php';
 
                     <!-- Trust Signal -->
                     <div class="flex items-center justify-center gap-2 text-sm text-gray-400">
-                        <i data-lucide="shield-check" class="w-4 h-4 text-green-500"></i>
+                        <i data-lucide="shield-check" class="w-4 h-4 text-green-500 a11y-success-text"></i>
                         <span>We never post without your permission</span>
                     </div>
 

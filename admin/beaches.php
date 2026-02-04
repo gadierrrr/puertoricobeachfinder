@@ -330,7 +330,7 @@ if ($action === 'list'):
                     </div>
 
                     <!-- Google Maps URL Coordinate Extractor -->
-                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div class="bg-blue-50 a11y-on-light-blue border border-blue-200 rounded-lg p-4">
                         <div class="flex items-center gap-2 mb-2">
                             <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
@@ -428,7 +428,7 @@ if ($action === 'list'):
             <!-- For new beaches, show placeholder message -->
             <div class="bg-white rounded-xl shadow-sm p-6">
                 <h2 class="font-semibold text-gray-900 mb-4">Beach Images</h2>
-                <div class="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg">
+                <div class="bg-blue-50 a11y-on-light-blue border border-blue-200 text-blue-700 px-4 py-3 rounded-lg">
                     <p>Save the beach first to upload images.</p>
                 </div>
                 <input type="hidden" name="cover_image" value="/images/beaches/placeholder-beach.webp">

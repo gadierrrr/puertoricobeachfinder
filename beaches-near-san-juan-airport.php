@@ -173,15 +173,16 @@ $extraHead .= <<<BREADCRUMB
 </script>
 BREADCRUMB;
 
-$navVariant = 'collection';
-$bodyVariant = 'collection-light';
+$bodyVariant = 'collection-dark';
 $skipMapCSS = true;
 include __DIR__ . '/components/header.php';
 ?>
 <?php include __DIR__ . '/components/collection/explorer.php'; ?>
 
+<div class="collection-legacy-content">
+
 <!-- Quick Navigation -->
-<section class="bg-white border-b">
+<section class="collection-content-nav bg-white border-b">
     <div class="max-w-7xl mx-auto px-4 py-4">
         <div class="flex flex-wrap gap-2 justify-center text-sm">
             <span class="text-gray-500">Jump to:</span>
@@ -225,7 +226,7 @@ include __DIR__ . '/components/header.php';
         <div class="bg-white rounded-xl shadow-md overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full">
-                    <thead class="bg-amber-50">
+                    <thead class="bg-amber-50 a11y-on-light-amber">
                         <tr>
                             <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Beach Name</th>
                             <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Distance</th>
@@ -323,8 +324,8 @@ include __DIR__ . '/components/header.php';
             </div>
 
             <!-- 6-Hour Layover -->
-            <div class="bg-white rounded-xl shadow-md overflow-hidden border-2 border-green-200">
-                <div class="bg-green-600 text-white p-6">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border-2 border-slate-200">
+                <div class="bg-brand-yellow text-brand-darker p-6">
                     <div class="text-3xl mb-2">🏖️</div>
                     <h3 class="text-xl font-bold">6-Hour Layover</h3>
                     <p class="text-sm opacity-90 mt-1">Comfortable beach visit</p>
@@ -332,27 +333,27 @@ include __DIR__ . '/components/header.php';
                 <div class="p-6">
                     <div class="space-y-3 text-sm">
                         <div class="flex items-start gap-3">
-                            <span class="text-green-600 font-bold">0:00</span>
+                            <span class="text-amber-700 font-bold">0:00</span>
                             <span class="text-gray-700">Land, clear immigration (30 min)</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-green-600 font-bold">0:30</span>
+                            <span class="text-amber-700 font-bold">0:30</span>
                             <span class="text-gray-700">Taxi to beach (10-15 min)</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-green-600 font-bold">0:45</span>
+                            <span class="text-amber-700 font-bold">0:45</span>
                             <span class="text-gray-700"><strong>Beach time!</strong> (2.5 hours)</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-green-600 font-bold">3:15</span>
+                            <span class="text-amber-700 font-bold">3:15</span>
                             <span class="text-gray-700">Lunch at beach restaurant (45 min)</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-green-600 font-bold">4:00</span>
+                            <span class="text-amber-700 font-bold">4:00</span>
                             <span class="text-gray-700">Rinse, change, return (30 min)</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-green-600 font-bold">4:30</span>
+                            <span class="text-amber-700 font-bold">4:30</span>
                             <span class="text-gray-700">Airport security & check-in</span>
                         </div>
                     </div>
@@ -367,8 +368,8 @@ include __DIR__ . '/components/header.php';
             </div>
 
             <!-- 8+ Hour Layover -->
-            <div class="bg-white rounded-xl shadow-md overflow-hidden border-2 border-blue-200">
-                <div class="bg-blue-600 text-white p-6">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border-2 border-slate-200">
+                <div class="bg-brand-yellow text-brand-darker p-6">
                     <div class="text-3xl mb-2">🌴</div>
                     <h3 class="text-xl font-bold">8+ Hour Layover</h3>
                     <p class="text-sm opacity-90 mt-1">Full beach day experience</p>
@@ -376,27 +377,27 @@ include __DIR__ . '/components/header.php';
                 <div class="p-6">
                     <div class="space-y-3 text-sm">
                         <div class="flex items-start gap-3">
-                            <span class="text-blue-600 font-bold">0:00</span>
+                            <span class="text-amber-700 font-bold">0:00</span>
                             <span class="text-gray-700">Land, immigration, store luggage</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-blue-600 font-bold">0:45</span>
+                            <span class="text-amber-700 font-bold">0:45</span>
                             <span class="text-gray-700">Travel to any nearby beach</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-blue-600 font-bold">1:00</span>
+                            <span class="text-amber-700 font-bold">1:00</span>
                             <span class="text-gray-700"><strong>Full beach day!</strong> (4+ hours)</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-blue-600 font-bold">5:00</span>
+                            <span class="text-amber-700 font-bold">5:00</span>
                             <span class="text-gray-700">Lunch, explore neighborhood</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-blue-600 font-bold">6:00</span>
+                            <span class="text-amber-700 font-bold">6:00</span>
                             <span class="text-gray-700">Shower, change, pick up luggage</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-blue-600 font-bold">6:30</span>
+                            <span class="text-amber-700 font-bold">6:30</span>
                             <span class="text-gray-700">Return to airport (relaxed)</span>
                         </div>
                     </div>
@@ -479,7 +480,7 @@ include __DIR__ . '/components/header.php';
             </div>
         </div>
 
-        <div class="mt-8 bg-amber-50 border border-amber-200 rounded-lg p-6">
+        <div class="mt-8 bg-amber-50 a11y-on-light-amber border border-amber-200 rounded-lg p-6">
             <h4 class="font-bold text-gray-900 mb-3 flex items-center gap-2">
                 <span>💡</span>
                 <span>Transportation Recommendations by Scenario</span>
@@ -576,7 +577,7 @@ include __DIR__ . '/components/header.php';
                         <p class="font-semibold text-gray-900 mb-1">Hotel Beach Access</p>
                         <p>Hotels along Isla Verde have outdoor showers accessible from the beach. Purchase a drink at a hotel bar to use indoor bathrooms for changing.</p>
                     </div>
-                    <div class="bg-blue-50 border border-blue-200 rounded p-3">
+                    <div class="bg-slate-50 border border-slate-200 rounded p-3">
                         <p class="text-xs"><strong>Money-saving tip:</strong> Bring your own beach towel in carry-on. Buy sunscreen at airport Walgreens (cheaper than beach vendors). Bring refillable water bottle.</p>
                     </div>
                 </div>
@@ -646,7 +647,7 @@ include __DIR__ . '/components/header.php';
                             <li>• Snacks</li>
                         </ul>
                     </div>
-                    <div class="bg-green-50 border border-green-200 rounded p-3">
+                    <div class="bg-slate-50 border border-slate-200 rounded p-3">
                         <p class="text-xs"><strong>Packing hack:</strong> Use a lightweight drawstring backpack as your beach bag. It packs flat in carry-on and works for wet clothes on return. Everything stays together and TSA-compliant.</p>
                     </div>
                 </div>
@@ -717,6 +718,8 @@ include __DIR__ . '/components/header.php';
         </a>
     </div>
 </section>
+
+</div>
 
 <?php
 $skipMapScripts = true;

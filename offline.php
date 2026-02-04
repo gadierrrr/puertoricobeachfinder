@@ -48,7 +48,7 @@ $pageTitle = 'Offline';
             </a>
         </div>
 
-        <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+        <div class="mt-8 p-4 bg-blue-50 a11y-on-light-blue rounded-lg">
             <h2 class="font-medium text-blue-900 mb-2">Tip</h2>
             <p class="text-blue-700 text-sm">
                 Visit your favorite beaches while online to cache them for offline viewing.

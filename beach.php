@@ -1124,29 +1124,6 @@ document.addEventListener('keydown', (e) => {
     </div>
 </div>
 
-<style>
-.checkin-option input:checked + .checkin-option-box {
-    background-color: rgb(220 252 231);
-    border-color: rgb(34 197 94);
-    color: rgb(21 128 61);
-}
-.checkin-option-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem;
-    border: 2px solid rgb(229 231 235);
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: all 0.15s;
-    min-height: 3.5rem;
-}
-.checkin-option-box:hover {
-    border-color: rgb(156 163 175);
-    background-color: rgb(249 250 251);
-}
-</style>
 
 <script>
 function openCheckinModal(beachId, beachName) {
@@ -1262,7 +1239,7 @@ document.addEventListener('keydown', (e) => {
 
             <!-- Rating -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Your Rating <span class="text-red-500">*</span></label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Your Rating <span class="text-red-500 a11y-error-text">*</span></label>
                 <div class="flex gap-1" id="star-rating">
                     <?php for ($i = 1; $i <= 5; $i++): ?>
                     <button type="button" onclick="setRating(<?= $i ?>)" data-star="<?= $i ?>"
@@ -1287,7 +1264,7 @@ document.addEventListener('keydown', (e) => {
             <!-- Review Text -->
             <div>
                 <label for="review-text" class="block text-sm font-medium text-gray-700 mb-1">
-                    Your Review <span class="text-red-500">*</span>
+                    Your Review <span class="text-red-500 a11y-error-text">*</span>
                 </label>
                 <textarea name="review_text" id="review-text" rows="4" minlength="20" maxlength="5000" required
                           placeholder="What did you like or dislike? Share tips for other visitors..."

@@ -71,25 +71,26 @@ $breadcrumbs = [
     ['name' => 'Family Beaches']
 ];
 
-$navVariant = 'collection';
-$bodyVariant = 'collection-light';
+$bodyVariant = 'collection-dark';
 $skipMapCSS = true;
 include __DIR__ . '/components/header.php';
 ?>
 <?php include __DIR__ . '/components/collection/explorer.php'; ?>
 
+<div class="collection-legacy-content">
+
 <!-- Quick Navigation -->
-<section class="bg-white border-b">
+<section class="collection-content-nav bg-white border-b">
     <div class="max-w-7xl mx-auto px-4 py-4">
         <div class="flex flex-wrap gap-2 justify-center text-sm">
             <span class="text-gray-500">Jump to:</span>
-            <a href="#top-beaches" class="text-blue-600 hover:underline">Top Beaches</a>
+            <a href="#top-beaches" class="text-amber-700 hover:underline">Top Beaches</a>
             <span class="text-gray-300">|</span>
-            <a href="#tips" class="text-blue-600 hover:underline">Family Tips</a>
+            <a href="#tips" class="text-amber-700 hover:underline">Family Tips</a>
             <span class="text-gray-300">|</span>
-            <a href="#faq" class="text-blue-600 hover:underline">FAQs</a>
+            <a href="#faq" class="text-amber-700 hover:underline">FAQs</a>
             <span class="text-gray-300">|</span>
-            <a href="#map" class="text-blue-600 hover:underline">Map</a>
+            <a href="#map" class="text-amber-700 hover:underline">Map</a>
         </div>
     </div>
 </section>
@@ -160,45 +161,45 @@ include __DIR__ . '/components/header.php';
         </h2>
 
         <div class="grid md:grid-cols-2 gap-8">
-            <div class="bg-blue-50 rounded-xl p-6">
+            <div class="bg-slate-50 rounded-xl p-6">
                 <h3 class="text-xl font-bold text-gray-900 mb-4">Must-Have Features</h3>
                 <ul class="text-gray-700 space-y-3">
                     <li class="flex items-start gap-2">
-                        <span class="text-green-500">✓</span>
+                        <span class="text-amber-600">✓</span>
                         <span><strong>Calm, shallow waters</strong> - Gentle waves for safe swimming</span>
                     </li>
                     <li class="flex items-start gap-2">
-                        <span class="text-green-500">✓</span>
+                        <span class="text-amber-600">✓</span>
                         <span><strong>Lifeguards</strong> - Extra eyes for peace of mind</span>
                     </li>
                     <li class="flex items-start gap-2">
-                        <span class="text-green-500">✓</span>
+                        <span class="text-amber-600">✓</span>
                         <span><strong>Restrooms & showers</strong> - Essential for families</span>
                     </li>
                     <li class="flex items-start gap-2">
-                        <span class="text-green-500">✓</span>
+                        <span class="text-amber-600">✓</span>
                         <span><strong>Parking nearby</strong> - Easy access with beach gear</span>
                     </li>
                 </ul>
             </div>
 
-            <div class="bg-green-50 rounded-xl p-6">
+            <div class="bg-slate-50 rounded-xl p-6">
                 <h3 class="text-xl font-bold text-gray-900 mb-4">Nice-to-Have Features</h3>
                 <ul class="text-gray-700 space-y-3">
                     <li class="flex items-start gap-2">
-                        <span class="text-blue-500">★</span>
+                        <span class="text-amber-600">★</span>
                         <span><strong>Food vendors</strong> - Convenient meals and snacks</span>
                     </li>
                     <li class="flex items-start gap-2">
-                        <span class="text-blue-500">★</span>
+                        <span class="text-amber-600">★</span>
                         <span><strong>Picnic areas</strong> - Shaded spots for lunch</span>
                     </li>
                     <li class="flex items-start gap-2">
-                        <span class="text-blue-500">★</span>
+                        <span class="text-amber-600">★</span>
                         <span><strong>Equipment rentals</strong> - Chairs, umbrellas, snorkel gear</span>
                     </li>
                     <li class="flex items-start gap-2">
-                        <span class="text-blue-500">★</span>
+                        <span class="text-amber-600">★</span>
                         <span><strong>Playground nearby</strong> - Extra entertainment for kids</span>
                     </li>
                 </ul>
@@ -217,19 +218,19 @@ include __DIR__ . '/components/header.php';
         <div class="grid md:grid-cols-3 gap-6">
             <a href="/best-beaches" class="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow group">
                 <div class="text-4xl mb-4">🏖️</div>
-                <h3 class="text-lg font-bold text-gray-900 group-hover:text-blue-600">Best Overall Beaches</h3>
+                <h3 class="text-lg font-bold text-gray-900 group-hover:text-brand-darker">Best Overall Beaches</h3>
                 <p class="text-gray-600 text-sm mt-2">Top 15 beaches in Puerto Rico</p>
             </a>
 
             <a href="/best-snorkeling-beaches" class="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow group">
                 <div class="text-4xl mb-4">🤿</div>
-                <h3 class="text-lg font-bold text-gray-900 group-hover:text-blue-600">Best for Snorkeling</h3>
+                <h3 class="text-lg font-bold text-gray-900 group-hover:text-brand-darker">Best for Snorkeling</h3>
                 <p class="text-gray-600 text-sm mt-2">Crystal-clear waters and coral reefs</p>
             </a>
 
             <a href="/beaches-near-san-juan" class="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow group">
                 <div class="text-4xl mb-4">🏙️</div>
-                <h3 class="text-lg font-bold text-gray-900 group-hover:text-blue-600">Near San Juan</h3>
+                <h3 class="text-lg font-bold text-gray-900 group-hover:text-brand-darker">Near San Juan</h3>
                 <p class="text-gray-600 text-sm mt-2">Easy access from the capital</p>
             </a>
         </div>
@@ -248,7 +249,7 @@ include __DIR__ . '/components/header.php';
             <details class="bg-white rounded-lg shadow-md group">
                 <summary class="flex items-center justify-between p-6 cursor-pointer font-semibold text-gray-900">
                     <?= h($faq['question']) ?>
-                    <span class="text-blue-600 group-open:rotate-180 transition-transform">▼</span>
+                    <span class="text-amber-700 group-open:rotate-180 transition-transform">▼</span>
                 </summary>
                 <div class="px-6 pb-6 text-gray-700">
                     <?= h($faq['answer']) ?>
@@ -266,7 +267,7 @@ include __DIR__ . '/components/header.php';
             Find Family Beaches on the Map
         </h2>
         <div class="text-center">
-            <a href="/?view=map&activity=family-friendly" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+            <a href="/?view=map&activity=family-friendly" class="inline-flex items-center gap-2 bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-6 py-3 rounded-lg font-medium transition-colors">
                 <span>🗺️</span>
                 <span>View Family Beaches Map</span>
             </a>
@@ -276,15 +277,17 @@ include __DIR__ . '/components/header.php';
 </section>
 
 <!-- CTA Section -->
-<section class="py-12 bg-green-600 text-white">
+<section class="py-12 bg-brand-yellow text-brand-darker">
     <div class="max-w-4xl mx-auto px-4 text-center">
         <h2 class="text-2xl md:text-3xl font-bold mb-4">Find the Perfect Beach for Your Family</h2>
         <p class="text-lg opacity-90 mb-6">Tell us about your family's preferences and get personalized beach recommendations.</p>
-        <a href="/quiz.php" class="inline-block bg-white text-green-600 hover:bg-green-50 px-8 py-3 rounded-lg font-semibold transition-colors">
+        <a href="/quiz.php" class="inline-block bg-white text-amber-700 hover:bg-slate-50 px-8 py-3 rounded-lg font-semibold transition-colors">
             Take the Beach Match Quiz
         </a>
     </div>
 </section>
+
+</div>
 
 <?php
 $skipMapScripts = true;

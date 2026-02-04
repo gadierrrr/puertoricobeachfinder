@@ -111,7 +111,7 @@ if ($wantsJson) {
         hx-swap="outerHTML"
         hx-vals='{"beach_id": "<?= h($beachId) ?>", "csrf_token": "<?= h(csrfToken()) ?>"}'
         title="<?= $isFavorite ? 'Remove from favorites' : 'Add to favorites' ?>">
-    <span class="text-lg <?= $isFavorite ? 'text-red-500' : 'text-gray-400' ?>">
+    <span class="text-lg <?= $isFavorite ? 'text-red-500 a11y-error-text' : 'text-gray-400' ?>">
         <?= $isFavorite ? '❤️' : '🤍' ?>
     </span>
 </button>
