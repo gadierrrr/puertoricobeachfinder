@@ -1,50 +1,116 @@
 <?php
 /**
- * API: Get Beach Data for Map View
+ * API: Get Beach Data for Map View.
  *
- * Returns minimal beach data needed for map markers and client-side filtering.
- * This endpoint is designed to be lazy-loaded after page render.
+ * Supports both generic filters and collection context handoff from
+ * collection explorer pages.
  *
  * GET /api/beaches-map.php
  */
 
 require_once __DIR__ . '/../inc/db.php';
 require_once __DIR__ . '/../inc/helpers.php';
+require_once __DIR__ . '/../inc/constants.php';
+require_once __DIR__ . '/../inc/collection_query.php';
 
-// Cache for 24 hours - beach data rarely changes
 header('Content-Type: application/json');
 header('Cache-Control: public, max-age=86400, s-maxage=86400');
 
-// Get minimal beach data for map markers
-$sql = 'SELECT b.id, b.slug, b.name, b.municipality, b.lat, b.lng,
-               b.cover_image, b.google_rating
-        FROM beaches b
-        WHERE b.publish_status = "published"
-        ORDER BY b.name ASC';
+$collectionKey = isset($_GET['collection']) ? (string)$_GET['collection'] : '';
+$beaches = [];
+$meta = [
+    'collection' => null,
+    'context_fallback' => false,
+];
 
-$beaches = query($sql, []);
+if ($collectionKey !== '' && isValidCollectionKey($collectionKey)) {
+    $filters = collectionFiltersFromRequest($collectionKey, $_GET);
+    $filters['page'] = 1;
+    $filters['limit'] = min(500, max(1, intval($_GET['limit'] ?? 500)));
 
-// Attach tags (needed for client-side filtering)
-if (!empty($beaches)) {
-    $beachIds = array_column($beaches, 'id');
-    $placeholders = implode(',', array_fill(0, count($beachIds), '?'));
+    $collectionData = fetchCollectionBeaches($collectionKey, $filters);
+    $beaches = $collectionData['beaches'] ?? [];
+    $meta['collection'] = $collectionKey;
+    $meta['context_fallback'] = !empty($collectionData['context_fallback']);
+    $meta['filters'] = $collectionData['effective_filters'] ?? [];
+} else {
+    $tags = isset($_GET['tags']) ? (array)$_GET['tags'] : [];
+    if (isset($_GET['tags[]'])) {
+        $tags = array_merge($tags, (array)$_GET['tags[]']);
+    }
+    $tags = array_values(array_filter($tags, 'isValidTag'));
 
-    $tagsSql = "SELECT beach_id, tag FROM beach_tags WHERE beach_id IN ($placeholders)";
-    $tagsResult = query($tagsSql, $beachIds);
-
-    // Group tags by beach_id
-    $tagsByBeach = [];
-    foreach ($tagsResult as $row) {
-        $tagsByBeach[$row['beach_id']][] = $row['tag'];
+    $municipality = '';
+    if (isset($_GET['municipality']) && is_string($_GET['municipality']) && isValidMunicipality($_GET['municipality'])) {
+        $municipality = $_GET['municipality'];
     }
 
-    // Attach tags to beaches
-    foreach ($beaches as &$beach) {
-        $beach['tags'] = $tagsByBeach[$beach['id']] ?? [];
+    $searchQuery = trim((string)($_GET['q'] ?? ''));
+    $sort = isset($_GET['sort']) ? (string)$_GET['sort'] : 'name';
+    if (!in_array($sort, ['name', 'rating', 'reviews'], true)) {
+        $sort = 'name';
     }
+
+    $params = [];
+    $where = ['b.publish_status = "published"'];
+
+    if (!empty($tags)) {
+        $tagPlaceholders = [];
+        foreach ($tags as $idx => $tag) {
+            $placeholder = ':tag_' . $idx;
+            $tagPlaceholders[] = $placeholder;
+            $params[$placeholder] = $tag;
+        }
+        $where[] = 'EXISTS (
+            SELECT 1 FROM beach_tags bt
+            WHERE bt.beach_id = b.id
+            AND bt.tag IN (' . implode(', ', $tagPlaceholders) . ')
+        )';
+    }
+
+    if ($municipality !== '') {
+        $params[':municipality'] = $municipality;
+        $where[] = 'b.municipality = :municipality';
+    }
+
+    if ($searchQuery !== '') {
+        $search = '%' . $searchQuery . '%';
+        $params[':search_name'] = $search;
+        $params[':search_municipality'] = $search;
+        $params[':search_description'] = $search;
+        $where[] = '(b.name LIKE :search_name
+            OR b.municipality LIKE :search_municipality
+            OR b.description LIKE :search_description)';
+    }
+
+    $whereClause = ' WHERE ' . implode(' AND ', $where);
+    $orderBy = 'b.name ASC';
+    if ($sort === 'rating') {
+        $orderBy = 'COALESCE(b.google_rating, 0) DESC, COALESCE(b.google_review_count, 0) DESC, b.name ASC';
+    } elseif ($sort === 'reviews') {
+        $orderBy = 'COALESCE(b.google_review_count, 0) DESC, COALESCE(b.google_rating, 0) DESC, b.name ASC';
+    }
+
+    $sql = 'SELECT b.id, b.slug, b.name, b.municipality, b.lat, b.lng,
+                   b.cover_image, b.google_rating
+            FROM beaches b' . $whereClause . '
+            ORDER BY ' . $orderBy . '
+            LIMIT 500';
+    $beaches = query($sql, $params) ?: [];
+    if (!empty($beaches)) {
+        attachBeachMetadata($beaches);
+    }
+
+    $meta['filters'] = [
+        'tags' => $tags,
+        'municipality' => $municipality,
+        'q' => $searchQuery,
+        'sort' => $sort,
+    ];
 }
 
 echo json_encode([
     'beaches' => $beaches,
-    'total' => count($beaches)
+    'total' => count($beaches),
+    'meta' => $meta,
 ]);

@@ -7,6 +7,7 @@
 require_once __DIR__ . '/inc/db.php';
 require_once __DIR__ . '/inc/helpers.php';
 require_once __DIR__ . '/inc/constants.php';
+require_once __DIR__ . '/inc/collection_query.php';
 require_once __DIR__ . '/components/seo-schemas.php';
 
 // Page metadata
@@ -14,31 +15,18 @@ $pageTitle = '15 Hidden Beaches in Puerto Rico (Secret Gems 2025)';
 $pageDescription = 'Discover 15 secret and hidden beaches in Puerto Rico. Off-the-beaten-path paradise spots, secluded coves, and remote island destinations for adventure seekers. Includes access guides and coordinates.';
 $canonicalUrl = ($_ENV['APP_URL'] ?? 'https://www.puertoricobeachfinder.com') . '/hidden-beaches-puerto-rico';
 
-// Fetch hidden beaches - secluded/remote beaches with lower review counts
-$hiddenBeaches = query("
-    SELECT b.*,
-           GROUP_CONCAT(DISTINCT bt.tag) as tag_list,
-           GROUP_CONCAT(DISTINCT ba.amenity) as amenity_list
-    FROM beaches b
-    LEFT JOIN beach_tags bt ON b.id = bt.beach_id
-    LEFT JOIN beach_amenities ba ON b.id = ba.beach_id
-    WHERE b.publish_status = 'published'
-    AND (
-        b.id IN (SELECT beach_id FROM beach_tags WHERE tag IN ('secluded', 'remote', 'wild'))
-        OR b.google_review_count < 200
-    )
-    GROUP BY b.id
-    HAVING tag_list LIKE '%secluded%' OR tag_list LIKE '%remote%' OR tag_list LIKE '%wild%'
-    ORDER BY b.google_rating DESC, b.google_review_count ASC
-    LIMIT 15
-");
+$collectionKey = 'hidden-beaches-puerto-rico';
+$collectionAnchorId = 'hidden-beaches';
+$collectionData = fetchCollectionBeaches($collectionKey, collectionFiltersFromRequest($collectionKey, $_GET));
+$collectionContext = $collectionData['collection'];
+$collectionState = $collectionData['effective_filters'];
+$hiddenBeaches = $collectionData['beaches'];
 
-// Process tags and amenities
-foreach ($hiddenBeaches as &$beach) {
-    $beach['tags'] = $beach['tag_list'] ? explode(',', $beach['tag_list']) : [];
-    $beach['amenities'] = $beach['amenity_list'] ? explode(',', $beach['amenity_list']) : [];
+$userFavorites = [];
+if (isAuthenticated()) {
+    $favorites = query('SELECT beach_id FROM user_favorites WHERE user_id = :user_id', [':user_id' => $_SESSION['user_id']]) ?: [];
+    $userFavorites = array_column($favorites, 'beach_id');
 }
-unset($beach);
 
 // Generate structured data
 $extraHead = articleSchema(
@@ -123,15 +111,12 @@ $breadcrumbs = [
     ['name' => 'Hidden Beaches in Puerto Rico']
 ];
 
+$navVariant = 'collection';
+$bodyVariant = 'collection-light';
+$skipMapCSS = true;
 include __DIR__ . '/components/header.php';
-
-// Override page title and description for hero component
-$pageTitle = '15 Hidden Beaches in Puerto Rico';
-$pageDescription = 'Escape the crowds and discover Puerto Rico\'s best-kept secrets. From remote island cays to secluded mainland coves, these hidden gems offer pristine beauty and authentic Caribbean adventure.';
-
-// Include hero component
-include __DIR__ . '/components/hero-guide.php';
 ?>
+<?php include __DIR__ . '/components/collection/explorer.php'; ?>
 
 <!-- Quick Navigation -->
 <section class="bg-white border-b">
@@ -162,96 +147,6 @@ include __DIR__ . '/components/hero-guide.php';
             <p>These secluded spots demand more from visitors than popular beaches. You'll need to be <strong>self-sufficient</strong>, bringing your own water, food, and supplies. You'll navigate <strong>rough roads</strong> or hire boat operators. You might hike through <strong>coastal trails</strong> or kayak across <strong>turquoise channels</strong>. But the reward is extraordinary: powder-soft sand unmarred by footprints, crystalline waters teeming with marine life, and the rare privilege of having a Caribbean paradise practically to yourself.</p>
 
             <p>This guide reveals 15 of Puerto Rico's most spectacular hidden beaches, from <strong>offshore cays</strong> like Cayo Enrique to <strong>remote mainland coves</strong> in Isabela and Cabo Rojo. We'll share <strong>access instructions</strong>, <strong>coordinates</strong>, and <strong>essential tips</strong> for visiting these secret spots responsibly. Remember: these beaches remain pristine because visitors respect them. Always practice <strong>Leave No Trace principles</strong>, pack out all trash, and help preserve these natural treasures for future adventurers.</p>
-        </div>
-    </div>
-</section>
-
-<!-- Hidden Beaches List -->
-<section id="hidden-beaches" class="py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
-            15 Secret Beaches in Puerto Rico for 2025
-        </h2>
-
-        <div class="space-y-8">
-            <?php foreach ($hiddenBeaches as $index => $beach): ?>
-            <article class="bg-white rounded-xl shadow-md overflow-hidden md:flex">
-                <div class="md:w-1/3 relative">
-                    <?php if ($beach['cover_image']): ?>
-                    <img src="<?= h($beach['cover_image']) ?>"
-                         alt="<?= h($beach['name']) ?>"
-                         class="w-full h-48 md:h-full object-cover"
-                         loading="<?= $index < 3 ? 'eager' : 'lazy' ?>">
-                    <?php else: ?>
-                    <div class="w-full h-48 md:h-full bg-gradient-to-br from-teal-400 to-cyan-600 flex items-center justify-center">
-                        <span class="text-6xl">🏝️</span>
-                    </div>
-                    <?php endif; ?>
-                    <div class="absolute top-4 left-4 bg-teal-600 text-white px-3 py-1 rounded-full font-bold">
-                        #<?= $index + 1 ?>
-                    </div>
-                    <?php if ($beach['google_review_count'] && $beach['google_review_count'] < 100): ?>
-                    <div class="absolute top-4 right-4 bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
-                        Ultra Secret
-                    </div>
-                    <?php endif; ?>
-                </div>
-                <div class="md:w-2/3 p-6">
-                    <div class="flex items-start justify-between mb-2">
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-900">
-                                <a href="/beach/<?= h($beach['slug']) ?>" class="hover:text-teal-600">
-                                    <?= h($beach['name']) ?>
-                                </a>
-                            </h3>
-                            <p class="text-gray-600"><?= h($beach['municipality']) ?>, Puerto Rico</p>
-                        </div>
-                        <?php if ($beach['google_rating']): ?>
-                        <div class="flex items-center bg-yellow-50 px-3 py-1 rounded-full">
-                            <span class="text-yellow-500 mr-1">★</span>
-                            <span class="font-semibold"><?= number_format($beach['google_rating'], 1) ?></span>
-                            <span class="text-gray-500 text-sm ml-1">(<?= number_format($beach['google_review_count']) ?>)</span>
-                        </div>
-                        <?php endif; ?>
-                    </div>
-
-                    <p class="text-gray-700 mb-4">
-                        <?= h(substr($beach['description'] ?? '', 0, 200)) ?>...
-                    </p>
-
-                    <?php if (!empty($beach['tags'])): ?>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <?php foreach (array_slice($beach['tags'], 0, 5) as $tag): ?>
-                        <span class="bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded">
-                            <?= h(getTagLabel($tag)) ?>
-                        </span>
-                        <?php endforeach; ?>
-                    </div>
-                    <?php endif; ?>
-
-                    <?php if (empty($beach['amenities']) || count($beach['amenities']) < 2): ?>
-                    <div class="bg-amber-50 border-l-4 border-amber-400 p-3 mb-4">
-                        <p class="text-sm text-amber-800">
-                            <strong>⚠️ No facilities:</strong> Bring water, food, and supplies. No restrooms or lifeguards.
-                        </p>
-                    </div>
-                    <?php endif; ?>
-
-                    <div class="flex gap-3">
-                        <a href="/beach/<?= h($beach['slug']) ?>"
-                           class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                            View Details
-                        </a>
-                        <a href="https://www.google.com/maps/dir/?api=1&destination=<?= urlencode($beach['lat'] . ',' . $beach['lng']) ?>"
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           class="border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                            Get Directions
-                        </a>
-                    </div>
-                </div>
-            </article>
-            <?php endforeach; ?>
         </div>
     </div>
 </section>
@@ -742,4 +637,9 @@ include __DIR__ . '/components/hero-guide.php';
     </div>
 </section>
 
+<?php
+$skipMapScripts = true;
+$skipAppScripts = true;
+$extraScripts = '<script defer src="/assets/js/collection-explorer.min.js"></script>';
+?>
 <?php include __DIR__ . '/components/footer.php'; ?>

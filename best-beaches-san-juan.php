@@ -8,6 +8,7 @@
 require_once __DIR__ . '/inc/db.php';
 require_once __DIR__ . '/inc/helpers.php';
 require_once __DIR__ . '/inc/constants.php';
+require_once __DIR__ . '/inc/collection_query.php';
 require_once __DIR__ . '/components/seo-schemas.php';
 
 // Page metadata
@@ -15,28 +16,18 @@ $pageTitle = '12 Best Beaches in San Juan, Puerto Rico (2025 Guide)';
 $pageDescription = 'Discover the best beaches in San Juan for 2025. From Condado and Isla Verde to Ocean Park and Escambrón, find pristine urban beaches with Caribbean beauty and city convenience.';
 $canonicalUrl = ($_ENV['APP_URL'] ?? 'https://www.puertoricobeachfinder.com') . '/best-beaches-san-juan';
 
-// Fetch top beaches in San Juan metro area (San Juan + Carolina municipalities)
-$topBeaches = query("
-    SELECT b.*,
-           GROUP_CONCAT(DISTINCT bt.tag) as tag_list,
-           GROUP_CONCAT(DISTINCT ba.amenity) as amenity_list
-    FROM beaches b
-    LEFT JOIN beach_tags bt ON b.id = bt.beach_id
-    LEFT JOIN beach_amenities ba ON b.id = ba.beach_id
-    WHERE b.publish_status = 'published'
-    AND b.municipality IN ('San Juan', 'Carolina')
-    AND b.google_rating IS NOT NULL
-    GROUP BY b.id
-    ORDER BY b.google_rating DESC, b.google_review_count DESC
-    LIMIT 12
-");
+$collectionKey = 'best-beaches-san-juan';
+$collectionAnchorId = 'top-beaches';
+$collectionData = fetchCollectionBeaches($collectionKey, collectionFiltersFromRequest($collectionKey, $_GET));
+$collectionContext = $collectionData['collection'];
+$collectionState = $collectionData['effective_filters'];
+$topBeaches = $collectionData['beaches'];
 
-// Process tags and amenities
-foreach ($topBeaches as &$beach) {
-    $beach['tags'] = $beach['tag_list'] ? explode(',', $beach['tag_list']) : [];
-    $beach['amenities'] = $beach['amenity_list'] ? explode(',', $beach['amenity_list']) : [];
+$userFavorites = [];
+if (isAuthenticated()) {
+    $favorites = query('SELECT beach_id FROM user_favorites WHERE user_id = :user_id', [':user_id' => $_SESSION['user_id']]) ?: [];
+    $userFavorites = array_column($favorites, 'beach_id');
 }
-unset($beach);
 
 // Generate structured data
 $extraHead = articleSchema(
@@ -93,14 +84,12 @@ $breadcrumbs = [
     ['name' => 'Best Beaches in San Juan']
 ];
 
+$navVariant = 'collection';
+$bodyVariant = 'collection-light';
+$skipMapCSS = true;
 include __DIR__ . '/components/header.php';
 ?>
-
-<!-- Hero Section -->
-<?php
-$heroSubtext = 'Updated January 2025 | Expert-curated list';
-include __DIR__ . '/components/hero-collection.php';
-?>
+<?php include __DIR__ . '/components/collection/explorer.php'; ?>
 
 <!-- Quick Navigation -->
 <section class="bg-white border-b">
@@ -129,83 +118,6 @@ include __DIR__ . '/components/hero-collection.php';
             <p>From the protected snorkeling cove at Escambrón to the social scene at Ocean Park, San Juan's beaches cater to every type of traveler. Families appreciate the calm waters and facilities at balnearios (public beaches), while surfers and kitesurfers find their playground where the Atlantic meets the Caribbean.</p>
 
             <p>Most San Juan beaches feature <strong>lifeguards, restrooms, and showers</strong>, making them convenient for cruise ship passengers and hotel guests alike. The walkability factor is exceptional—many beaches are accessible on foot from major hotels, and the waterfront promenades offer scenic strolls between beach neighborhoods.</p>
-        </div>
-    </div>
-</section>
-
-<!-- Top 12 Beaches List -->
-<section id="top-beaches" class="py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
-            The 12 Best Beaches in San Juan for 2025
-        </h2>
-
-        <div class="space-y-8">
-            <?php foreach ($topBeaches as $index => $beach): ?>
-            <article class="bg-white rounded-xl shadow-md overflow-hidden md:flex">
-                <div class="md:w-1/3 relative">
-                    <?php if ($beach['cover_image']): ?>
-                    <img src="<?= h($beach['cover_image']) ?>"
-                         alt="<?= h($beach['name']) ?>"
-                         class="w-full h-48 md:h-full object-cover"
-                         loading="<?= $index < 3 ? 'eager' : 'lazy' ?>">
-                    <?php else: ?>
-                    <div class="w-full h-48 md:h-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center">
-                        <span class="text-6xl">🏖️</span>
-                    </div>
-                    <?php endif; ?>
-                    <div class="absolute top-4 left-4 bg-purple-600 text-white px-3 py-1 rounded-full font-bold">
-                        #<?= $index + 1 ?>
-                    </div>
-                </div>
-                <div class="md:w-2/3 p-6">
-                    <div class="flex items-start justify-between mb-2">
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-900">
-                                <a href="/beach/<?= h($beach['slug']) ?>" class="hover:text-purple-600">
-                                    <?= h($beach['name']) ?>
-                                </a>
-                            </h3>
-                            <p class="text-gray-600"><?= h($beach['municipality']) ?>, Puerto Rico</p>
-                        </div>
-                        <?php if ($beach['google_rating']): ?>
-                        <div class="flex items-center bg-yellow-50 px-3 py-1 rounded-full">
-                            <span class="text-yellow-500 mr-1">★</span>
-                            <span class="font-semibold"><?= number_format($beach['google_rating'], 1) ?></span>
-                            <span class="text-gray-500 text-sm ml-1">(<?= number_format($beach['google_review_count']) ?>)</span>
-                        </div>
-                        <?php endif; ?>
-                    </div>
-
-                    <p class="text-gray-700 mb-4">
-                        <?= h(substr($beach['description'] ?? '', 0, 200)) ?>...
-                    </p>
-
-                    <?php if (!empty($beach['tags'])): ?>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <?php foreach (array_slice($beach['tags'], 0, 4) as $tag): ?>
-                        <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">
-                            <?= h(getTagLabel($tag)) ?>
-                        </span>
-                        <?php endforeach; ?>
-                    </div>
-                    <?php endif; ?>
-
-                    <div class="flex gap-3">
-                        <a href="/beach/<?= h($beach['slug']) ?>"
-                           class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                            View Details
-                        </a>
-                        <a href="https://www.google.com/maps/dir/?api=1&destination=<?= urlencode($beach['lat'] . ',' . $beach['lng']) ?>"
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           class="border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                            Get Directions
-                        </a>
-                    </div>
-                </div>
-            </article>
-            <?php endforeach; ?>
         </div>
     </div>
 </section>
@@ -415,4 +327,9 @@ include __DIR__ . '/components/hero-collection.php';
     </div>
 </section>
 
+<?php
+$skipMapScripts = true;
+$skipAppScripts = true;
+$extraScripts = '<script defer src="/assets/js/collection-explorer.min.js"></script>';
+?>
 <?php include __DIR__ . '/components/footer.php'; ?>

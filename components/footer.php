@@ -135,17 +135,21 @@
         </div>
     </footer>
 
+    <?php if (!isset($skipMapScripts) || !$skipMapScripts): ?>
     <!-- MapLibre GL JS (defer for non-blocking load) -->
     <script defer
             src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"
             integrity="sha384-3WUbXI7T+/GIrWP/5MDMjhzLyHQ+0utF3PnJ7ozD7UeN1/bbZ96Hk+Vvd024VYfW"
             crossorigin="anonymous"></script>
+    <?php endif; ?>
 
+    <?php if (!isset($skipAppScripts) || !$skipAppScripts): ?>
     <!-- App JavaScript (defer for non-blocking load) -->
     <script defer src="/assets/js/app.min.js"></script>
     <script defer src="/assets/js/geolocation.js"></script>
     <script defer src="/assets/js/filters.js"></script>
     <script defer src="/assets/js/share.js"></script>
+    <?php endif; ?>
 
     <!-- Initialize Lucide Icons -->
     <script>

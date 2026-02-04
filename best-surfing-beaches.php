@@ -7,6 +7,7 @@
 require_once __DIR__ . '/inc/db.php';
 require_once __DIR__ . '/inc/helpers.php';
 require_once __DIR__ . '/inc/constants.php';
+require_once __DIR__ . '/inc/collection_query.php';
 require_once __DIR__ . '/components/seo-schemas.php';
 
 // Page metadata
@@ -14,27 +15,18 @@ $pageTitle = 'Best Surfing Beaches in Puerto Rico (2025 Guide)';
 $pageDescription = 'Discover the best surfing beaches in Puerto Rico for 2025. From Rincon\'s world-class breaks to beginner-friendly spots, find your perfect wave on the island.';
 $canonicalUrl = ($_ENV['APP_URL'] ?? 'https://www.puertoricobeachfinder.com') . '/best-surfing-beaches';
 
-// Fetch surfing beaches
-$surfingBeaches = query("
-    SELECT b.*,
-           GROUP_CONCAT(DISTINCT bt.tag) as tag_list,
-           GROUP_CONCAT(DISTINCT ba.amenity) as amenity_list
-    FROM beaches b
-    LEFT JOIN beach_tags bt ON b.id = bt.beach_id
-    LEFT JOIN beach_amenities ba ON b.id = ba.beach_id
-    WHERE b.publish_status = 'published'
-    AND EXISTS (SELECT 1 FROM beach_tags bt2 WHERE bt2.beach_id = b.id AND bt2.tag = 'surfing')
-    GROUP BY b.id
-    ORDER BY b.google_rating DESC, b.google_review_count DESC
-    LIMIT 15
-");
+$collectionKey = 'best-surfing-beaches';
+$collectionAnchorId = 'top-beaches';
+$collectionData = fetchCollectionBeaches($collectionKey, collectionFiltersFromRequest($collectionKey, $_GET));
+$collectionContext = $collectionData['collection'];
+$collectionState = $collectionData['effective_filters'];
+$surfingBeaches = $collectionData['beaches'];
 
-// Process tags and amenities
-foreach ($surfingBeaches as &$beach) {
-    $beach['tags'] = $beach['tag_list'] ? explode(',', $beach['tag_list']) : [];
-    $beach['amenities'] = $beach['amenity_list'] ? explode(',', $beach['amenity_list']) : [];
+$userFavorites = [];
+if (isAuthenticated()) {
+    $favorites = query('SELECT beach_id FROM user_favorites WHERE user_id = :user_id', [':user_id' => $_SESSION['user_id']]) ?: [];
+    $userFavorites = array_column($favorites, 'beach_id');
 }
-unset($beach);
 
 // Generate structured data
 $extraHead = articleSchema(
@@ -79,15 +71,12 @@ $breadcrumbs = [
     ['name' => 'Surfing Beaches']
 ];
 
+$navVariant = 'collection';
+$bodyVariant = 'collection-light';
+$skipMapCSS = true;
 include __DIR__ . '/components/header.php';
 ?>
-
-<!-- Hero Section -->
-<?php
-$heroSubtext = 'Updated January 2025 | 45+ surf breaks reviewed';
-include __DIR__ . '/components/hero-collection.php';
-?>
-</section>
+<?php include __DIR__ . '/components/collection/explorer.php'; ?>
 
 <!-- Quick Navigation -->
 <section class="bg-white border-b">
@@ -112,83 +101,6 @@ include __DIR__ . '/components/hero-collection.php';
             <p>Puerto Rico is a <strong>world-renowned surfing destination</strong> with consistent swells, warm water year-round, and a variety of breaks for all skill levels. The island's unique position in the Caribbean receives swells from multiple directions.</p>
 
             <p>Rincon, often called the <strong>"Caribbean's Hawaii,"</strong> put Puerto Rico on the surfing map when it hosted the 1968 World Surfing Championship. Today, the island continues to attract surfers from around the globe seeking quality waves without the crowds of more popular destinations.</p>
-        </div>
-    </div>
-</section>
-
-<!-- Top Surfing Beaches List -->
-<section id="top-beaches" class="py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
-            Top Surfing Beaches in Puerto Rico
-        </h2>
-
-        <div class="space-y-8">
-            <?php foreach ($surfingBeaches as $index => $beach): ?>
-            <article class="bg-white rounded-xl shadow-md overflow-hidden md:flex">
-                <div class="md:w-1/3 relative">
-                    <?php if ($beach['cover_image']): ?>
-                    <img src="<?= h($beach['cover_image']) ?>"
-                         alt="Surfing at <?= h($beach['name']) ?>"
-                         class="w-full h-48 md:h-full object-cover"
-                         loading="<?= $index < 3 ? 'eager' : 'lazy' ?>">
-                    <?php else: ?>
-                    <div class="w-full h-48 md:h-full bg-gradient-to-br from-orange-400 to-red-600 flex items-center justify-center">
-                        <span class="text-6xl">🏄</span>
-                    </div>
-                    <?php endif; ?>
-                    <div class="absolute top-4 left-4 bg-orange-600 text-white px-3 py-1 rounded-full font-bold">
-                        #<?= $index + 1 ?>
-                    </div>
-                </div>
-                <div class="md:w-2/3 p-6">
-                    <div class="flex items-start justify-between mb-2">
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-900">
-                                <a href="/beach/<?= h($beach['slug']) ?>" class="hover:text-blue-600">
-                                    <?= h($beach['name']) ?>
-                                </a>
-                            </h3>
-                            <p class="text-gray-600"><?= h($beach['municipality']) ?>, Puerto Rico</p>
-                        </div>
-                        <?php if ($beach['google_rating']): ?>
-                        <div class="flex items-center bg-yellow-50 px-3 py-1 rounded-full">
-                            <span class="text-yellow-500 mr-1">★</span>
-                            <span class="font-semibold"><?= number_format($beach['google_rating'], 1) ?></span>
-                            <span class="text-gray-500 text-sm ml-1">(<?= number_format($beach['google_review_count']) ?>)</span>
-                        </div>
-                        <?php endif; ?>
-                    </div>
-
-                    <p class="text-gray-700 mb-4">
-                        <?= h(substr($beach['description'] ?? '', 0, 200)) ?>...
-                    </p>
-
-                    <?php if (!empty($beach['tags'])): ?>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <?php foreach (array_slice($beach['tags'], 0, 4) as $tag): ?>
-                        <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">
-                            <?= h(getTagLabel($tag)) ?>
-                        </span>
-                        <?php endforeach; ?>
-                    </div>
-                    <?php endif; ?>
-
-                    <div class="flex gap-3">
-                        <a href="/beach/<?= h($beach['slug']) ?>"
-                           class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                            View Details
-                        </a>
-                        <a href="https://www.google.com/maps/dir/?api=1&destination=<?= urlencode($beach['lat'] . ',' . $beach['lng']) ?>"
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           class="border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                            Get Directions
-                        </a>
-                    </div>
-                </div>
-            </article>
-            <?php endforeach; ?>
         </div>
     </div>
 </section>
@@ -351,4 +263,9 @@ include __DIR__ . '/components/hero-collection.php';
     </div>
 </section>
 
+<?php
+$skipMapScripts = true;
+$skipAppScripts = true;
+$extraScripts = '<script defer src="/assets/js/collection-explorer.min.js"></script>';
+?>
 <?php include __DIR__ . '/components/footer.php'; ?>
