@@ -20,16 +20,11 @@ $faqs = [
     ['question' => 'Can I bring my own snorkel gear to Puerto Rico?', 'answer' => 'Yes, bringing your own mask and snorkel ensures proper fit and hygiene. Many travelers pack compact travel snorkel sets. However, fins can be bulky—consider renting fins on-island if luggage space is limited.']
 ];
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo h($pageTitle); ?> - Puerto Rico Beach Finder</title>
-    <meta name="description" content="<?php echo h($pageDescription); ?>">
-    <?php
-    echo articleSchema($pageTitle, $pageDescription, 'https://puertoricobeachfinder.com/guides/beach-packing-list.php', '2024-01-15');
-    echo howToSchema(
+
+<?php
+$extraHead = $extraHead ?? "";
+$extraHead .= articleSchema($pageTitle, $pageDescription, 'https://puertoricobeachfinder.com/guides/beach-packing-list.php', '2024-01-15');
+    $extraHead .= howToSchema(
         'How to Pack for Puerto Rico Beaches',
         'Complete packing strategy for beach vacation in Puerto Rico',
         [
@@ -42,16 +37,19 @@ $faqs = [
             ['name' => 'Add Beach Entertainment', 'text' => 'Consider bringing snorkeling gear, boogie board, beach games, waterproof speaker, and books for downtime.']
         ]
     );
-    echo faqSchema($faqs);
-    echo breadcrumbSchema([
+    $extraHead .= faqSchema($faqs);
+    $extraHead .= breadcrumbSchema([
         ['name' => 'Home', 'url' => 'https://puertoricobeachfinder.com/'],
         ['name' => 'Guides', 'url' => 'https://puertoricobeachfinder.com/guides/'],
         ['name' => 'Beach Packing List', 'url' => 'https://puertoricobeachfinder.com/guides/beach-packing-list.php']
     ]);
-    ?>
-</head>
-<body class="bg-gray-50" data-theme="light">
-    <?php include __DIR__ . '/../components/header.php'; ?>
+$pageTheme = "guide";
+$skipMapCSS = true;
+$skipMapScripts = true;
+$pageShellMode = "start";
+include __DIR__ . "/../components/page-shell.php";
+?>
+
     <?php
     $breadcrumbs = [
         ['name' => 'Home', 'url' => '/'],
@@ -60,10 +58,8 @@ $faqs = [
     ];
     include __DIR__ . '/../components/hero-guide.php';
     ?>
-        </div>
-    </section>
 
-    <main class="guide-layout">
+    <section class="guide-layout">
         <aside class="guide-sidebar">
             <div class="guide-toc">
                     <h2 class="text-lg font-bold text-gray-900 mb-4">Categories</h2>
@@ -92,7 +88,7 @@ $faqs = [
                         <strong>These items are non-negotiable</strong> for any beach day in Puerto Rico. The Caribbean sun is intense year-round, and being unprepared can ruin your vacation with painful sunburn, dehydration, or lost valuables.
                     </p>
 
-                    <div class="bg-slate-50 border-l-4 border-green-600 p-6 my-6">
+                    <div class="bg-slate-50 border-l-4 border-yellow-400 p-6 my-6">
                         <h3 class="text-xl font-bold text-gray-900 mb-4">Must-Have Checklist</h3>
                         <div class="space-y-2">
                             <div class="checklist-item">Reef-safe sunscreen (SPF 30-50+, broad spectrum)</div>
@@ -184,7 +180,7 @@ $faqs = [
                         <strong>A compact first aid kit handles most minor beach injuries</strong>—cuts from shells, scrapes from rocks, jellyfish stings, or splinters. Packing these items prevents minor issues from derailing your day.
                     </p>
 
-                    <div class="bg-amber-50 border-l-4 border-yellow-600 p-6 my-6">
+                    <div class="bg-amber-50 a11y-on-light-amber border-l-4 border-yellow-600 p-6 my-6">
                         <h3 class="text-xl font-bold text-gray-900 mb-4">Beach First Aid Kit</h3>
                         <div class="space-y-3">
                             <div class="checklist-item"><strong>Adhesive bandages</strong> - Various sizes for cuts and blisters</div>
@@ -275,19 +271,19 @@ $faqs = [
 
                     <div class="space-y-6">
                         <?php foreach ($faqs as $faq): ?>
-                        <div class="border-l-4 border-green-600 pl-4">
+                        <div class="border-l-4 border-yellow-400 pl-4">
                             <h3 class="text-xl font-bold text-gray-900 mb-2"><?php echo h($faq['question']); ?></h3>
                             <p class="text-gray-700"><?php echo h($faq['answer']); ?></p>
                         </div>
                         <?php endforeach; ?>
                     </div>
 
-                    <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-8 mt-12">
+                    <div class="bg-gradient-to-r from-slate-50 to-slate-100 rounded-lg p-8 mt-12">
                         <h2 class="text-2xl font-bold text-gray-900 mb-4">Ready to Explore?</h2>
                         <p class="text-gray-700 mb-6">
                             Now that you know what to pack, find the perfect beach for your adventure.
                         </p>
-                        <a href="/" class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                        <a href="/" class="inline-block bg-brand-yellow text-brand-darker px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors">
                             Browse All Beaches
                         </a>
                     </div>
@@ -305,8 +301,9 @@ $faqs = [
                 </div>
             </article>
         </div>
-    </main>
+    </section>
 
-    <?php include __DIR__ . '/../components/footer.php'; ?>
-</body>
-</html>
+<?php
+$pageShellMode = "end";
+include __DIR__ . "/../components/page-shell.php";
+?>

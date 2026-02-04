@@ -1,36 +1,23 @@
-/* Beach Finder Custom Styles - Dark Glassmorphism Version */
-/* Inspired by premium travel platforms */
-
-/* ========================================
-   CSS VARIABLES & THEMING
-   ======================================== */
+/* AUTO-GENERATED FILE: DO NOT EDIT DIRECTLY */
+/* Source: assets/design/tokens.json */
 
 :root {
-    /* ===== BRAND COLORS ===== */
     --color-bg-primary: #1a2c32;
     --color-bg-secondary: #132024;
     --color-bg-tertiary: #1f3a42;
     --color-bg-card-dark: #1c2128;
-
-    /* ===== TEXT COLORS ===== */
     --color-white: #ffffff;
     --color-text-primary: #f1f5f9;
     --color-text-secondary: #cbd5e1;
     --color-text-muted: #94a3b8;
     --color-text-dark: #374151;
     --color-text-darker: #111827;
-
-    /* Text Colors - Light Mode Support */
-    --color-text-on-light: #1f2937;        /* Dark text for light backgrounds (gray-800) */
-    --color-text-secondary-light: #4b5563;  /* Medium gray for light backgrounds (gray-600) */
-    --color-text-muted-light: #6b7280;      /* Muted gray for light backgrounds (gray-500) */
-
-    /* Background Colors - Light Mode Support */
-    --color-bg-light-primary: #ffffff;      /* White background */
-    --color-bg-light-secondary: #f9fafb;    /* Off-white (gray-50) */
-    --color-bg-light-tertiary: #f3f4f6;     /* Light gray (gray-100) */
-
-    /* ===== INTERACTIVE / PRIMARY (Blue) ===== */
+    --color-text-on-light: #1f2937;
+    --color-text-secondary-light: #4b5563;
+    --color-text-muted-light: #6b7280;
+    --color-bg-light-primary: #ffffff;
+    --color-bg-light-secondary: #f9fafb;
+    --color-bg-light-tertiary: #f3f4f6;
     --color-primary: #3b82f6;
     --color-primary-hover: #2563eb;
     --color-primary-dark: #1d4ed8;
@@ -42,40 +29,26 @@
     --color-focus-ring-light: rgba(59, 130, 246, 0.3);
     --color-focus-ring-lighter: rgba(59, 130, 246, 0.2);
     --color-focus-ring-faint: rgba(59, 130, 246, 0.1);
-
-    /* ===== SECONDARY (Green - for guide pages, success states) ===== */
-    --color-secondary: #10b981;            /* Emerald-500 */
-    --color-secondary-light: #34d399;      /* Emerald-400 */
-    --color-secondary-hover: #059669;      /* Emerald-600 */
-    --color-secondary-dark: #047857;       /* Emerald-700 */
-
-    /* ===== ACCENT (Yellow - highlights, CTAs on dark backgrounds) ===== */
-    --color-accent: #fde047;               /* Yellow-300 */
-    --color-accent-light: #fef08a;         /* Yellow-200 */
-    --color-accent-hover: #facc15;         /* Yellow-400 */
-    --color-accent-dark: #eab308;          /* Yellow-500 */
-
-    /* Legacy aliases for backward compatibility */
+    --color-secondary: #10b981;
+    --color-secondary-light: #34d399;
+    --color-secondary-hover: #059669;
+    --color-secondary-dark: #047857;
+    --color-accent: #fde047;
+    --color-accent-light: #fef08a;
+    --color-accent-hover: #facc15;
+    --color-accent-dark: #eab308;
     --color-success: var(--color-secondary);
     --color-success-dark: var(--color-secondary-hover);
-
-    /* ===== GUIDE PAGE LINKS (Homepage-aligned + Tailwind Neutrals) ===== */
-    --color-guide-link: #ca8a04;               /* Dark gold - WCAG AA (4.7:1 on white) */
-    --color-guide-link-hover: #b45309;         /* Darker amber - WCAG AA (5.8:1 on white) */
-
-    /* ===== ERROR (Red) ===== */
+    --color-guide-link: #ca8a04;
+    --color-guide-link-hover: #b45309;
     --color-error: #ef4444;
     --color-error-dark: #dc2626;
     --color-error-light: rgba(239, 68, 68, 0.1);
     --color-error-light-hover: rgba(239, 68, 68, 0.2);
     --color-error-bg: #fef2f2;
     --color-error-bg-hover: #fee2e2;
-
-    /* ===== WARNING (Amber) ===== */
     --color-warning: #f59e0b;
     --color-warning-dark: #d97706;
-
-    /* ===== NEUTRAL / GRAY ===== */
     --color-gray-50: #f9fafb;
     --color-gray-100: #f3f4f6;
     --color-gray-200: #e5e7eb;
@@ -85,33 +58,24 @@
     --color-gray-600: #4b5563;
     --color-gray-700: #374151;
     --color-gray-800: #1f2937;
-
-    /* ===== SURFACES ===== */
-    --color-surface: white;
+    --color-gray-900: #111827;
+    --color-surface: #ffffff;
     --color-surface-hover: #f3f4f6;
     --color-surface-muted: #f9fafb;
     --color-overlay: rgba(0, 0, 0, 0.5);
     --color-overlay-dark: rgba(0, 0, 0, 0.95);
-
-    /* ===== BORDERS ===== */
     --color-border: rgba(255, 255, 255, 0.1);
     --color-border-light: rgba(255, 255, 255, 0.05);
     --color-border-solid: #e5e7eb;
     --color-border-solid-light: #f3f4f6;
-
-    /* ===== GLASS EFFECT ===== */
     --color-card-bg: rgba(255, 255, 255, 0.05);
     --glass-bg: rgba(0, 0, 0, 0.4);
     --glass-border: rgba(255, 255, 255, 0.2);
     --glass-blur: 12px;
-
-    /* ===== SCORE BADGES ===== */
     --score-exceptional-bg: linear-gradient(135deg, #059669 0%, #10b981 100%);
     --score-excellent-bg: linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%);
     --score-good-bg: linear-gradient(135deg, #fde047 0%, #facc15 100%);
     --score-average-bg: rgba(255, 255, 255, 0.1);
-
-    /* ===== SHADOWS ===== */
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
@@ -119,8 +83,6 @@
     --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4);
     --shadow-popup: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
     --shadow-dropdown: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-
-    /* ===== Z-INDEX SCALE ===== */
     --z-sticky: 30;
     --z-nav: 40;
     --z-drawer: 50;
@@ -130,9 +92,13 @@
     --z-lightbox-controls: 66;
     --z-toast: 100;
     --z-skip-link: 9999;
+    --brand-yellow: #FACC15;
+    --color-brand-yellow: #FACC15;
+    --color-brand-darker: #0f172a;
+    --color-slate-700: #334155;
+    --color-slate-50: #f8fafc;
 }
 
-/* Apply theme colors to body */
 body {
     background-color: var(--color-bg-secondary);
     color: var(--color-text-primary);

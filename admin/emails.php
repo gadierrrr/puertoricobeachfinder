@@ -362,7 +362,7 @@ document.querySelectorAll('code').forEach(el => {
 </div>
 
 <!-- Help Section -->
-<div class="mt-6 bg-blue-50 rounded-xl p-6 border border-blue-200">
+<div class="mt-6 bg-blue-50 a11y-on-light-blue rounded-xl p-6 border border-blue-200">
     <h3 class="font-semibold text-blue-900 mb-2">About Email Templates</h3>
     <div class="text-sm text-blue-800 space-y-2">
         <p>Email templates use <code class="bg-blue-100 px-1 rounded">{{variable}}</code> syntax for dynamic content.</p>

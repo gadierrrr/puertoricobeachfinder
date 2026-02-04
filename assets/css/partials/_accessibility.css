@@ -133,32 +133,33 @@ textarea::placeholder {
     opacity: 1;
 }
 
-/* Link colors with sufficient contrast */
-a:not([class]) {
-    color: var(--color-primary-dark); /* Darker blue for links */
+/* Link colors with sufficient contrast in prose-style content */
+.prose a:not([class]),
+.guide-article a:not([class]),
+.collection-legacy-content .beach-description a:not([class]) {
+    color: var(--color-primary-dark);
     text-decoration: underline;
 }
 
-a:not([class]):hover {
+.prose a:not([class]):hover,
+.guide-article a:not([class]):hover,
+.collection-legacy-content .beach-description a:not([class]):hover {
     color: var(--color-primary-darker);
 }
 
-/* Badge contrast improvements */
-.bg-blue-50 {
-    color: var(--color-primary-darker); /* Ensure text is readable on light blue bg */
+/* Semantic accessibility helpers */
+.a11y-on-light-blue {
+    color: var(--color-primary-darker);
 }
 
-.bg-amber-50 {
-    color: #92400e; /* Darker amber text */
+.a11y-on-light-amber {
+    color: #92400e;
 }
 
-/* Error states - visible and accessible */
-.text-red-500 {
+.a11y-error-text {
     color: var(--color-error-dark);
 }
 
-/* Success states */
-.text-green-500 {
+.a11y-success-text {
     color: var(--color-success-dark);
 }
-

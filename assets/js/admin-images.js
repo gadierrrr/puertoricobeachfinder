@@ -46,13 +46,13 @@
 
     ['dragenter', 'dragover'].forEach((eventName) => {
       dropZone.addEventListener(eventName, () => {
-        dropZone.classList.add('border-blue-500', 'bg-blue-50');
+        dropZone.classList.add('border-blue-500', 'bg-blue-50', 'a11y-on-light-blue');
       });
     });
 
     ['dragleave', 'drop'].forEach((eventName) => {
       dropZone.addEventListener(eventName, () => {
-        dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+        dropZone.classList.remove('border-blue-500', 'bg-blue-50', 'a11y-on-light-blue');
       });
     });
 

@@ -812,20 +812,3 @@
     }
 }
 
-/* ========================================
-   PRINT STYLES
-   ======================================== */
-
-@media print {
-    nav, footer, .filters-container, button, .drawer-overlay, .share-modal, .toast-container {
-        display: none !important;
-    }
-
-    .beach-card {
-        break-inside: avoid;
-        page-break-inside: avoid;
-        box-shadow: none;
-        border: 1px solid var(--color-gray-200);
-    }
-}
-

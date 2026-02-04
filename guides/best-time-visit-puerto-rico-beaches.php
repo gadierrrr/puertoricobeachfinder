@@ -24,25 +24,23 @@ $faqs = [
     ['question' => 'When do Puerto Rico beaches get crowded?', 'answer' => 'Major U.S. holidays (Thanksgiving, Christmas, New Year, Spring Break, Easter) see the heaviest crowds. Local holidays also bring Puerto Rican families to beaches. Weekdays are less crowded than weekends year-round.']
 ];
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo h($pageTitle); ?> - Puerto Rico Beach Finder</title>
-    <meta name="description" content="<?php echo h($pageDescription); ?>">
-    <?php
-    echo articleSchema($pageTitle, $pageDescription, 'https://puertoricobeachfinder.com/guides/best-time-visit-puerto-rico-beaches.php', '2024-01-15');
-    echo faqSchema($faqs);
-    echo breadcrumbSchema([
+
+<?php
+$extraHead = $extraHead ?? "";
+$extraHead .= articleSchema($pageTitle, $pageDescription, 'https://puertoricobeachfinder.com/guides/best-time-visit-puerto-rico-beaches.php', '2024-01-15');
+    $extraHead .= faqSchema($faqs);
+    $extraHead .= breadcrumbSchema([
         ['name' => 'Home', 'url' => 'https://puertoricobeachfinder.com/'],
         ['name' => 'Guides', 'url' => 'https://puertoricobeachfinder.com/guides/'],
         ['name' => 'Best Time to Visit', 'url' => 'https://puertoricobeachfinder.com/guides/best-time-visit-puerto-rico-beaches.php']
     ]);
-    ?>
-</head>
-<body class="bg-gray-50" data-theme="light">
-    <?php include __DIR__ . '/../components/header.php'; ?>
+$pageTheme = "guide";
+$skipMapCSS = true;
+$skipMapScripts = true;
+$pageShellMode = "start";
+include __DIR__ . "/../components/page-shell.php";
+?>
+
     <?php
     $breadcrumbs = [
         ['name' => 'Home', 'url' => '/'],
@@ -52,7 +50,7 @@ $faqs = [
     include __DIR__ . '/../components/hero-guide.php';
     ?>
 
-    <main class="guide-layout">
+    <section class="guide-layout">
         <aside class="guide-sidebar">
             <div class="guide-toc">
                     <h2 class="text-lg font-bold text-gray-900 mb-4">Table of Contents</h2>
@@ -91,7 +89,7 @@ $faqs = [
                             <p class="text-sm text-amber-700 mb-2">April-May, November</p>
                             <p class="text-gray-700">Great weather, moderate crowds, good value. Sweet spot for many travelers.</p>
                         </div>
-                        <div class="bg-amber-50 rounded-lg p-6">
+                        <div class="bg-amber-50 a11y-on-light-amber rounded-lg p-6">
                             <h3 class="text-xl font-bold text-gray-900 mb-2">Low Season</h3>
                             <p class="text-sm text-amber-700 mb-2">June-October</p>
                             <p class="text-gray-700">Warm, some rain, smallest crowds, best deals. Hurricane season but low risk.</p>
@@ -251,11 +249,11 @@ $faqs = [
                     <h2 id="recommendations" class="text-3xl font-bold text-gray-900 mt-12 mb-6">When Should You Visit?</h2>
 
                     <div class="space-y-6 my-8">
-                        <div class="border-l-4 border-green-600 pl-6">
+                        <div class="border-l-4 border-yellow-400 pl-6">
                             <h3 class="text-xl font-bold text-gray-900 mb-2">Best Overall Time: April - May</h3>
                             <p class="text-gray-700">Perfect weather, manageable crowds, reasonable prices. Ideal for first-time visitors seeking the complete package.</p>
                         </div>
-                        <div class="border-l-4 border-blue-600 pl-6">
+                        <div class="border-l-4 border-yellow-400 pl-6">
                             <h3 class="text-xl font-bold text-gray-900 mb-2">Best for Surfing: November - March</h3>
                             <p class="text-gray-700">Consistent north swells, international competitions, world-class breaks firing. Rincón and Isabela at their best.</p>
                         </div>
@@ -277,19 +275,19 @@ $faqs = [
 
                     <div class="space-y-6">
                         <?php foreach ($faqs as $faq): ?>
-                        <div class="border-l-4 border-green-600 pl-4">
+                        <div class="border-l-4 border-yellow-400 pl-4">
                             <h3 class="text-xl font-bold text-gray-900 mb-2"><?php echo h($faq['question']); ?></h3>
                             <p class="text-gray-700"><?php echo h($faq['answer']); ?></p>
                         </div>
                         <?php endforeach; ?>
                     </div>
 
-                    <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-8 mt-12">
+                    <div class="bg-gradient-to-r from-slate-50 to-slate-100 rounded-lg p-8 mt-12">
                         <h2 class="text-2xl font-bold text-gray-900 mb-4">Plan Your Perfect Beach Trip</h2>
                         <p class="text-gray-700 mb-6">
                             Now that you know when to visit, explore our beach database to plan your itinerary.
                         </p>
-                        <a href="/" class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                        <a href="/" class="inline-block bg-brand-yellow text-brand-darker px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors">
                             Browse All Beaches
                         </a>
                     </div>
@@ -307,8 +305,9 @@ $faqs = [
                 </div>
             </article>
         </div>
-    </main>
+    </section>
 
-    <?php include __DIR__ . '/../components/footer.php'; ?>
-</body>
-</html>
+<?php
+$pageShellMode = "end";
+include __DIR__ . "/../components/page-shell.php";
+?>

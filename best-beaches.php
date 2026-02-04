@@ -70,25 +70,26 @@ $breadcrumbs = [
     ['name' => 'Best Beaches in Puerto Rico']
 ];
 
-$navVariant = 'collection';
-$bodyVariant = 'collection-light';
+$bodyVariant = 'collection-dark';
 $skipMapCSS = true;
 include __DIR__ . '/components/header.php';
 ?>
 <?php include __DIR__ . '/components/collection/explorer.php'; ?>
 
+<div class="collection-legacy-content">
+
 <!-- Quick Navigation -->
-<section class="bg-white border-b">
+<section class="collection-content-nav bg-white border-b">
     <div class="max-w-7xl mx-auto px-4 py-4">
         <div class="flex flex-wrap gap-2 justify-center text-sm">
             <span class="text-gray-500">Jump to:</span>
-            <a href="#top-beaches" class="text-blue-600 hover:underline">Top 15 List</a>
+            <a href="#top-beaches" class="text-amber-700 hover:underline">Top 15 List</a>
             <span class="text-gray-300">|</span>
-            <a href="#by-activity" class="text-blue-600 hover:underline">By Activity</a>
+            <a href="#by-activity" class="text-amber-700 hover:underline">By Activity</a>
             <span class="text-gray-300">|</span>
-            <a href="#faq" class="text-blue-600 hover:underline">FAQs</a>
+            <a href="#faq" class="text-amber-700 hover:underline">FAQs</a>
             <span class="text-gray-300">|</span>
-            <a href="#map" class="text-blue-600 hover:underline">Map</a>
+            <a href="#map" class="text-amber-700 hover:underline">Map</a>
         </div>
     </div>
 </section>
@@ -114,25 +115,25 @@ include __DIR__ . '/components/header.php';
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <a href="/best-snorkeling-beaches" class="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow group">
                 <div class="text-4xl mb-4">🤿</div>
-                <h3 class="text-lg font-bold text-gray-900 group-hover:text-blue-600">Best for Snorkeling</h3>
+                <h3 class="text-lg font-bold text-gray-900 group-hover:text-brand-darker">Best for Snorkeling</h3>
                 <p class="text-gray-600 text-sm mt-2">Crystal-clear waters and vibrant coral reefs</p>
             </a>
 
             <a href="/best-surfing-beaches" class="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow group">
                 <div class="text-4xl mb-4">🏄</div>
-                <h3 class="text-lg font-bold text-gray-900 group-hover:text-blue-600">Best for Surfing</h3>
+                <h3 class="text-lg font-bold text-gray-900 group-hover:text-brand-darker">Best for Surfing</h3>
                 <p class="text-gray-600 text-sm mt-2">World-class waves on the west coast</p>
             </a>
 
             <a href="/best-family-beaches" class="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow group">
                 <div class="text-4xl mb-4">👨‍👩‍👧‍👦</div>
-                <h3 class="text-lg font-bold text-gray-900 group-hover:text-blue-600">Best for Families</h3>
+                <h3 class="text-lg font-bold text-gray-900 group-hover:text-brand-darker">Best for Families</h3>
                 <p class="text-gray-600 text-sm mt-2">Calm waters, facilities, and lifeguards</p>
             </a>
 
             <a href="/beaches-near-san-juan" class="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow group">
                 <div class="text-4xl mb-4">🏙️</div>
-                <h3 class="text-lg font-bold text-gray-900 group-hover:text-blue-600">Near San Juan</h3>
+                <h3 class="text-lg font-bold text-gray-900 group-hover:text-brand-darker">Near San Juan</h3>
                 <p class="text-gray-600 text-sm mt-2">Easy access from the capital city</p>
             </a>
         </div>
@@ -151,7 +152,7 @@ include __DIR__ . '/components/header.php';
             <details class="bg-white rounded-lg shadow-md group">
                 <summary class="flex items-center justify-between p-6 cursor-pointer font-semibold text-gray-900">
                     <?= h($faq['question']) ?>
-                    <span class="text-blue-600 group-open:rotate-180 transition-transform">▼</span>
+                    <span class="text-amber-700 group-open:rotate-180 transition-transform">▼</span>
                 </summary>
                 <div class="px-6 pb-6 text-gray-700">
                     <?= h($faq['answer']) ?>
@@ -169,7 +170,7 @@ include __DIR__ . '/components/header.php';
             Explore All Beaches on the Map
         </h2>
         <div class="text-center">
-            <a href="/?view=map" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+            <a href="/?view=map" class="inline-flex items-center gap-2 bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-6 py-3 rounded-lg font-medium transition-colors">
                 <span>🗺️</span>
                 <span>Open Interactive Map</span>
             </a>
@@ -179,15 +180,17 @@ include __DIR__ . '/components/header.php';
 </section>
 
 <!-- CTA Section -->
-<section class="py-12 bg-blue-600 text-white">
+<section class="py-12 bg-brand-yellow text-brand-darker">
     <div class="max-w-4xl mx-auto px-4 text-center">
         <h2 class="text-2xl md:text-3xl font-bold mb-4">Not Sure Which Beach is Right for You?</h2>
         <p class="text-lg opacity-90 mb-6">Take our quick quiz and get personalized beach recommendations based on your preferences.</p>
-        <a href="/quiz.php" class="inline-block bg-white text-blue-600 hover:bg-blue-50 px-8 py-3 rounded-lg font-semibold transition-colors">
+        <a href="/quiz.php" class="inline-block bg-white text-amber-700 hover:bg-slate-50 px-8 py-3 rounded-lg font-semibold transition-colors">
             Take the Beach Match Quiz
         </a>
     </div>
 </section>
+
+</div>
 
 <?php
 $skipMapScripts = true;
