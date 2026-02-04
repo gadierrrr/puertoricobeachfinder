@@ -15,9 +15,17 @@ require_once __DIR__ . '/../inc/i18n.php';
 $user = currentUser();
 $appName = $_ENV['APP_NAME'] ?? 'Beach Finder';
 $currentLang = getCurrentLanguage();
+$navVariant = (isset($navVariant) && $navVariant === 'collection') ? 'collection' : 'default';
+$bodyVariant = (isset($bodyVariant) && $bodyVariant === 'collection-light') ? 'collection-light' : 'default';
+$isCollectionVariant = $navVariant === 'collection';
+$bodyClasses = 'min-h-screen flex flex-col font-sans';
+$bodyClasses .= $bodyVariant === 'collection-light'
+    ? ' collection-light bg-gray-100 text-gray-900'
+    : ' bg-brand-darker text-brand-text';
+$htmlTheme = $bodyVariant === 'collection-light' ? 'light' : 'dark';
 ?>
 <!DOCTYPE html>
-<html lang="<?= getHtmlLang() ?>" data-theme="dark">
+<html lang="<?= getHtmlLang() ?>" data-theme="<?= h($htmlTheme) ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -150,7 +158,7 @@ $currentLang = getCurrentLanguage();
 
     <?php if (isset($extraHead)) echo $extraHead; ?>
 </head>
-<body class="min-h-screen flex flex-col font-sans bg-brand-darker text-brand-text">
+<body class="<?= h($bodyClasses) ?>">
     <!-- Skip Links for Accessibility -->
     <a href="#main-content" class="skip-link sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-cyan-500 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg focus:outline-none">
         Skip to main content
@@ -159,16 +167,23 @@ $currentLang = getCurrentLanguage();
         Skip to beaches
     </a>
 
-    <!-- Navigation - Dark Glassmorphism -->
-    <nav id="main-nav" class="fixed top-0 w-full z-50 px-4 sm:px-6 py-4 transition-all duration-300" role="navigation" aria-label="Main navigation">
+    <!-- Navigation -->
+    <nav id="main-nav" class="fixed top-0 w-full z-50 px-4 sm:px-6 <?= $isCollectionVariant ? 'py-3 bg-[#0b1835] border-b border-white/10 shadow-sm' : 'py-4 transition-all duration-300' ?>" role="navigation" aria-label="Main navigation">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
             <!-- Logo with rotating sun -->
-            <a href="/" class="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-brand-yellow focus:ring-offset-2 focus:ring-offset-brand-darker rounded-lg p-1" aria-label="<?= h($appName) ?> - Home">
+            <a href="/" class="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-brand-yellow focus:ring-offset-2 <?= $isCollectionVariant ? 'focus:ring-offset-[#0b1835]' : 'focus:ring-offset-brand-darker' ?> rounded-lg p-1" aria-label="<?= h($appName) ?> - Home">
                 <i data-lucide="sun" class="w-7 h-7 text-brand-yellow hover-spin transition-all" aria-hidden="true"></i>
                 <span class="text-xl font-bold text-white"><?= h($appName) ?></span>
             </a>
 
-            <!-- Center Navigation Pill (Desktop) -->
+            <!-- Center Navigation (Desktop) -->
+            <?php if ($isCollectionVariant): ?>
+            <div class="hidden md:flex items-center gap-8" role="menubar">
+                <a href="/best-beaches.php" class="text-sm font-medium text-white/85 hover:text-brand-yellow transition-colors" role="menuitem">Beaches</a>
+                <a href="/quiz.php" class="text-sm font-medium text-white/85 hover:text-brand-yellow transition-colors" role="menuitem">Quiz</a>
+                <a href="/?view=map" class="text-sm font-medium text-white/85 hover:text-brand-yellow transition-colors" role="menuitem">Map</a>
+            </div>
+            <?php else: ?>
             <div class="hidden md:flex items-center bg-brand-darker/50 backdrop-blur-md px-4 py-2 rounded-full border border-white/10" role="menubar">
                 <!-- Beaches Dropdown -->
                 <div class="relative" id="beaches-dropdown">
@@ -215,6 +230,7 @@ $currentLang = getCurrentLanguage();
                 <a href="/quiz.php" class="text-sm text-white/80 hover:text-brand-yellow px-4 py-1 transition-colors" role="menuitem">Quiz</a>
                 <a href="/?view=map" class="text-sm text-white/80 hover:text-brand-yellow px-4 py-1 transition-colors" role="menuitem">Map</a>
             </div>
+            <?php endif; ?>
 
             <!-- Right Side - Auth & Language -->
             <div class="hidden md:flex items-center gap-4">
@@ -257,7 +273,7 @@ $currentLang = getCurrentLanguage();
                         <a href="/logout.php" class="text-sm text-white/60 hover:text-white transition-colors">Logout</a>
                     </div>
                 <?php else: ?>
-                    <a href="/login.php" class="bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-5 py-2 rounded-full text-sm font-semibold transition-colors">
+                    <a href="/login.php" class="<?= $isCollectionVariant ? 'bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-4 py-2 rounded-xl text-sm font-semibold transition-colors' : 'bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-5 py-2 rounded-full text-sm font-semibold transition-colors' ?>">
                         Sign In
                     </a>
                 <?php endif; ?>
@@ -282,6 +298,29 @@ $currentLang = getCurrentLanguage();
         <!-- Mobile menu -->
         <div id="mobile-menu" class="hidden md:hidden mt-4 bg-brand-dark/95 backdrop-blur-md rounded-2xl border border-white/10 overflow-hidden" role="menu" aria-labelledby="mobile-menu-button">
             <div class="px-4 py-4 space-y-1">
+                <?php if ($isCollectionVariant): ?>
+                <a href="/best-beaches.php" class="flex items-center gap-3 text-white/90 hover:text-brand-yellow py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
+                    <i data-lucide="waves" class="w-5 h-5" aria-hidden="true"></i>
+                    <span>Beaches</span>
+                </a>
+                <a href="/quiz.php" class="flex items-center gap-3 text-white/90 hover:text-brand-yellow py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
+                    <i data-lucide="sparkles" class="w-5 h-5" aria-hidden="true"></i>
+                    <span>Quiz</span>
+                </a>
+                <a href="/?view=map" class="flex items-center gap-3 text-white/90 hover:text-brand-yellow py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
+                    <i data-lucide="map" class="w-5 h-5" aria-hidden="true"></i>
+                    <span>Map</span>
+                </a>
+                <?php if ($user): ?>
+                <a href="/profile.php?tab=favorites" class="flex items-center gap-3 text-white/90 hover:text-brand-yellow py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
+                    <i data-lucide="heart" class="w-5 h-5 text-red-400 fill-red-400"></i>
+                    <span>Favorites</span>
+                </a>
+                <a href="/logout.php" class="block text-red-400 hover:text-red-300 py-2 px-3">Logout</a>
+                <?php else: ?>
+                <a href="/login.php" class="block bg-brand-yellow text-brand-darker text-center py-3 rounded-lg mt-3 font-semibold">Sign In</a>
+                <?php endif; ?>
+                <?php else: ?>
                 <!-- Beaches Section -->
                 <div class="text-xs text-white/40 uppercase tracking-wider px-3 pt-2 pb-1">Find Beaches</div>
                 <a href="/?tags[]=surfing#beaches" class="flex items-center gap-3 text-white/80 hover:text-brand-yellow py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
@@ -355,6 +394,7 @@ $currentLang = getCurrentLanguage();
                         </button>
                     </div>
                 </div>
+                <?php endif; ?>
             </div>
         </div>
     </nav>
@@ -377,6 +417,7 @@ $currentLang = getCurrentLanguage();
     // Language dropdown
     function toggleLangDropdown() {
         const menu = document.getElementById('lang-dropdown-menu');
+        if (!menu) return;
         menu.classList.toggle('hidden');
         // Close beaches dropdown if open
         const beachesMenu = document.getElementById('beaches-dropdown-menu');
@@ -386,6 +427,7 @@ $currentLang = getCurrentLanguage();
     // Beaches dropdown
     function toggleBeachesDropdown() {
         const menu = document.getElementById('beaches-dropdown-menu');
+        if (!menu) return;
         menu.classList.toggle('hidden');
         // Close language dropdown if open
         const langMenu = document.getElementById('lang-dropdown-menu');

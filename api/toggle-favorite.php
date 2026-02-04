@@ -4,7 +4,10 @@
  *
  * POST /api/toggle-favorite.php
  * Body: beach_id, csrf_token
- * Returns updated favorite button HTML (for HTMX)
+ * Query:
+ * - format=json (optional)
+ *
+ * Returns updated favorite button HTML (default) or JSON response.
  */
 
 require_once __DIR__ . '/../inc/session.php';
@@ -12,8 +15,17 @@ session_start();
 require_once __DIR__ . '/../inc/db.php';
 require_once __DIR__ . '/../inc/helpers.php';
 
+$format = isset($_GET['format']) ? (string)$_GET['format'] : 'html';
+$wantsJson = $format === 'json';
+
 // Require authentication
 if (!isAuthenticated()) {
+    if ($wantsJson) {
+        jsonResponse([
+            'success' => false,
+            'error' => 'Authentication required.',
+        ], 401);
+    }
     http_response_code(401);
     echo '<button class="favorite-btn w-9 h-9 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-sm border border-white/20 hover:bg-black/60 transition-colors" onclick="event.stopPropagation(); showSignupPrompt(\'favorites\')" aria-label="Sign in to save this beach" title="Sign in to save favorites"><i data-lucide="heart" class="w-4 h-4 text-white/50"></i></button>';
     exit;
@@ -22,6 +34,12 @@ if (!isAuthenticated()) {
 // Validate CSRF token
 $csrfToken = $_POST['csrf_token'] ?? '';
 if (!validateCsrf($csrfToken)) {
+    if ($wantsJson) {
+        jsonResponse([
+            'success' => false,
+            'error' => 'Invalid CSRF token.',
+        ], 403);
+    }
     http_response_code(403);
     echo '<button class="favorite-btn">⚠️</button>';
     exit;
@@ -30,6 +48,12 @@ if (!validateCsrf($csrfToken)) {
 // Get beach ID
 $beachId = $_POST['beach_id'] ?? '';
 if (!$beachId) {
+    if ($wantsJson) {
+        jsonResponse([
+            'success' => false,
+            'error' => 'Missing beach_id.',
+        ], 400);
+    }
     http_response_code(400);
     echo '<button class="favorite-btn">⚠️</button>';
     exit;
@@ -38,6 +62,12 @@ if (!$beachId) {
 // Verify beach exists
 $beach = queryOne('SELECT id FROM beaches WHERE id = :id', [':id' => $beachId]);
 if (!$beach) {
+    if ($wantsJson) {
+        jsonResponse([
+            'success' => false,
+            'error' => 'Beach not found.',
+        ], 404);
+    }
     http_response_code(404);
     echo '<button class="favorite-btn">⚠️</button>';
     exit;
@@ -63,6 +93,14 @@ if ($existing) {
         [':id' => $favoriteId, ':user_id' => $userId, ':beach_id' => $beachId]
     );
     $isFavorite = true;
+}
+
+if ($wantsJson) {
+    jsonResponse([
+        'success' => true,
+        'beach_id' => $beachId,
+        'is_favorite' => $isFavorite,
+    ]);
 }
 
 // Return updated button

@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:css": "./scripts/build-css.sh",
     "build:tailwind": "npx tailwindcss -i ./assets/css/tailwind-input.css -o ./assets/css/tailwind.min.css --minify",
-    "build:js": "npx terser assets/js/app.js -o assets/js/app.min.js",
+    "build:js": "npx terser assets/js/app.js -o assets/js/app.min.js && npx terser assets/js/collection-explorer.js -o assets/js/collection-explorer.min.js",
     "build": "npm run build:css && npm run build:tailwind && npm run build:js",
     "watch:tailwind": "npx tailwindcss -i ./assets/css/tailwind-input.css -o ./assets/css/tailwind.min.css --watch",
     "dev": "npm run watch:tailwind"

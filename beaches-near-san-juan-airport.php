@@ -8,6 +8,7 @@
 require_once __DIR__ . '/inc/db.php';
 require_once __DIR__ . '/inc/helpers.php';
 require_once __DIR__ . '/inc/constants.php';
+require_once __DIR__ . '/inc/collection_query.php';
 require_once __DIR__ . '/components/seo-schemas.php';
 
 // Page metadata
@@ -15,35 +16,18 @@ $pageTitle = '10 Best Beaches Near San Juan Airport (2025 Layover Guide)';
 $pageDescription = 'Perfect for layovers! Visit beaches 5-20 minutes from San Juan Airport (SJU). Complete guide to maximizing beach time on your first or last day in Puerto Rico.';
 $canonicalUrl = ($_ENV['APP_URL'] ?? 'https://www.puertoricobeachfinder.com') . '/beaches-near-san-juan-airport';
 
-// Luis Muñoz Marín International Airport (SJU) coordinates
-$airportLat = 18.4394;
-$airportLng = -66.0018;
+$collectionKey = 'beaches-near-san-juan-airport';
+$collectionAnchorId = 'beaches';
+$collectionData = fetchCollectionBeaches($collectionKey, collectionFiltersFromRequest($collectionKey, $_GET));
+$collectionContext = $collectionData['collection'];
+$collectionState = $collectionData['effective_filters'];
+$airportBeaches = $collectionData['beaches'];
 
-// Fetch beaches near airport (within 15km radius)
-$airportBeaches = query("
-    SELECT b.id, b.name, b.slug, b.municipality, b.description, b.cover_image,
-           b.lat, b.lng, b.google_rating, b.google_review_count,
-           GROUP_CONCAT(DISTINCT bt.tag) as tag_list,
-           GROUP_CONCAT(DISTINCT ba.amenity) as amenity_list,
-           (6371 * acos(cos(radians(?)) * cos(radians(b.lat)) * cos(radians(b.lng) - radians(?)) + sin(radians(?)) * sin(radians(b.lat)))) AS distance
-    FROM beaches b
-    LEFT JOIN beach_tags bt ON b.id = bt.beach_id
-    LEFT JOIN beach_amenities ba ON b.id = ba.beach_id
-    WHERE b.publish_status = 'published'
-    AND b.lat IS NOT NULL
-    AND b.lng IS NOT NULL
-    GROUP BY b.id
-    HAVING distance < 15
-    ORDER BY distance ASC
-    LIMIT 10
-", [$airportLat, $airportLng, $airportLat]);
-
-// Process tags and amenities
-foreach ($airportBeaches as &$beach) {
-    $beach['tags'] = $beach['tag_list'] ? explode(',', $beach['tag_list']) : [];
-    $beach['amenities'] = $beach['amenity_list'] ? explode(',', $beach['amenity_list']) : [];
+$userFavorites = [];
+if (isAuthenticated()) {
+    $favorites = query('SELECT beach_id FROM user_favorites WHERE user_id = :user_id', [':user_id' => $_SESSION['user_id']]) ?: [];
+    $userFavorites = array_column($favorites, 'beach_id');
 }
-unset($beach);
 
 // Generate structured data
 $extraHead = articleSchema(
@@ -189,47 +173,12 @@ $extraHead .= <<<BREADCRUMB
 </script>
 BREADCRUMB;
 
+$navVariant = 'collection';
+$bodyVariant = 'collection-light';
+$skipMapCSS = true;
 include __DIR__ . '/components/header.php';
 ?>
-
-<!-- Hero Section -->
-<section class="relative w-full py-16 md:py-20 overflow-hidden">
-    <!-- Dark background with overlay -->
-    <div class="absolute inset-0 -z-10">
-        <div class="w-full h-full hero-gradient-dark"></div>
-        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
-    </div>
-
-    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <!-- ADD breadcrumbs FIRST -->
-        <nav class="text-white/60 text-sm mb-6" aria-label="Breadcrumb">
-            <a href="/" class="hover:text-brand-yellow transition-colors">Home</a>
-            <span class="mx-2 text-white/40">/</span>
-            <a href="/beaches-near-san-juan" class="hover:text-brand-yellow transition-colors">Near San Juan</a>
-            <span class="mx-2 text-white/40">/</span>
-            <span class="text-white/80">Near Airport</span>
-        </nav>
-
-        <!-- Keep existing badge, update colors to match dark theme -->
-        <div class="inline-flex items-center gap-2 bg-brand-yellow/20 border border-brand-yellow/30 rounded-full px-4 py-2 mb-6 text-sm text-brand-yellow">
-            <span>✈️</span>
-            <span>Perfect for Layovers & First/Last Day Visits</span>
-        </div>
-
-        <!-- Add explicit text-white -->
-        <h1 class="text-3xl md:text-5xl font-bold text-white mb-6">
-            Beaches Near San Juan Airport
-        </h1>
-
-        <!-- Change opacity-90 to text-gray-200 -->
-        <p class="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto">
-            Maximize your beach time! Discover beaches just 5-20 minutes from Luis Muñoz Marín International Airport (SJU). Perfect for arrival day, layovers, or your last morning in paradise.
-        </p>
-
-        <!-- Change opacity-75 to text-white/60 -->
-        <p class="text-sm text-white/60 mt-4">Updated January 2025 | All beaches within 15km of SJU Airport</p>
-    </div>
-</section>
+<?php include __DIR__ . '/components/collection/explorer.php'; ?>
 
 <!-- Quick Navigation -->
 <section class="bg-white border-b">
@@ -262,95 +211,6 @@ include __DIR__ . '/components/header.php';
             <p>This guide covers the 10 closest beaches to San Juan Airport, all within 15km (9 miles). We'll show you exactly how long it takes to reach each beach, what transportation options are available, where to store luggage, and how to plan layover beach visits of varying lengths. All distances and drive times are measured from the main terminal at Luis Muñoz Marín International Airport.</p>
 
             <p><strong>Pro tip:</strong> Isla Verde Beach is visible from the plane when landing at SJU - if you see that turquoise water from your window seat, you'll be swimming in it within 15 minutes of wheels down.</p>
-        </div>
-    </div>
-</section>
-
-<!-- Beaches List -->
-<section id="beaches" class="py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
-            10 Beaches Closest to San Juan Airport
-        </h2>
-
-        <div class="space-y-8">
-            <?php foreach ($airportBeaches as $index => $beach):
-                // Calculate approximate drive time (2 minutes per km + 2 minute base)
-                $driveTime = round(($beach['distance'] * 2) + 2);
-            ?>
-            <article class="bg-white rounded-xl shadow-md overflow-hidden md:flex">
-                <div class="md:w-1/3 relative">
-                    <?php if ($beach['cover_image']): ?>
-                    <img src="<?= h($beach['cover_image']) ?>"
-                         alt="<?= h($beach['name']) ?> near San Juan Airport"
-                         class="w-full h-48 md:h-full object-cover"
-                         loading="<?= $index < 3 ? 'eager' : 'lazy' ?>">
-                    <?php else: ?>
-                    <div class="w-full h-48 md:h-full bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center">
-                        <span class="text-6xl">✈️</span>
-                    </div>
-                    <?php endif; ?>
-                    <div class="absolute top-4 left-4 bg-amber-600 text-white px-3 py-1 rounded-full font-bold text-sm">
-                        <?= round($beach['distance'], 1) ?> km • <?= $driveTime ?> min
-                    </div>
-                    <?php if ($index === 0): ?>
-                    <div class="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full font-bold text-xs">
-                        CLOSEST
-                    </div>
-                    <?php endif; ?>
-                </div>
-                <div class="md:w-2/3 p-6">
-                    <div class="flex items-start justify-between mb-2">
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-900">
-                                <a href="/beach/<?= h($beach['slug']) ?>" class="hover:text-amber-600">
-                                    <?= ($index + 1) ?>. <?= h($beach['name']) ?>
-                                </a>
-                            </h3>
-                            <p class="text-gray-600">
-                                <?= h($beach['municipality']) ?> •
-                                <?= round($beach['distance'], 1) ?> km from SJU •
-                                ~<?= $driveTime ?> min drive
-                            </p>
-                        </div>
-                        <?php if ($beach['google_rating']): ?>
-                        <div class="flex items-center bg-yellow-50 px-3 py-1 rounded-full">
-                            <span class="text-yellow-500 mr-1">★</span>
-                            <span class="font-semibold"><?= number_format($beach['google_rating'], 1) ?></span>
-                            <span class="text-gray-500 text-sm ml-1">(<?= number_format($beach['google_review_count']) ?>)</span>
-                        </div>
-                        <?php endif; ?>
-                    </div>
-
-                    <p class="text-gray-700 mb-4">
-                        <?= h(substr($beach['description'] ?? '', 0, 200)) ?>...
-                    </p>
-
-                    <?php if (!empty($beach['tags'])): ?>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <?php foreach (array_slice($beach['tags'], 0, 4) as $tag): ?>
-                        <span class="bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded">
-                            <?= h(getTagLabel($tag)) ?>
-                        </span>
-                        <?php endforeach; ?>
-                    </div>
-                    <?php endif; ?>
-
-                    <div class="flex gap-3">
-                        <a href="/beach/<?= h($beach['slug']) ?>"
-                           class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                            View Details
-                        </a>
-                        <a href="https://www.google.com/maps/dir/?api=1&origin=<?= urlencode($airportLat . ',' . $airportLng) ?>&destination=<?= urlencode($beach['lat'] . ',' . $beach['lng']) ?>"
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           class="border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                            Directions from Airport
-                        </a>
-                    </div>
-                </div>
-            </article>
-            <?php endforeach; ?>
         </div>
     </div>
 </section>
@@ -858,4 +718,9 @@ include __DIR__ . '/components/header.php';
     </div>
 </section>
 
+<?php
+$skipMapScripts = true;
+$skipAppScripts = true;
+$extraScripts = '<script defer src="/assets/js/collection-explorer.min.js"></script>';
+?>
 <?php include __DIR__ . '/components/footer.php'; ?>

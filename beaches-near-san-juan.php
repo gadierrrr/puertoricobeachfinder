@@ -7,6 +7,7 @@
 require_once __DIR__ . '/inc/db.php';
 require_once __DIR__ . '/inc/helpers.php';
 require_once __DIR__ . '/inc/constants.php';
+require_once __DIR__ . '/inc/collection_query.php';
 require_once __DIR__ . '/components/seo-schemas.php';
 
 // Page metadata
@@ -14,34 +15,18 @@ $pageTitle = 'Best Beaches Near San Juan, Puerto Rico (2025 Guide)';
 $pageDescription = 'Discover the best beaches near San Juan, Puerto Rico. From Condado and Isla Verde to hidden local favorites, find the perfect beach just minutes from the capital.';
 $canonicalUrl = ($_ENV['APP_URL'] ?? 'https://www.puertoricobeachfinder.com') . '/beaches-near-san-juan';
 
-// San Juan coordinates for distance calculation
-$sanJuanLat = 18.4655;
-$sanJuanLng = -66.1057;
+$collectionKey = 'beaches-near-san-juan';
+$collectionAnchorId = 'beaches';
+$collectionData = fetchCollectionBeaches($collectionKey, collectionFiltersFromRequest($collectionKey, $_GET));
+$collectionContext = $collectionData['collection'];
+$collectionState = $collectionData['effective_filters'];
+$sanJuanBeaches = $collectionData['beaches'];
 
-// Fetch beaches near San Juan (within ~30km radius)
-$sanJuanBeaches = query("
-    SELECT b.*,
-           GROUP_CONCAT(DISTINCT bt.tag) as tag_list,
-           GROUP_CONCAT(DISTINCT ba.amenity) as amenity_list,
-           (6371 * acos(cos(radians(?)) * cos(radians(b.lat)) * cos(radians(b.lng) - radians(?)) + sin(radians(?)) * sin(radians(b.lat)))) AS distance
-    FROM beaches b
-    LEFT JOIN beach_tags bt ON b.id = bt.beach_id
-    LEFT JOIN beach_amenities ba ON b.id = ba.beach_id
-    WHERE b.publish_status = 'published'
-    AND b.lat IS NOT NULL
-    AND b.lng IS NOT NULL
-    GROUP BY b.id
-    HAVING distance < 30
-    ORDER BY distance ASC
-    LIMIT 15
-", [$sanJuanLat, $sanJuanLng, $sanJuanLat]);
-
-// Process tags and amenities
-foreach ($sanJuanBeaches as &$beach) {
-    $beach['tags'] = $beach['tag_list'] ? explode(',', $beach['tag_list']) : [];
-    $beach['amenities'] = $beach['amenity_list'] ? explode(',', $beach['amenity_list']) : [];
+$userFavorites = [];
+if (isAuthenticated()) {
+    $favorites = query('SELECT beach_id FROM user_favorites WHERE user_id = :user_id', [':user_id' => $_SESSION['user_id']]) ?: [];
+    $userFavorites = array_column($favorites, 'beach_id');
 }
-unset($beach);
 
 // Generate structured data
 $extraHead = articleSchema(
@@ -79,41 +64,12 @@ $pageFaqs = [
 ];
 $extraHead .= faqSchema($pageFaqs);
 
+$navVariant = 'collection';
+$bodyVariant = 'collection-light';
+$skipMapCSS = true;
 include __DIR__ . '/components/header.php';
 ?>
-
-<!-- Hero Section -->
-<section class="relative w-full py-16 md:py-20 overflow-hidden">
-    <!-- Dark background with overlay -->
-    <div class="absolute inset-0 -z-10">
-        <div class="w-full h-full hero-gradient-dark"></div>
-        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
-    </div>
-
-    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <!-- ADD breadcrumbs -->
-        <nav class="text-white/60 text-sm mb-6" aria-label="Breadcrumb">
-            <a href="/" class="hover:text-brand-yellow transition-colors">Home</a>
-            <span class="mx-2 text-white/40">/</span>
-            <a href="/" class="hover:text-brand-yellow transition-colors">Beaches</a>
-            <span class="mx-2 text-white/40">/</span>
-            <span class="text-white/80">Near San Juan</span>
-        </nav>
-
-        <!-- Add explicit text-white -->
-        <h1 class="text-3xl md:text-5xl font-bold text-white mb-6">
-            Beaches Near San Juan, Puerto Rico
-        </h1>
-
-        <!-- Change opacity-90 to text-gray-200 -->
-        <p class="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto">
-            Discover beautiful beaches just minutes from Puerto Rico's capital. From the urban shores of Condado to the resort paradise of Isla Verde.
-        </p>
-
-        <!-- Change opacity-75 to text-white/60 -->
-        <p class="text-sm text-white/60 mt-4">Updated January 2025 | All beaches within 30 minutes of San Juan</p>
-    </div>
-</section>
+<?php include __DIR__ . '/components/collection/explorer.php'; ?>
 
 <!-- Quick Navigation -->
 <section class="bg-white border-b">
@@ -138,83 +94,6 @@ include __DIR__ . '/components/header.php';
             <p>San Juan, Puerto Rico's vibrant capital, offers <strong>easy access to beautiful Caribbean beaches</strong> just minutes from the city center. Whether you're staying in the historic Old San Juan, the trendy Condado district, or near the airport in Isla Verde, you're never far from pristine shores.</p>
 
             <p>From urban beaches with waterfront restaurants to quiet coves perfect for snorkeling, the San Juan area has options for every type of beach lover. All beaches listed here are <strong>within 30 minutes</strong> of central San Juan.</p>
-        </div>
-    </div>
-</section>
-
-<!-- Beaches List -->
-<section id="beaches" class="py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
-            Beaches Near San Juan
-        </h2>
-
-        <div class="space-y-8">
-            <?php foreach ($sanJuanBeaches as $index => $beach): ?>
-            <article class="bg-white rounded-xl shadow-md overflow-hidden md:flex">
-                <div class="md:w-1/3 relative">
-                    <?php if ($beach['cover_image']): ?>
-                    <img src="<?= h($beach['cover_image']) ?>"
-                         alt="<?= h($beach['name']) ?> near San Juan"
-                         class="w-full h-48 md:h-full object-cover"
-                         loading="<?= $index < 3 ? 'eager' : 'lazy' ?>">
-                    <?php else: ?>
-                    <div class="w-full h-48 md:h-full bg-gradient-to-br from-purple-400 to-indigo-600 flex items-center justify-center">
-                        <span class="text-6xl">🏙️</span>
-                    </div>
-                    <?php endif; ?>
-                    <div class="absolute top-4 left-4 bg-purple-600 text-white px-3 py-1 rounded-full font-bold text-sm">
-                        <?= round($beach['distance'], 1) ?> km
-                    </div>
-                </div>
-                <div class="md:w-2/3 p-6">
-                    <div class="flex items-start justify-between mb-2">
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-900">
-                                <a href="/beach/<?= h($beach['slug']) ?>" class="hover:text-blue-600">
-                                    <?= h($beach['name']) ?>
-                                </a>
-                            </h3>
-                            <p class="text-gray-600"><?= h($beach['municipality']) ?> • ~<?= round($beach['distance'] * 2) ?> min drive</p>
-                        </div>
-                        <?php if ($beach['google_rating']): ?>
-                        <div class="flex items-center bg-yellow-50 px-3 py-1 rounded-full">
-                            <span class="text-yellow-500 mr-1">★</span>
-                            <span class="font-semibold"><?= number_format($beach['google_rating'], 1) ?></span>
-                            <span class="text-gray-500 text-sm ml-1">(<?= number_format($beach['google_review_count']) ?>)</span>
-                        </div>
-                        <?php endif; ?>
-                    </div>
-
-                    <p class="text-gray-700 mb-4">
-                        <?= h(substr($beach['description'] ?? '', 0, 200)) ?>...
-                    </p>
-
-                    <?php if (!empty($beach['tags'])): ?>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <?php foreach (array_slice($beach['tags'], 0, 4) as $tag): ?>
-                        <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">
-                            <?= h(getTagLabel($tag)) ?>
-                        </span>
-                        <?php endforeach; ?>
-                    </div>
-                    <?php endif; ?>
-
-                    <div class="flex gap-3">
-                        <a href="/beach/<?= h($beach['slug']) ?>"
-                           class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                            View Details
-                        </a>
-                        <a href="https://www.google.com/maps/dir/?api=1&destination=<?= urlencode($beach['lat'] . ',' . $beach['lng']) ?>"
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           class="border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                            Get Directions
-                        </a>
-                    </div>
-                </div>
-            </article>
-            <?php endforeach; ?>
         </div>
     </div>
 </section>
@@ -378,4 +257,9 @@ include __DIR__ . '/components/header.php';
     </div>
 </section>
 
+<?php
+$skipMapScripts = true;
+$skipAppScripts = true;
+$extraScripts = '<script defer src="/assets/js/collection-explorer.min.js"></script>';
+?>
 <?php include __DIR__ . '/components/footer.php'; ?>

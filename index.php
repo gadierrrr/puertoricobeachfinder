@@ -8,6 +8,7 @@ require_once __DIR__ . '/inc/db.php';
 require_once __DIR__ . '/inc/helpers.php';
 require_once __DIR__ . '/inc/constants.php';
 require_once __DIR__ . '/inc/geo.php';
+require_once __DIR__ . '/inc/collection_query.php';
 require_once __DIR__ . '/components/seo-schemas.php';
 
 // Page metadata
@@ -22,6 +23,8 @@ $selectedTags = isset($_GET['tags']) ? (array)$_GET['tags'] : [];
 $selectedMunicipality = $_GET['municipality'] ?? '';
 $sortBy = $_GET['sort'] ?? 'name';
 $viewMode = $_GET['view'] ?? 'list';
+$selectedCollection = $_GET['collection'] ?? '';
+$includeAll = isset($_GET['include_all']) && in_array((string)$_GET['include_all'], ['1', 'true'], true);
 $page = max(1, intval($_GET['page'] ?? 1));
 $perPage = 12;
 $searchQuery = trim($_GET['q'] ?? '');
@@ -30,6 +33,9 @@ $searchQuery = trim($_GET['q'] ?? '');
 $selectedTags = array_filter($selectedTags, 'isValidTag');
 if ($selectedMunicipality && !isValidMunicipality($selectedMunicipality)) {
     $selectedMunicipality = '';
+}
+if (!isValidCollectionKey((string)$selectedCollection)) {
+    $selectedCollection = '';
 }
 
 // Build query
@@ -473,6 +479,8 @@ window.BeachFinder = {
     beachesLoaded: false,
     selectedTags: <?= json_encode($selectedTags) ?>,
     selectedMunicipality: <?= json_encode($selectedMunicipality) ?>,
+    selectedCollection: <?= json_encode($selectedCollection) ?>,
+    includeAll: <?= $includeAll ? 'true' : 'false' ?>,
     searchQuery: <?= json_encode($searchQuery) ?>,
     sortBy: <?= json_encode($sortBy) ?>,
     viewMode: <?= json_encode($viewMode) ?>,
@@ -482,11 +490,15 @@ window.BeachFinder = {
     mapCenter: <?= json_encode(getPRCenter()) ?>,
     totalBeaches: <?= $totalBeaches ?>,
     tagLabels: <?= json_encode(array_combine(TAGS, array_map('getTagLabel', TAGS))) ?>,
-    hasActiveFilters: <?= (!empty($selectedTags) || !empty($selectedMunicipality) || !empty($searchQuery)) ? 'true' : 'false' ?>,
+    hasActiveFilters: <?= (!empty($selectedTags) || !empty($selectedMunicipality) || !empty($searchQuery) || !empty($selectedCollection) || $includeAll) ? 'true' : 'false' ?>,
     loadBeaches: function() {
         if (this.beachesLoaded || this._loading) return Promise.resolve(this.beaches);
         this._loading = true;
-        return fetch('/api/beaches-map.php')
+        const mapParams = new URLSearchParams(window.location.search);
+        mapParams.delete('view');
+        mapParams.delete('page');
+        const mapUrl = '/api/beaches-map.php' + (mapParams.toString() ? '?' + mapParams.toString() : '');
+        return fetch(mapUrl)
             .then(r => r.json())
             .then(data => {
                 this.beaches = data.beaches || [];
