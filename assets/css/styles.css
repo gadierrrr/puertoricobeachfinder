@@ -512,7 +512,7 @@ a.btn-loading,
 }
 
 .prose-brand a {
-    color: var(--color-accent);
+    color: var(--brand-yellow, #FACC15);
     text-decoration: underline;
     transition: opacity 0.2s ease;
 }
@@ -621,7 +621,7 @@ a.btn-loading,
 }
 
 .beach-card:focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--brand-yellow, #FACC15);
     outline-offset: 2px;
 }
 
@@ -834,6 +834,7 @@ a.btn-loading,
     background: var(--color-accent);
     color: white;
 }
+
 /* ========================================
    FILTER CHIP BUTTONS (Nomads-style)
    ======================================== */
@@ -936,6 +937,87 @@ a.btn-loading,
 }
 
 /* ========================================
+   CONDITIONS METER (Visual indicators)
+   ======================================== */
+
+.conditions-widget {
+    background: var(--color-bg-tertiary);
+    border-radius: 0.75rem;
+    padding: 1rem;
+}
+
+.condition-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+}
+
+.condition-row:not(:last-child) {
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.condition-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 100px;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+}
+
+.condition-label .emoji {
+    font-size: 1rem;
+}
+
+.condition-meter {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.meter-track {
+    flex: 1;
+    height: 8px;
+    background: var(--color-border);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.meter-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+/* Surf meter colors */
+.meter-fill.surf-calm { background: var(--color-success); width: 20%; }
+.meter-fill.surf-small { background: var(--color-primary); width: 40%; }
+.meter-fill.surf-medium { background: var(--color-warning); width: 70%; }
+.meter-fill.surf-large { background: var(--color-error); width: 100%; }
+
+/* Sargassum meter colors */
+.meter-fill.sargassum-none { background: var(--color-success); width: 5%; }
+.meter-fill.sargassum-light { background: #84cc16; width: 33%; }
+.meter-fill.sargassum-moderate { background: var(--color-warning); width: 66%; }
+.meter-fill.sargassum-heavy { background: var(--color-error); width: 100%; }
+
+/* Wind meter colors */
+.meter-fill.wind-calm { background: var(--color-success); width: 20%; }
+.meter-fill.wind-light { background: var(--color-primary); width: 40%; }
+.meter-fill.wind-moderate { background: var(--color-warning); width: 70%; }
+.meter-fill.wind-strong { background: var(--color-error); width: 100%; }
+
+.meter-value {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    min-width: 60px;
+    text-align: right;
+}
+
+/* ========================================
    THEME TOGGLE BUTTON
    ======================================== */
 
@@ -1006,6 +1088,7 @@ a.btn-loading,
     color: var(--color-primary-dark);
     font-size: 0.75rem;
     transition: background 0.15s ease;
+    /* Touch target: actual clickable area is 44px via padding/margin */
     position: relative;
 }
 
@@ -1086,86 +1169,7 @@ a.btn-loading,
 }
 
 /* Tag button active state - handled by Tailwind classes (bg-brand-yellow text-brand-darker) */
-/* ========================================
-   CONDITIONS METER (Visual indicators)
-   ======================================== */
 
-.conditions-widget {
-    background: var(--color-bg-tertiary);
-    border-radius: 0.75rem;
-    padding: 1rem;
-}
-
-.condition-row {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.5rem 0;
-}
-
-.condition-row:not(:last-child) {
-    border-bottom: 1px solid var(--color-border-light);
-}
-
-.condition-label {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    min-width: 100px;
-    font-size: 0.875rem;
-    color: var(--color-text-secondary);
-}
-
-.condition-label .emoji {
-    font-size: 1rem;
-}
-
-.condition-meter {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.meter-track {
-    flex: 1;
-    height: 8px;
-    background: var(--color-border);
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.meter-fill {
-    height: 100%;
-    border-radius: 4px;
-    transition: width 0.3s ease;
-}
-
-/* Surf meter colors */
-.meter-fill.surf-calm { background: var(--color-success); width: 20%; }
-.meter-fill.surf-small { background: var(--color-primary); width: 40%; }
-.meter-fill.surf-medium { background: var(--color-warning); width: 70%; }
-.meter-fill.surf-large { background: var(--color-error); width: 100%; }
-
-/* Sargassum meter colors */
-.meter-fill.sargassum-none { background: var(--color-success); width: 5%; }
-.meter-fill.sargassum-light { background: var(--color-secondary-light); width: 33%; }
-.meter-fill.sargassum-moderate { background: var(--color-warning); width: 66%; }
-.meter-fill.sargassum-heavy { background: var(--color-error); width: 100%; }
-
-/* Wind meter colors */
-.meter-fill.wind-calm { background: var(--color-success); width: 20%; }
-.meter-fill.wind-light { background: var(--color-primary); width: 40%; }
-.meter-fill.wind-moderate { background: var(--color-warning); width: 70%; }
-.meter-fill.wind-strong { background: var(--color-error); width: 100%; }
-
-.meter-value {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--color-text-primary);
-    min-width: 60px;
-    text-align: right;
-}
 /* ========================================
    MAP CONTAINER & CONTROLS
    ======================================== */
@@ -2073,94 +2077,6 @@ a.btn-loading,
  * These classes remain for backwards compatibility only.
  */
 
-/* ========================================
-   UI PRIMITIVES (Homepage-first defaults)
-   ======================================== */
-
-.ui-hero {
-    background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);
-    color: var(--color-text-primary);
-    padding: 3rem 1rem;
-}
-
-@media (min-width: 768px) {
-    .ui-hero {
-        padding: 4rem 1.5rem;
-    }
-}
-
-.ui-surface {
-    background: rgba(15, 23, 42, 0.72);
-    color: var(--color-text-primary);
-    border: 1px solid var(--color-border);
-    border-radius: 1rem;
-    box-shadow: var(--shadow-card);
-    backdrop-filter: blur(12px);
-}
-
-.ui-card {
-    background: rgba(15, 23, 42, 0.76);
-    color: var(--color-text-primary);
-    border: 1px solid var(--color-border);
-    border-radius: 1rem;
-    box-shadow: var(--shadow-card);
-    backdrop-filter: blur(6px);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.ui-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-glass);
-}
-
-.ui-btn-primary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    border-radius: 0.75rem;
-    padding: 0.75rem 1.25rem;
-    font-weight: 600;
-    background: var(--color-accent);
-    color: var(--color-brand-darker);
-    transition: background 0.2s ease;
-}
-
-.ui-btn-primary:hover {
-    background: var(--color-accent-hover);
-}
-
-.ui-btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    border-radius: 0.75rem;
-    padding: 0.75rem 1.25rem;
-    font-weight: 600;
-    border: 1px solid var(--color-border);
-    color: var(--color-text-primary);
-    background: rgba(255, 255, 255, 0.08);
-    transition: background 0.2s ease;
-}
-
-.ui-btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.14);
-}
-
-.ui-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.375rem;
-    border-radius: 9999px;
-    padding: 0.25rem 0.75rem;
-    font-size: 0.8125rem;
-    font-weight: 500;
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--color-text-secondary);
-    border: 1px solid var(--color-border);
-}
-
 .hero-cta {
     display: inline-flex;
     align-items: center;
@@ -2313,6 +2229,7 @@ a.btn-loading,
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
 }
+
 /* ========================================
    GUIDE PAGES - LAYOUT & COMPONENTS
    ======================================== */
@@ -2342,7 +2259,7 @@ a.btn-loading,
     gap: 2rem;
     max-width: 1400px;  /* Wider than default container */
     margin: 0 auto;
-    padding: 2.5rem 1rem;
+    padding: 3rem 1rem;
 }
 
 @media (min-width: 1024px) {
@@ -2363,10 +2280,6 @@ a.btn-loading,
 
 .guide-article {
     min-width: 0;  /* Prevent grid blowout */
-    background: var(--color-surface);
-    border: 1px solid var(--color-border-solid);
-    border-radius: 1rem;
-    box-shadow: var(--shadow-sm);
 }
 
 .guide-sidebar {
@@ -2389,10 +2302,9 @@ a.btn-loading,
     top: 100px;
     max-height: calc(100vh - 120px);
     overflow-y: auto;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border-solid);
-    border-radius: 0.75rem;
-    box-shadow: var(--shadow-sm);
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow-card);
     padding: 1.5rem;
 }
 
@@ -2416,7 +2328,7 @@ a.btn-loading,
 
 .guide-toc-link {
     display: block;
-    color: var(--color-gray-700);
+    color: var(--color-guide-link);
     text-decoration: underline;
     text-decoration-color: currentColor;
     text-underline-offset: 2px;
@@ -2426,7 +2338,7 @@ a.btn-loading,
 }
 
 .guide-toc-link:hover {
-    color: var(--color-guide-link);
+    color: var(--color-guide-link-hover);
 }
 
 /* Mobile: Horizontal scroll TOC */
@@ -2488,16 +2400,14 @@ a.btn-loading,
     justify-content: center;
     padding: 1rem;
     background: var(--color-gray-50);
-    border: 1px solid var(--color-border-solid);
-    border-radius: 0.75rem;
-    transition: border-color 0.2s ease, background-color 0.2s ease;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s ease;
     min-height: 5rem;  /* Consistent height */
     text-decoration: none;
 }
 
 .related-guide-card:hover {
     background: var(--color-gray-100);
-    border-color: var(--color-accent);
 }
 
 .related-guide-title {
@@ -3186,209 +3096,6 @@ body.collection-dark {
     .collection-card__actions {
         grid-template-columns: 1fr;
     }
-}
-/* ========================================
-   BEACH DETAIL PAGE
-   ======================================== */
-
-.checkin-option input:checked + .checkin-option-box {
-    background-color: var(--color-bg-light-secondary);
-    border-color: var(--color-secondary);
-    color: var(--color-secondary-dark);
-}
-
-.checkin-option-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem;
-    border: 2px solid var(--color-gray-200);
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: all 0.15s;
-    min-height: 3.5rem;
-}
-
-.checkin-option-box:hover {
-    border-color: var(--color-gray-400);
-    background-color: var(--color-gray-50);
-}
-
-/* ========================================
-   BEACH PAGE REDESIGN - ISLAFINDER STYLE
-   ======================================== */
-
-/* Hero section gradient for beach page */
-.hero-gradient-beach {
-    background: linear-gradient(to top, rgba(19, 32, 36, 0.95) 0%, rgba(19, 32, 36, 0.6) 40%, transparent 100%);
-}
-
-/* Highlight card with yellow glow - use attribute selector for specificity */
-.highlight-card[class] {
-    border-color: var(--color-accent);
-    box-shadow: 0 0 20px rgba(253, 224, 71, 0.15), 0 0 40px rgba(253, 224, 71, 0.1);
-}
-
-/* Yellow bullet for visitor tips */
-.yellow-bullet {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: var(--color-accent);
-    flex-shrink: 0;
-}
-
-/* Quick fact card styling */
-.quick-fact-card {
-    background: var(--color-bg-card-dark);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 0.75rem;
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.quick-fact-card:hover {
-    border-color: rgba(253, 224, 71, 0.3);
-}
-
-.quick-fact-card .icon-box {
-    background: var(--color-accent);
-    padding: 0.625rem;
-    border-radius: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.quick-fact-card .icon-box svg,
-.quick-fact-card .icon-box i {
-    width: 1.25rem;
-    height: 1.25rem;
-    color: var(--color-bg-secondary);
-}
-
-/* Beach detail dark theme cards */
-.beach-detail-card {
-    background: var(--color-bg-card-dark);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 0.75rem;
-}
-/* ========================================
-   BEACH MATCH QUIZ
-   ======================================== */
-
-.quiz-option {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 1.5rem;
-    border: 2px solid var(--color-border);
-    border-radius: 1rem;
-    background: var(--color-card-bg);
-    transition: all 0.2s ease;
-    cursor: pointer;
-}
-
-.quiz-option:hover {
-    border-color: rgba(253, 224, 71, 0.5);
-    background: rgba(253, 224, 71, 0.1);
-}
-
-.quiz-option.selected {
-    border-color: var(--color-accent);
-    background: rgba(253, 224, 71, 0.15);
-}
-
-.quiz-option-multi {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 1rem;
-    border: 2px solid var(--color-border);
-    border-radius: 0.75rem;
-    background: var(--color-card-bg);
-    transition: all 0.2s ease;
-    cursor: pointer;
-}
-
-.quiz-option-multi:hover {
-    border-color: rgba(253, 224, 71, 0.5);
-}
-
-.quiz-option-multi.selected {
-    border-color: var(--color-accent);
-    background: rgba(253, 224, 71, 0.15);
-}
-
-.quiz-option-wide {
-    display: block;
-    width: 100%;
-    padding: 1rem 1.25rem;
-    border: 2px solid var(--color-border);
-    border-radius: 0.75rem;
-    background: var(--color-card-bg);
-    transition: all 0.2s ease;
-    cursor: pointer;
-    text-align: left;
-}
-
-.quiz-option-wide:hover {
-    border-color: rgba(253, 224, 71, 0.5);
-    background: rgba(253, 224, 71, 0.1);
-}
-
-.quiz-option-wide.selected {
-    border-color: var(--color-accent);
-    background: rgba(253, 224, 71, 0.15);
-}
-
-.result-card {
-    display: flex;
-    gap: 1rem;
-    padding: 1rem;
-    border: 1px solid var(--color-border);
-    border-radius: 0.75rem;
-    background: var(--color-card-bg);
-    transition: all 0.2s ease;
-}
-
-.result-card:hover {
-    border-color: rgba(253, 224, 71, 0.5);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.match-score {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    font-weight: 700;
-    font-size: 0.875rem;
-}
-
-.match-score.excellent {
-    background: var(--score-exceptional-bg);
-    color: white;
-}
-
-.match-score.great {
-    background: var(--score-excellent-bg);
-    color: white;
-}
-
-.match-score.good {
-    background: var(--score-good-bg);
-    color: var(--color-brand-darker);
 }
 /* ========================================
    COMPARISON BAR
