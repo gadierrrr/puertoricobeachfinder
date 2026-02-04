@@ -188,14 +188,16 @@
     border: 1px solid var(--color-border);
 }
 
-/* Guide page card backgrounds - glass effect in dark mode */
-[data-theme="dark"] .bg-slate-50 {
+/* Guide page utility remaps - scoped to guide content only */
+[data-theme="dark"] .guide-layout .bg-slate-50,
+[data-theme="dark"] .guide-article .bg-slate-50 {
     background: var(--color-card-bg) !important;
     border: 1px solid var(--color-border-light);
 }
 
 /* Amber text stays visible in dark mode */
-[data-theme="dark"] .text-amber-700 {
+[data-theme="dark"] .guide-layout .text-amber-700,
+[data-theme="dark"] .guide-article .text-amber-700 {
     color: #fbbf24 !important; /* amber-400 - brighter for dark backgrounds */
 }
 
@@ -248,4 +250,3 @@
 [data-theme="dark"] .beach-description strong {
     color: var(--color-white);
 }
-
