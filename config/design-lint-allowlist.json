@@ -1,0 +1,88 @@
+{
+  "_meta": {
+    "note": "Temporary migration allowlist for homepage-first rollout. Remove entries as pages are migrated.",
+    "generated_from": "npm run lint:design",
+    "generated_on": "2026-02-04"
+  },
+  "global": {
+    "allowColorUtilityRegex": [],
+    "allowUtilitySelectorRegex": [],
+    "allowUnclassedAnchorSelectorRegex": [
+      "^\\.prose\\s+a:not\\(\\[class\\]\\)",
+      "^\\.guide-article\\s+a:not\\(\\[class\\]\\)",
+      "^\\.collection-legacy-content\\s+\\.beach-description\\s+a:not\\(\\[class\\]\\)"
+    ],
+    "deadComponentAllowlistRegex": []
+  },
+  "files": {
+    "beach.php": {
+      "allowColorUtilityRegex": [
+        "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
+      ]
+    },
+    "compare.php": {
+      "allowColorUtilityRegex": [
+        "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
+      ]
+    },
+    "components/beach-drawer.php": {
+      "allowColorUtilityRegex": [
+        "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
+      ]
+    },
+    "components/filters.php": {
+      "allowColorUtilityRegex": [
+        "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
+      ]
+    },
+    "components/footer.php": {
+      "allowColorUtilityRegex": [
+        "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
+      ]
+    },
+    "components/review-card.php": {
+      "allowColorUtilityRegex": [
+        "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
+      ]
+    },
+    "components/weather-widget.php": {
+      "allowColorUtilityRegex": [
+        "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
+      ]
+    },
+    "favorites.php": {
+      "allowColorUtilityRegex": [
+        "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
+      ]
+    },
+    "login.php": {
+      "allowColorUtilityRegex": [
+        "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
+      ]
+    },
+    "profile.php": {
+      "allowColorUtilityRegex": [
+        "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
+      ]
+    }
+  },
+  "partials": {
+    "assets/css/partials/_collections.css": {
+      "allowUtilitySelectorRegex": [
+        "^\\.collection-legacy-content\\s+"
+      ]
+    },
+    "assets/css/partials/_dark-mode.css": {
+      "allowUtilitySelectorRegex": [
+        "^\\[data-theme=\\\"dark\\\"\\]\\s+\\.guide-(?:layout|article)\\s+"
+      ]
+    },
+    "assets/css/partials/_accessibility.css": {
+      "allowUnclassedAnchorSelectorRegex": [
+        "^\\.prose\\s+a:not\\(\\[class\\]\\)",
+        "^\\.guide-article\\s+a:not\\(\\[class\\]\\)",
+        "^\\.collection-legacy-content\\s+\\.beach-description\\s+a:not\\(\\[class\\]\\)"
+      ]
+    }
+  }
+}
