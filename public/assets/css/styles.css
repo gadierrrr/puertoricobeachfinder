@@ -3639,6 +3639,62 @@ textarea::placeholder {
     color: #fbbf24 !important; /* amber-400 - brighter for dark backgrounds */
 }
 
+/* Guide typography + surface contrast fixes */
+[data-theme="dark"] .guide-layout {
+    color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .guide-layout .text-gray-900,
+[data-theme="dark"] .guide-layout .text-gray-800 {
+    color: var(--color-text-primary) !important;
+}
+
+[data-theme="dark"] .guide-layout .text-gray-700,
+[data-theme="dark"] .guide-layout .text-gray-600 {
+    color: var(--color-text-secondary) !important;
+}
+
+[data-theme="dark"] .guide-layout .text-gray-500,
+[data-theme="dark"] .guide-layout .text-gray-400 {
+    color: var(--color-text-muted) !important;
+}
+
+[data-theme="dark"] .guide-layout .text-green-900,
+[data-theme="dark"] .guide-layout .text-green-800,
+[data-theme="dark"] .guide-layout .text-blue-900,
+[data-theme="dark"] .guide-layout .text-yellow-900,
+[data-theme="dark"] .guide-layout .text-yellow-800 {
+    color: var(--color-text-primary) !important;
+}
+
+[data-theme="dark"] .guide-layout .text-green-600 {
+    color: var(--color-secondary-light) !important;
+}
+
+[data-theme="dark"] .guide-layout .bg-white,
+[data-theme="dark"] .guide-layout .bg-gray-50,
+[data-theme="dark"] .guide-layout .bg-green-50,
+[data-theme="dark"] .guide-layout .bg-blue-50,
+[data-theme="dark"] .guide-layout .bg-yellow-50,
+[data-theme="dark"] .guide-layout .bg-amber-50 {
+    background: var(--color-card-bg) !important;
+}
+
+[data-theme="dark"] .guide-layout .bg-gradient-to-r {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(30, 41, 59, 0.9) 100%) !important;
+    border: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .guide-layout .a11y-on-light-amber,
+[data-theme="dark"] .guide-layout .a11y-on-light-blue {
+    color: var(--color-text-primary);
+}
+
+/* Keep yellow CTA buttons legible in dark mode */
+[data-theme="dark"] .guide-layout .bg-yellow-400 .text-gray-900 {
+    color: var(--color-gray-900) !important;
+}
+
 [data-theme="dark"] .related-guide-card {
     background: var(--color-card-bg);
     border: 1px solid var(--color-border);
