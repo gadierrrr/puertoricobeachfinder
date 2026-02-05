@@ -23,7 +23,7 @@ Self-hosting fonts eliminates:
 
 **Inter (Weights: 400, 500, 600, 700, 800):**
 ```bash
-cd /var/www/beach-finder/assets/fonts
+cd /var/www/beach-finder/public/assets/fonts
 
 # Download Inter variable font (recommended - single file for all weights)
 wget -O inter-variable.woff2 https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZJhiI2B.woff2
@@ -47,7 +47,7 @@ wget -O playfair-700-italic.woff2 https://fonts.gstatic.com/s/playfairdisplay/v3
 
 ## Step 2: Create Font Face CSS
 
-Create `/var/www/beach-finder/assets/css/fonts.css`:
+Create `/var/www/beach-finder/public/assets/css/fonts.css`:
 
 ```css
 /* Inter Variable Font (Recommended) */

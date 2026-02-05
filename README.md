@@ -25,13 +25,21 @@ npm run build
 4. Initialize database (first run only):
 
 ```bash
-php init-db.php
+php scripts/init-db.php
 ```
 
 5. Run migrations:
 
 ```bash
 php scripts/migrate.php
+```
+
+## Local development
+
+Run with the built-in PHP server using the `public/` docroot:
+
+```bash
+php -S localhost:8082 -t public scripts/dev-router.php
 ```
 
 ## Required environment variables

@@ -8,6 +8,15 @@ if (defined('BOOTSTRAP_PHP_INCLUDED')) {
 }
 define('BOOTSTRAP_PHP_INCLUDED', true);
 
+if (!defined('APP_ROOT')) {
+    $root = realpath(__DIR__ . '/..');
+    define('APP_ROOT', $root !== false ? $root : dirname(__DIR__));
+}
+
+if (!defined('PUBLIC_ROOT')) {
+    define('PUBLIC_ROOT', APP_ROOT . '/public');
+}
+
 require_once __DIR__ . '/env.php';
 loadEnvFile();
 

@@ -8,6 +8,7 @@ function getDB() {
 
     if ($db === null) {
         $dbPath = envRequire('DB_PATH');
+        $dbPath = normalizePathFromAppRoot($dbPath);
         $dbDir = dirname($dbPath);
 
         if (!is_dir($dbDir) && !@mkdir($dbDir, 0755, true) && !is_dir($dbDir)) {
@@ -26,6 +27,36 @@ function getDB() {
     }
 
     return $db;
+}
+
+function normalizePathFromAppRoot(string $path): string {
+    if ($path === '') {
+        return $path;
+    }
+
+    if (pathIsAbsolute($path)) {
+        return $path;
+    }
+
+    $trimmed = $path;
+    if (str_starts_with($trimmed, './')) {
+        $trimmed = substr($trimmed, 2);
+    }
+    $trimmed = ltrim($trimmed, '/');
+
+    return APP_ROOT . '/' . $trimmed;
+}
+
+function pathIsAbsolute(string $path): bool {
+    if ($path === '') {
+        return false;
+    }
+
+    if ($path[0] === '/' || $path[0] === '\\') {
+        return true;
+    }
+
+    return preg_match('/^[A-Za-z]:[\\\\\\/]/', $path) === 1;
 }
 
 function uuid() {

@@ -17,7 +17,7 @@ echo "[3/6] Build frontend assets"
 npm run build
 
 echo "[4/6] Validate generated assets are committed"
-git diff --exit-code -- assets/css/tailwind.min.css assets/js/app.min.js
+git diff --exit-code -- public/assets/css/tailwind.min.css public/assets/js/app.min.js public/assets/js/collection-explorer.min.js
 
 echo "[5/6] Run migrations"
 php scripts/migrate.php

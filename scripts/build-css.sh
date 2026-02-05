@@ -4,7 +4,7 @@
 
 set -e
 
-CSS_DIR="assets/css"
+CSS_DIR="public/assets/css"
 PARTIALS_DIR="$CSS_DIR/partials"
 OUTPUT_FILE="$CSS_DIR/styles.css"
 

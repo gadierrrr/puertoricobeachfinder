@@ -213,11 +213,11 @@ function lintFile(file, allowlist) {
 }
 
 function lintPartials(allowlist) {
-  const partialsDir = path.join(ROOT, 'assets', 'css', 'partials');
+  const partialsDir = path.join(ROOT, 'public', 'assets', 'css', 'partials');
   const files = fs
     .readdirSync(partialsDir)
     .filter((name) => name.endsWith('.css'))
-    .map((name) => path.join('assets', 'css', 'partials', name))
+    .map((name) => path.join('public', 'assets', 'css', 'partials', name))
     .sort();
 
   const issues = [];

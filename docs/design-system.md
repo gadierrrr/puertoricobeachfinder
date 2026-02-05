@@ -4,9 +4,9 @@ This project uses a homepage-first visual system for all public pages.
 
 ## Source of truth
 
-- Tokens source: `assets/design/tokens.json`
-- Generated CSS variables: `assets/css/partials/_variables.css`
-- Generated Tailwind tokens: `assets/design/tailwind.tokens.cjs`
+- Tokens source: `public/assets/design/tokens.json`
+- Generated CSS variables: `public/assets/css/partials/_variables.css`
+- Generated Tailwind tokens: `public/assets/design/tailwind.tokens.cjs`
 
 Do not edit generated files directly. Run:
 
@@ -30,20 +30,23 @@ Usage pattern:
 
 ```php
 <?php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../bootstrap.php';
+
 $pageShellMode = 'start';
-include __DIR__ . '/components/page-shell.php';
+include APP_ROOT . '/components/page-shell.php';
 ?>
 
 <!-- page content -->
 
 <?php
 $pageShellMode = 'end';
-include __DIR__ . '/components/page-shell.php';
+include APP_ROOT . '/components/page-shell.php';
+?>
 ```
 
 ## UI primitives
 
-Use these shared primitives from `assets/css/partials/_layout.css`:
+Use these shared primitives from `public/assets/css/partials/_layout.css`:
 
 - `.ui-hero`
 - `.ui-surface`
