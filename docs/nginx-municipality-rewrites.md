@@ -18,7 +18,7 @@ location ~ ^/beaches-in-([a-z-]+)$ {
 server {
     listen 80;
     server_name www.puertoricobeachfinder.com puertoricobeachfinder.com;
-    root /var/www/beach-finder;
+    root /var/www/beach-finder/public;
     index index.php index.html;
 
     # Municipality landing pages
@@ -29,6 +29,11 @@ server {
     # Beach detail pages (existing)
     location ~ ^/beach/([a-z0-9-]+)$ {
         rewrite ^/beach/([a-z0-9-]+)$ /beach.php?slug=$1 last;
+    }
+
+    # Extensionless editorial URLs (optional)
+    location / {
+        try_files $uri $uri/ $uri.php /index.php?$query_string;
     }
 
     # PHP handling

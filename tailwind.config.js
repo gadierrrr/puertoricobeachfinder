@@ -2,7 +2,7 @@
 module.exports = {
   content: [
     "./**/*.php",
-    "./assets/js/**/*.js"
+    "./public/assets/js/**/*.js"
   ],
   darkMode: ['selector', '[data-theme="dark"]'],
   theme: {

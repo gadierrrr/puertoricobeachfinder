@@ -35,12 +35,12 @@ npm run build:js
 
 **Initialize/reset database:**
 ```bash
-php init-db.php
+php scripts/init-db.php
 ```
 
 **Run database migrations:**
 ```bash
-php migrations/001-add-reviews-safety-quiz.php
+php scripts/migrate.php
 ```
 
 ## Architecture
@@ -55,14 +55,17 @@ php migrations/001-add-reviews-safety-quiz.php
 ### Directory Structure
 - `inc/` - Core PHP includes (db.php, helpers.php, constants.php, auth.php)
 - `components/` - Reusable PHP UI components (header, footer, beach-card, filters)
-- `api/` - JSON/HTML API endpoints for HTMX requests
-- `admin/` - Admin panel for content management
-- `auth/` - Authentication handlers (Google OAuth)
+- `public/` - Web document root (ONLY this should be web-served)
+  - `public/api/` - JSON/HTML API endpoints for HTMX requests
+  - `public/admin/` - Admin panel for content management
+  - `public/auth/` - Authentication handlers (Google OAuth)
+  - `public/guides/` - Editorial/guide pages
+  - `public/errors/` - Friendly error pages
 - `data/` - SQLite database files
 - `migrations/` - Database migration scripts
-- `scripts/` - Build scripts (build-css.sh)
-- `assets/js/` - Frontend JavaScript (app.js, map.js, filters.js, geolocation.js)
-- `assets/css/` - Stylesheets
+- `scripts/` - CLI tools + build scripts (never web-served)
+- `public/assets/js/` - Frontend JavaScript (app.js, map.js, filters.js, geolocation.js)
+- `public/assets/css/` - Stylesheets
   - `styles.css` - Bundled custom CSS (generated from partials)
   - `tailwind-input.css` - Tailwind entry point
   - `tailwind.min.css` - Compiled Tailwind output
@@ -111,10 +114,10 @@ Custom extensions in `tailwind.config.js`:
 
 ### Overview
 
-Custom styles use a **partials-based architecture**. Source files live in `assets/css/partials/` and are bundled into `styles.css` for production.
+Custom styles use a **partials-based architecture**. Source files live in `public/assets/css/partials/` and are bundled into `styles.css` for production.
 
 ```
-assets/css/
+public/assets/css/
 ├── partials/              # Source files (edit these)
 │   ├── _variables.css     # CSS custom properties (colors, shadows, z-index)
 │   ├── _base.css          # Typography, animations, glass utilities
@@ -139,7 +142,7 @@ assets/css/
 
 ### Workflow
 
-1. **Edit** partials in `assets/css/partials/`
+1. **Edit** partials in `public/assets/css/partials/`
 2. **Build** with `npm run build:css`
 3. **Commit** both partials and bundled `styles.css`
 
@@ -230,7 +233,10 @@ For rich text content sections, use these semantic classes:
 </head>
 
 <!-- CORRECT - CSS loaded automatically via header.php -->
-<?php include __DIR__ . '/components/header.php'; ?>
+<?php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../bootstrap.php';
+include APP_ROOT . '/components/header.php';
+?>
 ```
 
 Duplicate CSS loading causes race conditions and prevents styles from rendering properly. Cache-busting versions are managed centrally in `header.php`.

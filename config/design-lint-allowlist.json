@@ -15,12 +15,12 @@
     "deadComponentAllowlistRegex": []
   },
   "files": {
-    "beach.php": {
+    "public/beach.php": {
       "allowColorUtilityRegex": [
         "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
       ]
     },
-    "compare.php": {
+    "public/compare.php": {
       "allowColorUtilityRegex": [
         "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
       ]
@@ -50,34 +50,77 @@
         "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
       ]
     },
-    "favorites.php": {
+    "public/favorites.php": {
       "allowColorUtilityRegex": [
         "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
       ]
     },
-    "login.php": {
+    "public/login.php": {
       "allowColorUtilityRegex": [
         "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
       ]
     },
-    "profile.php": {
+    "public/profile.php": {
+      "allowColorUtilityRegex": [
+        "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
+      ]
+    },
+    "public/quiz.php": {
+      "allowInlineStyle": true
+    },
+    "public/guides/index.php": {
+      "allowColorUtilityRegex": [
+        "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
+      ]
+    },
+    "public/guides/beach-photography-tips.php": {
+      "allowColorUtilityRegex": [
+        "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
+      ]
+    },
+    "public/guides/beach-safety-tips.php": {
+      "allowColorUtilityRegex": [
+        "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
+      ]
+    },
+    "public/guides/bioluminescent-bays.php": {
+      "allowColorUtilityRegex": [
+        "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
+      ]
+    },
+    "public/guides/culebra-vs-vieques.php": {
+      "allowColorUtilityRegex": [
+        "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
+      ]
+    },
+    "public/guides/family-beach-vacation-planning.php": {
+      "allowColorUtilityRegex": [
+        "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
+      ]
+    },
+    "public/guides/snorkeling-guide.php": {
+      "allowColorUtilityRegex": [
+        "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
+      ]
+    },
+    "public/guides/surfing-guide.php": {
       "allowColorUtilityRegex": [
         "^(?:bg|text|border|from|to|via|ring|fill|stroke|placeholder|accent|decoration)-(?:green|blue|teal)-\\d{2,3}(?:\\/\\d+)?$"
       ]
     }
   },
   "partials": {
-    "assets/css/partials/_collections.css": {
+    "public/assets/css/partials/_collections.css": {
       "allowUtilitySelectorRegex": [
         "^\\.collection-legacy-content\\s+"
       ]
     },
-    "assets/css/partials/_dark-mode.css": {
+    "public/assets/css/partials/_dark-mode.css": {
       "allowUtilitySelectorRegex": [
         "^\\[data-theme=\\\"dark\\\"\\]\\s+\\.guide-(?:layout|article)\\s+"
       ]
     },
-    "assets/css/partials/_accessibility.css": {
+    "public/assets/css/partials/_accessibility.css": {
       "allowUnclassedAnchorSelectorRegex": [
         "^\\.prose\\s+a:not\\(\\[class\\]\\)",
         "^\\.guide-article\\s+a:not\\(\\[class\\]\\)",

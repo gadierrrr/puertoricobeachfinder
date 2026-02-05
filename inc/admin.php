@@ -32,7 +32,7 @@ function requireAdmin(): void {
 
     if (!isAdmin()) {
         http_response_code(403);
-        include __DIR__ . '/../admin/403.php';
+        include PUBLIC_ROOT . '/admin/403.php';
         exit;
     }
 }
