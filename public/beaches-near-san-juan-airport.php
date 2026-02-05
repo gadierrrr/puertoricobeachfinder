@@ -14,9 +14,9 @@ require_once APP_ROOT . '/inc/collection_query.php';
 require_once APP_ROOT . '/components/seo-schemas.php';
 
 // Page metadata
-$pageTitle = '10 Best Beaches Near San Juan Airport (2025 Layover Guide)';
+$pageTitle = '10 Best Beaches Near San Juan Airport (2026 Layover Guide)';
 $pageDescription = 'Perfect for layovers! Visit beaches 5-20 minutes from San Juan Airport (SJU). Complete guide to maximizing beach time on your first or last day in Puerto Rico.';
-$canonicalUrl = ($_ENV['APP_URL'] ?? 'https://www.puertoricobeachfinder.com') . '/beaches-near-san-juan-airport';
+$canonicalUrl = getPublicBaseUrl() . '/beaches-near-san-juan-airport';
 
 $collectionKey = 'beaches-near-san-juan-airport';
 $collectionAnchorId = 'beaches';
@@ -37,7 +37,7 @@ $extraHead = articleSchema(
     $pageDescription,
     '/beaches-near-san-juan-airport',
     $airportBeaches[0]['cover_image'] ?? null,
-    '2025-01-01'
+    '2026-01-01'
 );
 $extraHead .= collectionPageSchema($pageTitle, $pageDescription, $airportBeaches);
 $extraHead .= websiteSchema();

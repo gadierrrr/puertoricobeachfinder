@@ -13,9 +13,9 @@ require_once APP_ROOT . '/inc/collection_query.php';
 require_once APP_ROOT . '/components/seo-schemas.php';
 
 // Page metadata
-$pageTitle = '15 Best Beaches in Puerto Rico (2025 Guide)';
-$pageDescription = 'Discover the 15 best beaches in Puerto Rico for 2025. From Flamenco Beach in Culebra to hidden gems on Vieques, find your perfect Caribbean paradise with insider tips and directions.';
-$canonicalUrl = ($_ENV['APP_URL'] ?? 'https://www.puertoricobeachfinder.com') . '/best-beaches';
+$pageTitle = '15 Best Beaches in Puerto Rico (2026 Guide)';
+$pageDescription = 'Discover the 15 best beaches in Puerto Rico for 2026. From Flamenco Beach in Culebra to hidden gems on Vieques, find your perfect Caribbean paradise with insider tips and directions.';
+$canonicalUrl = absoluteUrl('/best-beaches');
 
 $collectionKey = 'best-beaches';
 $collectionAnchorId = 'top-beaches';
@@ -36,7 +36,7 @@ $extraHead = articleSchema(
     $pageDescription,
     '/best-beaches',
     $topBeaches[0]['cover_image'] ?? null,
-    '2025-01-01'
+    '2026-01-01'
 );
 $extraHead .= collectionPageSchema($pageTitle, $pageDescription, $topBeaches);
 $extraHead .= websiteSchema();
@@ -102,7 +102,7 @@ include APP_ROOT . '/components/header.php';
         <div class="prose prose-lg max-w-none beach-description">
             <p>Puerto Rico boasts over <strong>270 miles of coastline</strong> with nearly <strong>300 beaches</strong> to explore. From the powdery white sands of Culebra to the dramatic cliffs of Cabo Rojo, the island offers incredible diversity for beach lovers.</p>
 
-            <p>Whether you're seeking the perfect snorkeling spot, a family-friendly bay, or world-class surf breaks, this guide covers the absolute best beaches Puerto Rico has to offer in 2025.</p>
+            <p>Whether you're seeking the perfect snorkeling spot, a family-friendly bay, or world-class surf breaks, this guide covers the absolute best beaches Puerto Rico has to offer in 2026.</p>
         </div>
     </div>
 </section>

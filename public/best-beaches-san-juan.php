@@ -14,9 +14,9 @@ require_once APP_ROOT . '/inc/collection_query.php';
 require_once APP_ROOT . '/components/seo-schemas.php';
 
 // Page metadata
-$pageTitle = '12 Best Beaches in San Juan, Puerto Rico (2025 Guide)';
-$pageDescription = 'Discover the best beaches in San Juan for 2025. From Condado and Isla Verde to Ocean Park and Escambrón, find pristine urban beaches with Caribbean beauty and city convenience.';
-$canonicalUrl = ($_ENV['APP_URL'] ?? 'https://www.puertoricobeachfinder.com') . '/best-beaches-san-juan';
+$pageTitle = '12 Best Beaches in San Juan, Puerto Rico (2026 Guide)';
+$pageDescription = 'Discover the best beaches in San Juan for 2026. From Condado and Isla Verde to Ocean Park and Escambrón, find pristine urban beaches with Caribbean beauty and city convenience.';
+$canonicalUrl = getPublicBaseUrl() . '/best-beaches-san-juan';
 
 $collectionKey = 'best-beaches-san-juan';
 $collectionAnchorId = 'top-beaches';
@@ -37,7 +37,7 @@ $extraHead = articleSchema(
     $pageDescription,
     '/best-beaches-san-juan',
     $topBeaches[0]['cover_image'] ?? null,
-    '2025-01-15'
+    '2026-01-15'
 );
 $extraHead .= collectionPageSchema($pageTitle, $pageDescription, $topBeaches);
 $extraHead .= websiteSchema();

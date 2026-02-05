@@ -26,12 +26,12 @@ $faqs = [
 ];
 
 $extraHead = $extraHead ?? "";
-$extraHead .= articleSchema($pageTitle, $pageDescription, 'https://puertoricobeachfinder.com/guides/culebra-vs-vieques.php', '2024-01-15');
+$extraHead .= articleSchema($pageTitle, $pageDescription, '/guides/culebra-vs-vieques', null, '2024-01-15');
 $extraHead .= faqSchema($faqs);
 $extraHead .= breadcrumbSchema([
-    ['name' => 'Home', 'url' => 'https://puertoricobeachfinder.com/'],
-    ['name' => 'Guides', 'url' => 'https://puertoricobeachfinder.com/guides/'],
-    ['name' => 'Culebra vs Vieques', 'url' => 'https://puertoricobeachfinder.com/guides/culebra-vs-vieques.php']
+    ['name' => 'Home', 'url' => '/'],
+    ['name' => 'Guides', 'url' => '/guides/'],
+    ['name' => 'Culebra vs Vieques', 'url' => '/guides/culebra-vs-vieques']
 ]);
 
 $pageTheme = "guide";
@@ -171,7 +171,7 @@ include APP_ROOT . "/components/page-shell.php";
                     <div class="space-y-4 mb-6">
                         <?php foreach ($culebra_beaches as $beach): ?>
                         <div class="bg-blue-50 border-l-4 border-blue-600 p-4">
-                            <a href="/beach.php?id=<?php echo $beach['id']; ?>" class="text-blue-900 font-bold hover:underline">
+                            <a href="/beach/<?php echo h($beach['slug']); ?>" class="text-blue-900 font-bold hover:underline">
                                 <?php echo h($beach['name']); ?>
                             </a>
                         </div>
@@ -197,7 +197,7 @@ include APP_ROOT . "/components/page-shell.php";
                     <div class="space-y-4 mb-6">
                         <?php foreach ($vieques_beaches as $beach): ?>
                         <div class="bg-green-50 border-l-4 border-green-600 p-4">
-                            <a href="/beach.php?id=<?php echo $beach['id']; ?>" class="text-green-900 font-bold hover:underline">
+                            <a href="/beach/<?php echo h($beach['slug']); ?>" class="text-green-900 font-bold hover:underline">
                                 <?php echo h($beach['name']); ?>
                             </a>
                         </div>
@@ -397,7 +397,7 @@ include APP_ROOT . "/components/page-shell.php";
                     <h3 class="text-xl font-bold text-gray-900 mb-4">Related Guides</h3>
                     <div class="related-guides-grid">
                         <?php foreach ($relatedGuides as $guide): ?>
-                        <a href="/guides/<?php echo h($guide['slug']); ?>.php" class="related-guide-card">
+                        <a href="/guides/<?php echo h($guide['slug']); ?>" class="related-guide-card">
                             <span class="related-guide-title"><?php echo h($guide['title']); ?></span>
                         </a>
                         <?php endforeach; ?>

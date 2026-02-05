@@ -61,6 +61,115 @@ function redirectInternal($value, $fallback = '/') {
     redirect(sanitizeInternalRedirect($value, $fallback));
 }
 
+function normalizeHostForUrl($host) {
+    if (!is_string($host) || $host === '') {
+        return null;
+    }
+
+    $host = trim($host);
+    if ($host === '') {
+        return null;
+    }
+
+    // Proxies can send a comma-separated host list; use the first hop.
+    $host = trim(explode(',', $host)[0]);
+    $host = preg_replace('#^https?://#i', '', $host);
+    $host = rtrim($host, '/');
+
+    if ($host === '' || !preg_match('/^[a-z0-9.-]+(?::\d{1,5})?$/i', $host)) {
+        return null;
+    }
+
+    return strtolower($host);
+}
+
+function isAllowedCanonicalHost(string $host): bool {
+    $hostWithoutPort = explode(':', $host)[0];
+
+    if (in_array($hostWithoutPort, ['localhost', '127.0.0.1', '::1'], true)) {
+        return true;
+    }
+
+    if ($hostWithoutPort === 'puertoricobeachfinder.com' || $hostWithoutPort === 'www.puertoricobeachfinder.com') {
+        return true;
+    }
+
+    $envUrl = $_ENV['APP_URL'] ?? '';
+    $envHost = '';
+    if (is_string($envUrl) && $envUrl !== '') {
+        $parsed = parse_url($envUrl);
+        $envHost = normalizeHostForUrl($parsed['host'] ?? '');
+    }
+
+    if ($envHost && $hostWithoutPort === explode(':', $envHost)[0]) {
+        return true;
+    }
+
+    return false;
+}
+
+function getRequestScheme(): string {
+    $forwardedProto = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '';
+    if (is_string($forwardedProto) && $forwardedProto !== '') {
+        $proto = strtolower(trim(explode(',', $forwardedProto)[0]));
+        if ($proto === 'http' || $proto === 'https') {
+            return $proto;
+        }
+    }
+
+    $https = $_SERVER['HTTPS'] ?? '';
+    if (!empty($https) && $https !== 'off') {
+        return 'https';
+    }
+
+    if ((int) ($_SERVER['SERVER_PORT'] ?? 0) === 443) {
+        return 'https';
+    }
+
+    return 'http';
+}
+
+function getPublicBaseUrl(): string {
+    static $cached = null;
+    if ($cached !== null) {
+        return $cached;
+    }
+
+    $envUrl = rtrim((string) ($_ENV['APP_URL'] ?? ''), '/');
+    $envParsed = $envUrl !== '' ? parse_url($envUrl) : null;
+    $envHost = normalizeHostForUrl($envParsed['host'] ?? '');
+
+    if (PHP_SAPI !== 'cli' && PHP_SAPI !== 'phpdbg') {
+        $requestHost = normalizeHostForUrl($_SERVER['HTTP_X_FORWARDED_HOST'] ?? ($_SERVER['HTTP_HOST'] ?? ($_SERVER['SERVER_NAME'] ?? '')));
+        if ($requestHost && isAllowedCanonicalHost($requestHost)) {
+            $cached = getRequestScheme() . '://' . $requestHost;
+            return $cached;
+        }
+    }
+
+    if ($envHost) {
+        $scheme = $envParsed['scheme'] ?? 'https';
+        $port = isset($envParsed['port']) ? ':' . (int) $envParsed['port'] : '';
+        $cached = strtolower($scheme) . '://' . explode(':', $envHost)[0] . $port;
+        return $cached;
+    }
+
+    $cached = 'https://www.puertoricobeachfinder.com';
+    return $cached;
+}
+
+function absoluteUrl($pathOrUrl): string {
+    if (!is_string($pathOrUrl) || $pathOrUrl === '') {
+        return getPublicBaseUrl() . '/';
+    }
+
+    if (preg_match('#^https?://#i', $pathOrUrl)) {
+        return $pathOrUrl;
+    }
+
+    return getPublicBaseUrl() . '/' . ltrim($pathOrUrl, '/');
+}
+
 function currentUser() {
     if (!isset($_SESSION['user_id'])) return null;
     require_once __DIR__ . '/db.php';
@@ -131,7 +240,7 @@ function getBeachUrl($beach) {
 }
 
 function getBeachDetailUrl($beach) {
-    return '/beach.php?slug=' . urlencode($beach['slug']);
+    return '/beach/' . urlencode($beach['slug']);
 }
 
 function getDirectionsUrl($beach) {

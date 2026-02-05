@@ -13,9 +13,9 @@ require_once APP_ROOT . '/inc/collection_query.php';
 require_once APP_ROOT . '/components/seo-schemas.php';
 
 // Page metadata
-$pageTitle = 'Best Family Beaches in Puerto Rico (2025 Guide)';
-$pageDescription = 'Discover the best family-friendly beaches in Puerto Rico for 2025. Calm waters, lifeguards, amenities, and fun for kids of all ages at these top family beach destinations.';
-$canonicalUrl = ($_ENV['APP_URL'] ?? 'https://www.puertoricobeachfinder.com') . '/best-family-beaches';
+$pageTitle = 'Best Family Beaches in Puerto Rico (2026 Guide)';
+$pageDescription = 'Discover the best family-friendly beaches in Puerto Rico for 2026. Calm waters, lifeguards, amenities, and fun for kids of all ages at these top family beach destinations.';
+$canonicalUrl = getPublicBaseUrl() . '/best-family-beaches';
 
 $collectionKey = 'best-family-beaches';
 $collectionAnchorId = 'top-beaches';
@@ -36,7 +36,7 @@ $extraHead = articleSchema(
     $pageDescription,
     '/best-family-beaches',
     $familyBeaches[0]['cover_image'] ?? null,
-    '2025-01-01'
+    '2026-01-01'
 );
 $extraHead .= collectionPageSchema($pageTitle, $pageDescription, $familyBeaches);
 $extraHead .= websiteSchema();

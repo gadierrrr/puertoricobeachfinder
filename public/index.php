@@ -15,7 +15,7 @@ require_once APP_ROOT . '/components/seo-schemas.php';
 
 // Page metadata
 $pageTitle = 'Discover Puerto Rico Beaches';
-$pageDescription = 'Find your perfect Puerto Rico beach from 230+ locations. Filter by amenities, conditions, and distance. Explore beaches for surfing, snorkeling, family fun, and more.';
+$pageDescription = 'Find your perfect Puerto Rico beach from a continuously updated island-wide database. Filter by amenities, conditions, and distance. Explore beaches for surfing, snorkeling, family fun, and more.';
 
 // Add structured data for homepage
 $extraHead = websiteSchema() . organizationSchema();

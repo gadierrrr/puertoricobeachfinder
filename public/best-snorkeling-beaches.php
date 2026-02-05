@@ -13,9 +13,9 @@ require_once APP_ROOT . '/inc/collection_query.php';
 require_once APP_ROOT . '/components/seo-schemas.php';
 
 // Page metadata
-$pageTitle = 'Best Snorkeling Beaches in Puerto Rico (2025 Guide)';
-$pageDescription = 'Discover the best snorkeling beaches in Puerto Rico for 2025. Crystal-clear waters, vibrant coral reefs, and tropical marine life await at these top snorkeling spots.';
-$canonicalUrl = ($_ENV['APP_URL'] ?? 'https://www.puertoricobeachfinder.com') . '/best-snorkeling-beaches';
+$pageTitle = 'Best Snorkeling Beaches in Puerto Rico (2026 Guide)';
+$pageDescription = 'Discover the best snorkeling beaches in Puerto Rico for 2026. Crystal-clear waters, vibrant coral reefs, and tropical marine life await at these top snorkeling spots.';
+$canonicalUrl = getPublicBaseUrl() . '/best-snorkeling-beaches';
 
 $collectionKey = 'best-snorkeling-beaches';
 $collectionAnchorId = 'top-beaches';
@@ -36,7 +36,7 @@ $extraHead = articleSchema(
     $pageDescription,
     '/best-snorkeling-beaches',
     $snorkelingBeaches[0]['cover_image'] ?? null,
-    '2025-01-01'
+    '2026-01-01'
 );
 $extraHead .= collectionPageSchema($pageTitle, $pageDescription, $snorkelingBeaches);
 $extraHead .= websiteSchema();

@@ -25,7 +25,7 @@ $faqs = [
 
 <?php
 $extraHead = $extraHead ?? "";
-$extraHead .= articleSchema($pageTitle, $pageDescription, 'https://puertoricobeachfinder.com/guides/beach-packing-list.php', '2024-01-15');
+$extraHead .= articleSchema($pageTitle, $pageDescription, '/guides/beach-packing-list', null, '2024-01-15');
     $extraHead .= howToSchema(
         'How to Pack for Puerto Rico Beaches',
         'Complete packing strategy for beach vacation in Puerto Rico',
@@ -41,9 +41,9 @@ $extraHead .= articleSchema($pageTitle, $pageDescription, 'https://puertoricobea
     );
     $extraHead .= faqSchema($faqs);
     $extraHead .= breadcrumbSchema([
-        ['name' => 'Home', 'url' => 'https://puertoricobeachfinder.com/'],
-        ['name' => 'Guides', 'url' => 'https://puertoricobeachfinder.com/guides/'],
-        ['name' => 'Beach Packing List', 'url' => 'https://puertoricobeachfinder.com/guides/beach-packing-list.php']
+        ['name' => 'Home', 'url' => '/'],
+        ['name' => 'Guides', 'url' => '/guides/'],
+        ['name' => 'Beach Packing List', 'url' => '/guides/beach-packing-list']
     ]);
 $pageTheme = "guide";
 $skipMapCSS = true;
@@ -295,7 +295,7 @@ include APP_ROOT . "/components/page-shell.php";
                     <h3 class="text-xl font-bold text-gray-900 mb-4">Related Guides</h3>
                     <div class="related-guides-grid">
                         <?php foreach ($relatedGuides as $guide): ?>
-                        <a href="/guides/<?php echo h($guide['slug']); ?>.php" class="related-guide-card">
+                        <a href="/guides/<?php echo h($guide['slug']); ?>" class="related-guide-card">
                             <span class="related-guide-title"><?php echo h($guide['title']); ?></span>
                         </a>
                         <?php endforeach; ?>

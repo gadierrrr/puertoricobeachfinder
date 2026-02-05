@@ -86,7 +86,7 @@ $collectionPageSchema = [
     "@type" => "CollectionPage",
     "name" => $pageTitle,
     "description" => $pageDescription,
-    "url" => "https://puertoricobeachfinder.com/guides/",
+    "url" => absoluteUrl('/guides/'),
     "breadcrumb" => [
         "@type" => "BreadcrumbList",
         "itemListElement" => [
@@ -94,13 +94,13 @@ $collectionPageSchema = [
                 "@type" => "ListItem",
                 "position" => 1,
                 "name" => "Home",
-                "item" => "https://puertoricobeachfinder.com/"
+                "item" => absoluteUrl('/')
             ],
             [
                 "@type" => "ListItem",
                 "position" => 2,
                 "name" => "Guides",
-                "item" => "https://puertoricobeachfinder.com/guides/"
+                "item" => absoluteUrl('/guides/')
             ]
         ]
     ]
@@ -128,7 +128,7 @@ include APP_ROOT . "/components/page-shell.php";
     <main class="container mx-auto px-4 container-padding py-12">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <?php foreach ($guides as $guide): ?>
-                <a href="/guides/<?php echo h($guide['slug']); ?>.php"
+                <a href="/guides/<?php echo h($guide['slug']); ?>"
                    class="block bg-white rounded-lg shadow-card hover:shadow-lg transition-all duration-300 overflow-hidden group">
                     <div class="p-6">
                         <div class="text-5xl mb-4"><?php echo $guide['icon']; ?></div>

@@ -13,9 +13,9 @@ require_once APP_ROOT . '/inc/collection_query.php';
 require_once APP_ROOT . '/components/seo-schemas.php';
 
 // Page metadata
-$pageTitle = '15 Hidden Beaches in Puerto Rico (Secret Gems 2025)';
+$pageTitle = '15 Hidden Beaches in Puerto Rico (Secret Gems 2026)';
 $pageDescription = 'Discover 15 secret and hidden beaches in Puerto Rico. Off-the-beaten-path paradise spots, secluded coves, and remote island destinations for adventure seekers. Includes access guides and coordinates.';
-$canonicalUrl = ($_ENV['APP_URL'] ?? 'https://www.puertoricobeachfinder.com') . '/hidden-beaches-puerto-rico';
+$canonicalUrl = getPublicBaseUrl() . '/hidden-beaches-puerto-rico';
 
 $collectionKey = 'hidden-beaches-puerto-rico';
 $collectionAnchorId = 'hidden-beaches';
@@ -36,7 +36,7 @@ $extraHead = articleSchema(
     $pageDescription,
     '/hidden-beaches-puerto-rico',
     $hiddenBeaches[0]['cover_image'] ?? null,
-    '2025-01-15'
+    '2026-01-15'
 );
 $extraHead .= collectionPageSchema($pageTitle, $pageDescription, $hiddenBeaches);
 $extraHead .= websiteSchema();

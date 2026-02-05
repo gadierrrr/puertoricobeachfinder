@@ -58,7 +58,7 @@ $faqs = [
 ];
 
 $extraHead = $extraHead ?? "";
-$extraHead .= articleSchema($pageTitle, $pageDescription, 'https://puertoricobeachfinder.com/guides/beach-safety-tips.php', '2024-01-15');
+$extraHead .= articleSchema($pageTitle, $pageDescription, '/guides/beach-safety-tips', null, '2024-01-15');
 $extraHead .= howToSchema(
     'How to Stay Safe at Puerto Rico Beaches',
     'Essential safety steps for enjoying Puerto Rico beaches without incidents',
@@ -74,9 +74,9 @@ $extraHead .= howToSchema(
 );
 $extraHead .= faqSchema($faqs);
 $extraHead .= breadcrumbSchema([
-    ['name' => 'Home', 'url' => 'https://puertoricobeachfinder.com/'],
-    ['name' => 'Guides', 'url' => 'https://puertoricobeachfinder.com/guides/'],
-    ['name' => 'Beach Safety Tips', 'url' => 'https://puertoricobeachfinder.com/guides/beach-safety-tips.php']
+    ['name' => 'Home', 'url' => '/'],
+    ['name' => 'Guides', 'url' => '/guides/'],
+    ['name' => 'Beach Safety Tips', 'url' => '/guides/beach-safety-tips']
 ]);
 
 $pageTheme = "guide";
@@ -174,7 +174,7 @@ include APP_ROOT . "/components/page-shell.php";
                     <div class="bg-green-50 border-l-4 border-green-600 p-6 my-8">
                         <h4 class="font-bold text-green-900 mb-2">Lifeguard-Protected Beach</h4>
                         <p class="text-green-800 mb-3">
-                            <a href="/beach.php?id=<?php echo $featuredBeaches[0]['id']; ?>" class="text-green-600 font-semibold hover:underline">
+                            <a href="/beach/<?php echo h($featuredBeaches[0]['slug']); ?>" class="text-green-600 font-semibold hover:underline">
                                 <?php echo h($featuredBeaches[0]['name']); ?>
                             </a> has full-time lifeguards and safety infrastructure,
                             making it ideal for families and less experienced swimmers.
@@ -304,7 +304,7 @@ include APP_ROOT . "/components/page-shell.php";
                     <div class="bg-green-50 border-l-4 border-green-600 p-6 my-8">
                         <h4 class="font-bold text-green-900 mb-2">Calm, Clear Waters</h4>
                         <p class="text-green-800 mb-3">
-                            <a href="/beach.php?id=<?php echo $featuredBeaches[1]['id']; ?>" class="text-green-600 font-semibold hover:underline">
+                            <a href="/beach/<?php echo h($featuredBeaches[1]['slug']); ?>" class="text-green-600 font-semibold hover:underline">
                                 <?php echo h($featuredBeaches[1]['name']); ?>
                             </a> offers calm conditions and visibility,
                             making it easier to spot and avoid marine life.
@@ -471,7 +471,7 @@ include APP_ROOT . "/components/page-shell.php";
                     <h3 class="text-xl font-bold text-gray-900 mb-4">Related Guides</h3>
                     <div class="related-guides-grid">
                         <?php foreach ($relatedGuides as $guide): ?>
-                        <a href="/guides/<?php echo h($guide['slug']); ?>.php" class="related-guide-card">
+                        <a href="/guides/<?php echo h($guide['slug']); ?>" class="related-guide-card">
                             <span class="related-guide-title"><?php echo h($guide['title']); ?></span>
                         </a>
                         <?php endforeach; ?>

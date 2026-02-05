@@ -76,7 +76,7 @@ $topTags = array_slice(array_keys($tagCounts), 0, 5);
 // Page metadata
 $pageTitle = "Best Beaches in {$municipality}, Puerto Rico ({$beachCount} Beaches)";
 $pageDescription = "Discover {$beachCount} beautiful beaches in {$municipality}, Puerto Rico. Find the perfect beach with our comprehensive guide including ratings, amenities, directions, and real-time conditions.";
-$canonicalUrl = ($_ENV['APP_URL'] ?? 'https://www.puertoricobeachfinder.com') . '/beaches-in-' . $municipalitySlug;
+$canonicalUrl = getPublicBaseUrl() . '/beaches-in-' . $municipalitySlug;
 
 // Structured data
 $extraHead = articleSchema(
