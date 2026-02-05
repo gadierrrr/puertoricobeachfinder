@@ -14,6 +14,7 @@ require_once __DIR__ . '/../inc/i18n.php';
 
 $user = currentUser();
 $appName = $_ENV['APP_NAME'] ?? 'Beach Finder';
+$appUrl = getPublicBaseUrl();
 $currentLang = getCurrentLanguage();
 $allowedBodyVariants = ['default', 'collection-light', 'collection-dark'];
 $requestedBodyVariant = isset($bodyVariant) ? (string) $bodyVariant : 'default';
@@ -63,7 +64,7 @@ if ($bodyVariant === 'collection-light') {
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="<?= isset($pageTitle) ? h($pageTitle) : 'Puerto Rico Beach' ?>">
     <?php else: ?>
-    <meta property="og:image" content="<?= h($_ENV['APP_URL'] ?? '') ?>/assets/icons/icon-512x512.png">
+    <meta property="og:image" content="<?= h($appUrl) ?>/assets/icons/icon-512x512.png">
     <meta property="og:image:width" content="512">
     <meta property="og:image:height" content="512">
     <?php endif; ?>
@@ -80,29 +81,87 @@ if ($bodyVariant === 'collection-light') {
     <meta name="twitter:image" content="<?= h($ogImage) ?>">
     <meta name="twitter:image:alt" content="<?= isset($pageTitle) ? h($pageTitle) : 'Puerto Rico Beach' ?>">
     <?php else: ?>
-    <meta name="twitter:image" content="<?= h($_ENV['APP_URL'] ?? '') ?>/assets/icons/icon-512x512.png">
+    <meta name="twitter:image" content="<?= h($appUrl) ?>/assets/icons/icon-512x512.png">
     <?php endif; ?>
 
     <!-- Canonical URL -->
     <?php
-    $appUrl = $_ENV['APP_URL'] ?? 'https://www.puertoricobeachfinder.com';
+    $requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+    $canonicalPath = '';
+
+    $normalizeCanonicalPath = static function (string $path): string {
+        if ($path === '' || $path[0] !== '/') {
+            $path = '/' . ltrim($path, '/');
+        }
+
+        if ($path === '/index.php') {
+            return '/';
+        }
+
+        // Canonicalize extensionless public pages.
+        $extensionlessPages = [
+            '/best-beaches.php',
+            '/best-beaches-san-juan.php',
+            '/best-snorkeling-beaches.php',
+            '/best-surfing-beaches.php',
+            '/best-family-beaches.php',
+            '/beaches-near-san-juan.php',
+            '/beaches-near-san-juan-airport.php',
+            '/hidden-beaches-puerto-rico.php',
+        ];
+
+        if (in_array($path, $extensionlessPages, true)) {
+            return substr($path, 0, -4);
+        }
+
+        if ($path === '/guides/index.php') {
+            return '/guides/';
+        }
+
+        if (str_starts_with($path, '/guides/') && str_ends_with($path, '.php')) {
+            return substr($path, 0, -4);
+        }
+
+        return $path;
+    };
+
     if (isset($canonicalUrl)) {
-        // Use explicitly set canonical
-        $canonical = $canonicalUrl;
+        $providedCanonical = (string) $canonicalUrl;
+        if (preg_match('#^https?://#i', $providedCanonical)) {
+            $parsed = parse_url($providedCanonical);
+            $canonicalPath = (string) ($parsed['path'] ?? '/');
+        } else {
+            $canonicalPath = $providedCanonical;
+        }
     } elseif (isset($beach['slug'])) {
-        $canonical = $appUrl . '/beach/' . $beach['slug'];
-    } elseif ($_SERVER['REQUEST_URI'] === '/' || $_SERVER['REQUEST_URI'] === '/index.php' || strpos($_SERVER['REQUEST_URI'], '/?') === 0) {
-        // Homepage and all filtered views (/?municipality=X, /?tags[]=Y) canonicalize to homepage
-        $canonical = $appUrl . '/';
+        $canonicalPath = '/beach/' . $beach['slug'];
+    } elseif ($requestPath === '/' || $requestPath === '/index.php') {
+        // Homepage and filtered views canonicalize to homepage.
+        $canonicalPath = '/';
     } else {
-        $canonical = $appUrl . strtok($_SERVER['REQUEST_URI'], '?');
+        $canonicalPath = $requestPath;
     }
+
+    $canonicalPath = $normalizeCanonicalPath($canonicalPath);
+    $canonical = absoluteUrl($canonicalPath);
+
+    $noindexPaths = [
+        '/login.php',
+        '/logout.php',
+        '/verify.php',
+        '/favorites.php',
+        '/profile.php',
+        '/onboarding.php',
+    ];
+    $robots = in_array($requestPath, $noindexPaths, true)
+        ? 'noindex, nofollow, noarchive'
+        : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1';
     ?>
     <link rel="canonical" href="<?= h($canonical) ?>">
     <meta property="og:url" content="<?= h($canonical) ?>">
 
     <!-- Robots Meta Tags -->
-    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="robots" content="<?= h($robots) ?>">
 
     <!-- Geographic Meta Tags -->
     <meta name="geo.region" content="US-PR">

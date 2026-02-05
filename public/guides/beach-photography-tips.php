@@ -10,7 +10,7 @@ $relatedGuides = [['title' => 'Best Time to Visit', 'slug' => 'best-time-visit-p
 $faqs = [['question' => 'What is the best time of day for beach photography?', 'answer' => 'Golden hour (hour after sunrise and before sunset) provides warm, soft light perfect for beach photos. Blue hour (twilight) offers moody atmospheric shots. Avoid harsh midday sun which creates unflattering shadows.'],['question' => 'Can I fly drones at Puerto Rico beaches?', 'answer' => 'Yes, but with restrictions. Register drones over 0.55 lbs with FAA. Don\'t fly over people, respect privacy, avoid national parks/wildlife refuges. Max altitude 400 feet. Check local regulations as some beaches prohibit drones.'],['question' => 'How do I protect my camera from sand and water?', 'answer' => 'Use UV filter to protect lens, carry in sealed bag when not shooting, clean with rocket blower (never blow with mouth), use rain sleeve in ocean spray, consider waterproof housing for surf photography.'],['question' => 'What camera settings work best for beach photos?', 'answer' => 'Use low ISO (100-400) in bright light, fast shutter (1/250+) for action, aperture f/8-11 for landscapes. Shoot RAW for maximum editing flexibility. Use exposure compensation +1 to +2 stops to prevent underexposure from bright sand/water.'],['question' => 'Do I need professional equipment for great beach photos?', 'answer' => 'No! Modern smartphones take excellent beach photos. Focus on composition, lighting, and timing rather than gear. Polarizing filter helps any camera reduce glare. Photography skill matters more than equipment cost.']];
 
 $extraHead = $extraHead ?? "";
-$extraHead .= articleSchema($pageTitle, $pageDescription, 'https://puertoricobeachfinder.com/guides/beach-photography-tips.php', '2024-01-15');
+$extraHead .= articleSchema($pageTitle, $pageDescription, '/guides/beach-photography-tips', null, '2024-01-15');
 $extraHead .= howToSchema(
     'How to Photograph Puerto Rico Beaches',
     'Expert photography guide for beach images',
@@ -25,9 +25,9 @@ $extraHead .= howToSchema(
 );
 $extraHead .= faqSchema($faqs);
 $extraHead .= breadcrumbSchema([
-    ['name' => 'Home', 'url' => 'https://puertoricobeachfinder.com/'],
-    ['name' => 'Guides', 'url' => 'https://puertoricobeachfinder.com/guides/'],
-    ['name' => 'Beach Photography', 'url' => 'https://puertoricobeachfinder.com/guides/beach-photography-tips.php']
+    ['name' => 'Home', 'url' => '/'],
+    ['name' => 'Guides', 'url' => '/guides/'],
+    ['name' => 'Beach Photography', 'url' => '/guides/beach-photography-tips']
 ]);
 
 $pageTheme = "guide";
@@ -78,7 +78,7 @@ include APP_ROOT . '/components/hero-guide.php';
 </div></div>
 <div class="mt-12 pt-8 border-t border-gray-200"><h3 class="text-xl font-bold text-gray-900 mb-4">Related Guides</h3>
 <div class="related-guides-grid"><?php foreach($relatedGuides as $guide):?>
-<a href="/guides/<?php echo h($guide['slug']);?>.php" class="related-guide-card"><span class="related-guide-title"><?php echo h($guide['title']);?></span></a>
+<a href="/guides/<?php echo h($guide['slug']);?>" class="related-guide-card"><span class="related-guide-title"><?php echo h($guide['title']);?></span></a>
 <?php endforeach;?></div></div>
 </article></div></main>
 

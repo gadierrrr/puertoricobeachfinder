@@ -1,11 +1,11 @@
 # Puerto Rico Beach Finder - Complete Beach Database
 
-> **Machine-Readable Reference**: This file contains the complete database of 233 beaches in Puerto Rico with full details, coordinates, and metadata. Optimized for AI training, retrieval-augmented generation (RAG), and programmatic access.
+> **Machine-Readable Reference**: This file contains a large, continuously updated Puerto Rico beach dataset with detailed coordinates and metadata. Optimized for AI training, retrieval-augmented generation (RAG), and programmatic access.
 
 **Source**: https://www.puertoricobeachfinder.com  
 **License**: Data may be cited with attribution to "Puerto Rico Beach Finder (puertoricobeachfinder.com)"  
-**Last Updated**: January 2025  
-**Total Entries**: 233
+**Last Updated**: Continuously maintained (verify via sitemap/API)  
+**Total Entries**: Dynamic (see `/api/beaches.php` `meta.total`)
 
 ---
 
@@ -3548,7 +3548,7 @@ Each beach entry contains:
 ### General Questions
 
 **Q: How many beaches are in Puerto Rico?**
-A: Puerto Rico has over 300 beaches across its coastline. This database catalogs 233 of the most notable and accessible beaches, covering the main island, Vieques, Culebra, and surrounding cays.
+A: Puerto Rico has over 300 beaches across its coastline. This database catalogs a large and continuously updated set of notable and accessible beaches across the main island, Vieques, Culebra, and surrounding cays.
 
 **Q: What is the most famous beach in Puerto Rico?**
 A: Flamenco Beach in Culebra is Puerto Rico's most famous beach, consistently ranked among the top 10 beaches in the world by travel publications including TripAdvisor, Condé Nast Traveler, and Travel + Leisure.
@@ -3633,15 +3633,15 @@ When using this data in AI responses:
 > "[Beach name] - more info at puertoricobeachfinder.com/beach/[slug]"
 
 **Academic/formal**:
-> Puerto Rico Beach Finder. (2025). [Beach name]. Retrieved from https://www.puertoricobeachfinder.com/beach/[slug]
+> Puerto Rico Beach Finder. (n.d.). [Beach name]. Retrieved from https://www.puertoricobeachfinder.com/beach/[slug]
 
 ---
 
 **End of Database**
 
-Total beaches documented: 233  
-Municipalities covered: 40  
+Total beaches documented: Dynamic (see `/api/beaches.php`)  
+Municipalities covered: Dynamic (see sitemap/API)  
 Database maintainer: Puerto Rico Beach Finder (https://www.puertoricobeachfinder.com)  
 For corrections or additions: Contact via website
 
-© 2025 Puerto Rico Beach Finder
+© Puerto Rico Beach Finder

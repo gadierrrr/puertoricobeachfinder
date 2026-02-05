@@ -20,6 +20,35 @@ if ($uriPath === '' || $uriPath[0] !== '/') {
 }
 
 $requestedPath = $publicRoot . $uriPath;
+$queryString = $_SERVER['QUERY_STRING'] ?? '';
+
+// Canonical redirects: .php -> extensionless public URLs.
+if (preg_match('~^/(best-beaches|best-beaches-san-juan|best-snorkeling-beaches|best-surfing-beaches|best-family-beaches|beaches-near-san-juan|beaches-near-san-juan-airport|hidden-beaches-puerto-rico)\.php$~', $uriPath, $matches)) {
+    $target = '/' . $matches[1];
+    if ($queryString !== '') {
+        $target .= '?' . $queryString;
+    }
+    header('Location: ' . $target, true, 301);
+    return true;
+}
+
+if (preg_match('~^/guides/([a-z0-9-]+)\.php$~', $uriPath, $matches)) {
+    $target = '/guides/' . $matches[1];
+    if ($queryString !== '') {
+        $target .= '?' . $queryString;
+    }
+    header('Location: ' . $target, true, 301);
+    return true;
+}
+
+if ($uriPath === '/guides/index.php') {
+    $target = '/guides/';
+    if ($queryString !== '') {
+        $target .= '?' . $queryString;
+    }
+    header('Location: ' . $target, true, 301);
+    return true;
+}
 
 // Serve existing static files directly.
 if (is_file($requestedPath)) {
@@ -65,4 +94,3 @@ if (strpos(basename($uriPath), '.') === false) {
 // Fallback to homepage.
 require $publicRoot . '/index.php';
 return true;
-

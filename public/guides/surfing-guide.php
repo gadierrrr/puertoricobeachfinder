@@ -18,7 +18,7 @@ $faqs = [
 ];
 
 $extraHead = $extraHead ?? "";
-$extraHead .= articleSchema($pageTitle, $pageDescription, 'https://puertoricobeachfinder.com/guides/surfing-guide.php', '2024-01-15');
+$extraHead .= articleSchema($pageTitle, $pageDescription, '/guides/surfing-guide', null, '2024-01-15');
 $extraHead .= howToSchema('How to Surf in Puerto Rico', 'Guide to surfing Puerto Rico waves', [
     ['name' => 'Choose Right Season', 'text' => 'Winter (Nov-Mar) for experienced surfers, summer (May-Sep) for beginners.'],
     ['name' => 'Select Appropriate Beach', 'text' => 'Match break to skill level. Beginners start at mellow beach breaks, advanced surfers tackle reef breaks.'],
@@ -29,9 +29,9 @@ $extraHead .= howToSchema('How to Surf in Puerto Rico', 'Guide to surfing Puerto
 ]);
 $extraHead .= faqSchema($faqs);
 $extraHead .= breadcrumbSchema([
-    ['name' => 'Home', 'url' => 'https://puertoricobeachfinder.com/'],
-    ['name' => 'Guides', 'url' => 'https://puertoricobeachfinder.com/guides/'],
-    ['name' => 'Surfing Guide', 'url' => 'https://puertoricobeachfinder.com/guides/surfing-guide.php']
+    ['name' => 'Home', 'url' => '/'],
+    ['name' => 'Guides', 'url' => '/guides/'],
+    ['name' => 'Surfing Guide', 'url' => '/guides/surfing-guide']
 ]);
 
 $pageTheme = "guide";
@@ -89,7 +89,7 @@ include APP_ROOT . "/components/page-shell.php";
                     <div class="space-y-4 mb-8">
                         <?php foreach ($surf_beaches as $beach): ?>
                         <div class="bg-slate-50 border-l-4 border-green-600 p-4">
-                            <a href="/beach.php?id=<?php echo $beach['id']; ?>" class="text-gray-900 font-bold hover:underline">
+                            <a href="/beach/<?php echo h($beach['slug']); ?>" class="text-gray-900 font-bold hover:underline">
                                 <?php echo h($beach['name']); ?>
                             </a>
                             <p class="text-amber-700 text-sm"><?php echo h($beach['municipality']); ?></p>
@@ -162,7 +162,7 @@ include APP_ROOT . "/components/page-shell.php";
                     <h3 class="text-xl font-bold text-gray-900 mb-4">Related Guides</h3>
                     <div class="related-guides-grid">
                         <?php foreach ($relatedGuides as $guide): ?>
-                        <a href="/guides/<?php echo h($guide['slug']); ?>.php" class="related-guide-card">
+                        <a href="/guides/<?php echo h($guide['slug']); ?>" class="related-guide-card">
                             <span class="related-guide-title"><?php echo h($guide['title']); ?></span>
                         </a>
                         <?php endforeach; ?>

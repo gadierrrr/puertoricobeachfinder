@@ -27,7 +27,7 @@ $faqs = [
 ];
 
 $extraHead = $extraHead ?? "";
-$extraHead .= articleSchema($pageTitle, $pageDescription, 'https://puertoricobeachfinder.com/guides/snorkeling-guide.php', '2024-01-15');
+$extraHead .= articleSchema($pageTitle, $pageDescription, '/guides/snorkeling-guide', null, '2024-01-15');
 $extraHead .= howToSchema('How to Snorkel in Puerto Rico', 'Complete guide to snorkeling at Puerto Rico beaches', [
     ['name' => 'Choose the Right Beach', 'text' => 'Select a beach with calm conditions, healthy reefs, and good visibility. Check current conditions and weather before heading out.'],
     ['name' => 'Get Proper Equipment', 'text' => 'Use a well-fitting mask that doesn\'t leak, comfortable snorkel tube, and fins for easier swimming. Test mask fit on dry land first.'],
@@ -38,9 +38,9 @@ $extraHead .= howToSchema('How to Snorkel in Puerto Rico', 'Complete guide to sn
 ]);
 $extraHead .= faqSchema($faqs);
 $extraHead .= breadcrumbSchema([
-    ['name' => 'Home', 'url' => 'https://puertoricobeachfinder.com/'],
-    ['name' => 'Guides', 'url' => 'https://puertoricobeachfinder.com/guides/'],
-    ['name' => 'Snorkeling Guide', 'url' => 'https://puertoricobeachfinder.com/guides/snorkeling-guide.php']
+    ['name' => 'Home', 'url' => '/'],
+    ['name' => 'Guides', 'url' => '/guides/'],
+    ['name' => 'Snorkeling Guide', 'url' => '/guides/snorkeling-guide']
 ]);
 
 $pageTheme = "guide";
@@ -144,7 +144,7 @@ include APP_ROOT . "/components/page-shell.php";
                     <div class="space-y-4 mb-8">
                         <?php $counter = 1; foreach ($snorkel_beaches as $beach): ?>
                         <div class="bg-slate-50 border-l-4 border-green-600 p-4">
-                            <h4 class="font-bold text-gray-900"><?php echo $counter; ?>. <a href="/beach.php?id=<?php echo $beach['id']; ?>" class="hover:underline"><?php echo h($beach['name']); ?></a></h4>
+                            <h4 class="font-bold text-gray-900"><?php echo $counter; ?>. <a href="/beach/<?php echo h($beach['slug']); ?>" class="hover:underline"><?php echo h($beach['name']); ?></a></h4>
                             <p class="text-amber-700 text-sm"><?php echo h($beach['municipality']); ?></p>
                         </div>
                         <?php $counter++; endforeach; ?>
@@ -215,7 +215,7 @@ include APP_ROOT . "/components/page-shell.php";
                     <h3 class="text-xl font-bold text-gray-900 mb-4">Related Guides</h3>
                     <div class="related-guides-grid">
                         <?php foreach ($relatedGuides as $guide): ?>
-                        <a href="/guides/<?php echo h($guide['slug']); ?>.php" class="related-guide-card">
+                        <a href="/guides/<?php echo h($guide['slug']); ?>" class="related-guide-card">
                             <span class="related-guide-title"><?php echo h($guide['title']); ?></span>
                         </a>
                         <?php endforeach; ?>

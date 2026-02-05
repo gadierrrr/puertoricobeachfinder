@@ -52,19 +52,19 @@
                         Beaches by Activity
                     </h4>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="/best-beaches.php" class="text-gray-400 hover:text-brand-yellow transition-colors">Best Beaches</a></li>
-                        <li><a href="/best-beaches-san-juan.php" class="text-gray-400 hover:text-brand-yellow transition-colors">San Juan Beaches</a></li>
-                        <li><a href="/best-surfing-beaches.php" class="text-gray-400 hover:text-brand-yellow transition-colors">Surfing Beaches</a></li>
-                        <li><a href="/best-snorkeling-beaches.php" class="text-gray-400 hover:text-brand-yellow transition-colors">Snorkeling Beaches</a></li>
-                        <li><a href="/best-family-beaches.php" class="text-gray-400 hover:text-brand-yellow transition-colors">Family Beaches</a></li>
-                        <li><a href="/hidden-beaches-puerto-rico.php" class="text-gray-400 hover:text-brand-yellow transition-colors">Hidden Beaches</a></li>
+                        <li><a href="/best-beaches" class="text-gray-400 hover:text-brand-yellow transition-colors">Best Beaches</a></li>
+                        <li><a href="/best-beaches-san-juan" class="text-gray-400 hover:text-brand-yellow transition-colors">San Juan Beaches</a></li>
+                        <li><a href="/best-surfing-beaches" class="text-gray-400 hover:text-brand-yellow transition-colors">Surfing Beaches</a></li>
+                        <li><a href="/best-snorkeling-beaches" class="text-gray-400 hover:text-brand-yellow transition-colors">Snorkeling Beaches</a></li>
+                        <li><a href="/best-family-beaches" class="text-gray-400 hover:text-brand-yellow transition-colors">Family Beaches</a></li>
+                        <li><a href="/hidden-beaches-puerto-rico" class="text-gray-400 hover:text-brand-yellow transition-colors">Hidden Beaches</a></li>
                     </ul>
                     <!-- Beaches by Location -->
                     <div class="mt-6">
                         <h5 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">By Location</h5>
                         <ul class="space-y-2 text-sm">
-                            <li><a href="/beaches-near-san-juan.php" class="text-gray-400 hover:text-brand-yellow transition-colors">Near San Juan</a></li>
-                            <li><a href="/beaches-near-san-juan-airport.php" class="text-gray-400 hover:text-brand-yellow transition-colors">Near Airport</a></li>
+                            <li><a href="/beaches-near-san-juan" class="text-gray-400 hover:text-brand-yellow transition-colors">Near San Juan</a></li>
+                            <li><a href="/beaches-near-san-juan-airport" class="text-gray-400 hover:text-brand-yellow transition-colors">Near Airport</a></li>
                         </ul>
                     </div>
                 </div>
@@ -77,14 +77,14 @@
                     </h4>
                     <ul class="space-y-2 text-sm">
                         <li><a href="/guides" class="text-gray-400 hover:text-brand-yellow transition-colors font-medium">All Guides →</a></li>
-                        <li><a href="/guides/getting-to-puerto-rico-beaches.php" class="text-gray-400 hover:text-brand-yellow transition-colors">Transportation</a></li>
-                        <li><a href="/guides/beach-safety-tips.php" class="text-gray-400 hover:text-brand-yellow transition-colors">Safety Tips</a></li>
-                        <li><a href="/guides/best-time-visit-puerto-rico-beaches.php" class="text-gray-400 hover:text-brand-yellow transition-colors">Best Times to Visit</a></li>
-                        <li><a href="/guides/beach-packing-list.php" class="text-gray-400 hover:text-brand-yellow transition-colors">Packing List</a></li>
-                        <li><a href="/guides/culebra-vs-vieques.php" class="text-gray-400 hover:text-brand-yellow transition-colors">Culebra vs Vieques</a></li>
-                        <li><a href="/guides/bioluminescent-bays.php" class="text-gray-400 hover:text-brand-yellow transition-colors">Bio Bays</a></li>
-                        <li><a href="/guides/snorkeling-guide.php" class="text-gray-400 hover:text-brand-yellow transition-colors">Snorkeling Guide</a></li>
-                        <li><a href="/guides/surfing-guide.php" class="text-gray-400 hover:text-brand-yellow transition-colors">Surfing Guide</a></li>
+                        <li><a href="/guides/getting-to-puerto-rico-beaches" class="text-gray-400 hover:text-brand-yellow transition-colors">Transportation</a></li>
+                        <li><a href="/guides/beach-safety-tips" class="text-gray-400 hover:text-brand-yellow transition-colors">Safety Tips</a></li>
+                        <li><a href="/guides/best-time-visit-puerto-rico-beaches" class="text-gray-400 hover:text-brand-yellow transition-colors">Best Times to Visit</a></li>
+                        <li><a href="/guides/beach-packing-list" class="text-gray-400 hover:text-brand-yellow transition-colors">Packing List</a></li>
+                        <li><a href="/guides/culebra-vs-vieques" class="text-gray-400 hover:text-brand-yellow transition-colors">Culebra vs Vieques</a></li>
+                        <li><a href="/guides/bioluminescent-bays" class="text-gray-400 hover:text-brand-yellow transition-colors">Bio Bays</a></li>
+                        <li><a href="/guides/snorkeling-guide" class="text-gray-400 hover:text-brand-yellow transition-colors">Snorkeling Guide</a></li>
+                        <li><a href="/guides/surfing-guide" class="text-gray-400 hover:text-brand-yellow transition-colors">Surfing Guide</a></li>
                     </ul>
                 </div>
 
@@ -95,8 +95,8 @@
                         More Guides
                     </h4>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="/guides/beach-photography-tips.php" class="text-gray-400 hover:text-brand-yellow transition-colors">Photography Tips</a></li>
-                        <li><a href="/guides/family-beach-vacation-planning.php" class="text-gray-400 hover:text-brand-yellow transition-colors">Family Planning</a></li>
+                        <li><a href="/guides/beach-photography-tips" class="text-gray-400 hover:text-brand-yellow transition-colors">Photography Tips</a></li>
+                        <li><a href="/guides/family-beach-vacation-planning" class="text-gray-400 hover:text-brand-yellow transition-colors">Family Planning</a></li>
                     </ul>
 
                     <?php if (isAuthenticated()): ?>

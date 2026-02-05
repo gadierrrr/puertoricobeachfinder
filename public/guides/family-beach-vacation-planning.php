@@ -11,7 +11,7 @@ $relatedGuides = [['title' => 'Beach Safety Tips', 'slug' => 'beach-safety-tips'
 $faqs = [['question' => 'What are the best family-friendly beaches in Puerto Rico?', 'answer' => 'Top family beaches include Balneario de Luquillo (calm water, facilities, food vendors), Balneario de Carolina (near San Juan, lifeguards), Seven Seas Fajardo (shallow water, shade), and Flamenco Beach Culebra (stunning beauty, calm conditions). Look for beaches with lifeguards and amenities.'],['question' => 'Is Puerto Rico safe for families with young children?', 'answer' => 'Yes! Puerto Rico is very family-friendly. Stay at balnearios (public beaches) with lifeguards for maximum safety. Book family-oriented hotels/resorts with kids clubs. Use common sense with valuables and stay in tourist areas. Puerto Ricans are welcoming to families.'],['question' => 'What is a realistic budget for a family beach vacation to Puerto Rico?', 'answer' => 'Budget $2,000-4,000 for a family of 4 for one week including flights ($800-1,600), car rental ($350-500), hotel ($700-1,400), food ($500-800), and activities ($300-500). Condo rentals with kitchens save money on dining.'],['question' => 'What activities beyond beaches keep kids entertained?', 'answer' => 'El Yunque Rainforest, bioluminescent bay kayaking, Camuy Caves, Arecibo Observatory, Old San Juan forts (Castillo San Felipe del Morro), Toro Verde zipline park, snorkeling trips, and wildlife refuges. Puerto Rico offers excellent variety beyond beaches.'],['question' => 'When is the best time for a family beach vacation in Puerto Rico?', 'answer' => 'April-May and November offer great weather with fewer crowds and lower prices than peak winter. Summer (June-August) aligns with school vacations but brings rain risk and humidity. Winter (Dec-March) has perfect weather but highest prices and crowds.']];
 
 $extraHead = $extraHead ?? "";
-$extraHead .= articleSchema($pageTitle, $pageDescription, 'https://puertoricobeachfinder.com/guides/family-beach-vacation-planning.php', '2024-01-15');
+$extraHead .= articleSchema($pageTitle, $pageDescription, '/guides/family-beach-vacation-planning', null, '2024-01-15');
 $extraHead .= howToSchema(
     'How to Plan Family Beach Vacation to Puerto Rico',
     'Complete planning guide for families',
@@ -27,9 +27,9 @@ $extraHead .= howToSchema(
 );
 $extraHead .= faqSchema($faqs);
 $extraHead .= breadcrumbSchema([
-    ['name' => 'Home', 'url' => 'https://puertoricobeachfinder.com/'],
-    ['name' => 'Guides', 'url' => 'https://puertoricobeachfinder.com/guides/'],
-    ['name' => 'Family Vacation Planning', 'url' => 'https://puertoricobeachfinder.com/guides/family-beach-vacation-planning.php']
+    ['name' => 'Home', 'url' => '/'],
+    ['name' => 'Guides', 'url' => '/guides/'],
+    ['name' => 'Family Vacation Planning', 'url' => '/guides/family-beach-vacation-planning']
 ]);
 
 $pageTheme = "guide";
@@ -59,7 +59,7 @@ include APP_ROOT . '/components/hero-guide.php';
 <h2 id="best-beaches" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Best Family-Friendly Beaches</h2>
 <?php if(!empty($family_beaches)):?>
 <div class="space-y-4 mb-8"><?php foreach($family_beaches as $beach):?>
-<div class="bg-green-50 border-l-4 border-green-600 p-4"><a href="/beach.php?id=<?php echo $beach['id'];?>" class="text-green-900 font-bold hover:underline"><?php echo h($beach['name']);?></a><p class="text-green-800 text-sm"><?php echo h($beach['municipality']);?></p></div>
+<div class="bg-green-50 border-l-4 border-green-600 p-4"><a href="/beach/<?php echo h($beach['slug']); ?>" class="text-green-900 font-bold hover:underline"><?php echo h($beach['name']);?></a><p class="text-green-800 text-sm"><?php echo h($beach['municipality']);?></p></div>
 <?php endforeach;?></div>
 <?php endif;?>
 <p class="mb-4"><strong>Key features for family beaches:</strong> Lifeguards on duty, calm shallow water, restrooms and showers, food vendors or nearby restaurants, shade (trees or rentals), parking, and easy access.</p>
@@ -100,7 +100,7 @@ include APP_ROOT . '/components/hero-guide.php';
 </div></div>
 <div class="mt-12 pt-8 border-t border-gray-200"><h3 class="text-xl font-bold text-gray-900 mb-4">Related Guides</h3>
 <div class="related-guides-grid"><?php foreach($relatedGuides as $guide):?>
-<a href="/guides/<?php echo h($guide['slug']);?>.php" class="related-guide-card"><span class="related-guide-title"><?php echo h($guide['title']);?></span></a>
+<a href="/guides/<?php echo h($guide['slug']);?>" class="related-guide-card"><span class="related-guide-title"><?php echo h($guide['title']);?></span></a>
 <?php endforeach;?></div></div>
 </article></div></main>
 

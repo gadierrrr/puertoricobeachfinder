@@ -16,12 +16,7 @@ require_once __DIR__ . '/../inc/constants.php';
  * @return array ImageObject schema
  */
 function imageObjectSchema($imageUrl, $caption = null) {
-    $appUrl = $_ENV['APP_URL'] ?? 'http://localhost:8082';
-
-    // Ensure absolute URL
-    $absoluteUrl = strpos($imageUrl, 'http') === 0
-        ? $imageUrl
-        : $appUrl . $imageUrl;
+    $absoluteUrl = absoluteUrl($imageUrl);
 
     // Get dimensions
     $dimensions = getImageDimensions($imageUrl);
@@ -112,7 +107,7 @@ function getAccessibilityFeatures(array $beach) {
  * @return string JSON-LD script tag
  */
 function beachSchema(array $beach, $reviews = null): string {
-    $appUrl = $_ENV['APP_URL'] ?? 'http://localhost:8082';
+    $appUrl = getPublicBaseUrl();
 
     $schema = [
         '@context' => 'https://schema.org',
@@ -205,7 +200,7 @@ function beachSchema(array $beach, $reviews = null): string {
  * Generate ItemList for beach listings
  */
 function beachListSchema(array $beaches, string $listName = 'Puerto Rico Beaches'): string {
-    $appUrl = $_ENV['APP_URL'] ?? 'http://localhost:8082';
+    $appUrl = getPublicBaseUrl();
 
     $items = [];
     foreach ($beaches as $index => $beach) {
@@ -233,7 +228,7 @@ function beachListSchema(array $beaches, string $listName = 'Puerto Rico Beaches
  * Generate Organization schema for the site
  */
 function organizationSchema(): string {
-    $appUrl = $_ENV['APP_URL'] ?? 'http://localhost:8082';
+    $appUrl = getPublicBaseUrl();
     $appName = $_ENV['APP_NAME'] ?? 'Puerto Rico Beach Finder';
 
     // Social media profiles - add/remove as needed
@@ -280,7 +275,7 @@ function organizationSchema(): string {
  * Generate WebSite schema with search action
  */
 function websiteSchema(): string {
-    $appUrl = $_ENV['APP_URL'] ?? 'http://localhost:8082';
+    $appUrl = getPublicBaseUrl();
     $appName = $_ENV['APP_NAME'] ?? 'Puerto Rico Beach Finder';
 
     $schema = [
@@ -305,7 +300,7 @@ function websiteSchema(): string {
  * Generate BreadcrumbList schema
  */
 function breadcrumbSchema(array $items): string {
-    $appUrl = $_ENV['APP_URL'] ?? 'http://localhost:8082';
+    $appUrl = getPublicBaseUrl();
 
     $listItems = [];
     foreach ($items as $index => $item) {
@@ -358,7 +353,7 @@ function faqSchema(array $faqs): string {
 function reviewsSchema(array $beach, array $reviews): string {
     if (empty($reviews)) return '';
 
-    $appUrl = $_ENV['APP_URL'] ?? 'http://localhost:8082';
+    $appUrl = getPublicBaseUrl();
 
     $reviewItems = [];
     foreach ($reviews as $review) {
@@ -412,7 +407,7 @@ function reviewsSchema(array $beach, array $reviews): string {
  * @return string JSON-LD script tag
  */
 function howToSchema($name, $description, $steps, $image = null, $totalTime = null): string {
-    $appUrl = $_ENV['APP_URL'] ?? 'http://localhost:8082';
+    $appUrl = getPublicBaseUrl();
 
     // Validate inputs
     if (empty($name) || empty($steps) || !is_array($steps)) {
@@ -477,7 +472,7 @@ function howToSchema($name, $description, $steps, $image = null, $totalTime = nu
  * @return string JSON-LD script tag
  */
 function touristAttractionSchema(array $beach): string {
-    $appUrl = $_ENV['APP_URL'] ?? 'https://www.puertoricobeachfinder.com';
+    $appUrl = getPublicBaseUrl();
 
     // Map tags to tourist types using TOURIST_TYPE_MAPPINGS constant
     $touristTypes = ['Beach Lovers', 'Nature Enthusiasts'];
@@ -639,15 +634,21 @@ function speakableSchema(): string {
  * Generate Article schema for landing pages
  */
 function articleSchema(string $title, string $description, string $url, ?string $image = null, ?string $datePublished = null): string {
-    $appUrl = $_ENV['APP_URL'] ?? 'https://www.puertoricobeachfinder.com';
+    $appUrl = getPublicBaseUrl();
     $appName = $_ENV['APP_NAME'] ?? 'Puerto Rico Beach Finder';
+
+    // Backward compatibility: some callers historically passed date as arg #4.
+    if ($datePublished === null && is_string($image) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $image)) {
+        $datePublished = $image;
+        $image = null;
+    }
 
     $schema = [
         '@context' => 'https://schema.org',
         '@type' => 'Article',
         'headline' => $title,
         'description' => $description,
-        'url' => strpos($url, 'http') === 0 ? $url : $appUrl . $url,
+        'url' => absoluteUrl($url),
         'author' => [
             '@type' => 'Organization',
             'name' => $appName,
@@ -678,7 +679,7 @@ function articleSchema(string $title, string $description, string $url, ?string 
  * Generate CollectionPage schema for list pages
  */
 function collectionPageSchema(string $title, string $description, array $beaches): string {
-    $appUrl = $_ENV['APP_URL'] ?? 'https://www.puertoricobeachfinder.com';
+    $appUrl = getPublicBaseUrl();
 
     $items = [];
     foreach (array_slice($beaches, 0, 20) as $index => $beach) {

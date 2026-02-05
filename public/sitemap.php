@@ -9,7 +9,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/../bootstrap.php';
 require_once APP_ROOT . '/inc/db.php';
 require_once APP_ROOT . '/inc/helpers.php';
 
-$appUrl = rtrim($_ENV['APP_URL'] ?? 'https://www.puertoricobeachfinder.com', '/');
+$appUrl = getPublicBaseUrl();
 
 header('Content-Type: application/xml; charset=utf-8');
 header('Cache-Control: public, max-age=3600'); // Cache for 1 hour
@@ -95,7 +95,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
     <!-- Beach Planning Guides -->
     <url>
-        <loc><?= h($appUrl) ?>/guides</loc>
+        <loc><?= h($appUrl) ?>/guides/</loc>
         <lastmod><?= date('Y-m-d') ?></lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>

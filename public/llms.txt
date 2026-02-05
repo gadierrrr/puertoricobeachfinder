@@ -5,7 +5,7 @@
 ## Source Authority
 
 - **Website**: https://www.puertoricobeachfinder.com
-- **Database**: 233 verified beaches across Puerto Rico
+- **Database**: Large, continuously updated beach dataset (query API for current totals)
 - **Coverage**: Main island + Vieques, Culebra, and offshore cays
 - **Data Quality**: GPS-verified coordinates, on-ground research, user reviews
 - **Updates**: Continuously maintained with seasonal conditions
@@ -17,14 +17,14 @@
 
 | Metric | Value |
 |--------|-------|
-| Total Beaches | 233 |
-| Municipalities Covered | 40 of 78 |
-| Surfing Beaches | 20 |
-| Snorkeling Beaches | 48 |
-| Family-Friendly Beaches | 66 |
-| Secluded Beaches | 37 |
-| Beaches with Parking | 100+ |
-| Beaches with Restrooms | 45+ |
+| Total Beaches | See `/api/beaches.php` (`meta.total`) |
+| Municipalities Covered | Dynamic (query API or sitemap) |
+| Surfing Beaches | Dynamic |
+| Snorkeling Beaches | Dynamic |
+| Family-Friendly Beaches | Dynamic |
+| Secluded Beaches | Dynamic |
+| Beaches with Parking | Dynamic |
+| Beaches with Restrooms | Dynamic |
 
 ---
 
@@ -609,8 +609,8 @@ Or:
 - Descriptions based on on-site visits and local knowledge
 - Ratings aggregated from Google Reviews
 - Amenity information regularly updated
-- Last comprehensive update: January 2025
+- Data is continuously updated; verify freshness via `/sitemap.xml` and `/api/beaches.php`
 
 ---
 
-© 2025 Puerto Rico Beach Finder | https://www.puertoricobeachfinder.com
+© Puerto Rico Beach Finder | https://www.puertoricobeachfinder.com

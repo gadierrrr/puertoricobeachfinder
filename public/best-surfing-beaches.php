@@ -13,9 +13,9 @@ require_once APP_ROOT . '/inc/collection_query.php';
 require_once APP_ROOT . '/components/seo-schemas.php';
 
 // Page metadata
-$pageTitle = 'Best Surfing Beaches in Puerto Rico (2025 Guide)';
-$pageDescription = 'Discover the best surfing beaches in Puerto Rico for 2025. From Rincon\'s world-class breaks to beginner-friendly spots, find your perfect wave on the island.';
-$canonicalUrl = ($_ENV['APP_URL'] ?? 'https://www.puertoricobeachfinder.com') . '/best-surfing-beaches';
+$pageTitle = 'Best Surfing Beaches in Puerto Rico (2026 Guide)';
+$pageDescription = 'Discover the best surfing beaches in Puerto Rico for 2026. From Rincon\'s world-class breaks to beginner-friendly spots, find your perfect wave on the island.';
+$canonicalUrl = getPublicBaseUrl() . '/best-surfing-beaches';
 
 $collectionKey = 'best-surfing-beaches';
 $collectionAnchorId = 'top-beaches';
@@ -36,7 +36,7 @@ $extraHead = articleSchema(
     $pageDescription,
     '/best-surfing-beaches',
     $surfingBeaches[0]['cover_image'] ?? null,
-    '2025-01-01'
+    '2026-01-01'
 );
 $extraHead .= collectionPageSchema($pageTitle, $pageDescription, $surfingBeaches);
 $extraHead .= websiteSchema();

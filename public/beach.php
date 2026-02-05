@@ -124,7 +124,7 @@ $extraHead .= faqSchema($faqs);
 $extraHead .= speakableSchema();
 
 // Set Open Graph image
-$ogImage = $beach['cover_image'] ? ($_ENV['APP_URL'] ?? '') . $beach['cover_image'] : null;
+$ogImage = $beach['cover_image'] ? absoluteUrl($beach['cover_image']) : null;
 
 // Get WebP version of cover image for optimized delivery
 $webpImage = getWebPImage($beach['cover_image'] ?? '');

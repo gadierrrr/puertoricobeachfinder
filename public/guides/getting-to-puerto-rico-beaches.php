@@ -59,7 +59,7 @@ $faqs = [
 ];
 
 $extraHead = $extraHead ?? "";
-$extraHead .= articleSchema($pageTitle, $pageDescription, 'https://puertoricobeachfinder.com/guides/getting-to-puerto-rico-beaches.php', '2024-01-15');
+$extraHead .= articleSchema($pageTitle, $pageDescription, '/guides/getting-to-puerto-rico-beaches', null, '2024-01-15');
 $extraHead .= howToSchema(
     'How to Get to Puerto Rico Beaches',
     'Complete guide to reaching beaches across Puerto Rico using various transportation methods',
@@ -75,9 +75,9 @@ $extraHead .= howToSchema(
 );
 $extraHead .= faqSchema($faqs);
 $extraHead .= breadcrumbSchema([
-    ['name' => 'Home', 'url' => 'https://puertoricobeachfinder.com/'],
-    ['name' => 'Guides', 'url' => 'https://puertoricobeachfinder.com/guides/'],
-    ['name' => 'Getting to Puerto Rico Beaches', 'url' => 'https://puertoricobeachfinder.com/guides/getting-to-puerto-rico-beaches.php']
+    ['name' => 'Home', 'url' => '/'],
+    ['name' => 'Guides', 'url' => '/guides/'],
+    ['name' => 'Getting to Puerto Rico Beaches', 'url' => '/guides/getting-to-puerto-rico-beaches']
 ]);
 
 $pageTheme = "guide";
@@ -170,7 +170,7 @@ include APP_ROOT . "/components/page-shell.php";
                     <div class="bg-slate-50 border-l-4 border-yellow-400 p-6 my-8">
                         <h4 class="font-bold text-gray-900 mb-2">Start Here: Nearby Beach</h4>
                         <p class="text-gray-800 mb-3">
-                            <a href="/beach.php?id=<?php echo $featuredBeaches[0]['id']; ?>" class="text-gray-700 font-semibold hover:underline">
+                            <a href="/beach/<?php echo h($featuredBeaches[0]['slug']); ?>" class="text-gray-700 font-semibold hover:underline">
                                 <?php echo h($featuredBeaches[0]['name']); ?>
                             </a> in <?php echo h($featuredBeaches[0]['municipality']); ?> is easily accessible
                             and makes a perfect first stop after picking up your rental car.
@@ -231,7 +231,7 @@ include APP_ROOT . "/components/page-shell.php";
                     <div class="bg-slate-50 border-l-4 border-yellow-400 p-6 my-8">
                         <h4 class="font-bold text-gray-900 mb-2">Uber-Accessible Beach</h4>
                         <p class="text-gray-800 mb-3">
-                            <a href="/beach.php?id=<?php echo $featuredBeaches[1]['id']; ?>" class="text-gray-700 font-semibold hover:underline">
+                            <a href="/beach/<?php echo h($featuredBeaches[1]['slug']); ?>" class="text-gray-700 font-semibold hover:underline">
                                 <?php echo h($featuredBeaches[1]['name']); ?>
                             </a> is within Uber's service area and perfect for a car-free beach day.
                         </p>
@@ -312,7 +312,7 @@ include APP_ROOT . "/components/page-shell.php";
                     <div class="bg-slate-50 border-l-4 border-yellow-400 p-6 my-8">
                         <h4 class="font-bold text-gray-900 mb-2">Island Beach Worth the Ferry</h4>
                         <p class="text-gray-800 mb-3">
-                            <a href="/beach.php?id=<?php echo $featuredBeaches[2]['id']; ?>" class="text-gray-700 font-semibold hover:underline">
+                            <a href="/beach/<?php echo h($featuredBeaches[2]['slug']); ?>" class="text-gray-700 font-semibold hover:underline">
                                 <?php echo h($featuredBeaches[2]['name']); ?>
                             </a> is a spectacular destination accessible via ferry.
                             The boat ride adds to the adventure.
@@ -414,7 +414,7 @@ include APP_ROOT . "/components/page-shell.php";
                     <div class="bg-slate-50 border-l-4 border-yellow-400 p-6 my-8">
                         <h4 class="font-bold text-gray-900 mb-2">Budget-Friendly Beach</h4>
                         <p class="text-gray-800 mb-3">
-                            <a href="/beach.php?id=<?php echo $featuredBeaches[3]['id']; ?>" class="text-gray-700 font-semibold hover:underline">
+                            <a href="/beach/<?php echo h($featuredBeaches[3]['slug']); ?>" class="text-gray-700 font-semibold hover:underline">
                                 <?php echo h($featuredBeaches[3]['name']); ?>
                             </a> offers free parking and easy access,
                             keeping your transportation costs minimal.
@@ -463,7 +463,7 @@ include APP_ROOT . "/components/page-shell.php";
                     <h3 class="text-xl font-bold text-gray-900 mb-4">Related Guides</h3>
                     <div class="related-guides-grid">
                         <?php foreach ($relatedGuides as $guide): ?>
-                        <a href="/guides/<?php echo h($guide['slug']); ?>.php" class="related-guide-card">
+                        <a href="/guides/<?php echo h($guide['slug']); ?>" class="related-guide-card">
                             <span class="related-guide-title"><?php echo h($guide['title']); ?></span>
                         </a>
                         <?php endforeach; ?>
