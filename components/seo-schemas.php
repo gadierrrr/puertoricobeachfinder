@@ -111,7 +111,7 @@ function beachSchema(array $beach, $reviews = null): string {
 
     $schema = [
         '@context' => 'https://schema.org',
-        '@type' => 'Beach',
+        '@type' => ['LocalBusiness', 'Beach'],
         '@id' => $appUrl . '/beach/' . $beach['slug'],
         'name' => $beach['name'],
         'description' => $beach['description'] ?? "Explore {$beach['name']} in {$beach['municipality']}, Puerto Rico.",
@@ -376,7 +376,7 @@ function reviewsSchema(array $beach, array $reviews): string {
 
     $schema = [
         '@context' => 'https://schema.org',
-        '@type' => 'Beach',
+        '@type' => ['LocalBusiness', 'Beach'],
         'name' => $beach['name'],
         'url' => $appUrl . '/beach/' . $beach['slug'],
         'review' => $reviewItems
