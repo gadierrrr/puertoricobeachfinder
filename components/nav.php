@@ -211,3 +211,53 @@ $user = $user ?? currentUser();
         </div>
     </div>
 </nav>
+
+<script>
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    const button = document.getElementById('mobile-menu-button');
+    const isOpen = !menu.classList.contains('hidden');
+    menu.classList.toggle('hidden');
+    button.setAttribute('aria-expanded', !isOpen);
+}
+
+function toggleBeachesDropdown() {
+    const menu = document.getElementById('beaches-dropdown-menu');
+    const button = document.querySelector('#beaches-dropdown button');
+    const isOpen = !menu.classList.contains('hidden');
+    menu.classList.toggle('hidden');
+    button.setAttribute('aria-expanded', !isOpen);
+    // Close lang dropdown if open
+    document.getElementById('lang-dropdown-menu')?.classList.add('hidden');
+}
+
+function toggleLangDropdown() {
+    const menu = document.getElementById('lang-dropdown-menu');
+    const button = document.querySelector('#lang-dropdown button');
+    const isOpen = !menu.classList.contains('hidden');
+    menu.classList.toggle('hidden');
+    button.setAttribute('aria-expanded', !isOpen);
+    // Close beaches dropdown if open
+    document.getElementById('beaches-dropdown-menu')?.classList.add('hidden');
+}
+
+function setLanguage(lang) {
+    fetch('/api/set-language.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: 'lang=' + encodeURIComponent(lang)
+    }).then(() => location.reload());
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('#beaches-dropdown')) {
+        document.getElementById('beaches-dropdown-menu')?.classList.add('hidden');
+        document.querySelector('#beaches-dropdown button')?.setAttribute('aria-expanded', 'false');
+    }
+    if (!e.target.closest('#lang-dropdown')) {
+        document.getElementById('lang-dropdown-menu')?.classList.add('hidden');
+        document.querySelector('#lang-dropdown button')?.setAttribute('aria-expanded', 'false');
+    }
+});
+</script>

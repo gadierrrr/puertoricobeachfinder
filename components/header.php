@@ -221,8 +221,6 @@ if ($bodyVariant === 'collection-light') {
             integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
             crossorigin="anonymous"></script>
 
-    <script defer src="/assets/js/nav.min.js?v=1"></script>
-
     <?php if (isset($extraHead)) echo $extraHead; ?>
 </head>
 <body class="<?= h($bodyClasses) ?>">
