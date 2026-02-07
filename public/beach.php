@@ -99,7 +99,9 @@ $avgUserRating = $beach['avg_user_rating'] ?? null;
 // Page metadata
 $pageTitle = $beach['name'] . ' - ' . $beach['municipality'];
 $pageDescription = $beach['description']
-    ? substr($beach['description'], 0, 160)
+    ? (strlen($beach['description']) > 155
+        ? substr($beach['description'], 0, strrpos(substr($beach['description'], 0, 155), ' ') ?: 155) . '...'
+        : $beach['description'])
     : 'Discover ' . $beach['name'] . ' in ' . $beach['municipality'] . ', Puerto Rico. View beach conditions, amenities, photos, and directions.';
 
 // Generate structured data using SEO component (consolidated with reviews)
