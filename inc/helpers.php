@@ -922,8 +922,9 @@ function getSunTimes($lat, $lng, $date = null) {
     // Puerto Rico timezone (AST - Atlantic Standard Time, no DST)
     $timezone = new DateTimeZone('America/Puerto_Rico');
 
-    $sunrise = date_sunrise($timestamp, SUNFUNCS_RET_TIMESTAMP, $lat, $lng, 90.833333, -4);
-    $sunset = date_sunset($timestamp, SUNFUNCS_RET_TIMESTAMP, $lat, $lng, 90.833333, -4);
+    $sunInfo = date_sun_info($timestamp, $lat, $lng);
+    $sunrise = $sunInfo['sunrise'];
+    $sunset = $sunInfo['sunset'];
 
     if ($sunrise === false || $sunset === false) {
         return null;
