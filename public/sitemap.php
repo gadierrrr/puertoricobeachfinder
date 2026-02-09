@@ -29,7 +29,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
     <!-- Beach Match Quiz -->
     <url>
-        <loc><?= h($appUrl) ?>/quiz.php</loc>
+        <loc><?= h($appUrl) ?>/quiz</loc>
         <lastmod><?= date('Y-m-d') ?></lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
@@ -37,7 +37,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
     <!-- Compare Beaches -->
     <url>
-        <loc><?= h($appUrl) ?>/compare.php</loc>
+        <loc><?= h($appUrl) ?>/compare</loc>
         <lastmod><?= date('Y-m-d') ?></lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>

@@ -29,11 +29,11 @@
                     <div class="space-y-2 mt-6">
                         <h5 class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Tools</h5>
                         <ul class="space-y-2 text-sm">
-                            <li><a href="/quiz.php" class="text-gray-400 hover:text-brand-yellow transition-colors flex items-center gap-2">
+                            <li><a href="/quiz" class="text-gray-400 hover:text-brand-yellow transition-colors flex items-center gap-2">
                                 <i data-lucide="compass" class="w-4 h-4"></i>
                                 Beach Match Quiz
                             </a></li>
-                            <li><a href="/compare.php" class="text-gray-400 hover:text-brand-yellow transition-colors flex items-center gap-2">
+                            <li><a href="/compare" class="text-gray-400 hover:text-brand-yellow transition-colors flex items-center gap-2">
                                 <i data-lucide="git-compare" class="w-4 h-4"></i>
                                 Compare Beaches
                             </a></li>
@@ -895,7 +895,7 @@
     function goToCompare() {
         const beaches = getCompareBeaches();
         if (beaches.length >= 2) {
-            window.location.href = '/compare.php?beaches=' + beaches.map(b => b.id).join(',');
+            window.location.href = '/compare?beaches=' + beaches.map(b => b.id).join(',');
         }
     }
 

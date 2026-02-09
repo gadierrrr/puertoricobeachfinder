@@ -24,6 +24,23 @@ if ($requestPath === '/index.php') {
     exit;
 }
 
+// Trailing-slash redirect or 404 for unknown routes.
+// Any request reaching index.php with a non-root path is a Nginx catch-all
+// fallback — either a trailing-slash variant or an unknown URL.
+// Real directory paths like /guides/ are served by Nginx's directory index
+// and never reach this code.
+if ($requestPath !== '/') {
+    if (str_ends_with($requestPath, '/')) {
+        $clean = rtrim($requestPath, '/');
+        $qs = $_SERVER['QUERY_STRING'] ?? '';
+        header('Location: ' . $clean . ($qs !== '' ? '?' . $qs : ''), true, 301);
+        exit;
+    }
+    http_response_code(404);
+    include APP_ROOT . '/public/errors/404.php';
+    exit;
+}
+
 // Page metadata
 $pageTitle = 'Discover Puerto Rico Beaches';
 $pageDescription = 'Find your perfect Puerto Rico beach from a continuously updated island-wide database. Filter by amenities, conditions, and distance. Explore beaches for surfing, snorkeling, family fun, and more.';
@@ -479,7 +496,7 @@ function scrollCarousel(id, direction) {
         <p class="text-gray-400 mb-8 text-base md:text-lg max-w-2xl mx-auto">
             Answer 3 quick questions. Get personalized beach recommendations.
         </p>
-        <a href="/quiz.php" class="inline-block px-8 md:px-12 py-3 md:py-4 bg-brand-yellow text-brand-darker font-bold rounded-full hover:scale-105 transition-transform">
+        <a href="/quiz" class="inline-block px-8 md:px-12 py-3 md:py-4 bg-brand-yellow text-brand-darker font-bold rounded-full hover:scale-105 transition-transform">
             Take the Quiz
         </a>
     </div>

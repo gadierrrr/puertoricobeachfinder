@@ -6,6 +6,7 @@
 
 require_once __DIR__ . '/../inc/session.php';
 if (session_status() === PHP_SESSION_NONE) {
+    session_cache_limiter('');   // Prevent PHP from emitting Pragma/Expires
     session_start();
 }
 require_once __DIR__ . '/../inc/security_headers.php';
