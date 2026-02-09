@@ -65,7 +65,7 @@ $user = $user ?? currentUser();
                 </div>
             </div>
 
-            <a href="/quiz.php" class="text-sm text-white/80 hover:text-brand-yellow px-4 py-1 transition-colors" role="menuitem">Quiz</a>
+            <a href="/quiz" class="text-sm text-white/80 hover:text-brand-yellow px-4 py-1 transition-colors" role="menuitem">Quiz</a>
             <a href="/?view=map" class="text-sm text-white/80 hover:text-brand-yellow px-4 py-1 transition-colors" role="menuitem">Map</a>
         </div>
 
@@ -161,7 +161,7 @@ $user = $user ?? currentUser();
             <!-- Tools Section -->
             <div class="border-t border-white/10 mt-3 pt-3">
                 <div class="text-xs text-white/40 uppercase tracking-wider px-3 pt-1 pb-1">Tools</div>
-                <a href="/quiz.php" class="flex items-center gap-3 text-white/80 hover:text-brand-yellow py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
+                <a href="/quiz" class="flex items-center gap-3 text-white/80 hover:text-brand-yellow py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
                     <i data-lucide="sparkles" class="w-5 h-5" aria-hidden="true"></i>
                     <span>Find My Beach Quiz</span>
                 </a>
