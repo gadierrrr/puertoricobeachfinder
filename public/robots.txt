@@ -16,6 +16,8 @@ Disallow: /login.php
 Disallow: /logout.php
 Disallow: /verify.php
 Disallow: /favorites.php
+Disallow: /index.php
+Disallow: /municipality.php
 
 # Allow specific API for rich results
 Allow: /api/beaches.php
@@ -27,7 +29,6 @@ Allow: /best-surfing-beaches
 Allow: /best-family-beaches
 Allow: /beaches-near-san-juan
 Allow: /beaches-in-*
-Allow: /municipality.php
 
 # Allow AI crawlers info files
 Allow: /llms.txt

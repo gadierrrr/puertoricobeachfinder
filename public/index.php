@@ -13,6 +13,17 @@ require_once APP_ROOT . '/inc/geo.php';
 require_once APP_ROOT . '/inc/collection_query.php';
 require_once APP_ROOT . '/components/seo-schemas.php';
 
+$requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+if ($requestPath === '/index.php') {
+    $queryString = $_SERVER['QUERY_STRING'] ?? '';
+    $target = '/';
+    if ($queryString !== '') {
+        $target .= '?' . $queryString;
+    }
+    header('Location: ' . $target, true, 301);
+    exit;
+}
+
 // Page metadata
 $pageTitle = 'Discover Puerto Rico Beaches';
 $pageDescription = 'Find your perfect Puerto Rico beach from a continuously updated island-wide database. Filter by amenities, conditions, and distance. Explore beaches for surfing, snorkeling, family fun, and more.';

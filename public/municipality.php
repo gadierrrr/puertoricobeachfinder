@@ -14,6 +14,11 @@ require_once APP_ROOT . '/components/seo-schemas.php';
 
 // Get municipality from slug or query parameter
 $municipalitySlug = $_GET['m'] ?? '';
+$requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+if ($requestPath === '/municipality.php' && $municipalitySlug !== '') {
+    header('Location: /beaches-in-' . $municipalitySlug, true, 301);
+    exit;
+}
 
 if (!$municipalitySlug) {
     http_response_code(404);
