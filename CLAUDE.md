@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Puerto Rico Beach Finder is a PHP-based web application that provides a searchable database of 230+ beaches across Puerto Rico. It uses SQLite for data storage, HTMX for dynamic interactions, and Tailwind CSS for styling.
+Puerto Rico Beach Finder is a PHP-based web application that provides a searchable database of 468 beaches across Puerto Rico. It uses SQLite for data storage, HTMX for dynamic interactions, and Tailwind CSS for styling.
 
 ## Common Commands
 
@@ -92,6 +92,22 @@ php scripts/migrate.php
 - `hero-guide.php` - Used by all guide pages, requires `$pageTitle`, `$pageDescription`, optional `$breadcrumbs`
 - `components/collection/explorer.php` - Shared collection explorer (hero + toolbar + results)
 - Always use shared components for consistency; avoid creating inline variants of existing components
+
+### URL Conventions & Routing
+
+**Always use clean URLs (no `.php` extensions) in links, nav, footer, sitemap, and templates.** Nginx handles extensionless routing (e.g., `/quiz` serves `quiz.php`, `/compare` serves `compare.php`). Using `.php` URLs causes an unnecessary 301 redirect hop.
+
+```php
+<!-- WRONG -->
+<a href="/quiz.php">Quiz</a>
+<a href="/compare.php?beaches=1,2">Compare</a>
+
+<!-- CORRECT -->
+<a href="/quiz">Quiz</a>
+<a href="/compare?beaches=1,2">Compare</a>
+```
+
+**Soft 404 handling:** `public/index.php` catches unknown routes that fall through Nginx's catch-all. Any request reaching `index.php` where the path is not `/` returns HTTP 404 (with `public/errors/404.php`). Trailing-slash variants (e.g., `/best-beaches/`) get 301-redirected to the non-slash version. Real directories like `/guides/` are served by Nginx's directory index and never reach this logic.
 
 ### Database Schema (Key Tables)
 - `beaches` - Main beach records with coordinates, ratings, conditions
