@@ -183,7 +183,7 @@ class BatchProcessor {
      * Get beaches to process
      */
     private function getBeachesToProcess(?string $startBeachId, ?array $checkpoint): array {
-        $sql = "SELECT id, name, municipality, latitude, longitude FROM beaches WHERE 1=1";
+        $sql = "SELECT id, name, municipality, lat, lng FROM beaches WHERE 1=1";
         $params = [];
 
         // Resume from checkpoint or start point
@@ -206,7 +206,7 @@ class BatchProcessor {
      */
     private function getBeach(string $beachId): array {
         require_once __DIR__ . '/../../inc/db.php';
-        $beach = queryOne("SELECT id, name, municipality, latitude, longitude FROM beaches WHERE id = ?", [$beachId]);
+        $beach = queryOne("SELECT id, name, municipality, lat, lng FROM beaches WHERE id = ?", [$beachId]);
 
         if (!$beach) {
             throw new Exception("Beach not found: {$beachId}");
