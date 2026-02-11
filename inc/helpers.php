@@ -177,7 +177,7 @@ function currentUser() {
 }
 
 function isAuthenticated() {
-    return isset($_SESSION['user_id']);
+    return session_status() === PHP_SESSION_ACTIVE && isset($_SESSION['user_id']);
 }
 
 function requireAuth() {
@@ -219,6 +219,7 @@ function generateToken($length = 32) {
 }
 
 function csrfToken() {
+    if (session_status() !== PHP_SESSION_ACTIVE) return '';
     if (!isset($_SESSION['csrf_token'])) {
         $_SESSION['csrf_token'] = generateToken(32);
     }
@@ -1574,49 +1575,49 @@ function getRelatedGuides($beachTags = [], $limit = 3) {
     $guideMap = [
         'surfing' => [
             'title' => 'Puerto Rico Surfing Guide',
-            'url' => '/guides/surfing-guide.php',
+            'url' => '/guides/surfing-guide',
             'icon' => 'waves',
             'priority' => 10
         ],
         'snorkeling' => [
             'title' => 'Snorkeling in Puerto Rico',
-            'url' => '/guides/snorkeling-guide.php',
+            'url' => '/guides/snorkeling-guide',
             'icon' => 'fish',
             'priority' => 10
         ],
         'family' => [
             'title' => 'Family Beach Vacation Planning',
-            'url' => '/guides/family-beach-vacation-planning.php',
+            'url' => '/guides/family-beach-vacation-planning',
             'icon' => 'users',
             'priority' => 9
         ],
         'photography' => [
             'title' => 'Beach Photography Tips',
-            'url' => '/guides/beach-photography-tips.php',
+            'url' => '/guides/beach-photography-tips',
             'icon' => 'camera',
             'priority' => 8
         ],
         'secluded' => [
             'title' => 'Getting to Puerto Rico Beaches',
-            'url' => '/guides/getting-to-puerto-rico-beaches.php',
+            'url' => '/guides/getting-to-puerto-rico-beaches',
             'icon' => 'map-pin',
             'priority' => 7
         ],
         'remote' => [
             'title' => 'Getting to Puerto Rico Beaches',
-            'url' => '/guides/getting-to-puerto-rico-beaches.php',
+            'url' => '/guides/getting-to-puerto-rico-beaches',
             'icon' => 'map-pin',
             'priority' => 7
         ],
         'wild' => [
             'title' => 'Beach Safety Tips',
-            'url' => '/guides/beach-safety-tips.php',
+            'url' => '/guides/beach-safety-tips',
             'icon' => 'shield',
             'priority' => 8
         ],
         'camping' => [
             'title' => 'Beach Packing List',
-            'url' => '/guides/beach-packing-list.php',
+            'url' => '/guides/beach-packing-list',
             'icon' => 'backpack',
             'priority' => 6
         ]
@@ -1626,19 +1627,19 @@ function getRelatedGuides($beachTags = [], $limit = 3) {
     $universalGuides = [
         [
             'title' => 'Best Time to Visit Puerto Rico Beaches',
-            'url' => '/guides/best-time-visit-puerto-rico-beaches.php',
+            'url' => '/guides/best-time-visit-puerto-rico-beaches',
             'icon' => 'calendar',
             'priority' => 5
         ],
         [
             'title' => 'Beach Packing List',
-            'url' => '/guides/beach-packing-list.php',
+            'url' => '/guides/beach-packing-list',
             'icon' => 'backpack',
             'priority' => 4
         ],
         [
             'title' => 'Beach Safety Tips',
-            'url' => '/guides/beach-safety-tips.php',
+            'url' => '/guides/beach-safety-tips',
             'icon' => 'shield',
             'priority' => 3
         ]

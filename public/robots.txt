@@ -34,8 +34,11 @@ Allow: /beaches-in-*
 Allow: /llms.txt
 Allow: /llms-full.txt
 
+# Block parameter URLs from crawl budget
+Disallow: /*?municipality=
+Disallow: /*?tags[]=
+Disallow: /*?sort=
+Disallow: /*?page=
+
 # Sitemap location
 Sitemap: https://www.puertoricobeachfinder.com/sitemap.xml
-
-# Crawl delay (be polite)
-Crawl-delay: 1
