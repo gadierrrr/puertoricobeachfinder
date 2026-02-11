@@ -192,13 +192,19 @@ foreach ($beaches as $beach):
 
     <!-- Municipality Landing Pages -->
 <?php
-$municipalities = array_column(
+function stripAccents($str) {
+    $map = ['á'=>'a','é'=>'e','í'=>'i','ó'=>'o','ú'=>'u','ñ'=>'n','ü'=>'u',
+            'Á'=>'A','É'=>'E','Í'=>'I','Ó'=>'O','Ú'=>'U','Ñ'=>'N','Ü'=>'U'];
+    return strtr($str, $map);
+}
+
+$municipalities = array_unique(array_column(
     query("SELECT DISTINCT municipality FROM beaches WHERE publish_status = 'published' ORDER BY municipality"),
     'municipality'
-);
+));
 
 foreach ($municipalities as $municipality):
-    $slug = strtolower(str_replace(' ', '-', $municipality));
+    $slug = strtolower(str_replace(' ', '-', stripAccents($municipality)));
 ?>
     <url>
         <loc><?= h($appUrl) ?>/beaches-in-<?= h($slug) ?></loc>

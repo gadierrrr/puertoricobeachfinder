@@ -5,7 +5,7 @@
  */
 
 require_once __DIR__ . '/../inc/session.php';
-if (session_status() === PHP_SESSION_NONE) {
+if (isset($_COOKIE['BEACH_FINDER_SESSION']) && session_status() === PHP_SESSION_NONE) {
     session_cache_limiter('');   // Prevent PHP from emitting Pragma/Expires
     session_start();
 }

@@ -7,7 +7,7 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/../bootstrap.php';
 
 require_once APP_ROOT . '/inc/session.php';
-session_start();
+// Session started conditionally in header.php (only when cookie exists)
 require_once APP_ROOT . '/inc/db.php';
 require_once APP_ROOT . '/inc/helpers.php';
 require_once APP_ROOT . '/inc/constants.php';
@@ -228,11 +228,10 @@ include APP_ROOT . '/components/header.php';
     </div>
 
     <?php
-    // Pre-fetch data needed for sidebar
-    require_once APP_ROOT . '/inc/weather.php';
+    // Pre-fetch data needed for sidebar (weather loaded client-side for fast TTFB)
     require_once APP_ROOT . '/inc/crowd.php';
-    $weather = getWeatherForLocation($beach['lat'], $beach['lng']);
-    $recommendation = $weather ? getBeachRecommendation($weather) : null;
+    $weather = null;
+    $recommendation = null;
     $crowdLevel = getBeachCrowdLevel($beach['id'], 4);
     $sunTimes = getSunTimes($beach['lat'], $beach['lng']);
     ?>
@@ -422,12 +421,21 @@ include APP_ROOT . '/components/header.php';
         <div class="lg:w-[37%] mt-8 lg:mt-0">
             <div class="lg:sticky lg:top-24 space-y-4">
 
-                <!-- Weather Widget -->
-                <?php if ($weather): ?>
-                <div class="beach-detail-card p-4">
-                    <?php $size = 'sidebar'; include APP_ROOT . '/components/weather-widget.php'; ?>
+                <!-- Weather Widget (loaded client-side) -->
+                <div class="beach-detail-card p-4" id="weather-widget-container"
+                     data-lat="<?= h($beach['lat']) ?>" data-lng="<?= h($beach['lng']) ?>">
+                    <div class="animate-pulse">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="h-6 bg-white/10 rounded w-32"></div>
+                            <div class="h-8 bg-white/10 rounded w-16"></div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div class="h-14 bg-white/10 rounded"></div>
+                            <div class="h-14 bg-white/10 rounded"></div>
+                            <div class="h-14 bg-white/10 rounded"></div>
+                        </div>
+                    </div>
                 </div>
-                <?php endif; ?>
 
                 <!-- Current Conditions -->
                 <?php if ($beach['sargassum'] || $beach['surf'] || $beach['wind']): ?>
@@ -636,19 +644,19 @@ include APP_ROOT . '/components/header.php';
 
 <!-- Sticky Quick Actions Bar (Mobile Only) -->
 <?php
-$stickyWeatherIcon = $weather['current']['icon'] ?? '☀️';
-$stickyWeatherTemp = isset($weather['current']['temperature']) ? round($weather['current']['temperature']) . '°F' : '--';
-$stickyWeatherVerdict = $recommendation['verdict'] ?? 'Check weather';
+$stickyWeatherIcon = '🌤️';
+$stickyWeatherTemp = '--';
+$stickyWeatherVerdict = 'Loading...';
 $stickyCrowdLabel = $crowdLevel['label'] ?? 'No data';
 $stickyCrowdColor = $crowdLevel['color'] ?? 'gray';
 $directionsUrl = getDirectionsUrl($beach);
 ?>
 <div class="beach-sticky-bar" aria-label="Quick actions">
     <div class="sticky-weather">
-        <span class="sticky-icon"><?= h($stickyWeatherIcon) ?></span>
+        <span class="sticky-icon" id="sticky-weather-icon"><?= h($stickyWeatherIcon) ?></span>
         <div class="sticky-text">
-            <span class="sticky-value"><?= h($stickyWeatherTemp) ?></span>
-            <span class="sticky-label"><?= h($stickyWeatherVerdict) ?></span>
+            <span class="sticky-value" id="sticky-weather-temp"><?= h($stickyWeatherTemp) ?></span>
+            <span class="sticky-label" id="sticky-weather-verdict"><?= h($stickyWeatherVerdict) ?></span>
         </div>
     </div>
     <div class="sticky-crowd sticky-crowd-<?= h($stickyCrowdColor) ?>">
@@ -1757,6 +1765,41 @@ document.addEventListener('keydown', (e) => {
         closePhotoModal();
     }
 });
+</script>
+
+<script>
+// Load weather data client-side (avoids blocking TTFB with external API call)
+(function() {
+    const container = document.getElementById('weather-widget-container');
+    if (!container) return;
+    const lat = container.dataset.lat;
+    const lng = container.dataset.lng;
+    if (!lat || !lng) return;
+
+    // Fetch rendered weather widget HTML
+    fetch('/api/weather-widget.php?lat=' + encodeURIComponent(lat) + '&lng=' + encodeURIComponent(lng) + '&size=sidebar')
+        .then(r => r.ok ? r.text() : Promise.reject())
+        .then(html => { container.innerHTML = html; })
+        .catch(() => { container.innerHTML = '<div class="text-sm text-gray-400">Weather unavailable</div>'; });
+
+    // Fetch weather JSON for sticky bar
+    fetch('/api/weather.php?lat=' + encodeURIComponent(lat) + '&lng=' + encodeURIComponent(lng))
+        .then(r => r.ok ? r.json() : Promise.reject())
+        .then(data => {
+            if (!data.success || !data.data) return;
+            const w = data.data;
+            const iconEl = document.getElementById('sticky-weather-icon');
+            const tempEl = document.getElementById('sticky-weather-temp');
+            const verdictEl = document.getElementById('sticky-weather-verdict');
+            if (iconEl && w.current) iconEl.textContent = w.current.icon || '🌤️';
+            if (tempEl && w.current) tempEl.textContent = w.current.temperature ? Math.round(w.current.temperature) + '°F' : '--';
+            if (verdictEl && w.recommendation) verdictEl.textContent = w.recommendation.verdict || 'Check weather';
+        })
+        .catch(() => {
+            const verdictEl = document.getElementById('sticky-weather-verdict');
+            if (verdictEl) verdictEl.textContent = 'Check weather';
+        });
+})();
 </script>
 
 <?php include APP_ROOT . '/components/footer.php'; ?>
