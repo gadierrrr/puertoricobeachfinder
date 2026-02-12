@@ -6,7 +6,9 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/../bootstrap.php';
 
 require_once APP_ROOT . '/inc/session.php';
-session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 require_once APP_ROOT . '/inc/security_headers.php';
 require_once APP_ROOT . '/inc/admin.php';
 

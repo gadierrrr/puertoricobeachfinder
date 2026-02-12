@@ -7,7 +7,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/../bootstrap.php';
 
 require_once APP_ROOT . '/inc/db.php';
 require_once APP_ROOT . '/inc/session.php';
-session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 
 // Ensure CSRF token exists
 if (empty($_SESSION['csrf_token'])) {
@@ -20,7 +22,9 @@ $beachId = $_GET['id'] ?? '';
 // Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require_once APP_ROOT . '/inc/session.php';
-    session_start();
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        session_start();
+    }
     require_once APP_ROOT . '/inc/admin.php';
     requireAdmin();
 
