@@ -1640,6 +1640,7 @@ async function submitPhotoUpload(event) {
 // Photo lightbox
 function openPhotoModal(url, caption) {
     document.getElementById('photo-lightbox-img').src = url;
+    document.getElementById('photo-lightbox-img').alt = caption || '';
     document.getElementById('photo-lightbox-caption').textContent = caption || '';
     document.getElementById('photo-lightbox').classList.remove('hidden');
     document.getElementById('photo-lightbox').classList.add('flex');
