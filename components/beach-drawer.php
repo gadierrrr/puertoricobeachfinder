@@ -62,6 +62,11 @@ if ($lat && $lng) {
 }
 ?>
 
+<div data-bf-beach-id="<?= h($beach['id'] ?? '') ?>"
+     data-bf-beach-slug="<?= h($beach['slug'] ?? '') ?>"
+     data-bf-municipality="<?= h($municipality) ?>"
+     data-bf-source="drawer">
+
 <!-- Drawer Handle (mobile) -->
 <div class="drawer-handle md:hidden" aria-hidden="true"></div>
 
@@ -452,6 +457,7 @@ if ($lat && $lng) {
         <a href="<?= h(getDirectionsUrl($beach)) ?>"
            target="_blank"
            rel="noopener noreferrer"
+           data-bf-track="directions"
            class="flex-1 flex items-center justify-center gap-2 bg-brand-yellow hover:bg-yellow-300 text-brand-darker py-3 rounded-lg font-semibold transition-colors"
            aria-label="Get directions to <?= h($name) ?>">
             <i data-lucide="navigation" class="w-5 h-5" aria-hidden="true"></i>
@@ -472,4 +478,6 @@ if ($lat && $lng) {
             View full beach page →
         </a>
     </div>
+</div>
+
 </div>

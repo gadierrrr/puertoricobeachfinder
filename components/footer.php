@@ -144,10 +144,17 @@
     <?php endif; ?>
 
     <?php if (!isset($skipAppScripts) || !$skipAppScripts): ?>
+    <script>
+    window.BeachFinderMeta = {
+        authenticated: <?= isAuthenticated() ? '1' : '0' ?>,
+        user_id: <?= isAuthenticated() ? json_encode((string)($_SESSION['user_id'] ?? '')) : 'null' ?>
+    };
+    </script>
     <!-- App JavaScript (defer for non-blocking load) -->
     <script defer src="/assets/js/app.min.js"></script>
     <script defer src="/assets/js/geolocation.js"></script>
     <script defer src="/assets/js/filters.js"></script>
+    <script defer src="/assets/js/analytics.js"></script>
     <script defer src="/assets/js/share.js"></script>
     <?php endif; ?>
 

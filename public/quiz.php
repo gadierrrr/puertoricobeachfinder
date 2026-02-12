@@ -291,6 +291,51 @@ $breadcrumbs = [
                         <!-- Results populated by JavaScript -->
                     </div>
 
+                    <!-- Unlock Block -->
+                    <div id="quiz-unlock" class="mt-8 bg-white/5 border border-white/10 rounded-xl p-5">
+                        <h3 class="text-lg font-bold text-brand-text mb-2">Unlock the full list + shareable link</h3>
+                        <p class="text-sm text-brand-muted mb-4">Get the full set of matches and a link you can save or send to friends.</p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <form id="quiz-send-form" class="md:col-span-2 flex flex-col sm:flex-row gap-2">
+                                <input type="email" id="quiz-send-email" required placeholder="you@email.com"
+                                       class="flex-1 px-3 h-11 rounded-lg bg-white/5 border border-white/20 text-white placeholder-gray-500 focus:ring-2 focus:ring-brand-yellow/50 focus:border-brand-yellow/50">
+                                <button type="submit"
+                                        class="h-11 px-5 rounded-lg bg-brand-yellow hover:bg-yellow-300 text-brand-darker font-semibold transition-colors">
+                                    Email me results
+                                </button>
+                            </form>
+
+	                            <a id="quiz-whatsapp-link"
+	                               href="#"
+	                               target="_blank"
+	                               rel="noopener noreferrer"
+	                               class="h-11 inline-flex items-center justify-center gap-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 text-white font-semibold transition-colors">
+	                                <span>WhatsApp</span>
+	                            </a>
+	                        </div>
+
+                        <div class="mt-3 flex flex-col sm:flex-row gap-2">
+                            <button type="button" id="quiz-save-btn"
+                                    class="h-11 flex-1 inline-flex items-center justify-center rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 text-white font-semibold transition-colors">
+                                Save to Favorites
+                            </button>
+                            <a id="quiz-results-link"
+                               href="#"
+                               class="h-11 flex-1 inline-flex items-center justify-center rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 text-white font-semibold transition-colors">
+                                Open results link
+                            </a>
+                        </div>
+
+                        <div id="quiz-unlock-message" class="hidden mt-3 text-sm px-4 py-3 rounded-lg"></div>
+                    </div>
+
+                    <!-- Full list (hidden until unlocked) -->
+                    <div id="quiz-full-list" class="hidden mt-8">
+                        <h3 class="text-lg font-bold text-brand-text mb-3">Full list</h3>
+                        <div id="results-full-list" class="space-y-3"></div>
+                    </div>
+
                     <div class="mt-8 pt-6 border-t border-white/10 text-center">
                         <button onclick="restartQuiz()" class="text-brand-yellow hover:text-yellow-300 font-medium">
                             ← Take the quiz again
@@ -434,8 +479,14 @@ const quizState = {
         facilities: [],
         crowd: null,
         location: null
-    }
+    },
+    resultsToken: null,
+    matches: [],
+    unlocked: false
 };
+
+const QUIZ_AUTHENTICATED = <?= isAuthenticated() ? 'true' : 'false' ?>;
+const QUIZ_CSRF = <?= json_encode(csrfToken()) ?>;
 
 // Initialize quiz
 document.addEventListener('DOMContentLoaded', () => {
@@ -581,6 +632,8 @@ async function submitQuiz() {
         const data = await response.json();
 
         if (data.success) {
+            quizState.resultsToken = data.results_token || null;
+            quizState.matches = data.matches || [];
             displayResults(data.matches);
         } else {
             throw new Error(data.error || 'Failed to get results');
@@ -596,7 +649,8 @@ function displayResults(matches) {
     document.getElementById('quiz-loading').classList.add('hidden');
 
     const resultsList = document.getElementById('results-list');
-    resultsList.innerHTML = matches.map((beach, index) => `
+    const top3 = (matches || []).slice(0, 3);
+    resultsList.innerHTML = top3.map((beach, index) => `
         <div class="result-card">
             <img src="${beach.cover_image || '/images/beaches/placeholder-beach.webp'}"
                  alt="${beach.name}"
@@ -629,6 +683,109 @@ function displayResults(matches) {
     `).join('');
 
     document.getElementById('quiz-results').classList.remove('hidden');
+
+    if (typeof window.bfTrack === 'function') {
+        window.bfTrack('A2_quiz_complete', { source: 'quiz' });
+    }
+
+    initUnlockBlock();
+}
+
+function initUnlockBlock() {
+    const token = quizState.resultsToken;
+    const unlock = document.getElementById('quiz-unlock');
+    const linkEl = document.getElementById('quiz-results-link');
+    const waEl = document.getElementById('quiz-whatsapp-link');
+    if (!unlock || !token) return;
+
+    const resultsUrl = `${window.location.origin}/quiz-results?token=${encodeURIComponent(token)}`;
+    if (linkEl) linkEl.href = resultsUrl;
+    if (waEl) waEl.href = `https://wa.me/?text=${encodeURIComponent('My Puerto Rico beach matches: ' + resultsUrl)}`;
+
+    const form = document.getElementById('quiz-send-form');
+    form?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('quiz-send-email')?.value?.trim() || '';
+        if (!email) return;
+
+        try {
+            const fd = new FormData();
+            fd.set('email', email);
+            fd.set('results_token', token);
+            fd.set('website', '');
+            const res = await fetch('/api/send-quiz-results.php', { method: 'POST', body: fd });
+            const payload = await res.json();
+            if (!res.ok || !payload.success) throw new Error(payload.error || 'Send failed');
+
+            if (typeof showToast === 'function') showToast('Sent! Check your inbox.', 'success', 3500);
+            if (typeof window.bfTrack === 'function') window.bfTrack('L1_results_sent', { source: 'quiz' });
+            unlockFullList();
+        } catch (err) {
+            if (typeof showToast === 'function') showToast('Could not send results. Please try again.', 'error', 4000);
+        }
+    }, { once: true });
+
+    document.getElementById('quiz-save-btn')?.addEventListener('click', async () => {
+        if (!token) return;
+
+        if (!QUIZ_AUTHENTICATED) {
+            if (typeof showSignupPrompt === 'function') {
+                showSignupPrompt('favorites', '/quiz?src=quiz');
+            } else {
+                window.location.href = '/login?redirect=' + encodeURIComponent('/quiz?src=quiz');
+            }
+            return;
+        }
+
+        try {
+            const fd = new FormData();
+            fd.set('results_token', token);
+            if (QUIZ_CSRF) fd.set('csrf_token', QUIZ_CSRF);
+            const res = await fetch('/api/favorites/bulk-add.php', { method: 'POST', body: fd });
+            const payload = await res.json();
+            if (!res.ok || !payload.success) throw new Error(payload.error || 'Save failed');
+
+            if (typeof showToast === 'function') showToast('Saved to favorites!', 'success', 3000);
+            unlockFullList();
+        } catch (err) {
+            if (typeof showToast === 'function') showToast('Could not save favorites. Please try again.', 'error', 4000);
+        }
+    }, { once: true });
+}
+
+function unlockFullList() {
+    if (quizState.unlocked) return;
+    quizState.unlocked = true;
+    const full = document.getElementById('quiz-full-list');
+    const fullList = document.getElementById('results-full-list');
+    const matches = quizState.matches || [];
+    if (!full || !fullList) return;
+
+    fullList.innerHTML = matches.slice(0, 8).map((beach) => `
+        <div class="result-card">
+            <img src="${beach.cover_image || '/images/beaches/placeholder-beach.webp'}"
+                 alt="${beach.name}"
+                 class="w-20 h-20 object-cover rounded-lg shrink-0">
+            <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between gap-2">
+                    <div>
+                        <h3 class="font-semibold text-brand-text">${beach.name}</h3>
+                        <p class="text-sm text-brand-muted">${beach.municipality}</p>
+                    </div>
+                    <div class="match-score ${beach.score >= 90 ? 'excellent' : beach.score >= 75 ? 'great' : 'good'}">
+                        ${beach.score}%
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <button onclick="openBeachDrawer('${beach.id}')"
+                            class="text-sm text-brand-yellow hover:text-yellow-300 font-medium">
+                        View Details →
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    full.classList.remove('hidden');
 }
 
 function restartQuiz() {
@@ -654,6 +811,14 @@ function restartQuiz() {
     document.getElementById('quiz-loading').classList.add('hidden');
     document.getElementById('quiz-results').classList.add('hidden');
     document.getElementById('quiz-nav').classList.remove('hidden');
+
+    quizState.resultsToken = null;
+    quizState.matches = [];
+    quizState.unlocked = false;
+
+    document.getElementById('quiz-full-list')?.classList.add('hidden');
+    const fullList = document.getElementById('results-full-list');
+    if (fullList) fullList.innerHTML = '';
 
     updateProgress();
     updateNavigation();

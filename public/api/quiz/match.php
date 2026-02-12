@@ -8,6 +8,12 @@
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/../bootstrap.php';
 
+require_once APP_ROOT . '/inc/session.php';
+if (isset($_COOKIE['BEACH_FINDER_SESSION']) && session_status() === PHP_SESSION_NONE) {
+    session_cache_limiter('');
+    session_start();
+}
+
 require_once APP_ROOT . '/inc/db.php';
 require_once APP_ROOT . '/inc/helpers.php';
 
@@ -394,8 +400,43 @@ if (count($diverseMatches) < 5) {
     }
 }
 
+// Persist a shareable quiz result token
+$token = bin2hex(random_bytes(16));
+$anonId = (string)($_COOKIE['BF_ANON_ID'] ?? '');
+if ($anonId === '') {
+    $anonId = uuid();
+    $secure = getRequestScheme() === 'https';
+    setcookie('BF_ANON_ID', $anonId, [
+        'expires' => time() + 180 * 24 * 60 * 60,
+        'path' => '/',
+        'secure' => $secure,
+        'httponly' => false,
+        'samesite' => 'Lax',
+    ]);
+}
+
+$quizId = uuid();
+$userId = isAuthenticated() ? (string)($_SESSION['user_id'] ?? '') : null;
+if ($userId === '') {
+    $userId = null;
+}
+
+// Best-effort insert (migration adds quiz_results.token; if missing, it will fail silently and the UI can still function)
+@execute("
+    INSERT INTO quiz_results (id, user_id, session_id, token, answers, matched_beaches, created_at)
+    VALUES (:id, :user_id, :session_id, :token, :answers, :matched_beaches, datetime('now'))
+", [
+    ':id' => $quizId,
+    ':user_id' => $userId,
+    ':session_id' => $anonId,
+    ':token' => $token,
+    ':answers' => json_encode($input),
+    ':matched_beaches' => json_encode(array_slice($diverseMatches, 0, 8)),
+]);
+
 jsonResponse([
     'success' => true,
     'matches' => array_slice($diverseMatches, 0, 8),
+    'results_token' => $token,
     'total_scored' => count($beaches)
 ]);

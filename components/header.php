@@ -116,6 +116,7 @@ if ($bodyVariant === 'collection-light') {
             '/beaches-near-san-juan-airport.php',
             '/hidden-beaches-puerto-rico.php',
             '/quiz.php',
+            '/quiz-results.php',
             '/compare.php',
             '/offline.php',
             '/login.php',
@@ -177,6 +178,9 @@ if ($bodyVariant === 'collection-light') {
     $robots = in_array($normalizedRequestPath, $noindexCanonicalPaths, true)
         ? 'noindex, nofollow, noarchive'
         : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1';
+    if (isset($robotsOverride) && is_string($robotsOverride) && trim($robotsOverride) !== '') {
+        $robots = trim($robotsOverride);
+    }
     ?>
     <link rel="canonical" href="<?= h($canonical) ?>">
     <meta property="og:url" content="<?= h($canonical) ?>">
@@ -185,6 +189,18 @@ if ($bodyVariant === 'collection-light') {
 
     <!-- Robots Meta Tags -->
     <meta name="robots" content="<?= h($robots) ?>">
+
+    <?php
+    $umamiEnabled = function_exists('envBool') ? envBool('UMAMI_ENABLED', false) : false;
+    $umamiWebsiteId = function_exists('env') ? (string) (env('UMAMI_WEBSITE_ID') ?? '') : '';
+    $umamiScriptUrl = function_exists('env') ? (string) (env('UMAMI_SCRIPT_URL', 'https://cloud.umami.is/script.js') ?? 'https://cloud.umami.is/script.js') : 'https://cloud.umami.is/script.js';
+    $umamiDomains = function_exists('env') ? (string) (env('UMAMI_DOMAINS', '') ?? '') : '';
+    ?>
+    <?php if ($umamiEnabled && $umamiWebsiteId !== ''): ?>
+    <script defer src="<?= h($umamiScriptUrl) ?>"
+            data-website-id="<?= h($umamiWebsiteId) ?>"
+            <?php if ($umamiDomains !== ''): ?>data-domains="<?= h($umamiDomains) ?>"<?php endif; ?>></script>
+    <?php endif; ?>
 
     <!-- Geographic Meta Tags -->
     <meta name="geo.region" content="US-PR">
@@ -224,9 +240,6 @@ if ($bodyVariant === 'collection-light') {
           crossorigin="anonymous">
     <noscript><link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet"></noscript>
     <?php endif; ?>
-
-    <!-- Analytics (Umami) -->
-    <script defer src="https://cloud.umami.is/script.js" data-website-id="df9e4019-b262-4db8-b267-a64a12aacf71"></script>
 
     <!-- Lucide Icons (pinned version, deferred for performance) -->
     <script defer

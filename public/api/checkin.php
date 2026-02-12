@@ -26,15 +26,19 @@ if ($method === 'POST') {
 }
 
 function submitCheckin() {
-    // Require authentication
-    if (!isAuthenticated()) {
-        jsonResponse(['error' => 'Please sign in to check in'], 401);
+    $isAuthed = isAuthenticated();
+
+    // Honeypot
+    if (!empty($_POST['website'] ?? '')) {
+        jsonResponse(['success' => true, 'message' => 'Thanks for checking in!']);
     }
 
-    // Validate CSRF
-    $csrfToken = $_POST['csrf_token'] ?? '';
-    if (!validateCsrf($csrfToken)) {
-        jsonResponse(['error' => 'Invalid request'], 403);
+    // Validate CSRF only for authenticated users.
+    if ($isAuthed) {
+        $csrfToken = (string)($_POST['csrf_token'] ?? '');
+        if (!validateCsrf($csrfToken)) {
+            jsonResponse(['error' => 'Invalid request'], 403);
+        }
     }
 
     $beachId = $_POST['beach_id'] ?? '';
@@ -44,7 +48,25 @@ function submitCheckin() {
     $sargassumLevel = $_POST['sargassum_level'] ?? null;
     $weatherActual = $_POST['weather_actual'] ?? null;
     $notes = trim($_POST['notes'] ?? '');
-    $userId = $_SESSION['user_id'];
+    $userId = $isAuthed ? (string)($_SESSION['user_id'] ?? '') : null;
+
+    $anonId = (string)($_COOKIE['BF_ANON_ID'] ?? '');
+    if ($anonId === '') {
+        $anonId = uuid();
+        $secure = getRequestScheme() === 'https';
+        setcookie('BF_ANON_ID', $anonId, [
+            'expires' => time() + 180 * 24 * 60 * 60,
+            'path' => '/',
+            'secure' => $secure,
+            'httponly' => false,
+            'samesite' => 'Lax',
+        ]);
+    }
+
+    $ip = (string)($_SERVER['REMOTE_ADDR'] ?? 'unknown');
+    $ipHash = hash('sha256', $ip);
+    $ua = (string)($_SERVER['HTTP_USER_AGENT'] ?? '');
+    $uaHash = $ua !== '' ? hash('sha256', $ua) : null;
 
     // Validate beach exists
     $beach = queryOne('SELECT id, name FROM beaches WHERE id = :id', [':id' => $beachId]);
@@ -76,24 +98,36 @@ function submitCheckin() {
         $sargassumLevel = null;
     }
 
-    // Rate limit: max 1 check-in per beach per hour per user
-    $recentCheckin = queryOne("
-        SELECT id FROM beach_checkins
-        WHERE beach_id = :beach_id AND user_id = :user_id
-        AND created_at > datetime('now', '-1 hour')
-    ", [':beach_id' => $beachId, ':user_id' => $userId]);
+    // Rate limit: max 1 check-in per beach per hour per identity (user or IP hash).
+    if ($isAuthed && $userId) {
+        $recentCheckin = queryOne("
+            SELECT id FROM beach_checkins
+            WHERE beach_id = :beach_id AND user_id = :user_id
+            AND created_at > datetime('now', '-1 hour')
+        ", [':beach_id' => $beachId, ':user_id' => $userId]);
+    } else {
+        $recentCheckin = queryOne("
+            SELECT id FROM beach_checkins
+            WHERE beach_id = :beach_id AND user_id IS NULL
+            AND ip_hash = :ip_hash
+            AND created_at > datetime('now', '-1 hour')
+        ", [':beach_id' => $beachId, ':ip_hash' => $ipHash]);
+    }
 
     if ($recentCheckin) {
         jsonResponse(['error' => 'You can only check in once per hour at each beach'], 429);
     }
 
-    // Insert check-in
+    // Insert check-in (new schema includes anon + hashes; fall back to legacy insert if needed).
     $result = execute("
-        INSERT INTO beach_checkins (beach_id, user_id, crowd_level, parking_status, water_condition, sargassum_level, weather_actual, notes, created_at)
-        VALUES (:beach_id, :user_id, :crowd_level, :parking_status, :water_condition, :sargassum_level, :weather_actual, :notes, datetime('now'))
+        INSERT INTO beach_checkins (beach_id, user_id, anon_id, ip_hash, user_agent_hash, crowd_level, parking_status, water_condition, sargassum_level, weather_actual, notes, created_at)
+        VALUES (:beach_id, :user_id, :anon_id, :ip_hash, :ua_hash, :crowd_level, :parking_status, :water_condition, :sargassum_level, :weather_actual, :notes, datetime('now'))
     ", [
         ':beach_id' => $beachId,
         ':user_id' => $userId,
+        ':anon_id' => $anonId,
+        ':ip_hash' => $ipHash,
+        ':ua_hash' => $uaHash,
         ':crowd_level' => $crowdLevel,
         ':parking_status' => $parkingStatus,
         ':water_condition' => $waterCondition,
@@ -102,10 +136,27 @@ function submitCheckin() {
         ':notes' => $notes ?: null
     ]);
 
+    if (!$result) {
+        $result = execute("
+            INSERT INTO beach_checkins (beach_id, user_id, crowd_level, parking_status, water_condition, sargassum_level, weather_actual, notes, created_at)
+            VALUES (:beach_id, :user_id, :crowd_level, :parking_status, :water_condition, :sargassum_level, :weather_actual, :notes, datetime('now'))
+        ", [
+            ':beach_id' => $beachId,
+            ':user_id' => $userId,
+            ':crowd_level' => $crowdLevel,
+            ':parking_status' => $parkingStatus,
+            ':water_condition' => $waterCondition,
+            ':sargassum_level' => $sargassumLevel,
+            ':weather_actual' => $weatherActual,
+            ':notes' => $notes ?: null
+        ]);
+    }
+
     if ($result) {
         jsonResponse([
             'success' => true,
-            'message' => 'Thanks for checking in! Your update helps other beachgoers.'
+            'message' => 'Thanks for checking in! Your update helps other beachgoers.',
+            'requires_signup' => !$isAuthed,
         ]);
     } else {
         jsonResponse(['error' => 'Failed to save check-in'], 500);

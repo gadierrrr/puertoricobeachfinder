@@ -8,6 +8,10 @@ async function shareBeach(slug, name) {
     const title = `${name} - Puerto Rico Beach Finder`;
     const text = `Check out ${name} in Puerto Rico!`;
 
+    if (typeof window.bfTrack === 'function') {
+        window.bfTrack('share_click', { beach_slug: slug, source: 'share' });
+    }
+
     // Try native share first
     if (navigator.share) {
         try {
@@ -103,6 +107,9 @@ async function copyShareLink() {
 
     try {
         await navigator.clipboard.writeText(input.value);
+        if (typeof window.bfTrack === 'function') {
+            window.bfTrack('share_copy_link', { source: 'share_modal' });
+        }
         if (btn) {
             const originalText = btn.textContent;
             btn.textContent = 'Copied!';
@@ -118,6 +125,9 @@ async function copyShareLink() {
         // Fallback for older browsers
         input.select();
         document.execCommand('copy');
+        if (typeof window.bfTrack === 'function') {
+            window.bfTrack('share_copy_link', { source: 'share_modal_fallback' });
+        }
         if (btn) btn.textContent = 'Copied!';
     }
 }
@@ -128,6 +138,9 @@ async function copyBeachLink(slug, btn) {
 
     try {
         await navigator.clipboard.writeText(url);
+        if (typeof window.bfTrack === 'function') {
+            window.bfTrack('share_copy_link', { beach_slug: slug, source: 'copy_button' });
+        }
 
         // Update button state
         const icon = btn.querySelector('[data-lucide="link"]');
@@ -156,6 +169,10 @@ async function copyBeachLink(slug, btn) {
         input.select();
         document.execCommand('copy');
         document.body.removeChild(input);
+
+        if (typeof window.bfTrack === 'function') {
+            window.bfTrack('share_copy_link', { beach_slug: slug, source: 'copy_button_fallback' });
+        }
 
         if (typeof showToast === 'function') {
             showToast('Link copied to clipboard!', 'success', 2000);

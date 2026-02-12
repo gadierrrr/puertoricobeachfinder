@@ -32,7 +32,7 @@ if (preg_match('~^/(best-beaches|best-beaches-san-juan|best-snorkeling-beaches|b
     return true;
 }
 
-if (preg_match('~^/(quiz|compare|offline|login|logout|verify|favorites|profile|onboarding|terms|privacy)\.php$~', $uriPath, $matches)) {
+if (preg_match('~^/(quiz|quiz-results|compare|offline|login|logout|verify|favorites|profile|onboarding|terms|privacy)\.php$~', $uriPath, $matches)) {
     $target = '/' . $matches[1];
     if ($queryString !== '') {
         $target .= '?' . $queryString;

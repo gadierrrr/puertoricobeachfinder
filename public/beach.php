@@ -215,6 +215,11 @@ include APP_ROOT . '/components/header.php';
 
         <div class="ml-auto flex gap-2">
             <a href="<?= h(getDirectionsUrl($beach)) ?>" target="_blank"
+               data-bf-track="directions"
+               data-bf-beach-id="<?= h($beach['id']) ?>"
+               data-bf-beach-slug="<?= h($beach['slug']) ?>"
+               data-bf-municipality="<?= h($beach['municipality']) ?>"
+               data-bf-source="beach_page"
                class="inline-flex items-center gap-1.5 bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-4 py-2 rounded-lg font-semibold text-sm transition-colors">
                 <i data-lucide="navigation" class="w-4 h-4" aria-hidden="true"></i>
                 <span>Directions</span>
@@ -488,12 +493,10 @@ include APP_ROOT . '/components/header.php';
                             <i data-lucide="radio" class="w-3.5 h-3.5 text-green-400" aria-hidden="true"></i>
                             Live Updates
                         </h3>
-                        <?php if (isAuthenticated()): ?>
                         <button onclick="openCheckinModal('<?= h($beach['id']) ?>', '<?= h(addslashes($beach['name'])) ?>')"
-                                class="text-xs bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded font-medium transition-colors">
+                                class="text-xs <?= isAuthenticated() ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-white/10 hover:bg-white/20 text-white' ?> px-2 py-1 rounded font-medium transition-colors border border-white/10">
                             Check In
                         </button>
-                        <?php endif; ?>
                     </div>
                     <?php if ($crowdLevel): ?>
                     <?php
@@ -532,6 +535,11 @@ include APP_ROOT . '/components/header.php';
                             <?php endif; ?>
                         </div>
                         <a href="<?= h(getDirectionsUrl($beach)) ?>" target="_blank"
+                           data-bf-track="directions"
+                           data-bf-beach-id="<?= h($beach['id']) ?>"
+                           data-bf-beach-slug="<?= h($beach['slug']) ?>"
+                           data-bf-municipality="<?= h($beach['municipality']) ?>"
+                           data-bf-source="beach_page_map"
                            class="mt-2 block w-full text-center bg-brand-yellow hover:bg-yellow-300 text-brand-darker py-2 rounded-lg font-medium text-sm transition-colors">
                             Get Directions
                         </a>
@@ -642,34 +650,53 @@ include APP_ROOT . '/components/header.php';
 </div>
 </div>
 
-<!-- Sticky Quick Actions Bar (Mobile Only) -->
+<!-- Sticky Quick Actions Bar (Mobile Only): Directions / Save / Share -->
 <?php
-$stickyWeatherIcon = '🌤️';
-$stickyWeatherTemp = '--';
-$stickyWeatherVerdict = 'Loading...';
-$stickyCrowdLabel = $crowdLevel['label'] ?? 'No data';
-$stickyCrowdColor = $crowdLevel['color'] ?? 'gray';
 $directionsUrl = getDirectionsUrl($beach);
+$isFavorite = false;
+if (isAuthenticated()) {
+    $existingFav = queryOne(
+        'SELECT id FROM user_favorites WHERE user_id = :user_id AND beach_id = :beach_id',
+        [':user_id' => $_SESSION['user_id'], ':beach_id' => $beach['id']]
+    );
+    $isFavorite = (bool)$existingFav;
+}
 ?>
-<div class="beach-sticky-bar" aria-label="Quick actions">
-    <div class="sticky-weather">
-        <span class="sticky-icon" id="sticky-weather-icon"><?= h($stickyWeatherIcon) ?></span>
-        <div class="sticky-text">
-            <span class="sticky-value" id="sticky-weather-temp"><?= h($stickyWeatherTemp) ?></span>
-            <span class="sticky-label" id="sticky-weather-verdict"><?= h($stickyWeatherVerdict) ?></span>
-        </div>
-    </div>
-    <div class="sticky-crowd sticky-crowd-<?= h($stickyCrowdColor) ?>">
-        <span class="sticky-icon">👥</span>
-        <div class="sticky-text">
-            <span class="sticky-value"><?= h($stickyCrowdLabel) ?></span>
-            <span class="sticky-label">crowd</span>
-        </div>
-    </div>
-    <a href="<?= h($directionsUrl) ?>" target="_blank" rel="noopener" class="sticky-directions">
-        <i data-lucide="navigation" class="w-4 h-4"></i>
-        <span>Go</span>
+<div class="beach-sticky-bar"
+     aria-label="Quick actions"
+     data-bf-beach-id="<?= h($beach['id']) ?>"
+     data-bf-beach-slug="<?= h($beach['slug']) ?>"
+     data-bf-municipality="<?= h($beach['municipality']) ?>"
+     data-bf-source="beach_page_sticky">
+    <a href="<?= h($directionsUrl) ?>"
+       target="_blank"
+       rel="noopener"
+       data-bf-track="directions"
+       class="sticky-directions"
+       aria-label="Get directions">
+        <i data-lucide="navigation" class="w-4 h-4" aria-hidden="true"></i>
+        <span>Directions</span>
     </a>
+
+    <button type="button"
+            class="sticky-directions"
+            style="background: rgba(255,255,255,0.10); color: white;"
+            onclick="toggleStickyFavorite()"
+            aria-label="<?= $isFavorite ? 'Remove from favorites' : 'Add to favorites' ?>"
+            aria-pressed="<?= $isFavorite ? 'true' : 'false' ?>"
+            id="sticky-favorite-btn">
+        <span id="sticky-favorite-icon" aria-hidden="true"><?= $isFavorite ? '❤️' : '🤍' ?></span>
+        <span>Save</span>
+    </button>
+
+    <button type="button"
+            class="sticky-directions"
+            style="background: rgba(255,255,255,0.10); color: white;"
+            onclick="shareBeach('<?= h($beach['slug']) ?>', '<?= h(addslashes($beach['name'])) ?>')"
+            aria-label="Share">
+        <i data-lucide="share-2" class="w-4 h-4" aria-hidden="true"></i>
+        <span>Share</span>
+    </button>
 </div>
 
 <!-- Share Modal -->
@@ -703,6 +730,54 @@ document.addEventListener('DOMContentLoaded', () => {
             .addTo(map);
     }
 });
+</script>
+
+<script>
+async function toggleStickyFavorite() {
+    const btn = document.getElementById('sticky-favorite-btn');
+    const icon = document.getElementById('sticky-favorite-icon');
+    if (!btn || !icon) return;
+
+    <?php if (!isAuthenticated()): ?>
+    if (typeof showSignupPrompt === 'function') {
+        showSignupPrompt('favorites', '/beach/<?= h($beach['slug']) ?>');
+    } else {
+        window.location.href = '/login?redirect=' + encodeURIComponent('/beach/<?= h($beach['slug']) ?>');
+    }
+    return;
+    <?php endif; ?>
+
+    if (btn.dataset.loading === '1') return;
+    btn.dataset.loading = '1';
+
+    try {
+        const body = new URLSearchParams();
+        body.set('beach_id', <?= json_encode($beach['id']) ?>);
+        body.set('csrf_token', <?= json_encode(csrfToken()) ?>);
+        const res = await fetch('/api/toggle-favorite.php?format=json', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: body.toString()
+        });
+        const payload = await res.json();
+        if (!res.ok || !payload.success) throw new Error(payload.error || 'Failed');
+
+        const isFav = payload.is_favorite === true;
+        btn.setAttribute('aria-pressed', isFav ? 'true' : 'false');
+        btn.setAttribute('aria-label', isFav ? 'Remove from favorites' : 'Add to favorites');
+        icon.textContent = isFav ? '❤️' : '🤍';
+        if (typeof showToast === 'function') {
+            showToast(isFav ? 'Saved!' : 'Removed from favorites', isFav ? 'success' : 'info', 2500);
+        }
+        if (typeof window.bfTrack === 'function') {
+            window.bfTrack(isFav ? 'favorite_add' : 'favorite_remove', { source: 'beach_page_sticky', beach_slug: <?= json_encode($beach['slug']) ?> });
+        }
+    } catch (e) {
+        if (typeof showToast === 'function') showToast('Could not update favorite.', 'error', 3500);
+    } finally {
+        delete btn.dataset.loading;
+    }
+}
 </script>
 
 <?php if (!empty($beach['gallery'])): ?>
@@ -957,6 +1032,7 @@ document.addEventListener('keydown', (e) => {
         <form id="checkin-form" class="p-6 space-y-5" onsubmit="submitCheckin(event)">
             <input type="hidden" name="beach_id" id="checkin-beach-id">
             <input type="hidden" name="csrf_token" value="<?= h(csrfToken()) ?>">
+            <input type="hidden" name="website" value="" autocomplete="off">
 
             <p class="text-sm text-gray-600">
                 Share what you're seeing at <strong id="checkin-beach-name"></strong> right now!
@@ -1197,6 +1273,10 @@ async function submitCheckin(event) {
                 showToast('Check-in submitted!', 'success', 3000);
             }
 
+            if (typeof window.bfTrack === 'function') {
+                window.bfTrack('U1_checkin_submitted', { source: 'beach_page', beach_slug: <?= json_encode($beach['slug']) ?> });
+            }
+
             // Refresh check-ins list
             if (typeof htmx !== 'undefined') {
                 htmx.trigger('#checkins-list', 'load');
@@ -1207,6 +1287,11 @@ async function submitCheckin(event) {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i><span>Submit Check-In</span>';
             }, 1000);
+
+            // Reward gate for guests: contribute -> signup.
+            if (data.requires_signup && typeof showSignupPrompt === 'function') {
+                showSignupPrompt('favorites', '/beach/<?= h($beach['slug']) ?>?src=checkin');
+            }
         } else {
             messageDiv.textContent = data.error || 'Failed to submit check-in';
             messageDiv.className = 'bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg';

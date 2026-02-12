@@ -35,9 +35,9 @@ This doc is a quick navigation guide to the repo after the `public/` docroot mig
 
 ## Web entrypoints (high level)
 
-- Pages: `public/index.php`, `public/beach.php`, `public/municipality.php`, `public/compare.php`, `public/favorites.php`, `public/profile.php`, `public/quiz.php`
+- Pages: `public/index.php`, `public/beach.php`, `public/municipality.php`, `public/compare.php`, `public/favorites.php`, `public/profile.php`, `public/quiz.php`, `public/quiz-results.php`
 - Guides index: `public/guides/index.php`
-- APIs: `public/api/*.php` (+ `public/api/admin/`, `public/api/quiz/`, `public/api/reviews/`)
+- APIs: `public/api/*.php` (+ `public/api/admin/`, `public/api/quiz/`, `public/api/reviews/`, `public/api/favorites/`)
 - Admin: `public/admin/*.php`
 
 ## Common change playbooks
@@ -56,6 +56,15 @@ This doc is a quick navigation guide to the repo after the `public/` docroot mig
 1. Create `public/api/<endpoint>.php`
 2. Require bootstrap at the top.
 3. Return HTML for HTMX requests (`HX-Request`) and JSON otherwise (existing endpoints show the pattern).
+
+### Analytics (Umami + funnel)
+
+- Umami script is injected from env vars in `components/header.php` (`UMAMI_ENABLED`, `UMAMI_SCRIPT_URL`, `UMAMI_WEBSITE_ID`, `UMAMI_DOMAINS`).
+- Client-side tracking wrapper lives in `public/assets/js/analytics.js` and can safely no-op when Umami is disabled/blocked.
+- Funnel-related endpoints:
+  - `public/api/send-list.php`
+  - `public/api/send-quiz-results.php`
+  - `public/api/favorites/bulk-add.php`
 
 ### Add a migration
 

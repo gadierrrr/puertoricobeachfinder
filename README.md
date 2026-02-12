@@ -56,6 +56,27 @@ Defined in `.env.example`:
 - `ANTHROPIC_API_KEY`
 - `APP_ENV` (`dev`, `staging`, `prod`)
 - `APP_DEBUG` (`0` or `1`)
+- Umami analytics (optional):
+  - `UMAMI_ENABLED` (`0` or `1`)
+  - `UMAMI_SCRIPT_URL` (default: `https://cloud.umami.is/script.js`)
+  - `UMAMI_WEBSITE_ID`
+  - `UMAMI_DOMAINS` (optional)
+
+## Funnel + analytics notes
+
+This codebase includes a lightweight funnel implementation and Umami-compatible client tracking:
+
+- Quiz:
+  - `/quiz` returns a `results_token` from `public/api/quiz/match.php` and can generate a shareable URL.
+  - `/quiz-results?token=...` renders stored quiz matches (tokenized pages are `noindex`).
+- Lead capture:
+  - List pages can post to `public/api/send-list.php` ("Send me this list").
+  - Quiz results can post to `public/api/send-quiz-results.php` ("Send my matches").
+  - Email delivery uses `RESEND_API_KEY`.
+- Tracking:
+  - `public/assets/js/analytics.js` defines `window.bfTrack()` and forwards events to Umami when available.
+  - Event naming follows the funnel schema (A1/A2/A3, L1/L2, S1/S2, U1...).
+  - See `docs/analytics-umami.md` for the event map and implementation details.
 
 ## Migration commands
 
