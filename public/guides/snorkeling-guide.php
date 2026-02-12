@@ -205,7 +205,7 @@ include APP_ROOT . "/components/page-shell.php";
                         <p class="text-gray-700 mb-6">
                             Browse beaches with excellent snorkeling to plan your underwater adventure.
                         </p>
-                        <a href="/?tags=snorkeling" class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                        <a href="/?view=map&tags[]=snorkeling#beaches" class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
                             View Snorkeling Beaches
                         </a>
                     </div>

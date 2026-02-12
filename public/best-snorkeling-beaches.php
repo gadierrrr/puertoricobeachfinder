@@ -214,7 +214,7 @@ include APP_ROOT . '/components/header.php';
             Find Snorkeling Beaches on the Map
         </h2>
         <div class="text-center">
-            <a href="/?view=map&activity=snorkeling" class="inline-flex items-center gap-2 bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+            <a href="/?view=map&tags[]=snorkeling#beaches" class="inline-flex items-center gap-2 bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
                 <span>🗺️</span>
                 <span>View Snorkeling Beaches Map</span>
             </a>

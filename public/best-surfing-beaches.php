@@ -246,7 +246,7 @@ include APP_ROOT . '/components/header.php';
             Find Surf Spots on the Map
         </h2>
         <div class="text-center">
-            <a href="/?view=map&activity=surfing" class="inline-flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+            <a href="/?view=map&tags[]=surfing#beaches" class="inline-flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
                 <span>🗺️</span>
                 <span>View Surf Beaches Map</span>
             </a>
