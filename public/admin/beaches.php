@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $amenityStmt->execute();
             }
 
-            header('Location: /admin/beaches.php?saved=1');
+            header('Location: /admin/beaches?saved=1');
             exit;
         }
     }
@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $db->exec("DELETE FROM beach_gallery WHERE beach_id = '$beachId'");
         $db->exec("DELETE FROM beaches WHERE id = '$beachId'");
 
-        header('Location: /admin/beaches.php?deleted=1');
+        header('Location: /admin/beaches?deleted=1');
         exit;
     }
 }
@@ -125,7 +125,7 @@ if ($action === 'edit' || $action === 'new') {
     $pageSubtitle = $action === 'new' ? 'Create a new beach listing' : 'Update beach information';
 }
 
-$pageActions = '<a href="/admin/beaches.php?action=new" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">+ Add Beach</a>';
+$pageActions = '<a href="/admin/beaches?action=new" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">+ Add Beach</a>';
 
 include __DIR__ . '/components/header.php';
 
@@ -190,7 +190,7 @@ if ($action === 'list'):
 
         <button type="submit" class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg font-medium">Filter</button>
         <?php if ($search || $status || $municipality): ?>
-        <a href="/admin/beaches.php" class="text-gray-500 hover:text-gray-700">Clear</a>
+        <a href="/admin/beaches" class="text-gray-500 hover:text-gray-700">Clear</a>
         <?php endif; ?>
     </form>
 </div>
@@ -247,7 +247,7 @@ if ($action === 'list'):
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                         </svg>
                     </a>
-                    <a href="/admin/beaches.php?action=edit&id=<?= h($beach['id']) ?>" class="text-blue-600 hover:text-blue-700 mr-3">Edit</a>
+                    <a href="/admin/beaches?action=edit&id=<?= h($beach['id']) ?>" class="text-blue-600 hover:text-blue-700 mr-3">Edit</a>
                 </td>
             </tr>
             <?php endforeach; ?>
@@ -529,7 +529,7 @@ if ($action === 'list'):
                         <?= $action === 'new' ? 'Create Beach' : 'Save Changes' ?>
                     </button>
 
-                    <a href="/admin/beaches.php" class="block text-center text-gray-500 hover:text-gray-700">Cancel</a>
+                    <a href="/admin/beaches" class="block text-center text-gray-500 hover:text-gray-700">Cancel</a>
                 </div>
 
                 <?php if ($beach): ?>

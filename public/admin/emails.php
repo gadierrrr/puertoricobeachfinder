@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         'email' => $testEmail,
                         'app_name' => $appName,
                         'app_url' => $appUrl,
-                        'login_url' => $appUrl . '/verify.php?token=test-token-preview',
+                        'login_url' => $appUrl . '/verify?token=test-token-preview',
                         'activity_text' => '<p style="margin: 0 0 20px; color: #fbbf24; font-size: 16px; line-height: 1.6;">Based on your preferences, we\'ll help you find the best snorkeling paradises, family-friendly beaches across Puerto Rico.</p>'
                     ];
 
@@ -110,7 +110,7 @@ if (isset($_GET['edit'])) {
             <h2 class="font-semibold text-gray-900">Edit: <?= h($editTemplate['name']) ?></h2>
             <p class="text-sm text-gray-500 mt-1"><?= h($editTemplate['description']) ?></p>
         </div>
-        <a href="/admin/emails.php" class="text-gray-500 hover:text-gray-700">
+        <a href="/admin/emails" class="text-gray-500 hover:text-gray-700">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
             </svg>
@@ -169,7 +169,7 @@ if (isset($_GET['edit'])) {
                             class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
                         Save Changes
                     </button>
-                    <a href="/admin/emails.php" class="text-gray-600 hover:text-gray-800">
+                    <a href="/admin/emails" class="text-gray-600 hover:text-gray-800">
                         Cancel
                     </a>
                 </div>
@@ -280,7 +280,7 @@ function showPreview() {
         'email': '<?= h($user['email']) ?>',
         'app_name': '<?= h($appName) ?>',
         'app_url': '<?= h($appUrl) ?>',
-        'login_url': '<?= h($appUrl) ?>/verify.php?token=test-preview',
+        'login_url': '<?= h($appUrl) ?>/verify?token=test-preview',
         'activity_text': '<p style="margin: 0 0 20px; color: #fbbf24; font-size: 16px; line-height: 1.6;">Based on your preferences, we\'ll help you find the best snorkeling paradises, family-friendly beaches across Puerto Rico.</p>'
     };
 

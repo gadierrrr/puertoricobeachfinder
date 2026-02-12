@@ -104,11 +104,11 @@
                     <div class="mt-6">
                         <h5 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Your Account</h5>
                         <ul class="space-y-2 text-sm">
-                            <li><a href="/favorites.php" class="text-gray-400 hover:text-brand-yellow transition-colors flex items-center gap-2">
+                            <li><a href="/favorites" class="text-gray-400 hover:text-brand-yellow transition-colors flex items-center gap-2">
                                 <i data-lucide="heart" class="w-4 h-4"></i>
                                 My Favorites
                             </a></li>
-                            <li><a href="/profile.php" class="text-gray-400 hover:text-brand-yellow transition-colors flex items-center gap-2">
+                            <li><a href="/profile" class="text-gray-400 hover:text-brand-yellow transition-colors flex items-center gap-2">
                                 <i data-lucide="user" class="w-4 h-4"></i>
                                 Profile
                             </a></li>
@@ -117,7 +117,7 @@
                     <?php else: ?>
                     <!-- Guest User -->
                     <div class="mt-6">
-                        <a href="/login.php" class="inline-flex items-center gap-2 bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-4 py-2 rounded-lg font-medium text-sm transition-colors">
+                        <a href="/login" class="inline-flex items-center gap-2 bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-4 py-2 rounded-lg font-medium text-sm transition-colors">
                             <i data-lucide="log-in" class="w-4 h-4"></i>
                             Sign In
                         </a>
@@ -297,7 +297,7 @@
 
                 <!-- Actions -->
                 <div class="flex flex-col gap-3">
-                    <a href="/login.php" id="signup-prompt-cta" class="flex items-center justify-center gap-2 bg-brand-yellow hover:bg-yellow-300 text-brand-darker py-3 rounded-lg font-semibold transition-colors">
+                    <a href="/login" id="signup-prompt-cta" class="flex items-center justify-center gap-2 bg-brand-yellow hover:bg-yellow-300 text-brand-darker py-3 rounded-lg font-semibold transition-colors">
                         <i data-lucide="log-in" class="w-5 h-5"></i>
                         Sign Up Free
                     </a>
@@ -349,7 +349,7 @@
         icon.innerHTML = `<i data-lucide="${config.icon}" class="w-6 h-6 text-brand-yellow"></i>`;
 
         // Set redirect URL
-        const loginUrl = redirectUrl ? `/login.php?redirect=${encodeURIComponent(redirectUrl)}` : '/login.php';
+        const loginUrl = redirectUrl ? `/login?redirect=${encodeURIComponent(redirectUrl)}` : '/login';
         cta.href = loginUrl;
 
         // Show modal
@@ -445,7 +445,7 @@
                     </a>
                     <?php endif; ?>
 
-                    <a href="/login.php?method=email" class="welcome-popup-btn-email">
+                    <a href="/login?method=email" class="welcome-popup-btn-email">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
                         </svg>
@@ -496,13 +496,21 @@
                 }
             }
 
-            // Skip if user came from login page (just declined to sign up)
-            if (document.referrer && document.referrer.includes('/login.php')) {
+            // Skip if user came from login/verify pages (avoid immediate re-prompt).
+            let refPath = '';
+            if (document.referrer) {
+                try {
+                    refPath = new URL(document.referrer).pathname || '';
+                } catch (e) {
+                    refPath = '';
+                }
+            }
+
+            if (refPath === '/login' || refPath === '/login.php') {
                 return false;
             }
 
-            // Skip if user came from verify page (just completed signup)
-            if (document.referrer && document.referrer.includes('/verify.php')) {
+            if (refPath === '/verify' || refPath === '/verify.php') {
                 return false;
             }
 

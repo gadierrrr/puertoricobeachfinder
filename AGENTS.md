@@ -32,7 +32,8 @@ This repo is a PHP + SQLite site with **no framework**. The production web serve
   - then loads `inc/bootstrap.php`
 - **All public PHP entrypoints** should start with:
   - `require_once $_SERVER['DOCUMENT_ROOT'] . '/../bootstrap.php';`
-- Use filesystem paths via `APP_ROOT` / `PUBLIC_ROOT` (avoid fragile `__DIR__` relative traversal).
+- For cross-directory includes, prefer filesystem paths via `APP_ROOT` / `PUBLIC_ROOT` to avoid fragile relative traversal.
+  Using `__DIR__` is fine for includes within the same subsystem (e.g. inside `inc/` or `components/`).
 
 ## Common commands
 

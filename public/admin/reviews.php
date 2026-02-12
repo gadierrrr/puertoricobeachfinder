@@ -17,11 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $reviewId = $_POST['review_id'] ?? '';
     $action = $_POST['action'] ?? '';
 
-    if ($reviewId && in_array($action, ['approve', 'reject', 'delete'])) {
+    if ($reviewId && in_array($action, ['approve', 'reject', 'delete'], true)) {
         $db = getDb();
 
         if ($action === 'delete') {
-            $db->exec("DELETE FROM beach_reviews WHERE id = '$reviewId'");
+            $stmt = $db->prepare('DELETE FROM beach_reviews WHERE id = :id');
+            $stmt->bindValue(':id', (string)$reviewId, SQLITE3_TEXT);
+            $stmt->execute();
         } else {
             $status = $action === 'approve' ? 'published' : 'rejected';
             $stmt = $db->prepare("UPDATE beach_reviews SET status = :status WHERE id = :id");
@@ -35,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        header('Location: /admin/reviews.php?updated=1');
+        header('Location: /admin/reviews?updated=1');
         exit;
     }
 }
@@ -81,19 +83,19 @@ $rejectedCount = queryOne("SELECT COUNT(*) as count FROM beach_reviews WHERE sta
 <!-- Status Tabs -->
 <div class="bg-white rounded-xl shadow-sm mb-6">
     <div class="flex border-b border-gray-200">
-        <a href="/admin/reviews.php"
+        <a href="/admin/reviews"
            class="px-6 py-4 font-medium <?= !$status ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700' ?>">
             All (<?= $total ?>)
         </a>
-        <a href="/admin/reviews.php?status=pending"
+        <a href="/admin/reviews?status=pending"
            class="px-6 py-4 font-medium <?= $status === 'pending' ? 'text-yellow-600 border-b-2 border-yellow-600' : 'text-gray-500 hover:text-gray-700' ?>">
             Pending (<?= $pendingCount ?>)
         </a>
-        <a href="/admin/reviews.php?status=published"
+        <a href="/admin/reviews?status=published"
            class="px-6 py-4 font-medium <?= $status === 'published' ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-500 hover:text-gray-700' ?>">
             Published (<?= $publishedCount ?>)
         </a>
-        <a href="/admin/reviews.php?status=rejected"
+        <a href="/admin/reviews?status=rejected"
            class="px-6 py-4 font-medium <?= $status === 'rejected' ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-500 hover:text-gray-700' ?>">
             Rejected (<?= $rejectedCount ?>)
         </a>
@@ -173,7 +175,7 @@ $rejectedCount = queryOne("SELECT COUNT(*) as count FROM beach_reviews WHERE sta
                 <div class="flex flex-col gap-2">
                     <?php if ($review['status'] !== 'published'): ?>
                     <form method="POST" class="inline"
-                          hx-post="/admin/reviews.php"
+                          hx-post="/admin/reviews"
                           hx-target="#review-<?= h($review['id']) ?>"
                           hx-swap="outerHTML">
                         <input type="hidden" name="review_id" value="<?= h($review['id']) ?>">
@@ -186,7 +188,7 @@ $rejectedCount = queryOne("SELECT COUNT(*) as count FROM beach_reviews WHERE sta
 
                     <?php if ($review['status'] !== 'rejected'): ?>
                     <form method="POST" class="inline"
-                          hx-post="/admin/reviews.php"
+                          hx-post="/admin/reviews"
                           hx-target="#review-<?= h($review['id']) ?>"
                           hx-swap="outerHTML">
                         <input type="hidden" name="review_id" value="<?= h($review['id']) ?>">
@@ -198,7 +200,7 @@ $rejectedCount = queryOne("SELECT COUNT(*) as count FROM beach_reviews WHERE sta
                     <?php endif; ?>
 
                     <form method="POST" class="inline"
-                          hx-post="/admin/reviews.php"
+                          hx-post="/admin/reviews"
                           hx-target="#review-<?= h($review['id']) ?>"
                           hx-swap="outerHTML"
                           hx-confirm="Are you sure you want to delete this review?">

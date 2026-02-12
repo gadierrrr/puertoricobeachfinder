@@ -95,10 +95,10 @@ $user = $user ?? currentUser();
 
             <?php if ($user): ?>
                 <div class="flex items-center gap-3">
-                    <a href="/profile.php?tab=favorites" class="text-white/70 hover:text-brand-yellow transition-colors">
+                    <a href="/profile?tab=favorites" class="text-white/70 hover:text-brand-yellow transition-colors">
                         <i data-lucide="heart" class="w-5 h-5"></i>
                     </a>
-                    <a href="/profile.php" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                    <a href="/profile" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
                         <?php if (!empty($user['avatar_url'])): ?>
                         <img src="<?= h($user['avatar_url']) ?>" alt="" class="w-8 h-8 rounded-full border border-white/20">
                         <?php else: ?>
@@ -107,10 +107,10 @@ $user = $user ?? currentUser();
                         </div>
                         <?php endif; ?>
                     </a>
-                    <a href="/logout.php" class="text-sm text-white/60 hover:text-white transition-colors">Logout</a>
+                    <a href="/logout" class="text-sm text-white/60 hover:text-white transition-colors">Logout</a>
                 </div>
             <?php else: ?>
-                <a href="/login.php" class="bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-5 py-2 rounded-full text-sm font-semibold transition-colors">
+                <a href="/login" class="bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-5 py-2 rounded-full text-sm font-semibold transition-colors">
                     Sign In
                 </a>
             <?php endif; ?>
@@ -171,11 +171,11 @@ $user = $user ?? currentUser();
                 </a>
             </div>
             <?php if ($user): ?>
-                <a href="/profile.php" class="flex items-center gap-3 text-white/80 hover:text-brand-yellow py-3 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
+                <a href="/profile" class="flex items-center gap-3 text-white/80 hover:text-brand-yellow py-3 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
                     <i data-lucide="user" class="w-5 h-5"></i>
                     <span>My Profile</span>
                 </a>
-                <a href="/profile.php?tab=favorites" class="flex items-center gap-3 text-white/80 hover:text-brand-yellow py-3 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
+                <a href="/profile?tab=favorites" class="flex items-center gap-3 text-white/80 hover:text-brand-yellow py-3 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
                     <i data-lucide="heart" class="w-5 h-5 text-red-400 fill-red-400"></i>
                     <span>Favorites</span>
                 </a>
@@ -190,10 +190,10 @@ $user = $user ?? currentUser();
                         <?php endif; ?>
                         <span class="text-sm text-white/70"><?= h($user['name'] ?? 'User') ?></span>
                     </div>
-                    <a href="/logout.php" class="block text-red-400 hover:text-red-300 py-2 px-3">Logout</a>
+                    <a href="/logout" class="block text-red-400 hover:text-red-300 py-2 px-3">Logout</a>
                 </div>
             <?php else: ?>
-                <a href="/login.php" class="block bg-brand-yellow text-brand-darker text-center py-3 rounded-lg mt-3 font-semibold">Sign In</a>
+                <a href="/login" class="block bg-brand-yellow text-brand-darker text-center py-3 rounded-lg mt-3 font-semibold">Sign In</a>
             <?php endif; ?>
 
             <!-- Mobile Language Switcher -->

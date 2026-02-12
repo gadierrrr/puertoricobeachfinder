@@ -17,12 +17,12 @@ if (isset($_GET['error'])) {
     $error = $_GET['error'];
     $errorDesc = $_GET['error_description'] ?? 'Unknown error';
     error_log("Google OAuth error: $error - $errorDesc");
-    redirect('/login.php?error=google_denied');
+    redirect('/login?error=google_denied');
 }
 
 // Verify authorization code is present
 if (!isset($_GET['code'])) {
-    redirect('/login.php?error=no_code');
+    redirect('/login?error=no_code');
 }
 
 // Verify state token (CSRF protection)
@@ -31,7 +31,7 @@ $expectedState = $_SESSION['google_oauth_state'] ?? '';
 
 if (!$state || !$expectedState || !hash_equals($expectedState, $state)) {
     error_log("Google OAuth state mismatch");
-    redirect('/login.php?error=invalid_state');
+    redirect('/login?error=invalid_state');
 }
 
 // Clear state token (one-time use)
@@ -41,26 +41,26 @@ unset($_SESSION['google_oauth_state']);
 $tokenData = exchangeCodeForToken($_GET['code']);
 
 if (!$tokenData) {
-    redirect('/login.php?error=token_failed');
+    redirect('/login?error=token_failed');
 }
 
 // Fetch user info from Google
 $googleUser = getGoogleUserInfo($tokenData['access_token']);
 
 if (!$googleUser) {
-    redirect('/login.php?error=userinfo_failed');
+    redirect('/login?error=userinfo_failed');
 }
 
 // Verify email is verified
 if (!$googleUser['verified_email']) {
-    redirect('/login.php?error=email_not_verified');
+    redirect('/login?error=email_not_verified');
 }
 
 // Find or create user
 $user = findOrCreateGoogleUser($googleUser);
 
 if (!$user) {
-    redirect('/login.php?error=user_creation_failed');
+    redirect('/login?error=user_creation_failed');
 }
 
 // Login the user
@@ -74,7 +74,7 @@ $redirectUrl = sanitizeInternalRedirect($redirectUrl, '/');
 
 // Redirect new users to onboarding (if not already completed)
 if (empty($user['onboarding_completed'])) {
-    $redirectUrl = '/onboarding.php' . ($redirectUrl !== '/' ? '?redirect=' . urlencode($redirectUrl) : '');
+    $redirectUrl = '/onboarding' . ($redirectUrl !== '/' ? '?redirect=' . urlencode($redirectUrl) : '');
 }
 
 redirectInternal($redirectUrl);

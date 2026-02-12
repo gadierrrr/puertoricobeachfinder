@@ -44,7 +44,7 @@ $recentActivity = getRecentActivity(10);
                 <span class="text-2xl">👥</span>
             </div>
         </div>
-        <a href="/admin/users.php" class="mt-4 text-sm text-blue-600 hover:text-blue-700 inline-block">
+        <a href="/admin/users" class="mt-4 text-sm text-blue-600 hover:text-blue-700 inline-block">
             Manage users →
         </a>
     </div>
@@ -61,7 +61,7 @@ $recentActivity = getRecentActivity(10);
             </div>
         </div>
         <?php if ($stats['pending_reviews'] > 0): ?>
-        <a href="/admin/reviews.php?status=pending" class="mt-4 text-sm text-yellow-600 hover:text-yellow-700 inline-block">
+        <a href="/admin/reviews?status=pending" class="mt-4 text-sm text-yellow-600 hover:text-yellow-700 inline-block">
             <?= $stats['pending_reviews'] ?> pending review →
         </a>
         <?php else: ?>
@@ -149,7 +149,7 @@ $recentActivity = getRecentActivity(10);
             <h2 class="font-semibold text-gray-900">Quick Actions</h2>
         </div>
         <div class="p-6 space-y-4">
-            <a href="/admin/beaches.php?action=new"
+            <a href="/admin/beaches?action=new"
                class="flex items-center gap-4 p-4 rounded-lg border-2 border-dashed border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors">
                 <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -162,7 +162,7 @@ $recentActivity = getRecentActivity(10);
                 </div>
             </a>
 
-            <a href="/admin/reviews.php?status=pending"
+            <a href="/admin/reviews?status=pending"
                class="flex items-center gap-4 p-4 rounded-lg border-2 border-dashed border-gray-200 hover:border-yellow-300 hover:bg-yellow-50 transition-colors">
                 <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center text-yellow-600">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

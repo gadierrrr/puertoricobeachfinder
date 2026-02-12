@@ -83,7 +83,9 @@ function renderHttpError(int $statusCode, string $publicMessage, ?Throwable $exc
     $showDetails = $debugMode && $exception !== null;
     $errorMessage = $showDetails ? $exception->getMessage() : null;
 
-    $errorTemplate = __DIR__ . '/../errors/500.php';
+    // Friendly error pages live under the public docroot.
+    // This keeps production docroot locked to public/ while still allowing server-side includes.
+    $errorTemplate = (defined('PUBLIC_ROOT') ? PUBLIC_ROOT : (__DIR__ . '/../public')) . '/errors/500.php';
     if (is_file($errorTemplate)) {
         include $errorTemplate;
         return;

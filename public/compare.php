@@ -538,9 +538,9 @@ function clearComparison() {
 
 function updateComparisonUrl() {
     if (comparisonBeaches.length === 0) {
-        window.location.href = '/compare.php';
+        window.location.href = '/compare';
     } else {
-        window.location.href = '/compare.php?beaches=' + comparisonBeaches.join(',');
+        window.location.href = '/compare?beaches=' + comparisonBeaches.join(',');
     }
 }
 

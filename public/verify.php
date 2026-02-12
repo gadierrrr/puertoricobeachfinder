@@ -21,7 +21,7 @@ if (!$token) {
             <div class="text-6xl mb-4">❌</div>
             <h1 class="text-2xl font-bold text-white mb-4">Invalid Link</h1>
             <p class="text-gray-400 mb-6">This login link is invalid or missing.</p>
-            <a href="/login.php" class="inline-block bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-6 py-3 rounded-lg font-medium">
+            <a href="/login" class="inline-block bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-6 py-3 rounded-lg font-medium">
                 Request New Link
             </a>
           </div>';
@@ -38,7 +38,7 @@ if (!$result['success']) {
             <div class="text-6xl mb-4">⏰</div>
             <h1 class="text-2xl font-bold text-white mb-4">Link Expired</h1>
             <p class="text-gray-400 mb-6">' . h($result['error']) . '</p>
-            <a href="/login.php" class="inline-block bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-6 py-3 rounded-lg font-medium">
+            <a href="/login" class="inline-block bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-6 py-3 rounded-lg font-medium">
                 Request New Link
             </a>
           </div>';
@@ -52,7 +52,7 @@ $redirect = sanitizeInternalRedirect($_GET['redirect'] ?? '/');
 
 // Redirect new users to onboarding (if not already completed)
 if ($user && empty($user['onboarding_completed'])) {
-    $redirect = '/onboarding.php' . ($redirect !== '/' ? '?redirect=' . urlencode($redirect) : '');
+    $redirect = '/onboarding' . ($redirect !== '/' ? '?redirect=' . urlencode($redirect) : '');
 }
 
 redirectInternal($redirect);

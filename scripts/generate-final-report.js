@@ -189,7 +189,7 @@ Based on analysis of ${contrastReport.pagesWithIssues} pages with contrast issue
 
 1. **Fix color contrast violations**
    - Replace \`text-gray-500\` with \`text-gray-400\` on dark backgrounds
-   - Update CSS variables in \`assets/css/partials/_variables.css\`
+   - Update CSS variables in \`public/assets/css/partials/_variables.css\`
    - Audit all \`.text-xs\` and \`.text-sm\` classes
 
 2. **Optimize performance on municipality pages**

@@ -32,8 +32,35 @@ if (preg_match('~^/(best-beaches|best-beaches-san-juan|best-snorkeling-beaches|b
     return true;
 }
 
+if (preg_match('~^/(quiz|compare|offline|login|logout|verify|favorites|profile|onboarding|terms|privacy)\.php$~', $uriPath, $matches)) {
+    $target = '/' . $matches[1];
+    if ($queryString !== '') {
+        $target .= '?' . $queryString;
+    }
+    header('Location: ' . $target, true, 301);
+    return true;
+}
+
 if (preg_match('~^/guides/([a-z0-9-]+)\.php$~', $uriPath, $matches)) {
     $target = '/guides/' . $matches[1];
+    if ($queryString !== '') {
+        $target .= '?' . $queryString;
+    }
+    header('Location: ' . $target, true, 301);
+    return true;
+}
+
+if ($uriPath === '/admin/index.php') {
+    $target = '/admin';
+    if ($queryString !== '') {
+        $target .= '?' . $queryString;
+    }
+    header('Location: ' . $target, true, 301);
+    return true;
+}
+
+if (preg_match('~^/admin/(beaches|reviews|users|emails|place-id-audit)\.php$~', $uriPath, $matches)) {
+    $target = '/admin/' . $matches[1];
     if ($queryString !== '') {
         $target .= '?' . $queryString;
     }

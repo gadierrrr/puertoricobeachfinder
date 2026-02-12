@@ -363,7 +363,7 @@ include APP_ROOT . '/components/header.php';
                         <span>Add</span>
                     </button>
                     <?php else: ?>
-                    <a href="/login.php?redirect=<?= urlencode('/beach/' . $beach['slug'] . '#user-photos') ?>"
+                    <a href="/login?redirect=<?= urlencode('/beach/' . $beach['slug'] . '#user-photos') ?>"
                        class="text-sm text-purple-400 hover:text-purple-300 font-medium">Sign in to add</a>
                     <?php endif; ?>
                 </div>
@@ -400,7 +400,7 @@ include APP_ROOT . '/components/header.php';
                         Write Review
                     </button>
                     <?php else: ?>
-                    <a href="/login.php?redirect=<?= urlencode('/beach/' . $beach['slug'] . '#reviews') ?>"
+                    <a href="/login?redirect=<?= urlencode('/beach/' . $beach['slug'] . '#reviews') ?>"
                        class="text-sm text-brand-yellow hover:text-yellow-300 font-medium">Sign in to review</a>
                     <?php endif; ?>
                 </div>
@@ -1658,7 +1658,7 @@ function closePhotoModal() {
 // Review voting
 async function voteReview(reviewId, btn) {
     <?php if (!isAuthenticated()): ?>
-    window.location.href = '/login.php?redirect=' + encodeURIComponent(window.location.pathname + '#reviews');
+    window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname + '#reviews');
     return;
     <?php endif; ?>
 

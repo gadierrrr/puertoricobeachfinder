@@ -228,7 +228,7 @@ include APP_ROOT . '/components/header.php';
     <div class="max-w-4xl mx-auto px-4 text-center">
         <h2 class="text-2xl md:text-3xl font-bold mb-4">Find Your Perfect Snorkeling Spot</h2>
         <p class="text-lg opacity-90 mb-6">Answer a few questions and get personalized beach recommendations based on your snorkeling experience and preferences.</p>
-        <a href="/quiz.php" class="inline-block bg-white text-cyan-600 hover:bg-cyan-50 px-8 py-3 rounded-lg font-semibold transition-colors">
+        <a href="/quiz" class="inline-block bg-white text-cyan-600 hover:bg-cyan-50 px-8 py-3 rounded-lg font-semibold transition-colors">
             Take the Beach Match Quiz
         </a>
     </div>

@@ -254,7 +254,7 @@ include APP_ROOT . '/components/header.php';
     <div class="max-w-4xl mx-auto px-4 text-center">
         <h2 class="text-2xl md:text-3xl font-bold mb-4">Planning a Day Trip from San Juan?</h2>
         <p class="text-lg opacity-90 mb-6">Take our quiz to find the perfect beach based on what you're looking for - whether it's snorkeling, surfing, or just relaxing.</p>
-        <a href="/quiz.php" class="inline-block bg-white text-amber-700 hover:bg-slate-50 px-8 py-3 rounded-lg font-semibold transition-colors">
+        <a href="/quiz" class="inline-block bg-white text-amber-700 hover:bg-slate-50 px-8 py-3 rounded-lg font-semibold transition-colors">
             Take the Beach Match Quiz
         </a>
     </div>
