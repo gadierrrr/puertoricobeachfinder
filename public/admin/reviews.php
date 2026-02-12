@@ -10,7 +10,9 @@ require_once APP_ROOT . '/inc/db.php';
 // Handle actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require_once APP_ROOT . '/inc/session.php';
-    session_start();
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        session_start();
+    }
     require_once APP_ROOT . '/inc/admin.php';
     requireAdmin();
 
