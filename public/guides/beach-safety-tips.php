@@ -461,7 +461,7 @@ include APP_ROOT . "/components/page-shell.php";
                         <p class="text-gray-700 mb-6">
                             Browse beaches with lifeguards, safety amenities, and calm conditions perfect for families.
                         </p>
-                        <a href="/?amenities=lifeguards" class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                        <a href="/?view=map&has_lifeguard=1#beaches" class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
                             View Lifeguard-Protected Beaches
                         </a>
                     </div>

@@ -19,6 +19,9 @@ header('Content-Type: application/json');
 header('Cache-Control: public, max-age=86400, s-maxage=86400');
 
 $collectionKey = isset($_GET['collection']) ? (string)$_GET['collection'] : '';
+if ($collectionKey === '' && (($_GET['near'] ?? '') === 'san-juan')) {
+    $collectionKey = 'beaches-near-san-juan';
+}
 $beaches = [];
 $meta = [
     'collection' => null,
@@ -43,6 +46,17 @@ if ($collectionKey !== '' && isValidCollectionKey($collectionKey)) {
         $tags = array_merge($tags, (array)$_GET['tags[]']);
     }
     $tags = array_values(array_filter($tags, 'isValidTag'));
+    $hasLifeguard = isset($_GET['has_lifeguard']) && in_array((string)$_GET['has_lifeguard'], ['1', 'true'], true);
+    $amenities = [];
+    if (isset($_GET['amenities'])) {
+        $amenities = array_merge($amenities, (array)$_GET['amenities']);
+    }
+    if (isset($_GET['amenities[]'])) {
+        $amenities = array_merge($amenities, (array)$_GET['amenities[]']);
+    }
+    if (in_array('lifeguards', $amenities, true) || in_array('lifeguard', $amenities, true)) {
+        $hasLifeguard = true;
+    }
 
     $municipality = '';
     if (isset($_GET['municipality']) && is_string($_GET['municipality']) && isValidMunicipality($_GET['municipality'])) {
@@ -77,6 +91,10 @@ if ($collectionKey !== '' && isValidCollectionKey($collectionKey)) {
         $where[] = 'b.municipality = :municipality';
     }
 
+    if ($hasLifeguard) {
+        $where[] = 'b.has_lifeguard = 1';
+    }
+
     if ($searchQuery !== '') {
         $search = '%' . $searchQuery . '%';
         $params[':search_name'] = $search;
@@ -108,6 +126,7 @@ if ($collectionKey !== '' && isValidCollectionKey($collectionKey)) {
     $meta['filters'] = [
         'tags' => $tags,
         'municipality' => $municipality,
+        'has_lifeguard' => $hasLifeguard,
         'q' => $searchQuery,
         'sort' => $sort,
     ];

@@ -155,7 +155,7 @@ include APP_ROOT . "/components/page-shell.php";
                     <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-8 mt-12">
                         <h2 class="text-2xl font-bold text-gray-900 mb-4">Find Surf Breaks</h2>
                         <p class="text-gray-700 mb-6">Browse beaches with excellent surfing conditions across Puerto Rico.</p>
-                        <a href="/?tags=surfing" class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">View Surf Beaches</a>
+                        <a href="/?view=map&tags[]=surfing#beaches" class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">View Surf Beaches</a>
                     </div>
                 </div>
                 <div class="mt-12 pt-8 border-t border-gray-200">

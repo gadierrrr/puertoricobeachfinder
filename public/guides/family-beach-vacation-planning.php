@@ -96,7 +96,7 @@ include APP_ROOT . '/components/hero-guide.php';
 <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-8 mt-12">
 <h2 class="text-2xl font-bold text-gray-900 mb-4">Find Family-Friendly Beaches</h2>
 <p class="text-gray-700 mb-6">Browse beaches with lifeguards, facilities, and calm water perfect for families.</p>
-<a href="/?amenities=lifeguards" class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">View Family Beaches</a>
+<a href="/?view=map&has_lifeguard=1#beaches" class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">View Family Beaches</a>
 </div></div>
 <div class="mt-12 pt-8 border-t border-gray-200"><h3 class="text-xl font-bold text-gray-900 mb-4">Related Guides</h3>
 <div class="related-guides-grid"><?php foreach($relatedGuides as $guide):?>

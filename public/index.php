@@ -49,18 +49,41 @@ $pageDescription = 'Find your perfect Puerto Rico beach from a continuously upda
 $extraHead = websiteSchema() . organizationSchema();
 
 // Get filter parameters from URL
-$selectedTags = isset($_GET['tags']) ? (array)$_GET['tags'] : [];
+$selectedTags = [];
+if (isset($_GET['tags'])) {
+    $selectedTags = array_merge($selectedTags, (array)$_GET['tags']);
+}
+if (isset($_GET['tags[]'])) {
+    $selectedTags = array_merge($selectedTags, (array)$_GET['tags[]']);
+}
+if (isset($_GET['activity']) && is_string($_GET['activity'])) {
+    $selectedTags[] = $_GET['activity'];
+}
 $selectedMunicipality = $_GET['municipality'] ?? '';
 $sortBy = $_GET['sort'] ?? 'name';
 $viewMode = $_GET['view'] ?? 'list';
 $selectedCollection = $_GET['collection'] ?? '';
 $includeAll = isset($_GET['include_all']) && in_array((string)$_GET['include_all'], ['1', 'true'], true);
+$hasLifeguard = isset($_GET['has_lifeguard']) && in_array((string)$_GET['has_lifeguard'], ['1', 'true'], true);
+$amenities = [];
+if (isset($_GET['amenities'])) {
+    $amenities = array_merge($amenities, (array)$_GET['amenities']);
+}
+if (isset($_GET['amenities[]'])) {
+    $amenities = array_merge($amenities, (array)$_GET['amenities[]']);
+}
+if (in_array('lifeguards', $amenities, true) || in_array('lifeguard', $amenities, true)) {
+    $hasLifeguard = true;
+}
+if (!$selectedCollection && (($_GET['near'] ?? '') === 'san-juan')) {
+    $selectedCollection = 'beaches-near-san-juan';
+}
 $page = max(1, intval($_GET['page'] ?? 1));
 $perPage = 12;
 $searchQuery = trim($_GET['q'] ?? '');
 
 // Validate filters
-$selectedTags = array_filter($selectedTags, 'isValidTag');
+$selectedTags = array_values(array_unique(array_filter($selectedTags, 'isValidTag')));
 if ($selectedMunicipality && !isValidMunicipality($selectedMunicipality)) {
     $selectedMunicipality = '';
 }
@@ -88,6 +111,11 @@ if (!empty($selectedTags)) {
 if ($selectedMunicipality) {
     $where[] = 'b.municipality = :municipality';
     $params[':municipality'] = $selectedMunicipality;
+}
+
+// Lifeguard filter
+if ($hasLifeguard) {
+    $where[] = 'b.has_lifeguard = 1';
 }
 
 // Search query filter - searches name, municipality, and description
@@ -314,7 +342,7 @@ include APP_ROOT . '/components/header.php';
 <!-- Trending Now - Horizontal Carousel -->
 <?php
 $trendingBeaches = getTrendingBeaches(8);
-$showDiscovery = !empty($selectedTags) || !empty($selectedMunicipality) ? false : true;
+        $showDiscovery = !empty($selectedTags) || !empty($selectedMunicipality) || $hasLifeguard ? false : true;
 ?>
 <?php if ($showDiscovery && !empty($trendingBeaches)): ?>
 <section class="py-12 md:py-16 pl-4 sm:pl-6 md:pl-20 bg-brand-dark">
@@ -437,6 +465,7 @@ function scrollCarousel(id, direction) {
                     'municipality' => $selectedMunicipality ?: null,
                     'q' => $searchQuery ?: null,
                     'sort' => $sortBy !== 'name' ? $sortBy : null,
+                    'has_lifeguard' => $hasLifeguard ? '1' : null,
                     'page' => $page + 1
                 ]);
             ?>
@@ -512,6 +541,7 @@ window.BeachFinder = {
     selectedMunicipality: <?= json_encode($selectedMunicipality) ?>,
     selectedCollection: <?= json_encode($selectedCollection) ?>,
     includeAll: <?= $includeAll ? 'true' : 'false' ?>,
+    hasLifeguard: <?= $hasLifeguard ? 'true' : 'false' ?>,
     searchQuery: <?= json_encode($searchQuery) ?>,
     sortBy: <?= json_encode($sortBy) ?>,
     viewMode: <?= json_encode($viewMode) ?>,
@@ -521,7 +551,7 @@ window.BeachFinder = {
     mapCenter: <?= json_encode(getPRCenter()) ?>,
     totalBeaches: <?= $totalBeaches ?>,
     tagLabels: <?= json_encode(array_combine(TAGS, array_map('getTagLabel', TAGS))) ?>,
-    hasActiveFilters: <?= (!empty($selectedTags) || !empty($selectedMunicipality) || !empty($searchQuery) || !empty($selectedCollection) || $includeAll) ? 'true' : 'false' ?>,
+    hasActiveFilters: <?= (!empty($selectedTags) || !empty($selectedMunicipality) || !empty($searchQuery) || !empty($selectedCollection) || $includeAll || $hasLifeguard) ? 'true' : 'false' ?>,
     loadBeaches: function() {
         if (this.beachesLoaded || this._loading) return Promise.resolve(this.beaches);
         this._loading = true;
@@ -560,7 +590,8 @@ window.BeachFinder = {
 
     // On page load: scroll if filters are active or hash is #beaches
     document.addEventListener('DOMContentLoaded', function() {
-        if (window.BeachFinder.hasActiveFilters || window.location.hash === '#beaches') {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (window.BeachFinder.hasActiveFilters || window.location.hash === '#beaches' || urlParams.get('view') === 'map') {
             // Small delay to ensure page is rendered
             setTimeout(scrollToResults, 100);
         }

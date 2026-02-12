@@ -34,6 +34,17 @@ $page = max(1, intval($_GET['page'] ?? 1));
 $limit = min(50, max(1, intval($_GET['limit'] ?? 12)));
 $offset = ($page - 1) * $limit;
 $searchQuery = trim($_GET['q'] ?? '');
+$hasLifeguard = isset($_GET['has_lifeguard']) && in_array((string)$_GET['has_lifeguard'], ['1', 'true'], true);
+$amenities = [];
+if (isset($_GET['amenities'])) {
+    $amenities = array_merge($amenities, (array)$_GET['amenities']);
+}
+if (isset($_GET['amenities[]'])) {
+    $amenities = array_merge($amenities, (array)$_GET['amenities[]']);
+}
+if (in_array('lifeguards', $amenities, true) || in_array('lifeguard', $amenities, true)) {
+    $hasLifeguard = true;
+}
 
 // Validate inputs
 $tags = array_filter($tags, 'isValidTag');
@@ -68,6 +79,10 @@ if (!empty($tags)) {
 if ($municipality) {
     $where[] = 'b.municipality = :municipality';
     $params[':municipality'] = $municipality;
+}
+
+if ($hasLifeguard) {
+    $where[] = 'b.has_lifeguard = 1';
 }
 
 // Search query filter - searches name, municipality, and description
@@ -205,6 +220,7 @@ jsonResponse([
         'filters' => [
             'tags' => $tags,
             'municipality' => $municipality,
+            'has_lifeguard' => $hasLifeguard,
             'sort' => $sortBy,
             'q' => $searchQuery
         ]
