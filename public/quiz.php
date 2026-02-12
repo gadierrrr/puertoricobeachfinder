@@ -296,12 +296,12 @@ $breadcrumbs = [
                         <h3 class="text-lg font-bold text-brand-text mb-2">Unlock the full list + shareable link</h3>
                         <p class="text-sm text-brand-muted mb-4">Get the full set of matches and a link you can save or send to friends.</p>
 
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            <form id="quiz-send-form" class="md:col-span-2 flex flex-col sm:flex-row gap-2">
+                        <div class="grid grid-cols-1 xl:grid-cols-3 gap-3 items-start">
+                            <form id="quiz-send-form" class="xl:col-span-2 flex flex-col sm:flex-row gap-2 min-w-0">
                                 <input type="email" id="quiz-send-email" required placeholder="you@email.com"
-                                       class="flex-1 px-3 h-11 rounded-lg bg-white/5 border border-white/20 text-white placeholder-gray-500 focus:ring-2 focus:ring-brand-yellow/50 focus:border-brand-yellow/50">
+                                       class="w-full min-w-0 flex-1 px-3 h-11 rounded-lg bg-white/5 border border-white/20 text-white placeholder-gray-500 focus:ring-2 focus:ring-brand-yellow/50 focus:border-brand-yellow/50">
                                 <button type="submit"
-                                        class="h-11 px-5 rounded-lg bg-brand-yellow hover:bg-yellow-300 text-brand-darker font-semibold transition-colors">
+                                        class="h-11 px-5 sm:shrink-0 whitespace-nowrap rounded-lg bg-brand-yellow hover:bg-yellow-300 text-brand-darker font-semibold transition-colors">
                                     Email me results
                                 </button>
                             </form>
@@ -310,10 +310,10 @@ $breadcrumbs = [
 	                               href="#"
 	                               target="_blank"
 	                               rel="noopener noreferrer"
-	                               class="h-11 inline-flex items-center justify-center gap-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 text-white font-semibold transition-colors">
-	                                <span>WhatsApp</span>
-	                            </a>
-	                        </div>
+                               class="w-full h-11 inline-flex items-center justify-center gap-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 text-white font-semibold transition-colors">
+                                <span>WhatsApp</span>
+                            </a>
+                        </div>
 
                         <div class="mt-3 flex flex-col sm:flex-row gap-2">
                             <button type="button" id="quiz-save-btn"
