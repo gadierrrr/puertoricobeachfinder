@@ -165,10 +165,10 @@ include APP_ROOT . '/components/header.php';
 
             <!-- Submit -->
             <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <a href="/onboarding.php?skip=1<?= $redirectUrl !== '/' ? '&redirect=' . urlencode($redirectUrl) : '' ?>"
-                   class="text-gray-500 hover:text-gray-300 text-sm transition-colors order-2 sm:order-1">
-                    Skip for now
-                </a>
+	                <a href="/onboarding?skip=1<?= $redirectUrl !== '/' ? '&redirect=' . urlencode($redirectUrl) : '' ?>"
+	                   class="text-gray-500 hover:text-gray-300 text-sm transition-colors order-2 sm:order-1">
+	                    Skip for now
+	                </a>
                 <button type="submit"
                         class="w-full sm:w-auto bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-8 py-3 rounded-xl font-semibold transition-all hover:-translate-y-0.5 hover:shadow-lg order-1 sm:order-2">
                     Find My Perfect Beaches

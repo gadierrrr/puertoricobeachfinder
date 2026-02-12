@@ -172,10 +172,10 @@ include APP_ROOT . '/components/header.php';
                     <i data-lucide="compass" class="w-4 h-4"></i>
                     <span>Explore Beaches</span>
                 </a>
-                <a href="/logout.php" class="inline-flex items-center gap-2 border border-white/20 hover:border-white/40 text-gray-300 hover:text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors">
-                    <i data-lucide="log-out" class="w-4 h-4"></i>
-                    <span>Sign Out</span>
-                </a>
+	                <a href="/logout" class="inline-flex items-center gap-2 border border-white/20 hover:border-white/40 text-gray-300 hover:text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors">
+	                    <i data-lucide="log-out" class="w-4 h-4"></i>
+	                    <span>Sign Out</span>
+	                </a>
             </div>
         </div>
     </div>

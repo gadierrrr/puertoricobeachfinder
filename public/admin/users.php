@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $db->exec("DELETE FROM users WHERE id = '$userId'");
         }
 
-        header('Location: /admin/users.php?updated=1');
+        header('Location: /admin/users?updated=1');
         exit;
     }
 }
@@ -80,7 +80,7 @@ $totalPages = ceil($total / $limit);
                class="flex-1 max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
         <button type="submit" class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg font-medium">Search</button>
         <?php if ($search): ?>
-        <a href="/admin/users.php" class="text-gray-500 hover:text-gray-700">Clear</a>
+        <a href="/admin/users" class="text-gray-500 hover:text-gray-700">Clear</a>
         <?php endif; ?>
     </form>
 </div>

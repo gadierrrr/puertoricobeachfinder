@@ -43,7 +43,7 @@ $userFavorites = array_column($favorites, 'id');
 // Breadcrumbs
 $breadcrumbs = [
     ['name' => 'Home', 'url' => '/'],
-    ['name' => 'My Profile', 'url' => '/profile.php'],
+    ['name' => 'My Profile', 'url' => '/profile'],
     ['name' => 'Favorites']
 ];
 

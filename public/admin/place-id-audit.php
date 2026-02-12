@@ -308,8 +308,8 @@ function renderResults(results) {
                     <img src="${escapeHtml(r.cover_image || '/images/beaches/placeholder-beach.webp')}"
                          alt="" class="w-10 h-10 rounded-lg object-cover">
                     <div>
-                        <a href="/admin/beaches.php?action=edit&id=${r.beach_id}"
-                           class="font-medium text-gray-900 hover:text-blue-600">${escapeHtml(r.beach_name)}</a>
+	                        <a href="/admin/beaches?action=edit&id=${r.beach_id}"
+	                           class="font-medium text-gray-900 hover:text-blue-600">${escapeHtml(r.beach_name)}</a>
                         <p class="text-sm text-gray-500">${escapeHtml(r.municipality || '')}</p>
                     </div>
                 </div>

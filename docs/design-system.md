@@ -4,15 +4,12 @@ This project uses a homepage-first visual system for all public pages.
 
 ## Source of truth
 
-- Tokens source: `public/assets/design/tokens.json`
-- Generated CSS variables: `public/assets/css/partials/_variables.css`
-- Generated Tailwind tokens: `public/assets/design/tailwind.tokens.cjs`
+- Design tokens reference: `public/assets/design/tokens.json`
+- CSS variables used by the site: `public/assets/css/partials/_variables.css`
+- Tailwind token module: `public/assets/design/tailwind.tokens.cjs`
 
-Do not edit generated files directly. Run:
-
-```bash
-npm run build:tokens
-```
+Note: token generation is currently manual in this repo (there is no `build:tokens` script). If you update
+`tokens.json`, make the corresponding update to `_variables.css` and `tailwind.tokens.cjs`.
 
 ## Public page shell contract
 
@@ -81,7 +78,7 @@ Run checks locally:
 npm run check:design
 ```
 
-`check:design` is required in CI.
+`check:design` is recommended locally (CI does not currently enforce it).
 
 ## Exceptions (temporary only)
 

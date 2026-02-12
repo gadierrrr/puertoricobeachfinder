@@ -14,7 +14,7 @@ require_once APP_ROOT . '/inc/google-oauth.php';
 
 // Check if Google OAuth is configured
 if (!isGoogleOAuthEnabled()) {
-    redirect('/login.php?error=google_not_configured');
+    redirect('/login?error=google_not_configured');
 }
 
 // Get optional redirect URL

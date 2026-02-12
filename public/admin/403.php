@@ -25,7 +25,7 @@
                 Go to Beach Finder
             </a>
 
-            <a href="/logout.php"
+            <a href="/logout"
                class="block w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 px-6 rounded-lg font-medium transition-colors">
                 Sign Out
             </a>

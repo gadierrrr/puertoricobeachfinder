@@ -283,7 +283,7 @@ include APP_ROOT . '/components/header.php';
     <div class="max-w-4xl mx-auto px-4 text-center">
         <h2 class="text-2xl md:text-3xl font-bold mb-4">Find the Perfect Beach for Your Family</h2>
         <p class="text-lg opacity-90 mb-6">Tell us about your family's preferences and get personalized beach recommendations.</p>
-        <a href="/quiz.php" class="inline-block bg-white text-amber-700 hover:bg-slate-50 px-8 py-3 rounded-lg font-semibold transition-colors">
+        <a href="/quiz" class="inline-block bg-white text-amber-700 hover:bg-slate-50 px-8 py-3 rounded-lg font-semibold transition-colors">
             Take the Beach Match Quiz
         </a>
     </div>

@@ -24,7 +24,7 @@ $success = '';
 // Magic link temporarily disabled - redirect to main login if someone tries to access it
 $showMagicLinkForm = false; // Was: isset($_GET['method']) && $_GET['method'] === 'email';
 if (isset($_GET['method']) && $_GET['method'] === 'email') {
-    redirect('/login.php' . ($redirectUrl !== '/' ? '?redirect=' . urlencode($redirectUrl) : ''));
+    redirect('/login' . ($redirectUrl !== '/' ? '?redirect=' . urlencode($redirectUrl) : ''));
 }
 
 // Handle OAuth error codes from callback
@@ -384,9 +384,9 @@ include APP_ROOT . '/components/header.php';
             <div class="mt-8 pt-6 border-t border-white/10 text-center space-y-4">
                 <p class="text-xs text-gray-400">
                     By signing in, you agree to our
-                    <a href="/terms.php" class="text-brand-yellow hover:underline">Terms of Service</a>
+                    <a href="/terms" class="text-brand-yellow hover:underline">Terms of Service</a>
                     and
-                    <a href="/privacy.php" class="text-brand-yellow hover:underline">Privacy Policy</a>
+                    <a href="/privacy" class="text-brand-yellow hover:underline">Privacy Policy</a>
                 </p>
 
                 <a href="/" class="inline-flex items-center gap-2 text-brand-yellow hover:text-yellow-300 text-sm transition-colors">

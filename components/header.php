@@ -101,7 +101,11 @@ if ($bodyVariant === 'collection-light') {
             return '/';
         }
 
-        // Canonicalize extensionless public pages.
+        if ($path === '/sitemap.php') {
+            return '/sitemap.xml';
+        }
+
+        // Canonicalize extensionless public pages (keep this as an allowlist to avoid surprises).
         $extensionlessPages = [
             '/best-beaches.php',
             '/best-beaches-san-juan.php',
@@ -111,6 +115,17 @@ if ($bodyVariant === 'collection-light') {
             '/beaches-near-san-juan.php',
             '/beaches-near-san-juan-airport.php',
             '/hidden-beaches-puerto-rico.php',
+            '/quiz.php',
+            '/compare.php',
+            '/offline.php',
+            '/login.php',
+            '/logout.php',
+            '/verify.php',
+            '/favorites.php',
+            '/profile.php',
+            '/onboarding.php',
+            '/terms.php',
+            '/privacy.php',
         ];
 
         if (in_array($path, $extensionlessPages, true)) {
@@ -148,15 +163,18 @@ if ($bodyVariant === 'collection-light') {
     $canonicalPath = $normalizeCanonicalPath($canonicalPath);
     $canonical = absoluteUrl($canonicalPath);
 
-    $noindexPaths = [
-        '/login.php',
-        '/logout.php',
-        '/verify.php',
-        '/favorites.php',
-        '/profile.php',
-        '/onboarding.php',
+    // Normalize before checking noindex so /login and /login.php behave the same.
+    $normalizedRequestPath = $normalizeCanonicalPath($requestPath);
+    $noindexCanonicalPaths = [
+        '/login',
+        '/logout',
+        '/verify',
+        '/favorites',
+        '/profile',
+        '/onboarding',
+        '/offline',
     ];
-    $robots = in_array($requestPath, $noindexPaths, true)
+    $robots = in_array($normalizedRequestPath, $noindexCanonicalPaths, true)
         ? 'noindex, nofollow, noarchive'
         : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1';
     ?>

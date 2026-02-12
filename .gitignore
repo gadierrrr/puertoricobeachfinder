@@ -40,6 +40,9 @@ lighthouse-*.json
 # Temporary files
 *.tmp
 
+# Local backups
+backups/
+
 # Runtime artifacts
 audit-results/
 data/cache/login-stats.json

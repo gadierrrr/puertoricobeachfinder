@@ -49,7 +49,7 @@ This doc is a quick navigation guide to the repo after the `public/` docroot mig
    - `require_once $_SERVER['DOCUMENT_ROOT'] . '/../bootstrap.php';`
 3. Use `components/page-shell.php` for consistent header/footer:
    - set `$pageTitle`, optional `$pageDescription`, then include the shell.
-4. Use `APP_ROOT` for includes; never assume `__DIR__` traversal.
+4. For cross-directory includes, prefer `APP_ROOT` (or `PUBLIC_ROOT`). Using `__DIR__` is fine within a subsystem.
 
 ### Add a new API endpoint
 
