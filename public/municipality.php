@@ -170,6 +170,19 @@ include APP_ROOT . '/components/header.php';
     </div>
 </section>
 
+<section class="bg-brand-dark border-b border-white/10 py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <?php
+        $contextType = 'municipality';
+        $contextKey = (string) $municipalitySlug;
+        $filtersQuery = '';
+        $title = 'Send me these beaches';
+        $subtitle = 'Get the full list for ' . $municipality . ' with Google Maps links (no account required).';
+        include APP_ROOT . '/components/send-list-capture.php';
+        ?>
+    </div>
+</section>
+
 <!-- Quick Filter Tags -->
 <?php if (!empty($topTags)): ?>
 <section class="bg-brand-dark border-b border-white/10 py-4">

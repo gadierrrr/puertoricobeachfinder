@@ -203,6 +203,11 @@ $hasConditions = $sargassum || $surf || $wind;
                target="_blank"
                rel="noopener noreferrer"
                onclick="event.stopPropagation()"
+               data-bf-track="directions"
+               data-bf-beach-id="<?= h($beach['id']) ?>"
+               data-bf-beach-slug="<?= h($slug) ?>"
+               data-bf-municipality="<?= h($municipality) ?>"
+               data-bf-source="card"
                class="flex-1 flex items-center justify-center gap-1.5 bg-white/10 hover:bg-white/20 text-white text-sm font-medium h-10 px-2 rounded-lg transition-colors border border-white/10"
                aria-label="Get directions to <?= h($name) ?>">
                 <i data-lucide="navigation" class="w-4 h-4" aria-hidden="true"></i>

@@ -35,6 +35,14 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         <priority>0.8</priority>
     </url>
 
+    <!-- Quiz Results Landing (shareable results links are noindex via token) -->
+    <url>
+        <loc><?= h($appUrl) ?>/quiz-results</loc>
+        <lastmod><?= date('Y-m-d') ?></lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.4</priority>
+    </url>
+
     <!-- Compare Beaches -->
     <url>
         <loc><?= h($appUrl) ?>/compare</loc>
