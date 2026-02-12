@@ -51,6 +51,8 @@ if ($bodyVariant === 'collection-light') {
     <meta name="apple-mobile-web-app-title" content="Beach Finder">
     <link rel="manifest" href="/manifest.json">
     <link rel="apple-touch-icon" href="/assets/icons/icon-152x152.png">
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="icon" href="/assets/icons/icon-96x96.png" sizes="96x96" type="image/png">
 
     <!-- Open Graph / Social -->
     <meta property="og:type" content="website">
@@ -160,6 +162,8 @@ if ($bodyVariant === 'collection-light') {
     ?>
     <link rel="canonical" href="<?= h($canonical) ?>">
     <meta property="og:url" content="<?= h($canonical) ?>">
+    <link rel="alternate" hreflang="en" href="<?= h($canonical) ?>">
+    <link rel="alternate" hreflang="x-default" href="<?= h($canonical) ?>">
 
     <!-- Robots Meta Tags -->
     <meta name="robots" content="<?= h($robots) ?>">

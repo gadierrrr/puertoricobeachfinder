@@ -136,6 +136,7 @@ if (isAuthenticated()) {
 $tagCounts = getBeachCountsByTag();
 $popularBeaches = getPopularBeaches(4);
 $siteStats = getSiteStats();
+$publishedCount = queryOne('SELECT COUNT(*) as cnt FROM beaches WHERE publish_status = "published"')['cnt'];
 
 // Include header
 include APP_ROOT . '/components/header.php';
@@ -158,7 +159,7 @@ include APP_ROOT . '/components/header.php';
         <!-- Headline - Single H1 with styled spans -->
         <h1 class="animate-fade-in-up">
             <span class="block text-2xl sm:text-3xl md:text-5xl lg:text-5xl font-bold text-white">
-                Explore 466 Puerto Rico Beaches—
+                Explore <?= number_format($publishedCount) ?> Puerto Rico Beaches --
             </span>
             <span class="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif italic text-brand-yellow animate-fade-in-up delay-200 lg:whitespace-nowrap">
                 from surf breaks to secret coves.

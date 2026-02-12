@@ -468,7 +468,7 @@ function renderBeachList(filter = '') {
                 class="w-full flex items-center gap-3 p-3 hover:bg-white/5 rounded-lg transition-colors text-left"
                 ${comparisonBeaches.length >= MAX_COMPARE ? 'disabled' : ''}>
             <img src="${beach.cover_image || '/images/beaches/placeholder-beach.webp'}"
-                 alt="" class="w-12 h-12 rounded-lg object-cover flex-shrink-0">
+                 alt="${escapeHtml(beach.name)}" class="w-12 h-12 rounded-lg object-cover flex-shrink-0">
             <div class="flex-1 min-w-0">
                 <div class="font-medium text-white truncate">${escapeHtml(beach.name)}</div>
                 <div class="text-sm text-gray-400">${escapeHtml(beach.municipality)}</div>
