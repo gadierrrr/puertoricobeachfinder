@@ -84,7 +84,6 @@ This doc is a quick navigation guide to the repo after the `public/` docroot mig
 - Ops runbook:
   - `docs/email-plunk.md`
 
-
 ### Add a migration
 
 1. Add a new file in `migrations/`

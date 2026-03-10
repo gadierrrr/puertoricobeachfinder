@@ -13,10 +13,6 @@ async function shareBeach(slug, name) {
         window.bfTrack('share_click', { beach_slug: slug, source: 'share' });
     }
 
-    if (typeof window.bfTrack === 'function') {
-        window.bfTrack('share_click', { beach_slug: slug, source: 'share' });
-    }
-
     // Try native share first
     if (navigator.share) {
         try {
