@@ -16,6 +16,7 @@ require_once __DIR__ . '/../inc/helpers.php';
 
 $_t = function_exists('__');
 
+
 $contextType = isset($contextType) ? (string) $contextType : '';
 $contextKey = isset($contextKey) ? (string) $contextKey : '';
 $filtersQuery = isset($filtersQuery) ? (string) $filtersQuery : '';

@@ -1342,6 +1342,10 @@ async function submitCheckin(event) {
                 window.bfTrack('U1_checkin_submitted', { source: 'beach_page', beach_slug: <?= json_encode($beach['slug']) ?> });
             }
 
+            if (typeof window.bfTrack === 'function') {
+                window.bfTrack('U1_checkin_submitted', { source: 'beach_page', beach_slug: <?= json_encode($beach['slug']) ?> });
+            }
+
             // Refresh check-ins list
             if (typeof htmx !== 'undefined') {
                 htmx.trigger('#checkins-list', 'load');
