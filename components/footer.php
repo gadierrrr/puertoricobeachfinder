@@ -166,7 +166,7 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
             src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"
             integrity="sha384-3WUbXI7T+/GIrWP/5MDMjhzLyHQ+0utF3PnJ7ozD7UeN1/bbZ96Hk+Vvd024VYfW"
             crossorigin="anonymous" <?= cspNonceAttr() ?>></script>
-    <script defer src="/assets/js/context-map-view.js" <?= cspNonceAttr() ?>></script>
+    <script defer src="/assets/js/context-map-view.js?v=2.0" <?= cspNonceAttr() ?>></script>
     <?php endif; ?>
 
     <?php if (!isset($skipAppScripts) || !$skipAppScripts): ?>
@@ -247,10 +247,10 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
     });
     </script>
     <!-- App JavaScript (defer for non-blocking load) -->
-    <script defer src="/assets/js/app.min.js" <?= cspNonceAttr() ?>></script>
-    <script defer src="/assets/js/geolocation.js" <?= cspNonceAttr() ?>></script>
+    <script defer src="/assets/js/app.min.js?v=2.0" <?= cspNonceAttr() ?>></script>
+    <script defer src="/assets/js/geolocation.js?v=2.0" <?= cspNonceAttr() ?>></script>
     <script defer src="/assets/js/filters.js" <?= cspNonceAttr() ?>></script>
-    <script defer src="/assets/js/analytics.js" <?= cspNonceAttr() ?>></script>
+    <script defer src="/assets/js/analytics.js?v=2.0" <?= cspNonceAttr() ?>></script>
     <script defer src="/assets/js/plunk-client.js" <?= cspNonceAttr() ?>></script>
     <script defer src="/assets/js/share.js" <?= cspNonceAttr() ?>></script>
     <?php endif; ?>
@@ -576,8 +576,8 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
     <!-- Welcome Popup JavaScript -->
     <script <?= cspNonceAttr() ?>>
     (function() {
-        const POPUP_DELAY = 12000;  // 12 seconds
-        const DISMISS_DURATION = 7 * 24 * 60 * 60 * 1000;  // 7 days in ms
+        const POPUP_DELAY = 30000;  // 30 seconds
+        const DISMISS_DURATION = 30 * 24 * 60 * 60 * 1000;  // 30 days in ms
         const STORAGE_KEY = 'welcome_popup_dismissed';
 
         let popupShown = false;
@@ -663,21 +663,23 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
             // Trigger 1: Timer after delay
             popupTimer = setTimeout(showWelcomePopup, POPUP_DELAY);
 
-            // Trigger 2: User scrolls past hero section
-            const heroSection = document.querySelector('header.min-h-screen');
-            if (heroSection && 'IntersectionObserver' in window) {
-                scrollObserver = new IntersectionObserver(function(entries) {
-                    entries.forEach(function(entry) {
-                        // When hero is no longer visible (user scrolled past)
-                        if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
-                            showWelcomePopup();
-                        }
+            // Trigger 2: User scrolls past hero section (desktop only — avoids mobile interstitial penalty)
+            if (window.innerWidth >= 768) {
+                const heroSection = document.querySelector('header.min-h-screen');
+                if (heroSection && 'IntersectionObserver' in window) {
+                    scrollObserver = new IntersectionObserver(function(entries) {
+                        entries.forEach(function(entry) {
+                            // When hero is no longer visible (user scrolled past)
+                            if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
+                                showWelcomePopup();
+                            }
+                        });
+                    }, {
+                        threshold: 0,
+                        rootMargin: '-100px 0px 0px 0px'
                     });
-                }, {
-                    threshold: 0,
-                    rootMargin: '-100px 0px 0px 0px'
-                });
-                scrollObserver.observe(heroSection);
+                    scrollObserver.observe(heroSection);
+                }
             }
         }
 

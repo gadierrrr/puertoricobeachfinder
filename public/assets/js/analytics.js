@@ -157,10 +157,13 @@
   function baseProps(extra) {
     const meta = getMeta();
     const anonId = ensureAnonId();
+    var locale = "en";
+    try { locale = (document.documentElement.lang || "en").substring(0, 2); } catch (e) {}
     return Object.assign(
       {
         auth: toBool01(meta.authenticated === 1 || meta.authenticated === "1"),
         anon_id: anonId,
+        locale: locale,
       },
       extra || {}
     );
@@ -399,6 +402,148 @@
     }, 1200);
   }
 
+  /* ===== Guide Scroll Depth Tracking ===== */
+  function initGuideScrollDepth() {
+    // Only run on guide pages
+    var guideContent = document.querySelector(".guide-content, .prose-light, article.guide");
+    if (!guideContent) return;
+    // Also check URL
+    var path = window.location.pathname;
+    if (path.indexOf("/guides/") === -1 && path.indexOf("/es/guias/") === -1) return;
+
+    var milestones = [25, 50, 75, 100];
+    var fired = {};
+
+    function getScrollPercent() {
+      var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight <= 0) return 100;
+      return Math.round((window.scrollY / docHeight) * 100);
+    }
+
+    var guideSlug = path.split("/").pop() || "unknown";
+
+    function checkMilestones() {
+      var pct = getScrollPercent();
+      for (var i = 0; i < milestones.length; i++) {
+        var m = milestones[i];
+        if (pct >= m && !fired[m]) {
+          fired[m] = true;
+          window.bfTrack("guide_scroll_depth", { depth: m, guide_slug: guideSlug });
+        }
+      }
+    }
+
+    var scrollTimer = null;
+    window.addEventListener("scroll", function () {
+      if (scrollTimer) return;
+      scrollTimer = setTimeout(function () {
+        scrollTimer = null;
+        checkMilestones();
+      }, 300);
+    }, { passive: true });
+  }
+
+  /* ===== Guide CTA Click Tracking ===== */
+  function initGuideCTATracking() {
+    var path = window.location.pathname;
+    if (path.indexOf("/guides/") === -1 && path.indexOf("/es/guias/") === -1) return;
+    var guideSlug = path.split("/").pop() || "unknown";
+
+    document.addEventListener("click", function (event) {
+      var link = event.target.closest ? event.target.closest("a[href]") : null;
+      if (!link) return;
+      var href = link.getAttribute("href") || "";
+      // Track clicks to beach pages from within guide content
+      if (href.indexOf("/beach/") !== -1 || href.indexOf("/playa/") !== -1) {
+        var beachSlug = href.split("/").pop() || "";
+        window.bfTrack("guide_cta_click", { guide_slug: guideSlug, beach_slug: beachSlug, href: href });
+      }
+    });
+  }
+
+  /* ===== Outbound Link Click Tracking ===== */
+  function initOutboundLinkTracking() {
+    document.addEventListener("click", function (event) {
+      var link = event.target.closest ? event.target.closest("a[href]") : null;
+      if (!link) return;
+      var href = link.getAttribute("href") || "";
+      // Only track external links (not same origin, not anchors, not mailto/tel)
+      if (!href || href.charAt(0) === "#" || href.charAt(0) === "/" || href.indexOf("mailto:") === 0 || href.indexOf("tel:") === 0) return;
+      try {
+        var url = new URL(href, window.location.origin);
+        if (url.hostname === window.location.hostname) return;
+        // Skip Google Maps directions (already tracked as A3)
+        if (url.hostname.indexOf("google.com") !== -1 && href.indexOf("/maps/dir") !== -1) return;
+        window.bfTrack("outbound_click", { url: url.hostname + url.pathname, domain: url.hostname });
+      } catch (e) {}
+    });
+  }
+
+  /* ===== Drawer Engagement Tracking ===== */
+  function initDrawerEngagementTracking() {
+    var drawerOpenTime = 0;
+    var drawerBeachSlug = "";
+
+    // Track when drawer opens (time starts)
+    document.body.addEventListener("htmx:afterSwap", function (event) {
+      var target = event.detail && event.detail.target;
+      if (!target || target.id !== "drawer-content-inner") return;
+      drawerOpenTime = Date.now();
+      var beachEl = target.querySelector("[data-bf-beach-slug]");
+      drawerBeachSlug = beachEl ? (beachEl.getAttribute("data-bf-beach-slug") || "") : "";
+    });
+
+    // Track gallery interaction in drawer
+    document.addEventListener("click", function (event) {
+      var target = event.target.closest ? event.target : null;
+      if (!target) return;
+      var drawer = target.closest("#beach-drawer, #drawer-content-inner");
+      if (!drawer) return;
+      // Gallery prev/next or thumbnail clicks
+      var galleryBtn = target.closest("[data-gallery-action], .gallery-nav, .gallery-thumb, .swiper-button-next, .swiper-button-prev, [data-slide]");
+      if (galleryBtn) {
+        window.bfTrack("drawer_gallery_interact", { beach_slug: drawerBeachSlug });
+      }
+    });
+
+    // Track drawer close and time spent
+    var drawerEl = document.getElementById("beach-drawer");
+    if (drawerEl) {
+      var observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+          if (mutation.attributeName !== "class") return;
+          var wasOpen = mutation.oldValue && mutation.oldValue.indexOf("open") !== -1;
+          var isOpen = drawerEl.classList.contains("open");
+          if (wasOpen && !isOpen && drawerOpenTime > 0) {
+            var duration = Math.round((Date.now() - drawerOpenTime) / 1000);
+            window.bfTrack("drawer_close", { beach_slug: drawerBeachSlug, time_spent_seconds: duration });
+            drawerOpenTime = 0;
+          }
+        });
+      });
+      observer.observe(drawerEl, { attributes: true, attributeOldValue: true });
+    }
+  }
+
+  /* ===== Geolocation Usage Tracking ===== */
+  function initGeolocationTracking() {
+    document.addEventListener("click", function (event) {
+      var btn = event.target.closest ? event.target.closest("#location-btn, #mobile-nearme-btn, #mobile-location-btn") : null;
+      if (!btn) return;
+      window.bfTrack("geolocation_requested", { source: btn.id });
+    });
+  }
+
+  /* ===== Compare Page View Tracking ===== */
+  function initCompareTracking() {
+    if (window.location.pathname.indexOf("/compare") === -1) return;
+    var params = new URLSearchParams(window.location.search);
+    var beaches = params.get("beaches") || "";
+    if (!beaches) return;
+    var slugs = beaches.split(",").filter(Boolean);
+    window.bfTrack("compare_page_view", { beach_count: slugs.length, beaches: slugs.join(",") });
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     ensureAnonId();
     trackSignupAttribution();
@@ -409,5 +554,11 @@
     initSendListForms();
     initWelcomePopupSuppression();
     initSyntheticProbe();
+    initGuideScrollDepth();
+    initGuideCTATracking();
+    initOutboundLinkTracking();
+    initDrawerEngagementTracking();
+    initGeolocationTracking();
+    initCompareTracking();
   });
 })();

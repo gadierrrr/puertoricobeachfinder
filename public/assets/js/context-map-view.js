@@ -358,6 +358,10 @@
             }
         }
 
+        if (typeof window.bfTrack === "function") {
+            window.bfTrack("map_view_activated", { collection: context.collection || "", mode: context.mode || "" });
+        }
+
         await renderMap(context);
         return true;
     }

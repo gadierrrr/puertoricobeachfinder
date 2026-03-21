@@ -263,6 +263,6 @@ include APP_ROOT . '/components/header.php';
 </section>
 
 <?php
-$extraScripts = '<script defer src="/assets/js/map.js" ' . cspNonceAttr() . '></script>';
+$extraScripts = '<script defer src="/assets/js/map.js?v=2.0" ' . cspNonceAttr() . '></script>';
 include APP_ROOT . '/components/footer.php';
 ?>

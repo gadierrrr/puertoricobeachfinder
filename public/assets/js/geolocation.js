@@ -50,6 +50,10 @@ function requestUserLocation() {
             if (mobileNearmeBtn) mobileNearmeBtn.disabled = false;
             if (mobileLocationBtn) mobileLocationBtn.disabled = false;
 
+            if (typeof window.bfTrack === "function") {
+                window.bfTrack("geolocation_granted", { source: "browser" });
+            }
+
             onLocationGranted();
             applyFilters();
 
@@ -61,6 +65,9 @@ function requestUserLocation() {
         // Error
         function(error) {
             state.geolocationStatus = "denied";
+            if (typeof window.bfTrack === "function") {
+                window.bfTrack("geolocation_denied", { error_code: error.code });
+            }
 
             // Reset desktop UI
             if (locationIcon) locationIcon.textContent = "📍";

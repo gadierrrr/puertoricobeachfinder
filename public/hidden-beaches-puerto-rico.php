@@ -620,6 +620,6 @@ include APP_ROOT . '/components/header.php';
 
 <?php
 $skipAppScripts = true;
-$extraScripts = '<script defer src="/assets/js/collection-explorer.min.js" ' . cspNonceAttr() . '></script>';
+$extraScripts = '<script defer src="/assets/js/collection-explorer.min.js?v=2.0" ' . cspNonceAttr() . '></script>';
 ?>
 <?php include APP_ROOT . '/components/footer.php'; ?>

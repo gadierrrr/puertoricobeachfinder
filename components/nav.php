@@ -306,6 +306,10 @@ function toggleLangDropdown() {
 }
 
 function setLanguage(lang, targetUrl) {
+    const currentLang = (document.documentElement.lang || 'en').substring(0, 2);
+    if (typeof window.bfTrack === 'function') {
+        window.bfTrack('language_switch', { from: currentLang, to: lang, page: window.location.pathname });
+    }
     const redirectUrl = targetUrl || window.location.pathname + window.location.search;
     const body = new URLSearchParams({
         lang: lang,

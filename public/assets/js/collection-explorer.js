@@ -308,16 +308,28 @@
         refresh();
     }, 250);
 
+    const debouncedSearchTrack = debounce(function(value) {
+        if (value && typeof window.bfTrack === 'function') {
+            window.bfTrack('filter_search', { query: value, collection: collectionKey });
+        }
+    }, 1000);
+
     if (searchInput) {
         searchInput.addEventListener('input', (event) => {
-            debouncedSearch(event.target.value || '');
+            const val = event.target.value || '';
+            debouncedSearch(val);
+            debouncedSearchTrack(val.trim());
         });
     }
 
     if (sortSelect) {
         sortSelect.addEventListener('change', () => {
-            state.sort = sortSelect.value || defaultSort;
+            const newSort = sortSelect.value || defaultSort;
+            state.sort = newSort;
             state.page = 1;
+            if (typeof window.bfTrack === 'function') {
+                window.bfTrack('filter_sort_change', { sort: newSort, collection: collectionKey });
+            }
             refresh();
         });
     }
@@ -333,6 +345,9 @@
             const exists = state.tags.includes(tag);
             state.tags = exists ? state.tags.filter((item) => item !== tag) : state.tags.concat(tag);
             state.page = 1;
+            if (typeof window.bfTrack === 'function') {
+                window.bfTrack('filter_tag_toggle', { tag: tag, active: !exists, collection: collectionKey });
+            }
             refresh();
             return;
         }
@@ -340,6 +355,9 @@
         if (action === 'toggle-all') {
             state.includeAll = !state.includeAll;
             state.page = 1;
+            if (typeof window.bfTrack === 'function') {
+                window.bfTrack('filter_tag_toggle', { tag: 'include_all', active: state.includeAll, collection: collectionKey });
+            }
             refresh();
             return;
         }
@@ -348,6 +366,9 @@
             event.preventDefault();
             const view = target.dataset.ceView || 'cards';
             if (!['cards', 'list', 'grid', 'map'].includes(view)) return;
+            if (typeof window.bfTrack === 'function') {
+                window.bfTrack('filter_view_change', { view: view, collection: collectionKey });
+            }
             state.view = view;
             state.page = 1;
             refresh();
@@ -355,6 +376,9 @@
         }
 
         if (action === 'clear-all') {
+            if (typeof window.bfTrack === 'function') {
+                window.bfTrack('filter_clear', { collection: collectionKey });
+            }
             state.q = '';
             state.tags = [];
             state.municipality = '';
@@ -367,6 +391,9 @@
         }
 
         if (action === 'clear-filters') {
+            if (typeof window.bfTrack === 'function') {
+                window.bfTrack('filter_clear', { collection: collectionKey });
+            }
             clearTagFiltersOnly();
             return;
         }
