@@ -45,7 +45,7 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
                                 <i data-lucide="git-compare" class="w-4 h-4"></i>
                                 <?= h(__('footer.compare_beaches')) ?>
                             </a></li>
-                            <li><a href="<?= h($homeAnchorHref('map')) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors flex items-center gap-2">
+                            <li><a href="<?= h($homePath . '?view=map') ?>" class="text-gray-400 hover:text-brand-yellow transition-colors flex items-center gap-2">
                                 <i data-lucide="map" class="w-4 h-4"></i>
                                 <?= h(__('footer.interactive_map')) ?>
                             </a></li>
