@@ -63,3 +63,9 @@ Disallow: /*?page=
 
 # Sitemap location
 Sitemap: https://www.puertoricobeachfinder.com/sitemap.xml
+
+# Tag/amenity landing pages
+Allow: /beaches/
+
+# RSS Feed
+Allow: /feed.xml

@@ -133,4 +133,42 @@ foreach ($municipalities as $municipality):
     </url>
 <?php endforeach; ?>
 
+
+    <!-- Tag/Amenity Landing Pages -->
+<?php
+$tagPages = [
+    "swimming" => "natacion",
+    "scenic" => "escenicas",
+    "calm-waters" => "aguas-tranquilas",
+    "fishing" => "pesca",
+    "accessible" => "accesibles",
+    "diving" => "buceo",
+    "camping" => "acampar",
+    "popular" => "populares",
+    "with-parking" => "con-estacionamiento",
+    "with-restrooms" => "con-banos",
+    "with-showers" => "con-duchas",
+    "with-lifeguard" => "con-salvavidas",
+    "with-picnic-areas" => "con-areas-picnic",
+    "with-food" => "con-comida",
+];
+$tagDate = date("Y-m-d");
+foreach ($tagPages as $enSlug => $esSlug):
+?>
+    <url>
+        <loc><?= h($appUrl) ?>/beaches/<?= h($enSlug) ?></loc>
+        <lastmod><?= $tagDate ?></lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc><?= h($appUrl) ?>/es/playas/<?= h($esSlug) ?></loc>
+        <lastmod><?= $tagDate ?></lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+<?php endforeach; ?>
+
 </urlset>
+
+This approach won't work since the file already has closing tags. Let me edit inline.

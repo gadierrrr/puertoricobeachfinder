@@ -53,6 +53,7 @@ if ($bodyVariant === 'collection-light') {
     <link rel="manifest" href="/manifest.json">
     <link rel="apple-touch-icon" href="/assets/icons/icon-152x152.png">
     <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="alternate" type="application/rss+xml" title="Puerto Rico Beach Finder" href="/feed.xml">
     <link rel="icon" href="/assets/icons/icon-96x96.png" sizes="96x96" type="image/png">
 
     <!-- Open Graph / Social -->
@@ -68,9 +69,9 @@ if ($bodyVariant === 'collection-light') {
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="<?= isset($pageTitle) ? h($pageTitle) : 'Puerto Rico Beach' ?>">
     <?php else: ?>
-    <meta property="og:image" content="<?= h($appUrl) ?>/assets/icons/icon-512x512.png">
-    <meta property="og:image:width" content="512">
-    <meta property="og:image:height" content="512">
+    <meta property="og:image" content="<?= h($appUrl) ?>/images/og-default.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <?php endif; ?>
 
     <!-- Twitter Card -->
@@ -85,7 +86,7 @@ if ($bodyVariant === 'collection-light') {
     <meta name="twitter:image" content="<?= h($ogImage) ?>">
     <meta name="twitter:image:alt" content="<?= isset($pageTitle) ? h($pageTitle) : 'Puerto Rico Beach' ?>">
     <?php else: ?>
-    <meta name="twitter:image" content="<?= h($appUrl) ?>/assets/icons/icon-512x512.png">
+    <meta name="twitter:image" content="<?= h($appUrl) ?>/images/og-default.jpg">
     <?php endif; ?>
 
     <!-- Canonical URL -->
