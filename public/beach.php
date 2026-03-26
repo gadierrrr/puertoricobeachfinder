@@ -336,10 +336,18 @@ include APP_ROOT . '/components/header.php';
                     $icon = 'clock'; $label = __('beach.best_time');
                     $_btRaw = ($lang === 'es' && !empty($beach['best_time_es'])) ? $beach['best_time_es'] : $beach['best_time'];
                     $_btClean = strip_tags($_btRaw);
-                    preg_match('/^([^.!?]+[.!?])/', $_btClean, $_btM);
-                    $_btFirst = !empty($_btM[1]) ? trim($_btM[1]) : $_btClean;
-                    $value = mb_strlen($_btFirst) > 55 ? mb_substr($_btFirst, 0, 52) . '...' : $_btFirst;
+                    // Try first sentence, otherwise take first ~40 chars at word boundary
+                    if (preg_match('/^([^.!?]{10,50}[.!?])/', $_btClean, $_btM)) {
+                        $value = trim($_btM[1]);
+                    } else {
+                        // Truncate at word boundary around 40 chars
+                        $value = mb_substr($_btClean, 0, 40);
+                        $lastSpace = mb_strrpos($value, ' ');
+                        if ($lastSpace > 20) $value = mb_substr($value, 0, $lastSpace);
+                        $value = rtrim($value, ',;: ');
+                    }
                     $subtext = '';
+                    $linkTo = '#section-best_time';
                     ?>
                     <?php include APP_ROOT . '/components/quick-fact-card.php'; ?>
                     <?php endif; ?>
@@ -349,9 +357,14 @@ include APP_ROOT . '/components/header.php';
                     $icon = 'car'; $label = __('beach.parking');
                     $_parkingVal = ($lang === 'es' && !empty($beach['parking_details_es'])) ? $beach['parking_details_es'] : $beach['parking_details'];
                     $_pkClean = strip_tags($_parkingVal);
-                    preg_match('/^([^.!?]+[.!?])/', $_pkClean, $_pkM);
-                    $_pkFirst = !empty($_pkM[1]) ? trim($_pkM[1]) : $_pkClean;
-                    $value = mb_strlen($_pkFirst) > 55 ? mb_substr($_pkFirst, 0, 52) . '...' : $_pkFirst;
+                    if (preg_match('/^([^.!?]{10,50}[.!?])/', $_pkClean, $_pkM)) {
+                        $value = trim($_pkM[1]);
+                    } else {
+                        $value = mb_substr($_pkClean, 0, 40);
+                        $lastSpace = mb_strrpos($value, ' ');
+                        if ($lastSpace > 15) $value = mb_substr($value, 0, $lastSpace);
+                        $value = rtrim($value, ',;: ');
+                    }
                     $subtext = '';
                     ?>
                     <?php include APP_ROOT . '/components/quick-fact-card.php'; ?>
@@ -413,9 +426,21 @@ include APP_ROOT . '/components/header.php';
                 $aboutSections = ["history", "nearby", "local_tips"];
                 $planHeadingShown = false;
                 $aboutHeadingShown = false;
+
+                // Reorder: Plan sections first, then About sections
+                $orderedSections = [];
+                $planGroup = [];
+                $aboutGroup = [];
+                $otherGroup = [];
+                foreach ($extendedSections as $s) {
+                    if ($s['section_type'] === 'getting_there') continue;
+                    if (in_array($s['section_type'], $planSections)) $planGroup[] = $s;
+                    elseif (in_array($s['section_type'], $aboutSections)) $aboutGroup[] = $s;
+                    else $otherGroup[] = $s;
+                }
+                $orderedSections = array_merge($planGroup, $aboutGroup, $otherGroup);
                 ?>
-                <?php foreach ($extendedSections as $section): ?>
-                <?php if ($section["section_type"] === "getting_there") continue; ?>
+                <?php foreach ($orderedSections as $section): ?>
                 <?php if (!$planHeadingShown && in_array($section["section_type"], $planSections)): $planHeadingShown = true; ?>
                 <div class="flex items-center gap-3 mt-4 mb-2">
                     <span class="text-[11px] uppercase tracking-wider text-white/30 whitespace-nowrap"><?= h($lang === "es" ? "Planifica Tu Visita" : "Plan Your Visit") ?></span>
@@ -544,7 +569,9 @@ include APP_ROOT . '/components/header.php';
 
         </div><!-- End Left Column -->
 
-        <!-- Right Column: Sidebar -->
+        <?php endif; // reviews ?>
+
+            <!-- Right Column: Sidebar -->
         <div class="lg:w-[37%] mt-8 lg:mt-0">
             <div class="lg:sticky lg:top-24 space-y-4">
 
@@ -711,8 +738,6 @@ include APP_ROOT . '/components/header.php';
         <?= $beachReferralBottom ?>
     </section>
     <?php endif; ?>
-
-    <?php endif; // reviews ?>
 
     <!-- Related Planning Guides -->
     <?php
