@@ -667,6 +667,6 @@ window.BeachFinder = {
 
 <?php
 // Extra scripts for map
-$extraScripts = '<script defer src="/assets/js/map.js?v=2.0" ' . cspNonceAttr() . '></script>';
+$extraScripts = '<script defer src="/assets/js/map.js?v=2.3" ' . cspNonceAttr() . '></script>';
 include APP_ROOT . '/components/footer.php';
 ?>
