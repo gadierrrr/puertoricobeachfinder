@@ -4901,3 +4901,23 @@ textarea::placeholder {
         border: 1px solid var(--color-gray-200);
     }
 }
+
+/* ========================================
+   BEACH SECTION NAVIGATION
+   ======================================== */
+.beach-nav-link {
+    padding: 10px 16px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+.beach-nav-link:hover {
+    color: rgba(255,255,255,0.7);
+}
+.beach-nav-link.active {
+    color: white;
+    border-bottom-color: var(--color-brand-yellow, #fbbf24);
+}

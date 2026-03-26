@@ -286,6 +286,19 @@ include APP_ROOT . '/components/header.php';
     </div>
     <?php endif; ?>
 
+
+    <!-- Sticky Section Navigation -->
+    <nav class="beach-section-nav flex overflow-x-auto hide-scrollbar border-b border-white/10 mb-6 -mx-4 px-4"
+         style="position: sticky; top: 56px; z-index: 30; background: rgba(15,26,31,0.97); backdrop-filter: blur(8px);">
+        <a href="#section-overview" class="beach-nav-link active" data-section="section-overview"><?= h($lang === 'es' ? 'General' : 'Overview') ?></a>
+        <a href="#section-best-time" class="beach-nav-link" data-section="section-best-time"><?= h($lang === 'es' ? 'Mejor Época' : 'Best Time') ?></a>
+        <a href="#section-what-to-bring" class="beach-nav-link" data-section="section-what-to-bring"><?= h($lang === 'es' ? 'Qué Llevar' : 'What to Bring') ?></a>
+        <a href="#section-history" class="beach-nav-link" data-section="section-history"><?= h($lang === 'es' ? 'Historia' : 'History') ?></a>
+        <a href="#section-nearby" class="beach-nav-link" data-section="section-nearby"><?= h($lang === 'es' ? 'Cercano' : 'Nearby') ?></a>
+        <a href="#section-tips" class="beach-nav-link" data-section="section-tips"><?= h($lang === 'es' ? 'Consejos' : 'Tips') ?></a>
+        <a href="#section-map" class="beach-nav-link" data-section="section-map"><?= h($lang === 'es' ? 'Mapa' : 'Map') ?></a>
+    </nav>
+
     <?php
     // Pre-fetch data needed for sidebar (weather loaded client-side for fast TTFB)
     require_once APP_ROOT . '/inc/crowd.php';
@@ -306,6 +319,7 @@ include APP_ROOT . '/components/header.php';
             <?php endif; ?>
 
             <!-- Quick Facts - Condensed 2x2 Grid -->
+            <div id="section-overview"></div>
             <section>
                 <h2 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
                     <i data-lucide="clipboard-list" class="w-5 h-5 text-brand-yellow" aria-hidden="true"></i>
@@ -318,7 +332,15 @@ include APP_ROOT . '/components/header.php';
                     <?php endif; ?>
 
                     <?php if ($beach['best_time']): ?>
-                    <?php $icon = 'clock'; $label = __('beach.best_time'); $value = ($lang === 'es' && !empty($beach['best_time_es'])) ? $beach['best_time_es'] : $beach['best_time']; $subtext = ''; ?>
+                    <?php
+                    $icon = 'clock'; $label = __('beach.best_time');
+                    $_btRaw = ($lang === 'es' && !empty($beach['best_time_es'])) ? $beach['best_time_es'] : $beach['best_time'];
+                    $_btClean = strip_tags($_btRaw);
+                    preg_match('/^([^.!?]+[.!?])/', $_btClean, $_btM);
+                    $_btFirst = !empty($_btM[1]) ? trim($_btM[1]) : $_btClean;
+                    $value = mb_strlen($_btFirst) > 55 ? mb_substr($_btFirst, 0, 52) . '...' : $_btFirst;
+                    $subtext = '';
+                    ?>
                     <?php include APP_ROOT . '/components/quick-fact-card.php'; ?>
                     <?php endif; ?>
 
@@ -326,7 +348,11 @@ include APP_ROOT . '/components/header.php';
                     <?php
                     $icon = 'car'; $label = __('beach.parking');
                     $_parkingVal = ($lang === 'es' && !empty($beach['parking_details_es'])) ? $beach['parking_details_es'] : $beach['parking_details'];
-                    $value = mb_strlen($_parkingVal) > 20 ? mb_substr($_parkingVal, 0, 20) . '...' : $_parkingVal; $subtext = '';
+                    $_pkClean = strip_tags($_parkingVal);
+                    preg_match('/^([^.!?]+[.!?])/', $_pkClean, $_pkM);
+                    $_pkFirst = !empty($_pkM[1]) ? trim($_pkM[1]) : $_pkClean;
+                    $value = mb_strlen($_pkFirst) > 55 ? mb_substr($_pkFirst, 0, 52) . '...' : $_pkFirst;
+                    $subtext = '';
                     ?>
                     <?php include APP_ROOT . '/components/quick-fact-card.php'; ?>
                     <?php endif; ?>
@@ -382,7 +408,26 @@ include APP_ROOT . '/components/header.php';
             <!-- Extended Content Sections -->
             <?php if (!empty($extendedSections)): ?>
             <div class="extended-content space-y-6 mt-8">
+                <?php
+                $planSections = ["best_time", "what_to_bring"];
+                $aboutSections = ["history", "nearby", "local_tips"];
+                $planHeadingShown = false;
+                $aboutHeadingShown = false;
+                ?>
                 <?php foreach ($extendedSections as $section): ?>
+                <?php if ($section["section_type"] === "getting_there") continue; ?>
+                <?php if (!$planHeadingShown && in_array($section["section_type"], $planSections)): $planHeadingShown = true; ?>
+                <div class="flex items-center gap-3 mt-4 mb-2">
+                    <span class="text-[11px] uppercase tracking-wider text-white/30 whitespace-nowrap"><?= h($lang === "es" ? "Planifica Tu Visita" : "Plan Your Visit") ?></span>
+                    <div class="flex-1 h-px bg-white/10"></div>
+                </div>
+                <?php endif; ?>
+                <?php if (!$aboutHeadingShown && in_array($section["section_type"], $aboutSections)): $aboutHeadingShown = true; ?>
+                <div class="flex items-center gap-3 mt-4 mb-2">
+                    <span class="text-[11px] uppercase tracking-wider text-white/30 whitespace-nowrap"><?= h($lang === "es" ? "Sobre Esta Playa" : "About This Beach") ?></span>
+                    <div class="flex-1 h-px bg-white/10"></div>
+                </div>
+                <?php endif; ?>
                     <?php
                     $_sectionHeading = ($lang === 'es' && !empty($section['heading_es']))
                         ? $section['heading_es'] : $section['heading'];
@@ -419,7 +464,9 @@ include APP_ROOT . '/components/header.php';
             </section>
             <?php endif; ?>
 
-            <!-- Visitor Photos - Compact -->
+            <!-- Visitor Photos - Hidden when empty -->
+            <?php $hasPhotos = !empty($beach['gallery']) || !empty($userPhotos ?? []); ?>
+            <?php if ($hasPhotos): ?>
             <section id="user-photos">
                 <?php
                 $userPhotos = query("SELECT p.id, p.filename, p.caption, p.created_at, u.name as user_name FROM beach_photos p LEFT JOIN users u ON p.user_id = u.id WHERE p.beach_id = :beach_id AND p.status = 'published' ORDER BY p.created_at DESC LIMIT 12", [':beach_id' => $beach['id']]);
@@ -458,7 +505,10 @@ include APP_ROOT . '/components/header.php';
                 <?php endif; ?>
             </section>
 
-            <!-- Reviews - Compact -->
+            <?php endif; // hasPhotos ?>
+
+            <!-- Reviews - Hidden when empty -->
+            <?php if (!empty($reviews)): ?>
             <section id="reviews">
                 <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center gap-3">
@@ -594,6 +644,7 @@ include APP_ROOT . '/components/header.php';
                 </div>
 
                 <!-- Map + Directions -->
+                <div id="section-map" style="scroll-margin-top: 120px;"></div>
                 <div class="beach-detail-card overflow-hidden">
                     <div id="beach-map" class="h-40"></div>
                     <div class="p-3">
@@ -660,6 +711,8 @@ include APP_ROOT . '/components/header.php';
         <?= $beachReferralBottom ?>
     </section>
     <?php endif; ?>
+
+    <?php endif; // reviews ?>
 
     <!-- Related Planning Guides -->
     <?php
@@ -1963,6 +2016,38 @@ document.addEventListener('keydown', (e) => {
             const verdictEl = document.getElementById('sticky-weather-verdict');
             if (verdictEl) verdictEl.textContent = 'Check weather';
         });
+})();
+</script>
+
+
+<!-- Section Nav Active State -->
+<script <?= cspNonceAttr() ?>>
+(function(){
+    var nav = document.querySelector(".beach-section-nav");
+    if (!nav) return;
+    var links = nav.querySelectorAll(".beach-nav-link");
+    var sections = document.querySelectorAll("[id^='section-']");
+
+    links.forEach(function(link){
+        link.addEventListener("click", function(e){
+            e.preventDefault();
+            var target = document.querySelector(link.getAttribute("href"));
+            if (target) target.scrollIntoView({behavior: "smooth"});
+        });
+    });
+
+    if (typeof IntersectionObserver !== "undefined") {
+        var observer = new IntersectionObserver(function(entries){
+            entries.forEach(function(entry){
+                if (entry.isIntersecting) {
+                    links.forEach(function(l){ l.classList.remove("active"); });
+                    var active = nav.querySelector('a[data-section="' + entry.target.id + '"]');
+                    if (active) active.classList.add("active");
+                }
+            });
+        }, {rootMargin: "-120px 0px -60% 0px"});
+        sections.forEach(function(s){ observer.observe(s); });
+    }
 })();
 </script>
 
