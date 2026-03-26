@@ -79,7 +79,7 @@ include APP_ROOT . '/components/header.php';
 
 <main id="main-content" class="min-h-screen bg-brand-darker">
     <!-- Header -->
-    <section class="bg-brand-dark border-b border-white/10 py-6">
+    <section class="bg-brand-dark border-b border-white/10 py-6 pt-24">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Breadcrumbs -->
             <div class="mb-4">

@@ -200,7 +200,7 @@ include APP_ROOT . '/components/header.php';
             <span class="text-sm text-white/60 whitespace-nowrap"><?= h(__('pages.municipality.popular')) ?></span>
             <?php foreach ($topTags as $tag): ?>
             <a href="/?municipality=<?= urlencode($municipality) ?>&tags[]=<?= h($tag) ?>#beaches"
-               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-brand-yellow/20 border border-white/10 hover:border-brand-yellow/30 text-white/80 hover:text-brand-yellow text-sm transition-colors whitespace-nowrap">
+               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-brand-yellow/20 border border-white/10 hover:border-brand-yellow/30 text-white/80 hover:text-brand-yellow text-sm transition-colors whitespace-nowrap flex-shrink-0">
                 <?= h(getTagLabel($tag)) ?>
                 <span class="text-xs text-white/70"><?= $tagCounts[$tag] ?></span>
             </a>
