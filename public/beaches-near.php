@@ -42,7 +42,7 @@ $radiusKm = $loc['radius'];
 $beaches = query("
     SELECT * FROM (SELECT *,
         (6371 * acos(cos(radians(:lat)) * cos(radians(lat)) * cos(radians(lng) - radians(:lng)) + sin(radians(:lat2)) * sin(radians(lat)))) AS distance_km
-    FROM beaches WHERE publish_status = 'published' AND lat IS NOT NULL
+    FROM beaches WHERE publish_status = 'published' AND lat IS NOT NULL AND (location_type = 'beach' OR location_type IS NULL)
     ) sub WHERE distance_km <= :radius
     ORDER BY distance_km ASC
 ", [':lat' => $lat, ':lng' => $lng, ':lat2' => $lat, ':radius' => $radiusKm]);

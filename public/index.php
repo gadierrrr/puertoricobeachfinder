@@ -129,7 +129,7 @@ if (!isValidCollectionKey((string)$selectedCollection)) {
 // Build query
 $sql = 'SELECT DISTINCT b.* FROM beaches b';
 $params = [];
-$where = ['b.publish_status = "published"'];
+$where = ['b.publish_status = "published"', '(b.location_type = "beach" OR b.location_type IS NULL)'];
 
 // Join tags table if filtering by tags
 if (!empty($selectedTags)) {
@@ -199,7 +199,7 @@ if (isAuthenticated()) {
 $tagCounts = getBeachCountsByTag();
 $popularBeaches = getPopularBeaches(4);
 $siteStats = getSiteStats();
-$publishedCount = queryOne('SELECT COUNT(*) as cnt FROM beaches WHERE publish_status = "published"')['cnt'];
+$publishedCount = queryOne('SELECT COUNT(*) as cnt FROM beaches WHERE publish_status = "published" AND (location_type = "beach" OR location_type IS NULL)')['cnt'];
 
 // Include header
 include APP_ROOT . '/components/header.php';

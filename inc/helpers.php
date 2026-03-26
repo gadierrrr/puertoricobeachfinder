@@ -1196,7 +1196,7 @@ function getTrendingBeaches($limit = 6, $days = 7) {
         FROM beaches b
         LEFT JOIN user_favorites uf ON b.id = uf.beach_id
             AND uf.created_at >= datetime('now', '-' || :days || ' days')
-        WHERE b.publish_status = 'published'
+        WHERE b.publish_status = 'published' AND (b.location_type = 'beach' OR b.location_type IS NULL)
         GROUP BY b.id
         ORDER BY recent_favorites DESC, b.google_rating DESC
         LIMIT :limit
@@ -1235,7 +1235,7 @@ function getHiddenGems($limit = 6) {
         SELECT b.*
         FROM beaches b
         LEFT JOIN beach_tags bt ON b.id = bt.beach_id AND bt.tag = 'secluded'
-        WHERE b.publish_status = 'published'
+        WHERE b.publish_status = 'published' AND (b.location_type = 'beach' OR b.location_type IS NULL)
           AND b.google_rating >= 4.3
           AND (b.google_review_count < 100 OR bt.tag IS NOT NULL)
         ORDER BY
@@ -1268,7 +1268,7 @@ function getBeachCountsByTag() {
         SELECT bt.tag, COUNT(DISTINCT bt.beach_id) as count
         FROM beach_tags bt
         INNER JOIN beaches b ON bt.beach_id = b.id
-        WHERE b.publish_status = 'published'
+        WHERE b.publish_status = 'published' AND (b.location_type = 'beach' OR b.location_type IS NULL)
         GROUP BY bt.tag
     ";
 
@@ -1291,7 +1291,7 @@ function getPopularBeaches($limit = 4) {
     $sql = "
         SELECT b.name, b.slug, b.municipality
         FROM beaches b
-        WHERE b.publish_status = 'published'
+        WHERE b.publish_status = 'published' AND (b.location_type = 'beach' OR b.location_type IS NULL)
           AND b.google_rating >= 4.5
           AND b.google_review_count >= 100
         ORDER BY b.google_review_count DESC

@@ -66,7 +66,7 @@ $sql = 'SELECT DISTINCT b.id, b.slug, b.name, b.municipality, b.lat, b.lng,
 
 $countSql = 'SELECT COUNT(DISTINCT b.id) as total FROM beaches b';
 $params = [];
-$where = ['b.publish_status = "published"'];
+$where = ['b.publish_status = "published"', '(b.location_type = "beach" OR b.location_type IS NULL)'];
 
 // Join for tag filtering
 if (!empty($tags)) {

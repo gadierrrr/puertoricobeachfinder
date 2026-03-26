@@ -351,11 +351,12 @@ if ($config['type'] === 'amenity') {
         FROM beaches b
         JOIN beach_amenities ba ON ba.beach_id = b.id
         WHERE ba.amenity = :amenity
-        AND b.publish_status = 'published'
+        AND b.publish_status = 'published' AND (b.location_type = 'beach' OR b.location_type IS NULL)
         ORDER BY
-            CASE WHEN b.google_rating IS NOT NULL THEN 1 ELSE 2 END,
-            b.google_rating DESC,
-            COALESCE(b.google_review_count, 0) DESC,
+            CASE WHEN b.google_rating IS NOT NULL AND b.google_review_count >= 10 THEN 1
+                 WHEN b.google_rating IS NOT NULL THEN 2
+                 ELSE 3 END,
+            (COALESCE(b.google_rating, 0) * (1.0 + COALESCE(b.google_review_count, 0) / 100.0)) DESC,
             b.name ASC
     ", [':amenity' => $config['tag']]);
 } else {
@@ -364,11 +365,12 @@ if ($config['type'] === 'amenity') {
         FROM beaches b
         JOIN beach_tags bt ON bt.beach_id = b.id
         WHERE bt.tag = :tag
-        AND b.publish_status = 'published'
+        AND b.publish_status = 'published' AND (b.location_type = 'beach' OR b.location_type IS NULL)
         ORDER BY
-            CASE WHEN b.google_rating IS NOT NULL THEN 1 ELSE 2 END,
-            b.google_rating DESC,
-            COALESCE(b.google_review_count, 0) DESC,
+            CASE WHEN b.google_rating IS NOT NULL AND b.google_review_count >= 10 THEN 1
+                 WHEN b.google_rating IS NOT NULL THEN 2
+                 ELSE 3 END,
+            (COALESCE(b.google_rating, 0) * (1.0 + COALESCE(b.google_review_count, 0) / 100.0)) DESC,
             b.name ASC
     ", [':tag' => $config['tag']]);
 }

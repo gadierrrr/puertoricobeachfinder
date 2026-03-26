@@ -63,7 +63,7 @@ function collectionFiltersFromRequest(string $key, array $input, int $maxLimit =
     }
 
     $sort = isset($input['sort']) && is_string($input['sort']) ? $input['sort'] : $defaultSort;
-    if (!in_array($sort, ['name', 'rating', 'reviews', 'distance'], true)) {
+    if (!in_array($sort, ['name', 'rating', 'reviews', 'distance', 'curated'], true)) {
         $sort = $defaultSort;
     }
 
@@ -155,7 +155,7 @@ function collectionRunQuery(array $context, array $filters): array {
     $countRow = queryOne($countSql, $params);
     $total = intval($countRow['total'] ?? 0);
 
-    $orderBy = collectionOrderByClause($filters['sort'], $distanceExpr !== null);
+    $orderBy = collectionOrderByClause($filters['sort'], $distanceExpr !== null, $context);
     $offset = ($filters['page'] - 1) * $filters['limit'];
 
     $selectDistance = $distanceExpr ? ', ' . $distanceExpr . ' AS distance_km' : '';
@@ -193,7 +193,7 @@ function collectionRunQuery(array $context, array $filters): array {
  * @return array<int,string>
  */
 function collectionBuildWhereClause(array $context, array $filters, array &$params, ?string &$distanceExpr): array {
-    $where = ['b.publish_status = "published"'];
+    $where = ['b.publish_status = "published"', '(b.location_type = "beach" OR b.location_type IS NULL)'];
     $distanceExpr = null;
     $isIncludeAll = !empty($filters['include_all']);
 
@@ -258,6 +258,14 @@ function collectionBuildWhereClause(array $context, array $filters, array &$para
             } else {
                 $where[] = 'COALESCE(b.google_review_count, 0) <= :hidden_max_reviews';
             }
+        } elseif ($mode === 'curated') {
+            $curatedKey = $context['key'] ?? '';
+            $params[':curated_key'] = $curatedKey;
+            $where[] = 'EXISTS (
+                SELECT 1 FROM collection_curated cc
+                WHERE cc.beach_id = b.id
+                AND cc.collection_key = :curated_key
+            )';
         }
     }
 
@@ -296,7 +304,7 @@ function collectionBuildWhereClause(array $context, array $filters, array &$para
     return $where;
 }
 
-function collectionOrderByClause(string $sort, bool $hasDistance): string {
+function collectionOrderByClause(string $sort, bool $hasDistance, array $context = []): string {
     switch ($sort) {
         case 'rating':
             return 'COALESCE(b.google_rating, 0) DESC, COALESCE(b.google_review_count, 0) DESC, b.name ASC';
@@ -307,6 +315,9 @@ function collectionOrderByClause(string $sort, bool $hasDistance): string {
                 return 'distance_km ASC, b.name ASC';
             }
             return 'b.name ASC';
+        case 'curated':
+            $curatedKey = $context['key'] ?? '';
+            return '(SELECT cc.rank FROM collection_curated cc WHERE cc.beach_id = b.id AND cc.collection_key = \'' . getDb()->escapeString($curatedKey) . '\') ASC, b.name ASC';
         case 'name':
         default:
             return 'b.name ASC';
