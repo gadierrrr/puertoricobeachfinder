@@ -501,14 +501,16 @@ $topMunicipalities = array_slice($munCounts, 0, 6, true);
         <?php endif; ?>
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <?php foreach (array_slice($beaches, 0, 30) as $beach): ?>
+            <?php $beachIdx = 0;
+foreach (array_slice($beaches, 0, 30) as $beach):
+$beachIdx++; ?>
             <a href="<?= h(routeUrl('beach_detail', $lang, ['slug' => $beach['slug']])) ?>"
                class="group bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                 <div class="aspect-[4/3] overflow-hidden">
                     <img src="<?= h($beach['cover_image']) ?>"
                          alt="<?= h($beach['name']) ?>"
                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                         loading="lazy" width="400" height="300">
+                         loading="<?= $beachIdx <= 6 ? "eager" : "lazy" ?>" width="400" height="300">
                 </div>
                 <div class="p-4">
                     <h3 class="font-bold text-gray-900 group-hover:text-amber-700 transition-colors"><?= h($beach['name']) ?></h3>

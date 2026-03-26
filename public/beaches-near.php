@@ -85,7 +85,7 @@ $avgRating = !empty($ratedBeaches) ? array_sum(array_column($ratedBeaches, 'goog
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 class="text-3xl md:text-5xl font-bold mb-4"><?= h($pageH1) ?></h1>
         <p class="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto mb-6">
-            <?= $lang === 'es' ? "Descubre $beachCount playas a menos de {$radiusKm}km de $locName en $loc[region] de Puerto Rico." : "Discover $beachCount beaches within {$radiusKm}km of $locName on $loc[region] of Puerto Rico. From San Juan, $locName is about $loc[drive]." ?>
+            <?= $lang === 'es' ? "Descubre $beachCount playas a menos de {$radiusKm}km de $locName, Puerto Rico." : "Discover $beachCount beaches within {$radiusKm}km of $locName on $loc[region] of Puerto Rico. From San Juan, $locName is about $loc[drive]." ?>
         </p>
         <div class="flex flex-wrap justify-center gap-4 text-sm text-slate-400">
             <span class="bg-slate-700/50 px-3 py-1 rounded-full"><?= $beachCount ?> <?= $lang === 'es' ? 'playas' : 'beaches' ?></span>
@@ -103,7 +103,9 @@ $avgRating = !empty($ratedBeaches) ? array_sum(array_column($ratedBeaches, 'goog
         <p class="text-gray-600 mb-8"><?= $lang === 'es' ? 'Ordenadas por distancia' : 'Sorted by distance from ' . h($locName) ?></p>
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <?php foreach (array_slice($beaches, 0, 30) as $beach):
+            <?php $beachIndex = 0;
+foreach (array_slice($beaches, 0, 30) as $beach):
+$beachIndex++;
                 $distKm = round($beach['distance_km'], 1);
                 $distMi = round($distKm * 0.621371, 1);
             ?>
@@ -113,7 +115,7 @@ $avgRating = !empty($ratedBeaches) ? array_sum(array_column($ratedBeaches, 'goog
                     <img src="<?= h($beach['cover_image']) ?>"
                          alt="<?= h($beach['name']) ?>"
                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                         loading="lazy" width="400" height="300">
+                         loading="<?= $beachIndex <= 6 ? "eager" : "lazy" ?>" width="400" height="300">
                     <span class="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-full">
                         <?= $distKm ?> km / <?= $distMi ?> mi
                     </span>
