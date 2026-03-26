@@ -134,6 +134,32 @@ foreach ($municipalities as $municipality):
 <?php endforeach; ?>
 
 
+
+    <!-- Beaches Near Location Pages -->
+<?php
+$nearLocations = [
+    "ponce" => "ponce", "aguadilla" => "aguadilla", "rincon" => "rincon",
+    "fajardo" => "fajardo", "mayaguez" => "mayaguez", "humacao" => "humacao",
+    "arecibo" => "arecibo", "cabo-rojo" => "cabo-rojo", "vega-baja" => "vega-baja",
+    "dorado" => "dorado",
+];
+$nearDate = date("Y-m-d");
+foreach ($nearLocations as $enSlug => $esSlug):
+?>
+    <url>
+        <loc><?= h($appUrl) ?>/beaches-near-<?= h($enSlug) ?></loc>
+        <lastmod><?= $nearDate ?></lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc><?= h($appUrl) ?>/es/playas-cerca-de-<?= h($esSlug) ?></loc>
+        <lastmod><?= $nearDate ?></lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+<?php endforeach; ?>
+
     <!-- Tag/Amenity Landing Pages -->
 <?php
 $tagPages = [
