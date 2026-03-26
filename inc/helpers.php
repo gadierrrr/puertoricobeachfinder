@@ -1913,3 +1913,29 @@ function stripAccents(string $str): string {
     ];
     return strtr($str, $map);
 }
+/**
+ * Get the URL for a tag landing page.
+ * Returns the tag landing page URL if one exists, otherwise falls back to homepage filter.
+ */
+function getTagPageUrl(string $tag, string $lang = "en"): string {
+    // Tags with dedicated landing pages
+    $tagPages = [
+        "swimming" => "/beaches/swimming",
+        "scenic" => "/beaches/scenic",
+        "calm-waters" => "/beaches/calm-waters",
+        "fishing" => "/beaches/fishing",
+        "accessible" => "/beaches/accessible",
+        "diving" => "/beaches/diving",
+        "camping" => "/beaches/camping",
+        "popular" => "/beaches/popular",
+        // Existing collection pages
+        "snorkeling" => "/best-snorkeling-beaches",
+        "surfing" => "/best-surfing-beaches",
+        "family-friendly" => "/best-family-beaches",
+        "secluded" => "/hidden-beaches-puerto-rico",
+    ];
+    if (isset($tagPages[$tag])) {
+        return $tagPages[$tag];
+    }
+    return "/?tags[]=" . urlencode($tag);
+}

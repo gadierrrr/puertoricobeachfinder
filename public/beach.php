@@ -102,7 +102,20 @@ $userReviewCount = count($reviews);
 $avgUserRating = $beach['avg_user_rating'] ?? null;
 
 // Page metadata
-$pageTitle = $beach['name'] . ' - ' . $beach['municipality'] . ' | ' . ($lang === 'es' ? 'Playas de Puerto Rico' : 'Puerto Rico Beach Finder');
+$siteLabel = $lang === 'es' ? 'Playas de Puerto Rico' : 'Puerto Rico Beach Finder';
+$pageTitle = $beach['name'] . ' - ' . $beach['municipality'];
+
+// Enrich title with top activities if total <title> stays under 65 chars
+// header.php appends " | $appName" so account for that suffix
+$titleSuffix = ' | ' . $siteLabel;
+$topTags = array_slice($beach['tags'] ?? [], 0, 2);
+if (!empty($topTags)) {
+    $labels = array_map('getTagLabel', $topTags);
+    $candidate = $beach['name'] . ' - ' . $beach['municipality'] . ' | ' . implode(', ', $labels);
+    if (mb_strlen($candidate . $titleSuffix) <= 65) {
+        $pageTitle = $candidate;
+    }
+}
 $_descSource = ($lang === 'es' && !empty($beach['description_es']))
     ? $beach['description_es']
     : ($beach['description'] ?? '');
@@ -241,7 +254,7 @@ include APP_ROOT . '/components/header.php';
         <?php if (!empty($beach['tags'])): ?>
         <div class="flex flex-wrap gap-1.5">
             <?php foreach (array_slice($beach['tags'], 0, 3) as $tag): ?>
-            <a href="/?tags[]=<?= h($tag) ?>" class="text-xs bg-white/10 hover:bg-white/20 text-white/80 px-2 py-1 rounded-full transition-colors">
+            <a href="<?= h(getTagPageUrl($tag, $lang)) ?>" class="text-xs bg-white/10 hover:bg-white/20 text-white/80 px-2 py-1 rounded-full transition-colors">
                 <?= h(getTagLabel($tag)) ?>
             </a>
             <?php endforeach; ?>
