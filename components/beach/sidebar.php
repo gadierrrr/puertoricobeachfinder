@@ -72,6 +72,7 @@
 
                 <!-- Live Updates / Crowd -->
                 <div class="beach-detail-card p-4">
+                    <?php if ($crowdLevel): ?>
                     <div class="flex items-center justify-between mb-3">
                         <h3 class="font-bold text-white text-sm flex items-center gap-1.5">
                             <i data-lucide="radio" class="w-3.5 h-3.5 text-green-400" aria-hidden="true"></i>
@@ -82,7 +83,6 @@
                             <?= h(__('beach.check_in')) ?>
                         </button>
                     </div>
-                    <?php if ($crowdLevel): ?>
                     <?php
                     $crowdColors = [
                         'green' => 'bg-green-500/10 text-green-400 border-green-500/20',
@@ -101,7 +101,17 @@
                         </div>
                     </div>
                     <?php else: ?>
-                    <p class="text-xs text-gray-400 text-center py-2"><?= h(__('beach.no_crowd_data')) ?></p>
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-white text-sm flex items-center gap-1.5">
+                            <i data-lucide="radio" class="w-3.5 h-3.5 text-green-400" aria-hidden="true"></i>
+                            <?= h(__('beach.live_updates')) ?>
+                        </h3>
+                        <span class="text-xs text-white/30"><?= h(__('beach.no_crowd_data')) ?></span>
+                        <button data-action="openCheckinModal" data-action-args='["<?= h($beach['id']) ?>","<?= h(addslashes($beach['name'])) ?>"]'
+                                class="text-xs bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 rounded font-medium transition-colors border border-white/10">
+                            <?= h(__('beach.check_in')) ?>
+                        </button>
+                    </div>
                     <?php endif; ?>
                 </div>
 

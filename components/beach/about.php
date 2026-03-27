@@ -7,8 +7,8 @@
  */
 ?>
             <!-- About + Highlights Merged -->
-            <section>
-                <h2 class="text-xl font-bold text-white mb-3"><?= h(__('beach.about')) ?> <?= h($beach['name']) ?></h2>
+            <section class="border-l-2 border-brand-yellow/20 pl-5">
+                <h2 class="text-2xl font-bold text-white mb-3"><?= h(__('beach.about')) ?> <?= h($beach['name']) ?></h2>
                 <?php
                 $_aboutDesc = ($lang === 'es' && !empty($beach['description_es']))
                     ? $beach['description_es']
@@ -36,11 +36,11 @@
                     <i data-lucide="lightbulb" class="w-5 h-5 text-brand-yellow" aria-hidden="true"></i>
                     <span><?= h(__('beach.visitor_tips')) ?></span>
                 </h2>
-                <ul class="space-y-2">
+                <ul class="space-y-3">
                     <?php foreach ($beach['tips'] as $tip): ?>
-                    <li class="flex items-start gap-2 text-sm">
-                        <span class="yellow-bullet mt-1.5 flex-shrink-0"></span>
-                        <span class="text-gray-300"><?= h(($lang === 'es' && !empty($tip['tip_es'])) ? $tip['tip_es'] : $tip['tip']) ?></span>
+                    <li class="flex items-start gap-3">
+                        <span class="yellow-bullet mt-[7px] flex-shrink-0"></span>
+                        <span class="text-gray-300 text-base leading-relaxed"><?= h(($lang === 'es' && !empty($tip['tip_es'])) ? $tip['tip_es'] : $tip['tip']) ?></span>
                     </li>
                     <?php endforeach; ?>
                 </ul>

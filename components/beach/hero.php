@@ -7,7 +7,7 @@
  */
 ?>
 <!-- Hero Image - IslaFinder Style (80vh) -->
-<div class="relative h-[70vh] md:h-[80vh] overflow-hidden">
+<div class="relative h-[50vh] md:h-[60vh] lg:h-[70vh] overflow-hidden">
     <?php if ($beach['cover_image']): ?>
     <picture>
         <?php if ($webpImage['webp']): ?>

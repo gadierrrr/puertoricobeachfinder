@@ -35,8 +35,7 @@ if (isAuthenticated()) {
     </a>
 
     <button type="button"
-            class="sticky-directions"
-            style="background: rgba(255,255,255,0.10); color: white;"
+            class="sticky-secondary"
             data-action="toggleStickyFavorite"
             aria-label="<?= $isFavorite ? 'Remove from favorites' : 'Add to favorites' ?>"
             aria-pressed="<?= $isFavorite ? 'true' : 'false' ?>"
@@ -46,8 +45,7 @@ if (isAuthenticated()) {
     </button>
 
     <button type="button"
-            class="sticky-directions"
-            style="background: rgba(255,255,255,0.10); color: white;"
+            class="sticky-secondary"
             data-action="shareBeach" data-action-args='["<?= h($beach['slug']) ?>","<?= h(addslashes($beach['name'])) ?>"]'
             aria-label="<?= h(__('beach.share')) ?>">
         <i data-lucide="share-2" class="w-4 h-4" aria-hidden="true"></i>

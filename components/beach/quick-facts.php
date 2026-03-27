@@ -16,12 +16,12 @@
                 </h2>
                 <div class="grid grid-cols-2 gap-3">
                     <?php if (!empty($beach['tags'])): ?>
-                    <div class="bg-white/5 border border-white/10 rounded-lg p-3 flex gap-3">
-                        <div class="bg-brand-yellow/20 rounded p-2 flex-shrink-0 self-start">
-                            <span class="text-brand-yellow text-sm">🏄</span>
+                    <div class="bg-white/[0.07] border border-white/[0.12] rounded-xl p-3 flex gap-3">
+                        <div class="bg-brand-yellow/20 rounded-lg p-2.5 flex-shrink-0 self-start">
+                            <i data-lucide="waves" class="w-4 h-4 text-brand-yellow" aria-hidden="true"></i>
                         </div>
                         <div class="min-w-0">
-                            <div class="text-[10px] uppercase tracking-wider text-white/40"><?= h(__('beach.best_for')) ?></div>
+                            <div class="text-[11px] uppercase tracking-wider text-white/50 mb-0.5"><?= h(__('beach.best_for')) ?></div>
                             <div class="text-white font-semibold text-sm"><?= h(getTagLabel($beach['tags'][0])) ?></div>
                             <?php if (count($beach['tags']) > 1): ?>
                             <div class="text-white/40 text-xs"><?= h(__('beach.tags_more', ['count' => count($beach['tags']) - 1])) ?></div>
@@ -31,22 +31,24 @@
                     <?php endif; ?>
 
                     <?php if ($beach['best_time']): ?>
-                    <a href="#section-best_time" class="bg-white/5 border border-white/10 rounded-lg p-3 flex gap-3 hover:border-brand-yellow/30 transition-colors group cursor-pointer">
-                        <div class="bg-brand-yellow/20 rounded p-2 flex-shrink-0 self-start">
-                            <span class="text-brand-yellow text-sm">🕐</span>
+                    <a href="#section-best_time" class="bg-white/[0.07] border border-white/[0.12] rounded-xl p-3 flex gap-3 hover:border-brand-yellow/30 transition-colors group cursor-pointer">
+                        <div class="bg-brand-yellow/20 rounded-lg p-2.5 flex-shrink-0 self-start">
+                            <i data-lucide="clock" class="w-4 h-4 text-brand-yellow" aria-hidden="true"></i>
                         </div>
                         <div class="min-w-0">
-                            <div class="text-[10px] uppercase tracking-wider text-white/40"><?= h(__('beach.best_time')) ?></div>
+                            <div class="text-[11px] uppercase tracking-wider text-white/50 mb-0.5"><?= h(__('beach.best_time')) ?></div>
                             <div class="text-white font-semibold text-sm"><?php
                                 $_btRaw = ($lang === 'es' && !empty($beach['best_time_es'])) ? $beach['best_time_es'] : $beach['best_time'];
                                 $_btClean = strip_tags($_btRaw);
-                                if (preg_match('/^([^.!?]{10,45}[.!?])/', $_btClean, $_btM)) {
+                                // Try first complete sentence up to 50 chars
+                                if (preg_match('/^([^.!?]{10,50}[.!?])/', $_btClean, $_btM)) {
                                     echo h(trim($_btM[1]));
                                 } else {
-                                    $_v = mb_substr($_btClean, 0, 35);
-                                    $_sp = mb_strrpos($_v, ' ');
-                                    if ($_sp > 15) $_v = mb_substr($_v, 0, $_sp);
-                                    echo h(rtrim($_v, ',;: '));
+                                    // Fallback: extract key phrases with bullet separator
+                                    $_phrases = preg_split('/[.,;]/', $_btClean, 3);
+                                    $_short = trim($_phrases[0]);
+                                    if (mb_strlen($_short) > 30) $_short = mb_substr($_short, 0, mb_strrpos(mb_substr($_short, 0, 30), ' ')) . '…';
+                                    echo h($_short);
                                 }
                             ?></div>
                             <div class="text-brand-yellow/60 text-xs group-hover:text-brand-yellow"><?= h($lang === 'es' ? 'Más ↓' : 'More ↓') ?></div>
@@ -55,22 +57,22 @@
                     <?php endif; ?>
 
                     <?php if ($beach['parking_details']): ?>
-                    <a href="#section-map" class="bg-white/5 border border-white/10 rounded-lg p-3 flex gap-3 hover:border-brand-yellow/30 transition-colors group cursor-pointer">
-                        <div class="bg-brand-yellow/20 rounded p-2 flex-shrink-0 self-start">
-                            <span class="text-brand-yellow text-sm">🚗</span>
+                    <a href="#section-map" class="bg-white/[0.07] border border-white/[0.12] rounded-xl p-3 flex gap-3 hover:border-brand-yellow/30 transition-colors group cursor-pointer">
+                        <div class="bg-brand-yellow/20 rounded-lg p-2.5 flex-shrink-0 self-start">
+                            <i data-lucide="car" class="w-4 h-4 text-brand-yellow" aria-hidden="true"></i>
                         </div>
                         <div class="min-w-0">
-                            <div class="text-[10px] uppercase tracking-wider text-white/40"><?= h(__('beach.parking')) ?></div>
+                            <div class="text-[11px] uppercase tracking-wider text-white/50 mb-0.5"><?= h(__('beach.parking')) ?></div>
                             <div class="text-white font-semibold text-sm"><?php
                                 $_parkingVal = ($lang === 'es' && !empty($beach['parking_details_es'])) ? $beach['parking_details_es'] : $beach['parking_details'];
                                 $_pkClean = strip_tags($_parkingVal);
-                                if (preg_match('/^([^.!?]{10,45}[.!?])/', $_pkClean, $_pkM)) {
+                                if (preg_match('/^([^.!?]{10,50}[.!?])/', $_pkClean, $_pkM)) {
                                     echo h(trim($_pkM[1]));
                                 } else {
-                                    $_v = mb_substr($_pkClean, 0, 35);
-                                    $_sp = mb_strrpos($_v, ' ');
-                                    if ($_sp > 15) $_v = mb_substr($_v, 0, $_sp);
-                                    echo h(rtrim($_v, ',;: '));
+                                    $_phrases = preg_split('/[.,;]/', $_pkClean, 3);
+                                    $_short = trim($_phrases[0]);
+                                    if (mb_strlen($_short) > 30) $_short = mb_substr($_short, 0, mb_strrpos(mb_substr($_short, 0, 30), ' ')) . '…';
+                                    echo h($_short);
                                 }
                             ?></div>
                             <div class="text-brand-yellow/60 text-xs group-hover:text-brand-yellow"><?= h($lang === 'es' ? 'Detalles ↓' : 'Details ↓') ?></div>
@@ -79,12 +81,12 @@
                     <?php endif; ?>
 
                     <?php if ($beach['access_label']): ?>
-                    <div class="bg-white/5 border border-white/10 rounded-lg p-3 flex gap-3">
-                        <div class="bg-brand-yellow/20 rounded p-2 flex-shrink-0 self-start">
-                            <span class="text-brand-yellow text-sm">🚶</span>
+                    <div class="bg-white/[0.07] border border-white/[0.12] rounded-xl p-3 flex gap-3">
+                        <div class="bg-brand-yellow/20 rounded-lg p-2.5 flex-shrink-0 self-start">
+                            <i data-lucide="footprints" class="w-4 h-4 text-brand-yellow" aria-hidden="true"></i>
                         </div>
                         <div class="min-w-0">
-                            <div class="text-[10px] uppercase tracking-wider text-white/40"><?= h(__('beach.access')) ?></div>
+                            <div class="text-[11px] uppercase tracking-wider text-white/50 mb-0.5"><?= h(__('beach.access')) ?></div>
                             <div class="text-white font-semibold text-sm"><?= h($beach['access_label']) ?></div>
                         </div>
                     </div>

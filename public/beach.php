@@ -193,9 +193,42 @@ include APP_ROOT . '/components/header.php';
     <div class="lg:flex lg:gap-8">
 
         <!-- Left Column: Main Content -->
-        <div class="lg:w-[63%] space-y-6">
+        <div class="lg:w-[63%] space-y-8">
 
             <?php include APP_ROOT . '/components/beach/quick-facts.php'; ?>
+
+            <!-- Mobile Weather Strip (hidden on desktop) -->
+            <div class="lg:hidden weather-strip"
+                 data-lat="<?= h($beach['lat']) ?>" data-lng="<?= h($beach['lng']) ?>">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2.5">
+                        <i data-lucide="sun" class="w-6 h-6 text-brand-yellow" aria-hidden="true"></i>
+                        <div>
+                            <div class="text-white font-semibold text-sm" id="weather-strip-verdict"><?= h($lang === "es" ? "Cargando…" : "Loading…") ?></div>
+                            <div class="text-white/40 text-xs" id="weather-strip-desc">&nbsp;</div>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-bold text-white" id="weather-strip-temp">&mdash;</div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="flex-1 bg-white/5 rounded-lg py-1.5 px-2 text-center">
+                        <div class="text-[10px] text-white/40"><?= h($lang === "es" ? "Viento" : "Wind") ?></div>
+                        <div class="text-xs text-white font-medium" id="weather-strip-wind">&mdash;</div>
+                    </div>
+                    <div class="flex-1 bg-white/5 rounded-lg py-1.5 px-2 text-center">
+                        <div class="text-[10px] text-white/40">UV</div>
+                        <div class="text-xs font-medium" id="weather-strip-uv">&mdash;</div>
+                    </div>
+                    <div class="flex-1 bg-white/5 rounded-lg py-1.5 px-2 text-center">
+                        <div class="text-[10px] text-white/40"><?= h($lang === "es" ? "Humedad" : "Humidity") ?></div>
+                        <div class="text-xs text-white font-medium" id="weather-strip-humidity">&mdash;</div>
+                    </div>
+                    <a href="#section-map" class="flex-shrink-0 bg-brand-yellow/10 border border-brand-yellow/20 rounded-lg py-1.5 px-3 text-center hover:bg-brand-yellow/20 transition-colors">
+                        <div class="text-[10px] text-brand-yellow/60"><?= h($lang === "es" ? "Ver" : "View") ?></div>
+                        <div class="text-xs text-brand-yellow font-medium"><?= h($lang === "es" ? "Mapa" : "Map") ?></div>
+                    </a>
+                </div>
+            </div>
 
             <?php include APP_ROOT . '/components/beach/about.php'; ?>
 

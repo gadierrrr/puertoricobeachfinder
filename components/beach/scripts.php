@@ -31,6 +31,23 @@
             if (iconEl && w.current) iconEl.textContent = w.current.icon || '🌤️';
             if (tempEl && w.current) tempEl.textContent = w.current.temperature ? Math.round(w.current.temperature) + '°F' : '--';
             if (verdictEl && w.recommendation) verdictEl.textContent = w.recommendation.verdict || 'Check weather';
+            // Populate mobile weather strip
+            var sv = document.getElementById('weather-strip-verdict');
+            if (sv && w.recommendation) sv.textContent = w.recommendation.verdict || 'Weather';
+            var sd = document.getElementById('weather-strip-desc');
+            if (sd && w.current) sd.textContent = (w.current.description || '') + ' • ' + (w.current.location || '');
+            var st = document.getElementById('weather-strip-temp');
+            if (st && w.current && w.current.temperature) st.textContent = Math.round(w.current.temperature) + '°';
+            var sw = document.getElementById('weather-strip-wind');
+            if (sw && w.current) sw.textContent = (w.current.wind_speed ? Math.round(w.current.wind_speed) + 'mph' : '--');
+            var su = document.getElementById('weather-strip-uv');
+            if (su && w.current) {
+                var uvi = w.current.uv_index || 0;
+                su.textContent = uvi <= 2 ? 'Low' : uvi <= 5 ? 'Moderate' : uvi <= 7 ? 'High' : 'Very High';
+                su.className = 'text-xs font-medium ' + (uvi <= 2 ? 'text-green-400' : uvi <= 5 ? 'text-yellow-400' : 'text-red-400');
+            }
+            var sh = document.getElementById('weather-strip-humidity');
+            if (sh && w.current) sh.textContent = (w.current.humidity || '--') + '%';
         })
         .catch(() => {
             const verdictEl = document.getElementById('sticky-weather-verdict');
@@ -69,5 +86,37 @@
         sections.forEach(function(s){ observer.observe(s); });
     }
 })();
+
+// Collapsible section toggle (CSP-safe via data-action)
+function toggleSection(el) {
+    var section = el.closest('.section-collapsible');
+    if (!section) return;
+    section.classList.toggle('expanded');
+    var isExpanded = section.classList.contains('expanded');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+    section.querySelectorAll('.read-more-text').forEach(function(el) {
+        el.textContent = isExpanded ? '<?= h($lang === "es" ? "Mostrar menos" : "Show less") ?>' : '<?= h($lang === "es" ? "Leer más" : "Read more") ?>';
+    });
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+// Sticky bar auto-hide on scroll down
+(function() {
+    var bar = document.querySelector('.beach-sticky-bar');
+    if (!bar) return;
+    var lastScroll = 0, ticking = false;
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            requestAnimationFrame(function() {
+                var curr = window.scrollY;
+                bar.classList.toggle('hidden-bar', curr > lastScroll && curr > 200);
+                lastScroll = curr;
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+})();
+
 </script>
 

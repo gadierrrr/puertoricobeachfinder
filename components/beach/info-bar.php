@@ -30,30 +30,19 @@
         <?php endif; ?>
 
         <?php if (!empty($beach['tags'])): ?>
-        <div class="flex flex-wrap gap-1.5">
+        <div class="flex flex-wrap gap-2">
             <?php foreach (array_slice($beach['tags'], 0, 3) as $tag): ?>
-            <a href="<?= h(getTagPageUrl($tag, $lang)) ?>" class="text-xs bg-white/10 hover:bg-white/20 text-white/80 px-2 py-1 rounded-full transition-colors">
+            <a href="<?= h(getTagPageUrl($tag, $lang)) ?>" class="text-sm bg-white/10 hover:bg-white/20 text-white/80 px-3 py-1.5 rounded-full transition-colors min-h-[36px] flex items-center">
                 <?= h(getTagLabel($tag)) ?>
             </a>
             <?php endforeach; ?>
         </div>
         <?php endif; ?>
 
-        <div class="ml-auto flex gap-2">
-            <a href="<?= h(getDirectionsUrl($beach)) ?>" target="_blank"
-               data-bf-track="directions"
-               data-bf-beach-id="<?= h($beach['id']) ?>"
-               data-bf-beach-slug="<?= h($beach['slug']) ?>"
-               data-bf-municipality="<?= h($beach['municipality']) ?>"
-               data-bf-source="beach_page"
-               class="inline-flex items-center gap-1.5 bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-4 py-2 rounded-lg font-semibold text-sm transition-colors">
-                <i data-lucide="navigation" class="w-4 h-4" aria-hidden="true"></i>
-                <span><?= h(__('beach.directions')) ?></span>
-            </a>
+        <div class="ml-auto">
             <button data-action="shareBeach" data-action-args='["<?= h($beach['slug']) ?>","<?= h(addslashes($beach['name'])) ?>"]' aria-label="Share this beach"
                     class="inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/20 text-white px-3 py-2 rounded-lg text-sm transition-colors">
                 <i data-lucide="share-2" class="w-4 h-4" aria-hidden="true"></i>
-                <span class="hidden sm:inline"><?= h(__('beach.share')) ?></span>
             </button>
         </div>
     </div>

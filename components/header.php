@@ -223,7 +223,7 @@ if ($bodyVariant === 'collection-light') {
 
     <!-- Preload critical CSS -->
     <link rel="preload" href="/assets/css/tailwind.min.css?v=3.5" as="style">
-    <link rel="preload" href="/assets/css/styles.css?v=3.8" as="style">
+    <link rel="preload" href="/assets/css/styles.css?v=3.9" as="style">
 
     <!-- Inter + Playfair Display Fonts - loaded asynchronously to avoid render blocking -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,400;1,500;1,600;1,700&display=swap" as="style" data-lazy-style>
@@ -254,7 +254,7 @@ if ($bodyVariant === 'collection-light') {
     <script src="/assets/js/csp-bindings.js" <?= cspNonceAttr() ?>></script>
 
     <!-- Custom styles -->
-    <link rel="stylesheet" href="/assets/css/styles.css?v=3.8">
+    <link rel="stylesheet" href="/assets/css/styles.css?v=3.9">
 
     <!-- Deferred scripts (non-blocking) -->
     <script defer
