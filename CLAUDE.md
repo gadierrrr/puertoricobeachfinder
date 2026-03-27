@@ -55,11 +55,16 @@ php scripts/migrate.php
 ### Directory Structure
 - `inc/` - Core PHP includes (db.php, helpers.php, constants.php, auth.php)
 - `components/` - Reusable PHP UI components (header, footer, beach-card, filters)
+  - `components/beach/` - Beach detail page components (13 files, see Beach Detail Architecture below)
+  - `components/collection/` - Collection/list page components
 - `public/` - Web document root (ONLY this should be web-served)
   - `public/api/` - JSON/HTML API endpoints for HTMX requests
   - `public/admin/` - Admin panel for content management
   - `public/auth/` - Authentication handlers (Google OAuth)
   - `public/guides/` - Editorial/guide pages
+  - `public/beaches-by-tag.php` - Dynamic tag/amenity landing pages (/beaches/swimming, etc.)
+  - `public/beaches-near.php` - Dynamic proximity pages (/beaches-near-ponce, etc.)
+  - `public/feed.xml.php` - RSS feed
   - `public/errors/` - Friendly error pages
 - `data/` - SQLite database files
 - `migrations/` - Database migration scripts
@@ -91,6 +96,7 @@ php scripts/migrate.php
 **Shared Components:** Reusable UI components in `components/` directory:
 - `hero-guide.php` - Used by all guide pages, requires `$pageTitle`, `$pageDescription`, optional `$breadcrumbs`
 - `components/collection/explorer.php` - Shared collection explorer (hero + toolbar + results)
+- `components/beach/*.php` - Beach detail page components (see Beach Detail Architecture below)
 - Always use shared components for consistency; avoid creating inline variants of existing components
 
 ### URL Conventions & Routing
@@ -108,6 +114,76 @@ php scripts/migrate.php
 ```
 
 **Soft 404 handling:** `public/index.php` catches unknown routes that fall through Nginx's catch-all. Any request reaching `index.php` where the path is not `/` returns HTTP 404 (with `public/errors/404.php`). Trailing-slash variants (e.g., `/best-beaches/`) get 301-redirected to the non-slash version. Real directories like `/guides/` are served by Nginx's directory index and never reach this logic.
+
+### Beach Detail Page Architecture
+
+The beach detail page (`public/beach.php`) is decomposed into 13 focused components. The main file (~230 lines) handles data fetching, SEO, and component includes only.
+
+```
+public/beach.php                        (230 lines) — data + includes
+components/beach/
+  ├── hero.php             (55 lines)  — Cover photo, gradient, breadcrumbs, title
+  ├── info-bar.php         (67 lines)  — Rating badge, tags, directions, share
+  ├── section-nav.php      (29 lines)  — Sticky horizontal tab navigation
+  ├── quick-facts.php      (94 lines)  — 2x2 Quick Facts grid (emoji icons)
+  ├── about.php            (50 lines)  — Description + feature badges + visitor tips
+  ├── extended-sections.php(79 lines)  — Grouped sections: Plan Your Visit / About This Beach
+  ├── photos.php           (50 lines)  — Gallery + user photo uploads (conditional)
+  ├── reviews.php          (46 lines)  — User reviews (conditional, hidden when empty)
+  ├── sidebar.php          (175 lines) — Weather, conditions, crowd, map, amenities, safety
+  ├── related.php          (74 lines)  — Planning guides + similar beaches
+  ├── sticky-bar.php       (57 lines)  — Mobile bottom action bar (directions/save/share)
+  ├── modals.php           (1166 lines)— All modal dialogs (share, lightbox, report, checkin, review, upload)
+  └── scripts.php          (73 lines)  — Weather widget loader + section nav observer
+```
+
+**To edit a section:** Open the specific component file. Each has a docblock listing its expected variables.
+
+**Data flow:** `beach.php` fetches all data (beach record, tags, amenities, sections, reviews) at the top, then passes variables to components via PHP's shared scope (includes inherit parent scope).
+
+**Key variables available to all components:**
+- `$beach` — Full beach record with tags, amenities, gallery, features, tips
+- `$lang` — Current language ('en' or 'es')
+- `$reviews` — Array of published reviews
+- `$extendedSections` — Content sections from beach_content_sections table
+- `$crowdLevel`, `$sunTimes` — Pre-computed sidebar data
+
+**Section ordering:** Extended sections are reordered in `extended-sections.php`:
+1. "Plan Your Visit": best_time, what_to_bring
+2. "About This Beach": history, nearby, local_tips
+3. `getting_there` is skipped (users use GPS)
+
+**Empty state handling:** Photos and reviews sections are only rendered when content exists. No empty placeholders.
+
+### Dynamic Pages (Programmatic SEO)
+
+In addition to the 466 individual beach pages, the site has several types of programmatic landing pages:
+
+**Tag/Amenity Pages** (`public/beaches-by-tag.php`):
+- URLs: `/beaches/swimming`, `/beaches/with-parking`, etc.
+- 15 tag pages + Spanish equivalents
+- Each has unique title, description, intro, and FAQ schema
+
+**Proximity Pages** (`public/beaches-near.php`):
+- URLs: `/beaches-near-ponce`, `/beaches-near-rincon`, etc.
+- 10 location pages using Haversine distance formula
+- Shows beaches sorted by distance with km/mi badges
+
+**Municipality Pages** (`public/municipality.php`):
+- URLs: `/beaches-in-cabo-rojo`, `/beaches-in-isabela`, etc.
+- 42 municipality pages (auto-generated from data)
+
+**Collection Pages** (individual PHP files):
+- `/best-beaches`, `/best-snorkeling-beaches`, etc.
+- Use `inc/collection_query.php` + `inc/collection_contexts.php`
+
+### Non-Beach Location Filtering
+
+The `beaches` table has a `location_type` column (default: "beach"). Non-beach locations (boardwalks, parks, natural pools, reserves) are marked with their actual type and filtered out of all listings via:
+```sql
+WHERE (location_type = "beach" OR location_type IS NULL)
+```
+This filter is applied in: homepage, beaches API, collection queries, tag pages, proximity pages.
 
 ### Database Schema (Key Tables)
 - `beaches` - Main beach records with coordinates, ratings, conditions
