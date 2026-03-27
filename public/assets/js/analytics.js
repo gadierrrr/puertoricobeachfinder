@@ -405,7 +405,7 @@
   /* ===== Guide Scroll Depth Tracking ===== */
   function initGuideScrollDepth() {
     // Only run on guide pages
-    var guideContent = document.querySelector(".guide-content, .prose-light, article.guide");
+    var guideContent = document.querySelector(".guide-content, article.guide");
     if (!guideContent) return;
     // Also check URL
     var path = window.location.pathname;

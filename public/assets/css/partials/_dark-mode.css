@@ -1,15 +1,22 @@
+/* ==========================================================
+   _dark-mode.css — All [data-theme="dark"] overrides, consolidated
+   Used by: all pages when dark mode is active
+   Dependencies: _variables.css (color tokens)
+   Note: Guide page overrides remap light-mode Tailwind classes
+   ========================================================== */
+
 /* ========================================
    DARK MODE OVERRIDES
    All [data-theme="dark"] styles consolidated here
    ======================================== */
 
-/* Cards */
+/* --- Cards --- */
 [data-theme="dark"] .beach-card {
     background-color: var(--color-card-bg);
     border-color: var(--color-border);
 }
 
-/* Badges */
+/* --- Badges --- */
 [data-theme="dark"] .beach-badge-gold {
     background: linear-gradient(135deg, #422006 0%, #713f12 100%);
     color: #fbbf24;
@@ -25,13 +32,13 @@
     color: var(--color-primary-muted);
 }
 
-/* Compare bar */
+/* --- Compare bar --- */
 [data-theme="dark"] #compare-bar {
     background: var(--color-card-bg);
     border-color: var(--color-border);
 }
 
-/* Empty states */
+/* --- Empty states --- */
 [data-theme="dark"] .empty-state {
     background: var(--color-bg-tertiary);
     border-color: var(--color-border);
@@ -51,7 +58,7 @@
     color: var(--color-text-muted);
 }
 
-/* Dark mode filter chips */
+/* --- Filter chips --- */
 [data-theme="dark"] .filter-chip {
     background: var(--color-accent-light);
     color: var(--color-primary-muted);
@@ -79,7 +86,7 @@
     background: rgba(239, 68, 68, 0.2);
 }
 
-/* Dark mode popup styles */
+/* --- Map popups --- */
 [data-theme="dark"] .beach-popup {
     background: var(--color-card-bg);
 }
@@ -107,7 +114,6 @@
     background: var(--color-border);
 }
 
-/* Dark mode map popup content */
 [data-theme="dark"] .beach-popup-container .maplibregl-popup-content {
     background: var(--color-card-bg);
 }
@@ -116,7 +122,7 @@
     border-top-color: var(--color-card-bg);
 }
 
-/* Dark mode skeleton loading */
+/* --- Loading states --- */
 [data-theme="dark"] .skeleton {
     background: linear-gradient(90deg, #334155 25%, #475569 50%, #334155 75%);
     background-size: 200% 100%;
@@ -126,22 +132,20 @@
     background: var(--color-card-bg);
 }
 
-/* Dark mode range slider */
+/* --- Form controls --- */
 [data-theme="dark"] input[type="range"] {
     background: var(--color-border);
 }
 
-/* Dark mode share modal */
+/* --- Modals --- */
 [data-theme="dark"] .share-modal-content {
     background: var(--color-card-bg);
 }
 
-/* Dark mode lightbox */
 [data-theme="dark"] .lightbox-overlay {
     background-color: rgba(0, 0, 0, 0.98);
 }
 
-/* Dark mode Tom Select */
 [data-theme="dark"] .ts-control {
     background: var(--color-card-bg);
     border-color: var(--color-border);
@@ -166,9 +170,7 @@
     background: var(--color-bg-tertiary);
 }
 
-/* ========================================
-   GUIDE PAGES DARK MODE
-   ======================================== */
+/* --- Guide pages --- */
 
 [data-theme="dark"] .guide-toc {
     background: var(--color-card-bg);
@@ -201,13 +203,19 @@
     color: #fbbf24 !important; /* amber-400 - brighter for dark backgrounds */
 }
 
-/* Guide typography + surface contrast fixes */
+/* --- Typography + surface contrast (guide content uses light-mode Tailwind) --- */
 [data-theme="dark"] .guide-layout {
     color: var(--color-text-secondary);
 }
 
+/* --- Text color remaps (guide content uses light-mode Tailwind classes) --- */
 [data-theme="dark"] .guide-layout .text-gray-900,
-[data-theme="dark"] .guide-layout .text-gray-800 {
+[data-theme="dark"] .guide-layout .text-gray-800,
+[data-theme="dark"] .guide-layout .text-green-900,
+[data-theme="dark"] .guide-layout .text-green-800,
+[data-theme="dark"] .guide-layout .text-blue-900,
+[data-theme="dark"] .guide-layout .text-yellow-900,
+[data-theme="dark"] .guide-layout .text-yellow-800 {
     color: var(--color-text-primary) !important;
 }
 
@@ -221,18 +229,11 @@
     color: var(--color-text-muted) !important;
 }
 
-[data-theme="dark"] .guide-layout .text-green-900,
-[data-theme="dark"] .guide-layout .text-green-800,
-[data-theme="dark"] .guide-layout .text-blue-900,
-[data-theme="dark"] .guide-layout .text-yellow-900,
-[data-theme="dark"] .guide-layout .text-yellow-800 {
-    color: var(--color-text-primary) !important;
-}
-
 [data-theme="dark"] .guide-layout .text-green-600 {
     color: var(--color-secondary-light) !important;
 }
 
+/* --- Background remaps --- */
 [data-theme="dark"] .guide-layout .bg-white,
 [data-theme="dark"] .guide-layout .bg-gray-50,
 [data-theme="dark"] .guide-layout .bg-green-50,
@@ -270,6 +271,7 @@
     color: var(--color-text-primary);
 }
 
+/* --- Prose --- */
 [data-theme="dark"] .prose-brand p {
     color: var(--color-text-secondary);
 }
@@ -297,12 +299,3 @@
     color: var(--color-accent-light);
 }
 
-/* Beach description dark mode support */
-[data-theme="dark"] .beach-description,
-[data-theme="dark"] .beach-description p {
-    color: var(--color-text-secondary);
-}
-
-[data-theme="dark"] .beach-description strong {
-    color: var(--color-white);
-}

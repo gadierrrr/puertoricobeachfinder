@@ -16,7 +16,7 @@
                 </h2>
                 <div class="grid grid-cols-2 gap-3">
                     <?php if (!empty($beach['tags'])): ?>
-                    <div class="bg-white/[0.07] border border-white/[0.12] rounded-xl p-3 flex gap-3">
+                    <div class="card-glass">
                         <div class="bg-brand-yellow/20 rounded-lg p-2.5 flex-shrink-0 self-start">
                             <i data-lucide="waves" class="w-4 h-4 text-brand-yellow" aria-hidden="true"></i>
                         </div>
@@ -31,7 +31,7 @@
                     <?php endif; ?>
 
                     <?php if ($beach['best_time']): ?>
-                    <a href="#section-best_time" class="bg-white/[0.07] border border-white/[0.12] rounded-xl p-3 flex gap-3 hover:border-brand-yellow/30 transition-colors group cursor-pointer">
+                    <a href="#section-best_time" class="card-glass card-glass--interactive group">
                         <div class="bg-brand-yellow/20 rounded-lg p-2.5 flex-shrink-0 self-start">
                             <i data-lucide="clock" class="w-4 h-4 text-brand-yellow" aria-hidden="true"></i>
                         </div>
@@ -57,7 +57,7 @@
                     <?php endif; ?>
 
                     <?php if ($beach['parking_details']): ?>
-                    <a href="#section-map" class="bg-white/[0.07] border border-white/[0.12] rounded-xl p-3 flex gap-3 hover:border-brand-yellow/30 transition-colors group cursor-pointer">
+                    <a href="#section-map" class="card-glass card-glass--interactive group">
                         <div class="bg-brand-yellow/20 rounded-lg p-2.5 flex-shrink-0 self-start">
                             <i data-lucide="car" class="w-4 h-4 text-brand-yellow" aria-hidden="true"></i>
                         </div>
@@ -81,7 +81,7 @@
                     <?php endif; ?>
 
                     <?php if ($beach['access_label']): ?>
-                    <div class="bg-white/[0.07] border border-white/[0.12] rounded-xl p-3 flex gap-3">
+                    <div class="card-glass">
                         <div class="bg-brand-yellow/20 rounded-lg p-2.5 flex-shrink-0 self-start">
                             <i data-lucide="footprints" class="w-4 h-4 text-brand-yellow" aria-hidden="true"></i>
                         </div>

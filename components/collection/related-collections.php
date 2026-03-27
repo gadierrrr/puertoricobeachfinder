@@ -37,18 +37,18 @@ foreach ($_rcCollections as $key => $meta) {
 if (!empty($_rcItems)):
     $_rcTitle = $_rcHasTranslate ? __('collection.explore_more') : 'Explore More Beach Collections';
 ?>
-<section class="py-12 bg-gray-50">
+<section class="py-12 ">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-slate-100 mb-8 text-center">
             <?= h($_rcTitle) ?>
         </h2>
 
         <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
             <?php foreach ($_rcItems as $item): ?>
             <a href="<?= h(routeUrl($item['page_key'], $_rcLang)) ?>"
-               class="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow group text-center">
+               class="bg-white/5 border border-white/10 rounded-xl p-6 shadow-glass hover:shadow-glass transition-shadow group text-center">
                 <div class="text-4xl mb-4"><?= $item['emoji'] ?></div>
-                <h3 class="text-lg font-bold text-gray-900 group-hover:text-brand-darker">
+                <h3 class="text-lg font-bold text-slate-100 group-hover:text-yellow-300">
                     <?= h($_rcHasTranslate ? __($item['label_key']) : $item['label_key']) ?>
                 </h3>
             </a>

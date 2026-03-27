@@ -75,28 +75,27 @@ include APP_ROOT . '/components/header.php';
 ?>
 <?php include APP_ROOT . '/components/collection/explorer.php'; ?>
 
-<div class="collection-legacy-content">
 
 <!-- Quick Navigation -->
-<section class="collection-content-nav bg-white border-b">
+<section class="collection-content-nav bg-white/5 border border-white/10">
     <div class="max-w-7xl mx-auto px-4 py-4">
         <div class="flex flex-wrap gap-2 justify-center text-sm">
-            <span class="text-gray-500"><?= h(__('pages.beaches_near_san_juan.jump_to')) ?></span>
-            <a href="#beaches" class="text-amber-700 hover:underline"><?= h(__('pages.beaches_near_san_juan.jump_beach_list')) ?></a>
-            <span class="text-gray-300">|</span>
-            <a href="#neighborhoods" class="text-amber-700 hover:underline"><?= h(__('pages.beaches_near_san_juan.jump_neighborhoods')) ?></a>
-            <span class="text-gray-300">|</span>
-            <a href="#getting-there" class="text-amber-700 hover:underline"><?= h(__('pages.beaches_near_san_juan.jump_getting_there')) ?></a>
-            <span class="text-gray-300">|</span>
-            <a href="#faq" class="text-amber-700 hover:underline"><?= h(__('pages.beaches_near_san_juan.jump_faq')) ?></a>
+            <span class="text-slate-400"><?= h(__('pages.beaches_near_san_juan.jump_to')) ?></span>
+            <a href="#beaches" class="text-yellow-300 hover:underline"><?= h(__('pages.beaches_near_san_juan.jump_beach_list')) ?></a>
+            <span class="text-white/20">|</span>
+            <a href="#neighborhoods" class="text-yellow-300 hover:underline"><?= h(__('pages.beaches_near_san_juan.jump_neighborhoods')) ?></a>
+            <span class="text-white/20">|</span>
+            <a href="#getting-there" class="text-yellow-300 hover:underline"><?= h(__('pages.beaches_near_san_juan.jump_getting_there')) ?></a>
+            <span class="text-white/20">|</span>
+            <a href="#faq" class="text-yellow-300 hover:underline"><?= h(__('pages.beaches_near_san_juan.jump_faq')) ?></a>
         </div>
     </div>
 </section>
 
 <!-- Introduction -->
-<section class="py-12 bg-gray-50">
+<section class="py-12">
     <div class="max-w-4xl mx-auto px-4">
-        <div class="prose prose-lg max-w-none beach-description">
+        <div class="prose prose-lg max-w-none prose-brand">
             <p><?= __('pages.beaches_near_san_juan.intro_p1') ?></p>
 
             <p><?= __('pages.beaches_near_san_juan.intro_p2') ?></p>
@@ -105,47 +104,47 @@ include APP_ROOT . '/components/header.php';
 </section>
 
 <!-- By Neighborhood -->
-<section id="neighborhoods" class="py-12 bg-gray-50">
+<section id="neighborhoods" class="py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-slate-100 mb-8 text-center">
             <?= h(__('pages.beaches_near_san_juan.neighborhoods_title')) ?>
         </h2>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="bg-white rounded-xl p-6 shadow-md">
-                <h3 class="text-lg font-bold text-gray-900 mb-3"><?= h(__('pages.beaches_near_san_juan.neighborhood_condado_title')) ?></h3>
-                <p class="text-gray-600 text-sm mb-3"><?= h(__('pages.beaches_near_san_juan.neighborhood_condado_desc')) ?></p>
-                <ul class="text-sm text-gray-700 space-y-1">
+            <div class="bg-white/5 border border-white/10 rounded-xl p-6 shadow-glass">
+                <h3 class="text-lg font-bold text-slate-100 mb-3"><?= h(__('pages.beaches_near_san_juan.neighborhood_condado_title')) ?></h3>
+                <p class="text-slate-400 text-sm mb-3"><?= h(__('pages.beaches_near_san_juan.neighborhood_condado_desc')) ?></p>
+                <ul class="text-sm text-slate-300 space-y-1">
                     <li><?= h(__('pages.beaches_near_san_juan.neighborhood_condado_1')) ?></li>
                     <li><?= h(__('pages.beaches_near_san_juan.neighborhood_condado_2')) ?></li>
                     <li><?= h(__('pages.beaches_near_san_juan.neighborhood_condado_3')) ?></li>
                 </ul>
             </div>
 
-            <div class="bg-white rounded-xl p-6 shadow-md">
-                <h3 class="text-lg font-bold text-gray-900 mb-3"><?= h(__('pages.beaches_near_san_juan.neighborhood_isla_verde_title')) ?></h3>
-                <p class="text-gray-600 text-sm mb-3"><?= h(__('pages.beaches_near_san_juan.neighborhood_isla_verde_desc')) ?></p>
-                <ul class="text-sm text-gray-700 space-y-1">
+            <div class="bg-white/5 border border-white/10 rounded-xl p-6 shadow-glass">
+                <h3 class="text-lg font-bold text-slate-100 mb-3"><?= h(__('pages.beaches_near_san_juan.neighborhood_isla_verde_title')) ?></h3>
+                <p class="text-slate-400 text-sm mb-3"><?= h(__('pages.beaches_near_san_juan.neighborhood_isla_verde_desc')) ?></p>
+                <ul class="text-sm text-slate-300 space-y-1">
                     <li><?= h(__('pages.beaches_near_san_juan.neighborhood_isla_verde_1')) ?></li>
                     <li><?= h(__('pages.beaches_near_san_juan.neighborhood_isla_verde_2')) ?></li>
                     <li><?= h(__('pages.beaches_near_san_juan.neighborhood_isla_verde_3')) ?></li>
                 </ul>
             </div>
 
-            <div class="bg-white rounded-xl p-6 shadow-md">
-                <h3 class="text-lg font-bold text-gray-900 mb-3"><?= h(__('pages.beaches_near_san_juan.neighborhood_ocean_park_title')) ?></h3>
-                <p class="text-gray-600 text-sm mb-3"><?= h(__('pages.beaches_near_san_juan.neighborhood_ocean_park_desc')) ?></p>
-                <ul class="text-sm text-gray-700 space-y-1">
+            <div class="bg-white/5 border border-white/10 rounded-xl p-6 shadow-glass">
+                <h3 class="text-lg font-bold text-slate-100 mb-3"><?= h(__('pages.beaches_near_san_juan.neighborhood_ocean_park_title')) ?></h3>
+                <p class="text-slate-400 text-sm mb-3"><?= h(__('pages.beaches_near_san_juan.neighborhood_ocean_park_desc')) ?></p>
+                <ul class="text-sm text-slate-300 space-y-1">
                     <li><?= h(__('pages.beaches_near_san_juan.neighborhood_ocean_park_1')) ?></li>
                     <li><?= h(__('pages.beaches_near_san_juan.neighborhood_ocean_park_2')) ?></li>
                     <li><?= h(__('pages.beaches_near_san_juan.neighborhood_ocean_park_3')) ?></li>
                 </ul>
             </div>
 
-            <div class="bg-white rounded-xl p-6 shadow-md">
-                <h3 class="text-lg font-bold text-gray-900 mb-3"><?= h(__('pages.beaches_near_san_juan.neighborhood_puerta_de_tierra_title')) ?></h3>
-                <p class="text-gray-600 text-sm mb-3"><?= h(__('pages.beaches_near_san_juan.neighborhood_puerta_de_tierra_desc')) ?></p>
-                <ul class="text-sm text-gray-700 space-y-1">
+            <div class="bg-white/5 border border-white/10 rounded-xl p-6 shadow-glass">
+                <h3 class="text-lg font-bold text-slate-100 mb-3"><?= h(__('pages.beaches_near_san_juan.neighborhood_puerta_de_tierra_title')) ?></h3>
+                <p class="text-slate-400 text-sm mb-3"><?= h(__('pages.beaches_near_san_juan.neighborhood_puerta_de_tierra_desc')) ?></p>
+                <ul class="text-sm text-slate-300 space-y-1">
                     <li><?= h(__('pages.beaches_near_san_juan.neighborhood_puerta_de_tierra_1')) ?></li>
                     <li><?= h(__('pages.beaches_near_san_juan.neighborhood_puerta_de_tierra_2')) ?></li>
                     <li><?= h(__('pages.beaches_near_san_juan.neighborhood_puerta_de_tierra_3')) ?></li>
@@ -158,27 +157,27 @@ include APP_ROOT . '/components/header.php';
 <!-- Getting There -->
 <section id="getting-there" class="py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-slate-100 mb-8 text-center">
             <?= h(__('pages.beaches_near_san_juan.getting_there_title')) ?>
         </h2>
 
         <div class="grid md:grid-cols-3 gap-6">
-            <div class="bg-white rounded-xl p-6 shadow-md">
+            <div class="bg-white/5 border border-white/10 rounded-xl p-6 shadow-glass">
                 <div class="text-3xl mb-4">🚕</div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2"><?= h(__('pages.beaches_near_san_juan.getting_there_taxi_title')) ?></h3>
-                <p class="text-gray-600 text-sm"><?= h(__('pages.beaches_near_san_juan.getting_there_taxi_desc')) ?></p>
+                <h3 class="text-lg font-bold text-slate-100 mb-2"><?= h(__('pages.beaches_near_san_juan.getting_there_taxi_title')) ?></h3>
+                <p class="text-slate-400 text-sm"><?= h(__('pages.beaches_near_san_juan.getting_there_taxi_desc')) ?></p>
             </div>
 
-            <div class="bg-white rounded-xl p-6 shadow-md">
+            <div class="bg-white/5 border border-white/10 rounded-xl p-6 shadow-glass">
                 <div class="text-3xl mb-4">🚌</div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2"><?= h(__('pages.beaches_near_san_juan.getting_there_bus_title')) ?></h3>
-                <p class="text-gray-600 text-sm"><?= h(__('pages.beaches_near_san_juan.getting_there_bus_desc')) ?></p>
+                <h3 class="text-lg font-bold text-slate-100 mb-2"><?= h(__('pages.beaches_near_san_juan.getting_there_bus_title')) ?></h3>
+                <p class="text-slate-400 text-sm"><?= h(__('pages.beaches_near_san_juan.getting_there_bus_desc')) ?></p>
             </div>
 
-            <div class="bg-white rounded-xl p-6 shadow-md">
+            <div class="bg-white/5 border border-white/10 rounded-xl p-6 shadow-glass">
                 <div class="text-3xl mb-4">🚶</div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2"><?= h(__('pages.beaches_near_san_juan.getting_there_walking_title')) ?></h3>
-                <p class="text-gray-600 text-sm"><?= h(__('pages.beaches_near_san_juan.getting_there_walking_desc')) ?></p>
+                <h3 class="text-lg font-bold text-slate-100 mb-2"><?= h(__('pages.beaches_near_san_juan.getting_there_walking_title')) ?></h3>
+                <p class="text-slate-400 text-sm"><?= h(__('pages.beaches_near_san_juan.getting_there_walking_desc')) ?></p>
             </div>
         </div>
     </div>
@@ -189,18 +188,18 @@ include APP_ROOT . '/components/header.php';
 <!-- FAQ Section -->
 <section id="faq" class="py-12">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-slate-100 mb-8 text-center">
             <?= h(__('pages.beaches_near_san_juan.faq_title')) ?>
         </h2>
 
         <div class="space-y-4">
             <?php foreach ($pageFaqs as $faq): ?>
-            <details class="bg-white rounded-lg shadow-md group">
-                <summary class="flex items-center justify-between p-6 cursor-pointer font-semibold text-gray-900">
+            <details class="bg-white/5 border border-white/10 rounded-lg shadow-glass group">
+                <summary class="flex items-center justify-between p-6 cursor-pointer font-semibold text-slate-100">
                     <?= h($faq['question']) ?>
-                    <span class="text-amber-700 group-open:rotate-180 transition-transform">▼</span>
+                    <span class="text-yellow-300 group-open:rotate-180 transition-transform">▼</span>
                 </summary>
-                <div class="px-6 pb-6 text-gray-700">
+                <div class="px-6 pb-6 text-slate-300">
                     <?= h($faq['answer']) ?>
                 </div>
             </details>
@@ -210,9 +209,9 @@ include APP_ROOT . '/components/header.php';
 </section>
 
 <!-- Map Section -->
-<section class="py-12 bg-gray-50">
+<section class="py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-slate-100 mb-8 text-center">
             <?= h(__('pages.beaches_near_san_juan.map_title')) ?>
         </h2>
         <div class="text-center">
@@ -220,23 +219,22 @@ include APP_ROOT . '/components/header.php';
                 <span>🗺️</span>
                 <span><?= h(__('pages.beaches_near_san_juan.map_button')) ?></span>
             </a>
-            <p class="text-gray-600 mt-4"><?= h(__('pages.beaches_near_san_juan.map_desc')) ?></p>
+            <p class="text-slate-400 mt-4"><?= h(__('pages.beaches_near_san_juan.map_desc')) ?></p>
         </div>
     </div>
 </section>
 
 <!-- CTA Section -->
-<section class="py-12 bg-brand-yellow text-brand-darker">
+<section class="py-12 bg-yellow-400/[0.18] border border-yellow-400/[0.38] text-yellow-300">
     <div class="max-w-4xl mx-auto px-4 text-center">
         <h2 class="text-2xl md:text-3xl font-bold mb-4"><?= h(__('pages.beaches_near_san_juan.cta_title')) ?></h2>
         <p class="text-lg opacity-90 mb-6"><?= h(__('pages.beaches_near_san_juan.cta_desc')) ?></p>
-        <a href="<?= h(routeUrl('quiz', $lang)) ?>" class="inline-block bg-white text-amber-700 hover:bg-slate-50 px-8 py-3 rounded-lg font-semibold transition-colors">
+        <a href="<?= h(routeUrl('quiz', $lang)) ?>" class="inline-block bg-brand-yellow text-brand-darker hover:bg-white/10 px-8 py-3 rounded-lg font-semibold transition-colors">
             <?= h(__('pages.common.take_quiz')) ?>
         </a>
     </div>
 </section>
 
-</div>
 
 <?php
 $skipAppScripts = true;

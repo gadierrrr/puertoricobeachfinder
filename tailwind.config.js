@@ -89,7 +89,7 @@ module.exports = {
         'soft': '0 2px 8px rgba(0, 0, 0, 0.06)',
         'soft-lg': '0 4px 16px rgba(0, 0, 0, 0.08)',
         'sunny': '0 4px 16px rgba(251, 191, 36, 0.2)',
-        'glass': '0 8px 32px rgba(0, 0, 0, 0.3)',
+        'glass': 'var(--shadow-glass)',
       },
       backgroundImage: {
         'hero-gradient': 'linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.3), rgba(0,0,0,0.8))',

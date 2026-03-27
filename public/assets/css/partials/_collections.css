@@ -1,3 +1,9 @@
+/* ==========================================================
+   _collections.css — Collection explorer, cards, toolbar, search, chips
+   Used by: collection/explorer.php, best-beaches.php, beaches-near-*.php
+   Dependencies: _variables.css
+   ========================================================== */
+
 /* ========================================
    COLLECTION EXPLORER PAGES
    Homepage-first dark system
@@ -603,114 +609,6 @@ body.collection-dark {
     text-decoration: none;
 }
 
-/* Normalize legacy utility-heavy section styling on collection pages */
-.collection-legacy-content .bg-white,
-.collection-legacy-content .bg-gray-50,
-.collection-legacy-content .bg-slate-50,
-.collection-legacy-content .bg-slate-100,
-.collection-legacy-content .bg-yellow-50,
-.collection-legacy-content .bg-red-50,
-.collection-legacy-content .bg-orange-100,
-.collection-legacy-content .bg-cyan-50,
-.collection-legacy-content .bg-cyan-100 {
-    background-color: rgba(15, 23, 42, 0.62) !important;
-    border-color: var(--color-border) !important;
-    color: var(--color-text-primary);
-}
-
-.collection-legacy-content .from-slate-50,
-.collection-legacy-content .from-cyan-50,
-.collection-legacy-content .from-orange-50,
-.collection-legacy-content .to-slate-100,
-.collection-legacy-content .to-cyan-100,
-.collection-legacy-content .to-orange-100 {
-    --tw-gradient-from: rgba(15, 23, 42, 0.74) var(--tw-gradient-from-position) !important;
-    --tw-gradient-to: rgba(15, 23, 42, 0.6) var(--tw-gradient-to-position) !important;
-    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
-}
-
-.collection-legacy-content section.bg-cyan-600,
-.collection-legacy-content section.bg-orange-600,
-.collection-legacy-content section.bg-amber-600,
-.collection-legacy-content section.bg-brand-yellow {
-    background-color: rgba(250, 204, 21, 0.18) !important;
-    border: 1px solid rgba(250, 204, 21, 0.38) !important;
-    color: var(--color-accent-light) !important;
-}
-
-.collection-legacy-content .text-gray-900,
-.collection-legacy-content .text-slate-900 {
-    color: var(--color-text-primary) !important;
-}
-
-.collection-legacy-content .text-gray-800,
-.collection-legacy-content .text-gray-700,
-.collection-legacy-content .text-slate-700 {
-    color: var(--color-text-secondary) !important;
-}
-
-.collection-legacy-content .text-gray-600,
-.collection-legacy-content .text-gray-500,
-.collection-legacy-content .text-slate-600,
-.collection-legacy-content .text-slate-500 {
-    color: var(--color-text-muted) !important;
-}
-
-.collection-legacy-content .text-amber-700,
-.collection-legacy-content .text-yellow-600,
-.collection-legacy-content .text-orange-600,
-.collection-legacy-content .text-cyan-600,
-.collection-legacy-content .text-red-600 {
-    color: var(--color-accent-light) !important;
-}
-
-.collection-legacy-content .border-gray-200,
-.collection-legacy-content .border-gray-300,
-.collection-legacy-content .border-slate-200,
-.collection-legacy-content .border-yellow-200,
-.collection-legacy-content .border-red-200,
-.collection-legacy-content .border-amber-500 {
-    border-color: var(--color-border) !important;
-}
-
-.collection-legacy-content .shadow-md,
-.collection-legacy-content .shadow-lg {
-    box-shadow: var(--shadow-card) !important;
-}
-
-.collection-legacy-content details {
-    border: 1px solid var(--color-border);
-    background: rgba(15, 23, 42, 0.62);
-}
-
-.collection-legacy-content summary {
-    color: var(--color-text-primary) !important;
-}
-
-.collection-legacy-content .prose p,
-.collection-legacy-content .prose li,
-.collection-legacy-content .beach-description,
-.collection-legacy-content .beach-description p {
-    color: var(--color-text-secondary) !important;
-}
-
-.collection-legacy-content .prose strong,
-.collection-legacy-content .beach-description strong {
-    color: var(--color-text-primary) !important;
-}
-
-.collection-legacy-content .prose a,
-.collection-legacy-content a.hover\:underline:hover,
-.collection-legacy-content a.group-hover\:text-brand-darker:hover,
-.collection-legacy-content a.group-hover\:text-cyan-600:hover {
-    color: var(--color-accent-light) !important;
-}
-
-.collection-legacy-content a.inline-block,
-.collection-legacy-content a.inline-flex,
-.collection-legacy-content a.ui-btn-primary {
-    background-color: var(--color-accent) !important;
-    border: 0 !important;
     color: var(--color-brand-darker);
 }
 
@@ -829,26 +727,9 @@ body.collection-dark {
         min-height: 44px;
     }
 
-    .collection-legacy-content section {
-        padding-top: 2rem !important;
-        padding-bottom: 2rem !important;
-    }
 
-    .collection-legacy-content .rounded-xl,
-    .collection-legacy-content .rounded-lg {
-        border-radius: 0.9rem !important;
-    }
 
-    .collection-legacy-content .grid {
-        gap: 0.85rem !important;
-    }
 
-    .collection-legacy-content a.inline-flex,
-    .collection-legacy-content a.inline-block {
-        min-height: 44px;
-        align-items: center;
-        justify-content: center;
-    }
 }
 
 @media (max-width: 480px) {

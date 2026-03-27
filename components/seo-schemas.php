@@ -668,7 +668,7 @@ function speakableSchema(): string {
         'speakable' => [
             '@type' => 'SpeakableSpecification',
             'cssSelector' => [
-                '.beach-description',
+                '.prose-brand',
                 '.beach-highlights',
                 '.beach-facts',
                 'h1',

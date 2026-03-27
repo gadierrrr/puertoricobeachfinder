@@ -7,8 +7,7 @@
  */
 ?>
     <!-- Sticky Section Navigation -->
-    <div class="section-nav-wrapper"><nav class="beach-section-nav flex overflow-x-auto hide-scrollbar border-b border-white/10 mb-6 -mx-4 px-4"
-         style="position: sticky; top: 56px; z-index: 30; background: rgba(15,26,31,0.97); backdrop-filter: blur(8px);">
+    <div class="section-nav-wrapper"><nav class="beach-section-nav flex overflow-x-auto hide-scrollbar border-b border-white/10 mb-6 -mx-4 px-4 sticky top-14 z-30 bg-[rgba(15,26,31,0.97)] backdrop-blur-md">
         <a href="#section-overview" class="beach-nav-link active" data-section="section-overview"><?= h($lang === 'es' ? 'General' : 'Overview') ?></a>
         <a href="#section-best-time" class="beach-nav-link" data-section="section-best-time"><?= h($lang === 'es' ? 'Mejor Época' : 'Best Time') ?></a>
         <a href="#section-what-to-bring" class="beach-nav-link" data-section="section-what-to-bring"><?= h($lang === 'es' ? 'Qué Llevar' : 'What to Bring') ?></a>

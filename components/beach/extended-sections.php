@@ -48,7 +48,7 @@
                     $_sectionContent = ($lang === 'es' && !empty($section['content_es']))
                         ? $section['content_es'] : $section['content'];
                     ?>
-                    <section class="beach-detail-card p-5 rounded-xl section-collapsible" id="section-<?= h($section['section_type']) ?>" style="scroll-margin-top: 120px;">
+                    <section class="beach-detail-card p-5 rounded-xl section-collapsible scroll-mt-[120px]" id="section-<?= h($section['section_type']) ?>">
                         <div class="section-toggle flex items-center justify-between" data-action="toggleSection" data-action-args='["__this__"]'>
                             <h2 class="text-lg font-bold text-white flex items-center gap-2">
                                 <i data-lucide="<?= h(CONTENT_SECTIONS[$section['section_type']]['icon'] ?? 'info') ?>" class="w-5 h-5 text-brand-yellow"></i>

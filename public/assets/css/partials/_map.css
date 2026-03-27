@@ -1,3 +1,9 @@
+/* ==========================================================
+   _map.css — MapLibre container, markers, popups, legend, clustering
+   Used by: beach/sidebar.php (map section), index.php (homepage map)
+   Dependencies: _variables.css
+   ========================================================== */
+
 /* Tag button active state - handled by Tailwind classes (bg-brand-yellow text-brand-darker) */
 
 /* ========================================

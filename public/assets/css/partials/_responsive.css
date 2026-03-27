@@ -1,3 +1,10 @@
+/* ==========================================================
+   _responsive.css — Mobile/tablet breakpoints, beach detail layout
+   Used by: all pages (responsive adaptations)
+   Dependencies: _variables.css
+   Breakpoints: 400px (narrow), 640px (mobile), 768px (tablet), 1024px (desktop)
+   ========================================================== */
+
 /* ========================================
    SEARCHABLE SELECT (Tom Select compatible)
    ======================================== */
@@ -210,7 +217,8 @@
 }
 
 /* Very narrow screens - simplify sticky bar */
-@media (max-width: 360px) {
+/* Narrow screens (< 400px): compact sticky bar, stacked cards, single-column facts */
+@media (max-width: 400px) {
     .sticky-weather,
     .sticky-crowd {
         gap: 0.375rem;
@@ -547,7 +555,7 @@
 }
 
 /* Small mobile: single column, full width cards */
-@media (max-width: 399px) {
+@media (max-width: 400px) {
     .quick-facts-grid {
         grid-template-columns: 1fr;
         gap: 0.5rem;
@@ -663,7 +671,7 @@
    ======================================== */
 
 /* Required HTML classes: .card-actions */
-@media (max-width: 380px) {
+@media (max-width: 400px) {
     /* Stack card action buttons on very narrow screens */
     .card-actions {
         flex-direction: column;
@@ -695,7 +703,7 @@
 }
 
 /* Alternative: wrap icon buttons on medium-small screens */
-@media (min-width: 381px) and (max-width: 480px) {
+@media (min-width: 401px) and (max-width: 480px) {
     .card-actions {
         flex-wrap: wrap;
     }

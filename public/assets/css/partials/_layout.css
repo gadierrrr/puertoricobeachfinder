@@ -1,14 +1,14 @@
+/* ==========================================================
+   _layout.css — Hero section, search autocomplete, empty states
+   Used by: index.php (hero), collection pages, error pages
+   Dependencies: _variables.css
+   ========================================================== */
+
 /* ========================================
    HERO SECTION
    ======================================== */
 
-.hero-gradient {
-    background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 50%, #7c3aed 100%);
-}
 
-.hero-gradient-purple {
-    background: linear-gradient(135deg, #7c3aed 0%, #9333ea 50%, #a855f7 100%);
-}
 
 /* Dark glassmorphic gradient matching home page */
 .hero-gradient-dark {
@@ -21,12 +21,6 @@
     /* Equivalent to from-green-600 to-green-700 */
 }
 
-/* Deprecation notice - DO NOT USE in new pages */
-/* .hero-gradient and .hero-gradient-purple are deprecated in favor of:
- * - .hero-gradient-dark (collection pages, matches homepage dark theme)
- * - .hero-gradient-guide (guide pages, green gradient)
- * These classes remain for backwards compatibility only.
- */
 
 .hero-cta {
     display: inline-flex;

@@ -1,5 +1,8 @@
 /* AUTO-GENERATED FILE: DO NOT EDIT DIRECTLY */
 /* Source: assets/design/tokens.json */
+/* Design tokens: colors, shadows, z-index, glass properties.
+   Single source of truth for all CSS custom properties.
+   Generated from: assets/design/tokens.json */
 
 :root {
     --color-bg-primary: #1a2c32;
@@ -37,7 +40,7 @@
     --color-accent-light: #fef08a;
     --color-accent-hover: #facc15;
     --color-accent-dark: #eab308;
-    --color-success: var(--color-secondary);
+    --color-success: var(--color-secondary); /* semantic alias: green = success */
     --color-success-dark: var(--color-secondary-hover);
     --color-guide-link: #ca8a04;
     --color-guide-link-hover: #b45309;
@@ -76,6 +79,7 @@
     --score-excellent-bg: linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%);
     --score-good-bg: linear-gradient(135deg, #fde047 0%, #facc15 100%);
     --score-average-bg: rgba(255, 255, 255, 0.1);
+    /* Shadows: dark-context values (heavier than Tailwind light-mode defaults) */
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
@@ -103,6 +107,12 @@ body {
     background-color: var(--color-bg-secondary);
     color: var(--color-text-primary);
 }
+/* ==========================================================
+   _base.css — Typography, glassmorphism utilities, animations
+   Used by: all pages (global styles)
+   Dependencies: _variables.css
+   ========================================================== */
+
 /* ========================================
    TYPOGRAPHY - PLAYFAIR DISPLAY ITALIC
    ======================================== */
@@ -166,6 +176,12 @@ body {
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+/* ==========================================================
+   _loading.css — Toast notifications, skeleton loaders, HTMX states
+   Used by: all pages (global loading states)
+   Dependencies: _variables.css
+   ========================================================== */
 
 /* ========================================
    GLOBAL MOBILE OVERFLOW PROTECTION
@@ -454,6 +470,12 @@ a.btn-loading,
     pointer-events: none;
 }
 
+/* ==========================================================
+   _cards.css — Component classes, beach cards, score badges, prose
+   Used by: beach-card.php, quick-facts.php, sidebar.php, info-bar.php
+   Dependencies: _variables.css
+   ========================================================== */
+
 .btn-loading::after {
     content: '';
     position: absolute;
@@ -522,82 +544,70 @@ a.btn-loading,
 }
 
 /* ========================================
-   PROSE STYLING - LIGHT MODE
+   REUSABLE COMPONENT CLASSES
    ======================================== */
 
-/* Prose styling for light mode / light backgrounds */
-.prose-light p {
-    color: var(--color-text-on-light);
-    line-height: 1.7;
-    margin-bottom: 1rem;
+/* Glass card — translucent dark container used across beach detail, sidebar, quick facts */
+.card-glass {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    padding: 0.75rem;
+    display: flex;
+    gap: 0.75rem;
 }
 
-.prose-light p:last-child {
-    margin-bottom: 0;
+.card-glass--interactive {
+    cursor: pointer;
+    transition: border-color 0.2s ease;
 }
 
-.prose-light strong {
-    color: var(--color-gray-900);
+.card-glass--interactive:hover {
+    border-color: rgba(253, 224, 71, 0.3);
+}
+
+/* Glass button — translucent action button on dark backgrounds */
+.btn-glass {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    transition: background-color 0.15s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-glass:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Primary CTA button — yellow accent */
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--color-accent);
+    color: var(--color-brand-darker);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
     font-weight: 600;
+    transition: background-color 0.15s ease;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
 }
 
-.prose-light h2 {
-    color: var(--color-gray-900);
-    font-size: 1.875rem;
-    font-weight: 700;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
+.btn-primary:hover {
+    background: #fde047cc;
 }
 
-.prose-light h3 {
-    color: var(--color-gray-900);
-    font-weight: 700;
-    font-size: 1.5rem;
-    margin-top: 1.5rem;
-    margin-bottom: 0.75rem;
-}
-
-.prose-light h3:first-child {
-    margin-top: 0;
-}
-
-.prose-light ul,
-.prose-light ol {
-    color: var(--color-text-on-light);
-    padding-left: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-.prose-light li {
-    margin-bottom: 0.5rem;
-    line-height: 1.7;
-}
-
-.prose-light a {
-    color: var(--color-primary);
-    text-decoration: underline;
-    text-decoration-color: var(--color-primary-light);
-    transition: color 0.2s ease;
-}
-
-.prose-light a:hover {
-    color: var(--color-primary-hover);
-}
-
-/* Collection page introduction styling */
-.beach-description {
-    color: var(--color-text-on-light);
-}
-
-.beach-description p {
-    color: var(--color-text-on-light);
-    line-height: 1.7;
-    margin-bottom: 1rem;
-}
-
-.beach-description strong {
-    color: var(--color-gray-900);
-    font-weight: 600;
+/* Text shadow for hero overlays on images */
+.text-shadow-hero {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 /* ========================================
@@ -834,6 +844,12 @@ a.btn-loading,
     background: var(--color-accent);
     color: white;
 }
+/* ==========================================================
+   _filters.css — Filter chips, condition meters, view toggles, theme toggle
+   Used by: filters.php, index.php
+   Dependencies: _variables.css
+   ========================================================== */
+
 /* ========================================
    FILTER CHIP BUTTONS (Nomads-style)
    ======================================== */
@@ -1165,6 +1181,12 @@ a.btn-loading,
     outline: none;
     border-color: var(--color-primary);
 }
+/* ==========================================================
+   _map.css — MapLibre container, markers, popups, legend, clustering
+   Used by: beach/sidebar.php (map section), index.php (homepage map)
+   Dependencies: _variables.css
+   ========================================================== */
+
 /* Tag button active state - handled by Tailwind classes (bg-brand-yellow text-brand-darker) */
 
 /* ========================================
@@ -1466,6 +1488,12 @@ a.btn-loading,
         padding: 0.5rem;
     }
 }
+/* ==========================================================
+   _drawers.css — Modal overlays, slide-up drawers, filter drawer
+   Used by: filters.php, beach-card.php (drawer interactions)
+   Dependencies: _variables.css
+   ========================================================== */
+
 /* ========================================
    DRAWER / MODAL
    ======================================== */
@@ -1590,6 +1618,12 @@ a.btn-loading,
     border-radius: 2px;
     margin: 0.75rem auto 0;
 }
+
+/* ==========================================================
+   _modals.css — Share modal, lightbox gallery, image viewer
+   Used by: footer.php (share modal), beach/photos.php (lightbox)
+   Dependencies: _variables.css
+   ========================================================== */
 
 /* ========================================
    SHARE MODAL
@@ -2043,17 +2077,17 @@ a.btn-loading,
     }
 }
 
+/* ==========================================================
+   _layout.css — Hero section, search autocomplete, empty states
+   Used by: index.php (hero), collection pages, error pages
+   Dependencies: _variables.css
+   ========================================================== */
+
 /* ========================================
    HERO SECTION
    ======================================== */
 
-.hero-gradient {
-    background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 50%, #7c3aed 100%);
-}
 
-.hero-gradient-purple {
-    background: linear-gradient(135deg, #7c3aed 0%, #9333ea 50%, #a855f7 100%);
-}
 
 /* Dark glassmorphic gradient matching home page */
 .hero-gradient-dark {
@@ -2066,12 +2100,6 @@ a.btn-loading,
     /* Equivalent to from-green-600 to-green-700 */
 }
 
-/* Deprecation notice - DO NOT USE in new pages */
-/* .hero-gradient and .hero-gradient-purple are deprecated in favor of:
- * - .hero-gradient-dark (collection pages, matches homepage dark theme)
- * - .hero-gradient-guide (guide pages, green gradient)
- * These classes remain for backwards compatibility only.
- */
 
 .hero-cta {
     display: inline-flex;
@@ -2225,6 +2253,12 @@ a.btn-loading,
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
 }
+
+/* ==========================================================
+   _guides.css — Guide page layout, table of contents, related guides
+   Used by: public/guides/*.php
+   Dependencies: _variables.css
+   ========================================================== */
 
 /* ========================================
    GUIDE PAGES - LAYOUT & COMPONENTS
@@ -2448,6 +2482,12 @@ a.btn-loading,
     flex-direction: column;
     justify-content: center;
 }
+/* ==========================================================
+   _collections.css — Collection explorer, cards, toolbar, search, chips
+   Used by: collection/explorer.php, best-beaches.php, beaches-near-*.php
+   Dependencies: _variables.css
+   ========================================================== */
+
 /* ========================================
    COLLECTION EXPLORER PAGES
    Homepage-first dark system
@@ -3053,114 +3093,6 @@ body.collection-dark {
     text-decoration: none;
 }
 
-/* Normalize legacy utility-heavy section styling on collection pages */
-.collection-legacy-content .bg-white,
-.collection-legacy-content .bg-gray-50,
-.collection-legacy-content .bg-slate-50,
-.collection-legacy-content .bg-slate-100,
-.collection-legacy-content .bg-yellow-50,
-.collection-legacy-content .bg-red-50,
-.collection-legacy-content .bg-orange-100,
-.collection-legacy-content .bg-cyan-50,
-.collection-legacy-content .bg-cyan-100 {
-    background-color: rgba(15, 23, 42, 0.62) !important;
-    border-color: var(--color-border) !important;
-    color: var(--color-text-primary);
-}
-
-.collection-legacy-content .from-slate-50,
-.collection-legacy-content .from-cyan-50,
-.collection-legacy-content .from-orange-50,
-.collection-legacy-content .to-slate-100,
-.collection-legacy-content .to-cyan-100,
-.collection-legacy-content .to-orange-100 {
-    --tw-gradient-from: rgba(15, 23, 42, 0.74) var(--tw-gradient-from-position) !important;
-    --tw-gradient-to: rgba(15, 23, 42, 0.6) var(--tw-gradient-to-position) !important;
-    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
-}
-
-.collection-legacy-content section.bg-cyan-600,
-.collection-legacy-content section.bg-orange-600,
-.collection-legacy-content section.bg-amber-600,
-.collection-legacy-content section.bg-brand-yellow {
-    background-color: rgba(250, 204, 21, 0.18) !important;
-    border: 1px solid rgba(250, 204, 21, 0.38) !important;
-    color: var(--color-accent-light) !important;
-}
-
-.collection-legacy-content .text-gray-900,
-.collection-legacy-content .text-slate-900 {
-    color: var(--color-text-primary) !important;
-}
-
-.collection-legacy-content .text-gray-800,
-.collection-legacy-content .text-gray-700,
-.collection-legacy-content .text-slate-700 {
-    color: var(--color-text-secondary) !important;
-}
-
-.collection-legacy-content .text-gray-600,
-.collection-legacy-content .text-gray-500,
-.collection-legacy-content .text-slate-600,
-.collection-legacy-content .text-slate-500 {
-    color: var(--color-text-muted) !important;
-}
-
-.collection-legacy-content .text-amber-700,
-.collection-legacy-content .text-yellow-600,
-.collection-legacy-content .text-orange-600,
-.collection-legacy-content .text-cyan-600,
-.collection-legacy-content .text-red-600 {
-    color: var(--color-accent-light) !important;
-}
-
-.collection-legacy-content .border-gray-200,
-.collection-legacy-content .border-gray-300,
-.collection-legacy-content .border-slate-200,
-.collection-legacy-content .border-yellow-200,
-.collection-legacy-content .border-red-200,
-.collection-legacy-content .border-amber-500 {
-    border-color: var(--color-border) !important;
-}
-
-.collection-legacy-content .shadow-md,
-.collection-legacy-content .shadow-lg {
-    box-shadow: var(--shadow-card) !important;
-}
-
-.collection-legacy-content details {
-    border: 1px solid var(--color-border);
-    background: rgba(15, 23, 42, 0.62);
-}
-
-.collection-legacy-content summary {
-    color: var(--color-text-primary) !important;
-}
-
-.collection-legacy-content .prose p,
-.collection-legacy-content .prose li,
-.collection-legacy-content .beach-description,
-.collection-legacy-content .beach-description p {
-    color: var(--color-text-secondary) !important;
-}
-
-.collection-legacy-content .prose strong,
-.collection-legacy-content .beach-description strong {
-    color: var(--color-text-primary) !important;
-}
-
-.collection-legacy-content .prose a,
-.collection-legacy-content a.hover\:underline:hover,
-.collection-legacy-content a.group-hover\:text-brand-darker:hover,
-.collection-legacy-content a.group-hover\:text-cyan-600:hover {
-    color: var(--color-accent-light) !important;
-}
-
-.collection-legacy-content a.inline-block,
-.collection-legacy-content a.inline-flex,
-.collection-legacy-content a.ui-btn-primary {
-    background-color: var(--color-accent) !important;
-    border: 0 !important;
     color: var(--color-brand-darker);
 }
 
@@ -3279,26 +3211,9 @@ body.collection-dark {
         min-height: 44px;
     }
 
-    .collection-legacy-content section {
-        padding-top: 2rem !important;
-        padding-bottom: 2rem !important;
-    }
 
-    .collection-legacy-content .rounded-xl,
-    .collection-legacy-content .rounded-lg {
-        border-radius: 0.9rem !important;
-    }
 
-    .collection-legacy-content .grid {
-        gap: 0.85rem !important;
-    }
 
-    .collection-legacy-content a.inline-flex,
-    .collection-legacy-content a.inline-block {
-        min-height: 44px;
-        align-items: center;
-        justify-content: center;
-    }
 }
 
 @media (max-width: 480px) {
@@ -3328,6 +3243,12 @@ body.collection-dark {
         gap: 0.35rem;
     }
 }
+/* ==========================================================
+   _beach.css — Beach detail page: hero gradient, quick facts, highlights
+   Used by: beach.php, components/beach/*.php
+   Dependencies: _variables.css
+   ========================================================== */
+
 /* ========================================
    BEACH DETAIL PAGE
    ======================================== */
@@ -3374,8 +3295,8 @@ body.collection-dark {
 /* Yellow bullet for visitor tips */
 .yellow-bullet {
     display: inline-block;
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background-color: var(--color-accent);
     flex-shrink: 0;
@@ -3420,6 +3341,12 @@ body.collection-dark {
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 0.75rem;
 }
+/* ==========================================================
+   _forms.css — Compare bar, range sliders, login animations, Tom Select
+   Used by: footer.php (compare), filters.php (range), auth pages
+   Dependencies: _variables.css
+   ========================================================== */
+
 /* ========================================
    COMPARISON BAR
    ======================================== */
@@ -3598,6 +3525,12 @@ input[type="range"]::-moz-range-thumb {
     }
 }
 
+/* ==========================================================
+   _accessibility.css — Focus states, skip links, reduced motion, contrast
+   Used by: all pages (global accessibility)
+   Dependencies: _variables.css
+   ========================================================== */
+
 /* ========================================
    ACCESSIBILITY
    ======================================== */
@@ -3763,18 +3696,25 @@ textarea::placeholder {
 .a11y-success-text {
     color: var(--color-success-dark);
 }
+/* ==========================================================
+   _dark-mode.css — All [data-theme="dark"] overrides, consolidated
+   Used by: all pages when dark mode is active
+   Dependencies: _variables.css (color tokens)
+   Note: Guide page overrides remap light-mode Tailwind classes
+   ========================================================== */
+
 /* ========================================
    DARK MODE OVERRIDES
    All [data-theme="dark"] styles consolidated here
    ======================================== */
 
-/* Cards */
+/* --- Cards --- */
 [data-theme="dark"] .beach-card {
     background-color: var(--color-card-bg);
     border-color: var(--color-border);
 }
 
-/* Badges */
+/* --- Badges --- */
 [data-theme="dark"] .beach-badge-gold {
     background: linear-gradient(135deg, #422006 0%, #713f12 100%);
     color: #fbbf24;
@@ -3790,13 +3730,13 @@ textarea::placeholder {
     color: var(--color-primary-muted);
 }
 
-/* Compare bar */
+/* --- Compare bar --- */
 [data-theme="dark"] #compare-bar {
     background: var(--color-card-bg);
     border-color: var(--color-border);
 }
 
-/* Empty states */
+/* --- Empty states --- */
 [data-theme="dark"] .empty-state {
     background: var(--color-bg-tertiary);
     border-color: var(--color-border);
@@ -3816,7 +3756,7 @@ textarea::placeholder {
     color: var(--color-text-muted);
 }
 
-/* Dark mode filter chips */
+/* --- Filter chips --- */
 [data-theme="dark"] .filter-chip {
     background: var(--color-accent-light);
     color: var(--color-primary-muted);
@@ -3844,7 +3784,7 @@ textarea::placeholder {
     background: rgba(239, 68, 68, 0.2);
 }
 
-/* Dark mode popup styles */
+/* --- Map popups --- */
 [data-theme="dark"] .beach-popup {
     background: var(--color-card-bg);
 }
@@ -3872,7 +3812,6 @@ textarea::placeholder {
     background: var(--color-border);
 }
 
-/* Dark mode map popup content */
 [data-theme="dark"] .beach-popup-container .maplibregl-popup-content {
     background: var(--color-card-bg);
 }
@@ -3881,7 +3820,7 @@ textarea::placeholder {
     border-top-color: var(--color-card-bg);
 }
 
-/* Dark mode skeleton loading */
+/* --- Loading states --- */
 [data-theme="dark"] .skeleton {
     background: linear-gradient(90deg, #334155 25%, #475569 50%, #334155 75%);
     background-size: 200% 100%;
@@ -3891,22 +3830,20 @@ textarea::placeholder {
     background: var(--color-card-bg);
 }
 
-/* Dark mode range slider */
+/* --- Form controls --- */
 [data-theme="dark"] input[type="range"] {
     background: var(--color-border);
 }
 
-/* Dark mode share modal */
+/* --- Modals --- */
 [data-theme="dark"] .share-modal-content {
     background: var(--color-card-bg);
 }
 
-/* Dark mode lightbox */
 [data-theme="dark"] .lightbox-overlay {
     background-color: rgba(0, 0, 0, 0.98);
 }
 
-/* Dark mode Tom Select */
 [data-theme="dark"] .ts-control {
     background: var(--color-card-bg);
     border-color: var(--color-border);
@@ -3931,9 +3868,7 @@ textarea::placeholder {
     background: var(--color-bg-tertiary);
 }
 
-/* ========================================
-   GUIDE PAGES DARK MODE
-   ======================================== */
+/* --- Guide pages --- */
 
 [data-theme="dark"] .guide-toc {
     background: var(--color-card-bg);
@@ -3966,13 +3901,19 @@ textarea::placeholder {
     color: #fbbf24 !important; /* amber-400 - brighter for dark backgrounds */
 }
 
-/* Guide typography + surface contrast fixes */
+/* --- Typography + surface contrast (guide content uses light-mode Tailwind) --- */
 [data-theme="dark"] .guide-layout {
     color: var(--color-text-secondary);
 }
 
+/* --- Text color remaps (guide content uses light-mode Tailwind classes) --- */
 [data-theme="dark"] .guide-layout .text-gray-900,
-[data-theme="dark"] .guide-layout .text-gray-800 {
+[data-theme="dark"] .guide-layout .text-gray-800,
+[data-theme="dark"] .guide-layout .text-green-900,
+[data-theme="dark"] .guide-layout .text-green-800,
+[data-theme="dark"] .guide-layout .text-blue-900,
+[data-theme="dark"] .guide-layout .text-yellow-900,
+[data-theme="dark"] .guide-layout .text-yellow-800 {
     color: var(--color-text-primary) !important;
 }
 
@@ -3986,18 +3927,11 @@ textarea::placeholder {
     color: var(--color-text-muted) !important;
 }
 
-[data-theme="dark"] .guide-layout .text-green-900,
-[data-theme="dark"] .guide-layout .text-green-800,
-[data-theme="dark"] .guide-layout .text-blue-900,
-[data-theme="dark"] .guide-layout .text-yellow-900,
-[data-theme="dark"] .guide-layout .text-yellow-800 {
-    color: var(--color-text-primary) !important;
-}
-
 [data-theme="dark"] .guide-layout .text-green-600 {
     color: var(--color-secondary-light) !important;
 }
 
+/* --- Background remaps --- */
 [data-theme="dark"] .guide-layout .bg-white,
 [data-theme="dark"] .guide-layout .bg-gray-50,
 [data-theme="dark"] .guide-layout .bg-green-50,
@@ -4035,6 +3969,7 @@ textarea::placeholder {
     color: var(--color-text-primary);
 }
 
+/* --- Prose --- */
 [data-theme="dark"] .prose-brand p {
     color: var(--color-text-secondary);
 }
@@ -4062,15 +3997,13 @@ textarea::placeholder {
     color: var(--color-accent-light);
 }
 
-/* Beach description dark mode support */
-[data-theme="dark"] .beach-description,
-[data-theme="dark"] .beach-description p {
-    color: var(--color-text-secondary);
-}
+/* ==========================================================
+   _responsive.css — Mobile/tablet breakpoints, beach detail layout
+   Used by: all pages (responsive adaptations)
+   Dependencies: _variables.css
+   Breakpoints: 400px (narrow), 640px (mobile), 768px (tablet), 1024px (desktop)
+   ========================================================== */
 
-[data-theme="dark"] .beach-description strong {
-    color: var(--color-white);
-}
 /* ========================================
    SEARCHABLE SELECT (Tom Select compatible)
    ======================================== */
@@ -4153,7 +4086,6 @@ textarea::placeholder {
 
     /* Hide sticky bar on desktop */
     .beach-sticky-bar {
-    transition: transform 0.3s ease;
         display: none;
     }
 }
@@ -4199,8 +4131,6 @@ textarea::placeholder {
    ======================================== */
 
 .beach-sticky-bar {
-    transition: transform 0.3s ease;
-    transition: transform 0.3s ease;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -4286,7 +4216,8 @@ textarea::placeholder {
 }
 
 /* Very narrow screens - simplify sticky bar */
-@media (max-width: 360px) {
+/* Narrow screens (< 400px): compact sticky bar, stacked cards, single-column facts */
+@media (max-width: 400px) {
     .sticky-weather,
     .sticky-crowd {
         gap: 0.375rem;
@@ -4623,7 +4554,7 @@ textarea::placeholder {
 }
 
 /* Small mobile: single column, full width cards */
-@media (max-width: 399px) {
+@media (max-width: 400px) {
     .quick-facts-grid {
         grid-template-columns: 1fr;
         gap: 0.5rem;
@@ -4739,7 +4670,7 @@ textarea::placeholder {
    ======================================== */
 
 /* Required HTML classes: .card-actions */
-@media (max-width: 380px) {
+@media (max-width: 400px) {
     /* Stack card action buttons on very narrow screens */
     .card-actions {
         flex-direction: column;
@@ -4771,7 +4702,7 @@ textarea::placeholder {
 }
 
 /* Alternative: wrap icon buttons on medium-small screens */
-@media (min-width: 381px) and (max-width: 480px) {
+@media (min-width: 401px) and (max-width: 480px) {
     .card-actions {
         flex-wrap: wrap;
     }
@@ -4888,6 +4819,11 @@ textarea::placeholder {
     }
 }
 
+/* ==========================================================
+   _print.css — Print media styles
+   Used by: all pages (@media print)
+   ========================================================== */
+
 /* ========================================
    PRINT STYLES
    ======================================== */
@@ -4903,120 +4839,4 @@ textarea::placeholder {
         box-shadow: none;
         border: 1px solid var(--color-gray-200);
     }
-}
-
-/* ========================================
-   BEACH SECTION NAVIGATION
-   ======================================== */
-.beach-nav-link {
-    padding: 10px 16px;
-    font-size: 13px;
-    color: rgba(255,255,255,0.6);
-    border-bottom: 2px solid transparent;
-    white-space: nowrap;
-    transition: all 0.2s;
-    text-decoration: none;
-}
-.beach-nav-link:hover {
-    color: rgba(255,255,255,0.85);
-}
-.beach-nav-link.active {
-    color: white;
-    border-bottom-color: var(--color-brand-yellow, #fbbf24);
-}
-
-/* ========================================
-   UI BEST-PRACTICES IMPROVEMENTS (v2)
-   ======================================== */
-
-/* Section nav fade affordance */
-.section-nav-wrapper {
-    position: relative;
-}
-.section-nav-wrapper::after {
-    content: "";
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 48px;
-    background: linear-gradient(to left, rgba(15,26,31,0.97), transparent);
-    pointer-events: none;
-    z-index: 1;
-}
-
-/* Collapsible extended sections */
-.section-collapsible .section-content {
-    max-height: 5.5rem;
-    overflow: hidden;
-    position: relative;
-    transition: max-height 0.4s ease;
-}
-.section-collapsible .section-content::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 3rem;
-    background: linear-gradient(to top, var(--color-bg-card-dark), transparent);
-    pointer-events: none;
-    transition: opacity 0.3s;
-}
-.section-collapsible.expanded .section-content {
-    max-height: 3000px;
-}
-.section-collapsible.expanded .section-content::after {
-    opacity: 0;
-}
-.section-toggle {
-    cursor: pointer;
-    transition: opacity 0.15s;
-}
-.section-toggle:hover {
-    opacity: 0.85;
-}
-.section-toggle .toggle-icon {
-    transition: transform 0.3s;
-}
-.section-collapsible.expanded .toggle-icon {
-    transform: rotate(180deg);
-}
-
-/* Sticky bar auto-hide */
-.beach-sticky-bar.hidden-bar {
-    transform: translateY(100%);
-}
-
-/* Secondary sticky buttons */
-.sticky-secondary {
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.15);
-    color: white;
-    padding: 0.625rem 1.25rem;
-    border-radius: 0.5rem;
-    font-weight: 500;
-    font-size: 0.875rem;
-    transition: background 0.2s, border-color 0.2s;
-    cursor: pointer;
-}
-.sticky-secondary:hover {
-    background: rgba(255,255,255,0.15);
-    border-color: rgba(255,255,255,0.25);
-}
-.sticky-secondary svg,
-.sticky-secondary i {
-    width: 1rem;
-    height: 1rem;
-}
-
-/* Weather strip (mobile) */
-.weather-strip {
-    padding: 1rem;
-    background: linear-gradient(135deg, rgba(28,33,40,0.95), rgba(26,44,50,0.95));
-    border: 1px solid rgba(250,204,21,0.15);
-    border-radius: 0.75rem;
 }

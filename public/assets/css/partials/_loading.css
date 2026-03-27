@@ -1,3 +1,9 @@
+/* ==========================================================
+   _loading.css — Toast notifications, skeleton loaders, HTMX states
+   Used by: all pages (global loading states)
+   Dependencies: _variables.css
+   ========================================================== */
+
 /* ========================================
    GLOBAL MOBILE OVERFLOW PROTECTION
    ======================================== */

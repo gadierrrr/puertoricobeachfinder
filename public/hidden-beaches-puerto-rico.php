@@ -122,30 +122,29 @@ include APP_ROOT . '/components/header.php';
 ?>
 <?php include APP_ROOT . '/components/collection/explorer.php'; ?>
 
-<div class="collection-legacy-content">
 
 <!-- Quick Navigation -->
-<section class="collection-content-nav bg-white border-b">
+<section class="collection-content-nav bg-white/5 border border-white/10">
     <div class="max-w-7xl mx-auto px-4 py-4">
         <div class="flex flex-wrap gap-2 justify-center text-sm">
-            <span class="text-gray-500"><?= h(__('pages.hidden_beaches.jump_to')) ?></span>
-            <a href="#hidden-beaches" class="text-amber-700 hover:underline"><?= h(__('pages.hidden_beaches.jump_top_list')) ?></a>
-            <span class="text-gray-300">|</span>
-            <a href="#by-region" class="text-amber-700 hover:underline"><?= h(__('pages.hidden_beaches.jump_by_region')) ?></a>
-            <span class="text-gray-300">|</span>
-            <a href="#access-guide" class="text-amber-700 hover:underline"><?= h(__('pages.hidden_beaches.jump_access_guide')) ?></a>
-            <span class="text-gray-300">|</span>
-            <a href="#what-to-bring" class="text-amber-700 hover:underline"><?= h(__('pages.hidden_beaches.jump_what_to_bring')) ?></a>
-            <span class="text-gray-300">|</span>
-            <a href="#faq" class="text-amber-700 hover:underline"><?= h(__('pages.hidden_beaches.jump_faq')) ?></a>
+            <span class="text-slate-400"><?= h(__('pages.hidden_beaches.jump_to')) ?></span>
+            <a href="#hidden-beaches" class="text-yellow-300 hover:underline"><?= h(__('pages.hidden_beaches.jump_top_list')) ?></a>
+            <span class="text-white/20">|</span>
+            <a href="#by-region" class="text-yellow-300 hover:underline"><?= h(__('pages.hidden_beaches.jump_by_region')) ?></a>
+            <span class="text-white/20">|</span>
+            <a href="#access-guide" class="text-yellow-300 hover:underline"><?= h(__('pages.hidden_beaches.jump_access_guide')) ?></a>
+            <span class="text-white/20">|</span>
+            <a href="#what-to-bring" class="text-yellow-300 hover:underline"><?= h(__('pages.hidden_beaches.jump_what_to_bring')) ?></a>
+            <span class="text-white/20">|</span>
+            <a href="#faq" class="text-yellow-300 hover:underline"><?= h(__('pages.hidden_beaches.jump_faq')) ?></a>
         </div>
     </div>
 </section>
 
 <!-- Introduction -->
-<section class="py-12 bg-gray-50">
+<section class="py-12">
     <div class="max-w-4xl mx-auto px-4">
-        <div class="prose prose-lg max-w-none beach-description">
+        <div class="prose prose-lg max-w-none prose-brand">
             <p><?= __('pages.hidden_beaches.intro_p1') ?></p>
 
             <p><?= __('pages.hidden_beaches.intro_p2') ?></p>
@@ -158,18 +157,18 @@ include APP_ROOT . '/components/header.php';
 </section>
 
 <!-- Hidden Beaches by Region -->
-<section id="by-region" class="py-12 bg-gray-50">
+<section id="by-region" class="py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-slate-100 mb-8 text-center">
             <?= h(__('pages.hidden_beaches.by_region_title')) ?>
         </h2>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="bg-white rounded-xl p-6 shadow-md">
+            <div class="bg-white/5 border border-white/10 rounded-xl p-6 shadow-glass">
                 <div class="text-4xl mb-4">🌊</div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2"><?= h(__('pages.hidden_beaches.region_northwest_title')) ?></h3>
-                <p class="text-gray-600 text-sm mb-4"><?= h(__('pages.hidden_beaches.region_northwest_desc')) ?></p>
-                <ul class="text-sm text-gray-700 space-y-1">
+                <h3 class="text-lg font-bold text-slate-100 mb-2"><?= h(__('pages.hidden_beaches.region_northwest_title')) ?></h3>
+                <p class="text-slate-400 text-sm mb-4"><?= h(__('pages.hidden_beaches.region_northwest_desc')) ?></p>
+                <ul class="text-sm text-slate-300 space-y-1">
                     <li>• <?= h(__('pages.hidden_beaches.region_northwest_1')) ?></li>
                     <li>• <?= h(__('pages.hidden_beaches.region_northwest_2')) ?></li>
                     <li>• <?= h(__('pages.hidden_beaches.region_northwest_3')) ?></li>
@@ -177,11 +176,11 @@ include APP_ROOT . '/components/header.php';
                 </ul>
             </div>
 
-            <div class="bg-white rounded-xl p-6 shadow-md">
+            <div class="bg-white/5 border border-white/10 rounded-xl p-6 shadow-glass">
                 <div class="text-4xl mb-4">🏝️</div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2"><?= h(__('pages.hidden_beaches.region_east_title')) ?></h3>
-                <p class="text-gray-600 text-sm mb-4"><?= h(__('pages.hidden_beaches.region_east_desc')) ?></p>
-                <ul class="text-sm text-gray-700 space-y-1">
+                <h3 class="text-lg font-bold text-slate-100 mb-2"><?= h(__('pages.hidden_beaches.region_east_title')) ?></h3>
+                <p class="text-slate-400 text-sm mb-4"><?= h(__('pages.hidden_beaches.region_east_desc')) ?></p>
+                <ul class="text-sm text-slate-300 space-y-1">
                     <li>• <?= h(__('pages.hidden_beaches.region_east_1')) ?></li>
                     <li>• <?= h(__('pages.hidden_beaches.region_east_2')) ?></li>
                     <li>• <?= h(__('pages.hidden_beaches.region_east_3')) ?></li>
@@ -189,11 +188,11 @@ include APP_ROOT . '/components/header.php';
                 </ul>
             </div>
 
-            <div class="bg-white rounded-xl p-6 shadow-md">
+            <div class="bg-white/5 border border-white/10 rounded-xl p-6 shadow-glass">
                 <div class="text-4xl mb-4">🌅</div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2"><?= h(__('pages.hidden_beaches.region_south_title')) ?></h3>
-                <p class="text-gray-600 text-sm mb-4"><?= h(__('pages.hidden_beaches.region_south_desc')) ?></p>
-                <ul class="text-sm text-gray-700 space-y-1">
+                <h3 class="text-lg font-bold text-slate-100 mb-2"><?= h(__('pages.hidden_beaches.region_south_title')) ?></h3>
+                <p class="text-slate-400 text-sm mb-4"><?= h(__('pages.hidden_beaches.region_south_desc')) ?></p>
+                <ul class="text-sm text-slate-300 space-y-1">
                     <li>• <?= h(__('pages.hidden_beaches.region_south_1')) ?></li>
                     <li>• <?= h(__('pages.hidden_beaches.region_south_2')) ?></li>
                     <li>• <?= h(__('pages.hidden_beaches.region_south_3')) ?></li>
@@ -201,11 +200,11 @@ include APP_ROOT . '/components/header.php';
                 </ul>
             </div>
 
-            <div class="bg-white rounded-xl p-6 shadow-md">
+            <div class="bg-white/5 border border-white/10 rounded-xl p-6 shadow-glass">
                 <div class="text-4xl mb-4">🐚</div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2"><?= h(__('pages.hidden_beaches.region_vieques_title')) ?></h3>
-                <p class="text-gray-600 text-sm mb-4"><?= h(__('pages.hidden_beaches.region_vieques_desc')) ?></p>
-                <ul class="text-sm text-gray-700 space-y-1">
+                <h3 class="text-lg font-bold text-slate-100 mb-2"><?= h(__('pages.hidden_beaches.region_vieques_title')) ?></h3>
+                <p class="text-slate-400 text-sm mb-4"><?= h(__('pages.hidden_beaches.region_vieques_desc')) ?></p>
+                <ul class="text-sm text-slate-300 space-y-1">
                     <li>• <?= h(__('pages.hidden_beaches.region_vieques_1')) ?></li>
                     <li>• <?= h(__('pages.hidden_beaches.region_vieques_2')) ?></li>
                     <li>• <?= h(__('pages.hidden_beaches.region_vieques_3')) ?></li>
@@ -219,7 +218,7 @@ include APP_ROOT . '/components/header.php';
 <!-- Access Difficulty Guide -->
 <section id="access-guide" class="py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-slate-100 mb-8 text-center">
             <?= h(__('pages.hidden_beaches.access_guide_title')) ?>
         </h2>
 
@@ -229,24 +228,24 @@ include APP_ROOT . '/components/header.php';
                     <div class="bg-slate-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold">
                         1
                     </div>
-                    <h3 class="text-lg font-bold text-gray-900"><?= h(__('pages.hidden_beaches.access_easy_title')) ?></h3>
+                    <h3 class="text-lg font-bold text-slate-100"><?= h(__('pages.hidden_beaches.access_easy_title')) ?></h3>
                 </div>
-                <p class="text-gray-700 text-sm mb-4"><?= h(__('pages.hidden_beaches.access_easy_desc')) ?></p>
-                <ul class="text-sm text-gray-700 space-y-2">
+                <p class="text-slate-300 text-sm mb-4"><?= h(__('pages.hidden_beaches.access_easy_desc')) ?></p>
+                <ul class="text-sm text-slate-300 space-y-2">
                     <li class="flex items-start gap-2">
-                        <span class="text-amber-700 font-bold">✓</span>
+                        <span class="text-yellow-300 font-bold">✓</span>
                         <span><?= h(__('pages.hidden_beaches.access_easy_1')) ?></span>
                     </li>
                     <li class="flex items-start gap-2">
-                        <span class="text-amber-700 font-bold">✓</span>
+                        <span class="text-yellow-300 font-bold">✓</span>
                         <span><?= h(__('pages.hidden_beaches.access_easy_2')) ?></span>
                     </li>
                     <li class="flex items-start gap-2">
-                        <span class="text-amber-700 font-bold">✓</span>
+                        <span class="text-yellow-300 font-bold">✓</span>
                         <span><?= h(__('pages.hidden_beaches.access_easy_3')) ?></span>
                     </li>
                 </ul>
-                <p class="text-xs text-gray-600 mt-4 italic"><?= h(__('pages.hidden_beaches.access_easy_examples')) ?></p>
+                <p class="text-xs text-slate-400 mt-4 italic"><?= h(__('pages.hidden_beaches.access_easy_examples')) ?></p>
             </div>
 
             <div class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-6">
@@ -254,10 +253,10 @@ include APP_ROOT . '/components/header.php';
                     <div class="bg-yellow-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold">
                         2
                     </div>
-                    <h3 class="text-lg font-bold text-gray-900"><?= h(__('pages.hidden_beaches.access_moderate_title')) ?></h3>
+                    <h3 class="text-lg font-bold text-slate-100"><?= h(__('pages.hidden_beaches.access_moderate_title')) ?></h3>
                 </div>
-                <p class="text-gray-700 text-sm mb-4"><?= h(__('pages.hidden_beaches.access_moderate_desc')) ?></p>
-                <ul class="text-sm text-gray-700 space-y-2">
+                <p class="text-slate-300 text-sm mb-4"><?= h(__('pages.hidden_beaches.access_moderate_desc')) ?></p>
+                <ul class="text-sm text-slate-300 space-y-2">
                     <li class="flex items-start gap-2">
                         <span class="text-yellow-600 font-bold">!</span>
                         <span><?= h(__('pages.hidden_beaches.access_moderate_1')) ?></span>
@@ -271,7 +270,7 @@ include APP_ROOT . '/components/header.php';
                         <span><?= h(__('pages.hidden_beaches.access_moderate_3')) ?></span>
                     </li>
                 </ul>
-                <p class="text-xs text-gray-600 mt-4 italic"><?= h(__('pages.hidden_beaches.access_moderate_examples')) ?></p>
+                <p class="text-xs text-slate-400 mt-4 italic"><?= h(__('pages.hidden_beaches.access_moderate_examples')) ?></p>
             </div>
 
             <div class="bg-red-50 border-2 border-red-200 rounded-xl p-6">
@@ -279,10 +278,10 @@ include APP_ROOT . '/components/header.php';
                     <div class="bg-red-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold">
                         3
                     </div>
-                    <h3 class="text-lg font-bold text-gray-900"><?= h(__('pages.hidden_beaches.access_difficult_title')) ?></h3>
+                    <h3 class="text-lg font-bold text-slate-100"><?= h(__('pages.hidden_beaches.access_difficult_title')) ?></h3>
                 </div>
-                <p class="text-gray-700 text-sm mb-4"><?= h(__('pages.hidden_beaches.access_difficult_desc')) ?></p>
-                <ul class="text-sm text-gray-700 space-y-2">
+                <p class="text-slate-300 text-sm mb-4"><?= h(__('pages.hidden_beaches.access_difficult_desc')) ?></p>
+                <ul class="text-sm text-slate-300 space-y-2">
                     <li class="flex items-start gap-2">
                         <span class="text-red-600 font-bold">⚠</span>
                         <span><?= h(__('pages.hidden_beaches.access_difficult_1')) ?></span>
@@ -296,172 +295,172 @@ include APP_ROOT . '/components/header.php';
                         <span><?= h(__('pages.hidden_beaches.access_difficult_3')) ?></span>
                     </li>
                 </ul>
-                <p class="text-xs text-gray-600 mt-4 italic"><?= h(__('pages.hidden_beaches.access_difficult_examples')) ?></p>
+                <p class="text-xs text-slate-400 mt-4 italic"><?= h(__('pages.hidden_beaches.access_difficult_examples')) ?></p>
             </div>
         </div>
     </div>
 </section>
 
 <!-- What to Bring -->
-<section id="what-to-bring" class="py-12 bg-gray-50">
+<section id="what-to-bring" class="py-12">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-slate-100 mb-8 text-center">
             <?= h(__('pages.hidden_beaches.packing_title')) ?>
         </h2>
 
-        <div class="bg-white rounded-xl shadow-md p-8">
-            <p class="text-gray-700 mb-6">
+        <div class="bg-white/5 border border-white/10 rounded-xl shadow-glass p-8">
+            <p class="text-slate-300 mb-6">
                 <?= h(__('pages.hidden_beaches.packing_intro')) ?>
             </p>
 
             <div class="grid md:grid-cols-2 gap-8">
                 <div>
-                    <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <h3 class="font-bold text-slate-100 mb-4 flex items-center gap-2">
                         <span class="text-2xl">💧</span> <?= h(__('pages.hidden_beaches.packing_hydration_title')) ?>
                     </h3>
-                    <ul class="space-y-2 text-sm text-gray-700">
+                    <ul class="space-y-2 text-sm text-slate-300">
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= __('pages.hidden_beaches.packing_hydration_1') ?></span>
                         </li>
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= h(__('pages.hidden_beaches.packing_hydration_2')) ?></span>
                         </li>
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= h(__('pages.hidden_beaches.packing_hydration_3')) ?></span>
                         </li>
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= h(__('pages.hidden_beaches.packing_hydration_4')) ?></span>
                         </li>
                     </ul>
 
-                    <h3 class="font-bold text-gray-900 mb-4 mt-6 flex items-center gap-2">
+                    <h3 class="font-bold text-slate-100 mb-4 mt-6 flex items-center gap-2">
                         <span class="text-2xl">☀️</span> <?= h(__('pages.hidden_beaches.packing_sun_title')) ?>
                     </h3>
-                    <ul class="space-y-2 text-sm text-gray-700">
+                    <ul class="space-y-2 text-sm text-slate-300">
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= __('pages.hidden_beaches.packing_sun_1') ?></span>
                         </li>
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= h(__('pages.hidden_beaches.packing_sun_2')) ?></span>
                         </li>
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= h(__('pages.hidden_beaches.packing_sun_3')) ?></span>
                         </li>
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= h(__('pages.hidden_beaches.packing_sun_4')) ?></span>
                         </li>
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= h(__('pages.hidden_beaches.packing_sun_5')) ?></span>
                         </li>
                     </ul>
 
-                    <h3 class="font-bold text-gray-900 mb-4 mt-6 flex items-center gap-2">
+                    <h3 class="font-bold text-slate-100 mb-4 mt-6 flex items-center gap-2">
                         <span class="text-2xl">🏊</span> <?= h(__('pages.hidden_beaches.packing_gear_title')) ?>
                     </h3>
-                    <ul class="space-y-2 text-sm text-gray-700">
+                    <ul class="space-y-2 text-sm text-slate-300">
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= h(__('pages.hidden_beaches.packing_gear_1')) ?></span>
                         </li>
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= h(__('pages.hidden_beaches.packing_gear_2')) ?></span>
                         </li>
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= h(__('pages.hidden_beaches.packing_gear_3')) ?></span>
                         </li>
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= h(__('pages.hidden_beaches.packing_gear_4')) ?></span>
                         </li>
                     </ul>
                 </div>
 
                 <div>
-                    <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <h3 class="font-bold text-slate-100 mb-4 flex items-center gap-2">
                         <span class="text-2xl">🎒</span> <?= h(__('pages.hidden_beaches.packing_safety_title')) ?>
                     </h3>
-                    <ul class="space-y-2 text-sm text-gray-700">
+                    <ul class="space-y-2 text-sm text-slate-300">
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= __('pages.hidden_beaches.packing_safety_1') ?></span>
                         </li>
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= h(__('pages.hidden_beaches.packing_safety_2')) ?></span>
                         </li>
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= h(__('pages.hidden_beaches.packing_safety_3')) ?></span>
                         </li>
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= h(__('pages.hidden_beaches.packing_safety_4')) ?></span>
                         </li>
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= h(__('pages.hidden_beaches.packing_safety_5')) ?></span>
                         </li>
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= h(__('pages.hidden_beaches.packing_safety_6')) ?></span>
                         </li>
                     </ul>
 
-                    <h3 class="font-bold text-gray-900 mb-4 mt-6 flex items-center gap-2">
+                    <h3 class="font-bold text-slate-100 mb-4 mt-6 flex items-center gap-2">
                         <span class="text-2xl">♻️</span> <?= h(__('pages.hidden_beaches.packing_lnt_title')) ?>
                     </h3>
-                    <ul class="space-y-2 text-sm text-gray-700">
+                    <ul class="space-y-2 text-sm text-slate-300">
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= __('pages.hidden_beaches.packing_lnt_1') ?></span>
                         </li>
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= h(__('pages.hidden_beaches.packing_lnt_2')) ?></span>
                         </li>
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= h(__('pages.hidden_beaches.packing_lnt_3')) ?></span>
                         </li>
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= h(__('pages.hidden_beaches.packing_lnt_4')) ?></span>
                         </li>
                     </ul>
 
-                    <h3 class="font-bold text-gray-900 mb-4 mt-6 flex items-center gap-2">
+                    <h3 class="font-bold text-slate-100 mb-4 mt-6 flex items-center gap-2">
                         <span class="text-2xl">💵</span> <?= h(__('pages.hidden_beaches.packing_money_title')) ?>
                     </h3>
-                    <ul class="space-y-2 text-sm text-gray-700">
+                    <ul class="space-y-2 text-sm text-slate-300">
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= __('pages.hidden_beaches.packing_money_1') ?></span>
                         </li>
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= h(__('pages.hidden_beaches.packing_money_2')) ?></span>
                         </li>
                         <li class="flex items-start gap-2">
-                            <span class="text-amber-700">✓</span>
+                            <span class="text-yellow-300">✓</span>
                             <span><?= h(__('pages.hidden_beaches.packing_money_3')) ?></span>
                         </li>
                     </ul>
                 </div>
             </div>
 
-            <div class="mt-8 p-4 bg-slate-50 border-l-4 border-amber-500 rounded">
-                <p class="text-sm text-gray-800">
+            <div class="mt-8 p-4 border-l-4 border-amber-500 rounded">
+                <p class="text-sm text-slate-200">
                     <?= __('pages.hidden_beaches.packing_pro_tip') ?>
                 </p>
             </div>
@@ -472,12 +471,12 @@ include APP_ROOT . '/components/header.php';
 <!-- Responsible Tourism Tips -->
 <section class="py-12 bg-gradient-to-br from-slate-50 to-slate-100">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-slate-100 mb-8 text-center">
             <?= h(__('pages.hidden_beaches.responsible_title')) ?>
         </h2>
 
-        <div class="bg-white rounded-xl shadow-md p-8">
-            <p class="text-gray-700 mb-6">
+        <div class="bg-white/5 border border-white/10 rounded-xl shadow-glass p-8">
+            <p class="text-slate-300 mb-6">
                 <?= h(__('pages.hidden_beaches.responsible_intro')) ?>
             </p>
 
@@ -487,8 +486,8 @@ include APP_ROOT . '/components/header.php';
                         🚯
                     </div>
                     <div>
-                        <h3 class="font-bold text-gray-900 mb-2"><?= h(__('pages.hidden_beaches.responsible_lnt_title')) ?></h3>
-                        <p class="text-gray-700 text-sm">
+                        <h3 class="font-bold text-slate-100 mb-2"><?= h(__('pages.hidden_beaches.responsible_lnt_title')) ?></h3>
+                        <p class="text-slate-300 text-sm">
                             <?= h(__('pages.hidden_beaches.responsible_lnt_desc')) ?>
                         </p>
                     </div>
@@ -499,8 +498,8 @@ include APP_ROOT . '/components/header.php';
                         🐠
                     </div>
                     <div>
-                        <h3 class="font-bold text-gray-900 mb-2"><?= h(__('pages.hidden_beaches.responsible_marine_title')) ?></h3>
-                        <p class="text-gray-700 text-sm">
+                        <h3 class="font-bold text-slate-100 mb-2"><?= h(__('pages.hidden_beaches.responsible_marine_title')) ?></h3>
+                        <p class="text-slate-300 text-sm">
                             <?= h(__('pages.hidden_beaches.responsible_marine_desc')) ?>
                         </p>
                     </div>
@@ -511,8 +510,8 @@ include APP_ROOT . '/components/header.php';
                         🥾
                     </div>
                     <div>
-                        <h3 class="font-bold text-gray-900 mb-2"><?= h(__('pages.hidden_beaches.responsible_trails_title')) ?></h3>
-                        <p class="text-gray-700 text-sm">
+                        <h3 class="font-bold text-slate-100 mb-2"><?= h(__('pages.hidden_beaches.responsible_trails_title')) ?></h3>
+                        <p class="text-slate-300 text-sm">
                             <?= h(__('pages.hidden_beaches.responsible_trails_desc')) ?>
                         </p>
                     </div>
@@ -523,8 +522,8 @@ include APP_ROOT . '/components/header.php';
                         🤝
                     </div>
                     <div>
-                        <h3 class="font-bold text-gray-900 mb-2"><?= h(__('pages.hidden_beaches.responsible_community_title')) ?></h3>
-                        <p class="text-gray-700 text-sm">
+                        <h3 class="font-bold text-slate-100 mb-2"><?= h(__('pages.hidden_beaches.responsible_community_title')) ?></h3>
+                        <p class="text-slate-300 text-sm">
                             <?= h(__('pages.hidden_beaches.responsible_community_desc')) ?>
                         </p>
                     </div>
@@ -535,8 +534,8 @@ include APP_ROOT . '/components/header.php';
                         🔇
                     </div>
                     <div>
-                        <h3 class="font-bold text-gray-900 mb-2"><?= h(__('pages.hidden_beaches.responsible_quiet_title')) ?></h3>
-                        <p class="text-gray-700 text-sm">
+                        <h3 class="font-bold text-slate-100 mb-2"><?= h(__('pages.hidden_beaches.responsible_quiet_title')) ?></h3>
+                        <p class="text-slate-300 text-sm">
                             <?= h(__('pages.hidden_beaches.responsible_quiet_desc')) ?>
                         </p>
                     </div>
@@ -547,16 +546,16 @@ include APP_ROOT . '/components/header.php';
                         🤐
                     </div>
                     <div>
-                        <h3 class="font-bold text-gray-900 mb-2"><?= h(__('pages.hidden_beaches.responsible_share_title')) ?></h3>
-                        <p class="text-gray-700 text-sm">
+                        <h3 class="font-bold text-slate-100 mb-2"><?= h(__('pages.hidden_beaches.responsible_share_title')) ?></h3>
+                        <p class="text-slate-300 text-sm">
                             <?= h(__('pages.hidden_beaches.responsible_share_desc')) ?>
                         </p>
                     </div>
                 </div>
             </div>
 
-            <div class="mt-8 p-4 bg-slate-50 border-l-4 border-amber-500 rounded">
-                <p class="text-sm text-gray-800">
+            <div class="mt-8 p-4 border-l-4 border-amber-500 rounded">
+                <p class="text-sm text-slate-200">
                     <?= __('pages.hidden_beaches.responsible_remember') ?>
                 </p>
             </div>
@@ -567,20 +566,20 @@ include APP_ROOT . '/components/header.php';
 <?php $currentCollectionKey = $collectionKey; include APP_ROOT . '/components/collection/related-collections.php'; ?>
 
 <!-- FAQ Section -->
-<section id="faq" class="py-12 bg-gray-50">
+<section id="faq" class="py-12">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-slate-100 mb-8 text-center">
             <?= h(__('pages.hidden_beaches.faq_title')) ?>
         </h2>
 
         <div class="space-y-4">
             <?php foreach ($pageFaqs as $faq): ?>
-            <details class="bg-white rounded-lg shadow-md group">
-                <summary class="flex items-center justify-between p-6 cursor-pointer font-semibold text-gray-900">
+            <details class="bg-white/5 border border-white/10 rounded-lg shadow-glass group">
+                <summary class="flex items-center justify-between p-6 cursor-pointer font-semibold text-slate-100">
                     <?= h($faq['question']) ?>
-                    <span class="text-amber-700 group-open:rotate-180 transition-transform">▼</span>
+                    <span class="text-yellow-300 group-open:rotate-180 transition-transform">▼</span>
                 </summary>
-                <div class="px-6 pb-6 text-gray-700">
+                <div class="px-6 pb-6 text-slate-300">
                     <?= h($faq['answer']) ?>
                 </div>
             </details>
@@ -590,9 +589,9 @@ include APP_ROOT . '/components/header.php';
 </section>
 
 <!-- Map Section -->
-<section id="map" class="py-12 bg-white">
+<section id="map" class="py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-slate-100 mb-8 text-center">
             <?= h(__('pages.hidden_beaches.map_title')) ?>
         </h2>
         <div class="text-center">
@@ -600,7 +599,7 @@ include APP_ROOT . '/components/header.php';
                 <span>🗺️</span>
                 <span><?= h(__('pages.hidden_beaches.map_button')) ?></span>
             </a>
-            <p class="text-gray-600 mt-4"><?= h(__('pages.hidden_beaches.map_desc')) ?></p>
+            <p class="text-slate-400 mt-4"><?= h(__('pages.hidden_beaches.map_desc')) ?></p>
         </div>
     </div>
 </section>
@@ -610,13 +609,12 @@ include APP_ROOT . '/components/header.php';
     <div class="max-w-4xl mx-auto px-4 text-center">
         <h2 class="text-2xl md:text-3xl font-bold mb-4"><?= h(__('pages.hidden_beaches.cta_title')) ?></h2>
         <p class="text-lg opacity-90 mb-6"><?= h(__('pages.hidden_beaches.cta_desc')) ?></p>
-        <a href="<?= h(routeUrl('quiz', $lang)) ?>" class="inline-block bg-white text-brand-darker hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold transition-colors">
+        <a href="<?= h(routeUrl('quiz', $lang)) ?>" class="inline-block bg-brand-yellow text-brand-darker hover:bg-yellow-300 px-8 py-3 rounded-lg font-semibold transition-colors">
             <?= h(__('pages.common.take_quiz')) ?>
         </a>
     </div>
 </section>
 
-</div>
 
 <?php
 $skipAppScripts = true;

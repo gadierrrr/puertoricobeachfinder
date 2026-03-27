@@ -143,7 +143,7 @@ $hasConditions = $sargassum || $surf || $wind;
         <?php endif; ?>
 
         <!-- Bottom content overlay -->
-        <div class="absolute bottom-0 left-0 right-16 p-4 z-20" style="text-shadow: 0 1px 3px rgba(0,0,0,0.8), 0 2px 8px rgba(0,0,0,0.6);">
+        <div class="absolute bottom-0 left-0 right-16 p-4 z-20 text-shadow-hero">
             <span class="text-xs text-brand-yellow uppercase tracking-wider font-medium"><?= h($municipality) ?></span>
             <h3 class="text-lg font-bold text-white mt-0.5 line-clamp-1"><?= h($name) ?></h3>
         </div>

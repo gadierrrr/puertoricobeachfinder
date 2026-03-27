@@ -116,7 +116,7 @@
                 </div>
 
                 <!-- Map + Directions -->
-                <div id="section-map" style="scroll-margin-top: 120px;"></div>
+                <div id="section-map" class="scroll-mt-[120px]"></div>
                 <div class="beach-detail-card overflow-hidden">
                     <div id="beach-map" class="h-40"></div>
                     <div class="p-3">
