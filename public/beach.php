@@ -327,52 +327,78 @@ include APP_ROOT . '/components/header.php';
                 </h2>
                 <div class="grid grid-cols-2 gap-3">
                     <?php if (!empty($beach['tags'])): ?>
-                    <?php $icon = 'activity'; $label = __('beach.best_for'); $value = getTagLabel($beach['tags'][0]); $subtext = count($beach['tags']) > 1 ? __('beach.tags_more', ['count' => count($beach['tags']) - 1]) : ''; ?>
-                    <?php include APP_ROOT . '/components/quick-fact-card.php'; ?>
+                    <div class="bg-white/5 border border-white/10 rounded-lg p-3 flex gap-3">
+                        <div class="bg-brand-yellow/20 rounded p-2 flex-shrink-0 self-start">
+                            <span class="text-brand-yellow text-sm">🏄</span>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-[10px] uppercase tracking-wider text-white/40"><?= h(__('beach.best_for')) ?></div>
+                            <div class="text-white font-semibold text-sm"><?= h(getTagLabel($beach['tags'][0])) ?></div>
+                            <?php if (count($beach['tags']) > 1): ?>
+                            <div class="text-white/40 text-xs"><?= h(__('beach.tags_more', ['count' => count($beach['tags']) - 1])) ?></div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                     <?php endif; ?>
 
                     <?php if ($beach['best_time']): ?>
-                    <?php
-                    $icon = 'clock'; $label = __('beach.best_time');
-                    $_btRaw = ($lang === 'es' && !empty($beach['best_time_es'])) ? $beach['best_time_es'] : $beach['best_time'];
-                    $_btClean = strip_tags($_btRaw);
-                    // Try first sentence, otherwise take first ~40 chars at word boundary
-                    if (preg_match('/^([^.!?]{10,50}[.!?])/', $_btClean, $_btM)) {
-                        $value = trim($_btM[1]);
-                    } else {
-                        // Truncate at word boundary around 40 chars
-                        $value = mb_substr($_btClean, 0, 40);
-                        $lastSpace = mb_strrpos($value, ' ');
-                        if ($lastSpace > 20) $value = mb_substr($value, 0, $lastSpace);
-                        $value = rtrim($value, ',;: ');
-                    }
-                    $subtext = '';
-                    $linkTo = '#section-best_time';
-                    ?>
-                    <?php include APP_ROOT . '/components/quick-fact-card.php'; ?>
+                    <a href="#section-best_time" class="bg-white/5 border border-white/10 rounded-lg p-3 flex gap-3 hover:border-brand-yellow/30 transition-colors group cursor-pointer">
+                        <div class="bg-brand-yellow/20 rounded p-2 flex-shrink-0 self-start">
+                            <span class="text-brand-yellow text-sm">🕐</span>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-[10px] uppercase tracking-wider text-white/40"><?= h(__('beach.best_time')) ?></div>
+                            <div class="text-white font-semibold text-sm"><?php
+                                $_btRaw = ($lang === 'es' && !empty($beach['best_time_es'])) ? $beach['best_time_es'] : $beach['best_time'];
+                                $_btClean = strip_tags($_btRaw);
+                                if (preg_match('/^([^.!?]{10,45}[.!?])/', $_btClean, $_btM)) {
+                                    echo h(trim($_btM[1]));
+                                } else {
+                                    $_v = mb_substr($_btClean, 0, 35);
+                                    $_sp = mb_strrpos($_v, ' ');
+                                    if ($_sp > 15) $_v = mb_substr($_v, 0, $_sp);
+                                    echo h(rtrim($_v, ',;: '));
+                                }
+                            ?></div>
+                            <div class="text-brand-yellow/60 text-xs group-hover:text-brand-yellow"><?= h($lang === 'es' ? 'Más ↓' : 'More ↓') ?></div>
+                        </div>
+                    </a>
                     <?php endif; ?>
 
                     <?php if ($beach['parking_details']): ?>
-                    <?php
-                    $icon = 'car'; $label = __('beach.parking');
-                    $_parkingVal = ($lang === 'es' && !empty($beach['parking_details_es'])) ? $beach['parking_details_es'] : $beach['parking_details'];
-                    $_pkClean = strip_tags($_parkingVal);
-                    if (preg_match('/^([^.!?]{10,50}[.!?])/', $_pkClean, $_pkM)) {
-                        $value = trim($_pkM[1]);
-                    } else {
-                        $value = mb_substr($_pkClean, 0, 40);
-                        $lastSpace = mb_strrpos($value, ' ');
-                        if ($lastSpace > 15) $value = mb_substr($value, 0, $lastSpace);
-                        $value = rtrim($value, ',;: ');
-                    }
-                    $subtext = '';
-                    ?>
-                    <?php include APP_ROOT . '/components/quick-fact-card.php'; ?>
+                    <a href="#section-map" class="bg-white/5 border border-white/10 rounded-lg p-3 flex gap-3 hover:border-brand-yellow/30 transition-colors group cursor-pointer">
+                        <div class="bg-brand-yellow/20 rounded p-2 flex-shrink-0 self-start">
+                            <span class="text-brand-yellow text-sm">🚗</span>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-[10px] uppercase tracking-wider text-white/40"><?= h(__('beach.parking')) ?></div>
+                            <div class="text-white font-semibold text-sm"><?php
+                                $_parkingVal = ($lang === 'es' && !empty($beach['parking_details_es'])) ? $beach['parking_details_es'] : $beach['parking_details'];
+                                $_pkClean = strip_tags($_parkingVal);
+                                if (preg_match('/^([^.!?]{10,45}[.!?])/', $_pkClean, $_pkM)) {
+                                    echo h(trim($_pkM[1]));
+                                } else {
+                                    $_v = mb_substr($_pkClean, 0, 35);
+                                    $_sp = mb_strrpos($_v, ' ');
+                                    if ($_sp > 15) $_v = mb_substr($_v, 0, $_sp);
+                                    echo h(rtrim($_v, ',;: '));
+                                }
+                            ?></div>
+                            <div class="text-brand-yellow/60 text-xs group-hover:text-brand-yellow"><?= h($lang === 'es' ? 'Detalles ↓' : 'Details ↓') ?></div>
+                        </div>
+                    </a>
                     <?php endif; ?>
 
                     <?php if ($beach['access_label']): ?>
-                    <?php $icon = 'accessibility'; $label = __('beach.access'); $value = $beach['access_label']; $subtext = ''; ?>
-                    <?php include APP_ROOT . '/components/quick-fact-card.php'; ?>
+                    <div class="bg-white/5 border border-white/10 rounded-lg p-3 flex gap-3">
+                        <div class="bg-brand-yellow/20 rounded p-2 flex-shrink-0 self-start">
+                            <span class="text-brand-yellow text-sm">🚶</span>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-[10px] uppercase tracking-wider text-white/40"><?= h(__('beach.access')) ?></div>
+                            <div class="text-white font-semibold text-sm"><?= h($beach['access_label']) ?></div>
+                        </div>
+                    </div>
                     <?php endif; ?>
                 </div>
             </section>
@@ -576,7 +602,7 @@ include APP_ROOT . '/components/header.php';
             <div class="lg:sticky lg:top-24 space-y-4">
 
                 <!-- Weather Widget (loaded client-side) -->
-                <div class="beach-detail-card p-4" id="weather-widget-container"
+                <div class="beach-detail-card p-4" id="weather-widget-container" style="max-height: 200px; overflow: hidden;"
                      data-lat="<?= h($beach['lat']) ?>" data-lng="<?= h($beach['lng']) ?>">
                     <div class="animate-pulse">
                         <div class="flex items-center justify-between mb-3">
