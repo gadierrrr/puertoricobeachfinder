@@ -61,9 +61,6 @@ jobs:
       - name: Initialize base schema
         run: php scripts/init-db.php
 
-      - name: Seed CI test data
-        run: sqlite3 /tmp/beach-finder-ci.db < scripts/ci-seed.sql
-
       - name: Migration dry-run
         run: php scripts/migrate.php --dry-run
 
@@ -71,6 +68,9 @@ jobs:
         run: |
           php scripts/migrate.php
           php scripts/migrate.php --check
+
+      - name: Seed CI test data
+        run: sqlite3 /tmp/beach-finder-ci.db < scripts/ci-seed.sql
 
       - name: Verify analytics guardrails
         run: |
