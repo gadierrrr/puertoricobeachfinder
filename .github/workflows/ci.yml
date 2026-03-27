@@ -85,6 +85,10 @@ jobs:
           curl -fsS "http://127.0.0.1:8082/api/health/analytics.php" >/tmp/analytics-health.json
           php -r '$d=json_decode(file_get_contents("/tmp/analytics-health.json"), true); if(!is_array($d) || ($d["ok"] ?? false) !== true){fwrite(STDERR, "Analytics health endpoint returned unhealthy status\n"); exit(1);} echo "Analytics health endpoint OK\n";'
 
+      - name: Dump PHP server log on failure
+        if: failure()
+        run: cat /tmp/beach-finder-ci-server.log 2>/dev/null || true
+
       - name: Ensure no hardcoded Google keys in active code
         run: |
           GOOGLE_KEY_PREFIX="AI""za"
