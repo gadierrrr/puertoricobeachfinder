@@ -214,9 +214,8 @@ public/assets/css/
 │   ├── _variables.css     # CSS custom properties (colors, shadows, z-index)
 │   ├── _base.css          # Typography, animations, glass utilities
 │   ├── _loading.css       # Toasts, skeletons, spinners, HTMX states
-│   ├── _cards.css         # Beach cards, score badges, prose classes
+│   ├── _cards.css         # Component classes, beach cards, score badges, prose
 │   ├── _filters.css       # Filter chips, tag buttons, view toggle
-│   ├── _conditions.css    # Beach conditions meter widget
 │   ├── _map.css           # Map container, markers, popups
 │   ├── _drawers.css       # Drawer/modal components
 │   ├── _modals.css        # Share modal, lightbox
@@ -224,8 +223,8 @@ public/assets/css/
 │   ├── _guides.css        # Guide page layout, TOC, related guides
 │   ├── _forms.css         # Range slider, Tom Select, compare bar
 │   ├── _accessibility.css # Focus states, reduced motion, contrast
-│   ├── _dark-mode.css     # All [data-theme="dark"] overrides
-│   ├── _responsive.css    # Mobile breakpoint overrides
+│   ├── _dark-mode.css     # All [data-theme="dark"] overrides (incl. guide remaps)
+│   ├── _responsive.css    # Mobile breakpoints (400/640/768/1024px)
 │   └── _print.css         # Print styles
 ├── styles.css             # Bundled output (don't edit directly)
 ├── tailwind-input.css     # Tailwind entry point
@@ -295,23 +294,27 @@ All colors, shadows, and z-index values are defined as CSS variables in `_variab
 5. **Run `npm run build:css`** to regenerate `styles.css`
 6. **Update components when removing/renaming CSS classes** - If you remove or rename a CSS class, search for and update all PHP components that reference it to prevent broken styling
 
+### Component Classes
+
+Reusable CSS classes are defined in `_cards.css`. See `DESIGN-SYSTEM.md` for the full reference.
+
+| Class | Purpose |
+|-------|---------|
+| `.card-glass` | Translucent dark card container |
+| `.card-glass--interactive` | Adds hover border effect to `.card-glass` |
+| `.btn-glass` | Translucent action button on dark backgrounds |
+| `.btn-primary` | Yellow accent CTA button |
+| `.text-shadow-hero` | Text shadow for image overlays |
+| `.prose-brand` | Rich text on dark backgrounds (collection intros, beach descriptions) |
+| `.beach-card` | Beach card with hover lift |
+| `.beach-detail-card` | Dark card on beach detail page |
+
 ### Prose Content Classes
 
-For rich text content sections, use these semantic classes:
-
-- **`.prose-brand`** - For content on dark backgrounds (collection pages, beach detail pages)
-  - Light text colors optimized for dark backgrounds
+- **`.prose-brand`** - For all rich text content on dark backgrounds (collection pages, beach detail)
   - Full dark mode support in `_dark-mode.css`
 
-- **`.prose-light`** - For content on light backgrounds (guide pages, light sections)
-  - Dark text colors optimized for light backgrounds
-  - Proper heading and link styling
-
-- **`.beach-description`** - For collection page introduction sections
-  - Styled for light gray backgrounds
-  - Includes dark mode overrides
-
-**Important:** Always pair prose classes with appropriate backgrounds to ensure readability.
+**Note:** `.prose-light` and `.beach-description` were removed — use `.prose-brand` instead.
 
 ### CSS Loading (CRITICAL)
 
