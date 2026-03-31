@@ -61,7 +61,7 @@ $scriptSources = ["'self'", "'nonce-" . CSP_NONCE . "'", "'strict-dynamic'", 'cd
 $styleSources = ["'self'", "'unsafe-inline'", 'cdn.tailwindcss.com', 'unpkg.com', 'cdn.jsdelivr.net', 'fonts.googleapis.com'];
 $imgSources = ["'self'", 'data:', 'blob:', 'https://*.basemaps.cartocdn.com', 'https://a.basemaps.cartocdn.com', 'https://b.basemaps.cartocdn.com', 'https://c.basemaps.cartocdn.com', 'https://d.basemaps.cartocdn.com'];
 $fontSources = ["'self'", 'data:', 'fonts.gstatic.com'];
-$connectSources = ["'self'", 'https://basemaps.cartocdn.com', 'https://*.basemaps.cartocdn.com', 'unpkg.com', 'cdn.jsdelivr.net', 'cloud.umami.is', 'api-gateway.umami.dev', 'https://next-api.useplunk.com'];
+$connectSources = ["'self'", 'https://basemaps.cartocdn.com', 'https://*.basemaps.cartocdn.com', 'unpkg.com', 'cdn.jsdelivr.net', 'cloud.umami.is', 'api-gateway.umami.dev', ];
 $workerSources = ["'self'", 'blob:'];
 
 $umamiEnabled = function_exists('envBool') ? envBool('UMAMI_ENABLED', false) : false;

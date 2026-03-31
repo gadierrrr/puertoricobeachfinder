@@ -1,7 +1,7 @@
-# Analytics Integration (Umami + Plunk)
+# Analytics Integration (Umami)
 
 This repo uses Umami (Cloud or self-hosted) for product analytics, with a thin client wrapper that is safe when analytics is disabled or blocked.
-It also forwards client tracking events to Plunk via a public-key bridge.
+
 
 ## Configuration
 
@@ -20,8 +20,6 @@ The script tag is injected in `components/header.php` only when `UMAMI_ENABLED=1
 - `public/assets/js/analytics.js` defines `window.bfTrack(eventName, props)`.
 - If Umami is available, events are forwarded via `window.umami.track(eventName, props)`.
 - A persistent anonymous id cookie `BF_ANON_ID` is created (180 days) and included in event props, plus `authenticated` and `user_id` when available.
-- `public/assets/js/plunk-client.js` wraps `window.bfTrack()` and forwards events to Plunk `/v1/track` using `PLUNK_PUBLIC_KEY`.
-- Runtime Plunk config is exposed from `components/footer.php` in `window.BF_CONFIG`.
 - In `prod`, `bfTrack()` logs a one-time console warning when Umami is unavailable.
 - Add `?bf_analytics_probe=1` to any page URL to fire `health_analytics_probe` and send a client probe beacon to `/api/health/analytics.php`.
 
@@ -58,7 +56,6 @@ Other utility events (implementation-specific):
 - Dynamic CSP host allowlist: `inc/security_headers.php`
 - Global user meta for analytics: `components/footer.php`
 - Tracking wrapper + delegated listeners: `public/assets/js/analytics.js`
-- Plunk client event forwarding: `public/assets/js/plunk-client.js`
 - Share tracking: `public/assets/js/share.js`
 - Quiz results landing + tokenized page: `public/quiz-results.php`
 - Analytics health endpoint: `public/api/health/analytics.php`

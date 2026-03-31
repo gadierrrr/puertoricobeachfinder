@@ -241,8 +241,6 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
         user_id: <?= isAuthenticated() ? json_encode((string)($_SESSION['user_id'] ?? '')) : 'null' ?>
     };
     window.BF_CONFIG = Object.assign({}, window.BF_CONFIG || {}, {
-        plunkPublicKey: <?= json_encode((string) env('PLUNK_PUBLIC_KEY', '')) ?>,
-        plunkBaseUrl: <?= json_encode((string) env('PLUNK_BASE_URL', 'https://next-api.useplunk.com')) ?>,
         appEnv: <?= json_encode((string) appEnv()) ?>
     });
     </script>
@@ -251,7 +249,6 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
     <script defer src="/assets/js/geolocation.js?v=2.0" <?= cspNonceAttr() ?>></script>
     <script defer src="/assets/js/filters.js" <?= cspNonceAttr() ?>></script>
     <script defer src="/assets/js/analytics.js?v=2.0" <?= cspNonceAttr() ?>></script>
-    <script defer src="/assets/js/plunk-client.js" <?= cspNonceAttr() ?>></script>
     <script defer src="/assets/js/share.js" <?= cspNonceAttr() ?>></script>
     <?php endif; ?>
 

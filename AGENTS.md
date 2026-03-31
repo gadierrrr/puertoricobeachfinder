@@ -122,5 +122,5 @@ php -S localhost:8082 -t public scripts/dev-router.php
 - `README.md` for setup, env vars, deploy flow, and health checks
 - `docs/codebase-map.md` for a deeper repo navigation map
 - `docs/analytics-umami.md` for analytics and event instrumentation
-- `docs/email-plunk.md` for email delivery and webhook operations
+- `docs/email-resend.md` for email delivery and webhook operations
 - `scripts/SYSTEM-ARCHITECTURE.md` for deeper generation/content-system context

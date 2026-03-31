@@ -9,7 +9,7 @@ define('EMAIL_PHP_INCLUDED', true);
 require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/helpers.php';
 require_once __DIR__ . '/env.php';
-require_once __DIR__ . '/email_provider_plunk.php';
+require_once __DIR__ . '/email_provider_resend.php';
 
 const EMAIL_TEMPLATE_CATEGORY_MAP = [
     'magic-link' => 'critical_auth',
@@ -75,7 +75,7 @@ function emailIsCriticalCategory(string $category): bool {
 }
 
 function emailProviderMode(): string {
-    return 'plunk';
+    return 'resend';
 }
 
 function emailGetFromParts(array $options = []): array {
@@ -253,7 +253,7 @@ function emailSendInternal(string $to, string $subject, string $html, array $opt
         'last_email_category' => $category,
         'last_email_subject' => mb_substr($subject, 0, 120),
     ];
-    plunkUpsertContact($email, $contactAttrs, null);
+    // Contact sync handled internally (no external provider API)
     emailUpsertContactState($email);
 
     $contactState = emailGetContactState($email);
@@ -274,7 +274,7 @@ function emailSendInternal(string $to, string $subject, string $html, array $opt
     ];
 
     emailRecordEvent($messageId, 'email_send_attempt', $eventProps);
-    plunkTrackEvent('email_send_attempt', $eventProps, $email);
+    // plunkTrackEvent('email_send_attempt', $eventProps, $email);
 
     if ($isUnsubscribed && !$isCritical) {
         $reason = (string) ($contactState['suppressed_reason'] ?? 'unsubscribed');
@@ -284,13 +284,13 @@ function emailSendInternal(string $to, string $subject, string $html, array $opt
             'failure_reason' => $reason,
         ]);
         emailRecordEvent($messageId, 'email_suppressed', ['reason' => $reason] + $eventProps);
-        plunkTrackEvent('email_suppressed', ['reason' => $reason] + $eventProps, $email);
+        // plunkTrackEvent('email_suppressed', ['reason' => $reason] + $eventProps, $email);
         return true;
     }
 
     $provider = emailProviderMode();
     $from = emailGetFromParts($options);
-    $result = plunkSendEmail($email, $subject, $html, [
+    $result = resendSendEmail($email, $subject, $html, [
         'from_name' => $from['name'],
         'from_address' => $from['address'],
     ]);
@@ -309,8 +309,8 @@ function emailSendInternal(string $to, string $subject, string $html, array $opt
         ] + $eventProps;
 
         emailRecordEvent($messageId, 'email_sent', $successProps);
-        plunkTrackEvent('email_sent', $successProps, $email);
-        plunkTrackEvent(emailBusinessEventName($templateSlug, $category), $successProps, $email);
+        // plunkTrackEvent('email_sent', $successProps, $email);
+        // plunkTrackEvent(emailBusinessEventName($templateSlug, $category), $successProps, $email);
         return true;
     }
 
@@ -329,7 +329,7 @@ function emailSendInternal(string $to, string $subject, string $html, array $opt
     ] + $eventProps;
 
     emailRecordEvent($messageId, 'email_failed', $failureProps);
-    plunkTrackEvent('email_failed', $failureProps, $email);
+    // plunkTrackEvent('email_failed', $failureProps, $email);
 
     return false;
 }

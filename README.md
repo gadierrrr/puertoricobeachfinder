@@ -52,12 +52,11 @@ Defined in `.env.example`:
 - `GOOGLE_MAPS_API_KEY`
 - `GOOGLE_CLIENT_ID`
 - `GOOGLE_CLIENT_SECRET`
-- `PLUNK_SECRET_KEY`
-- `PLUNK_PUBLIC_KEY`
-- `PLUNK_BASE_URL`
-- `PLUNK_WEBHOOK_SECRET`
-- `PLUNK_WEBHOOK_EXPECT_ENV` (optional: `dev`, `staging`, `prod`)
-- `EMAIL_PROVIDER` (`plunk`)
+- `RESEND_API_KEY`
+
+
+- `RESEND_WEBHOOK_SECRET` (optional)
+- `EMAIL_PROVIDER` (`resend`)
 - `ANTHROPIC_API_KEY`
 - `REFERRAL_ALLOWED_HOSTS`
 - `BACKUP_DIR` (default: `./backups/db`)
@@ -80,31 +79,29 @@ This codebase includes a lightweight funnel implementation and Umami-compatible 
 - Lead capture:
   - List pages can post to `public/api/send-list.php` ("Send me this list").
   - Quiz results can post to `public/api/send-quiz-results.php` ("Send my matches").
-  - Email delivery uses Plunk API keys.
-  - Webhook receiver: `public/api/webhooks/plunk.php`
-  - Set a per-environment webhook URL such as `/api/webhooks/plunk.php?env=prod` in production and `/api/webhooks/plunk.php?env=staging` in staging.
-  - Use a distinct `PLUNK_WEBHOOK_SECRET` for each environment and set `PLUNK_WEBHOOK_EXPECT_ENV` to the matching environment tag.
+  - Email delivery uses Resend API.
+  - Webhook receiver: `public/api/webhooks/resend.php`
   - Email health probe: `public/api/health/email.php`
 - Tracking:
   - `public/assets/js/analytics.js` defines `window.bfTrack()` and forwards events to Umami when available.
-  - `public/assets/js/plunk-client.js` bridges `window.bfTrack()` events to Plunk `/v1/track` using `PLUNK_PUBLIC_KEY`.
+  - 
   - Event naming follows the funnel schema (A1/A2/A3, L1/L2, S1/S2, U1...).
   - See `docs/analytics-umami.md` for the event map and implementation details.
 
 ## Email health check
 
-Use the email provider probe endpoint to validate Plunk config/connectivity:
+Use the email provider probe endpoint to validate Resend config/connectivity:
 
 ```bash
 curl -sS -i https://www.puertoricobeachfinder.com/api/health/email
 ```
 
 Expected:
-- `200` when keys are configured and Plunk is reachable/authenticated
+- `200` when keys are configured and Resend is reachable/authenticated
 - `503` when config/auth/connectivity is unhealthy
 
 Operational runbook:
-- `docs/email-plunk.md`
+- `docs/email-resend.md`
 
 ## Analytics health checks
 
