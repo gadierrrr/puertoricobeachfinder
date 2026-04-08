@@ -33,6 +33,15 @@ function requestSecurityApiLimitConfig(string $path): array
         return ['max_attempts' => 30, 'window_minutes' => 60];
     }
 
+    // Chat poll/unread endpoints fire frequently (every 5-30s) — exempt from tight limits
+    if (str_starts_with($path, '/api/chat/poll') || str_starts_with($path, '/api/chat/unread')) {
+        return ['max_attempts' => 2000, 'window_minutes' => 60];
+    }
+
+    if (str_starts_with($path, '/api/chat/')) {
+        return ['max_attempts' => 300, 'window_minutes' => 60];
+    }
+
     return ['max_attempts' => 100, 'window_minutes' => 60];
 }
 

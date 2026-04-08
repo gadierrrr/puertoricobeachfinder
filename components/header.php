@@ -23,14 +23,14 @@ $requestedBodyVariant = isset($bodyVariant) ? (string) $bodyVariant : 'default';
 $bodyVariant = in_array($requestedBodyVariant, $allowedBodyVariants, true) ? $requestedBodyVariant : 'default';
 $bodyClasses = 'min-h-screen flex flex-col font-sans';
 if ($bodyVariant === 'collection-light') {
-    $bodyClasses .= ' collection-light bg-gray-100 text-gray-900';
+    $bodyClasses .= ' collection-light bg-sand-50 text-warm-900';
     $htmlTheme = 'light';
 } elseif ($bodyVariant === 'collection-dark') {
-    $bodyClasses .= ' collection-dark bg-brand-darker text-brand-text';
+    $bodyClasses .= ' collection-dark bg-ocean-900 text-white';
     $htmlTheme = 'dark';
 } else {
-    $bodyClasses .= ' bg-brand-darker text-brand-text';
-    $htmlTheme = 'dark';
+    $bodyClasses .= ' bg-sand-50 text-warm-900';
+    $htmlTheme = 'light';
 }
 ?>
 <!DOCTYPE html>
@@ -45,7 +45,7 @@ if ($bodyVariant === 'collection-light') {
     <?php endif; ?>
 
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#1a2c32">
+    <meta name="theme-color" content="#105258">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -204,6 +204,15 @@ if ($bodyVariant === 'collection-light') {
             <?= cspNonceAttr() ?>></script>
     <?php endif; ?>
 
+    <!-- PostHog Analytics (Session Replay + Error Tracking) -->
+    <script <?= cspNonceAttr() ?>>
+        !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug getPageViewId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+        posthog.init('phc_vcMhXo3ENA9N3W7hU7sPZvvvMbtojcG38uk4rMGPPwmD', {
+            api_host: 'https://t.puertoricobeachfinder.com',
+            person_profiles: 'identified_only',
+        })
+    </script>
+
     <!-- Geographic Meta Tags -->
     <meta name="geo.region" content="US-PR">
     <meta name="geo.placename" content="Puerto Rico">
@@ -222,15 +231,15 @@ if ($bodyVariant === 'collection-light') {
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
     <!-- Preload critical CSS -->
-    <link rel="preload" href="/assets/css/tailwind.min.css?v=3.5" as="style">
-    <link rel="preload" href="/assets/css/styles.css?v=3.9" as="style">
+    <link rel="preload" href="/assets/css/tailwind.min.css?v=3.6" as="style">
+    <link rel="preload" href="/assets/css/styles.css?v=4.2" as="style">
 
-    <!-- Inter + Playfair Display Fonts - loaded asynchronously to avoid render blocking -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,400;1,500;1,600;1,700&display=swap" as="style" data-lazy-style>
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,400;1,500;1,600;1,700&display=swap" rel="stylesheet"></noscript>
+    <!-- DM Sans + DM Serif Display Fonts - loaded asynchronously to avoid render blocking -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" as="style" data-lazy-style>
+    <noscript><link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"></noscript>
 
     <!-- Tailwind CSS (local build - no render-blocking JS) -->
-    <link rel="stylesheet" href="/assets/css/tailwind.min.css?v=3.5">
+    <link rel="stylesheet" href="/assets/css/tailwind.min.css?v=3.6">
 
     <?php if (!isset($skipMapCSS) || !$skipMapCSS): ?>
     <!-- MapLibre GL CSS - loaded asynchronously to avoid render blocking -->
@@ -254,7 +263,7 @@ if ($bodyVariant === 'collection-light') {
     <script src="/assets/js/csp-bindings.js" <?= cspNonceAttr() ?>></script>
 
     <!-- Custom styles -->
-    <link rel="stylesheet" href="/assets/css/styles.css?v=3.9">
+    <link rel="stylesheet" href="/assets/css/styles.css?v=4.2">
 
     <!-- Deferred scripts (non-blocking) -->
     <script defer

@@ -444,7 +444,7 @@ function referralRenderCampaignCta(array $campaign, string $label, array $contex
         'primary' => 'inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors text-sm',
         'secondary' => 'inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-4 py-2.5 rounded-lg border border-white/20 transition-colors text-sm',
         'outline' => 'inline-flex items-center gap-2 border border-blue-600 text-blue-700 hover:bg-blue-50 font-semibold px-4 py-2.5 rounded-lg transition-colors text-sm',
-        'yellow' => 'inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-semibold px-4 py-2.5 rounded-lg transition-colors text-sm',
+        'yellow' => 'inline-flex items-center gap-2 bg-yellow-400 hover:bg-sunset-300 text-gray-900 font-semibold px-4 py-2.5 rounded-lg transition-colors text-sm',
     ];
 
     $class = $classes[$style] ?? $classes['primary'];

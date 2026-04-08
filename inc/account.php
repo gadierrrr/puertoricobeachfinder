@@ -174,6 +174,9 @@ function deleteUserAccount(string $userId, ?string $actorUserId = null, array $o
         accountDeleteRowsIfTableExists('beach_lists', 'user_id = :user_id', $userParam);
         accountDeleteRowsIfTableExists('beach_photos', 'user_id = :user_id', $userParam);
         accountDeleteRowsIfTableExists('beach_reviews', 'user_id = :user_id', $userParam);
+        accountDeleteRowsIfTableExists('chat_reports', 'reporter_user_id = :user_id', $userParam);
+        accountDeleteRowsIfTableExists('chat_messages', 'user_id = :user_id', $userParam);
+        accountDeleteRowsIfTableExists('chat_participants', 'user_id = :user_id', $userParam);
 
         if ($email !== '') {
             accountDeleteRowsIfTableExists('magic_links', 'email = :email', [':email' => $email]);

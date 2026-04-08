@@ -96,13 +96,13 @@ include APP_ROOT . '/components/header.php';
     <div class="w-full max-w-2xl">
         <!-- Welcome Header -->
         <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-brand-yellow/20 mb-6">
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-sunset-400/20 mb-6">
                 <span class="text-4xl">👋</span>
             </div>
-            <h1 class="text-3xl sm:text-4xl font-bold text-white mb-3">
+            <h1 class="text-3xl sm:text-4xl font-bold text-warm-900 mb-3">
                 <?= h(__('onboarding.welcome', ['name' => $user['name'] ?? __('profile.beach_explorer')])) ?>
             </h1>
-            <p class="text-gray-400 text-lg">
+            <p class="text-warm-500 text-lg">
                 <?= h(__('onboarding.personalize')) ?>
             </p>
         </div>
@@ -111,12 +111,12 @@ include APP_ROOT . '/components/header.php';
             <?= csrfField() ?>
 
             <!-- Step 1: Activities -->
-            <div class="bg-brand-darker/50 backdrop-blur-md rounded-xl border border-white/10 p-6">
-                <h2 class="text-xl font-semibold text-white mb-2 flex items-center gap-2">
-                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-brand-yellow text-brand-darker text-sm font-bold">1</span>
+            <div class="bg-white rounded-xl border border-warm-200 p-6">
+                <h2 class="text-xl font-semibold text-warm-900 mb-2 flex items-center gap-2">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-sunset-400 text-ocean-900 text-sm font-bold">1</span>
                     <?= h(__('onboarding.step1_title')) ?>
                 </h2>
-                <p class="text-gray-400 text-sm mb-6"><?= h(__('onboarding.step1_subtitle')) ?></p>
+                <p class="text-warm-500 text-sm mb-6"><?= h(__('onboarding.step1_subtitle')) ?></p>
 
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     <?php foreach ($activityOptions as $activity): ?>
@@ -125,11 +125,11 @@ include APP_ROOT . '/components/header.php';
                                name="activities[]"
                                value="<?= h($activity['id']) ?>"
                                class="sr-only peer">
-                        <div class="p-4 rounded-xl border-2 border-white/10 bg-white/5 text-center transition-all
-                                    hover:border-brand-yellow/50 hover:bg-brand-yellow/5
-                                    peer-checked:border-brand-yellow peer-checked:bg-brand-yellow/10">
+                        <div class="p-4 rounded-xl border-2 border-warm-200 bg-warm-50 text-center transition-all
+                                    hover:border-ocean-400 hover:bg-ocean-50
+                                    peer-checked:border-ocean-500 peer-checked:bg-ocean-50">
                             <span class="text-3xl block mb-2"><?= $activity['icon'] ?></span>
-                            <span class="text-white font-medium text-sm block"><?= h($activity['label']) ?></span>
+                            <span class="text-warm-900 font-medium text-sm block"><?= h($activity['label']) ?></span>
                             <span class="text-gray-500 text-xs"><?= h($activity['desc']) ?></span>
                         </div>
                     </label>
@@ -138,12 +138,12 @@ include APP_ROOT . '/components/header.php';
             </div>
 
             <!-- Step 2: Vibe -->
-            <div class="bg-brand-darker/50 backdrop-blur-md rounded-xl border border-white/10 p-6">
-                <h2 class="text-xl font-semibold text-white mb-2 flex items-center gap-2">
-                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-brand-yellow text-brand-darker text-sm font-bold">2</span>
+            <div class="bg-white rounded-xl border border-warm-200 p-6">
+                <h2 class="text-xl font-semibold text-warm-900 mb-2 flex items-center gap-2">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-sunset-400 text-ocean-900 text-sm font-bold">2</span>
                     <?= h(__('onboarding.step2_title')) ?>
                 </h2>
-                <p class="text-gray-400 text-sm mb-6"><?= h(__('onboarding.step2_subtitle')) ?></p>
+                <p class="text-warm-500 text-sm mb-6"><?= h(__('onboarding.step2_subtitle')) ?></p>
 
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     <?php foreach ($vibeOptions as $index => $vibe): ?>
@@ -153,11 +153,11 @@ include APP_ROOT . '/components/header.php';
                                value="<?= h($vibe['id']) ?>"
                                class="sr-only peer"
                                <?= $index === 0 ? 'checked' : '' ?>>
-                        <div class="p-4 rounded-xl border-2 border-white/10 bg-white/5 text-center transition-all
-                                    hover:border-brand-yellow/50 hover:bg-brand-yellow/5
-                                    peer-checked:border-brand-yellow peer-checked:bg-brand-yellow/10">
+                        <div class="p-4 rounded-xl border-2 border-warm-200 bg-warm-50 text-center transition-all
+                                    hover:border-ocean-400 hover:bg-ocean-50
+                                    peer-checked:border-ocean-500 peer-checked:bg-ocean-50">
                             <span class="text-3xl block mb-2"><?= $vibe['icon'] ?></span>
-                            <span class="text-white font-medium text-sm block"><?= h($vibe['label']) ?></span>
+                            <span class="text-warm-900 font-medium text-sm block"><?= h($vibe['label']) ?></span>
                             <span class="text-gray-500 text-xs"><?= h($vibe['desc']) ?></span>
                         </div>
                     </label>
@@ -172,7 +172,7 @@ include APP_ROOT . '/components/header.php';
 	                    <?= h(__('onboarding.skip')) ?>
 	                </a>
                 <button type="submit"
-                        class="w-full sm:w-auto bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-8 py-3 rounded-xl font-semibold transition-all hover:-translate-y-0.5 hover:shadow-lg order-1 sm:order-2">
+                        class="w-full sm:w-auto bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-8 py-3 rounded-xl font-semibold transition-all hover:-translate-y-0.5 hover:shadow-lg order-1 sm:order-2">
                     <?= h(__('onboarding.submit')) ?>
                 </button>
             </div>
@@ -180,9 +180,9 @@ include APP_ROOT . '/components/header.php';
 
         <!-- Progress indicator -->
         <div class="mt-8 flex items-center justify-center gap-2">
-            <div class="w-3 h-3 rounded-full bg-brand-yellow"></div>
-            <div class="w-12 h-1 rounded-full bg-brand-yellow"></div>
-            <div class="w-3 h-3 rounded-full bg-white/20"></div>
+            <div class="w-3 h-3 rounded-full bg-sunset-400"></div>
+            <div class="w-12 h-1 rounded-full bg-sunset-400"></div>
+            <div class="w-3 h-3 rounded-full bg-warm-200"></div>
         </div>
         <p class="text-center text-gray-500 text-xs mt-2">
             <?= h(__('onboarding.almost_there')) ?>

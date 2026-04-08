@@ -14,10 +14,10 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
     </div>
 
     <!-- Footer - Dark Glassmorphism -->
-    <footer class="bg-brand-darker border-t border-brand-yellow/80 pt-16 pb-8 px-4 sm:px-6 mt-auto relative overflow-hidden">
+    <footer class="bg-ocean-900 border-t border-ocean-700 pt-16 pb-8 px-4 sm:px-6 mt-auto relative overflow-hidden">
         <!-- Decorative palm tree (bottom right) -->
         <div class="absolute bottom-0 right-0 w-64 h-64 opacity-5 pointer-events-none">
-            <svg viewBox="0 0 100 100" fill="currentColor" class="text-brand-yellow w-full h-full">
+            <svg viewBox="0 0 100 100" fill="currentColor" class="text-sunset-400 w-full h-full">
                 <path d="M48 95V55M52 95V55M50 55C50 55 35 45 20 50C25 45 40 35 50 40C40 35 25 25 15 25C30 25 45 35 50 40M50 55C50 55 65 45 80 50C75 45 60 35 50 40C60 35 75 25 85 25C70 25 55 35 50 40"/>
             </svg>
         </div>
@@ -27,7 +27,7 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
                 <!-- Brand Column -->
                 <div>
                     <div class="flex items-center gap-2 mb-6">
-                        <i data-lucide="sun" class="w-6 h-6 text-brand-yellow"></i>
+                        <i data-lucide="sun" class="w-6 h-6 text-sunset-400"></i>
                         <span class="text-xl font-bold text-white"><?= h($_ENV['APP_NAME'] ?? 'Beach Finder') ?></span>
                     </div>
                     <p class="text-gray-400 text-sm mb-4">
@@ -37,15 +37,15 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
                     <div class="space-y-2 mt-6">
                         <h5 class="text-xs font-semibold text-gray-400 uppercase tracking-wider"><?= h(__('footer.tools')) ?></h5>
                         <ul class="space-y-2 text-sm">
-                            <li><a href="<?= h(routeUrl('quiz', $currentLang)) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors flex items-center gap-2">
+                            <li><a href="<?= h(routeUrl('quiz', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors flex items-center gap-2">
                                 <i data-lucide="compass" class="w-4 h-4"></i>
                                 <?= h(__('footer.beach_match_quiz')) ?>
                             </a></li>
-                            <li><a href="<?= h(routeUrl('compare', $currentLang)) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors flex items-center gap-2">
+                            <li><a href="<?= h(routeUrl('compare', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors flex items-center gap-2">
                                 <i data-lucide="git-compare" class="w-4 h-4"></i>
                                 <?= h(__('footer.compare_beaches')) ?>
                             </a></li>
-                            <li><a href="<?= h($homePath . '?view=map') ?>" class="text-gray-400 hover:text-brand-yellow transition-colors flex items-center gap-2">
+                            <li><a href="<?= h($homePath . '?view=map') ?>" class="text-gray-400 hover:text-sunset-400 transition-colors flex items-center gap-2">
                                 <i data-lucide="map" class="w-4 h-4"></i>
                                 <?= h(__('footer.interactive_map')) ?>
                             </a></li>
@@ -56,23 +56,23 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
                 <!-- Beaches by Activity -->
                 <div>
                     <h4 class="font-bold text-white mb-4 flex items-center gap-2">
-                        <i data-lucide="waves" class="w-5 h-5 text-brand-yellow"></i>
+                        <i data-lucide="waves" class="w-5 h-5 text-sunset-400"></i>
                         <?= h(__('footer.beaches_by_activity')) ?>
                     </h4>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="<?= h(routeUrl('best_beaches', $currentLang)) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors"><?= h(__('footer.best_beaches')) ?></a></li>
-                        <li><a href="<?= h(routeUrl('best_beaches_san_juan', $currentLang)) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors"><?= h(__('footer.san_juan_beaches')) ?></a></li>
-                        <li><a href="<?= h(routeUrl('best_surfing_beaches', $currentLang)) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors"><?= h(__('footer.surfing_beaches')) ?></a></li>
-                        <li><a href="<?= h(routeUrl('best_snorkeling_beaches', $currentLang)) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors"><?= h(__('footer.snorkeling_beaches')) ?></a></li>
-                        <li><a href="<?= h(routeUrl('best_family_beaches', $currentLang)) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors"><?= h(__('footer.family_beaches')) ?></a></li>
-                        <li><a href="<?= h(routeUrl('hidden_beaches', $currentLang)) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors"><?= h(__('footer.hidden_beaches')) ?></a></li>
+                        <li><a href="<?= h(routeUrl('best_beaches', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors"><?= h(__('footer.best_beaches')) ?></a></li>
+                        <li><a href="<?= h(routeUrl('best_beaches_san_juan', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors"><?= h(__('footer.san_juan_beaches')) ?></a></li>
+                        <li><a href="<?= h(routeUrl('best_surfing_beaches', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors"><?= h(__('footer.surfing_beaches')) ?></a></li>
+                        <li><a href="<?= h(routeUrl('best_snorkeling_beaches', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors"><?= h(__('footer.snorkeling_beaches')) ?></a></li>
+                        <li><a href="<?= h(routeUrl('best_family_beaches', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors"><?= h(__('footer.family_beaches')) ?></a></li>
+                        <li><a href="<?= h(routeUrl('hidden_beaches', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors"><?= h(__('footer.hidden_beaches')) ?></a></li>
                     </ul>
                     <!-- Beaches by Location -->
                     <div class="mt-6">
                         <h5 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3"><?= h(__('footer.by_location')) ?></h5>
                         <ul class="space-y-2 text-sm">
-                            <li><a href="<?= h(routeUrl('beaches_near_san_juan', $currentLang)) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors"><?= h(__('footer.near_san_juan')) ?></a></li>
-                            <li><a href="<?= h(routeUrl('beaches_near_airport', $currentLang)) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors"><?= h(__('footer.near_airport')) ?></a></li>
+                            <li><a href="<?= h(routeUrl('beaches_near_san_juan', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors"><?= h(__('footer.near_san_juan')) ?></a></li>
+                            <li><a href="<?= h(routeUrl('beaches_near_airport', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors"><?= h(__('footer.near_airport')) ?></a></li>
                         </ul>
                     </div>
                     <!-- Popular Municipalities -->
@@ -88,7 +88,7 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
                             foreach ($topMunicipalities as $muni):
                                 $muniSlug = strtolower(str_replace(' ', '-', stripAccents($muni)));
                             ?>
-                            <li><a href="<?= h(routeUrl('municipality', $currentLang, ['municipality' => $muniSlug])) ?>" class="block text-gray-400 hover:text-brand-yellow transition-colors"><?= h($muni) ?></a></li>
+                            <li><a href="<?= h(routeUrl('municipality', $currentLang, ['municipality' => $muniSlug])) ?>" class="block text-gray-400 hover:text-sunset-400 transition-colors"><?= h($muni) ?></a></li>
                             <?php endforeach; ?>
                         </ul>
                     </div>
@@ -97,31 +97,31 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
                 <!-- Planning Resources -->
                 <div>
                     <h4 class="font-bold text-white mb-4 flex items-center gap-2">
-                        <i data-lucide="book-open" class="w-5 h-5 text-brand-yellow"></i>
+                        <i data-lucide="book-open" class="w-5 h-5 text-sunset-400"></i>
                         <?= h(__('footer.planning_resources')) ?>
                     </h4>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="<?= h(routeUrl('guides_index', $currentLang)) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors font-medium"><?= h(__('footer.all_guides')) ?> →</a></li>
-                        <li><a href="<?= h(routeUrl('guide_transportation', $currentLang)) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors"><?= h(__('footer.transportation')) ?></a></li>
-                        <li><a href="<?= h(routeUrl('guide_safety', $currentLang)) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors"><?= h(__('footer.safety_tips')) ?></a></li>
-                        <li><a href="<?= h(routeUrl('guide_best_time', $currentLang)) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors"><?= h(__('footer.best_times_to_visit')) ?></a></li>
-                        <li><a href="<?= h(routeUrl('guide_packing', $currentLang)) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors"><?= h(__('footer.packing_list')) ?></a></li>
-                        <li><a href="<?= h(routeUrl('guide_culebra_vieques', $currentLang)) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors"><?= h(__('footer.culebra_vs_vieques')) ?></a></li>
-                        <li><a href="<?= h(routeUrl('guide_bio_bays', $currentLang)) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors"><?= h(__('footer.bio_bays')) ?></a></li>
-                        <li><a href="<?= h(routeUrl('guide_snorkeling', $currentLang)) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors"><?= h(__('footer.snorkeling_guide')) ?></a></li>
-                        <li><a href="<?= h(routeUrl('guide_surfing', $currentLang)) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors"><?= h(__('footer.surfing_guide')) ?></a></li>
+                        <li><a href="<?= h(routeUrl('guides_index', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors font-medium"><?= h(__('footer.all_guides')) ?> →</a></li>
+                        <li><a href="<?= h(routeUrl('guide_transportation', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors"><?= h(__('footer.transportation')) ?></a></li>
+                        <li><a href="<?= h(routeUrl('guide_safety', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors"><?= h(__('footer.safety_tips')) ?></a></li>
+                        <li><a href="<?= h(routeUrl('guide_best_time', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors"><?= h(__('footer.best_times_to_visit')) ?></a></li>
+                        <li><a href="<?= h(routeUrl('guide_packing', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors"><?= h(__('footer.packing_list')) ?></a></li>
+                        <li><a href="<?= h(routeUrl('guide_culebra_vieques', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors"><?= h(__('footer.culebra_vs_vieques')) ?></a></li>
+                        <li><a href="<?= h(routeUrl('guide_bio_bays', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors"><?= h(__('footer.bio_bays')) ?></a></li>
+                        <li><a href="<?= h(routeUrl('guide_snorkeling', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors"><?= h(__('footer.snorkeling_guide')) ?></a></li>
+                        <li><a href="<?= h(routeUrl('guide_surfing', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors"><?= h(__('footer.surfing_guide')) ?></a></li>
                     </ul>
                 </div>
 
                 <!-- More Guides & Account -->
                 <div>
                     <h4 class="font-bold text-white mb-4 flex items-center gap-2">
-                        <i data-lucide="lightbulb" class="w-5 h-5 text-brand-yellow"></i>
+                        <i data-lucide="lightbulb" class="w-5 h-5 text-sunset-400"></i>
                         <?= h(__('footer.more_guides')) ?>
                     </h4>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="<?= h(routeUrl('guide_photography', $currentLang)) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors"><?= h(__('footer.photography_tips')) ?></a></li>
-                        <li><a href="<?= h(routeUrl('guide_family_planning', $currentLang)) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors"><?= h(__('footer.family_planning')) ?></a></li>
+                        <li><a href="<?= h(routeUrl('guide_photography', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors"><?= h(__('footer.photography_tips')) ?></a></li>
+                        <li><a href="<?= h(routeUrl('guide_family_planning', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors"><?= h(__('footer.family_planning')) ?></a></li>
                     </ul>
 
                     <?php if (isAuthenticated()): ?>
@@ -129,11 +129,11 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
                     <div class="mt-6">
                         <h5 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3"><?= h(__('footer.your_account')) ?></h5>
                         <ul class="space-y-2 text-sm">
-                            <li><a href="<?= h(routeUrl('favorites', $currentLang)) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors flex items-center gap-2">
+                            <li><a href="<?= h(routeUrl('favorites', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors flex items-center gap-2">
                                 <i data-lucide="heart" class="w-4 h-4"></i>
                                 <?= h(__('footer.my_favorites')) ?>
                             </a></li>
-                            <li><a href="<?= h(routeUrl('profile', $currentLang)) ?>" class="text-gray-400 hover:text-brand-yellow transition-colors flex items-center gap-2">
+                            <li><a href="<?= h(routeUrl('profile', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors flex items-center gap-2">
                                 <i data-lucide="user" class="w-4 h-4"></i>
                                 <?= h(__('nav.profile')) ?>
                             </a></li>
@@ -142,7 +142,7 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
                     <?php else: ?>
                     <!-- Guest User -->
                     <div class="mt-6">
-                        <a href="<?= h(routeUrl('login', $currentLang)) ?>" class="inline-flex items-center gap-2 bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-4 py-2 rounded-lg font-medium text-sm transition-colors">
+                        <a href="<?= h(routeUrl('login', $currentLang)) ?>" class="inline-flex items-center gap-2 bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-4 py-2 rounded-lg font-medium text-sm transition-colors">
                             <i data-lucide="log-in" class="w-4 h-4"></i>
                             <?= h(__('nav.sign_in')) ?>
                         </a>
@@ -152,7 +152,7 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
             </div>
 
             <!-- Copyright -->
-            <div class="border-t border-white/5 pt-8 mt-12">
+            <div class="border-t border-ocean-800 pt-8 mt-12">
                 <p class="text-xs text-gray-400 text-center">
                     &copy; <?= date('Y') ?> <?= h($_ENV['APP_NAME'] ?? 'Beach Finder') ?>. <?= h(__('footer.copyright')) ?>
                 </p>
@@ -330,14 +330,14 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
     </script>
 
     <!-- PWA Install Banner (hidden by default) -->
-    <div id="pwa-install-banner" class="hidden fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 bg-brand-dark/95 backdrop-blur-md rounded-xl shadow-glass border border-white/10 p-4 z-50">
+    <div id="pwa-install-banner" class="hidden fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 bg-ocean-800 rounded-xl shadow-glass border border-ocean-700 p-4 z-50">
         <div class="flex items-start gap-3">
             <img src="/assets/icons/icon-72x72.png" alt="" class="w-12 h-12 rounded-lg">
             <div class="flex-1">
                 <h3 class="font-semibold text-white"><?= h(__('pwa.install_title')) ?></h3>
                 <p class="text-sm text-gray-400 mt-1"><?= h(__('pwa.install_message')) ?></p>
                 <div class="flex gap-2 mt-3">
-                    <button type="button" data-action="installPWA" class="bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                    <button type="button" data-action="installPWA" class="bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
                         <?= h(__('pwa.install')) ?>
                     </button>
                     <button type="button" data-action="dismissInstall" class="text-gray-400 hover:text-white px-4 py-2 text-sm font-medium transition-colors">
@@ -354,14 +354,14 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
     </div>
 
     <!-- Sign-Up Prompt Modal -->
-    <div id="signup-prompt-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden items-center justify-center p-4"
+    <div id="signup-prompt-modal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center p-4"
          role="dialog" aria-modal="true" aria-labelledby="signup-prompt-title" data-action="closeSignupPrompt">
-        <div class="bg-brand-dark rounded-xl shadow-glass max-w-md w-full border border-white/10 overflow-hidden" data-action-stop data-action="noop" data-on="click">
+        <div class="bg-ocean-800 rounded-xl shadow-glass max-w-md w-full border border-ocean-700 overflow-hidden" data-action-stop data-action="noop" data-on="click">
             <!-- Header with icon -->
-            <div class="bg-gradient-to-r from-brand-yellow/20 to-brand-yellow/5 px-6 py-5 border-b border-white/10">
+            <div class="bg-gradient-to-r from-sunset-400/20 to-sunset-400/5 px-6 py-5 border-b border-ocean-700">
                 <div class="flex items-center gap-3">
-                    <div id="signup-prompt-icon" class="w-12 h-12 rounded-full bg-brand-yellow/20 flex items-center justify-center">
-                        <i data-lucide="heart" class="w-6 h-6 text-brand-yellow"></i>
+                    <div id="signup-prompt-icon" class="w-12 h-12 rounded-full bg-sunset-400/20 flex items-center justify-center">
+                        <i data-lucide="heart" class="w-6 h-6 text-sunset-400"></i>
                     </div>
                     <div>
                         <h2 id="signup-prompt-title" class="text-lg font-semibold text-white"><?= h(__('footer.signup_title')) ?></h2>
@@ -379,22 +379,22 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
                 <!-- Benefits list -->
                 <ul class="space-y-2 mb-6">
                     <li class="flex items-center gap-2 text-sm text-gray-300">
-                        <i data-lucide="heart" class="w-4 h-4 text-brand-yellow"></i>
+                        <i data-lucide="heart" class="w-4 h-4 text-sunset-400"></i>
                         <span><?= h(__('footer.signup_benefit_1')) ?></span>
                     </li>
                     <li class="flex items-center gap-2 text-sm text-gray-300">
-                        <i data-lucide="star" class="w-4 h-4 text-brand-yellow"></i>
+                        <i data-lucide="star" class="w-4 h-4 text-sunset-400"></i>
                         <span><?= h(__('footer.signup_benefit_2')) ?></span>
                     </li>
                     <li class="flex items-center gap-2 text-sm text-gray-300">
-                        <i data-lucide="map-pin" class="w-4 h-4 text-brand-yellow"></i>
+                        <i data-lucide="map-pin" class="w-4 h-4 text-sunset-400"></i>
                         <span><?= h(__('footer.signup_benefit_3')) ?></span>
                     </li>
                 </ul>
 
                 <!-- Actions -->
                 <div class="flex flex-col gap-3">
-                    <a href="<?= h(routeUrl('login', $currentLang)) ?>" id="signup-prompt-cta" class="flex items-center justify-center gap-2 bg-brand-yellow hover:bg-yellow-300 text-brand-darker py-3 rounded-lg font-semibold transition-colors">
+                    <a href="<?= h(routeUrl('login', $currentLang)) ?>" id="signup-prompt-cta" class="flex items-center justify-center gap-2 bg-sunset-400 hover:bg-sunset-300 text-ocean-900 py-3 rounded-lg font-semibold transition-colors">
                         <i data-lucide="log-in" class="w-5 h-5"></i>
                         <?= h(__('footer.signup_cta')) ?>
                     </a>
@@ -443,7 +443,7 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
         title.textContent = config.title;
         subtitle.textContent = config.subtitle;
         description.textContent = config.description;
-        icon.innerHTML = `<i data-lucide="${config.icon}" class="w-6 h-6 text-brand-yellow"></i>`;
+        icon.innerHTML = `<i data-lucide="${config.icon}" class="w-6 h-6 text-sunset-400"></i>`;
 
         // Set redirect URL
         const loginBasePath = <?= json_encode(routeUrl('login', $currentLang)) ?>;
@@ -708,10 +708,10 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
     <?php endif; ?>
 
     <!-- Review Form Modal -->
-    <div id="review-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden items-center justify-center p-4"
+    <div id="review-modal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center p-4"
          role="dialog" aria-modal="true" aria-labelledby="review-modal-title" data-action="closeReviewForm">
-        <div class="bg-brand-dark rounded-xl shadow-glass max-w-lg w-full max-h-[90vh] overflow-y-auto border border-white/10" data-action-stop data-action="noop" data-on="click">
-            <div class="sticky top-0 bg-brand-dark border-b border-white/10 px-6 py-4 flex items-center justify-between">
+        <div class="bg-ocean-800 rounded-xl shadow-glass max-w-lg w-full max-h-[90vh] overflow-y-auto border border-ocean-700" data-action-stop data-action="noop" data-on="click">
+            <div class="sticky top-0 bg-ocean-800 border-b border-ocean-700 px-6 py-4 flex items-center justify-between">
                 <h2 id="review-modal-title" class="text-xl font-semibold text-white"><?= h(__('footer.review_title')) ?></h2>
                 <button data-action="closeReviewForm" class="text-gray-400 hover:text-white p-1 transition-colors" aria-label="<?= __('aria.close_review') ?>">
                     <i data-lucide="x" class="w-6 h-6"></i>
@@ -744,14 +744,14 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
                 <div>
                     <label for="review-title" class="block text-sm font-medium text-gray-300 mb-1"><?= h(__('footer.review_title_label')) ?></label>
                     <input type="text" name="title" id="review-title" maxlength="100" placeholder="<?= h(__('footer.review_title_placeholder')) ?>"
-                           class="w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-brand-yellow/50 focus:border-brand-yellow/50">
+                           class="w-full px-3 py-2 bg-white/5 border border-ocean-600 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-ocean-400 focus:border-ocean-400">
                 </div>
 
                 <!-- Review Text -->
                 <div>
                     <label for="review-text" class="block text-sm font-medium text-gray-300 mb-1"><?= h(__('footer.review_text_label')) ?></label>
                     <textarea name="review_text" id="review-text" rows="4" maxlength="2000" placeholder="<?= h(__('footer.review_text_placeholder')) ?>"
-                              class="w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-brand-yellow/50 focus:border-brand-yellow/50 resize-none"></textarea>
+                              class="w-full px-3 py-2 bg-white/5 border border-ocean-600 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-ocean-400 focus:border-ocean-400 resize-none"></textarea>
                     <div class="text-xs text-gray-500 text-right mt-1"><span id="char-count">0</span>/2000</div>
                 </div>
 
@@ -760,18 +760,18 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
                     <div>
                         <label for="review-visit-date" class="block text-sm font-medium text-gray-300 mb-1"><?= h(__('footer.review_visit_date')) ?></label>
                         <input type="month" name="visit_date" id="review-visit-date"
-                               class="w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-brand-yellow/50 focus:border-brand-yellow/50">
+                               class="w-full px-3 py-2 bg-white/5 border border-ocean-600 rounded-lg text-white focus:ring-2 focus:ring-ocean-400 focus:border-ocean-400">
                     </div>
                     <div>
                         <label for="review-visit-type" class="block text-sm font-medium text-gray-300 mb-1"><?= h(__('footer.review_trip_type')) ?></label>
                         <select name="visit_type" id="review-visit-type"
-                                class="w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-brand-yellow/50 focus:border-brand-yellow/50">
-                            <option value="" class="bg-brand-dark"><?= h(__('footer.review_select')) ?></option>
-                            <option value="solo" class="bg-brand-dark"><?= h(__('footer.review_solo')) ?></option>
-                            <option value="couple" class="bg-brand-dark"><?= h(__('footer.review_couple')) ?></option>
-                            <option value="family" class="bg-brand-dark"><?= h(__('footer.review_family')) ?></option>
-                            <option value="friends" class="bg-brand-dark"><?= h(__('footer.review_friends')) ?></option>
-                            <option value="group" class="bg-brand-dark"><?= h(__('footer.review_group')) ?></option>
+                                class="w-full px-3 py-2 bg-white/5 border border-ocean-600 rounded-lg text-white focus:ring-2 focus:ring-ocean-400 focus:border-ocean-400">
+                            <option value="" class="bg-ocean-800"><?= h(__('footer.review_select')) ?></option>
+                            <option value="solo" class="bg-ocean-800"><?= h(__('footer.review_solo')) ?></option>
+                            <option value="couple" class="bg-ocean-800"><?= h(__('footer.review_couple')) ?></option>
+                            <option value="family" class="bg-ocean-800"><?= h(__('footer.review_family')) ?></option>
+                            <option value="friends" class="bg-ocean-800"><?= h(__('footer.review_friends')) ?></option>
+                            <option value="group" class="bg-ocean-800"><?= h(__('footer.review_group')) ?></option>
                         </select>
                     </div>
                 </div>
@@ -779,18 +779,18 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
                 <!-- Would Recommend -->
                 <div class="flex items-center gap-2">
                     <input type="checkbox" name="would_recommend" id="review-recommend" checked
-                           class="w-4 h-4 text-brand-yellow bg-white/5 border-white/20 rounded focus:ring-brand-yellow/50">
+                           class="w-4 h-4 text-sunset-400 bg-white/5 border-ocean-600 rounded focus:ring-ocean-400">
                     <label for="review-recommend" class="text-sm text-gray-300"><?= h(__('footer.review_recommend')) ?></label>
                 </div>
 
                 <!-- Submit -->
                 <div class="flex gap-3 pt-2">
                     <button type="submit" id="review-submit-btn"
-                            class="flex-1 bg-brand-yellow hover:bg-yellow-300 text-brand-darker py-3 rounded-lg font-medium transition-colors">
+                            class="flex-1 bg-sunset-400 hover:bg-sunset-300 text-ocean-900 py-3 rounded-lg font-medium transition-colors">
                         <?= h(__('footer.review_submit')) ?>
                     </button>
                     <button type="button" data-action="closeReviewForm"
-                            class="px-6 py-3 border border-white/20 text-gray-300 rounded-lg font-medium hover:bg-white/5 hover:text-white transition-colors">
+                            class="px-6 py-3 border border-ocean-600 text-gray-300 rounded-lg font-medium hover:bg-white/5 hover:text-white transition-colors">
                         <?= h(__('common.cancel')) ?>
                     </button>
                 </div>
@@ -916,14 +916,24 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
 
     <?php if (isset($extraScripts)) echo $extraScripts; ?>
 
+    <!-- Chat Panel -->
+    <?php
+    $chatBeachId = isset($beach) ? ($beach['id'] ?? null) : null;
+    $chatBeachName = isset($beach) ? ($beach['name'] ?? null) : null;
+    $chatIsAuthenticated = isAuthenticated();
+    require_once APP_ROOT . '/inc/chat.php';
+    include __DIR__ . '/chat/panel.php';
+    ?>
+    <script defer src="/assets/js/chat.min.js?v=1.4" <?= cspNonceAttr() ?>></script>
+
     <!-- Beach Comparison Bar -->
-    <div id="compare-bar" class="fixed bottom-0 left-0 right-0 bg-brand-dark/95 backdrop-blur-md border-t border-white/10 shadow-glass transform translate-y-full transition-transform duration-300 z-40" role="region" aria-label="<?= __('aria.comparison') ?>">
+    <div id="compare-bar" class="fixed bottom-0 left-0 right-0 bg-ocean-800 border-t border-ocean-700 shadow-glass transform translate-y-full transition-transform duration-300 z-40" role="region" aria-label="<?= __('aria.comparison') ?>">
         <div class="max-w-7xl mx-auto px-4 py-3">
             <div class="flex items-center gap-4">
                 <div class="flex items-center gap-2">
-                    <i data-lucide="git-compare" class="w-5 h-5 text-brand-yellow" aria-hidden="true"></i>
+                    <i data-lucide="git-compare" class="w-5 h-5 text-sunset-400" aria-hidden="true"></i>
                     <span class="font-medium text-white"><?= h(__('footer.compare_label')) ?></span>
-                    <span id="compare-count" class="bg-brand-yellow text-brand-darker text-xs font-bold px-2 py-0.5 rounded-full">0</span>
+                    <span id="compare-count" class="bg-sunset-400 text-ocean-900 text-xs font-bold px-2 py-0.5 rounded-full">0</span>
                 </div>
 
                 <div id="compare-beaches" class="flex-1 flex gap-2 overflow-x-auto" role="list">
@@ -935,7 +945,7 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
                             data-action="goToCompare"
                             id="compare-go-btn"
                             disabled
-                            class="bg-brand-yellow hover:bg-yellow-300 disabled:bg-gray-600 disabled:cursor-not-allowed text-brand-darker px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+                            class="bg-sunset-400 hover:bg-sunset-300 disabled:bg-gray-600 disabled:cursor-not-allowed text-ocean-900 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
                         <?= h(__('footer.compare_now')) ?>
                     </button>
                     <button type="button"
@@ -1036,7 +1046,7 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
 
         // Render beach thumbnails
         container.innerHTML = beaches.map(beach => `
-            <div class="flex items-center gap-2 bg-white/10 rounded-lg px-2 py-1.5 flex-shrink-0 border border-white/10" role="listitem">
+            <div class="flex items-center gap-2 bg-white/10 rounded-lg px-2 py-1.5 flex-shrink-0 border border-ocean-700" role="listitem">
                 <img src="${beach.image || '/images/beaches/placeholder-beach.webp'}" alt="" class="w-8 h-8 rounded object-cover">
                 <span class="text-sm font-medium text-white max-w-24 truncate">${escapeHtmlCompare(beach.name)}</span>
                 <button data-action="removeFromCompareBar" data-action-args='["${beach.id}"]' class="text-gray-400 hover:text-red-400 p-0.5 transition-colors" aria-label="Remove ${escapeHtmlCompare(beach.name)} from comparison">

@@ -1,0 +1,181 @@
+<?php
+/**
+ * Best Time to Visit Puerto Rico Beaches — English body content sections.
+ * Returns an associative array of HTML fragments keyed by section name.
+ */
+return [
+    'intro' => '<p class="lead text-xl text-gray-700 mb-8">Puerto Rico enjoys tropical climate year-round, making it a fantastic beach destination in any season. However, understanding seasonal patterns helps you choose the best time based on your priorities—whether that\'s perfect weather, smaller crowds, lower prices, or specific activities like surfing or whale watching.</p>',
+
+    'overview' => '
+<h2 id="overview" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Understanding Puerto Rico\'s Seasons</h2>
+<p class="mb-4">Unlike mainland U.S., Puerto Rico doesn\'t experience dramatic seasonal temperature changes. Instead, <strong>the main differences are rainfall, crowds, and prices</strong>. Average temperatures hover between 78-85°F year-round, with ocean temperatures a comfortable 78-85°F.</p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
+<div class="bg-slate-50 rounded-lg p-6">
+<h3 class="text-xl font-bold text-gray-900 mb-2">Peak Season</h3>
+<p class="text-sm text-amber-700 mb-2">December - March</p>
+<p class="text-gray-700">Perfect weather, largest crowds, highest prices. Book 3-6 months ahead.</p>
+</div>
+<div class="bg-slate-50 rounded-lg p-6">
+<h3 class="text-xl font-bold text-gray-900 mb-2">Shoulder Season</h3>
+<p class="text-sm text-amber-700 mb-2">April-May, November</p>
+<p class="text-gray-700">Great weather, moderate crowds, good value. Sweet spot for many travelers.</p>
+</div>
+<div class="bg-amber-50 a11y-on-light-amber rounded-lg p-6">
+<h3 class="text-xl font-bold text-gray-900 mb-2">Low Season</h3>
+<p class="text-sm text-amber-700 mb-2">June-October</p>
+<p class="text-gray-700">Warm, some rain, smallest crowds, best deals. Hurricane season but low risk.</p>
+</div>
+</div>',
+
+    'winter' => '
+<h2 id="winter" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Winter: December - February</h2>
+<p class="mb-4"><strong>Winter is peak season</strong> in Puerto Rico, drawing visitors escaping cold northern climates. This period offers the most reliable weather—sunny skies, low humidity, and minimal rain. However, it\'s also the busiest and most expensive time to visit.</p>
+<h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">December</h3>
+<ul class="list-disc list-inside space-y-2 text-gray-700 mb-6">
+<li><strong>Weather:</strong> 80°F average, 3 inches rain, 70% sunny days</li>
+<li><strong>Crowds:</strong> Very high, especially Christmas/New Year weeks</li>
+<li><strong>Prices:</strong> Highest of the year, book early for deals</li>
+<li><strong>Best for:</strong> Guaranteed sun, holiday atmosphere, whale watching begins</li>
+<li><strong>Activities:</strong> All water sports, Las Mañanitas festival, beach parties</li>
+</ul>
+<h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">January</h3>
+<ul class="list-disc list-inside space-y-2 text-gray-700 mb-6">
+<li><strong>Weather:</strong> 79°F average, 2.5 inches rain, warmest ocean temps</li>
+<li><strong>Crowds:</strong> High through MLK weekend, moderate after</li>
+<li><strong>Prices:</strong> Very high early month, dropping late January</li>
+<li><strong>Best for:</strong> Prime surfing on north coast, humpback whales visible</li>
+<li><strong>Activities:</strong> Surf competitions in Rincón, San Sebastián Street Festival</li>
+</ul>
+<h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">February</h3>
+<ul class="list-disc list-inside space-y-2 text-gray-700 mb-6">
+<li><strong>Weather:</strong> 79°F average, 2 inches rain, driest month</li>
+<li><strong>Crowds:</strong> Moderate to high, spike during Presidents\' Day</li>
+<li><strong>Prices:</strong> Still elevated but better than Dec-Jan</li>
+<li><strong>Best for:</strong> Most reliable weather, Valentine\'s getaways, whale watching peak</li>
+<li><strong>Activities:</strong> Coffee Harvest Festival, San Juan street art tours</li>
+</ul>',
+
+    'spring' => '
+<h2 id="spring" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Spring: March - May</h2>
+<p class="mb-4"><strong>Spring offers the best overall value</strong>, especially April and May. Weather remains excellent while crowds thin out and prices drop significantly. This is my top recommendation for budget-conscious travelers seeking great conditions.</p>
+<h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">March</h3>
+<ul class="list-disc list-inside space-y-2 text-gray-700 mb-6">
+<li><strong>Weather:</strong> 80°F average, 2.5 inches rain, increasing warmth</li>
+<li><strong>Crowds:</strong> High during Spring Break (mid-month), moderate otherwise</li>
+<li><strong>Prices:</strong> Moderate, good deals outside Spring Break</li>
+<li><strong>Best for:</strong> Balance of weather and value, college crowd if you want energy</li>
+<li><strong>Activities:</strong> Emancipation Day celebrations, kite festivals</li>
+</ul>
+<h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">April</h3>
+<ul class="list-disc list-inside space-y-2 text-gray-700 mb-6">
+<li><strong>Weather:</strong> 82°F average, 3 inches rain, perfect beach weather</li>
+<li><strong>Crowds:</strong> Low to moderate except Easter week</li>
+<li><strong>Prices:</strong> Great value, 20-30% lower than winter</li>
+<li><strong>Best for:</strong> Ideal conditions without crowds, honeymoons, couples</li>
+<li><strong>Activities:</strong> San Juan Food Festival, sugar harvest season</li>
+</ul>
+<h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">May</h3>
+<ul class="list-disc list-inside space-y-2 text-gray-700 mb-6">
+<li><strong>Weather:</strong> 83°F average, 4 inches rain (brief afternoon showers)</li>
+<li><strong>Crowds:</strong> Low, excellent for quiet beaches</li>
+<li><strong>Prices:</strong> Excellent deals, transition to low season</li>
+<li><strong>Best for:</strong> Budget travelers, peaceful getaways, turtle nesting begins</li>
+<li><strong>Activities:</strong> Heineken JazzFest, mangrove kayaking, bio bay tours</li>
+</ul>',
+
+    'summer' => '
+<h2 id="summer" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Summer: June - August</h2>
+<p class="mb-4"><strong>Summer brings warmth, humidity, and occasional rain</strong>—but also incredible deals and authentic local atmosphere. Hurricane season begins in June, though storms are rare before August. For budget travelers willing to accept minor weather risk, summer offers outstanding value.</p>
+<h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">June</h3>
+<ul class="list-disc list-inside space-y-2 text-gray-700 mb-6">
+<li><strong>Weather:</strong> 84°F average, 5 inches rain, warmer and humid</li>
+<li><strong>Crowds:</strong> Low early month, increasing late June (summer vacation)</li>
+<li><strong>Prices:</strong> Low, great flight and hotel deals</li>
+<li><strong>Best for:</strong> Value seekers, fewer tourists, calm south coast beaches</li>
+<li><strong>Activities:</strong> San Juan Bautista Day, beach festivals, mango season</li>
+</ul>
+<h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">July</h3>
+<ul class="list-disc list-inside space-y-2 text-gray-700 mb-6">
+<li><strong>Weather:</strong> 85°F average, 6 inches rain, hottest month</li>
+<li><strong>Crowds:</strong> Moderate (U.S. families), but still less than winter</li>
+<li><strong>Prices:</strong> Moderate, higher than June but reasonable</li>
+<li><strong>Best for:</strong> Family vacations, warmest water temps, calm Caribbean side</li>
+<li><strong>Activities:</strong> Ponce Carnival, Loíza Festival, turtle watching</li>
+</ul>
+<h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">August</h3>
+<ul class="list-disc list-inside space-y-2 text-gray-700 mb-6">
+<li><strong>Weather:</strong> 85°F average, 7 inches rain, hurricane season active</li>
+<li><strong>Crowds:</strong> Low to moderate, fewer tourists post-summer vacation</li>
+<li><strong>Prices:</strong> Good deals despite being summer</li>
+<li><strong>Best for:</strong> Budget travel, authentic experience, risk-tolerant travelers</li>
+<li><strong>Activities:</strong> Barranquitas Crafts Fair, bio bay tours (best darkness)</li>
+</ul>',
+
+    'fall' => '
+<h2 id="fall" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Fall: September - November</h2>
+<p class="mb-4"><strong>Fall is the riskiest but cheapest season</strong>. September and October are peak hurricane months, causing many travelers to avoid Puerto Rico despite excellent prices. November transitions back to ideal conditions and is an underrated gem for value-conscious visitors.</p>
+<h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">September</h3>
+<ul class="list-disc list-inside space-y-2 text-gray-700 mb-6">
+<li><strong>Weather:</strong> 85°F average, 6 inches rain, peak hurricane risk</li>
+<li><strong>Crowds:</strong> Very low, locals have beaches to themselves</li>
+<li><strong>Prices:</strong> Lowest of the year, up to 50% off peak rates</li>
+<li><strong>Best for:</strong> Maximum savings, flexible travelers, travel insurance recommended</li>
+<li><strong>Activities:</strong> Rincón Steps Pro-Am surf contest, seafood festivals</li>
+</ul>
+<h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">October</h3>
+<ul class="list-disc list-inside space-y-2 text-gray-700 mb-6">
+<li><strong>Weather:</strong> 84°F average, 6 inches rain, still hurricane season</li>
+<li><strong>Crowds:</strong> Very low except Columbus Day weekend</li>
+<li><strong>Prices:</strong> Very low, excellent value for risk-tolerant</li>
+<li><strong>Best for:</strong> Adventurous travelers, last-minute deals, quiet exploration</li>
+<li><strong>Activities:</strong> International Billfish Tournament, coffee tours</li>
+</ul>
+<h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">November</h3>
+<ul class="list-disc list-inside space-y-2 text-gray-700 mb-6">
+<li><strong>Weather:</strong> 82°F average, 5 inches rain, conditions improving</li>
+<li><strong>Crowds:</strong> Low except Thanksgiving week, great shoulder season</li>
+<li><strong>Prices:</strong> Moderate, rising into holiday season</li>
+<li><strong>Best for:</strong> Value and weather balance, surf season begins, smaller groups</li>
+<li><strong>Activities:</strong> Festival Jayuya, North coast swells return, migratory birds</li>
+</ul>',
+
+    'events' => '
+<h2 id="events" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Annual Events and Holidays</h2>
+<p class="mb-4"><strong>Plan around these events</strong> for unique experiences or to avoid crowds and price surges:</p>
+<div class="bg-gray-50 rounded-lg p-6 my-6">
+<h3 class="text-xl font-bold text-gray-900 mb-4">Major Events</h3>
+<ul class="space-y-3 text-gray-700">
+<li><strong>San Sebastián Street Festival (January):</strong> Massive celebration in Old San Juan, book accommodations months ahead</li>
+<li><strong>Ponce Carnival (February):</strong> Week-long carnival on south coast, colorful parades and beach parties</li>
+<li><strong>Heineken JazzFest (May):</strong> World-class jazz festival in San Juan</li>
+<li><strong>San Juan Bautista Day (June 24):</strong> Traditional beach festivities, walking backwards into ocean at midnight</li>
+<li><strong>Rincón International Film Festival (April):</strong> Independent films in surf town setting</li>
+<li><strong>Saborea Food Festival (April):</strong> Puerto Rico\'s premier culinary event</li>
+</ul>
+</div>',
+
+    'recommendations' => '
+<h2 id="recommendations" class="text-3xl font-bold text-gray-900 mt-12 mb-6">When Should You Visit?</h2>
+<div class="space-y-6 my-8">
+<div class="border-l-4 border-yellow-400 pl-6">
+<h3 class="text-xl font-bold text-gray-900 mb-2">Best Overall Time: April - May</h3>
+<p class="text-gray-700">Perfect weather, manageable crowds, reasonable prices. Ideal for first-time visitors seeking the complete package.</p>
+</div>
+<div class="border-l-4 border-yellow-400 pl-6">
+<h3 class="text-xl font-bold text-gray-900 mb-2">Best for Surfing: November - March</h3>
+<p class="text-gray-700">Consistent north swells, international competitions, world-class breaks firing. Rincón and Isabela at their best.</p>
+</div>
+<div class="border-l-4 border-yellow-600 pl-6">
+<h3 class="text-xl font-bold text-gray-900 mb-2">Best Budget Time: September - October</h3>
+<p class="text-gray-700">Lowest prices of the year, empty beaches, authentic experience. Accept weather risk and buy travel insurance.</p>
+</div>
+<div class="border-l-4 border-purple-600 pl-6">
+<h3 class="text-xl font-bold text-gray-900 mb-2">Best for Families: July - August</h3>
+<p class="text-gray-700">School vacation timing, warm calm waters, kid-friendly events and festivals throughout the island.</p>
+</div>
+<div class="border-l-4 border-red-600 pl-6">
+<h3 class="text-xl font-bold text-gray-900 mb-2">Best Weather Guarantee: February</h3>
+<p class="text-gray-700">Driest month, consistent sunshine, perfect temps. Worth the premium for sun-guaranteed vacations.</p>
+</div>
+</div>',
+];

@@ -72,7 +72,7 @@ function affiliateCTA(string $key, string $label, string $style = 'primary'): st
     } elseif ($style === 'highlight') {
         $cls = 'inline-flex items-center gap-2 bg-white text-blue-700 hover:bg-blue-50 font-bold px-5 py-2.5 rounded-lg transition-colors text-sm shadow-sm';
     } elseif ($style === 'yellow') {
-        $cls = 'inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-semibold px-5 py-2.5 rounded-lg transition-colors text-sm shadow-sm';
+        $cls = 'inline-flex items-center gap-2 bg-yellow-400 hover:bg-sunset-300 text-gray-900 font-semibold px-5 py-2.5 rounded-lg transition-colors text-sm shadow-sm';
     } elseif ($style === 'outline') {
         $cls = 'inline-flex items-center gap-2 border border-blue-600 text-blue-700 hover:bg-blue-50 font-semibold px-5 py-2.5 rounded-lg transition-colors text-sm';
     } else {

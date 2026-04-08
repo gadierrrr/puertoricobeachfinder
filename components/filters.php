@@ -31,7 +31,7 @@ $activeFilterCount = count($selectedTags) + ($selectedMunicipality ? 1 : 0);
     <button type="button"
             id="mobile-nearme-btn"
             data-action="requestUserLocation"
-            class="inline-flex items-center justify-center gap-1.5 bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg px-3 h-11 text-sm font-medium text-white/80 hover:bg-white/10 transition-colors <?= $locationEnabled ? 'bg-green-500/20 border-green-500/50 text-green-300' : '' ?>">
+            class="inline-flex items-center justify-center gap-1.5 bg-warm-50 border border-warm-200 rounded-lg px-3 h-11 text-sm font-medium text-warm-700 hover:bg-warm-100 transition-colors <?= $locationEnabled ? 'bg-green-500/20 border-green-500/50 text-green-300' : '' ?>">
         <i data-lucide="navigation" id="mobile-nearme-icon" class="w-4 h-4" aria-hidden="true"></i>
         <span id="mobile-nearme-text" class="whitespace-nowrap"><?= $locationEnabled ? h(__('filters.near_me_active')) : h(__('filters.near_me')) ?></span>
     </button>
@@ -39,28 +39,28 @@ $activeFilterCount = count($selectedTags) + ($selectedMunicipality ? 1 : 0);
     <button type="button"
             id="mobile-filter-btn"
             data-action="openFilterDrawer"
-            class="flex-1 flex items-center justify-center gap-2 bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg px-4 h-11 text-sm font-medium text-white/80 hover:bg-white/10 transition-colors">
+            class="flex-1 flex items-center justify-center gap-2 bg-warm-50 border border-warm-200 rounded-lg px-4 h-11 text-sm font-medium text-warm-700 hover:bg-warm-100 transition-colors">
         <i data-lucide="sliders-horizontal" class="w-4 h-4" aria-hidden="true"></i>
         <span><?= h(__('common.filter')) ?></span>
         <?php if ($activeFilterCount > 0): ?>
-        <span class="bg-brand-yellow text-brand-darker text-xs px-2 py-0.5 rounded-full"><?= $activeFilterCount ?></span>
+        <span class="bg-sunset-400 text-ocean-900 text-xs px-2 py-0.5 rounded-full"><?= $activeFilterCount ?></span>
         <?php endif; ?>
     </button>
 
     <!-- View Toggle (Mobile) -->
-    <div class="flex rounded-lg border border-white/20 overflow-hidden" role="group" aria-label="<?= __('aria.view_mode') ?>">
+    <div class="flex rounded-lg border border-warm-200 overflow-hidden" role="group" aria-label="<?= __('aria.view_mode') ?>">
         <button type="button"
                 data-action="setViewMode" data-action-args='["list"]'
                 id="mobile-view-list-btn"
                 aria-pressed="<?= $viewMode === 'list' ? 'true' : 'false' ?>"
-                class="inline-flex items-center gap-1.5 px-3 h-11 text-sm font-medium <?= $viewMode === 'list' ? 'bg-brand-yellow text-brand-darker' : 'bg-white/5 text-white/80 hover:bg-white/10' ?>">
+                class="inline-flex items-center gap-1.5 px-3 h-11 text-sm font-medium <?= $viewMode === 'list' ? 'bg-sunset-400 text-ocean-900' : 'bg-warm-50 text-warm-700 hover:bg-warm-100' ?>">
             <i data-lucide="list" class="w-4 h-4" aria-hidden="true"></i>
         </button>
         <button type="button"
                 data-action="setViewMode" data-action-args='["map"]'
                 id="mobile-view-map-btn"
                 aria-pressed="<?= $viewMode === 'map' ? 'true' : 'false' ?>"
-                class="inline-flex items-center gap-1.5 px-3 h-11 text-sm font-medium <?= $viewMode === 'map' ? 'bg-brand-yellow text-brand-darker' : 'bg-white/5 text-white/80 hover:bg-white/10' ?>">
+                class="inline-flex items-center gap-1.5 px-3 h-11 text-sm font-medium <?= $viewMode === 'map' ? 'bg-sunset-400 text-ocean-900' : 'bg-warm-50 text-warm-700 hover:bg-warm-100' ?>">
             <i data-lucide="map" class="w-4 h-4" aria-hidden="true"></i>
         </button>
     </div>
@@ -68,13 +68,13 @@ $activeFilterCount = count($selectedTags) + ($selectedMunicipality ? 1 : 0);
 
 <!-- Mobile Filter Drawer -->
 <div id="filter-drawer" class="filter-drawer-overlay md:hidden" data-action="closeFilterDrawer" data-action-args='["__event__"]' role="dialog" aria-modal="true" aria-labelledby="filter-drawer-title">
-    <div class="filter-drawer bg-brand-dark border-t border-white/10" data-action-stop data-action="noop" data-on="click">
-        <div class="filter-drawer-handle bg-white/30" aria-hidden="true"></div>
+    <div class="filter-drawer bg-white border-t border-warm-200" data-action-stop data-action="noop" data-on="click">
+        <div class="filter-drawer-handle bg-warm-300" aria-hidden="true"></div>
 
         <!-- Header -->
-        <div class="flex items-center justify-between px-4 py-3 border-b border-white/10">
-            <h2 id="filter-drawer-title" class="text-lg font-semibold text-white"><?= h(__('common.filter')) ?></h2>
-            <button type="button" data-action="closeFilterDrawer" class="p-2 text-white/60 hover:text-white" aria-label="<?= __('aria.close_filters') ?>">
+        <div class="flex items-center justify-between px-4 py-3 border-b border-warm-200">
+            <h2 id="filter-drawer-title" class="text-lg font-semibold text-warm-900"><?= h(__('common.filter')) ?></h2>
+            <button type="button" data-action="closeFilterDrawer" class="p-2 text-warm-500 hover:text-warm-900" aria-label="<?= __('aria.close_filters') ?>">
                 <i data-lucide="x" class="w-5 h-5" aria-hidden="true"></i>
             </button>
         </div>
@@ -83,11 +83,11 @@ $activeFilterCount = count($selectedTags) + ($selectedMunicipality ? 1 : 0);
         <div class="p-4 space-y-5 overflow-y-auto max-h-[60vh]">
             <!-- Location Button -->
             <div>
-                <label class="block text-sm font-medium text-white/80 mb-2"><?= h(__('filters.location')) ?></label>
+                <label class="block text-sm font-medium text-warm-700 mb-2"><?= h(__('filters.location')) ?></label>
                 <button type="button"
                         id="mobile-location-btn"
                         data-action="requestUserLocation"
-                        class="w-full inline-flex items-center justify-center gap-2 px-4 h-11 rounded-lg border border-white/20 bg-white/5 hover:bg-white/10 transition-colors text-sm font-medium text-white/80">
+                        class="w-full inline-flex items-center justify-center gap-2 px-4 h-11 rounded-lg border border-warm-200 bg-warm-50 hover:bg-warm-100 transition-colors text-sm font-medium text-warm-700">
                     <i data-lucide="map-pin" id="mobile-location-icon" class="w-4 h-4" aria-hidden="true"></i>
                     <span id="mobile-location-text"><?= h(__('filters.use_location')) ?></span>
                 </button>
@@ -95,9 +95,9 @@ $activeFilterCount = count($selectedTags) + ($selectedMunicipality ? 1 : 0);
 
             <!-- Municipality -->
             <div>
-                <label for="mobile-municipality-filter" class="block text-sm font-medium text-white/80 mb-2"><?= h(__('filters.municipality')) ?></label>
+                <label for="mobile-municipality-filter" class="block text-sm font-medium text-warm-700 mb-2"><?= h(__('filters.municipality')) ?></label>
                 <select id="mobile-municipality-filter"
-                        class="w-full px-3 h-11 border border-white/20 bg-white/5 rounded-lg text-sm text-white focus:ring-2 focus:ring-brand-yellow focus:border-brand-yellow">
+                        class="w-full px-3 h-11 border border-warm-200 bg-white rounded-lg text-sm text-warm-900 focus:ring-2 focus:ring-ocean-400 focus:border-ocean-400">
                     <option value=""><?= h(__('filters.all_municipalities')) ?></option>
                     <?php foreach (MUNICIPALITIES as $muni): ?>
                     <option value="<?= h($muni) ?>" <?= $selectedMunicipality === $muni ? 'selected' : '' ?>><?= h($muni) ?></option>
@@ -107,28 +107,28 @@ $activeFilterCount = count($selectedTags) + ($selectedMunicipality ? 1 : 0);
 
             <!-- Distance Slider -->
             <div id="mobile-distance-container" class="<?= $locationEnabled ? '' : 'hidden' ?>">
-                <label class="block text-sm font-medium text-white/80 mb-2"><?= h(__('filters.distance_label')) ?></label>
+                <label class="block text-sm font-medium text-warm-700 mb-2"><?= h(__('filters.distance_label')) ?></label>
                 <div class="flex items-center gap-3">
-                    <span class="text-sm text-white/50">5km</span>
+                    <span class="text-sm text-warm-500">5km</span>
                     <input type="range"
                            id="mobile-distance-filter"
                            min="5"
                            max="100"
                            step="5"
                            value="<?= h($maxDistance) ?>"
-                           class="flex-1 accent-brand-yellow">
-                    <span class="text-sm text-white/50">100km</span>
+                           class="flex-1 accent-ocean-400">
+                    <span class="text-sm text-warm-500">100km</span>
                 </div>
                 <div class="text-center mt-1">
-                    <span id="mobile-distance-value" class="text-sm font-medium text-brand-yellow"><?= h($maxDistance) ?>km</span>
+                    <span id="mobile-distance-value" class="text-sm font-medium text-sunset-400"><?= h($maxDistance) ?>km</span>
                 </div>
             </div>
 
             <!-- Sort -->
             <div>
-                <label for="mobile-sort-filter" class="block text-sm font-medium text-white/80 mb-2"><?= h(__('filters.sort_by')) ?></label>
+                <label for="mobile-sort-filter" class="block text-sm font-medium text-warm-700 mb-2"><?= h(__('filters.sort_by')) ?></label>
                 <select id="mobile-sort-filter"
-                        class="w-full px-3 h-11 border border-white/20 bg-white/5 rounded-lg text-sm text-white focus:ring-2 focus:ring-brand-yellow focus:border-brand-yellow">
+                        class="w-full px-3 h-11 border border-warm-200 bg-white rounded-lg text-sm text-warm-900 focus:ring-2 focus:ring-ocean-400 focus:border-ocean-400">
                     <option value="name" <?= $sortBy === 'name' ? 'selected' : '' ?>><?= h(__('filters.sort_name')) ?></option>
                     <option value="distance" <?= $sortBy === 'distance' ? 'selected' : '' ?> id="mobile-sort-distance-option" <?= $locationEnabled ? '' : 'disabled' ?>><?= h(__('filters.sort_distance')) ?></option>
                     <option value="rating" <?= $sortBy === 'rating' ? 'selected' : '' ?>><?= h(__('filters.sort_rating')) ?></option>
@@ -137,7 +137,7 @@ $activeFilterCount = count($selectedTags) + ($selectedMunicipality ? 1 : 0);
 
             <!-- Tags -->
             <div>
-                <label class="block text-sm font-medium text-white/80 mb-2"><?= h(__('filters.beach_type')) ?></label>
+                <label class="block text-sm font-medium text-warm-700 mb-2"><?= h(__('filters.beach_type')) ?></label>
                 <div class="flex flex-wrap gap-2">
                     <?php foreach (TAGS as $tag): ?>
                     <button type="button"
@@ -146,8 +146,8 @@ $activeFilterCount = count($selectedTags) + ($selectedMunicipality ? 1 : 0);
                             aria-pressed="<?= in_array($tag, $selectedTags) ? 'true' : 'false' ?>"
                             class="mobile-tag-btn px-3 h-9 rounded-full text-sm font-medium transition-colors
                                    <?= in_array($tag, $selectedTags)
-                                       ? 'bg-brand-yellow text-brand-darker'
-                                       : 'bg-white/10 text-white/80 hover:bg-brand-yellow hover:text-brand-darker' ?>">
+                                       ? 'bg-sunset-400 text-ocean-900'
+                                       : 'bg-warm-50 text-warm-700 hover:bg-sunset-400 hover:text-ocean-900' ?>">
                         <?= h(getTagLabel($tag)) ?>
                     </button>
                     <?php endforeach; ?>
@@ -156,11 +156,11 @@ $activeFilterCount = count($selectedTags) + ($selectedMunicipality ? 1 : 0);
         </div>
 
         <!-- Footer Actions -->
-        <div class="sticky bottom-0 bg-brand-darker border-t border-white/10 p-4 flex gap-3">
-            <button type="button" data-action="clearFiltersMobile" class="flex-1 px-4 h-11 border border-white/20 text-white/80 rounded-lg font-medium hover:bg-white/10 transition-colors">
+        <div class="sticky bottom-0 bg-white border-t border-warm-200 p-4 flex gap-3">
+            <button type="button" data-action="clearFiltersMobile" class="flex-1 px-4 h-11 border border-warm-200 text-warm-700 rounded-lg font-medium hover:bg-warm-100 transition-colors">
                 <?= h(__('filters.clear_all')) ?>
             </button>
-            <button type="button" data-action="applyFiltersMobile" class="flex-1 px-4 h-11 bg-brand-yellow text-brand-darker rounded-lg font-semibold hover:bg-yellow-300 transition-colors">
+            <button type="button" data-action="applyFiltersMobile" class="flex-1 px-4 h-11 bg-sunset-400 text-ocean-900 rounded-lg font-semibold hover:bg-sunset-300 transition-colors">
                 <?= h(__('filters.show_results')) ?>
             </button>
         </div>
@@ -168,7 +168,7 @@ $activeFilterCount = count($selectedTags) + ($selectedMunicipality ? 1 : 0);
 </div>
 
 <!-- Desktop Filters -->
-<div class="filters-container bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-5 mb-6 hidden md:block" role="search" aria-label="<?= __('aria.beach_filters') ?>">
+<div class="filters-container bg-white rounded-2xl border border-warm-200 p-5 mb-6 hidden md:block" role="search" aria-label="<?= __('aria.beach_filters') ?>">
     <!-- Top Row: Location Button, View Toggle, Sort -->
     <div class="flex flex-wrap items-center gap-3 mb-4 filter-row">
         <!-- Location Button -->
@@ -176,18 +176,18 @@ $activeFilterCount = count($selectedTags) + ($selectedMunicipality ? 1 : 0);
                 id="location-btn"
                 data-action="requestUserLocation"
                 aria-label="<?= __('aria.enable_location') ?>"
-                class="inline-flex items-center gap-2 px-4 h-10 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 transition-colors text-sm font-medium text-white/80">
+                class="inline-flex items-center gap-2 px-4 h-10 rounded-full border border-warm-200 bg-warm-50 hover:bg-warm-100 transition-colors text-sm font-medium text-warm-700">
             <i data-lucide="map-pin" id="location-icon" class="w-4 h-4" aria-hidden="true"></i>
             <span id="location-text"><?= h(__('filters.use_location')) ?></span>
         </button>
 
         <!-- View Toggle -->
-        <div class="flex rounded-full border border-white/20 overflow-hidden ml-auto" role="group" aria-label="<?= __('aria.view_mode') ?>">
+        <div class="flex rounded-full border border-warm-200 overflow-hidden ml-auto" role="group" aria-label="<?= __('aria.view_mode') ?>">
             <button type="button"
                     data-action="setViewMode" data-action-args='["list"]'
                     id="view-list-btn"
                     aria-pressed="<?= $viewMode === 'list' ? 'true' : 'false' ?>"
-                    class="inline-flex items-center gap-1.5 px-4 h-10 text-sm font-medium <?= $viewMode === 'list' ? 'bg-brand-yellow text-brand-darker' : 'bg-white/5 text-white/80 hover:bg-white/10' ?>">
+                    class="inline-flex items-center gap-1.5 px-4 h-10 text-sm font-medium <?= $viewMode === 'list' ? 'bg-sunset-400 text-ocean-900' : 'bg-warm-50 text-warm-700 hover:bg-warm-100' ?>">
                 <i data-lucide="list" class="w-4 h-4" aria-hidden="true"></i>
                 <span class="sr-only-mobile"><?= __('aria.list_view') ?></span>
             </button>
@@ -195,7 +195,7 @@ $activeFilterCount = count($selectedTags) + ($selectedMunicipality ? 1 : 0);
                     data-action="setViewMode" data-action-args='["map"]'
                     id="view-map-btn"
                     aria-pressed="<?= $viewMode === 'map' ? 'true' : 'false' ?>"
-                    class="inline-flex items-center gap-1.5 px-4 h-10 text-sm font-medium <?= $viewMode === 'map' ? 'bg-brand-yellow text-brand-darker' : 'bg-white/5 text-white/80 hover:bg-white/10' ?>">
+                    class="inline-flex items-center gap-1.5 px-4 h-10 text-sm font-medium <?= $viewMode === 'map' ? 'bg-sunset-400 text-ocean-900' : 'bg-warm-50 text-warm-700 hover:bg-warm-100' ?>">
                 <i data-lucide="map" class="w-4 h-4" aria-hidden="true"></i>
                 <span class="sr-only-mobile"><?= __('aria.map_view') ?></span>
             </button>
@@ -210,10 +210,10 @@ $activeFilterCount = count($selectedTags) + ($selectedMunicipality ? 1 : 0);
             <select id="municipality-filter"
                     data-action="applyFilters" data-on="change"
                     aria-label="<?= __('aria.filter_municipality') ?>"
-                    class="w-full px-3 h-10 border border-white/20 bg-white/5 rounded-lg text-sm text-white focus:ring-2 focus:ring-brand-yellow focus:border-brand-yellow">
-                <option value="" class="bg-brand-dark"><?= h(__('filters.all_municipalities')) ?></option>
+                    class="w-full px-3 h-10 border border-warm-200 bg-white rounded-lg text-sm text-warm-900 focus:ring-2 focus:ring-ocean-400 focus:border-ocean-400">
+                <option value="" class="bg-white"><?= h(__('filters.all_municipalities')) ?></option>
                 <?php foreach (MUNICIPALITIES as $muni): ?>
-                <option value="<?= h($muni) ?>" <?= $selectedMunicipality === $muni ? 'selected' : '' ?> class="bg-brand-dark">
+                <option value="<?= h($muni) ?>" <?= $selectedMunicipality === $muni ? 'selected' : '' ?> class="bg-white">
                     <?= h($muni) ?>
                 </option>
                 <?php endforeach; ?>
@@ -223,7 +223,7 @@ $activeFilterCount = count($selectedTags) + ($selectedMunicipality ? 1 : 0);
         <!-- Distance Slider (shown when location enabled) -->
         <div id="distance-filter-container" class="flex-1 min-w-[200px] <?= $locationEnabled ? '' : 'hidden' ?>">
             <div class="flex items-center gap-2">
-                <label for="distance-filter" class="text-sm text-white/60 whitespace-nowrap"><?= h(__('filters.within')) ?></label>
+                <label for="distance-filter" class="text-sm text-warm-500 whitespace-nowrap"><?= h(__('filters.within')) ?></label>
                 <input type="range"
                        id="distance-filter"
                        min="5"
@@ -235,8 +235,8 @@ $activeFilterCount = count($selectedTags) + ($selectedMunicipality ? 1 : 0);
                        aria-valuemax="100"
                        aria-valuenow="<?= h($maxDistance) ?>"
                        aria-valuetext="<?= h($maxDistance) ?> kilometers"
-                       class="flex-1 accent-brand-yellow">
-                <span id="distance-value" class="text-sm font-medium text-brand-yellow min-w-[50px]" aria-live="polite"><?= h($maxDistance) ?>km</span>
+                       class="flex-1 accent-ocean-400">
+                <span id="distance-value" class="text-sm font-medium text-sunset-400 min-w-[50px]" aria-live="polite"><?= h($maxDistance) ?>km</span>
             </div>
         </div>
 
@@ -246,12 +246,12 @@ $activeFilterCount = count($selectedTags) + ($selectedMunicipality ? 1 : 0);
             <select id="sort-filter"
                     data-action="applyFilters" data-on="change"
                     aria-label="<?= __('aria.sort_by') ?>"
-                    class="w-full px-3 h-10 border border-white/20 bg-white/5 rounded-lg text-sm text-white focus:ring-2 focus:ring-brand-yellow focus:border-brand-yellow">
-                <option value="name" <?= $sortBy === 'name' ? 'selected' : '' ?> class="bg-brand-dark"><?= h(__('filters.sort_by_name')) ?></option>
-                <option value="distance" <?= $sortBy === 'distance' ? 'selected' : '' ?> id="sort-distance-option" <?= $locationEnabled ? '' : 'disabled' ?> class="bg-brand-dark">
+                    class="w-full px-3 h-10 border border-warm-200 bg-white rounded-lg text-sm text-warm-900 focus:ring-2 focus:ring-ocean-400 focus:border-ocean-400">
+                <option value="name" <?= $sortBy === 'name' ? 'selected' : '' ?> class="bg-white"><?= h(__('filters.sort_by_name')) ?></option>
+                <option value="distance" <?= $sortBy === 'distance' ? 'selected' : '' ?> id="sort-distance-option" <?= $locationEnabled ? '' : 'disabled' ?> class="bg-white">
                     <?= h(__('filters.sort_by_distance')) ?>
                 </option>
-                <option value="rating" <?= $sortBy === 'rating' ? 'selected' : '' ?> class="bg-brand-dark"><?= h(__('filters.sort_by_rating')) ?></option>
+                <option value="rating" <?= $sortBy === 'rating' ? 'selected' : '' ?> class="bg-white"><?= h(__('filters.sort_by_rating')) ?></option>
             </select>
         </div>
     </div>
@@ -265,8 +265,8 @@ $activeFilterCount = count($selectedTags) + ($selectedMunicipality ? 1 : 0);
                 aria-pressed="<?= in_array($tag, $selectedTags) ? 'true' : 'false' ?>"
                 class="tag-btn flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all
                        <?= in_array($tag, $selectedTags)
-                           ? 'bg-brand-yellow text-brand-darker'
-                           : 'bg-white/5 backdrop-blur-sm border border-white/20 text-white/80 hover:bg-white/10 hover:border-brand-yellow/50' ?>">
+                           ? 'bg-sunset-400 text-ocean-900'
+                           : 'bg-warm-50 border border-warm-200 text-warm-700 hover:bg-warm-100 hover:border-sunset-400/50' ?>">
             <?= h(getTagLabel($tag)) ?>
         </button>
         <?php endforeach; ?>
@@ -290,7 +290,7 @@ $activeFilterCount = count($selectedTags) + ($selectedMunicipality ? 1 : 0);
 
 <!-- Results Count -->
 <div class="flex items-center justify-between mb-4">
-    <p id="results-count" class="text-white/60 text-sm" aria-live="polite" aria-atomic="true">
+    <p id="results-count" class="text-warm-500 text-sm" aria-live="polite" aria-atomic="true">
         <?php
         // Show server-side count initially - JS will update when filters change
         $displayCount = $totalBeaches ?? count($beaches ?? []);
@@ -366,11 +366,11 @@ function syncMobileDrawerState() {
     document.querySelectorAll('.mobile-tag-btn').forEach(btn => {
         const tag = btn.dataset.tag;
         if (mobileFilterState.selectedTags.includes(tag)) {
-            btn.classList.add('bg-brand-yellow', 'text-brand-darker');
-            btn.classList.remove('bg-white/10', 'text-white/80');
+            btn.classList.add('bg-sunset-400', 'text-ocean-900');
+            btn.classList.remove('bg-warm-50', 'text-warm-700');
         } else {
-            btn.classList.remove('bg-brand-yellow', 'text-brand-darker');
-            btn.classList.add('bg-white/10', 'text-white/80');
+            btn.classList.remove('bg-sunset-400', 'text-ocean-900');
+            btn.classList.add('bg-warm-50', 'text-warm-700');
         }
     });
 }
@@ -386,10 +386,10 @@ function toggleTagMobile(tag) {
     // Update button UI
     const btn = document.querySelector(`.mobile-tag-btn[data-tag="${tag}"]`);
     if (btn) {
-        btn.classList.toggle('bg-brand-yellow');
-        btn.classList.toggle('text-brand-darker');
-        btn.classList.toggle('bg-white/10');
-        btn.classList.toggle('text-white/80');
+        btn.classList.toggle('bg-sunset-400');
+        btn.classList.toggle('text-ocean-900');
+        btn.classList.toggle('bg-warm-50');
+        btn.classList.toggle('text-warm-700');
     }
 }
 
@@ -414,8 +414,8 @@ function clearFiltersMobile() {
     }
 
     document.querySelectorAll('.mobile-tag-btn').forEach(btn => {
-        btn.classList.remove('bg-brand-yellow', 'text-brand-darker');
-        btn.classList.add('bg-white/10', 'text-white/80');
+        btn.classList.remove('bg-sunset-400', 'text-ocean-900');
+        btn.classList.add('bg-warm-50', 'text-warm-700');
     });
 }
 
@@ -456,12 +456,12 @@ function applyFiltersMobile() {
         document.querySelectorAll('.tag-btn:not(.mobile-tag-btn)').forEach(btn => {
             const tag = btn.dataset.tag;
             if (state.selectedTags.includes(tag)) {
-                btn.classList.add('bg-brand-yellow', 'text-brand-darker');
-                btn.classList.remove('bg-white/5', 'text-white/80', 'border-white/20');
+                btn.classList.add('bg-sunset-400', 'text-ocean-900');
+                btn.classList.remove('bg-warm-50', 'text-warm-700', 'border-warm-200');
                 btn.setAttribute('aria-pressed', 'true');
             } else {
-                btn.classList.remove('bg-brand-yellow', 'text-brand-darker');
-                btn.classList.add('bg-white/5', 'text-white/80', 'border-white/20');
+                btn.classList.remove('bg-sunset-400', 'text-ocean-900');
+                btn.classList.add('bg-warm-50', 'text-warm-700', 'border-warm-200');
                 btn.setAttribute('aria-pressed', 'false');
             }
         });
@@ -489,13 +489,13 @@ function updateMobileFilterBadge() {
     const btn = document.getElementById('mobile-filter-btn');
     if (!btn) return;
 
-    const badge = btn.querySelector('span.bg-brand-yellow');
+    const badge = btn.querySelector('span.bg-sunset-400');
     if (count > 0) {
         if (badge) {
             badge.textContent = count;
         } else {
             const newBadge = document.createElement('span');
-            newBadge.className = 'bg-brand-yellow text-brand-darker text-xs px-2 py-0.5 rounded-full';
+            newBadge.className = 'bg-sunset-400 text-ocean-900 text-xs px-2 py-0.5 rounded-full';
             newBadge.textContent = count;
             btn.appendChild(newBadge);
         }

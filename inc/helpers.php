@@ -1939,3 +1939,86 @@ function getTagPageUrl(string $tag, string $lang = "en"): string {
     }
     return "/?tags[]=" . urlencode($tag);
 }
+
+
+/**
+ * Generate a concise, AI-extractable summary paragraph for a beach.
+ * Used by the "At a Glance" component for GEO optimization.
+ */
+function generateAtAGlanceSummary(array $beach, string $lang = 'en'): string {
+    $name = $beach['name'] ?? 'This beach';
+    $muni = $beach['municipality'] ?? 'Puerto Rico';
+    $tags = $beach['tags'] ?? [];
+    $amenities = $beach['amenities'] ?? [];
+    $desc = ($lang === 'es')
+        ? ($beach['description_es'] ?? $beach['description'] ?? '')
+        : ($beach['description'] ?? '');
+
+    // Build primary characteristic from tags
+    $tagLabels = [];
+    $tagMap = [
+        'calm-waters' => 'calm waters',
+        'swimming' => 'swimming',
+        'snorkeling' => 'snorkeling',
+        'surfing' => 'surfing',
+        'family-friendly' => 'families',
+        'secluded' => 'its secluded atmosphere',
+        'popular' => 'its popularity with locals and visitors',
+        'scenic' => 'scenic views',
+    ];
+    foreach ($tags as $tag) {
+        if (isset($tagMap[$tag]) && count($tagLabels) < 2) {
+            $tagLabels[] = $tagMap[$tag];
+        }
+    }
+
+    $knownFor = !empty($tagLabels)
+        ? implode(' and ', $tagLabels)
+        : 'its natural beauty';
+
+    // Determine beach type
+    $type = 'beach';
+    if (in_array('secluded', $tags, true)) {
+        $type = 'secluded beach';
+    } elseif (in_array('popular', $tags, true)) {
+        $type = 'popular beach';
+    } elseif (in_array('family-friendly', $tags, true)) {
+        $type = 'family-friendly beach';
+    }
+
+    // Build key differentiator from first sentence of description
+    $differentiator = '';
+    if ($desc !== '') {
+        $firstSentence = strtok($desc, '.');
+        if ($firstSentence && strlen($firstSentence) > 20 && strlen($firstSentence) < 200) {
+            // Don't repeat if it starts with the beach name
+            if (stripos(trim($firstSentence), $name) !== 0) {
+                $differentiator = ' ' . trim($firstSentence) . '.';
+            }
+        }
+    }
+
+    // Amenity highlights
+    $amenityParts = [];
+    if (in_array('food', $amenities, true)) {
+        $amenityParts[] = 'on-site dining';
+    }
+    if (in_array('parking', $amenities, true) || in_array('free-parking', $amenities, true)) {
+        $amenityParts[] = 'parking';
+    }
+    if (in_array('restrooms', $amenities, true)) {
+        $amenityParts[] = 'restrooms';
+    }
+    $amenityStr = !empty($amenityParts)
+        ? ' Facilities include ' . implode(', ', $amenityParts) . '.'
+        : '';
+
+    // Lifeguard note
+    $lifeguardStr = !empty($beach['has_lifeguard'])
+        ? ' A lifeguard is on duty.'
+        : '';
+
+    $summary = "{$name} is a {$type} in {$muni}, Puerto Rico, known for {$knownFor}.{$differentiator}{$amenityStr}{$lifeguardStr}";
+
+    return trim($summary);
+}

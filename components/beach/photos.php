@@ -15,16 +15,16 @@
                 $totalUserPhotos = queryOne("SELECT COUNT(*) as count FROM beach_photos WHERE beach_id = :beach_id AND status = 'published'", [':beach_id' => $beach['id']]);
                 ?>
                 <div class="flex items-center justify-between mb-3">
-                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                    <h2 class="text-lg font-bold text-warm-900 flex items-center gap-2">
                         <i data-lucide="camera" class="w-5 h-5 text-purple-400" aria-hidden="true"></i>
                         <span><?= h(__('beach.visitor_photos')) ?></span>
                         <?php if ($totalUserPhotos['count'] > 0): ?>
-                        <span class="text-sm font-normal text-gray-400">(<?= $totalUserPhotos['count'] ?>)</span>
+                        <span class="text-sm font-normal text-warm-500">(<?= $totalUserPhotos['count'] ?>)</span>
                         <?php endif; ?>
                     </h2>
                     <?php if (isAuthenticated()): ?>
                     <button data-action="openPhotoUploadModal" data-action-args='["<?= h($beach['id']) ?>","<?= h(addslashes($beach['name'])) ?>"]'
-                            class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-lg font-medium transition-colors flex items-center gap-1.5 text-sm">
+                            class="bg-purple-600 hover:bg-purple-700 text-warm-900 px-3 py-1.5 rounded-lg font-medium transition-colors flex items-center gap-1.5 text-sm">
                         <i data-lucide="plus" class="w-4 h-4"></i>
                         <span><?= __('beach.add_photo') ?></span>
                     </button>
@@ -43,7 +43,7 @@
                     <?php endforeach; ?>
                 </div>
                 <?php else: ?>
-                <p class="text-sm text-gray-400"><?= h(__('beach.no_photos_yet')) ?></p>
+                <p class="text-sm text-warm-500"><?= h(__('beach.no_photos_yet')) ?></p>
                 <?php endif; ?>
             </section>
 

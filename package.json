@@ -9,7 +9,7 @@
     "check:analytics": "php scripts/check-analytics-umami.php",
     "build:css": "./scripts/build-css.sh",
     "build:tailwind": "npx tailwindcss -i ./public/assets/css/tailwind-input.css -o ./public/assets/css/tailwind.min.css --minify",
-    "build:js": "npx terser public/assets/js/app.js -o public/assets/js/app.min.js && npx terser public/assets/js/collection-explorer.js -o public/assets/js/collection-explorer.min.js",
+    "build:js": "npx terser public/assets/js/app.js -o public/assets/js/app.min.js && npx terser public/assets/js/collection-explorer.js -o public/assets/js/collection-explorer.min.js && npx terser public/assets/js/chat.js -o public/assets/js/chat.min.js",
     "build": "npm run build:css && npm run build:tailwind && npm run build:js",
     "watch:tailwind": "npx tailwindcss -i ./public/assets/css/tailwind-input.css -o ./public/assets/css/tailwind.min.css --watch",
     "dev": "npm run watch:tailwind"

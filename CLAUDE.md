@@ -56,6 +56,7 @@ php scripts/migrate.php
 - `inc/` - Core PHP includes (db.php, helpers.php, constants.php, auth.php)
 - `components/` - Reusable PHP UI components (header, footer, beach-card, filters)
   - `components/beach/` - Beach detail page components (13 files, see Beach Detail Architecture below)
+  - `components/chat/` - Chat system UI components (panel, inbox-item, message)
   - `components/collection/` - Collection/list page components
 - `public/` - Web document root (ONLY this should be web-served)
   - `public/api/` - JSON/HTML API endpoints for HTMX requests
@@ -69,7 +70,7 @@ php scripts/migrate.php
 - `data/` - SQLite database files
 - `migrations/` - Database migration scripts
 - `scripts/` - CLI tools + build scripts (never web-served)
-- `public/assets/js/` - Frontend JavaScript (app.js, map.js, filters.js, geolocation.js)
+- `public/assets/js/` - Frontend JavaScript (app.js, map.js, filters.js, geolocation.js, chat.js)
 - `public/assets/css/` - Stylesheets
   - `styles.css` - Bundled custom CSS (generated from partials)
   - `tailwind-input.css` - Tailwind entry point
@@ -185,6 +186,36 @@ WHERE (location_type = "beach" OR location_type IS NULL)
 ```
 This filter is applied in: homepage, beaches API, collection queries, tag pages, proximity pages.
 
+### Chat System
+
+A real-time community chat built into the site as a floating panel (bottom-right FAB). Supports general discussion, per-beach threads, and DMs.
+
+**Backend:**
+- `inc/chat.php` — Channel management, message CRUD, inbox queries, access control
+- `inc/chat_moderation.php` — Keyword blocklist, AI moderation, reports, mute/ban
+- `public/api/chat/` — REST endpoints: `send.php`, `messages.php`, `inbox.php`, `poll.php`, `mark-read.php`, `unread.php`, `report.php`
+
+**Frontend:**
+- `components/chat/panel.php` — Floating panel with inbox + thread views (included via footer)
+- `components/chat/inbox-item.php` — Conversation row in inbox
+- `components/chat/message.php` — Individual message bubble
+- `public/assets/js/chat.js` — CSP-compliant JS: inbox/thread switching, real-time polling, compose
+- `public/assets/css/partials/_chat.css` — Dark ocean-themed panel styles
+
+**Key details:**
+- Panel uses dark ocean background (`--color-ocean-800/900`) matching the nav theme
+- All text uses `text-white` / `text-white/40` classes — never use light backgrounds for chat elements
+- Guest users see a "Sign in to join" CTA instead of the compose bar
+- Real-time updates via polling (`/api/chat/poll.php`), not WebSockets
+- Moderation: keyword blocklist + optional AI check before messages are published
+
+**Database tables** (migration 031):
+- `chat_channels` — Channel definitions (general, beach-specific, DM)
+- `chat_messages` — Messages with channel_id, user_id, body
+- `chat_participants` — Channel membership + last_read tracking
+- `chat_reports` — User-reported messages
+- `chat_blocklist` — Banned keywords/patterns
+
 ### Database Schema (Key Tables)
 - `beaches` - Main beach records with coordinates, ratings, conditions
 - `beach_tags` - Many-to-many: beach activities (surfing, snorkeling, etc.)
@@ -225,6 +256,7 @@ public/assets/css/
 │   ├── _forms.css         # Range slider, Tom Select, compare bar
 │   ├── _accessibility.css # Focus states, reduced motion, contrast
 │   ├── _dark-mode.css     # All [data-theme="dark"] overrides
+│   ├── _chat.css          # Chat floating panel + bubbles
 │   ├── _responsive.css    # Mobile breakpoint overrides
 │   └── _print.css         # Print styles
 ├── styles.css             # Bundled output (don't edit directly)

@@ -670,7 +670,7 @@ function speakableSchema(): string {
             'cssSelector' => [
                 '.prose-brand',
                 '.beach-highlights',
-                '.beach-facts',
+                '.beach-facts',                '.at-a-glance-summary',
                 'h1',
                 '.page-description'
             ]

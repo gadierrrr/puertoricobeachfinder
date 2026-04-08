@@ -17,7 +17,7 @@
     fetch('/api/weather-widget.php?lat=' + encodeURIComponent(lat) + '&lng=' + encodeURIComponent(lng) + '&size=sidebar')
         .then(r => r.ok ? r.text() : Promise.reject())
         .then(html => { container.innerHTML = html; })
-        .catch(() => { container.innerHTML = '<div class="text-sm text-gray-400">Weather unavailable</div>'; });
+        .catch(() => { container.innerHTML = '<div class="text-sm text-warm-500">Weather unavailable</div>'; });
 
     // Fetch weather JSON for sticky bar
     fetch('/api/weather.php?lat=' + encodeURIComponent(lat) + '&lng=' + encodeURIComponent(lng))

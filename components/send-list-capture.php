@@ -31,11 +31,11 @@ if ($contextType === '' || $contextKey === '') {
 }
 ?>
 
-<section class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-5 md:p-6">
+<section class="bg-ocean-50 border border-ocean-200 rounded-2xl p-5 md:p-6">
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-            <h2 class="text-lg font-bold text-white"><?= h($title) ?></h2>
-            <p class="text-sm text-gray-400 mt-1"><?= h($subtitle) ?></p>
+            <h2 class="text-lg font-bold text-warm-900"><?= h($title) ?></h2>
+            <p class="text-sm text-warm-500 mt-1"><?= h($subtitle) ?></p>
         </div>
 
         <form data-bf-form="send-list" class="w-full md:w-auto flex flex-col sm:flex-row gap-2 sm:items-center">
@@ -49,10 +49,10 @@ if ($contextType === '' || $contextKey === '') {
                    name="email"
                    required
                    placeholder="you@email.com"
-                   class="w-full sm:w-64 px-3 h-11 rounded-lg bg-white/5 border border-white/20 text-white placeholder-gray-500 focus:ring-2 focus:ring-brand-yellow/50 focus:border-brand-yellow/50">
+                   class="w-full sm:w-64 px-3 h-11 rounded-lg bg-white border border-warm-200 text-warm-900 placeholder-warm-400 focus:ring-2 focus:ring-sunset-400/50 focus:border-sunset-400/50">
 
             <button type="submit"
-                    class="h-11 px-5 rounded-lg bg-brand-yellow hover:bg-yellow-300 text-brand-darker font-semibold transition-colors">
+                    class="h-11 px-5 rounded-lg bg-sunset-400 hover:bg-sunset-300 text-ocean-900 font-semibold transition-colors">
                 <?= h($sendLabel) ?>
             </button>
         </form>

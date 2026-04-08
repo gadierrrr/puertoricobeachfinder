@@ -7,14 +7,14 @@
  */
 ?>
     <!-- Sticky Section Navigation -->
-    <div class="section-nav-wrapper"><nav class="beach-section-nav flex overflow-x-auto hide-scrollbar border-b border-white/10 mb-6 -mx-4 px-4 sticky top-14 z-30 bg-[rgba(15,26,31,0.97)] backdrop-blur-md">
-        <a href="#section-overview" class="beach-nav-link active" data-section="section-overview"><?= h($lang === 'es' ? 'General' : 'Overview') ?></a>
-        <a href="#section-best-time" class="beach-nav-link" data-section="section-best-time"><?= h($lang === 'es' ? 'Mejor Época' : 'Best Time') ?></a>
-        <a href="#section-what-to-bring" class="beach-nav-link" data-section="section-what-to-bring"><?= h($lang === 'es' ? 'Qué Llevar' : 'What to Bring') ?></a>
-        <a href="#section-history" class="beach-nav-link" data-section="section-history"><?= h($lang === 'es' ? 'Historia' : 'History') ?></a>
-        <a href="#section-nearby" class="beach-nav-link" data-section="section-nearby"><?= h($lang === 'es' ? 'Cercano' : 'Nearby') ?></a>
-        <a href="#section-tips" class="beach-nav-link" data-section="section-tips"><?= h($lang === 'es' ? 'Consejos' : 'Tips') ?></a>
-        <a href="#section-map" class="beach-nav-link" data-section="section-map"><?= h($lang === 'es' ? 'Mapa' : 'Map') ?></a>
+    <div class="section-nav-wrapper"><nav class="beach-section-nav flex overflow-x-auto hide-scrollbar border-b border-warm-200 mb-6 -mx-4 px-4 sticky top-14 z-30 bg-white shadow-sm">
+        <a href="#section-overview" class="beach-nav-link whitespace-nowrap px-4 py-3 text-sm font-medium text-ocean-600 border-b-2 border-ocean-500 active" data-section="section-overview"><?= h($lang === 'es' ? 'General' : 'Overview') ?></a>
+        <a href="#section-best-time" class="beach-nav-link whitespace-nowrap px-4 py-3 text-sm font-medium text-warm-500 hover:text-warm-900 transition-colors border-b-2 border-transparent" data-section="section-best-time"><?= h($lang === 'es' ? 'Mejor Época' : 'Best Time') ?></a>
+        <a href="#section-what-to-bring" class="beach-nav-link whitespace-nowrap px-4 py-3 text-sm font-medium text-warm-500 hover:text-warm-900 transition-colors border-b-2 border-transparent" data-section="section-what-to-bring"><?= h($lang === 'es' ? 'Qué Llevar' : 'What to Bring') ?></a>
+        <a href="#section-history" class="beach-nav-link whitespace-nowrap px-4 py-3 text-sm font-medium text-warm-500 hover:text-warm-900 transition-colors border-b-2 border-transparent" data-section="section-history"><?= h($lang === 'es' ? 'Historia' : 'History') ?></a>
+        <a href="#section-nearby" class="beach-nav-link whitespace-nowrap px-4 py-3 text-sm font-medium text-warm-500 hover:text-warm-900 transition-colors border-b-2 border-transparent" data-section="section-nearby"><?= h($lang === 'es' ? 'Cercano' : 'Nearby') ?></a>
+        <a href="#section-tips" class="beach-nav-link whitespace-nowrap px-4 py-3 text-sm font-medium text-warm-500 hover:text-warm-900 transition-colors border-b-2 border-transparent" data-section="section-tips"><?= h($lang === 'es' ? 'Consejos' : 'Tips') ?></a>
+        <a href="#section-map" class="beach-nav-link whitespace-nowrap px-4 py-3 text-sm font-medium text-warm-500 hover:text-warm-900 transition-colors border-b-2 border-transparent" data-section="section-map"><?= h($lang === 'es' ? 'Mapa' : 'Map') ?></a>
     </nav></div>
 
     <?php

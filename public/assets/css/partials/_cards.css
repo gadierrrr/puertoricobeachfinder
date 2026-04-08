@@ -1,5 +1,5 @@
 /* ==========================================================
-   _cards.css — Component classes, beach cards, score badges, prose
+   _cards.css — Tropical Daytime surface components, beach cards, score badges, prose
    Used by: beach-card.php, quick-facts.php, sidebar.php, info-bar.php
    Dependencies: _variables.css
    ========================================================== */
@@ -40,7 +40,7 @@
 
 .prose-brand ul,
 .prose-brand ol {
-    color: var(--color-gray-300);
+    color: var(--color-gray-600);
     margin-left: 1.5rem;
     margin-bottom: 1rem;
 }
@@ -62,7 +62,7 @@
 }
 
 .prose-brand a {
-    color: var(--brand-yellow, #FACC15);
+    color: var(--color-guide-link);
     text-decoration: underline;
     transition: opacity 0.2s ease;
 }
@@ -75,10 +75,11 @@
    REUSABLE COMPONENT CLASSES
    ======================================== */
 
-/* Glass card — translucent dark container used across beach detail, sidebar, quick facts */
+/* Glass card — light surface container used across beach detail, sidebar, quick facts */
 .card-glass {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-card);
     border-radius: 0.75rem;
     padding: 0.75rem;
     display: flex;
@@ -91,26 +92,26 @@
 }
 
 .card-glass--interactive:hover {
-    border-color: rgba(253, 224, 71, 0.3);
+    border-color: var(--color-primary);
 }
 
-/* Glass button — translucent action button on dark backgrounds */
+/* Glass button — solid light action button */
 .btn-glass {
     display: inline-flex;
     align-items: center;
     gap: 0.375rem;
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
+    background: var(--color-bg-light-secondary);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
     padding: 0.5rem 0.75rem;
     border-radius: 0.5rem;
     font-size: 0.875rem;
     transition: background-color 0.15s ease;
-    border: none;
     cursor: pointer;
 }
 
 .btn-glass:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--color-bg-light-tertiary);
 }
 
 /* Primary CTA button — yellow accent */
@@ -119,7 +120,7 @@
     align-items: center;
     gap: 0.5rem;
     background: var(--color-accent);
-    color: var(--color-brand-darker);
+    color: var(--color-gray-900);
     padding: 0.75rem 1.5rem;
     border-radius: 0.5rem;
     font-weight: 600;
@@ -130,7 +131,7 @@
 }
 
 .btn-primary:hover {
-    background: #fde047cc;
+    background: var(--color-accent-hover);
 }
 
 /* Text shadow for hero overlays on images */
@@ -159,7 +160,7 @@
 }
 
 .beach-card:focus-visible {
-    outline: 2px solid var(--brand-yellow, #FACC15);
+    outline: 2px solid var(--color-primary);
     outline-offset: 2px;
 }
 
@@ -177,13 +178,13 @@
     width: 1.25rem;
     height: 1.25rem;
     border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-light-tertiary);
     transition: transform 0.15s ease, background-color 0.15s ease;
 }
 
 .condition-dot:hover {
     transform: scale(1.15);
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--color-bg-light-secondary);
 }
 
 /* Card action buttons - mobile optimization */
@@ -246,8 +247,7 @@
     justify-content: center;
     padding: 0.5rem 0.75rem;
     border-radius: 0.75rem;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--shadow-md);
     min-width: 52px;
 }
 
@@ -259,8 +259,7 @@
     justify-content: center;
     padding: 0.5rem 0.75rem;
     border-radius: 0.75rem;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--shadow-md);
     min-width: 52px;
 }
 
@@ -283,24 +282,24 @@
 }
 
 .score-exceptional {
-    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
     color: white;
 }
 
 .score-excellent {
-    background: linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%);
+    background: linear-gradient(135deg, #0a7f86 0%, #0e9ca3 100%);
     color: white;
 }
 
 .score-good {
-    background: linear-gradient(135deg, #fde047 0%, #facc15 100%);
-    color: #1f2937;
+    background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+    color: white;
 }
 
 .score-average {
-    background: rgba(255, 255, 255, 0.15);
-    color: #9ca3af;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: var(--color-gray-100);
+    color: var(--color-gray-500);
+    border: 1px solid var(--color-gray-200);
 }
 
 /* ========================================
@@ -356,8 +355,8 @@
     align-items: center;
     gap: 0.375rem;
     padding: 0.375rem 0.625rem;
-    background: var(--color-accent-light);
-    color: var(--color-accent);
+    background: var(--color-ocean-50, #eefbfb);
+    color: var(--color-primary);
     border-radius: 9999px;
     font-size: 0.75rem;
     font-weight: 500;
@@ -369,6 +368,6 @@
 }
 
 .tag-chip-emoji:hover {
-    background: var(--color-accent);
+    background: var(--color-primary);
     color: white;
 }

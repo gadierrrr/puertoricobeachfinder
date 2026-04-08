@@ -327,6 +327,14 @@ function resolveLocaleFromPath(string $path): ?string
     if ($path === '/en' || str_starts_with($path, '/en/')) {
         return 'en';
     }
+
+    // Fallback: check if path matches a known locale route.
+    // English routes have no prefix, so the prefix check misses them.
+    $match = localeRouteMatch($path);
+    if (is_array($match) && isset($match['locale'])) {
+        return $match['locale'];
+    }
+
     return null;
 }
 

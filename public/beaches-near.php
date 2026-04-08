@@ -74,7 +74,7 @@ $breadcrumbs = [
     ['name' => $pageH1]
 ];
 
-$bodyVariant = 'collection-dark';
+$bodyVariant = 'collection-light';
 include APP_ROOT . '/components/header.php';
 
 $ratedBeaches = array_filter($beaches, fn($b) => !empty($b['google_rating']));
@@ -84,10 +84,10 @@ $avgRating = !empty($ratedBeaches) ? array_sum(array_column($ratedBeaches, 'goog
 <section class="relative bg-gradient-to-b from-slate-900 via-slate-800 to-slate-700 text-white py-16 md:py-24">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 class="text-3xl md:text-5xl font-bold mb-4"><?= h($pageH1) ?></h1>
-        <p class="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto mb-6">
+        <p class="text-lg md:text-xl text-warm-700 max-w-3xl mx-auto mb-6">
             <?= $lang === 'es' ? "Descubre $beachCount playas a menos de {$radiusKm}km de $locName, Puerto Rico." : "Discover $beachCount beaches within {$radiusKm}km of $locName on $loc[region] of Puerto Rico. From San Juan, $locName is about $loc[drive]." ?>
         </p>
-        <div class="flex flex-wrap justify-center gap-4 text-sm text-slate-400">
+        <div class="flex flex-wrap justify-center gap-4 text-sm text-warm-500">
             <span class="bg-slate-700/50 px-3 py-1 rounded-full"><?= $beachCount ?> <?= $lang === 'es' ? 'playas' : 'beaches' ?></span>
             <?php if ($avgRating > 0): ?>
             <span class="bg-slate-700/50 px-3 py-1 rounded-full">★ <?= number_format($avgRating, 1) ?> <?= $lang === 'es' ? 'promedio' : 'avg rating' ?></span>
@@ -184,7 +184,7 @@ $beachIndex++;
 </section>
 
 <!-- CTA -->
-<section class="py-12 bg-brand-yellow text-brand-darker">
+<section class="py-12 bg-sunset-400 text-ocean-900">
     <div class="max-w-4xl mx-auto px-4 text-center">
         <h2 class="text-2xl md:text-3xl font-bold mb-4"><?= $lang === 'es' ? '¿No sabes cuál playa es para ti?' : 'Not sure which beach is right for you?' ?></h2>
         <p class="text-lg opacity-90 mb-6"><?= $lang === 'es' ? 'Toma nuestro quiz de 60 segundos.' : 'Take our 60-second quiz and we\'ll recommend the perfect beaches for you.' ?></p>

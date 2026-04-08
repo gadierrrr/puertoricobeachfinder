@@ -23,8 +23,8 @@ function collectionContextRegistry(): array {
             'key' => 'best-beaches',
             'slug' => 'best-beaches',
             'page_key' => 'best_beaches',
-            'mode' => 'best',
-            'default_sort' => 'rating',
+            'mode' => 'curated',
+            'default_sort' => 'curated',
             'default_limit' => 15,
             'hero' => [
                 'title' => __('pages.best_beaches.hero_title'),

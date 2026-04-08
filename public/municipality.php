@@ -143,9 +143,9 @@ include APP_ROOT . '/components/header.php';
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Breadcrumbs -->
         <nav class="text-white/70 text-sm mb-4" aria-label="Breadcrumb">
-            <a href="<?= h(routeUrl('home', $lang)) ?>" class="hover:text-brand-yellow transition-colors"><?= h(__('nav.home')) ?></a>
+            <a href="<?= h(routeUrl('home', $lang)) ?>" class="hover:text-sunset-400 transition-colors"><?= h(__('nav.home')) ?></a>
             <span class="mx-2">/</span>
-            <a href="<?= h(routeUrl('home', $lang)) ?>#beaches" class="hover:text-brand-yellow transition-colors"><?= h(__('nav.beaches')) ?></a>
+            <a href="<?= h(routeUrl('home', $lang)) ?>#beaches" class="hover:text-sunset-400 transition-colors"><?= h(__('nav.beaches')) ?></a>
             <span class="mx-2">/</span>
             <span class="text-white/70"><?= h($municipality) ?></span>
         </nav>
@@ -160,18 +160,18 @@ include APP_ROOT . '/components/header.php';
         <!-- Stats Bar -->
         <div class="flex flex-wrap gap-6 mt-6 text-sm">
             <div class="flex items-center gap-2">
-                <i data-lucide="map-pin" class="w-5 h-5 text-brand-yellow"></i>
+                <i data-lucide="map-pin" class="w-5 h-5 text-sunset-400"></i>
                 <span><?= h(__('pages.municipality.beaches_count', ['count' => $beachCount])) ?></span>
             </div>
             <?php if ($avgRating > 0): ?>
             <div class="flex items-center gap-2">
-                <i data-lucide="star" class="w-5 h-5 text-brand-yellow"></i>
+                <i data-lucide="star" class="w-5 h-5 text-sunset-400"></i>
                 <span><strong><?= number_format($avgRating, 1) ?></strong> <?= h(__('pages.municipality.avg_rating')) ?></span>
             </div>
             <?php endif; ?>
             <?php if (!empty($topTags)): ?>
             <div class="flex items-center gap-2">
-                <i data-lucide="activity" class="w-5 h-5 text-brand-yellow"></i>
+                <i data-lucide="activity" class="w-5 h-5 text-sunset-400"></i>
                 <span><?= h(getTagLabel($topTags[0])) ?>, <?= h(getTagLabel($topTags[1] ?? $topTags[0])) ?> <?= h(__('pages.municipality.and_more')) ?></span>
             </div>
             <?php endif; ?>
@@ -179,7 +179,7 @@ include APP_ROOT . '/components/header.php';
     </div>
 </section>
 
-<section class="bg-brand-dark border-b border-white/10 py-6">
+<section class="bg-white border-b border-warm-200 py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <?php
         $contextType = 'municipality';
@@ -194,13 +194,13 @@ include APP_ROOT . '/components/header.php';
 
 <!-- Quick Filter Tags -->
 <?php if (!empty($topTags)): ?>
-<section class="bg-brand-dark border-b border-white/10 py-4">
+<section class="bg-white border-b border-warm-200 py-4">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center gap-3 overflow-x-auto hide-scrollbar">
             <span class="text-sm text-white/60 whitespace-nowrap"><?= h(__('pages.municipality.popular')) ?></span>
             <?php foreach ($topTags as $tag): ?>
             <a href="/?municipality=<?= urlencode($municipality) ?>&tags[]=<?= h($tag) ?>#beaches"
-               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-brand-yellow/20 border border-white/10 hover:border-brand-yellow/30 text-white/80 hover:text-brand-yellow text-sm transition-colors whitespace-nowrap flex-shrink-0">
+               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-sunset-400/20 border border-warm-200 hover:border-sunset-400/30 text-white/80 hover:text-sunset-400 text-sm transition-colors whitespace-nowrap flex-shrink-0">
                 <?= h(getTagLabel($tag)) ?>
                 <span class="text-xs text-white/70"><?= $tagCounts[$tag] ?></span>
             </a>
@@ -211,7 +211,7 @@ include APP_ROOT . '/components/header.php';
 <?php endif; ?>
 
 <!-- Main Content -->
-<section class="py-12 md:py-16 bg-brand-dark">
+<section class="py-12 md:py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- Intro Paragraph (SEO Content) -->
@@ -252,7 +252,7 @@ include APP_ROOT . '/components/header.php';
             <h2 class="text-2xl font-bold text-white mb-6"><?= h(__('pages.municipality.faq_title')) ?></h2>
             <div class="space-y-4">
                 <?php foreach ($pageFaqs as $faq): ?>
-                <details class="bg-white/5 border border-white/10 rounded-lg p-4 hover:bg-white/10 transition-colors">
+                <details class="bg-white border border-warm-200 rounded-lg p-4 hover:bg-sunset-300 transition-colors">
                     <summary class="font-semibold text-white cursor-pointer"><?= h($faq['question']) ?></summary>
                     <p class="mt-3 text-gray-300 leading-relaxed"><?= h($faq['answer']) ?></p>
                 </details>

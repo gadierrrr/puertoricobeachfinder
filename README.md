@@ -1,6 +1,6 @@
 # Puerto Rico Beach Finder
 
-A PHP + SQLite web application for exploring beaches in Puerto Rico.
+A PHP + SQLite web application for exploring beaches in Puerto Rico. Features beach search with filters, interactive maps, a beach quiz, guide articles, and community chat.
 
 ## Local setup
 

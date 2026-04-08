@@ -132,7 +132,7 @@ include APP_ROOT . '/components/header.php';
             <div class="mb-8">
                 <h2 class="text-4xl xl:text-5xl font-bold text-white leading-tight mb-4">
                     <?= h(__('login.hero_title_1')) ?><br>
-                    <span class="text-brand-yellow"><?= h(__('login.hero_title_2')) ?></span><br>
+                    <span class="text-sunset-400"><?= h(__('login.hero_title_2')) ?></span><br>
                     <?= h(__('login.hero_title_3')) ?>
                 </h2>
                 <p class="text-lg text-white/70 max-w-md">
@@ -143,7 +143,7 @@ include APP_ROOT . '/components/header.php';
             <!-- Benefit-Focused Feature List -->
             <div class="space-y-4 mb-10">
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full bg-brand-yellow/20 flex items-center justify-center flex-shrink-0">
+                    <div class="w-12 h-12 rounded-full bg-sunset-400/20 flex items-center justify-center flex-shrink-0">
                         <span class="text-2xl">🌤️</span>
                     </div>
                     <div>
@@ -152,7 +152,7 @@ include APP_ROOT . '/components/header.php';
                     </div>
                 </div>
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full bg-brand-yellow/20 flex items-center justify-center flex-shrink-0">
+                    <div class="w-12 h-12 rounded-full bg-sunset-400/20 flex items-center justify-center flex-shrink-0">
                         <span class="text-2xl">❤️</span>
                     </div>
                     <div>
@@ -161,7 +161,7 @@ include APP_ROOT . '/components/header.php';
                     </div>
                 </div>
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full bg-brand-yellow/20 flex items-center justify-center flex-shrink-0">
+                    <div class="w-12 h-12 rounded-full bg-sunset-400/20 flex items-center justify-center flex-shrink-0">
                         <span class="text-2xl">🏆</span>
                     </div>
                     <div>
@@ -170,7 +170,7 @@ include APP_ROOT . '/components/header.php';
                     </div>
                 </div>
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full bg-brand-yellow/20 flex items-center justify-center flex-shrink-0">
+                    <div class="w-12 h-12 rounded-full bg-sunset-400/20 flex items-center justify-center flex-shrink-0">
                         <span class="text-2xl">👥</span>
                     </div>
                     <div>
@@ -181,29 +181,29 @@ include APP_ROOT . '/components/header.php';
             </div>
 
             <!-- Community Stats -->
-            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/10 max-w-md">
+            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-warm-200 max-w-md">
                 <p class="text-white/60 text-sm mb-4"><?= h(__('login.community_shared')) ?></p>
                 <div class="grid grid-cols-3 gap-4 mb-4">
                     <div class="text-center">
-                        <div class="text-2xl font-bold text-brand-yellow"><?= number_format(max($photoCount, 500)) ?>+</div>
+                        <div class="text-2xl font-bold text-sunset-400"><?= number_format(max($photoCount, 500)) ?>+</div>
                         <div class="text-white/50 text-xs"><?= h(__('login.stat_photos')) ?></div>
                     </div>
                     <div class="text-center">
-                        <div class="text-2xl font-bold text-brand-yellow"><?= number_format(max($reviewCount, 200)) ?>+</div>
+                        <div class="text-2xl font-bold text-sunset-400"><?= number_format(max($reviewCount, 200)) ?>+</div>
                         <div class="text-white/50 text-xs"><?= h(__('login.stat_reviews')) ?></div>
                     </div>
                     <div class="text-center">
-                        <div class="text-2xl font-bold text-brand-yellow"><?= number_format(max($checkinCount, 1000)) ?>+</div>
+                        <div class="text-2xl font-bold text-sunset-400"><?= number_format(max($checkinCount, 1000)) ?>+</div>
                         <div class="text-white/50 text-xs"><?= h(__('login.stat_checkins')) ?></div>
                     </div>
                 </div>
-                <div class="pt-4 border-t border-white/10">
+                <div class="pt-4 border-t border-warm-200">
                     <div class="flex gap-1 mb-2">
-                        <span class="text-brand-yellow">★</span>
-                        <span class="text-brand-yellow">★</span>
-                        <span class="text-brand-yellow">★</span>
-                        <span class="text-brand-yellow">★</span>
-                        <span class="text-brand-yellow">★</span>
+                        <span class="text-sunset-400">★</span>
+                        <span class="text-sunset-400">★</span>
+                        <span class="text-sunset-400">★</span>
+                        <span class="text-sunset-400">★</span>
+                        <span class="text-sunset-400">★</span>
                     </div>
                     <p class="text-white/90 italic text-sm">
                         <?= h(__('login.testimonial')) ?>
@@ -215,24 +215,24 @@ include APP_ROOT . '/components/header.php';
     </div>
 
     <!-- Right Panel - Sign In Form -->
-    <div class="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-8 lg:p-12 bg-brand-darker">
+    <div class="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-8 lg:p-12 bg-white">
         <div class="w-full max-w-md">
             <!-- Social Proof Header -->
             <div class="text-center mb-8">
-                <div class="inline-flex items-center gap-2 bg-brand-yellow/10 border border-brand-yellow/20 rounded-full px-4 py-2 mb-6">
+                <div class="inline-flex items-center gap-2 bg-sunset-400/10 border border-sunset-400/20 rounded-full px-4 py-2 mb-6">
                     <div class="flex -space-x-2">
-                        <div class="w-6 h-6 rounded-full bg-blue-500 border-2 border-brand-darker flex items-center justify-center text-[10px] text-white font-bold">J</div>
-                        <div class="w-6 h-6 rounded-full bg-green-500 border-2 border-brand-darker flex items-center justify-center text-[10px] text-white font-bold">M</div>
-                        <div class="w-6 h-6 rounded-full bg-purple-500 border-2 border-brand-darker flex items-center justify-center text-[10px] text-white font-bold">C</div>
-                        <div class="w-6 h-6 rounded-full bg-orange-500 border-2 border-brand-darker flex items-center justify-center text-[10px] text-white font-bold">+</div>
+                        <div class="w-6 h-6 rounded-full bg-blue-500 border-2 border-white flex items-center justify-center text-[10px] text-white font-bold">J</div>
+                        <div class="w-6 h-6 rounded-full bg-green-500 border-2 border-white flex items-center justify-center text-[10px] text-white font-bold">M</div>
+                        <div class="w-6 h-6 rounded-full bg-purple-500 border-2 border-white flex items-center justify-center text-[10px] text-white font-bold">C</div>
+                        <div class="w-6 h-6 rounded-full bg-orange-500 border-2 border-white flex items-center justify-center text-[10px] text-white font-bold">+</div>
                     </div>
-                    <span class="text-sm text-brand-yellow font-medium"><?= h(__('login.join_explorers', ['count' => $userCountDisplay])) ?></span>
+                    <span class="text-sm text-sunset-400 font-medium"><?= h(__('login.join_explorers', ['count' => $userCountDisplay])) ?></span>
                 </div>
 
-                <h1 class="text-3xl sm:text-4xl font-bold text-white mb-2">
+                <h1 class="text-3xl sm:text-4xl font-bold text-warm-900 mb-2">
                     <?= $showMagicLinkForm ? h(__('login.sign_in_email')) : h(__('login.start_exploring')) ?>
                 </h1>
-                <p class="text-gray-400">
+                <p class="text-warm-500">
                     <?= $showMagicLinkForm ? h(__('login.magic_link_info')) : h(__('login.free_forever')) ?>
                 </p>
             </div>
@@ -284,7 +284,7 @@ include APP_ROOT . '/components/header.php';
                     </a>
 
                     <!-- Trust Signal -->
-                    <div class="flex items-center justify-center gap-2 text-sm text-gray-400">
+                    <div class="flex items-center justify-center gap-2 text-sm text-warm-500">
                         <i data-lucide="shield-check" class="w-4 h-4 text-green-500 a11y-success-text"></i>
                         <span><?= h(__('login.trust_signal')) ?></span>
                     </div>
@@ -293,23 +293,23 @@ include APP_ROOT . '/components/header.php';
                     <?php /*
                     <div class="relative">
                         <div class="absolute inset-0 flex items-center">
-                            <div class="w-full border-t border-white/10"></div>
+                            <div class="w-full border-t border-warm-200"></div>
                         </div>
                         <div class="relative flex justify-center text-sm">
-                            <span class="px-4 bg-brand-darker text-gray-400"><?= h(__('login.or')) ?></span>
+                            <span class="px-4 bg-white text-warm-500"><?= h(__('login.or')) ?></span>
                         </div>
                     </div>
                     <a href="?method=email<?= $redirectUrl !== '/' ? '&redirect=' . urlencode($redirectUrl) : '' ?>"
-                       class="w-full flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/20 text-white py-3.5 px-4 rounded-xl font-medium transition-all">
+                       class="w-full flex items-center justify-center gap-3 bg-warm-50 hover:bg-warm-100 border border-warm-200 text-warm-900 py-3.5 px-4 rounded-xl font-medium transition-all">
                         <i data-lucide="mail" class="w-5 h-5"></i>
                         <span>Continue with Email</span>
                     </a>
                     */ ?>
                     <?php else: ?>
-                    <div class="text-center py-8 text-gray-400">
+                    <div class="text-center py-8 text-warm-500">
                         <i data-lucide="alert-triangle" class="w-12 h-12 mx-auto mb-4 text-yellow-500/50"></i>
                         <p><?= h(__('login.google_unavailable')) ?></p>
-                        <p class="text-sm mt-2 text-gray-400"><?= h(__('login.google_config_note')) ?></p>
+                        <p class="text-sm mt-2 text-warm-500"><?= h(__('login.google_config_note')) ?></p>
                     </div>
                     <?php endif; ?>
 
@@ -320,24 +320,24 @@ include APP_ROOT . '/components/header.php';
                         <input type="hidden" name="redirect" value="<?= h($redirectUrl) ?>">
 
                         <div>
-                            <label for="email" class="block text-sm font-medium text-gray-300 mb-2"><?= h(__('login.email_label')) ?></label>
+                            <label for="email" class="block text-sm font-medium text-warm-600 mb-2"><?= h(__('login.email_label')) ?></label>
                             <div class="relative">
-                                <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+                                <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-warm-500"></i>
                                 <input type="email"
                                        id="email"
                                        name="email"
                                        required
                                        placeholder="<?= h(__('login.email_placeholder')) ?>"
-                                       class="w-full pl-12 pr-4 py-3.5 bg-white/5 border border-white/20 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-yellow focus:border-transparent">
+                                       class="w-full pl-12 pr-4 py-3.5 bg-warm-50 border border-warm-200 rounded-xl text-warm-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-ocean-400 focus:border-transparent">
                             </div>
                         </div>
 
                         <button type="submit"
-                                class="w-full bg-brand-yellow hover:bg-yellow-300 text-brand-darker py-3.5 px-4 rounded-xl font-semibold transition-all hover:-translate-y-0.5 hover:shadow-lg">
+                                class="w-full bg-sunset-400 hover:bg-sunset-300 text-ocean-900 py-3.5 px-4 rounded-xl font-semibold transition-all hover:-translate-y-0.5 hover:shadow-lg">
                             <?= h(__('login.send_magic_link')) ?>
                         </button>
 
-                        <p class="text-center text-sm text-gray-400">
+                        <p class="text-center text-sm text-warm-500">
                             <?= h(__('login.magic_link_note')) ?>
                         </p>
                     </form>
@@ -345,15 +345,15 @@ include APP_ROOT . '/components/header.php';
                     <!-- Back to Google option -->
                     <div class="relative">
                         <div class="absolute inset-0 flex items-center">
-                            <div class="w-full border-t border-white/10"></div>
+                            <div class="w-full border-t border-warm-200"></div>
                         </div>
                         <div class="relative flex justify-center text-sm">
-                            <span class="px-4 bg-brand-darker text-gray-400"><?= h(__('login.or')) ?></span>
+                            <span class="px-4 bg-white text-warm-500"><?= h(__('login.or')) ?></span>
                         </div>
                     </div>
 
                     <a href="?<?= $redirectUrl !== '/' ? 'redirect=' . urlencode($redirectUrl) : '' ?>"
-                       class="w-full flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/20 text-white py-3.5 px-4 rounded-xl font-medium transition-all">
+                       class="w-full flex items-center justify-center gap-3 bg-warm-50 hover:bg-warm-100 border border-warm-200 text-warm-900 py-3.5 px-4 rounded-xl font-medium transition-all">
                         <svg class="w-5 h-5" viewBox="0 0 24 24">
                             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                             <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -368,42 +368,42 @@ include APP_ROOT . '/components/header.php';
             <?php endif; ?>
 
             <!-- Mobile Feature Cards (visible only on mobile) -->
-            <div class="lg:hidden mt-8 pt-8 border-t border-white/10">
-                <p class="text-center text-sm text-gray-400 mb-4"><?= h(__('login.join_who', ['count' => $userCountDisplay])) ?></p>
+            <div class="lg:hidden mt-8 pt-8 border-t border-warm-200">
+                <p class="text-center text-sm text-warm-500 mb-4"><?= h(__('login.join_who', ['count' => $userCountDisplay])) ?></p>
                 <div class="grid grid-cols-2 gap-3">
-                    <div class="bg-white/5 rounded-xl p-4 text-center border border-white/10">
+                    <div class="bg-warm-50 rounded-xl p-4 text-center border border-warm-200">
                         <span class="text-2xl mb-2 block">🌤️</span>
-                        <p class="text-white text-sm font-medium"><?= h(__('login.mobile_conditions')) ?></p>
-                        <p class="text-gray-400 text-xs mt-1"><?= h(__('login.mobile_conditions_desc')) ?></p>
+                        <p class="text-warm-900 text-sm font-medium"><?= h(__('login.mobile_conditions')) ?></p>
+                        <p class="text-warm-500 text-xs mt-1"><?= h(__('login.mobile_conditions_desc')) ?></p>
                     </div>
-                    <div class="bg-white/5 rounded-xl p-4 text-center border border-white/10">
+                    <div class="bg-warm-50 rounded-xl p-4 text-center border border-warm-200">
                         <span class="text-2xl mb-2 block">❤️</span>
-                        <p class="text-white text-sm font-medium"><?= h(__('login.mobile_favorites')) ?></p>
-                        <p class="text-gray-400 text-xs mt-1"><?= h(__('login.mobile_favorites_desc')) ?></p>
+                        <p class="text-warm-900 text-sm font-medium"><?= h(__('login.mobile_favorites')) ?></p>
+                        <p class="text-warm-500 text-xs mt-1"><?= h(__('login.mobile_favorites_desc')) ?></p>
                     </div>
-                    <div class="bg-white/5 rounded-xl p-4 text-center border border-white/10">
+                    <div class="bg-warm-50 rounded-xl p-4 text-center border border-warm-200">
                         <span class="text-2xl mb-2 block">🏆</span>
-                        <p class="text-white text-sm font-medium"><?= h(__('login.mobile_badges')) ?></p>
-                        <p class="text-gray-400 text-xs mt-1"><?= h(__('login.mobile_badges_desc')) ?></p>
+                        <p class="text-warm-900 text-sm font-medium"><?= h(__('login.mobile_badges')) ?></p>
+                        <p class="text-warm-500 text-xs mt-1"><?= h(__('login.mobile_badges_desc')) ?></p>
                     </div>
-                    <div class="bg-white/5 rounded-xl p-4 text-center border border-white/10">
+                    <div class="bg-warm-50 rounded-xl p-4 text-center border border-warm-200">
                         <span class="text-2xl mb-2 block">👥</span>
-                        <p class="text-white text-sm font-medium"><?= h(__('login.mobile_help')) ?></p>
-                        <p class="text-gray-400 text-xs mt-1"><?= h(__('login.mobile_help_desc')) ?></p>
+                        <p class="text-warm-900 text-sm font-medium"><?= h(__('login.mobile_help')) ?></p>
+                        <p class="text-warm-500 text-xs mt-1"><?= h(__('login.mobile_help_desc')) ?></p>
                     </div>
                 </div>
             </div>
 
             <!-- Footer Links -->
-            <div class="mt-8 pt-6 border-t border-white/10 text-center space-y-4">
-                <p class="text-xs text-gray-400">
+            <div class="mt-8 pt-6 border-t border-warm-200 text-center space-y-4">
+                <p class="text-xs text-warm-500">
                     <?= h(__('login.terms_agree')) ?>
-                    <a href="/terms" class="text-brand-yellow hover:underline"><?= h(__('login.terms_link')) ?></a>
+                    <a href="/terms" class="text-sunset-400 hover:underline"><?= h(__('login.terms_link')) ?></a>
                     <?= h(__('login.terms_and')) ?>
-                    <a href="/privacy" class="text-brand-yellow hover:underline"><?= h(__('login.privacy_link')) ?></a>
+                    <a href="/privacy" class="text-sunset-400 hover:underline"><?= h(__('login.privacy_link')) ?></a>
                 </p>
 
-                <a href="/" class="inline-flex items-center gap-2 text-brand-yellow hover:text-yellow-300 text-sm transition-colors">
+                <a href="/" class="inline-flex items-center gap-2 text-sunset-400 hover:text-sunset-400 text-sm transition-colors">
                     <i data-lucide="arrow-left" class="w-4 h-4"></i>
                     <span><?= h(__('login.back_to_exploring')) ?></span>
                 </a>

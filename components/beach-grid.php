@@ -34,7 +34,7 @@ $weatherDataMap = [];
     <i data-lucide="umbrella" class="w-16 h-16 mx-auto text-white/30 mb-4" aria-hidden="true"></i>
     <h3 class="text-xl font-semibold text-white mb-2"><?= h(__('filters.no_results_title')) ?></h3>
     <p class="text-white/60 mb-4"><?= h(__('filters.no_results_hint')) ?></p>
-    <button data-action="clearFilters" class="text-brand-yellow hover:text-yellow-300 font-medium inline-flex items-center gap-1.5">
+    <button data-action="clearFilters" class="text-sunset-400 hover:text-sunset-300 font-medium inline-flex items-center gap-1.5">
         <i data-lucide="x" class="w-4 h-4" aria-hidden="true"></i>
         <?= h(__('filters.clear_filters')) ?>
     </button>

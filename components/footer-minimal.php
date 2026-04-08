@@ -4,7 +4,7 @@
     <div class="toast-container" aria-live="polite" aria-atomic="true" role="status"></div>
 
     <!-- Minimal Footer for Auth Pages -->
-    <footer class="bg-brand-darker border-t border-brand-yellow/80 py-8 px-4 sm:px-6 mt-auto">
+    <footer class="bg-ocean-900 border-t border-ocean-700 py-8 px-4 sm:px-6 mt-auto">
         <div class="max-w-7xl mx-auto text-center">
             <p class="text-xs text-gray-600">
                 &copy; <?= date('Y') ?> <?= h($_ENV['APP_NAME'] ?? 'Beach Finder') ?>. <?= h(__('footer.copyright')) ?>

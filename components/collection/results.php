@@ -144,7 +144,7 @@ $viewLabels = [
         <div id="collection-map-loading" class="text-sm text-gray-400 mb-3"><?= h($_t ? __('collection.loading_map') : 'Loading map...') ?></div>
         <div id="collection-map-error" class="hidden text-sm text-red-400 mb-3"><?= h($_t ? __('collection.map_error') : 'Unable to load map right now.') ?></div>
         <div id="collection-map-empty" class="hidden text-sm text-gray-400 mb-3"><?= h($_t ? __('collection.map_empty') : 'No beaches with mappable coordinates were found for this view.') ?></div>
-        <div id="collection-map-container" class="rounded-xl overflow-hidden border border-white/10" style="height: 520px;"></div>
+        <div id="collection-map-container" class="rounded-xl overflow-hidden border border-warm-200" style="height: 520px;"></div>
     </div>
     <?php endif; ?>
 </section>

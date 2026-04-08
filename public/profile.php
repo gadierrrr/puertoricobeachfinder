@@ -126,25 +126,23 @@ include APP_ROOT . '/components/header.php';
         <?php include APP_ROOT . '/components/breadcrumbs.php'; ?>
     </div>
     <!-- Profile Header -->
-    <div class="bg-brand-darker/50 backdrop-blur-md rounded-xl border border-white/10 p-6 mb-8">
+    <div class="bg-white rounded-xl border border-warm-200 p-6 mb-8">
         <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
             <!-- Avatar -->
             <div class="flex-shrink-0">
-                <?php if (!empty($user['avatar_url'])): ?>
-                <img src="<?= h($user['avatar_url']) ?>"
-                     alt="<?= h($user['name'] ?? 'User') ?>"
-                     class="w-24 h-24 rounded-full object-cover border-4 border-brand-yellow/30">
-                <?php else: ?>
-                <div class="w-24 h-24 rounded-full bg-gradient-to-br from-brand-yellow to-yellow-500 flex items-center justify-center text-brand-darker text-3xl font-bold">
-                    <?= strtoupper(substr($user['name'] ?? $user['email'] ?? 'U', 0, 1)) ?>
+                <?php
+                require_once APP_ROOT . '/inc/chat.php';
+                $_profileAvatar = chatUserDisplayInfo($user);
+                ?>
+                <div class="w-24 h-24 rounded-full <?= h($_profileAvatar['color']) ?> flex items-center justify-center text-white text-3xl font-bold border-4 border-warm-200">
+                    <?= h($_profileAvatar['initials']) ?>
                 </div>
-                <?php endif; ?>
             </div>
 
             <!-- User Info -->
             <div class="flex-1 text-center sm:text-left">
                 <div class="flex items-center justify-center sm:justify-start gap-3 flex-wrap">
-                    <h1 class="text-2xl font-bold text-white">
+                    <h1 class="text-2xl font-bold text-warm-900">
                         <?= h($user['name'] ?? __('profile.beach_explorer')) ?>
                     </h1>
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium border <?= h($levelInfo['colorClass']) ?>">
@@ -152,7 +150,7 @@ include APP_ROOT . '/components/header.php';
                         <span><?= h($levelInfo['label']) ?></span>
                     </span>
                 </div>
-                <p class="text-gray-400 mt-1">
+                <p class="text-warm-500 mt-1">
                     <i data-lucide="calendar" class="w-4 h-4 inline-block mr-1"></i>
                     <?= h(__('profile.member_since', ['date' => $memberSince])) ?>
                 </p>
@@ -160,7 +158,7 @@ include APP_ROOT . '/components/header.php';
                 <!-- Stats -->
                 <div class="flex flex-wrap justify-center sm:justify-start gap-6 mt-4">
                     <div class="text-center">
-                        <div class="text-2xl font-bold text-brand-yellow"><?= $stats['favorites'] ?></div>
+                        <div class="text-2xl font-bold text-sunset-400"><?= $stats['favorites'] ?></div>
                         <div class="text-xs text-gray-500 uppercase tracking-wide"><?= h(__('profile.favorites')) ?></div>
                     </div>
                     <div class="text-center">
@@ -180,11 +178,11 @@ include APP_ROOT . '/components/header.php';
 
             <!-- Actions -->
             <div class="flex flex-col gap-2">
-                <a href="/" class="inline-flex items-center gap-2 bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-4 py-2 rounded-lg font-medium text-sm transition-colors">
+                <a href="/" class="inline-flex items-center gap-2 bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-4 py-2 rounded-lg font-medium text-sm transition-colors">
                     <i data-lucide="compass" class="w-4 h-4"></i>
                     <span><?= h(__('profile.explore_beaches')) ?></span>
                 </a>
-	                <a href="/logout" class="inline-flex items-center gap-2 border border-white/20 hover:border-white/40 text-gray-300 hover:text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors">
+	                <a href="/logout" class="inline-flex items-center gap-2 border border-warm-200 hover:border-warm-300 text-warm-500 hover:text-warm-900 px-4 py-2 rounded-lg font-medium text-sm transition-colors">
 	                    <i data-lucide="log-out" class="w-4 h-4"></i>
 	                    <span><?= h(__('profile.sign_out')) ?></span>
 	                </a>
@@ -201,10 +199,10 @@ include APP_ROOT . '/components/header.php';
     <!-- Dashboard Widgets -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <!-- Explorer Progress Card -->
-        <div class="bg-brand-darker/50 backdrop-blur-md rounded-xl border border-white/10 p-6">
+        <div class="bg-white rounded-xl border border-warm-200 p-6">
             <div class="flex items-center justify-between mb-4">
-                <h2 class="text-lg font-semibold text-white flex items-center gap-2">
-                    <i data-lucide="trophy" class="w-5 h-5 text-brand-yellow"></i>
+                <h2 class="text-lg font-semibold text-warm-900 flex items-center gap-2">
+                    <i data-lucide="trophy" class="w-5 h-5 text-sunset-400"></i>
                     <?= h(__('profile.explorer_progress')) ?>
                 </h2>
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium border <?= h($levelInfo['colorClass']) ?>">
@@ -215,16 +213,16 @@ include APP_ROOT . '/components/header.php';
 
             <div class="mb-4">
                 <div class="flex justify-between text-sm mb-2">
-                    <span class="text-gray-400"><?php
+                    <span class="text-warm-500"><?php
                         $exploredParts = explode('|', __('profile.beaches_explored', ['count' => $beachesVisited]));
                         echo h($beachesVisited === 1 ? $exploredParts[0] : ($exploredParts[1] ?? $exploredParts[0]));
                     ?></span>
                     <?php if ($progress['next_level']): ?>
-                    <span class="text-brand-yellow"><?= h($progress['message']) ?></span>
+                    <span class="text-sunset-400"><?= h($progress['message']) ?></span>
                     <?php endif; ?>
                 </div>
-                <div class="h-3 bg-white/10 rounded-full overflow-hidden">
-                    <div class="h-full bg-gradient-to-r from-brand-yellow to-yellow-400 rounded-full transition-all duration-500"
+                <div class="h-3 bg-warm-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-ocean-400 to-ocean-500 rounded-full transition-all duration-500"
                          style="width: <?= $progress['percentage'] ?>%"></div>
                 </div>
             </div>
@@ -247,10 +245,10 @@ include APP_ROOT . '/components/header.php';
         </div>
 
         <!-- Favorite Beaches Weather Card -->
-        <div class="bg-brand-darker/50 backdrop-blur-md rounded-xl border border-white/10 p-6">
+        <div class="bg-white rounded-xl border border-warm-200 p-6">
             <div class="flex items-center justify-between mb-4">
-                <h2 class="text-lg font-semibold text-white flex items-center gap-2">
-                    <i data-lucide="sun" class="w-5 h-5 text-brand-yellow"></i>
+                <h2 class="text-lg font-semibold text-warm-900 flex items-center gap-2">
+                    <i data-lucide="sun" class="w-5 h-5 text-sunset-400"></i>
                     <?= h(__('profile.your_beaches_today')) ?>
                 </h2>
                 <?php if (!empty($favoritesForWeather)): ?>
@@ -260,8 +258,8 @@ include APP_ROOT . '/components/header.php';
 
             <?php if (empty($favoritesForWeather)): ?>
             <div class="text-center py-6">
-                <p class="text-gray-400 mb-3"><?= h(__('profile.save_beaches_weather')) ?></p>
-                <a href="/" class="text-brand-yellow hover:text-yellow-300 text-sm font-medium">
+                <p class="text-warm-500 mb-3"><?= h(__('profile.save_beaches_weather')) ?></p>
+                <a href="/" class="text-sunset-400 hover:text-sunset-400 text-sm font-medium">
                     <?= h(__('profile.explore_beaches_link')) ?>
                 </a>
             </div>
@@ -272,12 +270,12 @@ include APP_ROOT . '/components/header.php';
                     $current = $weather['current'] ?? null;
                 ?>
                 <a href="/beach/<?= h($beach['slug']) ?>"
-                   class="flex items-center justify-between p-3 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 hover:border-brand-yellow/30 transition-all group">
+                   class="flex items-center justify-between p-3 rounded-lg bg-warm-50 hover:bg-warm-100 border border-warm-100 hover:border-sunset-400/30 transition-all group">
                     <div class="flex items-center gap-3 min-w-0">
                         <img src="<?= h(getThumbnailUrl($beach['cover_image'] ?? '')) ?>"
                              alt="<?= h($beach['name']) ?>"
                              class="w-10 h-10 rounded-lg object-cover flex-shrink-0">
-                        <span class="text-white font-medium truncate group-hover:text-brand-yellow transition-colors">
+                        <span class="text-warm-900 font-medium truncate group-hover:text-sunset-400 transition-colors">
                             <?= h($beach['name']) ?>
                         </span>
                     </div>
@@ -286,7 +284,7 @@ include APP_ROOT . '/components/header.php';
                         <span class="text-2xl" title="<?= h($current['description'] ?? '') ?>">
                             <?= h($current['icon'] ?? '🌤️') ?>
                         </span>
-                        <span class="text-white font-medium">
+                        <span class="text-warm-900 font-medium">
                             <?= round($current['temperature'] ?? 0) ?>°F
                         </span>
                         <?php
@@ -312,7 +310,7 @@ include APP_ROOT . '/components/header.php';
         </div>
     </div>
 
-    <section class="bg-red-950/40 backdrop-blur-md rounded-xl border border-red-500/30 p-6 mb-8" aria-labelledby="account-danger-zone">
+    <section class="bg-red-950/40 rounded-xl border border-red-500/30 p-6 mb-8" aria-labelledby="account-danger-zone">
         <div class="flex items-start gap-3 mb-5">
             <i data-lucide="triangle-alert" class="w-5 h-5 text-red-300 mt-0.5"></i>
             <div>
@@ -377,39 +375,39 @@ include APP_ROOT . '/components/header.php';
     </section>
 
     <!-- Tabs -->
-    <div class="border-b border-white/10 mb-6">
+    <div class="border-b border-warm-200 mb-6">
         <nav class="flex gap-1 overflow-x-auto" role="tablist" aria-label="Profile sections">
             <a href="?tab=favorites"
                role="tab"
                aria-selected="<?= $activeTab === 'favorites' ? 'true' : 'false' ?>"
-               class="flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors <?= $activeTab === 'favorites' ? 'border-brand-yellow text-brand-yellow' : 'border-transparent text-gray-400 hover:text-white hover:border-white/30' ?>">
+               class="flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors <?= $activeTab === 'favorites' ? 'border-sunset-400 text-sunset-400' : 'border-transparent text-warm-500 hover:text-warm-900 hover:border-warm-300' ?>">
                 <i data-lucide="heart" class="w-4 h-4"></i>
                 <span><?= h(__('profile.favorites')) ?></span>
-                <span class="bg-white/10 text-gray-300 text-xs px-2 py-0.5 rounded-full"><?= $stats['favorites'] ?></span>
+                <span class="bg-warm-100 text-warm-600 text-xs px-2 py-0.5 rounded-full"><?= $stats['favorites'] ?></span>
             </a>
             <a href="?tab=reviews"
                role="tab"
                aria-selected="<?= $activeTab === 'reviews' ? 'true' : 'false' ?>"
-               class="flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors <?= $activeTab === 'reviews' ? 'border-brand-yellow text-brand-yellow' : 'border-transparent text-gray-400 hover:text-white hover:border-white/30' ?>">
+               class="flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors <?= $activeTab === 'reviews' ? 'border-sunset-400 text-sunset-400' : 'border-transparent text-warm-500 hover:text-warm-900 hover:border-warm-300' ?>">
                 <i data-lucide="star" class="w-4 h-4"></i>
                 <span><?= h(__('profile.reviews')) ?></span>
-                <span class="bg-white/10 text-gray-300 text-xs px-2 py-0.5 rounded-full"><?= $stats['reviews'] ?></span>
+                <span class="bg-warm-100 text-warm-600 text-xs px-2 py-0.5 rounded-full"><?= $stats['reviews'] ?></span>
             </a>
             <a href="?tab=photos"
                role="tab"
                aria-selected="<?= $activeTab === 'photos' ? 'true' : 'false' ?>"
-               class="flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors <?= $activeTab === 'photos' ? 'border-brand-yellow text-brand-yellow' : 'border-transparent text-gray-400 hover:text-white hover:border-white/30' ?>">
+               class="flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors <?= $activeTab === 'photos' ? 'border-sunset-400 text-sunset-400' : 'border-transparent text-warm-500 hover:text-warm-900 hover:border-warm-300' ?>">
                 <i data-lucide="image" class="w-4 h-4"></i>
                 <span><?= h(__('profile.photos')) ?></span>
-                <span class="bg-white/10 text-gray-300 text-xs px-2 py-0.5 rounded-full"><?= $stats['photos'] ?></span>
+                <span class="bg-warm-100 text-warm-600 text-xs px-2 py-0.5 rounded-full"><?= $stats['photos'] ?></span>
             </a>
             <a href="?tab=checkins"
                role="tab"
                aria-selected="<?= $activeTab === 'checkins' ? 'true' : 'false' ?>"
-               class="flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors <?= $activeTab === 'checkins' ? 'border-brand-yellow text-brand-yellow' : 'border-transparent text-gray-400 hover:text-white hover:border-white/30' ?>">
+               class="flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors <?= $activeTab === 'checkins' ? 'border-sunset-400 text-sunset-400' : 'border-transparent text-warm-500 hover:text-warm-900 hover:border-warm-300' ?>">
                 <i data-lucide="map-pin" class="w-4 h-4"></i>
                 <span><?= h(__('profile.checkins')) ?></span>
-                <span class="bg-white/10 text-gray-300 text-xs px-2 py-0.5 rounded-full"><?= $stats['checkins'] ?></span>
+                <span class="bg-warm-100 text-warm-600 text-xs px-2 py-0.5 rounded-full"><?= $stats['checkins'] ?></span>
             </a>
         </nav>
     </div>
@@ -419,11 +417,11 @@ include APP_ROOT . '/components/header.php';
         <?php if ($activeTab === 'favorites'): ?>
         <!-- Favorites Tab -->
         <?php if (empty($favorites)): ?>
-        <div class="text-center py-16 bg-white/5 border border-white/10 rounded-xl">
+        <div class="text-center py-16 bg-warm-50 border border-warm-200 rounded-xl">
             <div class="text-6xl mb-4">❤️</div>
-            <h2 class="text-xl font-semibold text-white mb-2"><?= h(__('profile.no_favorites')) ?></h2>
-            <p class="text-gray-400 mb-6"><?= h(__('profile.no_favorites_cta')) ?></p>
-            <a href="/" class="inline-block bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-6 py-3 rounded-lg font-medium transition-colors">
+            <h2 class="text-xl font-semibold text-warm-900 mb-2"><?= h(__('profile.no_favorites')) ?></h2>
+            <p class="text-warm-500 mb-6"><?= h(__('profile.no_favorites_cta')) ?></p>
+            <a href="/" class="inline-block bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-6 py-3 rounded-lg font-medium transition-colors">
                 <?= h(__('profile.explore_beaches')) ?>
             </a>
         </div>
@@ -443,18 +441,18 @@ include APP_ROOT . '/components/header.php';
         <?php elseif ($activeTab === 'reviews'): ?>
         <!-- Reviews Tab -->
         <?php if (empty($reviews)): ?>
-        <div class="text-center py-16 bg-white/5 border border-white/10 rounded-xl">
+        <div class="text-center py-16 bg-warm-50 border border-warm-200 rounded-xl">
             <div class="text-6xl mb-4">⭐</div>
-            <h2 class="text-xl font-semibold text-white mb-2"><?= h(__('profile.no_reviews')) ?></h2>
-            <p class="text-gray-400 mb-6"><?= h(__('profile.no_reviews_cta')) ?></p>
-            <a href="/" class="inline-block bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-6 py-3 rounded-lg font-medium transition-colors">
+            <h2 class="text-xl font-semibold text-warm-900 mb-2"><?= h(__('profile.no_reviews')) ?></h2>
+            <p class="text-warm-500 mb-6"><?= h(__('profile.no_reviews_cta')) ?></p>
+            <a href="/" class="inline-block bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-6 py-3 rounded-lg font-medium transition-colors">
                 <?= h(__('profile.find_beach_review')) ?>
             </a>
         </div>
         <?php else: ?>
         <div class="space-y-4">
             <?php foreach ($reviews as $review): ?>
-            <div class="bg-brand-darker/50 backdrop-blur-md rounded-xl border border-white/10 p-5 hover:border-brand-yellow/30 transition-all">
+            <div class="bg-white rounded-xl border border-warm-200 p-5 hover:border-sunset-400/30 transition-all">
                 <div class="flex items-start gap-4">
                     <!-- Beach Image -->
                     <a href="/beach/<?= h($review['beach_slug']) ?>" class="flex-shrink-0">
@@ -467,7 +465,7 @@ include APP_ROOT . '/components/header.php';
                     <div class="flex-1 min-w-0">
                         <div class="flex items-start justify-between gap-2">
                             <div>
-                                <a href="/beach/<?= h($review['beach_slug']) ?>" class="font-semibold text-white hover:text-brand-yellow transition-colors">
+                                <a href="/beach/<?= h($review['beach_slug']) ?>" class="font-semibold text-warm-900 hover:text-sunset-400 transition-colors">
                                     <?= h($review['beach_name']) ?>
                                 </a>
                                 <div class="flex items-center gap-2 mt-1">
@@ -485,11 +483,11 @@ include APP_ROOT . '/components/header.php';
                         </div>
 
                         <?php if (!empty($review['title'])): ?>
-                        <h3 class="font-medium text-white mt-2"><?= h($review['title']) ?></h3>
+                        <h3 class="font-medium text-warm-900 mt-2"><?= h($review['title']) ?></h3>
                         <?php endif; ?>
 
                         <?php if (!empty($review['review_text'])): ?>
-                        <p class="text-gray-400 text-sm mt-1 line-clamp-2"><?= h($review['review_text']) ?></p>
+                        <p class="text-warm-500 text-sm mt-1 line-clamp-2"><?= h($review['review_text']) ?></p>
                         <?php endif; ?>
 
                         <?php if (!empty($review['helpful_count'])): ?>
@@ -508,18 +506,18 @@ include APP_ROOT . '/components/header.php';
         <?php elseif ($activeTab === 'photos'): ?>
         <!-- Photos Tab -->
         <?php if (empty($photos)): ?>
-        <div class="text-center py-16 bg-white/5 border border-white/10 rounded-xl">
+        <div class="text-center py-16 bg-warm-50 border border-warm-200 rounded-xl">
             <div class="text-6xl mb-4">📷</div>
-            <h2 class="text-xl font-semibold text-white mb-2"><?= h(__('profile.no_photos')) ?></h2>
-            <p class="text-gray-400 mb-6"><?= h(__('profile.no_photos_cta')) ?></p>
-            <a href="/" class="inline-block bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-6 py-3 rounded-lg font-medium transition-colors">
+            <h2 class="text-xl font-semibold text-warm-900 mb-2"><?= h(__('profile.no_photos')) ?></h2>
+            <p class="text-warm-500 mb-6"><?= h(__('profile.no_photos_cta')) ?></p>
+            <a href="/" class="inline-block bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-6 py-3 rounded-lg font-medium transition-colors">
                 <?= h(__('profile.find_beach')) ?>
             </a>
         </div>
         <?php else: ?>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <?php foreach ($photos as $photo): ?>
-            <div class="group relative aspect-square rounded-xl overflow-hidden bg-brand-dark">
+            <div class="group relative aspect-square rounded-xl overflow-hidden bg-warm-100">
                 <img src="<?= h($photo['thumbnail_url'] ?? $photo['photo_url']) ?>"
                      alt="<?= h(__('profile.photo_at', ['name' => $photo['beach_name']])) ?>"
                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -542,18 +540,18 @@ include APP_ROOT . '/components/header.php';
         <?php elseif ($activeTab === 'checkins'): ?>
         <!-- Check-ins Tab -->
         <?php if (empty($checkins)): ?>
-        <div class="text-center py-16 bg-white/5 border border-white/10 rounded-xl">
+        <div class="text-center py-16 bg-warm-50 border border-warm-200 rounded-xl">
             <div class="text-6xl mb-4">📍</div>
-            <h2 class="text-xl font-semibold text-white mb-2"><?= h(__('profile.no_checkins')) ?></h2>
-            <p class="text-gray-400 mb-6"><?= h(__('profile.no_checkins_cta')) ?></p>
-            <a href="/" class="inline-block bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-6 py-3 rounded-lg font-medium transition-colors">
+            <h2 class="text-xl font-semibold text-warm-900 mb-2"><?= h(__('profile.no_checkins')) ?></h2>
+            <p class="text-warm-500 mb-6"><?= h(__('profile.no_checkins_cta')) ?></p>
+            <a href="/" class="inline-block bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-6 py-3 rounded-lg font-medium transition-colors">
                 <?= h(__('profile.explore_beaches')) ?>
             </a>
         </div>
         <?php else: ?>
         <div class="space-y-3">
             <?php foreach ($checkins as $checkin): ?>
-            <div class="bg-brand-darker/50 backdrop-blur-md rounded-lg border border-white/10 p-4 flex items-center gap-4 hover:border-brand-yellow/30 transition-all">
+            <div class="bg-white rounded-lg border border-warm-200 p-4 flex items-center gap-4 hover:border-sunset-400/30 transition-all">
                 <!-- Beach Image -->
                 <a href="/beach/<?= h($checkin['beach_slug']) ?>" class="flex-shrink-0">
                     <img src="<?= h(getThumbnailUrl($checkin['beach_image'] ?? '/images/beaches/placeholder-beach.webp')) ?>"
@@ -563,7 +561,7 @@ include APP_ROOT . '/components/header.php';
 
                 <!-- Check-in Info -->
                 <div class="flex-1 min-w-0">
-                    <a href="/beach/<?= h($checkin['beach_slug']) ?>" class="font-medium text-white hover:text-brand-yellow transition-colors">
+                    <a href="/beach/<?= h($checkin['beach_slug']) ?>" class="font-medium text-warm-900 hover:text-sunset-400 transition-colors">
                         <?= h($checkin['beach_name']) ?>
                     </a>
                     <div class="flex flex-wrap items-center gap-2 mt-1">
@@ -608,7 +606,7 @@ include APP_ROOT . '/components/header.php';
     <div class="share-modal-content" data-action-stop data-action="noop" data-on="click">
         <div class="flex justify-between items-center mb-4">
             <h3 id="share-modal-title" class="text-lg font-semibold"><?= h(__('profile.share_beach')) ?></h3>
-            <button data-action="closeShareModal" class="text-gray-400 hover:text-gray-600" aria-label="Close">
+            <button data-action="closeShareModal" class="text-warm-500 hover:text-gray-600" aria-label="Close">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
         </div>

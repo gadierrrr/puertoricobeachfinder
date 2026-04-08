@@ -434,9 +434,6 @@
    ======================================== */
 
 #main-nav.scrolled {
-    background-color: rgba(19, 32, 36, 0.9);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
 }
 
@@ -817,6 +814,25 @@
 
     .checklist-item:before {
         font-size: 1.125rem;
+    }
+}
+
+/* ========================================
+   CHAT PANEL MOBILE
+   ======================================== */
+
+/* Full-width panel on small screens */
+@media (max-width: 440px) {
+    .chat-panel {
+        width: calc(100vw - 24px);
+        height: calc(100dvh - 100px);
+    }
+}
+
+/* Clear the beach sticky bar on mobile */
+@media (max-width: 1023px) {
+    .page-has-sticky-bar .chat-fab-container {
+        bottom: 5rem;
     }
 }
 

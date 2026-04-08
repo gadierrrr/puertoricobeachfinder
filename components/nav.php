@@ -40,12 +40,12 @@ if (!is_string($navMapHref) || $navMapHref === '') {
 </a>
 
 <!-- Navigation -->
-<nav id="main-nav" class="fixed top-0 w-full z-50 px-4 sm:px-6 py-4 transition-all duration-300" role="navigation" aria-label="<?= h(__('nav.main_navigation')) ?>">
+<nav id="main-nav" class="fixed top-0 w-full z-50 px-6 sm:px-12 py-1.5 bg-ocean-800 transition-all duration-300" role="navigation" aria-label="<?= h(__('nav.main_navigation')) ?>">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
         <!-- Logo with rotating sun -->
-        <a href="<?= h($localizedHome) ?>" class="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-brand-yellow focus:ring-offset-2 focus:ring-offset-brand-darker rounded-lg p-1" aria-label="<?= h($appName) ?> - <?= h(__('nav.home')) ?>">
-            <i data-lucide="sun" class="w-7 h-7 text-brand-yellow hover-spin transition-all" aria-hidden="true"></i>
-            <span class="text-xl font-bold text-white"><?= h($appName) ?></span>
+        <a href="<?= h($localizedHome) ?>" class="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-ocean-400 focus:ring-offset-2 focus:ring-offset-ocean-800 rounded-lg p-1" aria-label="<?= h($appName) ?> - <?= h(__('nav.home')) ?>">
+            <i data-lucide="sun" class="w-7 h-7 text-sunset-400 hover-spin transition-all" aria-hidden="true"></i>
+            <span class="text-[17px] font-bold text-white"><?= h($appName) ?></span>
         </a>
 
         <!-- Center Navigation (Desktop) -->
@@ -54,37 +54,37 @@ if (!is_string($navMapHref) || $navMapHref === '') {
             <div class="relative" id="beaches-dropdown">
                 <button type="button"
                         data-action="toggleBeachesDropdown"
-                        class="flex items-center gap-1 text-sm text-white/80 hover:text-brand-yellow px-4 py-1 transition-colors"
+                        class="flex items-center gap-1 text-sm text-white/70 hover:text-sunset-400 px-3 py-1.5 transition-colors"
                         role="menuitem"
                         aria-expanded="false"
                         aria-haspopup="true">
                     <span><?= h(__('nav.beaches')) ?></span>
                     <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
                 </button>
-                <div id="beaches-dropdown-menu" class="hidden absolute left-0 top-full mt-3 w-56 bg-brand-dark/95 backdrop-blur-md rounded-xl shadow-glass border border-white/10 py-2 z-50">
+                <div id="beaches-dropdown-menu" class="hidden absolute left-0 top-full mt-3 w-56 bg-ocean-800 rounded-xl shadow-glass border border-ocean-700 py-2 z-50">
                     <div class="px-3 py-2 text-xs text-white/40 uppercase tracking-wider"><?= h(__('nav.find_by_activity')) ?></div>
-                    <a href="<?= h($homeFilterHref('surfing')) ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-white/80 hover:text-brand-yellow hover:bg-white/5 transition-colors">
+                    <a href="<?= h($homeFilterHref('surfing')) ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-white/80 hover:text-sunset-400 hover:bg-white/5 transition-colors">
                         <span class="text-lg">🏄‍♂️</span>
                         <span><?= h(__('tags.surfing')) ?></span>
                     </a>
-                    <a href="<?= h($homeFilterHref('snorkeling')) ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-white/80 hover:text-brand-yellow hover:bg-white/5 transition-colors">
+                    <a href="<?= h($homeFilterHref('snorkeling')) ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-white/80 hover:text-sunset-400 hover:bg-white/5 transition-colors">
                         <span class="text-lg">🤿</span>
                         <span><?= h(__('tags.snorkeling')) ?></span>
                     </a>
-                    <a href="<?= h($homeFilterHref('family-friendly')) ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-white/80 hover:text-brand-yellow hover:bg-white/5 transition-colors">
+                    <a href="<?= h($homeFilterHref('family-friendly')) ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-white/80 hover:text-sunset-400 hover:bg-white/5 transition-colors">
                         <span class="text-lg">👨‍👩‍👧</span>
                         <span><?= h(__('tags.family-friendly')) ?></span>
                     </a>
-                    <a href="<?= h($homeFilterHref('secluded')) ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-white/80 hover:text-brand-yellow hover:bg-white/5 transition-colors">
+                    <a href="<?= h($homeFilterHref('secluded')) ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-white/80 hover:text-sunset-400 hover:bg-white/5 transition-colors">
                         <span class="text-lg">🌴</span>
                         <span><?= h(__('tags.secluded')) ?></span>
                     </a>
-                    <a href="<?= h($homeFilterHref('swimming')) ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-white/80 hover:text-brand-yellow hover:bg-white/5 transition-colors">
+                    <a href="<?= h($homeFilterHref('swimming')) ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-white/80 hover:text-sunset-400 hover:bg-white/5 transition-colors">
                         <span class="text-lg">🏊</span>
                         <span><?= h(__('tags.swimming')) ?></span>
                     </a>
-                    <div class="border-t border-white/10 mt-2 pt-2">
-                        <a href="<?= h($homeAnchorHref('beaches')) ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-brand-yellow hover:bg-white/5 transition-colors">
+                    <div class="border-t border-ocean-700 mt-2 pt-2">
+                        <a href="<?= h($homeAnchorHref('beaches')) ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-sunset-400 hover:bg-white/5 transition-colors">
                             <i data-lucide="compass" class="w-4 h-4"></i>
                             <span><?= h(__('nav.view_all_beaches')) ?></span>
                         </a>
@@ -92,9 +92,10 @@ if (!is_string($navMapHref) || $navMapHref === '') {
                 </div>
             </div>
 
-            <a href="<?= h($localizedQuiz) ?>" class="text-sm text-white/80 hover:text-brand-yellow px-4 py-1 transition-colors" role="menuitem"><?= h(__('nav.quiz')) ?></a>
+            <a href="/guides" class="text-sm text-white/70 hover:text-sunset-400 px-3 py-1.5 transition-colors" role="menuitem"><?= h(__('nav.guides')) ?></a>
+            <a href="<?= h($localizedQuiz) ?>" class="text-sm text-white/70 hover:text-sunset-400 px-3 py-1.5 transition-colors" role="menuitem"><?= h(__('nav.quiz')) ?></a>
             <a href="<?= h($navMapHref) ?>"
-               class="text-sm text-white/80 hover:text-brand-yellow px-4 py-1 transition-colors"
+               class="text-sm text-white/70 hover:text-sunset-400 px-3 py-1.5 transition-colors"
                role="menuitem"
                data-context-map-link><?= h(__('nav.map')) ?></a>
         </div>
@@ -113,11 +114,11 @@ if (!is_string($navMapHref) || $navMapHref === '') {
                     <span class="hidden sm:inline"><?= strtoupper($currentLang) ?></span>
                     <i data-lucide="chevron-down" class="w-3 h-3"></i>
                 </button>
-                <div id="lang-dropdown-menu" class="hidden absolute right-0 mt-1 w-32 bg-brand-dark/95 backdrop-blur-md rounded-lg shadow-glass border border-white/10 py-1 z-50">
-                    <button type="button" data-target-url="<?= h($langSwitchEnUrl) ?>" data-action="setLanguage" data-action-args='["en","__this__"]' class="flex items-center gap-2 w-full px-3 py-2 text-sm text-left hover:bg-white/10 <?= $currentLang === 'en' ? 'text-brand-yellow' : 'text-white/80' ?>">
+                <div id="lang-dropdown-menu" class="hidden absolute right-0 mt-1 w-32 bg-ocean-800 rounded-lg shadow-glass border border-ocean-700 py-1 z-50">
+                    <button type="button" data-target-url="<?= h($langSwitchEnUrl) ?>" data-action="setLanguage" data-action-args='["en","__this__"]' class="flex items-center gap-2 w-full px-3 py-2 text-sm text-left hover:bg-white/10 <?= $currentLang === 'en' ? 'text-sunset-400' : 'text-white/80' ?>">
                         <span>🇺🇸</span> <?= h(__('nav.language_english')) ?>
                     </button>
-                    <button type="button" data-target-url="<?= h($langSwitchEsUrl) ?>" data-action="setLanguage" data-action-args='["es","__this__"]' class="flex items-center gap-2 w-full px-3 py-2 text-sm text-left hover:bg-white/10 <?= $currentLang === 'es' ? 'text-brand-yellow' : 'text-white/80' ?>">
+                    <button type="button" data-target-url="<?= h($langSwitchEsUrl) ?>" data-action="setLanguage" data-action-args='["es","__this__"]' class="flex items-center gap-2 w-full px-3 py-2 text-sm text-left hover:bg-white/10 <?= $currentLang === 'es' ? 'text-sunset-400' : 'text-white/80' ?>">
                         <span>🇵🇷</span> <?= h(__('nav.language_spanish')) ?>
                     </button>
                 </div>
@@ -125,22 +126,22 @@ if (!is_string($navMapHref) || $navMapHref === '') {
 
             <?php if ($user): ?>
                 <div class="flex items-center gap-3">
-                    <a href="<?= h($localizedProfile) ?>?tab=favorites" class="text-white/70 hover:text-brand-yellow transition-colors">
+                    <a href="<?= h($localizedProfile) ?>?tab=favorites" class="text-white/70 hover:text-sunset-400 transition-colors">
                         <i data-lucide="heart" class="w-5 h-5"></i>
                     </a>
                     <a href="<?= h($localizedProfile) ?>" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                        <?php if (!empty($user['avatar_url'])): ?>
-                        <img src="<?= h($user['avatar_url']) ?>" alt="" class="w-8 h-8 rounded-full border border-white/20">
-                        <?php else: ?>
-                        <div class="w-8 h-8 rounded-full bg-brand-yellow/20 flex items-center justify-center text-brand-yellow font-medium text-sm border border-brand-yellow/30">
-                            <?= strtoupper(substr($user['name'] ?? $user['email'], 0, 1)) ?>
+                        <?php
+                        require_once APP_ROOT . '/inc/chat.php';
+                        $_navAvatar = chatUserDisplayInfo($user);
+                        ?>
+                        <div class="w-8 h-8 rounded-full <?= h($_navAvatar['color']) ?> flex items-center justify-center text-white font-semibold text-xs border border-ocean-600">
+                            <?= h($_navAvatar['initials']) ?>
                         </div>
-                        <?php endif; ?>
                     </a>
                     <a href="<?= h($localizedLogout) ?>" class="text-sm text-white/60 hover:text-white transition-colors"><?= h(__('nav.logout')) ?></a>
                 </div>
             <?php else: ?>
-                <a href="<?= h($localizedLogin) ?>" class="border border-brand-yellow text-brand-yellow hover:bg-brand-yellow hover:text-brand-darker px-5 py-2 rounded-full text-sm font-semibold transition-colors">
+                <a href="<?= h($localizedLogin) ?>" class="border border-sunset-400 text-sunset-400 hover:bg-sunset-400 hover:text-ocean-900 px-5 py-2 rounded-full text-sm font-semibold transition-colors">
                     <?= h(__('nav.sign_in')) ?>
                 </a>
             <?php endif; ?>
@@ -151,7 +152,7 @@ if (!is_string($navMapHref) || $navMapHref === '') {
             <button type="button"
                     id="mobile-menu-button"
                     data-action="toggleMobileMenu"
-                    class="p-2 rounded-lg text-white/80 hover:text-white focus:outline-none focus:ring-2 focus:ring-brand-yellow"
+                    class="p-2 rounded-lg text-white/80 hover:text-white focus:outline-none focus:ring-2 focus:ring-ocean-400"
                     aria-expanded="false"
                     aria-controls="mobile-menu"
                     aria-label="<?= h(__('nav.open_main_menu')) ?>">
@@ -163,40 +164,40 @@ if (!is_string($navMapHref) || $navMapHref === '') {
     </div>
 
     <!-- Mobile menu -->
-    <div id="mobile-menu" class="hidden md:hidden mt-4 bg-brand-dark/95 backdrop-blur-md rounded-2xl border border-white/10 overflow-hidden" role="menu" aria-labelledby="mobile-menu-button">
+    <div id="mobile-menu" class="hidden md:hidden mt-4 bg-ocean-800 rounded-2xl border border-ocean-700 overflow-hidden" role="menu" aria-labelledby="mobile-menu-button">
         <div class="px-4 py-4 space-y-1">
             <!-- Beaches Section -->
             <div class="text-xs text-white/40 uppercase tracking-wider px-3 pt-2 pb-1"><?= h(__('nav.find_beaches')) ?></div>
-            <a href="<?= h($homeFilterHref('surfing')) ?>" class="flex items-center gap-3 text-white/80 hover:text-brand-yellow py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
+            <a href="<?= h($homeFilterHref('surfing')) ?>" class="flex items-center gap-3 text-white/80 hover:text-sunset-400 py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
                 <span class="text-lg">🏄‍♂️</span>
                 <span><?= h(__('tags.surfing')) ?></span>
             </a>
-            <a href="<?= h($homeFilterHref('snorkeling')) ?>" class="flex items-center gap-3 text-white/80 hover:text-brand-yellow py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
+            <a href="<?= h($homeFilterHref('snorkeling')) ?>" class="flex items-center gap-3 text-white/80 hover:text-sunset-400 py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
                 <span class="text-lg">🤿</span>
                 <span><?= h(__('tags.snorkeling')) ?></span>
             </a>
-            <a href="<?= h($homeFilterHref('family-friendly')) ?>" class="flex items-center gap-3 text-white/80 hover:text-brand-yellow py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
+            <a href="<?= h($homeFilterHref('family-friendly')) ?>" class="flex items-center gap-3 text-white/80 hover:text-sunset-400 py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
                 <span class="text-lg">👨‍👩‍👧</span>
                 <span><?= h(__('tags.family-friendly')) ?></span>
             </a>
-            <a href="<?= h($homeFilterHref('secluded')) ?>" class="flex items-center gap-3 text-white/80 hover:text-brand-yellow py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
+            <a href="<?= h($homeFilterHref('secluded')) ?>" class="flex items-center gap-3 text-white/80 hover:text-sunset-400 py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
                 <span class="text-lg">🌴</span>
                 <span><?= h(__('tags.secluded')) ?></span>
             </a>
-            <a href="<?= h($homeAnchorHref('beaches')) ?>" class="flex items-center gap-3 text-brand-yellow py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
+            <a href="<?= h($homeAnchorHref('beaches')) ?>" class="flex items-center gap-3 text-sunset-400 py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
                 <i data-lucide="compass" class="w-5 h-5" aria-hidden="true"></i>
                 <span><?= h(__('nav.view_all_beaches')) ?></span>
             </a>
 
             <!-- Tools Section -->
-            <div class="border-t border-white/10 mt-3 pt-3">
+            <div class="border-t border-ocean-700 mt-3 pt-3">
                 <div class="text-xs text-white/40 uppercase tracking-wider px-3 pt-1 pb-1"><?= h(__('nav.tools')) ?></div>
-                <a href="<?= h($localizedQuiz) ?>" class="flex items-center gap-3 text-white/80 hover:text-brand-yellow py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
+                <a href="<?= h($localizedQuiz) ?>" class="flex items-center gap-3 text-white/80 hover:text-sunset-400 py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
                     <i data-lucide="sparkles" class="w-5 h-5" aria-hidden="true"></i>
                     <span><?= h(__('nav.find_my_beach_quiz')) ?></span>
                 </a>
                 <a href="<?= h($navMapHref) ?>"
-                   class="flex items-center gap-3 text-white/80 hover:text-brand-yellow py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors"
+                   class="flex items-center gap-3 text-white/80 hover:text-sunset-400 py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors"
                    role="menuitem"
                    data-context-map-link>
                     <i data-lucide="map" class="w-5 h-5" aria-hidden="true"></i>
@@ -204,39 +205,36 @@ if (!is_string($navMapHref) || $navMapHref === '') {
                 </a>
             </div>
             <?php if ($user): ?>
-                <a href="<?= h($localizedProfile) ?>" class="flex items-center gap-3 text-white/80 hover:text-brand-yellow py-3 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
+                <a href="<?= h($localizedProfile) ?>" class="flex items-center gap-3 text-white/80 hover:text-sunset-400 py-3 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
                     <i data-lucide="user" class="w-5 h-5"></i>
                     <span><?= h(__('nav.my_profile')) ?></span>
                 </a>
-                <a href="<?= h($localizedProfile) ?>?tab=favorites" class="flex items-center gap-3 text-white/80 hover:text-brand-yellow py-3 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
+                <a href="<?= h($localizedProfile) ?>?tab=favorites" class="flex items-center gap-3 text-white/80 hover:text-sunset-400 py-3 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
                     <i data-lucide="heart" class="w-5 h-5 text-red-400 fill-red-400"></i>
                     <span><?= h(__('nav.favorites')) ?></span>
                 </a>
-                <div class="pt-3 mt-3 border-t border-white/10">
+                <div class="pt-3 mt-3 border-t border-ocean-700">
                     <div class="flex items-center gap-3 py-2 px-3">
-                        <?php if (!empty($user['avatar_url'])): ?>
-                        <img src="<?= h($user['avatar_url']) ?>" alt="" class="w-8 h-8 rounded-full border border-white/20">
-                        <?php else: ?>
-                        <div class="w-8 h-8 rounded-full bg-brand-yellow/20 flex items-center justify-center text-brand-yellow font-medium text-sm">
-                            <?= strtoupper(substr($user['name'] ?? $user['email'], 0, 1)) ?>
+                        <?php if (!isset($_navAvatar)) { require_once APP_ROOT . '/inc/chat.php'; $_navAvatar = chatUserDisplayInfo($user); } ?>
+                        <div class="w-8 h-8 rounded-full <?= h($_navAvatar['color']) ?> flex items-center justify-center text-white font-semibold text-xs">
+                            <?= h($_navAvatar['initials']) ?>
                         </div>
-                        <?php endif; ?>
                         <span class="text-sm text-white/70"><?= h($user['name'] ?? __('nav.user_fallback')) ?></span>
                     </div>
                     <a href="<?= h($localizedLogout) ?>" class="block text-red-400 hover:text-red-300 py-2 px-3"><?= h(__('nav.logout')) ?></a>
                 </div>
             <?php else: ?>
-                <a href="<?= h($localizedLogin) ?>" class="block bg-brand-yellow text-brand-darker text-center py-3 rounded-lg mt-3 font-semibold"><?= h(__('nav.sign_in')) ?></a>
+                <a href="<?= h($localizedLogin) ?>" class="block bg-sunset-400 text-ocean-900 text-center py-3 rounded-lg mt-3 font-semibold"><?= h(__('nav.sign_in')) ?></a>
             <?php endif; ?>
 
             <!-- Mobile Language Switcher -->
-            <div class="pt-3 mt-3 border-t border-white/10">
+            <div class="pt-3 mt-3 border-t border-ocean-700">
                 <label class="block text-xs text-white/50 uppercase tracking-wide mb-2 px-3"><?= h(__('nav.language')) ?></label>
                 <div class="flex gap-2 px-3">
-                    <button type="button" data-target-url="<?= h($langSwitchEnUrl) ?>" data-action="setLanguage" data-action-args='["en","__this__"]' class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-colors <?= $currentLang === 'en' ? 'bg-brand-yellow text-brand-darker' : 'bg-white/10 text-white/80 hover:bg-white/20' ?>">
+                    <button type="button" data-target-url="<?= h($langSwitchEnUrl) ?>" data-action="setLanguage" data-action-args='["en","__this__"]' class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-colors <?= $currentLang === 'en' ? 'bg-sunset-400 text-ocean-900' : 'bg-white/10 text-white/80 hover:bg-white/20' ?>">
                         <span>🇺🇸</span> <?= h(__('nav.language_english')) ?>
                     </button>
-                    <button type="button" data-target-url="<?= h($langSwitchEsUrl) ?>" data-action="setLanguage" data-action-args='["es","__this__"]' class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-colors <?= $currentLang === 'es' ? 'bg-brand-yellow text-brand-darker' : 'bg-white/10 text-white/80 hover:bg-white/20' ?>">
+                    <button type="button" data-target-url="<?= h($langSwitchEsUrl) ?>" data-action="setLanguage" data-action-args='["es","__this__"]' class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-colors <?= $currentLang === 'es' ? 'bg-sunset-400 text-ocean-900' : 'bg-white/10 text-white/80 hover:bg-white/20' ?>">
                         <span>🇵🇷</span> <?= h(__('nav.language_spanish')) ?>
                     </button>
                 </div>

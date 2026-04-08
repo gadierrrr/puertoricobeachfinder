@@ -11,23 +11,23 @@
             <section id="reviews">
                 <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center gap-3">
-                        <h2 class="text-lg font-bold text-white"><?= h(__('beach.reviews_title')) ?></h2>
+                        <h2 class="text-lg font-bold text-warm-900"><?= h(__('beach.reviews_title')) ?></h2>
                         <?php if ($avgUserRating): ?>
                         <div class="flex items-center gap-1 text-sm">
-                            <span class="text-brand-yellow">★</span>
-                            <span class="text-white"><?= number_format($avgUserRating, 1) ?></span>
-                            <span class="text-gray-400">(<?= $userReviewCount ?>)</span>
+                            <span class="text-sunset-400">★</span>
+                            <span class="text-warm-900"><?= number_format($avgUserRating, 1) ?></span>
+                            <span class="text-warm-500">(<?= $userReviewCount ?>)</span>
                         </div>
                         <?php endif; ?>
                     </div>
                     <?php if (isAuthenticated()): ?>
                     <button data-action="openReviewForm" data-action-args='["<?= h($beach['id']) ?>","<?= h(addslashes($beach['name'])) ?>"]'
-                            class="bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-3 py-1.5 rounded-lg font-medium text-sm transition-colors">
+                            class="bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-3 py-1.5 rounded-lg font-medium text-sm transition-colors">
                         <?= h(__('beach.write_review')) ?>
                     </button>
                     <?php else: ?>
                     <a href="<?= h(routeUrl('login', $lang)) ?>?redirect=<?= urlencode(routeUrl('beach_detail', $lang, ['slug' => $beach['slug']]) . '#reviews') ?>"
-                       class="text-sm text-brand-yellow hover:text-yellow-300 font-medium"><?= h(__('beach.sign_in_to_review')) ?></a>
+                       class="text-sm text-sunset-400 hover:text-sunset-300 font-medium"><?= h(__('beach.sign_in_to_review')) ?></a>
                     <?php endif; ?>
                 </div>
                 <?php if (!empty($reviews)): ?>
@@ -37,7 +37,7 @@
                     <?php endforeach; ?>
                 </div>
                 <?php else: ?>
-                <p class="text-sm text-gray-400"><?= h(__('beach.no_reviews_yet')) ?></p>
+                <p class="text-sm text-warm-500"><?= h(__('beach.no_reviews_yet')) ?></p>
                 <?php endif; ?>
             </section>
 

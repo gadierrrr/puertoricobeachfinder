@@ -29,10 +29,10 @@ if ($token === '') {
             <h1 class="text-3xl md:text-5xl font-bold mb-4"><?= h(__('quiz_results.title')) ?></h1>
             <p class="text-lg md:text-xl opacity-90"><?= h(__('quiz_results.no_quiz_desc')) ?></p>
             <div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
-                <a href="/quiz" class="inline-flex items-center justify-center bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-5 py-2.5 rounded-lg font-semibold transition-colors">
+                <a href="/quiz" class="inline-flex items-center justify-center bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-5 py-2.5 rounded-lg font-semibold transition-colors">
                     <?= h(__('quiz_results.take_quiz')) ?>
                 </a>
-                <a href="/best-beaches" class="inline-flex items-center justify-center bg-white/10 hover:bg-white/20 border border-white/20 px-5 py-2.5 rounded-lg font-medium transition-colors">
+                <a href="/best-beaches" class="inline-flex items-center justify-center bg-warm-100 hover:bg-warm-200 border border-warm-200 px-5 py-2.5 rounded-lg font-medium transition-colors">
                     <?= h(__('quiz_results.browse_best')) ?>
                 </a>
             </div>
@@ -50,7 +50,7 @@ if (!$row) {
     $pageTitle = __('quiz_results.not_found_title');
     $pageDescription = __('quiz_results.not_found_desc');
     include APP_ROOT . '/components/header.php';
-    echo '<div class="max-w-2xl mx-auto px-4 py-16 text-center"><h1 class="text-2xl font-bold text-white mb-3">' . h(__('quiz_results.not_found_heading')) . '</h1><p class="text-gray-400">' . h(__('quiz_results.not_found_expired')) . '</p></div>';
+    echo '<div class="max-w-2xl mx-auto px-4 py-16 text-center"><h1 class="text-2xl font-bold text-warm-900 mb-3">' . h(__('quiz_results.not_found_heading')) . '</h1><p class="text-warm-500">' . h(__('quiz_results.not_found_expired')) . '</p></div>';
     include APP_ROOT . '/components/footer.php';
     exit;
 }
@@ -61,7 +61,7 @@ if (!is_array($matches) || empty($matches)) {
     $pageTitle = __('quiz_results.not_found_title');
     $pageDescription = __('quiz_results.not_found_desc');
     include APP_ROOT . '/components/header.php';
-    echo '<div class="max-w-2xl mx-auto px-4 py-16 text-center"><h1 class="text-2xl font-bold text-white mb-3">' . h(__('quiz_results.not_found_heading')) . '</h1><p class="text-gray-400">' . h(__('quiz_results.not_found_empty')) . '</p></div>';
+    echo '<div class="max-w-2xl mx-auto px-4 py-16 text-center"><h1 class="text-2xl font-bold text-warm-900 mb-3">' . h(__('quiz_results.not_found_heading')) . '</h1><p class="text-warm-500">' . h(__('quiz_results.not_found_empty')) . '</p></div>';
     include APP_ROOT . '/components/footer.php';
     exit;
 }
@@ -93,23 +93,23 @@ include APP_ROOT . '/components/header.php';
         <h1 class="text-3xl md:text-5xl font-bold mb-4"><?= h(__('quiz_results.your_matches')) ?></h1>
         <p class="text-lg md:text-xl opacity-90"><?= h(__('quiz_results.save_link')) ?></p>
         <div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <a href="/quiz" class="inline-flex items-center justify-center bg-white/10 hover:bg-white/20 border border-white/20 px-5 py-2.5 rounded-lg font-medium transition-colors">
+            <a href="/quiz" class="inline-flex items-center justify-center bg-warm-100 hover:bg-warm-200 border border-warm-200 px-5 py-2.5 rounded-lg font-medium transition-colors">
                 <?= h(__('quiz_results.retake')) ?>
             </a>
             <button type="button"
                     data-action="bfShareCurrentQuizResults"
                     data-bf-source="quiz_results"
-                    class="inline-flex items-center justify-center bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-5 py-2.5 rounded-lg font-semibold transition-colors">
+                    class="inline-flex items-center justify-center bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-5 py-2.5 rounded-lg font-semibold transition-colors">
                 <?= h(__('quiz_results.share')) ?>
             </button>
         </div>
     </div>
 </section>
 
-<section class="py-10 bg-brand-dark">
+<section class="py-10 bg-sand-50">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
-            <h2 class="text-xl font-bold text-white mb-4"><?= h(__('quiz_results.top_matches')) ?></h2>
+        <div class="bg-warm-50 border border-warm-200 rounded-2xl p-6">
+            <h2 class="text-xl font-bold text-warm-900 mb-4"><?= h(__('quiz_results.top_matches')) ?></h2>
 
             <div class="space-y-4">
                 <?php foreach ($matches as $m):
@@ -122,7 +122,7 @@ include APP_ROOT . '/components/header.php';
                     $muni = (string)($b['municipality'] ?? ($m['municipality'] ?? ''));
                     $cover = (string)($b['cover_image'] ?? ($m['cover_image'] ?? '/images/beaches/placeholder-beach.webp'));
                 ?>
-                <div class="flex gap-4 bg-white/5 border border-white/10 rounded-xl p-4"
+                <div class="flex gap-4 bg-warm-50 border border-warm-200 rounded-xl p-4"
                      data-bf-beach-id="<?= h($id) ?>"
                      data-bf-beach-slug="<?= h($slug) ?>"
                      data-bf-municipality="<?= h($muni) ?>"
@@ -131,27 +131,27 @@ include APP_ROOT . '/components/header.php';
                     <div class="flex-1 min-w-0">
                         <div class="flex items-start justify-between gap-3">
                             <div>
-                                <div class="text-sm text-gray-400"><?= h($muni) ?></div>
-                                <div class="text-lg font-semibold text-white"><?= h($name) ?></div>
+                                <div class="text-sm text-warm-500"><?= h($muni) ?></div>
+                                <div class="text-lg font-semibold text-warm-900"><?= h($name) ?></div>
                             </div>
-                            <div class="text-sm font-bold text-brand-yellow"><?= $score ?>%</div>
+                            <div class="text-sm font-bold text-sunset-400"><?= $score ?>%</div>
                         </div>
                         <?php if (is_array($reasons) && !empty($reasons)): ?>
                         <div class="flex flex-wrap gap-1.5 mt-2">
                             <?php foreach (array_slice($reasons, 0, 4) as $reason): ?>
-                            <span class="text-xs bg-brand-yellow/10 text-brand-yellow px-2 py-0.5 rounded-full border border-brand-yellow/20"><?= h((string)$reason) ?></span>
+                            <span class="text-xs bg-sunset-400/10 text-sunset-400 px-2 py-0.5 rounded-full border border-sunset-400/20"><?= h((string)$reason) ?></span>
                             <?php endforeach; ?>
                         </div>
                         <?php endif; ?>
                         <div class="mt-3 flex flex-wrap gap-2">
                             <a href="/beach/<?= h($slug) ?>"
-                               class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-3 py-2 rounded-lg text-sm border border-white/10 transition-colors">
+                               class="inline-flex items-center gap-2 bg-warm-100 hover:bg-warm-200 text-warm-900 px-3 py-2 rounded-lg text-sm border border-warm-200 transition-colors">
                                 <?= h(__('quiz_results.view_details')) ?>
                             </a>
                             <?php if ($b): ?>
                             <a href="<?= h(getDirectionsUrl($b)) ?>" target="_blank" rel="noopener noreferrer"
                                data-bf-track="directions"
-                               class="inline-flex items-center gap-2 bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-3 py-2 rounded-lg text-sm font-semibold transition-colors">
+                               class="inline-flex items-center gap-2 bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-3 py-2 rounded-lg text-sm font-semibold transition-colors">
                                 <?= h(__('quiz_results.directions')) ?>
                             </a>
                             <?php endif; ?>

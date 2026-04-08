@@ -27,7 +27,7 @@ if (empty($breadcrumbs)) {
 $styles = [
     'dark' => [
         'nav' => 'text-white/60',
-        'link' => 'hover:text-brand-yellow transition-colors',
+        'link' => 'hover:text-sunset-400 transition-colors',
         'separator' => 'text-white/40',
         'current' => 'text-white/90 font-medium'
     ],

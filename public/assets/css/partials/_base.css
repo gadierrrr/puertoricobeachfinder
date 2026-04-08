@@ -1,15 +1,15 @@
 /* ==========================================================
-   _base.css — Typography, glassmorphism utilities, animations
+   _base.css — Typography, surface utilities, animations
    Used by: all pages (global styles)
    Dependencies: _variables.css
    ========================================================== */
 
 /* ========================================
-   TYPOGRAPHY - PLAYFAIR DISPLAY ITALIC
+   TYPOGRAPHY - SERIF DISPLAY
    ======================================== */
 
 .font-uncharted {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'DM Serif Display', 'Playfair Display', Georgia, serif;
     font-style: italic;
 }
 
@@ -44,27 +44,21 @@
 }
 
 /* ========================================
-   GLASSMORPHISM UTILITIES
+   SURFACE UTILITIES (replaces glassmorphism)
    ======================================== */
 
-.glass {
-    background: var(--glass-bg);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    border: 1px solid var(--glass-border);
+/* Elevated surface — white card with subtle shadow */
+.surface-elevated {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-card);
+    border-radius: 0.75rem;
 }
 
-.glass-light {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.glass-dark {
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+/* Muted surface — subtle background */
+.surface-muted {
+    background: var(--color-surface-muted);
+    border: 1px solid var(--color-border-light);
+    border-radius: 0.75rem;
 }
 

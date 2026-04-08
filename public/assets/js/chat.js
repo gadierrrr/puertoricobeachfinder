@@ -1,0 +1,369 @@
+/**
+ * Chat Panel — Floating bubble + inbox + thread view
+ * CSP-compliant: all handlers via data-action (csp-bindings.js)
+ */
+
+(function () {
+    'use strict';
+
+    var chatOpen = false;
+    var currentChannelId = null;
+    var inboxLoaded = false;
+    var pollInterval = null;
+
+    var container = function () { return document.getElementById('chat-container'); };
+    var panel = function () { return document.getElementById('chat-panel'); };
+    var fabIconOpen = function () { return document.getElementById('chat-fab-icon-open'); };
+    var fabIconClose = function () { return document.getElementById('chat-fab-icon-close'); };
+    var headerInbox = function () { return document.getElementById('chat-header-inbox'); };
+    var headerThread = function () { return document.getElementById('chat-header-thread'); };
+    var inboxEl = function () { return document.getElementById('chat-inbox'); };
+    var threadEl = function () { return document.getElementById('chat-thread'); };
+    var composeEl = function () { return document.getElementById('chat-compose'); };
+    var composeInput = function () { return document.getElementById('chat-compose-input'); };
+    var threadTitle = function () { return document.getElementById('chat-thread-title'); };
+    var threadSubtitle = function () { return document.getElementById('chat-thread-subtitle'); };
+    var threadIcon = function () { return document.getElementById('chat-thread-icon'); };
+
+    function getBeachId() {
+        var c = container();
+        return c ? c.getAttribute('data-beach-id') || '' : '';
+    }
+
+    function isAuth() {
+        var c = container();
+        return c ? c.getAttribute('data-authenticated') === '1' : false;
+    }
+
+    // --- Toggle Panel ---
+    window.toggleChatPanel = function () {
+        chatOpen = !chatOpen;
+        var p = panel();
+        if (!p) return;
+
+        if (chatOpen) {
+            p.classList.remove('closed');
+            p.classList.add('open');
+            if (fabIconOpen()) fabIconOpen().classList.add('hidden');
+            if (fabIconClose()) fabIconClose().classList.remove('hidden');
+            // Hide badge when open
+            var badge = document.getElementById('chat-fab-badge-container');
+            if (badge) badge.style.display = 'none';
+            // Load inbox on first open
+            if (!inboxLoaded) {
+                loadInbox();
+            }
+        } else {
+            closeChatPanelInternal();
+        }
+    };
+
+    window.closeChatPanel = function () {
+        closeChatPanelInternal();
+    };
+
+    function closeChatPanelInternal() {
+        chatOpen = false;
+        var p = panel();
+        if (p) {
+            p.classList.add('closed');
+            p.classList.remove('open');
+        }
+        if (fabIconOpen()) fabIconOpen().classList.remove('hidden');
+        if (fabIconClose()) fabIconClose().classList.add('hidden');
+        // Show badge again
+        var badge = document.getElementById('chat-fab-badge-container');
+        if (badge) badge.style.display = '';
+        // Stop polling
+        stopPolling();
+        // Reset to inbox after animation
+        setTimeout(function () {
+            if (!chatOpen) showInbox();
+        }, 300);
+    }
+
+    // --- Inbox ---
+    function loadInbox() {
+        var inbox = inboxEl();
+        if (!inbox) return;
+
+        var beachId = getBeachId();
+        var url = '/api/chat/inbox' + (beachId ? '?beach_id=' + encodeURIComponent(beachId) : '');
+
+        inbox.innerHTML = '<div class="px-4 py-8 text-center"><div class="inline-block w-5 h-5 border-2 border-white/20 border-t-white/60 rounded-full animate-spin"></div></div>';
+
+        fetch(url, { headers: { 'HX-Request': 'true' } })
+            .then(function (r) { return r.text(); })
+            .then(function (html) {
+                inbox.innerHTML = html;
+                inboxLoaded = true;
+            })
+            .catch(function () {
+                inbox.innerHTML = '<div class="px-4 py-8 text-center text-xs text-warm-500">Failed to load</div>';
+            });
+    }
+
+    function showInbox() {
+        if (headerInbox()) headerInbox().classList.remove('hidden');
+        if (headerThread()) headerThread().classList.add('hidden');
+        if (inboxEl()) inboxEl().classList.remove('hidden');
+        if (threadEl()) threadEl().classList.add('hidden');
+        if (composeEl()) composeEl().classList.add('hidden');
+        currentChannelId = null;
+        stopPolling();
+    }
+
+    window.chatBack = function () {
+        showInbox();
+        // Refresh inbox to update unread counts
+        loadInbox();
+    };
+
+    // --- Thread ---
+    window.openChatThread = function (channelId) {
+        currentChannelId = channelId;
+
+        // Show thread view
+        if (headerInbox()) headerInbox().classList.add('hidden');
+        if (headerThread()) headerThread().classList.remove('hidden');
+        if (inboxEl()) inboxEl().classList.add('hidden');
+        if (threadEl()) {
+            threadEl().classList.remove('hidden');
+            threadEl().innerHTML = '<div class="px-4 py-8 text-center"><div class="inline-block w-5 h-5 border-2 border-white/20 border-t-white/60 rounded-full animate-spin"></div></div>';
+        }
+        if (composeEl()) composeEl().classList.remove('hidden');
+
+        // Set header info (will be updated once we know the channel)
+        if (threadTitle()) threadTitle().textContent = 'Loading...';
+        if (threadSubtitle()) threadSubtitle().textContent = '';
+
+        // Fetch messages
+        fetch('/api/chat/messages?channel_id=' + encodeURIComponent(channelId), {
+            headers: { 'HX-Request': 'true' }
+        })
+            .then(function (r) { return r.text(); })
+            .then(function (html) {
+                var t = threadEl();
+                if (t) {
+                    t.innerHTML = html;
+                    t.scrollTop = t.scrollHeight;
+                }
+                // Update header from the clicked inbox item data
+                updateThreadHeader(channelId);
+                // Start polling for new messages
+                startPolling(channelId);
+            })
+            .catch(function () {
+                if (threadEl()) threadEl().innerHTML = '<div class="px-4 py-8 text-center text-xs text-warm-500">Failed to load</div>';
+            });
+    };
+
+    function updateThreadHeader(channelId) {
+        // Try to get info from the inbox item that was clicked
+        var btn = document.querySelector('[data-action-args=\'["' + channelId + '"]\']');
+        if (btn) {
+            var nameEl = btn.querySelector('.text-xs.font-semibold');
+            var iconEl = btn.querySelector('.w-9');
+            if (nameEl && threadTitle()) threadTitle().textContent = nameEl.textContent;
+            if (iconEl && threadIcon()) {
+                threadIcon().textContent = iconEl.textContent;
+                threadIcon().className = iconEl.className.replace('w-9 h-9', 'w-7 h-7');
+            }
+        }
+        // Count messages for subtitle
+        var msgs = threadEl() ? threadEl().querySelectorAll('[data-message-id]') : [];
+        if (threadSubtitle()) threadSubtitle().textContent = msgs.length + ' messages';
+    }
+
+    // --- Polling ---
+    function startPolling(channelId) {
+        stopPolling();
+        pollInterval = setInterval(function () {
+            if (currentChannelId !== channelId || document.hidden) {
+                return;
+            }
+            var t = threadEl();
+            if (!t) return;
+            var lastMsg = t.querySelector('[data-message-id]:last-child');
+            var afterId = lastMsg ? lastMsg.getAttribute('data-message-id') : '';
+            if (!afterId) return; // Empty thread — nothing to poll after
+
+            fetch('/api/chat/poll?channel_id=' + encodeURIComponent(channelId) + '&after=' + encodeURIComponent(afterId), {
+                headers: { 'HX-Request': 'true' }
+            })
+                .then(function (r) {
+                    if (r.status === 204) return null;
+                    if (r.status === 404) { stopPolling(); return null; }
+                    if (!r.ok) return null;
+                    return r.text();
+                })
+                .then(function (html) {
+                    if (!html || currentChannelId !== channelId) return;
+                    var t = threadEl();
+                    if (t) {
+                        var wasAtBottom = t.scrollHeight - t.scrollTop - t.clientHeight < 50;
+                        t.insertAdjacentHTML('beforeend', html);
+                        if (wasAtBottom) t.scrollTop = t.scrollHeight;
+                    }
+                })
+                .catch(function () { /* silent */ });
+        }, 5000);
+    }
+
+    function stopPolling() {
+        if (pollInterval) {
+            clearInterval(pollInterval);
+            pollInterval = null;
+        }
+    }
+
+    // --- Send Message ---
+    var sending = false;
+    window.chatSendMessage = function () {
+        if (sending || !currentChannelId || !isAuth()) return;
+        var input = composeInput();
+        if (!input) return;
+        var body = input.value.trim();
+        if (!body) return;
+
+        var c = container();
+        var csrfToken = c ? (c.getAttribute('data-csrf') || '') : '';
+
+        // Build form data
+        var fd = new FormData();
+        fd.append('channel_id', currentChannelId);
+        fd.append('body', body);
+        fd.append('csrf_token', csrfToken);
+
+        // Disable input during send
+        sending = true;
+        input.disabled = true;
+        input.style.opacity = '0.5';
+
+        fetch('/api/chat/send', {
+            method: 'POST',
+            headers: { 'HX-Request': 'true' },
+            body: fd
+        })
+            .then(function (r) {
+                if (!r.ok) {
+                    return r.text().then(function (text) {
+                        try {
+                            var j = JSON.parse(text);
+                            throw new Error(j.error || 'Failed to send');
+                        } catch (e) {
+                            if (e.message) throw e;
+                            throw new Error('Failed to send message');
+                        }
+                    });
+                }
+                return r.text();
+            })
+            .then(function (html) {
+                input.value = '';
+                input.style.height = 'auto';
+                var t = threadEl();
+                if (t) {
+                    t.insertAdjacentHTML('beforeend', html);
+                    t.scrollTop = t.scrollHeight;
+                }
+            })
+            .catch(function (err) {
+                if (typeof showToast === 'function') {
+                    showToast(err.message || 'Failed to send message', 'error', 4000);
+                }
+            })
+            .finally(function () {
+                sending = false;
+                input.disabled = false;
+                input.style.opacity = '1';
+                input.focus();
+            });
+    };
+
+    // Enter-to-send handler
+    window.chatSendOnEnter = function (e) {
+        if (e && e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            window.chatSendMessage();
+        }
+    };
+
+    // Auto-resize textarea
+    document.addEventListener('input', function (e) {
+        if (e.target && e.target.id === 'chat-compose-input') {
+            e.target.style.height = 'auto';
+            e.target.style.height = Math.min(e.target.scrollHeight, 80) + 'px';
+        }
+    });
+
+    // --- Report ---
+    window.chatReportMessage = function (messageId) {
+        if (!isAuth() || !messageId) return;
+
+        // Show inline report menu instead of blocking prompt()
+        var existing = document.getElementById('chat-report-menu');
+        if (existing) existing.remove();
+
+        var menu = document.createElement('div');
+        menu.id = 'chat-report-menu';
+        menu.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:200;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5)';
+        menu.innerHTML = '<div style="background:#1e293b;border-radius:12px;padding:20px;max-width:280px;width:90%;border:1px solid rgba(255,255,255,0.1)">' +
+            '<p style="color:#e2e8f0;font-size:13px;font-weight:600;margin:0 0 12px">Report this message</p>' +
+            '<div style="display:flex;flex-direction:column;gap:6px">' +
+            ['spam', 'harassment', 'inappropriate', 'misinformation', 'other'].map(function (r) {
+                return '<button data-reason="' + r + '" style="text-align:left;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px 12px;color:#94a3b8;font-size:12px;cursor:pointer">' +
+                    r.charAt(0).toUpperCase() + r.slice(1) + '</button>';
+            }).join('') +
+            '</div>' +
+            '<button id="chat-report-cancel" style="margin-top:10px;width:100%;text-align:center;color:#64748b;font-size:11px;background:none;border:none;cursor:pointer;padding:6px">Cancel</button>' +
+            '</div>';
+
+        document.body.appendChild(menu);
+
+        menu.querySelector('#chat-report-cancel').addEventListener('click', function () { menu.remove(); });
+        menu.addEventListener('click', function (e) { if (e.target === menu) menu.remove(); });
+
+        menu.querySelectorAll('[data-reason]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var reason = btn.getAttribute('data-reason');
+                menu.remove();
+                submitReport(messageId, reason);
+            });
+        });
+    };
+
+    function submitReport(messageId, reason) {
+        var fd = new FormData();
+        fd.append('message_id', messageId);
+        fd.append('reason', reason);
+        var c = container();
+        fd.append('csrf_token', c ? (c.getAttribute('data-csrf') || '') : '');
+
+        fetch('/api/chat/report', {
+            method: 'POST',
+            body: fd
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (data.success && typeof showToast === 'function') {
+                    showToast((window.BF_STRINGS || {}).chat_report_submitted || 'Report submitted. Thank you.', 'success', 3000);
+                } else if (!data.success && typeof showToast === 'function') {
+                    showToast(data.error || 'Could not submit report', 'error', 3000);
+                }
+            })
+            .catch(function () {
+                if (typeof showToast === 'function') {
+                    showToast('Could not submit report', 'error', 3000);
+                }
+            });
+    }
+
+    // --- Cleanup ---
+    window.addEventListener('beforeunload', function () { stopPolling(); });
+    document.addEventListener('visibilitychange', function () {
+        if (document.hidden) { stopPolling(); }
+        else if (currentChannelId && chatOpen) { startPolling(currentChannelId); }
+    });
+
+})();

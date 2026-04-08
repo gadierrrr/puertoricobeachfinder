@@ -15,7 +15,7 @@ if (!$weather || !isset($weather['current'])) {
     // Show placeholder if no weather data
     if ($size !== 'compact') {
         $unavailMsg = function_exists('__') ? __('weather.unavailable') : 'Weather unavailable';
-        echo '<div class="weather-widget weather-error text-sm text-gray-400">' . h($unavailMsg) . '</div>';
+        echo '<div class="weather-widget weather-error text-sm text-warm-500">' . h($unavailMsg) . '</div>';
     }
     return;
 }
@@ -40,26 +40,26 @@ $windDir = getWindDirection($current['wind_direction'] ?? 0);
         <div class="flex items-center gap-2">
             <span class="text-2xl"><?= $recommendation['icon'] ?></span>
             <div>
-                <div class="font-semibold text-white text-sm"><?= h($recommendation['verdict']) ?></div>
-                <div class="text-xs text-gray-500"><?= h($current['description']) ?></div>
+                <div class="font-semibold text-warm-900 text-sm"><?= h($recommendation['verdict']) ?></div>
+                <div class="text-xs text-warm-500"><?= h($current['description']) ?></div>
             </div>
         </div>
         <div class="text-right">
-            <div class="text-2xl font-bold text-brand-yellow"><?= round($current['temperature']) ?>°</div>
+            <div class="text-2xl font-bold text-sunset-400"><?= round($current['temperature']) ?>°</div>
         </div>
     </div>
     <div class="grid grid-cols-3 gap-2 text-center text-xs">
-        <div class="bg-white/5 rounded p-2">
-            <div class="text-gray-400"><?= h(function_exists('__') ? __('weather.wind') : 'Wind') ?></div>
-            <div class="text-white font-medium"><?= round($current['wind_speed']) ?><?= h(function_exists('__') ? __('weather_ui.mph') : 'mph') ?></div>
+        <div class="bg-warm-50 rounded p-2">
+            <div class="text-warm-500"><?= h(function_exists('__') ? __('weather.wind') : 'Wind') ?></div>
+            <div class="text-warm-900 font-medium"><?= round($current['wind_speed']) ?><?= h(function_exists('__') ? __('weather_ui.mph') : 'mph') ?></div>
         </div>
-        <div class="bg-white/5 rounded p-2">
-            <div class="text-gray-400"><?= h(function_exists('__') ? __('weather_ui.uv_label') : 'UV') ?></div>
-            <div class="text-brand-yellow font-medium"><?= $uvLevel['level'] ?></div>
+        <div class="bg-warm-50 rounded p-2">
+            <div class="text-warm-500"><?= h(function_exists('__') ? __('weather_ui.uv_label') : 'UV') ?></div>
+            <div class="text-sunset-400 font-medium"><?= $uvLevel['level'] ?></div>
         </div>
-        <div class="bg-white/5 rounded p-2">
-            <div class="text-gray-400"><?= h(function_exists('__') ? __('weather.humidity') : 'Humidity') ?></div>
-            <div class="text-white font-medium"><?= round($current['humidity']) ?>%</div>
+        <div class="bg-warm-50 rounded p-2">
+            <div class="text-warm-500"><?= h(function_exists('__') ? __('weather.humidity') : 'Humidity') ?></div>
+            <div class="text-warm-900 font-medium"><?= round($current['humidity']) ?>%</div>
         </div>
     </div>
     <?php if ($current['uv_index'] >= 6): ?>
@@ -120,18 +120,18 @@ $_todayLabel = $_t ? __('weather.today') : 'Today';
 ?>
 <div class="weather-widget weather-full beach-detail-card overflow-hidden">
     <!-- Header with recommendation - Dark background -->
-    <div class="bg-[#1c2128] p-5 border-b border-white/10">
+    <div class="bg-ocean-50 p-5 border-b border-warm-200">
         <div class="flex items-center justify-between">
             <div>
-                <div class="flex items-center gap-2 text-lg font-semibold text-white">
+                <div class="flex items-center gap-2 text-lg font-semibold text-warm-900">
                     <span><?= $recommendation['icon'] ?></span>
                     <span><?= h($recommendation['verdict']) ?></span>
                 </div>
-                <p class="text-sm text-gray-400 mt-1"><?= h($recommendation['message']) ?></p>
+                <p class="text-sm text-warm-500 mt-1"><?= h($recommendation['message']) ?></p>
             </div>
             <div class="text-right">
-                <div class="text-4xl font-bold text-brand-yellow"><?= round($current['temperature']) ?>°</div>
-                <div class="text-sm text-gray-400"><?= h($_feelsLabel) ?> <?= round($current['feels_like']) ?>°</div>
+                <div class="text-4xl font-bold text-sunset-400"><?= round($current['temperature']) ?>°</div>
+                <div class="text-sm text-warm-500"><?= h($_feelsLabel) ?> <?= round($current['feels_like']) ?>°</div>
             </div>
         </div>
     </div>
@@ -140,31 +140,31 @@ $_todayLabel = $_t ? __('weather.today') : 'Today';
     <div class="p-4">
         <div class="weather-conditions-grid grid grid-cols-2 gap-2 sm:gap-3">
             <!-- Weather -->
-            <div class="text-center p-3 bg-white/5 rounded-lg border border-white/5">
+            <div class="text-center p-3 bg-warm-50 rounded-lg border border-warm-100">
                 <div class="text-2xl mb-1"><?= $current['icon'] ?></div>
-                <div class="text-sm font-medium text-white"><?= h($current['description']) ?></div>
-                <div class="text-xs text-gray-500"><?= h($_currentLabel) ?></div>
+                <div class="text-sm font-medium text-warm-900"><?= h($current['description']) ?></div>
+                <div class="text-xs text-warm-500"><?= h($_currentLabel) ?></div>
             </div>
 
             <!-- Wind -->
-            <div class="text-center p-3 bg-white/5 rounded-lg border border-white/5">
+            <div class="text-center p-3 bg-warm-50 rounded-lg border border-warm-100">
                 <div class="text-2xl mb-1">💨</div>
-                <div class="text-sm font-medium text-white"><?= round($current['wind_speed']) ?> <?= h(function_exists('__') ? __('weather_ui.mph') : 'mph') ?></div>
-                <div class="text-xs text-gray-500"><?= $windDir ?> <?= h($_windSuffix) ?></div>
+                <div class="text-sm font-medium text-warm-900"><?= round($current['wind_speed']) ?> <?= h(function_exists('__') ? __('weather_ui.mph') : 'mph') ?></div>
+                <div class="text-xs text-warm-500"><?= $windDir ?> <?= h($_windSuffix) ?></div>
             </div>
 
             <!-- UV Index -->
-            <div class="text-center p-3 bg-white/5 rounded-lg border border-white/5">
+            <div class="text-center p-3 bg-warm-50 rounded-lg border border-warm-100">
                 <div class="text-2xl mb-1">☀️</div>
-                <div class="text-sm font-medium text-brand-yellow"><?= $uvLevel['level'] ?></div>
-                <div class="text-xs text-gray-500"><?= h(function_exists('__') ? __('weather_ui.uv_label') : 'UV') ?> <?= round($current['uv_index']) ?></div>
+                <div class="text-sm font-medium text-sunset-400"><?= $uvLevel['level'] ?></div>
+                <div class="text-xs text-warm-500"><?= h(function_exists('__') ? __('weather_ui.uv_label') : 'UV') ?> <?= round($current['uv_index']) ?></div>
             </div>
 
             <!-- Humidity -->
-            <div class="text-center p-3 bg-white/5 rounded-lg border border-white/5">
+            <div class="text-center p-3 bg-warm-50 rounded-lg border border-warm-100">
                 <div class="text-2xl mb-1">💧</div>
-                <div class="text-sm font-medium text-white"><?= round($current['humidity']) ?>%</div>
-                <div class="text-xs text-gray-500"><?= h($_humidityLabel) ?></div>
+                <div class="text-sm font-medium text-warm-900"><?= round($current['humidity']) ?>%</div>
+                <div class="text-xs text-warm-500"><?= h($_humidityLabel) ?></div>
             </div>
         </div>
 
@@ -180,7 +180,7 @@ $_todayLabel = $_t ? __('weather.today') : 'Today';
 
         <!-- Sun times -->
         <?php if (!empty($weather['sunrise']) && !empty($weather['sunset'])): ?>
-        <div class="mt-4 flex items-center justify-center gap-6 text-sm text-gray-400">
+        <div class="mt-4 flex items-center justify-center gap-6 text-sm text-warm-500">
             <div class="flex items-center gap-1">
                 <span>🌅</span>
                 <span><?= h($_sunriseLabel) ?> <?= formatSunTime($weather['sunrise']) ?></span>
@@ -195,8 +195,8 @@ $_todayLabel = $_t ? __('weather.today') : 'Today';
 
     <!-- 3-day forecast -->
     <?php if (!empty($weather['daily'])): ?>
-    <div class="border-t border-white/10 p-4">
-        <h4 class="text-sm font-semibold text-gray-400 mb-3"><?= h($_forecastLabel) ?></h4>
+    <div class="border-t border-warm-200 p-4">
+        <h4 class="text-sm font-semibold text-warm-500 mb-3"><?= h($_forecastLabel) ?></h4>
         <div class="grid grid-cols-3 gap-2">
             <?php foreach (array_slice($weather['daily'], 0, 3) as $i => $day): ?>
             <?php
@@ -204,12 +204,12 @@ $_todayLabel = $_t ? __('weather.today') : 'Today';
                 $dayKeys = ['day_sun', 'day_mon', 'day_tue', 'day_wed', 'day_thu', 'day_fri', 'day_sat'];
                 $dayLabel = function_exists('__') ? __('weather_ui.' . $dayKeys[$dayNum]) : date('D', strtotime($day['date']));
             ?>
-            <div class="text-center p-2 <?= $i === 0 ? 'bg-brand-yellow/10 border border-brand-yellow/20 rounded-lg' : '' ?>">
-                <div class="text-xs font-medium <?= $i === 0 ? 'text-brand-yellow' : 'text-gray-500' ?>">
+            <div class="text-center p-2 <?= $i === 0 ? 'bg-sunset-400/10 border border-sunset-400/20 rounded-lg' : '' ?>">
+                <div class="text-xs font-medium <?= $i === 0 ? 'text-sunset-400' : 'text-warm-500' ?>">
                     <?= $i === 0 ? h($_todayLabel) : h($dayLabel) ?>
                 </div>
                 <div class="text-xl my-1"><?= getWeatherIcon($day['weather_code']) ?></div>
-                <div class="text-sm font-medium text-white">
+                <div class="text-sm font-medium text-warm-900">
                     <?= round($day['temp_max']) ?>° / <?= round($day['temp_min']) ?>°
                 </div>
                 <?php if ($day['precipitation_probability'] > 30): ?>

@@ -77,9 +77,9 @@ $breadcrumbs = [
 include APP_ROOT . '/components/header.php';
 ?>
 
-<main id="main-content" class="min-h-screen bg-brand-darker">
+<main id="main-content" class="min-h-screen bg-sand-50">
     <!-- Header -->
-    <section class="bg-brand-dark border-b border-white/10 py-6 pt-24">
+    <section class="bg-white border-b border-warm-200 py-6 pt-24">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Breadcrumbs -->
             <div class="mb-4">
@@ -87,18 +87,18 @@ include APP_ROOT . '/components/header.php';
             </div>
             <div class="flex items-center justify-between flex-wrap gap-4">
                 <div>
-                    <h1 class="text-2xl md:text-3xl font-bold text-white"><?= h(__('compare.title')) ?></h1>
-                    <p class="text-gray-400 mt-1"><?= h(__('compare.subtitle')) ?></p>
+                    <h1 class="text-2xl md:text-3xl font-bold text-warm-900"><?= h(__('compare.title')) ?></h1>
+                    <p class="text-warm-500 mt-1"><?= h(__('compare.subtitle')) ?></p>
                 </div>
                 <div class="flex gap-2">
                     <button data-action="openBeachSelector"
-                            class="bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-4 py-2 rounded-lg font-semibold transition-colors flex items-center gap-2">
+                            class="bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-4 py-2 rounded-lg font-semibold transition-colors flex items-center gap-2">
                         <i data-lucide="plus" class="w-4 h-4" aria-hidden="true"></i>
                         <span><?= h(__('compare.add_beach')) ?></span>
                     </button>
                     <?php if (!empty($beaches)): ?>
                     <button data-action="clearComparison"
-                            class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 border border-white/10">
+                            class="bg-warm-100 hover:bg-warm-200 text-warm-900 px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 border border-warm-200">
                         <i data-lucide="x" class="w-4 h-4" aria-hidden="true"></i>
                         <span><?= h(__('compare.clear_all')) ?></span>
                     </button>
@@ -113,15 +113,15 @@ include APP_ROOT . '/components/header.php';
     <section class="py-16">
         <div class="max-w-2xl mx-auto px-4 text-center">
             <div class="text-6xl mb-4">⚖️</div>
-            <h2 class="text-xl font-semibold text-white mb-2"><?= h(__('compare.no_beaches_selected')) ?></h2>
-            <p class="text-gray-400 mb-6"><?= h(__('compare.empty_state_description')) ?></p>
+            <h2 class="text-xl font-semibold text-warm-900 mb-2"><?= h(__('compare.no_beaches_selected')) ?></h2>
+            <p class="text-warm-500 mb-6"><?= h(__('compare.empty_state_description')) ?></p>
             <button data-action="openBeachSelector"
-                    class="bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-6 py-3 rounded-lg font-semibold transition-colors inline-flex items-center gap-2">
+                    class="bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-6 py-3 rounded-lg font-semibold transition-colors inline-flex items-center gap-2">
                 <i data-lucide="plus" class="w-5 h-5" aria-hidden="true"></i>
                 <span><?= h(__('compare.add_first_beach')) ?></span>
             </button>
             <p class="text-sm text-gray-500 mt-4">
-                <?= h(__('compare.tip_also_add')) ?> <a href="/" class="text-brand-yellow hover:text-yellow-300"><?= h(__('compare.beach_listing')) ?></a> <?= h(__('compare.tip_compare_button')) ?>
+                <?= h(__('compare.tip_also_add')) ?> <a href="/" class="text-sunset-400 hover:text-sunset-400"><?= h(__('compare.beach_listing')) ?></a> <?= h(__('compare.tip_compare_button')) ?>
             </p>
         </div>
     </section>
@@ -129,10 +129,10 @@ include APP_ROOT . '/components/header.php';
     <!-- Single Beach - Prompt to add more -->
     <section class="py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-brand-yellow/10 border border-brand-yellow/30 rounded-lg p-4 mb-6 flex items-center gap-3">
-                <i data-lucide="info" class="w-5 h-5 text-brand-yellow flex-shrink-0" aria-hidden="true"></i>
-                <p class="text-gray-300"><?= h(__('compare.add_more_prompt')) ?></p>
-                <button data-action="openBeachSelector" class="ml-auto bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors">
+            <div class="bg-sunset-400/10 border border-sunset-400/30 rounded-lg p-4 mb-6 flex items-center gap-3">
+                <i data-lucide="info" class="w-5 h-5 text-sunset-400 flex-shrink-0" aria-hidden="true"></i>
+                <p class="text-warm-600"><?= h(__('compare.add_more_prompt')) ?></p>
+                <button data-action="openBeachSelector" class="ml-auto bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors">
                     <?= h(__('compare.add_beach')) ?>
                 </button>
             </div>
@@ -146,14 +146,14 @@ include APP_ROOT . '/components/header.php';
                              alt="<?= h($beach['name']) ?>"
                              class="w-full h-48 object-cover">
                         <button data-action="removeFromComparison" data-action-args='["<?= h($beach['id']) ?>"]'
-                                class="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white p-1.5 rounded-full border border-white/10"
+                                class="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white p-1.5 rounded-full border border-warm-200"
                                 aria-label="<?= h(__('compare.aria_remove')) ?>">
                             <i data-lucide="x" class="w-4 h-4"></i>
                         </button>
                     </div>
                     <div class="p-4">
-                        <h3 class="font-bold text-lg text-white"><?= h($beach['name']) ?></h3>
-                        <p class="text-gray-400 text-sm"><?= h($beach['municipality']) ?></p>
+                        <h3 class="font-bold text-lg text-warm-900"><?= h($beach['name']) ?></h3>
+                        <p class="text-warm-500 text-sm"><?= h($beach['municipality']) ?></p>
                     </div>
                 </div>
             </div>
@@ -175,16 +175,16 @@ include APP_ROOT . '/components/header.php';
                                  class="w-full h-40 object-cover hover:opacity-90 transition-opacity">
                         </a>
                         <button data-action="removeFromComparison" data-action-args='["<?= h($beach['id']) ?>"]'
-                                class="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white p-1.5 rounded-full border border-white/10 transition-colors"
+                                class="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white p-1.5 rounded-full border border-warm-200 transition-colors"
                                 aria-label="<?= h(__('compare.aria_remove_named', ['name' => $beach['name']])) ?>">
                             <i data-lucide="x" class="w-4 h-4"></i>
                         </button>
                     </div>
                     <div class="p-4 text-center">
-                        <a href="/beach/<?= h($beach['slug']) ?>" class="font-bold text-lg text-white hover:text-brand-yellow transition-colors">
+                        <a href="/beach/<?= h($beach['slug']) ?>" class="font-bold text-lg text-warm-900 hover:text-sunset-400 transition-colors">
                             <?= h($beach['name']) ?>
                         </a>
-                        <p class="text-gray-400 text-sm"><?= h($beach['municipality']) ?></p>
+                        <p class="text-warm-500 text-sm"><?= h($beach['municipality']) ?></p>
                     </div>
                 </div>
                 <?php endforeach; ?>
@@ -195,19 +195,19 @@ include APP_ROOT . '/components/header.php';
 
                 <!-- Ratings -->
                 <div class="beach-detail-card overflow-hidden">
-                    <div class="bg-white/5 px-4 py-3 border-b border-white/10">
-                        <h3 class="font-semibold text-white flex items-center gap-2">
-                            <i data-lucide="star" class="w-4 h-4 text-brand-yellow" aria-hidden="true"></i>
+                    <div class="bg-warm-50 px-4 py-3 border-b border-warm-200">
+                        <h3 class="font-semibold text-warm-900 flex items-center gap-2">
+                            <i data-lucide="star" class="w-4 h-4 text-sunset-400" aria-hidden="true"></i>
                             <?= h(__('compare.section_ratings')) ?>
                         </h3>
                     </div>
-                    <div class="compare-grid grid grid-cols-1 sm:grid-cols-<?= count($beaches) ?> divide-y sm:divide-y-0 sm:divide-x divide-white/10">
+                    <div class="compare-grid grid grid-cols-1 sm:grid-cols-<?= count($beaches) ?> divide-y sm:divide-y-0 sm:divide-x divide-warm-200">
                         <?php foreach ($beaches as $beach): ?>
                         <div class="p-4 text-center">
                             <!-- Google Rating -->
                             <?php if ($beach['google_rating']): ?>
                             <div class="mb-3">
-                                <div class="text-2xl font-bold text-brand-yellow"><?= number_format($beach['google_rating'], 1) ?></div>
+                                <div class="text-2xl font-bold text-sunset-400"><?= number_format($beach['google_rating'], 1) ?></div>
                                 <div class="text-xs text-gray-500"><?= h(__('compare.google_rating')) ?></div>
                                 <?php if ($beach['google_review_count']): ?>
                                 <div class="text-xs text-gray-500">(<?= number_format($beach['google_review_count']) ?> <?= h(__('compare.reviews_count')) ?>)</div>
@@ -220,7 +220,7 @@ include APP_ROOT . '/components/header.php';
                             <!-- User Rating -->
                             <?php if ($beach['user_rating']): ?>
                             <div>
-                                <div class="text-xl font-bold text-brand-yellow"><?= number_format($beach['user_rating'], 1) ?></div>
+                                <div class="text-xl font-bold text-sunset-400"><?= number_format($beach['user_rating'], 1) ?></div>
                                 <div class="text-xs text-gray-500"><?= h(__('compare.community_rating')) ?></div>
                                 <div class="text-xs text-gray-500">(<?= $beach['user_review_count'] ?> <?= h(__('compare.reviews_count')) ?>)</div>
                             </div>
@@ -234,19 +234,19 @@ include APP_ROOT . '/components/header.php';
 
                 <!-- Activities (Tags) -->
                 <div class="beach-detail-card overflow-hidden">
-                    <div class="bg-white/5 px-4 py-3 border-b border-white/10">
-                        <h3 class="font-semibold text-white flex items-center gap-2">
-                            <i data-lucide="activity" class="w-4 h-4 text-brand-yellow" aria-hidden="true"></i>
+                    <div class="bg-warm-50 px-4 py-3 border-b border-warm-200">
+                        <h3 class="font-semibold text-warm-900 flex items-center gap-2">
+                            <i data-lucide="activity" class="w-4 h-4 text-sunset-400" aria-hidden="true"></i>
                             <?= h(__('compare.section_activities')) ?>
                         </h3>
                     </div>
-                    <div class="compare-grid grid grid-cols-1 sm:grid-cols-<?= count($beaches) ?> divide-y sm:divide-y-0 sm:divide-x divide-white/10">
+                    <div class="compare-grid grid grid-cols-1 sm:grid-cols-<?= count($beaches) ?> divide-y sm:divide-y-0 sm:divide-x divide-warm-200">
                         <?php foreach ($beaches as $beach): ?>
                         <div class="p-4">
                             <?php if (!empty($beach['tags'])): ?>
                             <div class="flex flex-wrap gap-1.5 justify-center">
                                 <?php foreach ($beach['tags'] as $tag): ?>
-                                <span class="inline-block bg-brand-yellow/10 text-brand-yellow px-2 py-1 rounded-full text-xs border border-brand-yellow/20">
+                                <span class="inline-block bg-sunset-400/10 text-sunset-400 px-2 py-1 rounded-full text-xs border border-sunset-400/20">
                                     <?= h(getTagLabel($tag)) ?>
                                 </span>
                                 <?php endforeach; ?>
@@ -261,13 +261,13 @@ include APP_ROOT . '/components/header.php';
 
                 <!-- Amenities -->
                 <div class="beach-detail-card overflow-hidden">
-                    <div class="bg-white/5 px-4 py-3 border-b border-white/10">
-                        <h3 class="font-semibold text-white flex items-center gap-2">
+                    <div class="bg-warm-50 px-4 py-3 border-b border-warm-200">
+                        <h3 class="font-semibold text-warm-900 flex items-center gap-2">
                             <i data-lucide="check-circle" class="w-4 h-4 text-green-400" aria-hidden="true"></i>
                             <?= h(__('compare.section_amenities')) ?>
                         </h3>
                     </div>
-                    <div class="compare-grid grid grid-cols-1 sm:grid-cols-<?= count($beaches) ?> divide-y sm:divide-y-0 sm:divide-x divide-white/10">
+                    <div class="compare-grid grid grid-cols-1 sm:grid-cols-<?= count($beaches) ?> divide-y sm:divide-y-0 sm:divide-x divide-warm-200">
                         <?php
                         // Collect all amenities across beaches
                         $allAmenities = [];
@@ -282,7 +282,7 @@ include APP_ROOT . '/components/header.php';
                             <?php if (!empty($beach['amenities'])): ?>
                             <ul class="space-y-1.5">
                                 <?php foreach ($allAmenities as $amenity): ?>
-                                <li class="flex items-center gap-2 text-sm <?= in_array($amenity, $beach['amenities']) ? 'text-gray-300' : 'text-gray-600' ?>">
+                                <li class="flex items-center gap-2 text-sm <?= in_array($amenity, $beach['amenities']) ? 'text-warm-600' : 'text-gray-600' ?>">
                                     <?php if (in_array($amenity, $beach['amenities'])): ?>
                                     <i data-lucide="check" class="w-4 h-4 text-green-400" aria-hidden="true"></i>
                                     <?php else: ?>
@@ -302,19 +302,19 @@ include APP_ROOT . '/components/header.php';
 
                 <!-- Conditions -->
                 <div class="beach-detail-card overflow-hidden">
-                    <div class="bg-white/5 px-4 py-3 border-b border-white/10">
-                        <h3 class="font-semibold text-white flex items-center gap-2">
+                    <div class="bg-warm-50 px-4 py-3 border-b border-warm-200">
+                        <h3 class="font-semibold text-warm-900 flex items-center gap-2">
                             <i data-lucide="waves" class="w-4 h-4 text-cyan-400" aria-hidden="true"></i>
                             <?= h(__('compare.section_conditions')) ?>
                         </h3>
                     </div>
-                    <div class="compare-grid grid grid-cols-1 sm:grid-cols-<?= count($beaches) ?> divide-y sm:divide-y-0 sm:divide-x divide-white/10">
+                    <div class="compare-grid grid grid-cols-1 sm:grid-cols-<?= count($beaches) ?> divide-y sm:divide-y-0 sm:divide-x divide-warm-200">
                         <?php foreach ($beaches as $beach): ?>
                         <div class="p-4 space-y-2">
                             <?php if ($beach['sargassum'] || $beach['surf'] || $beach['wind']): ?>
                                 <?php if ($beach['sargassum']): ?>
                                 <div class="flex justify-between items-center text-sm">
-                                    <span class="text-gray-400"><?= h(__('compare.condition_sargassum')) ?></span>
+                                    <span class="text-warm-500"><?= h(__('compare.condition_sargassum')) ?></span>
                                     <span class="<?= getConditionClassDark($beach['sargassum']) ?> px-2 py-0.5 rounded text-xs">
                                         <?= h(getConditionLabel('sargassum', $beach['sargassum'])) ?>
                                     </span>
@@ -322,7 +322,7 @@ include APP_ROOT . '/components/header.php';
                                 <?php endif; ?>
                                 <?php if ($beach['surf']): ?>
                                 <div class="flex justify-between items-center text-sm">
-                                    <span class="text-gray-400"><?= h(__('compare.condition_surf')) ?></span>
+                                    <span class="text-warm-500"><?= h(__('compare.condition_surf')) ?></span>
                                     <span class="<?= getConditionClassDark($beach['surf']) ?> px-2 py-0.5 rounded text-xs">
                                         <?= h(getConditionLabel('surf', $beach['surf'])) ?>
                                     </span>
@@ -330,7 +330,7 @@ include APP_ROOT . '/components/header.php';
                                 <?php endif; ?>
                                 <?php if ($beach['wind']): ?>
                                 <div class="flex justify-between items-center text-sm">
-                                    <span class="text-gray-400"><?= h(__('compare.condition_wind')) ?></span>
+                                    <span class="text-warm-500"><?= h(__('compare.condition_wind')) ?></span>
                                     <span class="<?= getConditionClassDark($beach['wind']) ?> px-2 py-0.5 rounded text-xs">
                                         <?= h(getConditionLabel('wind', $beach['wind'])) ?>
                                     </span>
@@ -346,25 +346,25 @@ include APP_ROOT . '/components/header.php';
 
                 <!-- Access & Parking -->
                 <div class="beach-detail-card overflow-hidden">
-                    <div class="bg-white/5 px-4 py-3 border-b border-white/10">
-                        <h3 class="font-semibold text-white flex items-center gap-2">
-                            <i data-lucide="car" class="w-4 h-4 text-brand-yellow" aria-hidden="true"></i>
+                    <div class="bg-warm-50 px-4 py-3 border-b border-warm-200">
+                        <h3 class="font-semibold text-warm-900 flex items-center gap-2">
+                            <i data-lucide="car" class="w-4 h-4 text-sunset-400" aria-hidden="true"></i>
                             <?= h(__('compare.section_access')) ?>
                         </h3>
                     </div>
-                    <div class="compare-grid grid grid-cols-1 sm:grid-cols-<?= count($beaches) ?> divide-y sm:divide-y-0 sm:divide-x divide-white/10">
+                    <div class="compare-grid grid grid-cols-1 sm:grid-cols-<?= count($beaches) ?> divide-y sm:divide-y-0 sm:divide-x divide-warm-200">
                         <?php foreach ($beaches as $beach): ?>
                         <div class="p-4 space-y-2 text-sm">
                             <?php if ($beach['access_label']): ?>
                             <div>
                                 <span class="text-gray-500"><?= h(__('compare.access_label')) ?></span>
-                                <span class="text-white font-medium ml-1"><?= h($beach['access_label']) ?></span>
+                                <span class="text-warm-900 font-medium ml-1"><?= h($beach['access_label']) ?></span>
                             </div>
                             <?php endif; ?>
                             <?php if ($beach['parking_details']): ?>
                             <div>
                                 <span class="text-gray-500"><?= h(__('compare.parking_label')) ?></span>
-                                <span class="text-gray-300 ml-1"><?= h($beach['parking_details']) ?></span>
+                                <span class="text-warm-600 ml-1"><?= h($beach['parking_details']) ?></span>
                             </div>
                             <?php endif; ?>
                             <?php if (!$beach['access_label'] && !$beach['parking_details']): ?>
@@ -377,16 +377,16 @@ include APP_ROOT . '/components/header.php';
 
                 <!-- Actions -->
                 <div class="beach-detail-card overflow-hidden">
-                    <div class="compare-grid compare-actions grid grid-cols-1 sm:grid-cols-<?= count($beaches) ?> divide-y sm:divide-y-0 sm:divide-x divide-white/10">
+                    <div class="compare-grid compare-actions grid grid-cols-1 sm:grid-cols-<?= count($beaches) ?> divide-y sm:divide-y-0 sm:divide-x divide-warm-200">
                         <?php foreach ($beaches as $beach): ?>
                         <div class="p-4 text-center">
                             <a href="/beach/<?= h($beach['slug']) ?>"
-                               class="inline-block bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-4 py-2 rounded-lg font-semibold transition-colors">
+                               class="inline-block bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-4 py-2 rounded-lg font-semibold transition-colors">
                                 <?= h(__('compare.view_details')) ?>
                             </a>
                             <a href="<?= h(getDirectionsUrl($beach)) ?>"
                                target="_blank"
-                               class="inline-block ml-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg font-medium transition-colors border border-white/10">
+                               class="inline-block ml-2 bg-warm-100 hover:bg-warm-200 text-warm-900 px-4 py-2 rounded-lg font-medium transition-colors border border-warm-200">
                                 <?= h(__('compare.directions')) ?>
                             </a>
                         </div>
@@ -401,21 +401,21 @@ include APP_ROOT . '/components/header.php';
 </main>
 
 <!-- Beach Selector Modal -->
-<div id="beach-selector-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden items-center justify-center p-4"
+<div id="beach-selector-modal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center p-4"
      role="dialog" aria-modal="true" aria-labelledby="selector-title" data-action="closeBeachSelector">
-    <div class="bg-brand-dark rounded-xl shadow-2xl max-w-lg w-full max-h-[80vh] flex flex-col border border-white/10" data-action-stop data-action="noop" data-on="click">
-        <div class="border-b border-white/10 px-6 py-4 flex items-center justify-between flex-shrink-0">
-            <h2 id="selector-title" class="text-lg font-semibold text-white"><?= h(__('compare.modal_title')) ?></h2>
-            <button data-action="closeBeachSelector" class="text-gray-400 hover:text-white p-1" aria-label="<?= h(__('compare.aria_close')) ?>">
+    <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-[80vh] flex flex-col border border-warm-200" data-action-stop data-action="noop" data-on="click">
+        <div class="border-b border-warm-200 px-6 py-4 flex items-center justify-between flex-shrink-0">
+            <h2 id="selector-title" class="text-lg font-semibold text-warm-900"><?= h(__('compare.modal_title')) ?></h2>
+            <button data-action="closeBeachSelector" class="text-warm-500 hover:text-warm-900 p-1" aria-label="<?= h(__('compare.aria_close')) ?>">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
         </div>
 
-        <div class="p-4 border-b border-white/10 flex-shrink-0">
+        <div class="p-4 border-b border-warm-200 flex-shrink-0">
             <div class="relative">
                 <i data-lucide="search" class="w-5 h-5 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true"></i>
                 <input type="text" id="beach-search" placeholder="<?= h(__('compare.search_placeholder')) ?>"
-                       class="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-brand-yellow/50 focus:border-brand-yellow/50"
+                       class="w-full pl-10 pr-4 py-2 bg-warm-50 border border-warm-200 rounded-lg text-warm-900 placeholder-gray-500 focus:ring-2 focus:ring-ocean-400/50 focus:border-ocean-400/50"
                        data-action="filterBeaches" data-action-args='["__this__"]' data-on="input"
                        aria-label="<?= h(__('compare.search_placeholder')) ?>">
             </div>
@@ -473,20 +473,20 @@ function renderBeachList(filter = '') {
 
     container.innerHTML = filtered.slice(0, 50).map(beach => `
         <button data-action="addToComparison" data-action-args='["${beach.id}"]'
-                class="w-full flex items-center gap-3 p-3 hover:bg-white/5 rounded-lg transition-colors text-left"
+                class="w-full flex items-center gap-3 p-3 hover:bg-warm-50 rounded-lg transition-colors text-left"
                 ${comparisonBeaches.length >= MAX_COMPARE ? 'disabled' : ''}>
             <img src="${beach.cover_image || '/images/beaches/placeholder-beach.webp'}"
                  alt="${escapeHtml(beach.name)}" class="w-12 h-12 rounded-lg object-cover flex-shrink-0">
             <div class="flex-1 min-w-0">
-                <div class="font-medium text-white truncate">${escapeHtml(beach.name)}</div>
-                <div class="text-sm text-gray-400">${escapeHtml(beach.municipality)}</div>
+                <div class="font-medium text-warm-900 truncate">${escapeHtml(beach.name)}</div>
+                <div class="text-sm text-warm-500">${escapeHtml(beach.municipality)}</div>
             </div>
-            ${beach.google_rating ? `<div class="text-brand-yellow text-sm">★ ${beach.google_rating.toFixed(1)}</div>` : ''}
+            ${beach.google_rating ? `<div class="text-sunset-400 text-sm">★ ${beach.google_rating.toFixed(1)}</div>` : ''}
         </button>
     `).join('');
 
     if (comparisonBeaches.length >= MAX_COMPARE) {
-        container.innerHTML = '<div class="text-center py-4 text-brand-yellow bg-brand-yellow/10 border border-brand-yellow/30 rounded-lg mb-2">' + escapeHtml(COMPARE_STRINGS.max_alert) + '</div>' + container.innerHTML;
+        container.innerHTML = '<div class="text-center py-4 text-sunset-400 bg-sunset-400/10 border border-sunset-400/30 rounded-lg mb-2">' + escapeHtml(COMPARE_STRINGS.max_alert) + '</div>' + container.innerHTML;
     }
 }
 

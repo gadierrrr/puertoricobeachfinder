@@ -178,28 +178,28 @@ $extraHead .= <<<BREADCRUMB
 </script>
 BREADCRUMB;
 
-$bodyVariant = 'collection-dark';
+$bodyVariant = 'collection-light';
 include APP_ROOT . '/components/header.php';
 ?>
 <?php include APP_ROOT . '/components/collection/explorer.php'; ?>
 
 
 <!-- Quick Navigation -->
-<section class="collection-content-nav bg-white/5 border border-white/10">
+<section class="collection-content-nav bg-white border border-warm-200">
     <div class="max-w-7xl mx-auto px-4 py-4">
         <div class="flex flex-wrap gap-2 justify-center text-sm">
-            <span class="text-slate-400">Jump to:</span>
-            <a href="#beaches" class="text-yellow-300 hover:underline">Beach List</a>
-            <span class="text-white/20">|</span>
-            <a href="#travel-times" class="text-yellow-300 hover:underline">Travel Times</a>
-            <span class="text-white/20">|</span>
-            <a href="#layover-guide" class="text-yellow-300 hover:underline">Layover Itineraries</a>
-            <span class="text-white/20">|</span>
-            <a href="#transportation" class="text-yellow-300 hover:underline">Transportation</a>
-            <span class="text-white/20">|</span>
-            <a href="#airport-tips" class="text-yellow-300 hover:underline">Airport Tips</a>
-            <span class="text-white/20">|</span>
-            <a href="#faq" class="text-yellow-300 hover:underline">FAQs</a>
+            <span class="text-warm-500">Jump to:</span>
+            <a href="#beaches" class="text-ocean-500 hover:underline">Beach List</a>
+            <span class="text-warm-300">|</span>
+            <a href="#travel-times" class="text-ocean-500 hover:underline">Travel Times</a>
+            <span class="text-warm-300">|</span>
+            <a href="#layover-guide" class="text-ocean-500 hover:underline">Layover Itineraries</a>
+            <span class="text-warm-300">|</span>
+            <a href="#transportation" class="text-ocean-500 hover:underline">Transportation</a>
+            <span class="text-warm-300">|</span>
+            <a href="#airport-tips" class="text-ocean-500 hover:underline">Airport Tips</a>
+            <span class="text-warm-300">|</span>
+            <a href="#faq" class="text-ocean-500 hover:underline">FAQs</a>
         </div>
     </div>
 </section>
@@ -222,20 +222,20 @@ include APP_ROOT . '/components/header.php';
 <!-- Travel Time Table -->
 <section id="travel-times" class="py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-slate-100 mb-8 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-warm-900 mb-8 text-center">
             Travel Times from San Juan Airport
         </h2>
 
-        <div class="bg-white/5 border border-white/10 rounded-xl shadow-glass overflow-hidden">
+        <div class="bg-white border border-warm-200 rounded-xl shadow-card overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead class="bg-amber-50 a11y-on-light-amber">
                         <tr>
-                            <th class="px-6 py-4 text-left text-sm font-semibold text-slate-100">Beach Name</th>
-                            <th class="px-6 py-4 text-left text-sm font-semibold text-slate-100">Distance</th>
-                            <th class="px-6 py-4 text-left text-sm font-semibold text-slate-100">Drive Time</th>
-                            <th class="px-6 py-4 text-left text-sm font-semibold text-slate-100">Taxi Cost</th>
-                            <th class="px-6 py-4 text-left text-sm font-semibold text-slate-100">Best For</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-warm-900">Beach Name</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-warm-900">Distance</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-warm-900">Drive Time</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-warm-900">Taxi Cost</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-warm-900">Best For</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
@@ -250,12 +250,12 @@ include APP_ROOT . '/components/header.php';
                         ];
 
                         foreach ($travelData as $row): ?>
-                        <tr class="hover:bg-white/10">
-                            <td class="px-6 py-4 text-sm font-medium text-slate-100"><?= h($row['beach']) ?></td>
-                            <td class="px-6 py-4 text-sm text-slate-300"><?= h($row['distance']) ?></td>
-                            <td class="px-6 py-4 text-sm text-slate-300"><?= h($row['time']) ?></td>
-                            <td class="px-6 py-4 text-sm text-slate-300"><?= h($row['cost']) ?></td>
-                            <td class="px-6 py-4 text-sm text-slate-400"><?= h($row['bestFor']) ?></td>
+                        <tr class="hover:bg-sunset-300">
+                            <td class="px-6 py-4 text-sm font-medium text-warm-900"><?= h($row['beach']) ?></td>
+                            <td class="px-6 py-4 text-sm text-warm-700"><?= h($row['distance']) ?></td>
+                            <td class="px-6 py-4 text-sm text-warm-700"><?= h($row['time']) ?></td>
+                            <td class="px-6 py-4 text-sm text-warm-700"><?= h($row['cost']) ?></td>
+                            <td class="px-6 py-4 text-sm text-warm-500"><?= h($row['bestFor']) ?></td>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -263,7 +263,7 @@ include APP_ROOT . '/components/header.php';
             </div>
         </div>
 
-        <p class="text-sm text-slate-400 text-center mt-4">
+        <p class="text-sm text-warm-500 text-center mt-4">
             <strong>Note:</strong> Drive times are estimates based on typical traffic. During rush hour (7-9 AM, 4-7 PM weekdays), add 5-10 minutes.
             Taxi costs are approximate for standard taxis/Uber from airport arrivals.
         </p>
@@ -273,17 +273,17 @@ include APP_ROOT . '/components/header.php';
 <!-- Layover Beach Day Guide -->
 <section id="layover-guide" class="py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-slate-100 mb-8 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-warm-900 mb-8 text-center">
             Layover Beach Day Itineraries
         </h2>
 
-        <p class="text-center text-slate-400 mb-8 max-w-3xl mx-auto">
+        <p class="text-center text-warm-500 mb-8 max-w-3xl mx-auto">
             Plan your beach visit based on your layover length. <strong>Important:</strong> Only attempt layover beach visits if you have carry-on luggage only and are comfortable with tight timing. Always return to the airport earlier than you think necessary.
         </p>
 
         <div class="grid md:grid-cols-3 gap-6">
             <!-- 4-Hour Layover -->
-            <div class="bg-white/5 border border-white/10 rounded-xl shadow-glass overflow-hidden border-2 border-amber-200">
+            <div class="bg-white border border-warm-200 rounded-xl shadow-card overflow-hidden border-2 border-amber-200">
                 <div class="bg-amber-600 text-white p-6">
                     <div class="text-3xl mb-2">⚡</div>
                     <h3 class="text-xl font-bold">4-Hour Layover</h3>
@@ -292,32 +292,32 @@ include APP_ROOT . '/components/header.php';
                 <div class="p-6">
                     <div class="space-y-3 text-sm">
                         <div class="flex items-start gap-3">
-                            <span class="text-yellow-300 font-bold">0:00</span>
-                            <span class="text-slate-300">Land, clear immigration (30 min)</span>
+                            <span class="text-ocean-500 font-bold">0:00</span>
+                            <span class="text-warm-700">Land, clear immigration (30 min)</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-yellow-300 font-bold">0:30</span>
-                            <span class="text-slate-300">Uber to Isla Verde Beach (7 min)</span>
+                            <span class="text-ocean-500 font-bold">0:30</span>
+                            <span class="text-warm-700">Uber to Isla Verde Beach (7 min)</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-yellow-300 font-bold">0:40</span>
-                            <span class="text-slate-300"><strong>Beach time!</strong> (90 minutes)</span>
+                            <span class="text-ocean-500 font-bold">0:40</span>
+                            <span class="text-warm-700"><strong>Beach time!</strong> (90 minutes)</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-yellow-300 font-bold">2:10</span>
-                            <span class="text-slate-300">Rinse off, change clothes (10 min)</span>
+                            <span class="text-ocean-500 font-bold">2:10</span>
+                            <span class="text-warm-700">Rinse off, change clothes (10 min)</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-yellow-300 font-bold">2:20</span>
-                            <span class="text-slate-300">Return to airport (7 min)</span>
+                            <span class="text-ocean-500 font-bold">2:20</span>
+                            <span class="text-warm-700">Return to airport (7 min)</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-yellow-300 font-bold">2:30</span>
-                            <span class="text-slate-300">Check-in, security (90 min buffer)</span>
+                            <span class="text-ocean-500 font-bold">2:30</span>
+                            <span class="text-warm-700">Check-in, security (90 min buffer)</span>
                         </div>
                     </div>
                     <div class="mt-6 pt-6 border-t border-gray-200">
-                        <p class="text-xs text-slate-400">
+                        <p class="text-xs text-warm-500">
                             <strong>Beach time:</strong> 90 minutes<br>
                             <strong>Recommended beach:</strong> Isla Verde only<br>
                             <strong>Risk level:</strong> High - not recommended for international connections
@@ -327,8 +327,8 @@ include APP_ROOT . '/components/header.php';
             </div>
 
             <!-- 6-Hour Layover -->
-            <div class="bg-white/5 border border-white/10 rounded-xl shadow-glass overflow-hidden border-2 border-slate-200">
-                <div class="bg-brand-yellow text-brand-darker p-6">
+            <div class="bg-white border border-warm-200 rounded-xl shadow-card overflow-hidden border-2 border-slate-200">
+                <div class="bg-sunset-400 text-ocean-900 p-6">
                     <div class="text-3xl mb-2">🏖️</div>
                     <h3 class="text-xl font-bold">6-Hour Layover</h3>
                     <p class="text-sm opacity-90 mt-1">Comfortable beach visit</p>
@@ -336,32 +336,32 @@ include APP_ROOT . '/components/header.php';
                 <div class="p-6">
                     <div class="space-y-3 text-sm">
                         <div class="flex items-start gap-3">
-                            <span class="text-yellow-300 font-bold">0:00</span>
-                            <span class="text-slate-300">Land, clear immigration (30 min)</span>
+                            <span class="text-ocean-500 font-bold">0:00</span>
+                            <span class="text-warm-700">Land, clear immigration (30 min)</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-yellow-300 font-bold">0:30</span>
-                            <span class="text-slate-300">Taxi to beach (10-15 min)</span>
+                            <span class="text-ocean-500 font-bold">0:30</span>
+                            <span class="text-warm-700">Taxi to beach (10-15 min)</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-yellow-300 font-bold">0:45</span>
-                            <span class="text-slate-300"><strong>Beach time!</strong> (2.5 hours)</span>
+                            <span class="text-ocean-500 font-bold">0:45</span>
+                            <span class="text-warm-700"><strong>Beach time!</strong> (2.5 hours)</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-yellow-300 font-bold">3:15</span>
-                            <span class="text-slate-300">Lunch at beach restaurant (45 min)</span>
+                            <span class="text-ocean-500 font-bold">3:15</span>
+                            <span class="text-warm-700">Lunch at beach restaurant (45 min)</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-yellow-300 font-bold">4:00</span>
-                            <span class="text-slate-300">Rinse, change, return (30 min)</span>
+                            <span class="text-ocean-500 font-bold">4:00</span>
+                            <span class="text-warm-700">Rinse, change, return (30 min)</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-yellow-300 font-bold">4:30</span>
-                            <span class="text-slate-300">Airport security & check-in</span>
+                            <span class="text-ocean-500 font-bold">4:30</span>
+                            <span class="text-warm-700">Airport security & check-in</span>
                         </div>
                     </div>
                     <div class="mt-6 pt-6 border-t border-gray-200">
-                        <p class="text-xs text-slate-400">
+                        <p class="text-xs text-warm-500">
                             <strong>Beach time:</strong> 2.5-3 hours<br>
                             <strong>Recommended beaches:</strong> Isla Verde, Balneario Carolina, Ocean Park<br>
                             <strong>Risk level:</strong> Low - comfortable timing
@@ -371,8 +371,8 @@ include APP_ROOT . '/components/header.php';
             </div>
 
             <!-- 8+ Hour Layover -->
-            <div class="bg-white/5 border border-white/10 rounded-xl shadow-glass overflow-hidden border-2 border-slate-200">
-                <div class="bg-brand-yellow text-brand-darker p-6">
+            <div class="bg-white border border-warm-200 rounded-xl shadow-card overflow-hidden border-2 border-slate-200">
+                <div class="bg-sunset-400 text-ocean-900 p-6">
                     <div class="text-3xl mb-2">🌴</div>
                     <h3 class="text-xl font-bold">8+ Hour Layover</h3>
                     <p class="text-sm opacity-90 mt-1">Full beach day experience</p>
@@ -380,32 +380,32 @@ include APP_ROOT . '/components/header.php';
                 <div class="p-6">
                     <div class="space-y-3 text-sm">
                         <div class="flex items-start gap-3">
-                            <span class="text-yellow-300 font-bold">0:00</span>
-                            <span class="text-slate-300">Land, immigration, store luggage</span>
+                            <span class="text-ocean-500 font-bold">0:00</span>
+                            <span class="text-warm-700">Land, immigration, store luggage</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-yellow-300 font-bold">0:45</span>
-                            <span class="text-slate-300">Travel to any nearby beach</span>
+                            <span class="text-ocean-500 font-bold">0:45</span>
+                            <span class="text-warm-700">Travel to any nearby beach</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-yellow-300 font-bold">1:00</span>
-                            <span class="text-slate-300"><strong>Full beach day!</strong> (4+ hours)</span>
+                            <span class="text-ocean-500 font-bold">1:00</span>
+                            <span class="text-warm-700"><strong>Full beach day!</strong> (4+ hours)</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-yellow-300 font-bold">5:00</span>
-                            <span class="text-slate-300">Lunch, explore neighborhood</span>
+                            <span class="text-ocean-500 font-bold">5:00</span>
+                            <span class="text-warm-700">Lunch, explore neighborhood</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-yellow-300 font-bold">6:00</span>
-                            <span class="text-slate-300">Shower, change, pick up luggage</span>
+                            <span class="text-ocean-500 font-bold">6:00</span>
+                            <span class="text-warm-700">Shower, change, pick up luggage</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="text-yellow-300 font-bold">6:30</span>
-                            <span class="text-slate-300">Return to airport (relaxed)</span>
+                            <span class="text-ocean-500 font-bold">6:30</span>
+                            <span class="text-warm-700">Return to airport (relaxed)</span>
                         </div>
                     </div>
                     <div class="mt-6 pt-6 border-t border-gray-200">
-                        <p class="text-xs text-slate-400">
+                        <p class="text-xs text-warm-500">
                             <strong>Beach time:</strong> 4-5 hours<br>
                             <strong>All beaches accessible:</strong> Try Condado or Escambrón for variety<br>
                             <strong>Risk level:</strong> Very low - plenty of buffer time
@@ -419,8 +419,8 @@ include APP_ROOT . '/components/header.php';
             <div class="flex gap-3">
                 <div class="text-2xl">⚠️</div>
                 <div>
-                    <h4 class="font-bold text-slate-100 mb-2">Layover Beach Visit Disclaimer</h4>
-                    <p class="text-sm text-slate-300">
+                    <h4 class="font-bold text-warm-900 mb-2">Layover Beach Visit Disclaimer</h4>
+                    <p class="text-sm text-warm-700">
                         Attempting a beach visit during a layover carries risk of missing your connection. Only attempt this if: (1) You have <strong>carry-on bags only</strong>, (2) Your layover is <strong>domestic or within the same terminal</strong>, (3) You're comfortable with tight timing, (4) Traffic is light (avoid weekday rush hours). <strong>We recommend 6+ hour layovers minimum</strong>. Always prioritize making your flight over beach time. Consider travel insurance for missed connections.
                     </p>
                 </div>
@@ -432,18 +432,18 @@ include APP_ROOT . '/components/header.php';
 <!-- Transportation Options -->
 <section id="transportation" class="py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-slate-100 mb-8 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-warm-900 mb-8 text-center">
             Transportation from the Airport
         </h2>
 
         <div class="grid md:grid-cols-3 gap-6">
             <!-- Taxi/Uber -->
-            <div class="bg-white/5 border border-white/10 rounded-xl p-6 shadow-glass">
+            <div class="bg-white border border-warm-200 rounded-xl p-6 shadow-card">
                 <div class="flex items-center gap-3 mb-4">
                     <div class="text-3xl">🚕</div>
-                    <h3 class="text-lg font-bold text-slate-100">Taxi & Rideshare</h3>
+                    <h3 class="text-lg font-bold text-warm-900">Taxi & Rideshare</h3>
                 </div>
-                <div class="space-y-3 text-sm text-slate-300">
+                <div class="space-y-3 text-sm text-warm-700">
                     <p><strong><?= __('airport_labels.best_for') ?></strong> Quick, convenient beach access</p>
                     <p><strong><?= __('airport_labels.cost') ?></strong> $8-12 to Isla Verde, $15-25 to Condado, $25-32 to Escambrón</p>
                     <p><strong><?= __('airport_labels.uber_lyft') ?></strong> Typically 20-30% cheaper than airport taxis. Pick up at departures level for faster service.</p>
@@ -453,12 +453,12 @@ include APP_ROOT . '/components/header.php';
             </div>
 
             <!-- Rental Car -->
-            <div class="bg-white/5 border border-white/10 rounded-xl p-6 shadow-glass">
+            <div class="bg-white border border-warm-200 rounded-xl p-6 shadow-card">
                 <div class="flex items-center gap-3 mb-4">
                     <div class="text-3xl">🚗</div>
-                    <h3 class="text-lg font-bold text-slate-100">Rental Car</h3>
+                    <h3 class="text-lg font-bold text-warm-900">Rental Car</h3>
                 </div>
-                <div class="space-y-3 text-sm text-slate-300">
+                <div class="space-y-3 text-sm text-warm-700">
                     <p><strong><?= __('airport_labels.best_for') ?></strong> Multi-day stays, exploring beyond San Juan</p>
                     <p><strong><?= __('airport_labels.cost') ?></strong> $30-60/day plus parking ($15-25/day at beach hotels)</p>
                     <p><strong><?= __('airport_labels.pros') ?></strong> Freedom to visit multiple beaches, explore the island, carry beach gear</p>
@@ -468,12 +468,12 @@ include APP_ROOT . '/components/header.php';
             </div>
 
             <!-- Public Transit -->
-            <div class="bg-white/5 border border-white/10 rounded-xl p-6 shadow-glass">
+            <div class="bg-white border border-warm-200 rounded-xl p-6 shadow-card">
                 <div class="flex items-center gap-3 mb-4">
                     <div class="text-3xl">🚌</div>
-                    <h3 class="text-lg font-bold text-slate-100">Public Bus (AMA)</h3>
+                    <h3 class="text-lg font-bold text-warm-900">Public Bus (AMA)</h3>
                 </div>
-                <div class="space-y-3 text-sm text-slate-300">
+                <div class="space-y-3 text-sm text-warm-700">
                     <p><strong><?= __('airport_labels.best_for') ?></strong> Budget travelers with time to spare</p>
                     <p><strong><?= __('airport_labels.cost') ?></strong> $0.75 per ride (exact change required)</p>
                     <p><strong><?= __('airport_labels.route') ?></strong> Bus C53 connects airport to Isla Verde and beyond. Runs approximately every 30-60 minutes.</p>
@@ -484,11 +484,11 @@ include APP_ROOT . '/components/header.php';
         </div>
 
         <div class="mt-8 bg-amber-50 a11y-on-light-amber border border-amber-200 rounded-lg p-6">
-            <h4 class="font-bold text-slate-100 mb-3 flex items-center gap-2">
+            <h4 class="font-bold text-warm-900 mb-3 flex items-center gap-2">
                 <span>💡</span>
                 <span>Transportation Recommendations by Scenario</span>
             </h4>
-            <div class="grid md:grid-cols-2 gap-4 text-sm text-slate-300">
+            <div class="grid md:grid-cols-2 gap-4 text-sm text-warm-700">
                 <div>
                     <p class="font-semibold mb-1">4-6 Hour Layover:</p>
                     <p>Uber/Taxi only - speed is essential. Request pickup at departures level to avoid taxi line wait.</p>
@@ -513,20 +513,20 @@ include APP_ROOT . '/components/header.php';
 <!-- Airport Tips -->
 <section id="airport-tips" class="py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-slate-100 mb-8 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-warm-900 mb-8 text-center">
             Airport Beach Visit Tips
         </h2>
 
         <div class="grid md:grid-cols-2 gap-6">
             <!-- Luggage Storage -->
-            <div class="bg-white/5 border border-white/10 rounded-xl p-6 shadow-glass">
-                <h3 class="text-lg font-bold text-slate-100 mb-4 flex items-center gap-2">
+            <div class="bg-white border border-warm-200 rounded-xl p-6 shadow-card">
+                <h3 class="text-lg font-bold text-warm-900 mb-4 flex items-center gap-2">
                     <span class="text-2xl">🎒</span>
                     <span>Luggage Storage Options</span>
                 </h3>
-                <div class="space-y-4 text-sm text-slate-300">
+                <div class="space-y-4 text-sm text-warm-700">
                     <div>
-                        <p class="font-semibold text-slate-100 mb-1">Hotel Luggage Holds (Best Option)</p>
+                        <p class="font-semibold text-warm-900 mb-1">Hotel Luggage Holds (Best Option)</p>
                         <p>Most Isla Verde hotels allow non-guest luggage storage for $5-10/bag. Call ahead to confirm.</p>
                         <ul class="mt-2 space-y-1 ml-4">
                             <li>• <strong>ESJ Azul Hotel:</strong> Often accommodates requests, beachfront location</li>
@@ -535,11 +535,11 @@ include APP_ROOT . '/components/header.php';
                         </ul>
                     </div>
                     <div>
-                        <p class="font-semibold text-slate-100 mb-1">Beach Equipment Rentals</p>
+                        <p class="font-semibold text-warm-900 mb-1">Beach Equipment Rentals</p>
                         <p>Some beach chair rental vendors offer luggage holding for customers ($5-10). Ask the attendant when renting chairs.</p>
                     </div>
                     <div>
-                        <p class="font-semibold text-slate-100 mb-1">Airport Lockers</p>
+                        <p class="font-semibold text-warm-900 mb-1">Airport Lockers</p>
                         <p><strong>Not available</strong> - SJU does not have public luggage storage lockers inside the terminal.</p>
                     </div>
                     <div class="bg-yellow-50 border border-yellow-200 rounded p-3">
@@ -549,14 +549,14 @@ include APP_ROOT . '/components/header.php';
             </div>
 
             <!-- Beach Gear Rental -->
-            <div class="bg-white/5 border border-white/10 rounded-xl p-6 shadow-glass">
-                <h3 class="text-lg font-bold text-slate-100 mb-4 flex items-center gap-2">
+            <div class="bg-white border border-warm-200 rounded-xl p-6 shadow-card">
+                <h3 class="text-lg font-bold text-warm-900 mb-4 flex items-center gap-2">
                     <span class="text-2xl">🏖️</span>
                     <span>Beach Equipment & Facilities</span>
                 </h3>
-                <div class="space-y-4 text-sm text-slate-300">
+                <div class="space-y-4 text-sm text-warm-700">
                     <div>
-                        <p class="font-semibold text-slate-100 mb-1">Equipment Rental Prices (Isla Verde)</p>
+                        <p class="font-semibold text-warm-900 mb-1">Equipment Rental Prices (Isla Verde)</p>
                         <ul class="space-y-1 ml-4">
                             <li>• <strong>2 chairs + umbrella:</strong> $15-20/day</li>
                             <li>• <strong>Beach towel:</strong> $5-8</li>
@@ -567,7 +567,7 @@ include APP_ROOT . '/components/header.php';
                         </ul>
                     </div>
                     <div>
-                        <p class="font-semibold text-slate-100 mb-1">Public Facilities</p>
+                        <p class="font-semibold text-warm-900 mb-1">Public Facilities</p>
                         <p><strong>Balneario de Carolina</strong> (official public beach) has:</p>
                         <ul class="space-y-1 ml-4 mt-1">
                             <li>• Free outdoor showers</li>
@@ -577,7 +577,7 @@ include APP_ROOT . '/components/header.php';
                         </ul>
                     </div>
                     <div>
-                        <p class="font-semibold text-slate-100 mb-1">Hotel Beach Access</p>
+                        <p class="font-semibold text-warm-900 mb-1">Hotel Beach Access</p>
                         <p>Hotels along Isla Verde have outdoor showers accessible from the beach. Purchase a drink at a hotel bar to use indoor bathrooms for changing.</p>
                     </div>
                     <div class="bg-slate-50 border border-slate-200 rounded p-3">
@@ -587,14 +587,14 @@ include APP_ROOT . '/components/header.php';
             </div>
 
             <!-- Timing Your Return -->
-            <div class="bg-white/5 border border-white/10 rounded-xl p-6 shadow-glass">
-                <h3 class="text-lg font-bold text-slate-100 mb-4 flex items-center gap-2">
+            <div class="bg-white border border-warm-200 rounded-xl p-6 shadow-card">
+                <h3 class="text-lg font-bold text-warm-900 mb-4 flex items-center gap-2">
                     <span class="text-2xl">⏰</span>
                     <span>Timing Your Airport Return</span>
                 </h3>
-                <div class="space-y-4 text-sm text-slate-300">
+                <div class="space-y-4 text-sm text-warm-700">
                     <div>
-                        <p class="font-semibold text-slate-100 mb-1">When to Leave the Beach</p>
+                        <p class="font-semibold text-warm-900 mb-1">When to Leave the Beach</p>
                         <ul class="space-y-2 ml-4">
                             <li>• <strong>International flights:</strong> Leave beach 3 hours before departure</li>
                             <li>• <strong>Domestic flights:</strong> Leave beach 2 hours before departure</li>
@@ -603,7 +603,7 @@ include APP_ROOT . '/components/header.php';
                         </ul>
                     </div>
                     <div>
-                        <p class="font-semibold text-slate-100 mb-1">Post-Beach Tasks (Budget Time)</p>
+                        <p class="font-semibold text-warm-900 mb-1">Post-Beach Tasks (Budget Time)</p>
                         <ul class="space-y-1 ml-4">
                             <li>• Rinse sand off: 5 minutes</li>
                             <li>• Change clothes in bathroom: 10 minutes</li>
@@ -619,14 +619,14 @@ include APP_ROOT . '/components/header.php';
             </div>
 
             <!-- What to Bring -->
-            <div class="bg-white/5 border border-white/10 rounded-xl p-6 shadow-glass">
-                <h3 class="text-lg font-bold text-slate-100 mb-4 flex items-center gap-2">
+            <div class="bg-white border border-warm-200 rounded-xl p-6 shadow-card">
+                <h3 class="text-lg font-bold text-warm-900 mb-4 flex items-center gap-2">
                     <span class="text-2xl">🎒</span>
                     <span>Beach Day Packing List</span>
                 </h3>
-                <div class="space-y-4 text-sm text-slate-300">
+                <div class="space-y-4 text-sm text-warm-700">
                     <div>
-                        <p class="font-semibold text-slate-100 mb-1">Essential Items</p>
+                        <p class="font-semibold text-warm-900 mb-1">Essential Items</p>
                         <ul class="space-y-1 ml-4">
                             <li>✅ Swimsuit (wear under clothes)</li>
                             <li>✅ Beach towel (quick-dry travel towel ideal)</li>
@@ -641,7 +641,7 @@ include APP_ROOT . '/components/header.php';
                         </ul>
                     </div>
                     <div>
-                        <p class="font-semibold text-slate-100 mb-1">Nice to Have</p>
+                        <p class="font-semibold text-warm-900 mb-1">Nice to Have</p>
                         <ul class="space-y-1 ml-4">
                             <li>• Snorkel mask (if you have compact one)</li>
                             <li>• Beach read or Kindle</li>
@@ -662,27 +662,27 @@ include APP_ROOT . '/components/header.php';
 <!-- Cross-Links Section -->
 <section class="py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-slate-100 mb-8 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-warm-900 mb-8 text-center">
             Explore More San Juan Beaches
         </h2>
 
         <div class="grid md:grid-cols-3 gap-6">
-            <a href="/beaches-near-san-juan" class="bg-white/5 border border-white/10 rounded-xl p-6 shadow-glass hover:shadow-glass transition-shadow group">
+            <a href="/beaches-near-san-juan" class="bg-white border border-warm-200 rounded-xl p-6 shadow-card hover:shadow-card transition-shadow group">
                 <div class="text-4xl mb-4">🏙️</div>
-                <h3 class="text-lg font-bold text-slate-100 group-hover:text-yellow-300">Beaches Near San Juan</h3>
-                <p class="text-slate-400 text-sm mt-2">All beaches within 30 minutes of San Juan city center, including Old San Juan, Condado, and beyond</p>
+                <h3 class="text-lg font-bold text-warm-900 group-hover:text-ocean-500">Beaches Near San Juan</h3>
+                <p class="text-warm-500 text-sm mt-2">All beaches within 30 minutes of San Juan city center, including Old San Juan, Condado, and beyond</p>
             </a>
 
-            <a href="/best-beaches" class="bg-white/5 border border-white/10 rounded-xl p-6 shadow-glass hover:shadow-glass transition-shadow group">
+            <a href="/best-beaches" class="bg-white border border-warm-200 rounded-xl p-6 shadow-card hover:shadow-card transition-shadow group">
                 <div class="text-4xl mb-4">🏖️</div>
-                <h3 class="text-lg font-bold text-slate-100 group-hover:text-yellow-300">Best Beaches in Puerto Rico</h3>
-                <p class="text-slate-400 text-sm mt-2">Top 15 beaches across the entire island - if you have a rental car, venture beyond San Juan</p>
+                <h3 class="text-lg font-bold text-warm-900 group-hover:text-ocean-500">Best Beaches in Puerto Rico</h3>
+                <p class="text-warm-500 text-sm mt-2">Top 15 beaches across the entire island - if you have a rental car, venture beyond San Juan</p>
             </a>
 
-            <a href="/best-family-beaches" class="bg-white/5 border border-white/10 rounded-xl p-6 shadow-glass hover:shadow-glass transition-shadow group">
+            <a href="/best-family-beaches" class="bg-white border border-warm-200 rounded-xl p-6 shadow-card hover:shadow-card transition-shadow group">
                 <div class="text-4xl mb-4">👨‍👩‍👧‍👦</div>
-                <h3 class="text-lg font-bold text-slate-100 group-hover:text-yellow-300">Best Family Beaches</h3>
-                <p class="text-slate-400 text-sm mt-2">Calm waters, facilities, and kid-friendly amenities - perfect for traveling families with layovers</p>
+                <h3 class="text-lg font-bold text-warm-900 group-hover:text-ocean-500">Best Family Beaches</h3>
+                <p class="text-warm-500 text-sm mt-2">Calm waters, facilities, and kid-friendly amenities - perfect for traveling families with layovers</p>
             </a>
         </div>
     </div>
@@ -691,18 +691,18 @@ include APP_ROOT . '/components/header.php';
 <!-- FAQ Section -->
 <section id="faq" class="py-12">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-slate-100 mb-8 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-warm-900 mb-8 text-center">
             San Juan Airport Beach FAQs
         </h2>
 
         <div class="space-y-4">
             <?php foreach ($pageFaqs as $faq): ?>
-            <details class="bg-white/5 border border-white/10 rounded-lg shadow-glass group">
-                <summary class="flex items-center justify-between p-6 cursor-pointer font-semibold text-slate-100">
+            <details class="bg-white border border-warm-200 rounded-lg shadow-card group">
+                <summary class="flex items-center justify-between p-6 cursor-pointer font-semibold text-warm-900">
                     <?= h($faq['question']) ?>
-                    <span class="text-yellow-300 group-open:rotate-180 transition-transform">▼</span>
+                    <span class="text-ocean-500 group-open:rotate-180 transition-transform">▼</span>
                 </summary>
-                <div class="px-6 pb-6 text-slate-300">
+                <div class="px-6 pb-6 text-warm-700">
                     <?= h($faq['answer']) ?>
                 </div>
             </details>
@@ -716,7 +716,7 @@ include APP_ROOT . '/components/header.php';
     <div class="max-w-4xl mx-auto px-4 text-center">
         <h2 class="text-2xl md:text-3xl font-bold mb-4">Making the Most of Your Puerto Rico Visit?</h2>
         <p class="text-lg opacity-90 mb-6">Discover your perfect beach based on your interests. Our Beach Match Quiz considers your priorities - whether it's quick airport access, snorkeling, surfing, or family-friendly facilities.</p>
-        <a href="/quiz" class="inline-block bg-brand-yellow text-brand-darker hover:bg-yellow-300 px-8 py-3 rounded-lg font-semibold transition-colors">
+        <a href="/quiz" class="inline-block bg-sunset-400 text-ocean-900 hover:bg-sunset-300 px-8 py-3 rounded-lg font-semibold transition-colors">
             Take the Beach Match Quiz
         </a>
     </div>

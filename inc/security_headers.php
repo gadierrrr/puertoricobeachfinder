@@ -57,11 +57,11 @@ header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
 // Note: 'unsafe-inline' is still required for style-src (Tailwind + inline styles).
 // 'unsafe-eval' removed from script-src — no runtime eval() is used.
 // If a JS library requires eval, add a specific hash/nonce instead.
-$scriptSources = ["'self'", "'nonce-" . CSP_NONCE . "'", "'strict-dynamic'", 'cdn.tailwindcss.com', 'unpkg.com', 'cdn.jsdelivr.net', 'cloud.umami.is'];
+$scriptSources = ["'self'", 't.puertoricobeachfinder.com', "'nonce-" . CSP_NONCE . "'", "'strict-dynamic'", 'cdn.tailwindcss.com', 'unpkg.com', 'cdn.jsdelivr.net', 'cloud.umami.is'];
 $styleSources = ["'self'", "'unsafe-inline'", 'cdn.tailwindcss.com', 'unpkg.com', 'cdn.jsdelivr.net', 'fonts.googleapis.com'];
 $imgSources = ["'self'", 'data:', 'blob:', 'https://*.basemaps.cartocdn.com', 'https://a.basemaps.cartocdn.com', 'https://b.basemaps.cartocdn.com', 'https://c.basemaps.cartocdn.com', 'https://d.basemaps.cartocdn.com'];
 $fontSources = ["'self'", 'data:', 'fonts.gstatic.com'];
-$connectSources = ["'self'", 'https://basemaps.cartocdn.com', 'https://*.basemaps.cartocdn.com', 'unpkg.com', 'cdn.jsdelivr.net', 'cloud.umami.is', 'api-gateway.umami.dev', ];
+$connectSources = ["'self'", 't.puertoricobeachfinder.com', 'https://basemaps.cartocdn.com', 'https://*.basemaps.cartocdn.com', 'unpkg.com', 'cdn.jsdelivr.net', 'cloud.umami.is', 'api-gateway.umami.dev', ];
 $workerSources = ["'self'", 'blob:'];
 
 $umamiEnabled = function_exists('envBool') ? envBool('UMAMI_ENABLED', false) : false;

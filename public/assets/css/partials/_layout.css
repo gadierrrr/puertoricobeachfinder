@@ -10,15 +10,14 @@
 
 
 
-/* Dark glassmorphic gradient matching home page */
+/* Ocean teal gradient for collection/dark hero pages */
 .hero-gradient-dark {
-    background: linear-gradient(135deg, #1a2c32 0%, #132024 100%);
+    background: linear-gradient(135deg, var(--color-ocean-800) 0%, var(--color-ocean-900) 100%);
 }
 
-/* Green gradient for guide pages (reliable CSS class instead of Tailwind utilities) */
+/* Green gradient for guide pages */
 .hero-gradient-guide {
-    background: linear-gradient(135deg, #059669 0%, #047857 100%);
-    /* Equivalent to from-green-600 to-green-700 */
+    background: linear-gradient(135deg, var(--color-palm-600) 0%, var(--color-palm-700) 100%);
 }
 
 

@@ -32,14 +32,14 @@
                 <?php foreach ($orderedSections as $section): ?>
                 <?php if (!$planHeadingShown && in_array($section["section_type"], $planSections)): $planHeadingShown = true; ?>
                 <div class="flex items-center gap-3 mt-4 mb-2">
-                    <span class="text-xs font-medium uppercase tracking-widest text-white/45 whitespace-nowrap"><?= h($lang === "es" ? "Planifica Tu Visita" : "Plan Your Visit") ?></span>
-                    <div class="flex-1 h-px bg-white/10"></div>
+                    <span class="text-xs font-medium uppercase tracking-widest text-warm-400 whitespace-nowrap"><?= h($lang === "es" ? "Planifica Tu Visita" : "Plan Your Visit") ?></span>
+                    <div class="flex-1 h-px bg-warm-100"></div>
                 </div>
                 <?php endif; ?>
                 <?php if (!$aboutHeadingShown && in_array($section["section_type"], $aboutSections)): $aboutHeadingShown = true; ?>
                 <div class="flex items-center gap-3 mt-4 mb-2">
-                    <span class="text-xs font-medium uppercase tracking-widest text-white/45 whitespace-nowrap"><?= h($lang === "es" ? "Sobre Esta Playa" : "About This Beach") ?></span>
-                    <div class="flex-1 h-px bg-white/10"></div>
+                    <span class="text-xs font-medium uppercase tracking-widest text-warm-400 whitespace-nowrap"><?= h($lang === "es" ? "Sobre Esta Playa" : "About This Beach") ?></span>
+                    <div class="flex-1 h-px bg-warm-100"></div>
                 </div>
                 <?php endif; ?>
                     <?php
@@ -50,18 +50,18 @@
                     ?>
                     <section class="beach-detail-card p-5 rounded-xl section-collapsible scroll-mt-[120px]" id="section-<?= h($section['section_type']) ?>">
                         <div class="section-toggle flex items-center justify-between" data-action="toggleSection" data-action-args='["__this__"]'>
-                            <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                                <i data-lucide="<?= h(CONTENT_SECTIONS[$section['section_type']]['icon'] ?? 'info') ?>" class="w-5 h-5 text-brand-yellow"></i>
+                            <h2 class="text-lg font-bold text-warm-900 flex items-center gap-2">
+                                <i data-lucide="<?= h(CONTENT_SECTIONS[$section['section_type']]['icon'] ?? 'info') ?>" class="w-5 h-5 text-sunset-400"></i>
                                 <?= h($_sectionHeading) ?>
                             </h2>
-                            <i data-lucide="chevron-down" class="w-5 h-5 text-white/40 toggle-icon flex-shrink-0"></i>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-warm-400 toggle-icon flex-shrink-0"></i>
                         </div>
                         <div class="section-content mt-3">
                             <div class="prose prose-invert prose-brand max-w-none text-base">
                                 <?= sanitizeContentHtml($_sectionContent) ?>
                             </div>
                         </div>
-                        <button class="mt-3 text-sm font-medium text-brand-yellow hover:text-yellow-300 transition-colors flex items-center gap-1"
+                        <button class="mt-3 text-sm font-medium text-sunset-400 hover:text-sunset-300 transition-colors flex items-center gap-1"
                                 data-action="toggleSection" data-action-args='["__this__"]'>
                             <span class="read-more-text"><?= h($lang === 'es' ? 'Leer más' : 'Read more') ?></span>
                             <i data-lucide="chevron-down" class="w-3.5 h-3.5 toggle-icon"></i>
@@ -74,8 +74,8 @@
             <!-- Gallery (if exists) -->
             <?php if (!empty($beach['gallery'])): ?>
             <section>
-                <h2 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
-                    <i data-lucide="images" class="w-5 h-5 text-brand-yellow" aria-hidden="true"></i>
+                <h2 class="text-lg font-bold text-warm-900 mb-3 flex items-center gap-2">
+                    <i data-lucide="images" class="w-5 h-5 text-sunset-400" aria-hidden="true"></i>
                     <?= h(__('beach.photos')) ?>
                 </h2>
                 <div class="gallery-grid">

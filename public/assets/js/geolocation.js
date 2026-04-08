@@ -251,7 +251,7 @@ function updateDistanceBadges() {
             let badge = card.querySelector(".distance-badge");
             if (!badge) {
                 badge = document.createElement("div");
-                badge.className = "distance-badge absolute top-3 right-3 bg-brand-yellow text-brand-darker text-xs font-semibold px-2 py-1 rounded-full shadow";
+                badge.className = "distance-badge absolute top-3 right-3 bg-sunset-400 text-ocean-900 text-xs font-semibold px-2 py-1 rounded-full shadow";
                 const cardImageContainer = card.querySelector(".relative");
                 if (cardImageContainer) {
                     cardImageContainer.appendChild(badge);

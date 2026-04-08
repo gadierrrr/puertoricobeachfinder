@@ -1,6 +1,6 @@
 <?php
 /**
- * Beach Card Component - Dark Glassmorphism Design
+ * Beach Card Component - Tropical Daytime Design
  *
  * @param array $beach - Beach data from database
  * @param float|null $distance - Distance in meters (if user location available)
@@ -67,7 +67,7 @@ $wind = $beach['wind'] ?? null;
 $hasConditions = $sargassum || $surf || $wind;
 ?>
 
-<article class="beach-card relative group rounded-2xl overflow-hidden bg-brand-darker/50 border border-white/10 hover:border-brand-yellow/30 transition-all duration-300 cursor-pointer"
+<article class="beach-card relative group rounded-2xl overflow-hidden bg-white shadow-card border border-warm-200 hover:border-sunset-400/30 transition-all duration-300 cursor-pointer"
          data-beach-id="<?= h($beach['id']) ?>"
          data-lat="<?= h($lat) ?>"
          data-lng="<?= h($lng) ?>"
@@ -128,7 +128,7 @@ $hasConditions = $sargassum || $surf || $wind;
 
         <!-- Distance Badge (if available) -->
         <?php if ($distanceFormatted): ?>
-        <div class="distance-badge absolute top-14 right-3 bg-brand-yellow text-brand-darker text-xs font-semibold px-2.5 py-1 rounded-full z-20" aria-label="<?= h($distanceFormatted) ?> away">
+        <div class="distance-badge absolute top-14 right-3 bg-sunset-400 text-ocean-900 text-xs font-semibold px-2.5 py-1 rounded-full z-20" aria-label="<?= h($distanceFormatted) ?> away">
             <?= h($distanceFormatted) ?>
         </div>
         <?php endif; ?>
@@ -144,18 +144,18 @@ $hasConditions = $sargassum || $surf || $wind;
 
         <!-- Bottom content overlay -->
         <div class="absolute bottom-0 left-0 right-16 p-4 z-20 text-shadow-hero">
-            <span class="text-xs text-brand-yellow uppercase tracking-wider font-medium"><?= h($municipality) ?></span>
+            <span class="text-xs text-sunset-400 uppercase tracking-wider font-medium"><?= h($municipality) ?></span>
             <h3 class="text-lg font-bold text-white mt-0.5 line-clamp-1"><?= h($name) ?></h3>
         </div>
     </div>
 
     <!-- Card Actions - Dark glass style -->
-    <div class="p-4 bg-brand-darker/80">
+    <div class="p-4 bg-white">
         <!-- Live Data: Conditions, Weather & Crowd -->
         <div class="flex flex-wrap items-center gap-2 mb-3 <?= (!$hasConditions && !$crowdData) ? 'weather-row-placeholder' : '' ?>"
              data-beach-id="<?= h($beach['id']) ?>">
             <!-- Weather badge (loaded async via JS) -->
-            <span class="weather-badge inline-flex items-center gap-1 text-xs bg-white/10 text-white/80 px-2 py-0.5 rounded-full hidden"
+            <span class="weather-badge inline-flex items-center gap-1 text-xs bg-warm-100 text-warm-600 px-2 py-0.5 rounded-full hidden"
                   data-beach-id="<?= h($beach['id']) ?>">
                 <span class="weather-icon">🌤️</span>
                 <span class="weather-temp font-medium"></span>
@@ -210,7 +210,7 @@ $hasConditions = $sargassum || $surf || $wind;
         <div class="card-actions flex gap-2">
             <button type="button"
                     data-action-stop data-action="openBeachDrawer" data-action-args='["<?= h($beach['id']) ?>"]'
-                    class="flex-1 flex items-center justify-center gap-1.5 bg-brand-yellow hover:bg-yellow-300 text-brand-darker text-sm font-semibold h-10 px-3 rounded-lg transition-colors">
+                    class="flex-1 flex items-center justify-center gap-1.5 bg-ocean-500 hover:bg-ocean-600 text-white text-sm font-semibold h-10 px-3 rounded-lg transition-colors">
                 <i data-lucide="book-open" class="w-4 h-4 shrink-0" aria-hidden="true"></i>
                 <span><?= h($cardT('beach.details', 'Details')) ?></span>
             </button>
@@ -223,14 +223,14 @@ $hasConditions = $sargassum || $surf || $wind;
                data-bf-beach-slug="<?= h($slug) ?>"
                data-bf-municipality="<?= h($municipality) ?>"
                data-bf-source="card"
-               class="flex-1 flex items-center justify-center gap-1.5 bg-white/10 hover:bg-white/20 text-white text-sm font-medium h-10 px-3 rounded-lg transition-colors border border-white/10"
+               class="flex-1 flex items-center justify-center gap-1.5 bg-warm-100 hover:bg-warm-200 text-warm-700 text-sm font-medium h-10 px-3 rounded-lg transition-colors border border-warm-200"
                aria-label="<?= h($cardT('beach.go', 'Go')) ?> <?= h($name) ?>">
                 <i data-lucide="navigation" class="w-4 h-4 shrink-0" aria-hidden="true"></i>
                 <span><?= h($cardT('beach.go', 'Go')) ?></span>
             </a>
             <button type="button"
                     data-action-stop data-action="toggleCompare" data-action-args='["<?= h($beach['id']) ?>","<?= h(addslashes($name)) ?>","<?= h($coverImage) ?>","__this__"]'
-                    class="compare-btn flex-none flex items-center justify-center bg-white/10 hover:bg-white/20 text-white text-sm h-10 w-10 rounded-lg transition-colors border border-white/10"
+                    class="compare-btn flex-none flex items-center justify-center bg-warm-100 hover:bg-warm-200 text-warm-700 text-sm h-10 w-10 rounded-lg transition-colors border border-warm-200"
                     aria-label="<?= h($cardT('beach.compare', 'Compare')) ?> <?= h($name) ?>"
                     title="<?= h($cardT('beach.compare', 'Compare')) ?>"
                     data-beach-id="<?= h($beach['id']) ?>">
@@ -238,7 +238,7 @@ $hasConditions = $sargassum || $surf || $wind;
             </button>
             <button type="button"
                     data-action-stop data-action="shareBeach" data-action-args='["<?= h($slug) ?>","<?= h(addslashes($name)) ?>"]'
-                    class="flex-none flex items-center justify-center bg-white/10 hover:bg-white/20 text-white text-sm h-10 w-10 rounded-lg transition-colors border border-white/10"
+                    class="flex-none flex items-center justify-center bg-warm-100 hover:bg-warm-200 text-warm-700 text-sm h-10 w-10 rounded-lg transition-colors border border-warm-200"
                     aria-label="<?= h($cardT('common.share', 'Share')) ?> <?= h($name) ?>"
                     title="<?= h($cardT('common.share', 'Share')) ?>">
                 <i data-lucide="share-2" class="w-4 h-4" aria-hidden="true"></i>

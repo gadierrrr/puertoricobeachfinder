@@ -1,92 +1,152 @@
-/* AUTO-GENERATED FILE: DO NOT EDIT DIRECTLY */
-/* Source: assets/design/tokens.json */
-/* Design tokens: colors, shadows, z-index, glass properties.
+/* ==========================================================
+   _variables.css — Design Tokens: Tropical Daytime
    Single source of truth for all CSS custom properties.
-   Generated from: assets/design/tokens.json */
+   Palette: Ocean teal, warm sand, sunset orange, coral, palm green
+   ========================================================== */
 
 :root {
-    --color-bg-primary: #1a2c32;
-    --color-bg-secondary: #132024;
-    --color-bg-tertiary: #1f3a42;
-    --color-bg-card-dark: #1c2128;
-    --color-white: #ffffff;
-    --color-text-primary: #f1f5f9;
-    --color-text-secondary: #cbd5e1;
-    --color-text-muted: #94a3b8;
-    --color-text-dark: #374151;
-    --color-text-darker: #111827;
-    --color-text-on-light: #1f2937;
-    --color-text-secondary-light: #4b5563;
-    --color-text-muted-light: #6b7280;
-    --color-bg-light-primary: #ffffff;
-    --color-bg-light-secondary: #f9fafb;
-    --color-bg-light-tertiary: #f3f4f6;
-    --color-primary: #3b82f6;
-    --color-primary-hover: #2563eb;
-    --color-primary-dark: #1d4ed8;
-    --color-primary-darker: #1e40af;
-    --color-primary-light: #eff6ff;
-    --color-primary-light-hover: #dbeafe;
-    --color-primary-muted: #93c5fd;
-    --color-focus-ring: rgba(59, 130, 246, 0.5);
-    --color-focus-ring-light: rgba(59, 130, 246, 0.3);
-    --color-focus-ring-lighter: rgba(59, 130, 246, 0.2);
-    --color-focus-ring-faint: rgba(59, 130, 246, 0.1);
-    --color-secondary: #10b981;
-    --color-secondary-light: #34d399;
-    --color-secondary-hover: #059669;
-    --color-secondary-dark: #047857;
-    --color-accent: #fde047;
-    --color-accent-light: #fef08a;
-    --color-accent-hover: #facc15;
-    --color-accent-dark: #eab308;
-    --color-success: var(--color-secondary); /* semantic alias: green = success */
+    /* ---- OCEAN (Primary) ---- */
+    --color-ocean-50:  #eefbfb;
+    --color-ocean-100: #d4f5f5;
+    --color-ocean-200: #a3e8ea;
+    --color-ocean-300: #5fd4d8;
+    --color-ocean-400: #22b8bf;
+    --color-ocean-500: #0e9ca3;
+    --color-ocean-600: #0a7f86;
+    --color-ocean-700: #0d656c;
+    --color-ocean-800: #105258;
+    --color-ocean-900: #0c3d42;
+
+    /* ---- SAND (Backgrounds) ---- */
+    --color-sand-50:  #fffcf7;
+    --color-sand-100: #fef7ec;
+    --color-sand-200: #fcecd0;
+    --color-sand-300: #f8d9a5;
+
+    /* ---- SUNSET (Accent / CTA) ---- */
+    --color-sunset-300: #fdba74;
+    --color-sunset-400: #fb923c;
+    --color-sunset-500: #f97316;
+    --color-sunset-600: #ea580c;
+
+    /* ---- CORAL (Danger / Hearts) ---- */
+    --color-coral-400: #f77171;
+    --color-coral-500: #ef4444;
+    --color-coral-600: #dc2626;
+
+    /* ---- PALM GREEN (Success / Positive) ---- */
+    --color-palm-400: #4ade80;
+    --color-palm-500: #22c55e;
+    --color-palm-600: #16a34a;
+    --color-palm-700: #15803d;
+
+    /* ---- SEMANTIC MAPPINGS ---- */
+    /* Primary: Ocean teal for interactive elements, links, buttons */
+    --color-primary: var(--color-ocean-500);
+    --color-primary-hover: var(--color-ocean-600);
+    --color-primary-dark: var(--color-ocean-700);
+    --color-primary-darker: var(--color-ocean-800);
+    --color-primary-light: var(--color-ocean-50);
+    --color-primary-light-hover: var(--color-ocean-100);
+    --color-primary-muted: var(--color-ocean-300);
+
+    /* Secondary: Palm green for success states */
+    --color-secondary: var(--color-palm-500);
+    --color-secondary-light: var(--color-palm-400);
+    --color-secondary-hover: var(--color-palm-600);
+    --color-secondary-dark: var(--color-palm-700);
+
+    /* Accent: Sunset orange for CTAs, highlights */
+    --color-accent: var(--color-sunset-400);
+    --color-accent-light: var(--color-sunset-300);
+    --color-accent-hover: var(--color-sunset-500);
+    --color-accent-dark: var(--color-sunset-600);
+
+    /* Success / Error / Warning */
+    --color-success: var(--color-secondary);
     --color-success-dark: var(--color-secondary-hover);
-    --color-guide-link: #ca8a04;
-    --color-guide-link-hover: #b45309;
-    --color-error: #ef4444;
-    --color-error-dark: #dc2626;
+    --color-error: var(--color-coral-500);
+    --color-error-dark: var(--color-coral-600);
     --color-error-light: rgba(239, 68, 68, 0.1);
     --color-error-light-hover: rgba(239, 68, 68, 0.2);
     --color-error-bg: #fef2f2;
     --color-error-bg-hover: #fee2e2;
     --color-warning: #f59e0b;
     --color-warning-dark: #d97706;
-    --color-gray-50: #f9fafb;
-    --color-gray-100: #f3f4f6;
-    --color-gray-200: #e5e7eb;
-    --color-gray-300: #d1d5db;
-    --color-gray-400: #9ca3af;
-    --color-gray-500: #6b7280;
-    --color-gray-600: #4b5563;
-    --color-gray-700: #374151;
-    --color-gray-800: #1f2937;
-    --color-gray-900: #111827;
+
+    /* Guide link colors */
+    --color-guide-link: var(--color-ocean-600);
+    --color-guide-link-hover: var(--color-ocean-700);
+
+    /* ---- BACKGROUNDS ---- */
+    /* Light-first: sand/warm tones as default */
+    --color-bg-primary: var(--color-sand-50);
+    --color-bg-secondary: var(--color-sand-100);
+    --color-bg-tertiary: var(--color-sand-200);
+    --color-bg-card-dark: var(--color-ocean-900);
+
+    /* Light mode surface hierarchy */
+    --color-bg-light-primary: #ffffff;
+    --color-bg-light-secondary: #f9fafb;
+    --color-bg-light-tertiary: #f3f4f6;
+
+    /* ---- TEXT ---- */
+    /* Dark text on light backgrounds (default) */
+    --color-text-primary: #1c1917;
+    --color-text-secondary: #57534e;
+    --color-text-muted: #78716c;
+    --color-text-dark: #374151;
+    --color-text-darker: #111827;
+    --color-text-on-light: #1f2937;
+    --color-text-secondary-light: #4b5563;
+    --color-text-muted-light: #6b7280;
+
+    /* ---- GRAY SCALE (warm stone) ---- */
+    --color-gray-50:  #fafaf9;
+    --color-gray-100: #f5f5f4;
+    --color-gray-200: #e7e5e4;
+    --color-gray-300: #d6d3d1;
+    --color-gray-400: #a8a29e;
+    --color-gray-500: #78716c;
+    --color-gray-600: #57534e;
+    --color-gray-700: #44403c;
+    --color-gray-800: #292524;
+    --color-gray-900: #1c1917;
+    --color-white: #ffffff;
+
+    /* ---- SURFACES & BORDERS ---- */
     --color-surface: #ffffff;
-    --color-surface-hover: #f3f4f6;
-    --color-surface-muted: #f9fafb;
+    --color-surface-hover: #f5f5f4;
+    --color-surface-muted: #fafaf9;
     --color-overlay: rgba(0, 0, 0, 0.5);
-    --color-overlay-dark: rgba(0, 0, 0, 0.95);
-    --color-border: rgba(255, 255, 255, 0.1);
-    --color-border-light: rgba(255, 255, 255, 0.05);
-    --color-border-solid: #e5e7eb;
-    --color-border-solid-light: #f3f4f6;
-    --color-card-bg: rgba(255, 255, 255, 0.05);
-    --glass-bg: rgba(0, 0, 0, 0.4);
-    --glass-border: rgba(255, 255, 255, 0.2);
-    --glass-blur: 12px;
-    --score-exceptional-bg: linear-gradient(135deg, #059669 0%, #10b981 100%);
-    --score-excellent-bg: linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%);
-    --score-good-bg: linear-gradient(135deg, #fde047 0%, #facc15 100%);
-    --score-average-bg: rgba(255, 255, 255, 0.1);
-    /* Shadows: dark-context values (heavier than Tailwind light-mode defaults) */
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
-    --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
-    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4);
-    --shadow-popup: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
-    --shadow-dropdown: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    --color-overlay-dark: rgba(0, 0, 0, 0.85);
+    --color-border: var(--color-gray-200);
+    --color-border-light: var(--color-gray-100);
+    --color-border-solid: #e7e5e4;
+    --color-border-solid-light: #f5f5f4;
+    --color-card-bg: #ffffff;
+
+    /* ---- FOCUS ---- */
+    --color-focus-ring: rgba(14, 156, 163, 0.5);
+    --color-focus-ring-light: rgba(14, 156, 163, 0.3);
+    --color-focus-ring-lighter: rgba(14, 156, 163, 0.2);
+    --color-focus-ring-faint: rgba(14, 156, 163, 0.1);
+
+    /* ---- SCORE BADGES ---- */
+    --score-exceptional-bg: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+    --score-excellent-bg: linear-gradient(135deg, #0a7f86 0%, #0e9ca3 100%);
+    --score-good-bg: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+    --score-average-bg: var(--color-gray-400);
+
+    /* ---- SHADOWS (light-context: softer than dark theme) ---- */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.04);
+    --shadow-popup: 0 10px 25px -5px rgba(0, 0, 0, 0.12);
+    --shadow-dropdown: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+
+    /* ---- Z-INDEX STACK ---- */
     --z-sticky: 30;
     --z-nav: 40;
     --z-drawer: 50;
@@ -94,16 +154,15 @@
     --z-modal: 60;
     --z-lightbox: 65;
     --z-lightbox-controls: 66;
+    --z-chat: 70;
     --z-toast: 100;
     --z-skip-link: 9999;
-    --brand-yellow: #FACC15;
-    --color-brand-yellow: #FACC15;
-    --color-brand-darker: #0f172a;
+
     --color-slate-700: #334155;
     --color-slate-50: #f8fafc;
 }
 
 body {
-    background-color: var(--color-bg-secondary);
+    background-color: var(--color-bg-primary);
     color: var(--color-text-primary);
 }

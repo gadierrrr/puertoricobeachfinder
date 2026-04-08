@@ -91,13 +91,13 @@ $beachUrl = routeUrl('beach_detail', $lang, ['slug' => $beach['slug'] ?? '']);
         <img src="<?= h($coverImage) ?>" alt="<?= h($name) ?>" class="w-full h-full object-cover">
     </picture>
     <?php else: ?>
-    <div class="w-full h-full bg-gradient-to-br from-brand-dark to-brand-darker flex items-center justify-center">
-        <i data-lucide="umbrella" class="w-16 h-16 text-brand-yellow/80" aria-hidden="true"></i>
+    <div class="w-full h-full bg-gradient-to-br from-ocean-800 to-ocean-900 flex items-center justify-center">
+        <i data-lucide="umbrella" class="w-16 h-16 text-sunset-400/80" aria-hidden="true"></i>
     </div>
     <?php endif; ?>
 
     <!-- Gradient overlay -->
-    <div class="absolute inset-0 bg-gradient-to-t from-brand-darker via-brand-darker/60 to-transparent"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-ocean-900 via-ocean-900/60 to-transparent"></div>
 
     <!-- Close button -->
     <button data-action="closeBeachDrawer"
@@ -108,7 +108,7 @@ $beachUrl = routeUrl('beach_detail', $lang, ['slug' => $beach['slug'] ?? '']);
 
     <!-- Title overlay -->
     <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
-        <span class="text-xs text-brand-yellow uppercase tracking-wider font-medium"><?= h($municipality) ?></span>
+        <span class="text-xs text-sunset-400 uppercase tracking-wider font-medium"><?= h($municipality) ?></span>
         <h2 class="text-2xl font-bold mt-0.5"><?= h($name) ?></h2>
     </div>
 
@@ -118,7 +118,7 @@ $beachUrl = routeUrl('beach_detail', $lang, ['slug' => $beach['slug'] ?? '']);
         <div class="flex items-center gap-2">
             <span class="text-xl"><?= $weather['current']['icon'] ?></span>
             <div>
-                <div class="font-semibold text-brand-yellow"><?= round($weather['current']['temperature']) ?>°F</div>
+                <div class="font-semibold text-sunset-400"><?= round($weather['current']['temperature']) ?>°F</div>
                 <div class="text-xs text-gray-300"><?= h($weather['current']['description']) ?></div>
             </div>
         </div>
@@ -127,29 +127,29 @@ $beachUrl = routeUrl('beach_detail', $lang, ['slug' => $beach['slug'] ?? '']);
 </div>
 
 <!-- Content -->
-<div class="p-4 md:p-6 space-y-6 bg-brand-darker">
+<div class="p-4 md:p-6 space-y-6 bg-white">
 
     <!-- Ratings Row -->
     <div class="drawer-badges flex flex-wrap gap-2 sm:gap-3">
         <!-- Google Rating -->
         <?php if ($googleRating): ?>
-        <div class="flex items-center gap-1.5 bg-white/10 border border-white/10 px-3 py-1.5 rounded-full" aria-label="Google rating: <?= number_format($googleRating, 1) ?> out of 5">
+        <div class="flex items-center gap-1.5 bg-warm-100 border border-warm-200 px-3 py-1.5 rounded-full" aria-label="Google rating: <?= number_format($googleRating, 1) ?> out of 5">
             <svg class="w-4 h-4" viewBox="0 0 24 24" aria-hidden="true">
                 <path fill="#FACC15" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
             </svg>
-            <span class="font-semibold text-brand-yellow"><?= number_format($googleRating, 1) ?></span>
-            <span class="text-gray-400 text-xs font-medium">Google</span>
-            <span class="text-gray-500 text-xs">(<?= number_format($googleReviewCount) ?>)</span>
+            <span class="font-semibold text-sunset-600"><?= number_format($googleRating, 1) ?></span>
+            <span class="text-warm-500 text-xs font-medium">Google</span>
+            <span class="text-warm-500 text-xs">(<?= number_format($googleReviewCount) ?>)</span>
         </div>
         <?php endif; ?>
 
         <!-- Community Rating -->
         <?php if ($avgUserRating): ?>
-        <div class="flex items-center gap-1.5 bg-white/10 border border-white/10 px-3 py-1.5 rounded-full" aria-label="<?= h(__('beach.community')) ?> rating: <?= number_format($avgUserRating, 1) ?> out of 5">
-            <i data-lucide="star" class="w-4 h-4 text-brand-yellow fill-brand-yellow" aria-hidden="true"></i>
-            <span class="font-semibold text-brand-yellow"><?= number_format($avgUserRating, 1) ?></span>
-            <span class="text-gray-400 text-xs font-medium"><?= h(__('beach.community')) ?></span>
-            <span class="text-gray-500 text-xs">(<?= $userReviewCount ?>)</span>
+        <div class="flex items-center gap-1.5 bg-warm-100 border border-warm-200 px-3 py-1.5 rounded-full" aria-label="<?= h(__('beach.community')) ?> rating: <?= number_format($avgUserRating, 1) ?> out of 5">
+            <i data-lucide="star" class="w-4 h-4 text-sunset-400 fill-sunset-400" aria-hidden="true"></i>
+            <span class="font-semibold text-sunset-600"><?= number_format($avgUserRating, 1) ?></span>
+            <span class="text-warm-500 text-xs font-medium"><?= h(__('beach.community')) ?></span>
+            <span class="text-warm-500 text-xs">(<?= $userReviewCount ?>)</span>
         </div>
         <?php endif; ?>
 
@@ -179,7 +179,7 @@ $beachUrl = routeUrl('beach_detail', $lang, ['slug' => $beach['slug'] ?? '']);
     <?php if (!empty($tags)): ?>
     <div class="flex flex-wrap gap-2">
         <?php foreach ($tags as $tag): ?>
-        <span class="inline-block bg-brand-yellow/10 text-brand-yellow text-sm px-3 py-1 rounded-full border border-brand-yellow/20">
+        <span class="inline-block bg-sunset-400/10 text-sunset-400 text-sm px-3 py-1 rounded-full border border-sunset-400/20">
             <?= h(getTagLabel($tag)) ?>
         </span>
         <?php endforeach; ?>
@@ -189,8 +189,8 @@ $beachUrl = routeUrl('beach_detail', $lang, ['slug' => $beach['slug'] ?? '']);
     <!-- Weather Section (Full) -->
     <?php if ($weather): ?>
     <div>
-        <h3 class="font-semibold text-white mb-3 flex items-center gap-2">
-            <i data-lucide="cloud-sun" class="w-5 h-5 text-brand-yellow" aria-hidden="true"></i>
+        <h3 class="font-semibold text-warm-900 mb-3 flex items-center gap-2">
+            <i data-lucide="cloud-sun" class="w-5 h-5 text-sunset-400" aria-hidden="true"></i>
             <span><?= h(__('beach.todays_weather')) ?></span>
         </h3>
         <?php
@@ -202,60 +202,60 @@ $beachUrl = routeUrl('beach_detail', $lang, ['slug' => $beach['slug'] ?? '']);
 
     <!-- Safety Information -->
     <div class="beach-detail-card p-4">
-        <h3 class="font-semibold text-white mb-3 flex items-center gap-2">
-            <i data-lucide="alert-triangle" class="w-5 h-5 text-brand-yellow" aria-hidden="true"></i>
+        <h3 class="font-semibold text-warm-900 mb-3 flex items-center gap-2">
+            <i data-lucide="alert-triangle" class="w-5 h-5 text-sunset-400" aria-hidden="true"></i>
             <span><?= h(__('beach.safety_info')) ?></span>
         </h3>
 
         <div class="drawer-safety-grid grid grid-cols-1 xs:grid-cols-2 gap-3 text-sm">
             <!-- Swim Difficulty -->
-            <div class="bg-white/5 p-3 rounded-lg border border-white/10">
-                <div class="text-gray-500 text-xs mb-1"><?= h(__('beach.swimming_difficulty')) ?></div>
-                <div class="font-medium text-white"><?= getSwimDifficultyLabel($swimDifficulty) ?></div>
+            <div class="bg-warm-50 p-3 rounded-lg border border-warm-200">
+                <div class="text-warm-500 text-xs mb-1"><?= h(__('beach.swimming_difficulty')) ?></div>
+                <div class="font-medium text-warm-900"><?= getSwimDifficultyLabel($swimDifficulty) ?></div>
                 <div class="flex gap-0.5 mt-1">
                     <?php for ($i = 1; $i <= 5; $i++): ?>
-                    <div class="w-4 h-1.5 rounded <?= $i <= $swimDifficulty ? 'bg-brand-yellow' : 'bg-white/20' ?>"></div>
+                    <div class="w-4 h-1.5 rounded <?= $i <= $swimDifficulty ? 'bg-sunset-400' : 'bg-warm-200' ?>"></div>
                     <?php endfor; ?>
                 </div>
             </div>
 
             <!-- Lifeguard -->
-            <div class="bg-white/5 p-3 rounded-lg border border-white/10">
-                <div class="text-gray-500 text-xs mb-1"><?= h(__('beach.lifeguard')) ?></div>
+            <div class="bg-warm-50 p-3 rounded-lg border border-warm-200">
+                <div class="text-warm-500 text-xs mb-1"><?= h(__('beach.lifeguard')) ?></div>
                 <div class="font-medium flex items-center gap-1">
                     <?php if ($hasLifeguard): ?>
                     <i data-lucide="check" class="w-4 h-4 text-green-400" aria-hidden="true"></i>
                     <span class="text-green-400"><?= h(__('beach.lifeguard_available')) ?></span>
                     <?php else: ?>
-                    <i data-lucide="x" class="w-4 h-4 text-gray-500" aria-hidden="true"></i>
-                    <span class="text-gray-500"><?= h(__('beach.lifeguard_not_available')) ?></span>
+                    <i data-lucide="x" class="w-4 h-4 text-warm-400" aria-hidden="true"></i>
+                    <span class="text-warm-400"><?= h(__('beach.lifeguard_not_available')) ?></span>
                     <?php endif; ?>
                 </div>
             </div>
 
             <!-- Child Safe -->
-            <div class="bg-white/5 p-3 rounded-lg border border-white/10">
-                <div class="text-gray-500 text-xs mb-1"><?= h(__('beach.child_friendly')) ?></div>
+            <div class="bg-warm-50 p-3 rounded-lg border border-warm-200">
+                <div class="text-warm-500 text-xs mb-1"><?= h(__('beach.child_friendly')) ?></div>
                 <div class="font-medium flex items-center gap-1">
                     <?php if ($safeForChildren): ?>
                     <i data-lucide="check" class="w-4 h-4 text-green-400" aria-hidden="true"></i>
                     <span class="text-green-400"><?= h(__('beach.kid_friendly')) ?></span>
                     <?php else: ?>
-                    <i data-lucide="alert-triangle" class="w-4 h-4 text-brand-yellow" aria-hidden="true"></i>
-                    <span class="text-brand-yellow"><?= h(__('beach.caution_advised')) ?></span>
+                    <i data-lucide="alert-triangle" class="w-4 h-4 text-sunset-400" aria-hidden="true"></i>
+                    <span class="text-sunset-400"><?= h(__('beach.caution_advised')) ?></span>
                     <?php endif; ?>
                 </div>
             </div>
 
             <!-- Emergency -->
-            <div class="bg-white/5 p-3 rounded-lg border border-white/10">
-                <div class="text-gray-500 text-xs mb-1"><?= h(__('beach.emergency')) ?></div>
+            <div class="bg-warm-50 p-3 rounded-lg border border-warm-200">
+                <div class="text-warm-500 text-xs mb-1"><?= h(__('beach.emergency')) ?></div>
                 <div class="font-medium text-red-400"><?= h(__('beach.call_911')) ?></div>
             </div>
         </div>
 
         <?php if ($safetyInfo): ?>
-        <div class="mt-3 text-sm text-gray-300">
+        <div class="mt-3 text-sm text-warm-600">
             <?= h($safetyInfo) ?>
         </div>
         <?php endif; ?>
@@ -264,7 +264,7 @@ $beachUrl = routeUrl('beach_detail', $lang, ['slug' => $beach['slug'] ?? '']);
     <!-- Conditions -->
     <?php if ($sargassum || $surf || $wind): ?>
     <div>
-        <h3 class="font-semibold text-white mb-2"><?= h(__('beach.beach_conditions')) ?></h3>
+        <h3 class="font-semibold text-warm-900 mb-2"><?= h(__('beach.beach_conditions')) ?></h3>
         <div class="flex flex-wrap gap-2">
             <?php if ($sargassum): ?>
             <span class="inline-flex items-center gap-1.5 <?= getConditionClassDark($sargassum, 'sargassum') ?> px-3 py-1.5 rounded-lg text-sm border">
@@ -291,10 +291,10 @@ $beachUrl = routeUrl('beach_detail', $lang, ['slug' => $beach['slug'] ?? '']);
     <!-- Amenities -->
     <?php if (!empty($amenities)): ?>
     <div>
-        <h3 class="font-semibold text-white mb-2"><?= h(__('beach.amenities_title')) ?></h3>
+        <h3 class="font-semibold text-warm-900 mb-2"><?= h(__('beach.amenities_title')) ?></h3>
         <div class="grid grid-cols-2 gap-2">
             <?php foreach ($amenities as $amenity): ?>
-            <div class="flex items-center gap-2 text-sm text-gray-300">
+            <div class="flex items-center gap-2 text-sm text-warm-700">
                 <i data-lucide="check" class="w-4 h-4 text-green-400" aria-hidden="true"></i>
                 <?= h(getAmenityLabel($amenity)) ?>
             </div>
@@ -306,20 +306,20 @@ $beachUrl = routeUrl('beach_detail', $lang, ['slug' => $beach['slug'] ?? '']);
     <!-- Description -->
     <?php if ($description): ?>
     <div>
-        <h3 class="font-semibold text-white mb-2"><?= h(__('beach.about_this_beach')) ?></h3>
-        <p class="text-gray-300 text-sm leading-relaxed"><?= nl2br(h($description)) ?></p>
+        <h3 class="font-semibold text-warm-900 mb-2"><?= h(__('beach.about_this_beach')) ?></h3>
+        <p class="text-warm-600 text-sm leading-relaxed"><?= nl2br(h($description)) ?></p>
     </div>
     <?php endif; ?>
 
     <!-- Features -->
     <?php if (!empty($features)): ?>
     <div>
-        <h3 class="font-semibold text-white mb-2"><?= h(__('beach.highlights')) ?></h3>
+        <h3 class="font-semibold text-warm-900 mb-2"><?= h(__('beach.highlights')) ?></h3>
         <div class="space-y-3">
             <?php foreach (array_slice($features, 0, 3) as $feature): ?>
-            <div class="bg-white/5 p-3 rounded-lg border border-white/10">
-                <h4 class="font-medium text-white text-sm"><?= h(($lang === 'es' && !empty($feature['title_es'])) ? $feature['title_es'] : $feature['title']) ?></h4>
-                <p class="text-gray-400 text-sm mt-1"><?= h(($lang === 'es' && !empty($feature['description_es'])) ? $feature['description_es'] : $feature['description']) ?></p>
+            <div class="bg-warm-50 p-3 rounded-lg border border-warm-200">
+                <h4 class="font-medium text-warm-900 text-sm"><?= h(($lang === 'es' && !empty($feature['title_es'])) ? $feature['title_es'] : $feature['title']) ?></h4>
+                <p class="text-warm-500 text-sm mt-1"><?= h(($lang === 'es' && !empty($feature['description_es'])) ? $feature['description_es'] : $feature['description']) ?></p>
             </div>
             <?php endforeach; ?>
         </div>
@@ -329,12 +329,12 @@ $beachUrl = routeUrl('beach_detail', $lang, ['slug' => $beach['slug'] ?? '']);
     <!-- Tips -->
     <?php if (!empty($tips)): ?>
     <div>
-        <h3 class="font-semibold text-white mb-2"><?= h(__('beach.visitor_tips')) ?></h3>
+        <h3 class="font-semibold text-warm-900 mb-2"><?= h(__('beach.visitor_tips')) ?></h3>
         <ul class="space-y-2">
             <?php foreach (array_slice($tips, 0, 4) as $tip): ?>
             <li class="flex items-start gap-3 text-sm">
                 <span class="yellow-bullet mt-1.5"></span>
-                <span class="text-gray-300"><?= h(($lang === 'es' && !empty($tip['tip_es'])) ? $tip['tip_es'] : $tip['tip']) ?></span>
+                <span class="text-warm-600"><?= h(($lang === 'es' && !empty($tip['tip_es'])) ? $tip['tip_es'] : $tip['tip']) ?></span>
             </li>
             <?php endforeach; ?>
         </ul>
@@ -344,64 +344,64 @@ $beachUrl = routeUrl('beach_detail', $lang, ['slug' => $beach['slug'] ?? '']);
     <!-- Additional Info -->
     <div class="drawer-info-grid grid grid-cols-1 sm:grid-cols-2 gap-3">
         <?php if ($parkingDetails): ?>
-        <div class="bg-white/5 p-3 rounded-lg border border-white/10">
-            <h4 class="font-medium text-white text-sm mb-1 flex items-center gap-1.5">
-                <i data-lucide="car" class="w-4 h-4 text-brand-yellow" aria-hidden="true"></i>
+        <div class="bg-warm-50 p-3 rounded-lg border border-warm-200">
+            <h4 class="font-medium text-warm-900 text-sm mb-1 flex items-center gap-1.5">
+                <i data-lucide="car" class="w-4 h-4 text-sunset-400" aria-hidden="true"></i>
                 <?= h(__('beach.parking')) ?>
             </h4>
-            <p class="text-gray-400 text-sm"><?= h($parkingDetails) ?></p>
+            <p class="text-warm-500 text-sm"><?= h($parkingDetails) ?></p>
         </div>
         <?php endif; ?>
 
         <?php if ($bestTime): ?>
-        <div class="bg-white/5 p-3 rounded-lg border border-white/10">
-            <h4 class="font-medium text-white text-sm mb-1 flex items-center gap-1.5">
-                <i data-lucide="clock" class="w-4 h-4 text-brand-yellow" aria-hidden="true"></i>
+        <div class="bg-warm-50 p-3 rounded-lg border border-warm-200">
+            <h4 class="font-medium text-warm-900 text-sm mb-1 flex items-center gap-1.5">
+                <i data-lucide="clock" class="w-4 h-4 text-sunset-400" aria-hidden="true"></i>
                 <?= h(__('beach.best_time')) ?>
             </h4>
-            <p class="text-gray-400 text-sm"><?= h($bestTime) ?></p>
+            <p class="text-warm-500 text-sm"><?= h($bestTime) ?></p>
         </div>
         <?php endif; ?>
 
         <?php if ($accessLabel): ?>
-        <div class="bg-white/5 p-3 rounded-lg border border-white/10">
-            <h4 class="font-medium text-white text-sm mb-1 flex items-center gap-1.5">
-                <i data-lucide="route" class="w-4 h-4 text-brand-yellow" aria-hidden="true"></i>
+        <div class="bg-warm-50 p-3 rounded-lg border border-warm-200">
+            <h4 class="font-medium text-warm-900 text-sm mb-1 flex items-center gap-1.5">
+                <i data-lucide="route" class="w-4 h-4 text-sunset-400" aria-hidden="true"></i>
                 <?= h(__('beach.access')) ?>
             </h4>
-            <p class="text-gray-400 text-sm"><?= h($accessLabel) ?></p>
+            <p class="text-warm-500 text-sm"><?= h($accessLabel) ?></p>
         </div>
         <?php endif; ?>
     </div>
 
     <!-- Notes/Warnings -->
     <?php if ($notes): ?>
-    <div class="bg-brand-yellow/10 border border-brand-yellow/30 p-3 rounded-lg">
+    <div class="bg-sunset-400/10 border border-sunset-400/30 p-3 rounded-lg">
         <div class="flex gap-2">
-            <i data-lucide="info" class="w-5 h-5 text-brand-yellow shrink-0" aria-hidden="true"></i>
-            <p class="text-gray-300 text-sm"><?= h($notes) ?></p>
+            <i data-lucide="info" class="w-5 h-5 text-sunset-400 shrink-0" aria-hidden="true"></i>
+            <p class="text-warm-600 text-sm"><?= h($notes) ?></p>
         </div>
     </div>
     <?php endif; ?>
 
     <!-- User Reviews Section -->
-    <div class="border-t border-white/10 pt-6">
+    <div class="border-t border-warm-200 pt-6">
         <div class="flex items-center justify-between mb-4">
-            <h3 class="font-semibold text-white flex items-center gap-2">
-                <i data-lucide="message-circle" class="w-5 h-5 text-brand-yellow" aria-hidden="true"></i>
+            <h3 class="font-semibold text-warm-900 flex items-center gap-2">
+                <i data-lucide="message-circle" class="w-5 h-5 text-sunset-400" aria-hidden="true"></i>
                 <span><?= h(__('beach.reviews_title')) ?></span>
                 <?php if ($userReviewCount > 0): ?>
-                <span class="text-sm font-normal text-gray-500">(<?= $userReviewCount ?>)</span>
+                <span class="text-sm font-normal text-warm-500">(<?= $userReviewCount ?>)</span>
                 <?php endif; ?>
             </h3>
             <?php if (isAuthenticated()): ?>
             <button data-action="openReviewForm" data-action-args='["<?= h($beach['id']) ?>","<?= h(addslashes($name)) ?>"]'
-                    class="text-sm text-brand-yellow hover:text-yellow-300 font-medium">
+                    class="text-sm text-sunset-400 hover:text-sunset-300 font-medium">
                 <?= h(__('beach.write_review')) ?>
             </button>
             <?php else: ?>
             <button data-action="showSignupPrompt" data-action-args='["reviews","<?= h($beachUrl) ?>"]'
-                    class="text-sm text-brand-yellow hover:text-yellow-300 font-medium">
+                    class="text-sm text-sunset-400 hover:text-sunset-300 font-medium">
                 <?= h(__('beach.write_review')) ?>
             </button>
             <?php endif; ?>
@@ -416,33 +416,33 @@ $beachUrl = routeUrl('beach_detail', $lang, ['slug' => $beach['slug'] ?? '']);
         <?php if (count($reviews) > 3): ?>
         <div class="mt-4 text-center">
             <a href="<?= h($beachUrl) ?>#reviews"
-               class="text-brand-yellow hover:text-yellow-300 text-sm font-medium">
+               class="text-sunset-400 hover:text-sunset-300 text-sm font-medium">
                 <?= h(__('beach.view_all_reviews', ['count' => count($reviews)])) ?> →
             </a>
         </div>
         <?php endif; ?>
 
         <?php if (!isAuthenticated()): ?>
-        <div class="mt-4 p-3 bg-brand-yellow/5 rounded-lg border border-brand-yellow/20 text-center">
-            <p class="text-sm text-gray-300 mb-2">
+        <div class="mt-4 p-3 bg-sunset-400/5 rounded-lg border border-sunset-400/20 text-center">
+            <p class="text-sm text-warm-600 mb-2">
                 <?php
                 $reviewedKey = $userReviewCount === 1 ? 'beach.community_reviewed_one' : 'beach.community_reviewed_many';
                 echo h(__($reviewedKey, ['count' => $userReviewCount]));
                 ?>
             </p>
             <button data-action="showSignupPrompt" data-action-args='["reviews","<?= h($beachUrl) ?>"]'
-                    class="text-sm text-brand-yellow hover:text-yellow-300 font-medium">
+                    class="text-sm text-sunset-400 hover:text-sunset-300 font-medium">
                 <?= h(__('beach.join_community')) ?> →
             </button>
         </div>
         <?php endif; ?>
         <?php else: ?>
-        <div class="text-center py-6 bg-white/5 rounded-lg border border-white/10">
-            <i data-lucide="pen-line" class="w-8 h-8 mx-auto text-gray-500 mb-2" aria-hidden="true"></i>
-            <p class="text-gray-400 text-sm mb-3"><?= h(__('beach.no_reviews_yet')) ?></p>
+        <div class="text-center py-6 bg-warm-50 rounded-lg border border-warm-200">
+            <i data-lucide="pen-line" class="w-8 h-8 mx-auto text-warm-400 mb-2" aria-hidden="true"></i>
+            <p class="text-warm-500 text-sm mb-3"><?= h(__('beach.no_reviews_yet')) ?></p>
             <?php if (!isAuthenticated()): ?>
             <button data-action="showSignupPrompt" data-action-args='["reviews","<?= h($beachUrl) ?>"]'
-                    class="inline-flex items-center gap-2 bg-brand-yellow/10 hover:bg-brand-yellow/20 text-brand-yellow px-4 py-2 rounded-lg text-sm font-medium transition-colors border border-brand-yellow/20">
+                    class="inline-flex items-center gap-2 bg-sunset-400/10 hover:bg-sunset-400/20 text-sunset-400 px-4 py-2 rounded-lg text-sm font-medium transition-colors border border-sunset-400/20">
                 <i data-lucide="log-in" class="w-4 h-4" aria-hidden="true"></i>
                 <?= h(__('beach.sign_in_first_reviewer')) ?>
             </button>
@@ -454,7 +454,7 @@ $beachUrl = routeUrl('beach_detail', $lang, ['slug' => $beach['slug'] ?? '']);
     <!-- Gallery -->
     <?php if (!empty($gallery)): ?>
     <div>
-        <h3 class="font-semibold text-white mb-2"><?= h(__('beach.photos')) ?></h3>
+        <h3 class="font-semibold text-warm-900 mb-2"><?= h(__('beach.photos')) ?></h3>
         <div class="gallery-grid">
             <?php foreach (array_slice($gallery, 0, 6) as $image): ?>
             <img src="<?= h($image) ?>"
@@ -467,18 +467,18 @@ $beachUrl = routeUrl('beach_detail', $lang, ['slug' => $beach['slug'] ?? '']);
     <?php endif; ?>
 
     <!-- Actions -->
-    <div class="flex gap-3 pt-4 border-t border-white/10">
+    <div class="flex gap-3 pt-4 border-t border-warm-200">
         <a href="<?= h(getDirectionsUrl($beach)) ?>"
            target="_blank"
            rel="noopener noreferrer"
            data-bf-track="directions"
-           class="flex-1 flex items-center justify-center gap-2 bg-brand-yellow hover:bg-yellow-300 text-brand-darker py-3 rounded-lg font-semibold transition-colors"
+           class="flex-1 flex items-center justify-center gap-2 bg-sunset-400 hover:bg-sunset-300 text-ocean-900 py-3 rounded-lg font-semibold transition-colors"
            aria-label="<?= h(__('beach.get_directions')) ?> - <?= h($name) ?>">
             <i data-lucide="navigation" class="w-5 h-5" aria-hidden="true"></i>
             <?= h(__('beach.get_directions')) ?>
         </a>
         <button data-action="shareBeach" data-action-args='["<?= h($beach['slug']) ?>","<?= h(addslashes($name)) ?>"]'
-                class="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-3 rounded-lg font-medium transition-colors border border-white/10"
+                class="flex items-center justify-center gap-2 bg-warm-100 hover:bg-warm-200 text-warm-700 px-4 py-3 rounded-lg font-medium transition-colors border border-warm-200"
                 aria-label="<?= h(__('beach.share')) ?> <?= h($name) ?>">
             <i data-lucide="share-2" class="w-5 h-5" aria-hidden="true"></i>
             <?= h(__('beach.share')) ?>
@@ -488,7 +488,7 @@ $beachUrl = routeUrl('beach_detail', $lang, ['slug' => $beach['slug'] ?? '']);
     <!-- View Full Page Link -->
     <div class="text-center">
         <a href="<?= h($beachUrl) ?>"
-           class="text-brand-yellow hover:text-yellow-300 text-sm font-medium">
+           class="text-sunset-400 hover:text-sunset-300 text-sm font-medium">
             <?= h(__('beach.view_full_page')) ?> →
         </a>
     </div>

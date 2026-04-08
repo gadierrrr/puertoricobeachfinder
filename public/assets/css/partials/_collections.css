@@ -6,14 +6,11 @@
 
 /* ========================================
    COLLECTION EXPLORER PAGES
-   Homepage-first dark system
+   Tropical Daytime light system
    ======================================== */
 
 body.collection-dark {
-    background:
-        radial-gradient(circle at 20% -10%, rgba(250, 204, 21, 0.14), transparent 40%),
-        radial-gradient(circle at 85% -15%, rgba(59, 130, 246, 0.2), transparent 42%),
-        linear-gradient(180deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 34%, var(--color-bg-secondary) 100%);
+    background: linear-gradient(180deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);
     color: var(--color-text-primary);
 }
 
@@ -47,7 +44,7 @@ body.collection-dark {
     margin-bottom: 1rem;
     border: 1px solid var(--color-border);
     border-radius: 0 0 1.25rem 1.25rem;
-    box-shadow: var(--shadow-glass);
+    box-shadow: var(--shadow-card);
     position: relative;
     overflow: hidden;
 }
@@ -58,7 +55,7 @@ body.collection-dark {
     inset: auto auto -100px -100px;
     width: 220px;
     height: 220px;
-    background: radial-gradient(circle, rgba(250, 204, 21, 0.18) 0%, transparent 72%);
+    background: radial-gradient(circle, rgba(14, 156, 163, 0.12) 0%, transparent 72%);
     pointer-events: none;
 }
 
@@ -114,7 +111,7 @@ body.collection-dark {
 .collection-search {
     display: flex;
     align-items: center;
-    background: rgba(15, 23, 42, 0.76);
+    background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: 0.75rem;
     min-height: 48px;
@@ -143,8 +140,8 @@ body.collection-dark {
 }
 
 .collection-search:focus-within {
-    border-color: rgba(250, 204, 21, 0.64);
-    box-shadow: 0 0 0 2px rgba(250, 204, 21, 0.2);
+    border-color: var(--color-focus-ring);
+    box-shadow: 0 0 0 2px var(--color-focus-ring-lighter);
 }
 
 .collection-toolbar__btn {
@@ -153,7 +150,7 @@ body.collection-dark {
     white-space: nowrap;
     border-radius: 0.75rem;
     border: 1px solid var(--color-border);
-    background: rgba(15, 23, 42, 0.82);
+    background: var(--color-surface);
     color: var(--color-text-primary);
     display: inline-flex;
     align-items: center;
@@ -163,15 +160,15 @@ body.collection-dark {
 }
 
 .collection-toolbar__btn:hover {
-    border-color: rgba(255, 255, 255, 0.28);
-    background: rgba(255, 255, 255, 0.12);
+    border-color: var(--color-primary-muted);
+    background: var(--color-surface-hover);
 }
 
 .collection-toolbar__sort {
     min-height: 48px;
     border-radius: 0.75rem;
     border: 1px solid var(--color-border);
-    background: rgba(15, 23, 42, 0.82);
+    background: var(--color-surface);
     color: var(--color-text-primary);
     font-size: 0.95rem;
     font-weight: 600;
@@ -241,7 +238,7 @@ body.collection-dark {
     align-items: center;
     gap: 0.36rem;
     border: 1px solid var(--color-border);
-    background: rgba(255, 255, 255, 0.07);
+    background: var(--color-bg-light-secondary);
     color: var(--color-text-secondary);
     font-size: 0.88rem;
     font-weight: 600;
@@ -249,14 +246,14 @@ body.collection-dark {
 }
 
 .collection-chip:hover {
-    border-color: rgba(255, 255, 255, 0.28);
-    background: rgba(255, 255, 255, 0.12);
+    border-color: var(--color-primary-muted);
+    background: var(--color-surface-hover);
 }
 
 .collection-chip.is-active {
-    border-color: rgba(250, 204, 21, 0.72);
-    background: rgba(250, 204, 21, 0.18);
-    color: var(--color-accent-light);
+    border-color: var(--color-primary);
+    background: var(--color-primary-light);
+    color: var(--color-primary-dark);
 }
 
 .collection-chip__emoji {
@@ -300,7 +297,7 @@ body.collection-dark {
 .collection-view-switch {
     display: inline-flex;
     gap: 0.3rem;
-    background: rgba(15, 23, 42, 0.86);
+    background: var(--color-bg-light-tertiary);
     border: 1px solid var(--color-border);
     padding: 0.2rem;
     border-radius: 0.65rem;
@@ -322,15 +319,15 @@ body.collection-dark {
 }
 
 .collection-view-switch__btn.is-active {
-    background: rgba(255, 255, 255, 0.14);
+    background: var(--color-surface);
     color: var(--color-text-primary);
 }
 
 .collection-results__notice {
     margin-bottom: 0.85rem;
-    background: rgba(250, 204, 21, 0.14);
-    border: 1px solid rgba(250, 204, 21, 0.35);
-    color: var(--color-accent-light);
+    background: var(--color-primary-light);
+    border: 1px solid var(--color-primary-muted);
+    color: var(--color-primary-dark);
     border-radius: 0.75rem;
     padding: 0.65rem 0.8rem;
     font-size: 0.9rem;
@@ -344,7 +341,7 @@ body.collection-dark {
 .collection-card {
     overflow: hidden;
     border-radius: 1rem;
-    background: linear-gradient(145deg, rgba(15, 23, 42, 0.84), rgba(15, 23, 42, 0.62));
+    background: var(--color-surface);
     border: 1px solid var(--color-border);
     box-shadow: var(--shadow-card);
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
@@ -352,8 +349,8 @@ body.collection-dark {
 
 .collection-card:hover {
     transform: translateY(-2px);
-    border-color: rgba(255, 255, 255, 0.22);
-    box-shadow: var(--shadow-glass);
+    border-color: var(--color-primary-muted);
+    box-shadow: var(--shadow-popup);
 }
 
 .collection-card--cards,
@@ -391,7 +388,7 @@ body.collection-dark {
     left: 0.75rem;
     border-radius: 9999px;
     background: var(--color-accent);
-    color: var(--color-brand-darker);
+    color: var(--color-gray-900);
     font-size: 0.76rem;
     font-weight: 700;
     padding: 0.3rem 0.55rem;
@@ -402,7 +399,7 @@ body.collection-dark {
     top: 0.75rem;
     right: 0.75rem;
     border: 1px solid var(--color-border);
-    background: rgba(15, 23, 42, 0.9);
+    background: var(--color-surface);
     border-radius: 9999px;
     width: 44px;
     height: 44px;
@@ -447,7 +444,7 @@ body.collection-dark {
 }
 
 .collection-card__title-link:hover {
-    color: var(--color-accent-light);
+    color: var(--color-primary);
     text-decoration: underline;
     text-underline-offset: 2px;
 }
@@ -495,9 +492,9 @@ body.collection-dark {
 
 .collection-mini-chip {
     border-radius: 9999px;
-    background: rgba(250, 204, 21, 0.16);
-    border: 1px solid rgba(250, 204, 21, 0.38);
-    color: var(--color-accent-light);
+    background: var(--color-primary-light);
+    border: 1px solid var(--color-primary-muted);
+    color: var(--color-primary-dark);
     padding: 0.25rem 0.65rem;
     font-size: 0.76rem;
     font-weight: 600;
@@ -583,12 +580,11 @@ body.collection-dark {
 
 .collection-content-nav {
     border-bottom-color: var(--color-border) !important;
-    background: rgba(15, 23, 42, 0.72) !important;
-    backdrop-filter: blur(12px);
+    background: var(--color-surface) !important;
 }
 
 .collection-content-nav a {
-    color: var(--color-accent-light) !important;
+    color: var(--color-primary) !important;
 }
 
 .collection-content-nav span {
@@ -609,7 +605,7 @@ body.collection-dark {
     text-decoration: none;
 }
 
-    color: var(--color-brand-darker);
+    color: var(--color-gray-900);
 }
 
 @media (max-width: 1024px) {

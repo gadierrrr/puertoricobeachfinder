@@ -205,9 +205,9 @@ $publishedCount = queryOne('SELECT COUNT(*) as cnt FROM beaches WHERE publish_st
 include APP_ROOT . '/components/header.php';
 ?>
 
-<!-- Hero Section - Premium Dark Glassmorphism -->
-<header class="relative w-full min-h-[85vh] flex flex-col items-center justify-center overflow-hidden">
-    <!-- Background with gradient overlay and scale effect -->
+<!-- Hero Section - Tropical Daytime Split Layout -->
+<header class="relative w-full min-h-[85vh] flex items-end overflow-hidden">
+    <!-- Background with gradient overlay -->
     <div class="absolute inset-0 -z-10">
         <img src="/images/beaches/jobos-beach-isabela-18513-67085.jpg"
              alt="Jobos Beach in Isabela, Puerto Rico - famous for surfing"
@@ -217,102 +217,80 @@ include APP_ROOT . '/components/header.php';
         <div class="absolute inset-0 bg-black/30"></div>
     </div>
 
-    <!-- Hero Content -->
-    <div class="text-center z-10 px-4 py-16 md:py-24 w-full max-w-6xl mx-auto">
-        <!-- Headline - Single H1 with styled spans -->
-        <h1 class="animate-fade-in-up">
-            <span class="block text-2xl sm:text-3xl md:text-5xl lg:text-5xl font-bold text-white">
-                <?= h(__('pages.home.hero_headline_1', ['count' => number_format($publishedCount)])) ?>
-            </span>
-            <span class="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif italic text-brand-yellow animate-fade-in-up delay-200 lg:whitespace-nowrap">
-                <?= h(__('pages.home.hero_headline_2')) ?>
-            </span>
-        </h1>
+    <!-- Hero Content - Split Grid -->
+    <div class="z-10 w-full max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-[73px] pb-12 pt-32 grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-8 lg:gap-10 items-end">
+        <!-- Left: Text Content -->
+        <div class="text-left animate-fade-in-up">
+            <!-- Eyebrow Badge -->
+            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/15 backdrop-blur-sm text-orange-300 text-xs mb-4">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <?= h(__('pages.home.hero_eyebrow')) ?>
+            </div>
 
-        <!-- Subtitle with integrated stats -->
-        <p class="text-sm sm:text-base text-gray-200 max-w-2xl mx-auto mt-6 md:mt-8 mb-8 md:mb-10 animate-fade-in-up delay-300">
-            <?= h(__('pages.home.hero_subtitle', ['count' => number_format($totalBeaches)])) ?>
-            <span class="text-white/70 mx-1">•</span>
-            <span class="inline-flex items-center gap-1">
-                <svg class="w-3.5 h-3.5 text-brand-yellow inline" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                <?= h(__('pages.home.hero_subtitle_reviews', ['rating' => number_format($siteStats['avg_rating'], 1), 'reviewsK' => number_format($siteStats['total_reviews'] / 1000)])) ?>
-            </span>
-        </p>
+            <!-- Headline -->
+            <h1 class="text-[56px] font-serif text-white leading-[1.1] mb-3.5">
+                <?= h(__('pages.home.hero_headline_1')) ?> <em style="color: #a3e8ea"><?= h(__('pages.home.hero_headline_2')) ?></em>
+            </h1>
 
-        <!-- Enhanced Search Bar -->
-        <div class="animate-fade-in-up delay-400 mb-8 md:mb-10">
-            <form action="/#beaches" method="GET" class="hero-search-form bg-black/40 backdrop-blur-md border border-white/20 rounded-2xl sm:rounded-full p-1.5 sm:p-2 max-w-xl md:max-w-2xl mx-auto" id="hero-search-form">
-                <div class="flex items-center">
-                    <i data-lucide="search" class="w-5 h-5 text-white/70 ml-3 sm:ml-4 flex-shrink-0" aria-hidden="true"></i>
+            <!-- Subtitle -->
+            <p class="text-base mb-6" style="color: rgba(255,255,255,0.75); max-width: 440px">
+                <?= h(__('pages.home.hero_subtitle', ['count' => number_format($totalBeaches)])) ?>
+            </p>
+
+            <!-- Stat Pills -->
+            <div class="flex items-center gap-3">
+                <span class="inline-flex items-center gap-1.5 px-4 py-[7px] rounded-full bg-white/10 backdrop-blur-sm text-white text-[13px]">
+                    <svg class="w-4 h-4 text-sunset-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <?= h(__('pages.home.hero_stat_rating', ['rating' => number_format($siteStats['avg_rating'], 1)])) ?>
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-4 py-[7px] rounded-full bg-white/10 backdrop-blur-sm text-white text-[13px]">
+                    <span class="w-2 h-2 rounded-full bg-sunset-400"></span>
+                    <?= h(__('pages.home.hero_stat_reviews', ['count' => number_format($siteStats['total_reviews'] / 1000) . 'K'])) ?>
+                </span>
+            </div>
+        </div>
+
+        <!-- Right: Search Card -->
+        <div class="bg-white rounded-2xl p-2 shadow-search animate-fade-in-up delay-200">
+            <form action="/#beaches" method="GET" class="hero-search-form relative" id="hero-search-form">
+                <div class="flex items-center px-3 py-2">
+                    <i data-lucide="search" class="w-[18px] h-[18px] text-warm-400 flex-shrink-0" aria-hidden="true"></i>
                     <input type="text"
                            name="q"
                            id="hero-search-input"
                            placeholder="<?= h(__('pages.home.search_placeholder')) ?>"
                            value="<?= h($searchQuery) ?>"
-                           class="flex-1 bg-transparent border-none text-white placeholder-white/40 px-3 sm:px-4 py-2.5 focus:outline-none text-sm sm:text-base"
+                           class="flex-1 bg-transparent border-none text-warm-900 placeholder-warm-400 px-3 py-2 focus:outline-none text-[15px]"
                            aria-label="<?= h(__('common.search')) ?>"
                            autocomplete="off">
-                    <button type="submit" class="bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-5 sm:px-8 py-2.5 sm:py-3 rounded-xl sm:rounded-full font-semibold text-sm sm:text-base transition-colors flex-shrink-0">
-                        <?= h(__('pages.home.search_button')) ?>
+                    <button type="submit" class="bg-ocean-600 hover:bg-ocean-700 text-white w-[42px] h-[42px] rounded-full flex items-center justify-center transition-colors flex-shrink-0" aria-label="<?= h(__('pages.home.search_button')) ?>">
+                        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
                     </button>
                 </div>
                 <!-- Search Autocomplete Dropdown -->
-                <div id="search-autocomplete" class="hidden absolute left-0 right-0 top-full mt-2 bg-brand-dark/95 backdrop-blur-md border border-white/20 rounded-xl shadow-glass overflow-hidden z-50">
-                    <div id="search-results" class="max-h-64 overflow-y-auto">
-                        <!-- Results populated by JS -->
-                    </div>
+                <div id="search-autocomplete" class="hidden absolute left-0 right-0 top-full mt-2 bg-white shadow-lg border border-warm-200 rounded-xl overflow-hidden z-50">
+                    <div id="search-results" class="max-h-64 overflow-y-auto"></div>
                 </div>
             </form>
-        </div>
 
-        <!-- Filter Category Chips - Compact horizontal pills -->
-        <div class="animate-fade-in-up delay-500">
-            <?php
-            $heroCategories = [
-                'surfing' => [
-                    'label' => __('pages.home.category_surfing'), 'emoji' => '🏄‍♂️',
-                    'bg' => 'bg-emerald-500/20', 'border' => 'border-emerald-400/40',
-                    'hoverBg' => 'hover:bg-emerald-500/30', 'hoverBorder' => 'hover:border-emerald-400/60',
-                    'countColor' => 'text-emerald-300/70',
-                ],
-                'snorkeling' => [
-                    'label' => __('pages.home.category_snorkeling'), 'emoji' => '🤿',
-                    'bg' => 'bg-teal-500/20', 'border' => 'border-teal-400/40',
-                    'hoverBg' => 'hover:bg-teal-500/30', 'hoverBorder' => 'hover:border-teal-400/60',
-                    'countColor' => 'text-teal-300/70',
-                ],
-                'family-friendly' => [
-                    'label' => __('pages.home.category_family'), 'emoji' => '👨‍👩‍👧',
-                    'bg' => 'bg-amber-500/20', 'border' => 'border-amber-400/40',
-                    'hoverBg' => 'hover:bg-amber-500/30', 'hoverBorder' => 'hover:border-amber-400/60',
-                    'countColor' => 'text-amber-300/70',
-                ],
-                'secluded' => [
-                    'label' => __('pages.home.category_secluded'), 'emoji' => '🌴',
-                    'bg' => 'bg-rose-500/20', 'border' => 'border-rose-400/40',
-                    'hoverBg' => 'hover:bg-rose-500/30', 'hoverBorder' => 'hover:border-rose-400/60',
-                    'countColor' => 'text-rose-300/70',
-                ],
-            ];
-            ?>
-            <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 max-w-2xl mx-auto">
-                <?php foreach ($heroCategories as $tag => $cat):
+            <!-- Quick Filter Chips -->
+            <div class="flex flex-wrap gap-2 mt-4">
+                <?php
+                $searchChips = [
+                    'surfing' => ['label' => __('pages.home.category_surfing'), 'emoji' => '🏄‍♂️'],
+                    'snorkeling' => ['label' => __('pages.home.category_snorkeling'), 'emoji' => '🤿'],
+                    'family-friendly' => ['label' => __('pages.home.category_family'), 'emoji' => '👨‍👩‍👧'],
+                    'secluded' => ['label' => __('pages.home.category_secluded'), 'emoji' => '🌴'],
+                ];
+                foreach ($searchChips as $tag => $chip):
                     $isActive = in_array($tag, $selectedTags);
-                    $count = $tagCounts[$tag] ?? 0;
                 ?>
                 <a href="/?tags[]=<?= h($tag) ?>#beaches"
-                   class="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full backdrop-blur-sm border transition-all duration-200 text-sm <?= $isActive ? 'bg-brand-yellow/20 border-brand-yellow text-brand-yellow' : $cat['bg'] . ' ' . $cat['hoverBg'] . ' ' . $cat['border'] . ' ' . $cat['hoverBorder'] . ' text-white' ?>"
-                   aria-pressed="<?= $isActive ? 'true' : 'false' ?>">
-                    <span><?= $cat['emoji'] ?></span>
-                    <span class="font-medium"><?= h($cat['label']) ?></span>
-                    <span class="text-xs <?= $isActive ? 'text-brand-yellow/70' : $cat['countColor'] ?>"><?= $count ?></span>
+                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] transition-all <?= $isActive ? 'bg-ocean-100 text-ocean-700' : 'bg-teal-50 text-warm-700 hover:bg-teal-100' ?>">
+                    <span><?= $chip['emoji'] ?></span>
+                    <span class="font-medium"><?= h($chip['label']) ?></span>
                 </a>
                 <?php endforeach; ?>
-                <a href="#beaches"
-                   class="inline-flex items-center gap-1 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-white/60 hover:text-white transition-all duration-200 text-sm">
-                    <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i>
-                    <span><?= h(__('pages.home.category_more')) ?></span>
-                </a>
             </div>
         </div>
     </div>
@@ -359,15 +337,15 @@ include APP_ROOT . '/components/header.php';
             }
 
             resultsContainer.innerHTML = results.map(function(beach) {
-                return '<a href="/beach/' + beach.slug + '" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-colors border-b border-white/5 last:border-0">' +
-                    '<div class="w-8 h-8 rounded-full bg-brand-yellow/20 flex items-center justify-center flex-shrink-0">' +
-                    '<svg class="w-4 h-4 text-brand-yellow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>' +
+                return '<a href="/beach/' + beach.slug + '" class="flex items-center gap-3 px-4 py-3 hover:bg-warm-50 transition-colors border-b border-warm-100 last:border-0">' +
+                    '<div class="w-8 h-8 rounded-full bg-sunset-400/20 flex items-center justify-center flex-shrink-0">' +
+                    '<svg class="w-4 h-4 text-sunset-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>' +
                     '</div>' +
                     '<div class="flex-1 min-w-0">' +
-                    '<div class="text-white font-medium truncate">' + beach.name + '</div>' +
-                    '<div class="text-xs text-white/70">' + beach.municipality + '</div>' +
+                    '<div class="text-warm-900 font-medium truncate">' + beach.name + '</div>' +
+                    '<div class="text-xs text-warm-500">' + beach.municipality + '</div>' +
                     '</div>' +
-                    '<svg class="w-4 h-4 text-white/30 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>' +
+                    '<svg class="w-4 h-4 text-warm-300 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>' +
                     '</a>';
             }).join('');
 
@@ -394,97 +372,93 @@ include APP_ROOT . '/components/header.php';
 })();
 </script>
 
+<!-- Category Cards -->
+<section class="py-12 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            <?php
+            $categories = [
+                'surfing'          => ['emoji' => '🏄‍♂️', 'label' => __('pages.home.category_surfing'),    'bg' => 'bg-blue-100'],
+                'snorkeling'       => ['emoji' => '🤿',    'label' => __('pages.home.category_snorkeling'), 'bg' => 'bg-teal-100'],
+                'family-friendly'  => ['emoji' => '👨‍👩‍👧', 'label' => __('pages.home.category_family'),     'bg' => 'bg-amber-100'],
+                'secluded'         => ['emoji' => '🌴',    'label' => __('pages.home.category_secluded'),   'bg' => 'bg-green-100'],
+                'swimming'         => ['emoji' => '🏊',    'label' => __('tags.swimming'),                  'bg' => 'bg-cyan-100'],
+                'sunset'           => ['emoji' => '🌅',    'label' => __('tags.sunset'),                    'bg' => 'bg-orange-100'],
+            ];
+            foreach ($categories as $tag => $cat):
+                $count = $tagCounts[$tag] ?? 0;
+            ?>
+            <a href="/beaches/<?= h($tag) ?>"
+               class="flex flex-col items-center gap-3 py-5 px-3 bg-white rounded-xl border-[1.5px] border-warm-200 hover:shadow-lg hover:border-ocean-300 transition-all group">
+                <div class="w-12 h-12 rounded-xl <?= $cat['bg'] ?> flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                    <?= $cat['emoji'] ?>
+                </div>
+                <span class="font-semibold text-warm-900 text-sm"><?= h($cat['label']) ?></span>
+                <span class="text-xs text-warm-500"><?= $count ?> <?= $count === 1 ? 'beach' : 'beaches' ?></span>
+            </a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+
 <!-- Trending Now - Horizontal Carousel -->
 <?php
 $trendingBeaches = getTrendingBeaches(8);
         $showDiscovery = !empty($selectedTags) || !empty($selectedMunicipality) || $hasLifeguard ? false : true;
 ?>
 <?php if ($showDiscovery && !empty($trendingBeaches)): ?>
-<section class="py-12 md:py-16 pl-4 sm:pl-6 md:pl-20 bg-brand-dark">
+<section class="py-12 md:py-16 pl-4 sm:pl-6 md:pl-20 bg-sand-50">
     <!-- Section Header -->
     <div class="flex justify-between items-center pr-4 sm:pr-6 md:pr-20 mb-6 md:mb-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-white"><?= h(__('pages.home.trending_now')) ?></h2>
+        <h2 class="text-[28px] font-serif font-normal text-warm-900"><?= h(__('pages.home.trending_now')) ?></h2>
         <div class="flex gap-2">
-            <button data-action="scrollCarousel" data-action-args='["trending",-1]' class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white transition-colors" aria-label="<?= h(__('common.previous')) ?>">
+            <button data-action="scrollCarousel" data-action-args='["trending",-1]' class="w-10 h-10 rounded-full bg-white hover:bg-warm-50 border border-warm-200 flex items-center justify-center text-warm-700 transition-colors" aria-label="<?= h(__('common.previous')) ?>">
                 <i data-lucide="chevron-left" class="w-5 h-5" aria-hidden="true"></i>
             </button>
-            <button data-action="scrollCarousel" data-action-args='["trending",1]' class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white transition-colors" aria-label="<?= h(__('common.next')) ?>">
+            <button data-action="scrollCarousel" data-action-args='["trending",1]' class="w-10 h-10 rounded-full bg-white hover:bg-warm-50 border border-warm-200 flex items-center justify-center text-warm-700 transition-colors" aria-label="<?= h(__('common.next')) ?>">
                 <i data-lucide="chevron-right" class="w-5 h-5" aria-hidden="true"></i>
             </button>
         </div>
     </div>
 
     <!-- Carousel -->
-    <div id="trending-carousel" class="flex overflow-x-auto gap-6 snap-x snap-mandatory hide-scrollbar pb-4">
-        <?php foreach ($trendingBeaches as $i => $tb):
-            $tagsList = $tb['tags'] ?? [];
-            $viewCount = $tb['view_count'] ?? rand(500, 2500);
-        ?>
+    <div id="trending-carousel" class="flex overflow-x-auto gap-4 snap-x snap-mandatory hide-scrollbar pb-4">
+        <?php foreach ($trendingBeaches as $i => $tb): ?>
         <a href="/beach/<?= h($tb['slug']) ?>"
-           class="w-[280px] sm:w-[320px] md:w-[400px] lg:w-[450px] snap-start relative group rounded-xl overflow-hidden flex-shrink-0 shadow-2xl">
-            <!-- Image with zoom on hover -->
-            <div class="relative aspect-[4/5] overflow-hidden">
+           class="w-[280px] snap-start relative group rounded-xl overflow-hidden flex-shrink-0">
+            <!-- Image -->
+            <div class="relative overflow-hidden" style="height: 373px">
                 <img src="<?= h(getThumbnailUrl($tb['cover_image'])) ?>"
                      alt="<?= h($tb['name']) ?>"
                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                      loading="lazy">
 
-                <!-- Subtle gradient for text readability at bottom only -->
+                <!-- Gradient overlay -->
                 <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent"></div>
 
-                <!-- View count badge with fire emoji -->
-                <div class="absolute top-4 right-4 z-20 bg-black/40 backdrop-blur-md rounded-full px-3 py-1.5 border border-white/20 flex items-center gap-1.5">
-                    <span>🔥</span>
-                    <span class="text-xs text-white font-medium"><?= h(formatViewCount($viewCount)) ?></span>
+                <!-- Trending badge -->
+                <div class="absolute top-3 left-3 z-20 bg-black/40 backdrop-blur-md rounded-full px-3 py-1 text-xs text-white font-medium">
+                    #<?= $i + 1 ?> Trending
                 </div>
 
-                <!-- Ranking number -->
-                <div class="absolute top-4 left-4 z-20 text-white/30 text-6xl font-bold"><?= $i + 1 ?></div>
-
                 <!-- Bottom content -->
-                <div class="absolute bottom-0 left-0 w-full p-5 md:p-6 z-20" style="text-shadow: 0 2px 4px rgba(0,0,0,0.8), 0 4px 12px rgba(0,0,0,0.6);">
-                    <span class="text-xs text-brand-yellow uppercase tracking-wider font-medium"><?= h($tb['municipality']) ?></span>
-                    <h3 class="text-xl md:text-2xl font-bold text-white font-serif mt-1"><?= h($tb['name']) ?></h3>
+                <div class="absolute bottom-0 left-0 w-full p-4 z-20">
+                    <div class="text-[11px] text-white/70 uppercase tracking-wider mb-1"><?= h($tb['municipality']) ?></div>
+                    <h3 class="text-xl font-bold text-white"><?= h($tb['name']) ?></h3>
 
-                    <!-- Rating -->
                     <?php if ($tb['google_rating']): ?>
-                    <div class="flex items-center gap-2 mt-2">
-                        <div class="flex items-center gap-1">
-                            <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#FACC15" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <span class="text-sm font-medium text-white"><?= number_format($tb['google_rating'], 1) ?></span>
-                        </div>
+                    <div class="flex items-center gap-1.5 mt-2 text-[13px]">
+                        <span class="text-yellow-400">★</span>
+                        <span class="text-white font-medium"><?= number_format($tb['google_rating'], 1) ?></span>
                         <?php if ($tb['google_review_count']): ?>
-                        <span class="text-xs text-white/60">(<?= number_format($tb['google_review_count']) ?> <?= h(__('beach.reviews')) ?>)</span>
+                        <span class="text-white/50">(<?= number_format($tb['google_review_count']) ?>)</span>
                         <?php endif; ?>
                     </div>
                     <?php endif; ?>
-
-                    <!-- Hover reveal description -->
-                    <?php
-                    $lang = getCurrentLanguage();
-                    $tbDesc = ($lang === 'es' && !empty($tb['description_es'])) ? $tb['description_es'] : ($tb['description'] ?? __('beach.beach_fallback_desc'));
-                    ?>
-                    <p class="text-sm text-gray-300 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">
-                        <?= h(substr($tbDesc, 0, 100)) ?>
-                    </p>
                 </div>
             </div>
         </a>
         <?php endforeach; ?>
-
-        <!-- More to Explore Terminal Card -->
-        <a href="/#beaches" class="w-[280px] sm:w-[320px] md:w-[400px] lg:w-[450px] snap-start relative group rounded-xl overflow-hidden flex-shrink-0 shadow-2xl">
-            <div class="relative aspect-[4/5] bg-brand-darker border border-white/10 flex flex-col items-center justify-center p-8 text-center">
-                <div class="font-mono text-brand-yellow text-sm mb-4 opacity-60">> ls -la beaches/</div>
-                <h3 class="text-2xl font-bold text-white mb-2"><?= h(__('pages.home.more_to_explore')) ?></h3>
-                <p class="text-gray-400 text-sm mb-6 opacity-60 group-hover:opacity-100 transition-opacity">
-                    <?= h(__('pages.home.more_to_explore_desc', ['count' => number_format($totalBeaches)])) ?>
-                </p>
-                <div class="w-12 h-12 rounded-full bg-brand-yellow/20 flex items-center justify-center group-hover:bg-brand-yellow/30 transition-colors">
-                    <i data-lucide="arrow-right" class="w-6 h-6 text-brand-yellow"></i>
-                </div>
-            </div>
-        </a>
     </div>
 </section>
 
@@ -500,7 +474,7 @@ function scrollCarousel(id, direction) {
 <?php endif; ?>
 
 <!-- Main Content -->
-<section id="beaches" class="py-12 md:py-16 bg-brand-dark scroll-mt-20">
+<section id="beaches" class="py-12 md:py-16 bg-sand-50 scroll-mt-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- Filters -->
@@ -533,7 +507,7 @@ function scrollCarousel(id, direction) {
                         hx-get="/api/beaches.php?<?= http_build_query($apiParams) ?>"
                         hx-target="#beach-grid"
                         hx-swap="beforeend"
-                        class="bg-brand-yellow hover:bg-yellow-300 text-brand-darker px-6 py-3 rounded-lg font-medium transition-colors">
+                        class="bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-6 py-3 rounded-lg font-medium transition-colors">
                     <?= h(__('pages.home.load_more')) ?>
                     <span class="htmx-indicator ml-2">...</span>
                 </button>
@@ -577,16 +551,68 @@ function scrollCarousel(id, direction) {
 </div>
 
 <!-- Quiz CTA Section -->
-<section id="experiences" class="py-16 md:py-24 px-4 sm:px-6 md:px-20 text-center bg-brand-dark">
-    <div class="max-w-4xl mx-auto border border-brand-yellow/20 rounded-3xl p-8 md:p-12 bg-white/5 backdrop-blur-sm">
-        <h3 class="text-3xl md:text-4xl font-serif italic text-white mb-6">
+<section id="experiences" class="py-16 md:py-24 px-4 sm:px-6 md:px-20 text-center bg-white">
+    <div class="max-w-4xl mx-auto border border-ocean-200 rounded-3xl p-8 md:p-12 bg-white shadow-card">
+        <h3 class="text-3xl md:text-4xl font-serif italic text-warm-900 mb-6">
             <?= h(__('pages.home.quiz_headline')) ?>
         </h3>
-        <p class="text-gray-400 mb-8 text-base md:text-lg max-w-2xl mx-auto">
+        <p class="text-warm-500 mb-8 text-base md:text-lg max-w-2xl mx-auto">
             <?= h(__('pages.home.quiz_subtitle')) ?>
         </p>
-        <a href="/quiz" class="inline-block px-8 md:px-12 py-3 md:py-4 bg-brand-yellow text-brand-darker font-bold rounded-full hover:scale-105 transition-transform">
+        <a href="/quiz" class="inline-block px-8 md:px-12 py-3 md:py-4 bg-sunset-400 text-ocean-900 font-bold rounded-full hover:scale-105 transition-transform">
             <?= h(__('pages.home.quiz_button')) ?>
+        </a>
+    </div>
+</section>
+
+<!-- Planning Resources -->
+<section class="py-16 md:py-20 px-4 sm:px-6 bg-sand-100">
+    <div class="max-w-6xl mx-auto">
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h2 class="text-[28px] font-serif font-normal text-warm-900"><?= h(__('pages.home.resources_heading')) ?></h2>
+                <p class="text-[15px] text-warm-500 mt-1"><?= h(__('pages.home.resources_subtitle')) ?></p>
+            </div>
+            <a href="/guides" class="hidden sm:inline-flex items-center gap-1 text-ocean-600 hover:text-ocean-700 font-medium transition-colors">
+                <?= h(__('pages.home.resources_all_guides')) ?>
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <?php
+            $guideCards = [
+                ['slug' => 'snorkeling-guide',              'type' => 'Guide',    'emoji' => '🤿', 'title' => 'Best Snorkeling Spots & What to Bring',  'desc' => 'Crystal-clear waters, vibrant reefs, and the gear you need.'],
+                ['slug' => 'surfing-guide',                 'type' => 'Guide',    'emoji' => '🏄‍♂️', 'title' => 'Surfing Puerto Rico: A Complete Guide',  'desc' => 'From beginner breaks to world-class waves across the island.'],
+                ['slug' => 'family-beach-vacation-planning', 'type' => 'Planning', 'emoji' => '👨‍👩‍👧', 'title' => 'Family Beach Vacation Planning',        'desc' => 'Kid-friendly beaches, safety tips, and what to pack.'],
+                ['slug' => 'beach-safety-tips',             'type' => 'Safety',   'emoji' => '🛟', 'title' => 'Beach Safety Tips for Visitors',          'desc' => 'Currents, sun protection, and local safety guidelines.'],
+            ];
+            foreach ($guideCards as $guide):
+                $typeColors = match($guide['type']) {
+                    'Guide'    => 'bg-ocean-50 text-ocean-700',
+                    'Planning' => 'bg-amber-50 text-amber-700',
+                    'Safety'   => 'bg-rose-50 text-rose-700',
+                    default    => 'bg-warm-100 text-warm-600',
+                };
+            ?>
+            <a href="/guides/<?= h($guide['slug']) ?>"
+               class="flex flex-col bg-white rounded-xl border border-warm-200 hover:shadow-lg hover:border-ocean-300 transition-all overflow-hidden group">
+                <div class="p-5 flex flex-col flex-1">
+                    <span class="inline-flex self-start items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium <?= $typeColors ?> mb-3">
+                        <?= $guide['emoji'] ?> <?= h($guide['type']) ?>
+                    </span>
+                    <h3 class="font-semibold text-warm-900 mb-2 group-hover:text-ocean-700 transition-colors"><?= h($guide['title']) ?></h3>
+                    <p class="text-sm text-warm-500 flex-1"><?= h($guide['desc']) ?></p>
+                    <span class="mt-4 text-sm font-medium text-ocean-600 group-hover:text-ocean-700 inline-flex items-center gap-1 transition-colors">
+                        <?= h(__('pages.home.resources_read_guide')) ?>
+                        <svg class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+                    </span>
+                </div>
+            </a>
+            <?php endforeach; ?>
+        </div>
+        <a href="/guides" class="sm:hidden mt-6 inline-flex items-center gap-1 text-ocean-600 hover:text-ocean-700 font-medium transition-colors">
+            <?= h(__('pages.home.resources_all_guides')) ?>
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
         </a>
     </div>
 </section>

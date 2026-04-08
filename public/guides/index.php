@@ -4,134 +4,89 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/../bootstrap.php';
 require_once APP_ROOT . '/inc/db.php';
 require_once APP_ROOT . '/inc/helpers.php';
 require_once APP_ROOT . '/inc/constants.php';
-require_once APP_ROOT . '/inc/i18n.php';
 
-$pageTitle = __('guides_index.page_title');
-$pageDescription = __('guides_index.page_description');
+$pageTitle = 'Puerto Rico Beach Guides';
+$pageDescription = 'Expert guides to help you plan the perfect Puerto Rico beach vacation. From safety tips to transportation, snorkeling spots to photography advice.';
 
 $guides = [
     [
-        'title' => __('guides_index.guide_transport_title'),
+        'title' => 'Getting to Puerto Rico Beaches',
         'slug' => 'getting-to-puerto-rico-beaches',
-        'description' => __('guides_index.guide_transport_desc'),
+        'description' => 'Complete transportation guide including car rentals, ferries, public transit, and tips for reaching every beach.',
         'icon' => '🚗',
-        'readTime' => __('guides_index.guide_transport_time')
+        'readTime' => '12 min read'
     ],
     [
-        'title' => __('guides_index.guide_safety_title'),
+        'title' => 'Beach Safety Tips',
         'slug' => 'beach-safety-tips',
-        'description' => __('guides_index.guide_safety_desc'),
+        'description' => 'Essential safety information covering rip currents, sun protection, marine life, and emergency contacts.',
         'icon' => '🛟',
-        'readTime' => __('guides_index.guide_safety_time')
+        'readTime' => '10 min read'
     ],
     [
-        'title' => __('guides_index.guide_besttime_title'),
+        'title' => 'Best Time to Visit',
         'slug' => 'best-time-visit-puerto-rico-beaches',
-        'description' => __('guides_index.guide_besttime_desc'),
+        'description' => 'Month-by-month breakdown of weather patterns, peak seasons, and ideal times for your beach getaway.',
         'icon' => '📅',
-        'readTime' => __('guides_index.guide_besttime_time')
+        'readTime' => '11 min read'
     ],
     [
-        'title' => __('guides_index.guide_packing_title'),
+        'title' => 'Beach Packing List',
         'slug' => 'beach-packing-list',
-        'description' => __('guides_index.guide_packing_desc'),
+        'description' => 'Comprehensive checklist of everything you need for a perfect day at Puerto Rico\'s beaches.',
         'icon' => '🎒',
-        'readTime' => __('guides_index.guide_packing_time')
+        'readTime' => '8 min read'
     ],
     [
-        'title' => __('guides_index.guide_islands_title'),
+        'title' => 'Culebra vs Vieques',
         'slug' => 'culebra-vs-vieques',
-        'description' => __('guides_index.guide_islands_desc'),
+        'description' => 'Side-by-side comparison of Puerto Rico\'s two island paradise destinations to help you choose.',
         'icon' => '🏝️',
-        'readTime' => __('guides_index.guide_islands_time')
+        'readTime' => '13 min read'
     ],
     [
-        'title' => __('guides_index.guide_bio_title'),
+        'title' => 'Bioluminescent Bays Guide',
         'slug' => 'bioluminescent-bays',
-        'description' => __('guides_index.guide_bio_desc'),
+        'description' => 'Everything you need to know about Puerto Rico\'s magical glowing waters and how to visit them.',
         'icon' => '✨',
-        'readTime' => __('guides_index.guide_bio_time')
+        'readTime' => '10 min read'
     ],
     [
-        'title' => __('guides_index.guide_snorkeling_title'),
+        'title' => 'Snorkeling Guide',
         'slug' => 'snorkeling-guide',
-        'description' => __('guides_index.guide_snorkeling_desc'),
+        'description' => 'Top snorkeling spots, equipment tips, techniques, and what marine life you\'ll encounter.',
         'icon' => '🤿',
-        'readTime' => __('guides_index.guide_snorkeling_time')
+        'readTime' => '14 min read'
     ],
     [
-        'title' => __('guides_index.guide_surfing_title'),
+        'title' => 'Surfing Guide',
         'slug' => 'surfing-guide',
-        'description' => __('guides_index.guide_surfing_desc'),
+        'description' => 'Best surf breaks, seasonal patterns, board rentals, surf schools, and etiquette for all skill levels.',
         'icon' => '🏄',
-        'readTime' => __('guides_index.guide_surfing_time')
+        'readTime' => '12 min read'
     ],
     [
-        'title' => __('guides_index.guide_photo_title'),
+        'title' => 'Beach Photography Tips',
         'slug' => 'beach-photography-tips',
-        'description' => __('guides_index.guide_photo_desc'),
+        'description' => 'Capture stunning beach photos with expert tips on lighting, composition, equipment, and drone rules.',
         'icon' => '📸',
-        'readTime' => __('guides_index.guide_photo_time')
+        'readTime' => '9 min read'
     ],
     [
-        'title' => __('guides_index.guide_family_title'),
+        'title' => 'Family Beach Vacation Planning',
         'slug' => 'family-beach-vacation-planning',
-        'description' => __('guides_index.guide_family_desc'),
+        'description' => 'Plan the perfect family beach trip with kid-friendly beaches, sample itineraries, and budget tips.',
         'icon' => '👨‍👩‍👧‍👦',
-        'readTime' => __('guides_index.guide_family_time')
+        'readTime' => '15 min read'
     ],
     [
-        'title' => __('guides_index.guide_springbreak_title'),
-        'slug' => 'spring-break-beaches-puerto-rico',
-        'description' => __('guides_index.guide_springbreak_desc'),
-        'icon' => '🌊',
-        'readTime' => __('guides_index.guide_springbreak_time')
+        'title' => 'Kid-Friendly Beaches',
+        'slug' => 'kid-friendly-beaches',
+        'description' => 'The best beaches in Puerto Rico for kids — calm water, facilities, and tips for safe beach days with toddlers and children.',
+        'icon' => '👶',
+        'readTime' => '18 min read'
     ]
 ];
-
-$cmsGuides = query("
-    SELECT slug, title_en, description_en, status
-    FROM guide_articles
-    WHERE status = 'published'
-    ORDER BY COALESCE(published_at, updated_at, created_at) DESC
-");
-$cmsGuides = is_array($cmsGuides) ? $cmsGuides : [];
-
-if (!empty($cmsGuides)) {
-    $bySlug = [];
-    foreach ($guides as $idx => $guide) {
-        $bySlug[(string) ($guide['slug'] ?? '')] = $idx;
-    }
-
-    foreach ($cmsGuides as $cmsGuide) {
-        $slug = trim((string) ($cmsGuide['slug'] ?? ''));
-        if ($slug === '') {
-            continue;
-        }
-
-        $title = trim((string) ($cmsGuide['title_en'] ?? ''));
-        $description = trim((string) ($cmsGuide['description_en'] ?? ''));
-
-        if (isset($bySlug[$slug])) {
-            $i = $bySlug[$slug];
-            if ($title !== '') {
-                $guides[$i]['title'] = $title;
-            }
-            if ($description !== '') {
-                $guides[$i]['description'] = $description;
-            }
-            continue;
-        }
-
-        $guides[] = [
-            'title' => $title !== '' ? $title : ucwords(str_replace('-', ' ', $slug)),
-            'slug' => $slug,
-            'description' => $description !== '' ? $description : 'CMS-managed guide.',
-            'icon' => '🧭',
-            'readTime' => 'Updated guide',
-        ];
-    }
-}
 
 $collectionPageSchema = [
     "@context" => "https://schema.org",
@@ -145,13 +100,13 @@ $collectionPageSchema = [
             [
                 "@type" => "ListItem",
                 "position" => 1,
-                "name" => __('guides_index.breadcrumb_home'),
+                "name" => "Home",
                 "item" => absoluteUrl('/')
             ],
             [
                 "@type" => "ListItem",
                 "position" => 2,
-                "name" => __('guides_index.breadcrumb_guides'),
+                "name" => "Guides",
                 "item" => absoluteUrl('/guides/')
             ]
         ]
@@ -170,8 +125,8 @@ include APP_ROOT . "/components/page-shell.php";
     <!-- Hero Section -->
     <?php
     $breadcrumbs = [
-        ['name' => __('guides_index.breadcrumb_home'), 'url' => '/'],
-        ['name' => __('guides_index.breadcrumb_guides')]
+        ['name' => 'Home', 'url' => '/'],
+        ['name' => 'Guides']
     ];
     include APP_ROOT . '/components/hero-guide.php';
     ?>
@@ -192,7 +147,7 @@ include APP_ROOT . "/components/page-shell.php";
                         </p>
                         <div class="flex items-center justify-between text-sm">
                             <span class="text-green-600 font-medium"><?php echo h($guide['readTime']); ?></span>
-                            <span class="text-gray-400 group-hover:text-green-600 transition-colors"><?= __('guides_index.read_guide') ?> →</span>
+                            <span class="text-gray-400 group-hover:text-green-600 transition-colors">Read guide →</span>
                         </div>
                     </div>
                 </a>
@@ -201,12 +156,12 @@ include APP_ROOT . "/components/page-shell.php";
 
         <!-- CTA Section -->
         <div class="mt-16 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-8 text-center">
-            <h2 class="text-3xl font-bold text-gray-900 mb-4"><?= __('guides_index.cta_title') ?></h2>
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Ready to Explore?</h2>
             <p class="text-lg text-gray-700 mb-6 max-w-2xl mx-auto">
-                <?= __('guides_index.cta_desc') ?>
+                Browse our collection of 230+ beaches across Puerto Rico and find your perfect beach destination.
             </p>
             <a href="/" class="inline-block bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
-                <?= __('guides_index.cta_button') ?>
+                Browse All Beaches
             </a>
         </div>
     </main>

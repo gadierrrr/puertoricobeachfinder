@@ -47,11 +47,11 @@ $breadcrumbs = [
     <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- Quiz Card -->
-        <div id="quiz-container" class="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl shadow-glass overflow-hidden">
+        <div id="quiz-container" class="bg-white border border-warm-200 rounded-2xl shadow-card overflow-hidden">
 
             <!-- Progress Bar -->
-            <div class="bg-white/10 h-2">
-                <div id="progress-bar" class="h-full bg-brand-yellow transition-all duration-300" style="width: 0%"></div>
+            <div class="bg-warm-200 h-2">
+                <div id="progress-bar" class="h-full bg-ocean-500 transition-all duration-300" style="width: 0%"></div>
             </div>
 
             <!-- Quiz Content -->
@@ -60,35 +60,35 @@ $breadcrumbs = [
                 <!-- Question 1: Activity -->
                 <div class="quiz-step" data-step="1">
                     <div class="text-center mb-8">
-                        <span class="text-sm text-brand-yellow font-semibold"><?= h(__('quiz.question_of', ['current' => '1', 'total' => '5'])) ?></span>
-                        <h2 class="text-2xl font-bold text-brand-text mt-2"><?= h(__('quiz.q1_title')) ?></h2>
-                        <p class="text-brand-muted mt-1"><?= h(__('quiz.q1_subtitle')) ?></p>
+                        <span class="text-sm text-sunset-400 font-semibold"><?= h(__('quiz.question_of', ['current' => '1', 'total' => '5'])) ?></span>
+                        <h2 class="text-2xl font-bold text-warm-900 mt-2"><?= h(__('quiz.q1_title')) ?></h2>
+                        <p class="text-warm-500 mt-1"><?= h(__('quiz.q1_subtitle')) ?></p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <button class="quiz-option" data-question="activity" data-value="swimming">
                             <span class="text-4xl mb-2">🏊</span>
-                            <span class="font-medium text-brand-text"><?= h(__('quiz.q1_swimming')) ?></span>
-                            <span class="text-sm text-brand-muted"><?= h(__('quiz.q1_swimming_desc')) ?></span>
+                            <span class="font-medium text-warm-900"><?= h(__('quiz.q1_swimming')) ?></span>
+                            <span class="text-sm text-warm-500"><?= h(__('quiz.q1_swimming_desc')) ?></span>
                         </button>
                         <button class="quiz-option" data-question="activity" data-value="surfing">
                             <span class="text-4xl mb-2">🏄</span>
-                            <span class="font-medium text-brand-text"><?= h(__('quiz.q1_surfing')) ?></span>
-                            <span class="text-sm text-brand-muted"><?= h(__('quiz.q1_surfing_desc')) ?></span>
+                            <span class="font-medium text-warm-900"><?= h(__('quiz.q1_surfing')) ?></span>
+                            <span class="text-sm text-warm-500"><?= h(__('quiz.q1_surfing_desc')) ?></span>
                         </button>
                         <button class="quiz-option" data-question="activity" data-value="snorkeling">
                             <span class="text-4xl mb-2">🤿</span>
-                            <span class="font-medium text-brand-text"><?= h(__('quiz.q1_snorkeling')) ?></span>
-                            <span class="text-sm text-brand-muted"><?= h(__('quiz.q1_snorkeling_desc')) ?></span>
+                            <span class="font-medium text-warm-900"><?= h(__('quiz.q1_snorkeling')) ?></span>
+                            <span class="text-sm text-warm-500"><?= h(__('quiz.q1_snorkeling_desc')) ?></span>
                         </button>
                         <button class="quiz-option" data-question="activity" data-value="relaxing">
                             <span class="text-4xl mb-2">🧘</span>
-                            <span class="font-medium text-brand-text"><?= h(__('quiz.q1_relaxing')) ?></span>
-                            <span class="text-sm text-brand-muted"><?= h(__('quiz.q1_relaxing_desc')) ?></span>
+                            <span class="font-medium text-warm-900"><?= h(__('quiz.q1_relaxing')) ?></span>
+                            <span class="text-sm text-warm-500"><?= h(__('quiz.q1_relaxing_desc')) ?></span>
                         </button>
                     </div>
 
-                    <button class="quiz-next-btn w-full mt-6 bg-brand-yellow hover:bg-yellow-300 disabled:bg-white/10 disabled:cursor-not-allowed text-brand-darker py-3 rounded-lg font-medium transition-colors" data-action="nextStep" disabled>
+                    <button class="quiz-next-btn w-full mt-6 bg-sunset-400 hover:bg-sunset-300 disabled:bg-warm-100 disabled:cursor-not-allowed text-ocean-900 py-3 rounded-lg font-medium transition-colors" data-action="nextStep" disabled>
                         <?= h(__('quiz.continue')) ?> <span class="ml-1">→</span>
                     </button>
                 </div>
@@ -96,35 +96,35 @@ $breadcrumbs = [
                 <!-- Question 2: Group -->
                 <div class="quiz-step hidden" data-step="2">
                     <div class="text-center mb-8">
-                        <span class="text-sm text-brand-yellow font-semibold"><?= h(__('quiz.question_of', ['current' => '2', 'total' => '5'])) ?></span>
-                        <h2 class="text-2xl font-bold text-brand-text mt-2"><?= h(__('quiz.q2_title')) ?></h2>
-                        <p class="text-brand-muted mt-1"><?= h(__('quiz.q2_subtitle')) ?></p>
+                        <span class="text-sm text-sunset-400 font-semibold"><?= h(__('quiz.question_of', ['current' => '2', 'total' => '5'])) ?></span>
+                        <h2 class="text-2xl font-bold text-warm-900 mt-2"><?= h(__('quiz.q2_title')) ?></h2>
+                        <p class="text-warm-500 mt-1"><?= h(__('quiz.q2_subtitle')) ?></p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <button class="quiz-option" data-question="group" data-value="solo">
                             <span class="text-4xl mb-2">👤</span>
-                            <span class="font-medium text-brand-text"><?= h(__('quiz.q2_solo')) ?></span>
-                            <span class="text-sm text-brand-muted"><?= h(__('quiz.q2_solo_desc')) ?></span>
+                            <span class="font-medium text-warm-900"><?= h(__('quiz.q2_solo')) ?></span>
+                            <span class="text-sm text-warm-500"><?= h(__('quiz.q2_solo_desc')) ?></span>
                         </button>
                         <button class="quiz-option" data-question="group" data-value="couple">
                             <span class="text-4xl mb-2">💑</span>
-                            <span class="font-medium text-brand-text"><?= h(__('quiz.q2_couple')) ?></span>
-                            <span class="text-sm text-brand-muted"><?= h(__('quiz.q2_couple_desc')) ?></span>
+                            <span class="font-medium text-warm-900"><?= h(__('quiz.q2_couple')) ?></span>
+                            <span class="text-sm text-warm-500"><?= h(__('quiz.q2_couple_desc')) ?></span>
                         </button>
                         <button class="quiz-option" data-question="group" data-value="family">
                             <span class="text-4xl mb-2">👨‍👩‍👧‍👦</span>
-                            <span class="font-medium text-brand-text"><?= h(__('quiz.q2_family')) ?></span>
-                            <span class="text-sm text-brand-muted"><?= h(__('quiz.q2_family_desc')) ?></span>
+                            <span class="font-medium text-warm-900"><?= h(__('quiz.q2_family')) ?></span>
+                            <span class="text-sm text-warm-500"><?= h(__('quiz.q2_family_desc')) ?></span>
                         </button>
                         <button class="quiz-option" data-question="group" data-value="friends">
                             <span class="text-4xl mb-2">👥</span>
-                            <span class="font-medium text-brand-text"><?= h(__('quiz.q2_friends')) ?></span>
-                            <span class="text-sm text-brand-muted"><?= h(__('quiz.q2_friends_desc')) ?></span>
+                            <span class="font-medium text-warm-900"><?= h(__('quiz.q2_friends')) ?></span>
+                            <span class="text-sm text-warm-500"><?= h(__('quiz.q2_friends_desc')) ?></span>
                         </button>
                     </div>
 
-                    <button class="quiz-next-btn w-full mt-6 bg-brand-yellow hover:bg-yellow-300 disabled:bg-white/10 disabled:cursor-not-allowed text-brand-darker py-3 rounded-lg font-medium transition-colors" data-action="nextStep" disabled>
+                    <button class="quiz-next-btn w-full mt-6 bg-sunset-400 hover:bg-sunset-300 disabled:bg-warm-100 disabled:cursor-not-allowed text-ocean-900 py-3 rounded-lg font-medium transition-colors" data-action="nextStep" disabled>
                         <?= h(__('quiz.continue')) ?> <span class="ml-1">→</span>
                     </button>
                 </div>
@@ -132,39 +132,39 @@ $breadcrumbs = [
                 <!-- Question 3: Facilities -->
                 <div class="quiz-step hidden" data-step="3">
                     <div class="text-center mb-8">
-                        <span class="text-sm text-brand-yellow font-semibold"><?= h(__('quiz.question_of', ['current' => '3', 'total' => '5'])) ?></span>
-                        <h2 class="text-2xl font-bold text-brand-text mt-2"><?= h(__('quiz.q3_title')) ?></h2>
-                        <p class="text-brand-muted mt-1"><?= h(__('quiz.q3_subtitle')) ?></p>
+                        <span class="text-sm text-sunset-400 font-semibold"><?= h(__('quiz.question_of', ['current' => '3', 'total' => '5'])) ?></span>
+                        <h2 class="text-2xl font-bold text-warm-900 mt-2"><?= h(__('quiz.q3_title')) ?></h2>
+                        <p class="text-warm-500 mt-1"><?= h(__('quiz.q3_subtitle')) ?></p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <button class="quiz-option-multi" data-question="facilities" data-value="restrooms">
                             <span class="text-3xl mb-2">🚻</span>
-                            <span class="font-medium text-brand-text"><?= h(__('quiz.q3_restrooms')) ?></span>
+                            <span class="font-medium text-warm-900"><?= h(__('quiz.q3_restrooms')) ?></span>
                         </button>
                         <button class="quiz-option-multi" data-question="facilities" data-value="parking">
                             <span class="text-3xl mb-2">🅿️</span>
-                            <span class="font-medium text-brand-text"><?= h(__('quiz.q3_parking')) ?></span>
+                            <span class="font-medium text-warm-900"><?= h(__('quiz.q3_parking')) ?></span>
                         </button>
                         <button class="quiz-option-multi" data-question="facilities" data-value="food">
                             <span class="text-3xl mb-2">🍔</span>
-                            <span class="font-medium text-brand-text"><?= h(__('quiz.q3_food')) ?></span>
+                            <span class="font-medium text-warm-900"><?= h(__('quiz.q3_food')) ?></span>
                         </button>
                         <button class="quiz-option-multi" data-question="facilities" data-value="lifeguard">
                             <span class="text-3xl mb-2">🛟</span>
-                            <span class="font-medium text-brand-text"><?= h(__('quiz.q3_lifeguard')) ?></span>
+                            <span class="font-medium text-warm-900"><?= h(__('quiz.q3_lifeguard')) ?></span>
                         </button>
                         <button class="quiz-option-multi" data-question="facilities" data-value="shade">
                             <span class="text-3xl mb-2">⛱️</span>
-                            <span class="font-medium text-brand-text"><?= h(__('quiz.q3_shade')) ?></span>
+                            <span class="font-medium text-warm-900"><?= h(__('quiz.q3_shade')) ?></span>
                         </button>
                         <button class="quiz-option-multi" data-question="facilities" data-value="none">
                             <span class="text-3xl mb-2">🏝️</span>
-                            <span class="font-medium text-brand-text"><?= h(__('quiz.q3_none')) ?></span>
+                            <span class="font-medium text-warm-900"><?= h(__('quiz.q3_none')) ?></span>
                         </button>
                     </div>
 
-                    <button id="facilities-next" class="w-full mt-6 bg-brand-yellow hover:bg-yellow-300 text-brand-darker py-3 rounded-lg font-medium transition-colors">
+                    <button id="facilities-next" class="w-full mt-6 bg-sunset-400 hover:bg-sunset-300 text-ocean-900 py-3 rounded-lg font-medium transition-colors">
                         <?= h(__('quiz.continue')) ?> →
                     </button>
                 </div>
@@ -172,9 +172,9 @@ $breadcrumbs = [
                 <!-- Question 4: Crowd -->
                 <div class="quiz-step hidden" data-step="4">
                     <div class="text-center mb-8">
-                        <span class="text-sm text-brand-yellow font-semibold"><?= h(__('quiz.question_of', ['current' => '4', 'total' => '5'])) ?></span>
-                        <h2 class="text-2xl font-bold text-brand-text mt-2"><?= h(__('quiz.q4_title')) ?></h2>
-                        <p class="text-brand-muted mt-1"><?= h(__('quiz.q4_subtitle')) ?></p>
+                        <span class="text-sm text-sunset-400 font-semibold"><?= h(__('quiz.question_of', ['current' => '4', 'total' => '5'])) ?></span>
+                        <h2 class="text-2xl font-bold text-warm-900 mt-2"><?= h(__('quiz.q4_title')) ?></h2>
+                        <p class="text-warm-500 mt-1"><?= h(__('quiz.q4_subtitle')) ?></p>
                     </div>
 
                     <div class="space-y-3">
@@ -182,8 +182,8 @@ $breadcrumbs = [
                             <div class="flex items-center gap-4">
                                 <span class="text-3xl">🎉</span>
                                 <div class="text-left">
-                                    <span class="font-medium block text-brand-text"><?= h(__('quiz.q4_popular')) ?></span>
-                                    <span class="text-sm text-brand-muted"><?= h(__('quiz.q4_popular_desc')) ?></span>
+                                    <span class="font-medium block text-warm-900"><?= h(__('quiz.q4_popular')) ?></span>
+                                    <span class="text-sm text-warm-500"><?= h(__('quiz.q4_popular_desc')) ?></span>
                                 </div>
                             </div>
                         </button>
@@ -191,8 +191,8 @@ $breadcrumbs = [
                             <div class="flex items-center gap-4">
                                 <span class="text-3xl">👥</span>
                                 <div class="text-left">
-                                    <span class="font-medium block text-brand-text"><?= h(__('quiz.q4_balanced')) ?></span>
-                                    <span class="text-sm text-brand-muted"><?= h(__('quiz.q4_balanced_desc')) ?></span>
+                                    <span class="font-medium block text-warm-900"><?= h(__('quiz.q4_balanced')) ?></span>
+                                    <span class="text-sm text-warm-500"><?= h(__('quiz.q4_balanced_desc')) ?></span>
                                 </div>
                             </div>
                         </button>
@@ -200,8 +200,8 @@ $breadcrumbs = [
                             <div class="flex items-center gap-4">
                                 <span class="text-3xl">🏝️</span>
                                 <div class="text-left">
-                                    <span class="font-medium block text-brand-text"><?= h(__('quiz.q4_secluded')) ?></span>
-                                    <span class="text-sm text-brand-muted"><?= h(__('quiz.q4_secluded_desc')) ?></span>
+                                    <span class="font-medium block text-warm-900"><?= h(__('quiz.q4_secluded')) ?></span>
+                                    <span class="text-sm text-warm-500"><?= h(__('quiz.q4_secluded_desc')) ?></span>
                                 </div>
                             </div>
                         </button>
@@ -211,9 +211,9 @@ $breadcrumbs = [
                 <!-- Question 5: Location -->
                 <div class="quiz-step hidden" data-step="5">
                     <div class="text-center mb-8">
-                        <span class="text-sm text-brand-yellow font-semibold"><?= h(__('quiz.question_of', ['current' => '5', 'total' => '5'])) ?></span>
-                        <h2 class="text-2xl font-bold text-brand-text mt-2"><?= h(__('quiz.q5_title')) ?></h2>
-                        <p class="text-brand-muted mt-1"><?= h(__('quiz.q5_subtitle')) ?></p>
+                        <span class="text-sm text-sunset-400 font-semibold"><?= h(__('quiz.question_of', ['current' => '5', 'total' => '5'])) ?></span>
+                        <h2 class="text-2xl font-bold text-warm-900 mt-2"><?= h(__('quiz.q5_title')) ?></h2>
+                        <p class="text-warm-500 mt-1"><?= h(__('quiz.q5_subtitle')) ?></p>
                     </div>
 
                     <div class="space-y-3">
@@ -221,8 +221,8 @@ $breadcrumbs = [
                             <div class="flex items-center gap-4">
                                 <span class="text-3xl">🏙️</span>
                                 <div class="text-left">
-                                    <span class="font-medium block text-brand-text"><?= h(__('quiz.q5_san_juan')) ?></span>
-                                    <span class="text-sm text-brand-muted"><?= h(__('quiz.q5_san_juan_desc')) ?></span>
+                                    <span class="font-medium block text-warm-900"><?= h(__('quiz.q5_san_juan')) ?></span>
+                                    <span class="text-sm text-warm-500"><?= h(__('quiz.q5_san_juan_desc')) ?></span>
                                 </div>
                             </div>
                         </button>
@@ -230,8 +230,8 @@ $breadcrumbs = [
                             <div class="flex items-center gap-4">
                                 <span class="text-3xl">🌅</span>
                                 <div class="text-left">
-                                    <span class="font-medium block text-brand-text"><?= h(__('quiz.q5_west')) ?></span>
-                                    <span class="text-sm text-brand-muted"><?= h(__('quiz.q5_west_desc')) ?></span>
+                                    <span class="font-medium block text-warm-900"><?= h(__('quiz.q5_west')) ?></span>
+                                    <span class="text-sm text-warm-500"><?= h(__('quiz.q5_west_desc')) ?></span>
                                 </div>
                             </div>
                         </button>
@@ -239,8 +239,8 @@ $breadcrumbs = [
                             <div class="flex items-center gap-4">
                                 <span class="text-3xl">🌴</span>
                                 <div class="text-left">
-                                    <span class="font-medium block text-brand-text"><?= h(__('quiz.q5_east')) ?></span>
-                                    <span class="text-sm text-brand-muted"><?= h(__('quiz.q5_east_desc')) ?></span>
+                                    <span class="font-medium block text-warm-900"><?= h(__('quiz.q5_east')) ?></span>
+                                    <span class="text-sm text-warm-500"><?= h(__('quiz.q5_east_desc')) ?></span>
                                 </div>
                             </div>
                         </button>
@@ -248,8 +248,8 @@ $breadcrumbs = [
                             <div class="flex items-center gap-4">
                                 <span class="text-3xl">☀️</span>
                                 <div class="text-left">
-                                    <span class="font-medium block text-brand-text"><?= h(__('quiz.q5_south')) ?></span>
-                                    <span class="text-sm text-brand-muted"><?= h(__('quiz.q5_south_desc')) ?></span>
+                                    <span class="font-medium block text-warm-900"><?= h(__('quiz.q5_south')) ?></span>
+                                    <span class="text-sm text-warm-500"><?= h(__('quiz.q5_south_desc')) ?></span>
                                 </div>
                             </div>
                         </button>
@@ -257,8 +257,8 @@ $breadcrumbs = [
                             <div class="flex items-center gap-4">
                                 <span class="text-3xl">🏝️</span>
                                 <div class="text-left">
-                                    <span class="font-medium block text-brand-text"><?= h(__('quiz.q5_islands')) ?></span>
-                                    <span class="text-sm text-brand-muted"><?= h(__('quiz.q5_islands_desc')) ?></span>
+                                    <span class="font-medium block text-warm-900"><?= h(__('quiz.q5_islands')) ?></span>
+                                    <span class="text-sm text-warm-500"><?= h(__('quiz.q5_islands_desc')) ?></span>
                                 </div>
                             </div>
                         </button>
@@ -266,8 +266,8 @@ $breadcrumbs = [
                             <div class="flex items-center gap-4">
                                 <span class="text-3xl">🗺️</span>
                                 <div class="text-left">
-                                    <span class="font-medium block text-brand-text"><?= h(__('quiz.q5_anywhere')) ?></span>
-                                    <span class="text-sm text-brand-muted"><?= h(__('quiz.q5_anywhere_desc')) ?></span>
+                                    <span class="font-medium block text-warm-900"><?= h(__('quiz.q5_anywhere')) ?></span>
+                                    <span class="text-sm text-warm-500"><?= h(__('quiz.q5_anywhere_desc')) ?></span>
                                 </div>
                             </div>
                         </button>
@@ -276,17 +276,17 @@ $breadcrumbs = [
 
                 <!-- Loading State -->
                 <div id="quiz-loading" class="hidden text-center py-12">
-                    <div class="loading-spinner loading-spinner-lg text-brand-yellow mx-auto mb-4"></div>
-                    <h2 class="text-xl font-bold text-brand-text"><?= h(__('quiz.loading')) ?></h2>
-                    <p class="text-brand-muted mt-2"><?= h(__('quiz.loading_sub')) ?></p>
+                    <div class="loading-spinner loading-spinner-lg text-sunset-400 mx-auto mb-4"></div>
+                    <h2 class="text-xl font-bold text-warm-900"><?= h(__('quiz.loading')) ?></h2>
+                    <p class="text-warm-500 mt-2"><?= h(__('quiz.loading_sub')) ?></p>
                 </div>
 
                 <!-- Results -->
                 <div id="quiz-results" class="hidden">
                     <div class="text-center mb-8">
-                        <i data-lucide="trophy" class="w-12 h-12 mx-auto text-brand-yellow mb-4" aria-hidden="true"></i>
-                        <h2 class="text-2xl font-bold text-brand-text"><?= h(__('quiz.results_heading')) ?></h2>
-                        <p class="text-brand-muted mt-1"><?= h(__('quiz.results_sub')) ?></p>
+                        <i data-lucide="trophy" class="w-12 h-12 mx-auto text-sunset-400 mb-4" aria-hidden="true"></i>
+                        <h2 class="text-2xl font-bold text-warm-900"><?= h(__('quiz.results_heading')) ?></h2>
+                        <p class="text-warm-500 mt-1"><?= h(__('quiz.results_sub')) ?></p>
                     </div>
 
                     <div id="results-list" class="space-y-4">
@@ -294,16 +294,16 @@ $breadcrumbs = [
                     </div>
 
                     <!-- Unlock Block -->
-                    <div id="quiz-unlock" class="mt-8 bg-white/5 border border-white/10 rounded-xl p-5">
-                        <h3 class="text-lg font-bold text-brand-text mb-2"><?= h(__('quiz.unlock_title')) ?></h3>
-                        <p class="text-sm text-brand-muted mb-4"><?= h(__('quiz.unlock_desc')) ?></p>
+                    <div id="quiz-unlock" class="mt-8 bg-warm-50 border border-warm-200 rounded-xl p-5">
+                        <h3 class="text-lg font-bold text-warm-900 mb-2"><?= h(__('quiz.unlock_title')) ?></h3>
+                        <p class="text-sm text-warm-500 mb-4"><?= h(__('quiz.unlock_desc')) ?></p>
 
                         <div class="grid grid-cols-1 xl:grid-cols-3 gap-3 items-start">
                             <form id="quiz-send-form" class="xl:col-span-2 flex flex-col sm:flex-row gap-2 min-w-0">
                                 <input type="email" id="quiz-send-email" required placeholder="you@email.com"
-                                       class="w-full min-w-0 flex-1 px-3 h-11 rounded-lg bg-white/5 border border-white/20 text-white placeholder-gray-500 focus:ring-2 focus:ring-brand-yellow/50 focus:border-brand-yellow/50">
+                                       class="w-full min-w-0 flex-1 px-3 h-11 rounded-lg bg-warm-50 border border-warm-200 text-warm-900 placeholder-gray-500 focus:ring-2 focus:ring-ocean-400/50 focus:border-ocean-400/50">
                                 <button type="submit"
-                                        class="h-11 px-5 sm:shrink-0 whitespace-nowrap rounded-lg bg-brand-yellow hover:bg-yellow-300 text-brand-darker font-semibold transition-colors">
+                                        class="h-11 px-5 sm:shrink-0 whitespace-nowrap rounded-lg bg-sunset-400 hover:bg-sunset-300 text-ocean-900 font-semibold transition-colors">
                                     <?= h(__('quiz.email_results')) ?>
                                 </button>
                             </form>
@@ -312,19 +312,19 @@ $breadcrumbs = [
 	                               href="#"
 	                               target="_blank"
 	                               rel="noopener noreferrer"
-                               class="w-full h-11 inline-flex items-center justify-center gap-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 text-white font-semibold transition-colors">
+                               class="w-full h-11 inline-flex items-center justify-center gap-2 rounded-lg bg-warm-100 hover:bg-warm-200 border border-warm-200 text-warm-900 font-semibold transition-colors">
                                 <span><?= h(__('quiz.whatsapp')) ?></span>
                             </a>
                         </div>
 
                         <div class="mt-3 flex flex-col sm:flex-row gap-2">
                             <button type="button" id="quiz-save-btn"
-                                    class="h-11 flex-1 inline-flex items-center justify-center rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 text-white font-semibold transition-colors">
+                                    class="h-11 flex-1 inline-flex items-center justify-center rounded-lg bg-warm-100 hover:bg-warm-200 border border-warm-200 text-warm-900 font-semibold transition-colors">
                                 <?= h(__('quiz.save_favorites')) ?>
                             </button>
                             <a id="quiz-results-link"
                                href="#"
-                               class="h-11 flex-1 inline-flex items-center justify-center rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 text-white font-semibold transition-colors">
+                               class="h-11 flex-1 inline-flex items-center justify-center rounded-lg bg-warm-100 hover:bg-warm-200 border border-warm-200 text-warm-900 font-semibold transition-colors">
                                 <?= h(__('quiz.open_results')) ?>
                             </a>
                         </div>
@@ -334,20 +334,20 @@ $breadcrumbs = [
 
                     <!-- Full list (hidden until unlocked) -->
                     <div id="quiz-full-list" class="hidden mt-8">
-                        <h3 class="text-lg font-bold text-brand-text mb-3"><?= h(__('quiz.full_list')) ?></h3>
+                        <h3 class="text-lg font-bold text-warm-900 mb-3"><?= h(__('quiz.full_list')) ?></h3>
                         <div id="results-full-list" class="space-y-3"></div>
                     </div>
 
-                    <div class="mt-8 pt-6 border-t border-white/10 text-center">
-                        <button data-action="restartQuiz" class="text-brand-yellow hover:text-yellow-300 font-medium">
+                    <div class="mt-8 pt-6 border-t border-warm-200 text-center">
+                        <button data-action="restartQuiz" class="text-sunset-400 hover:text-sunset-400 font-medium">
                             ← <?= h(__('quiz.retake')) ?>
                         </button>
                     </div>
                 </div>
 
                 <!-- Navigation -->
-                <div id="quiz-nav" class="flex justify-between mt-8 pt-6 border-t border-white/10">
-                    <button id="prev-btn" class="text-brand-muted hover:text-brand-text font-medium hidden" data-action="prevStep">
+                <div id="quiz-nav" class="flex justify-between mt-8 pt-6 border-t border-warm-200">
+                    <button id="prev-btn" class="text-warm-500 hover:text-warm-900 font-medium hidden" data-action="prevStep">
                         ← <?= h(__('quiz.back')) ?>
                     </button>
                     <div></div>
@@ -356,12 +356,12 @@ $breadcrumbs = [
         </div>
 
         <!-- Info Box -->
-        <div class="mt-6 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4">
+        <div class="mt-6 bg-warm-50 border border-warm-200 rounded-lg p-4">
             <div class="flex gap-3">
-                <i data-lucide="lightbulb" class="w-6 h-6 text-brand-yellow shrink-0" aria-hidden="true"></i>
+                <i data-lucide="lightbulb" class="w-6 h-6 text-sunset-400 shrink-0" aria-hidden="true"></i>
                 <div>
-                    <h3 class="font-medium text-brand-text"><?= h(__('quiz.how_it_works')) ?></h3>
-                    <p class="text-brand-muted text-sm mt-1">
+                    <h3 class="font-medium text-warm-900"><?= h(__('quiz.how_it_works')) ?></h3>
+                    <p class="text-warm-500 text-sm mt-1">
                         <?= h(__('quiz.how_it_works_desc')) ?>
                     </p>
                 </div>
@@ -377,21 +377,21 @@ $breadcrumbs = [
     align-items: center;
     text-align: center;
     padding: 1.5rem;
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid #e7e0d6;
     border-radius: 1rem;
-    background: rgba(255, 255, 255, 0.05);
+    background: #faf8f5;
     transition: all 0.2s ease;
     cursor: pointer;
 }
 
 .quiz-option:hover {
-    border-color: rgba(253, 224, 71, 0.5);
-    background: rgba(253, 224, 71, 0.1);
+    border-color: #0ea5e9;
+    background: #f0f9ff;
 }
 
 .quiz-option.selected {
-    border-color: #fde047;
-    background: rgba(253, 224, 71, 0.15);
+    border-color: #0284c7;
+    background: #e0f2fe;
 }
 
 .quiz-option-multi {
@@ -400,57 +400,57 @@ $breadcrumbs = [
     align-items: center;
     text-align: center;
     padding: 1rem;
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid #e7e0d6;
     border-radius: 0.75rem;
-    background: rgba(255, 255, 255, 0.05);
+    background: #faf8f5;
     transition: all 0.2s ease;
     cursor: pointer;
 }
 
 .quiz-option-multi:hover {
-    border-color: rgba(253, 224, 71, 0.5);
+    border-color: #0ea5e9;
 }
 
 .quiz-option-multi.selected {
-    border-color: #fde047;
-    background: rgba(253, 224, 71, 0.15);
+    border-color: #0284c7;
+    background: #e0f2fe;
 }
 
 .quiz-option-wide {
     display: block;
     width: 100%;
     padding: 1rem 1.25rem;
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid #e7e0d6;
     border-radius: 0.75rem;
-    background: rgba(255, 255, 255, 0.05);
+    background: #faf8f5;
     transition: all 0.2s ease;
     cursor: pointer;
     text-align: left;
 }
 
 .quiz-option-wide:hover {
-    border-color: rgba(253, 224, 71, 0.5);
-    background: rgba(253, 224, 71, 0.1);
+    border-color: #0ea5e9;
+    background: #f0f9ff;
 }
 
 .quiz-option-wide.selected {
-    border-color: #fde047;
-    background: rgba(253, 224, 71, 0.15);
+    border-color: #0284c7;
+    background: #e0f2fe;
 }
 
 .result-card {
     display: flex;
     gap: 1rem;
     padding: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid #e7e0d6;
     border-radius: 0.75rem;
-    background: rgba(255, 255, 255, 0.05);
+    background: #faf8f5;
     transition: all 0.2s ease;
 }
 
 .result-card:hover {
-    border-color: rgba(253, 224, 71, 0.5);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border-color: #0ea5e9;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .match-score {
@@ -672,8 +672,8 @@ function displayResults(matches) {
             <div class="flex-1 min-w-0">
                 <div class="flex items-start justify-between gap-2">
                     <div>
-                        <h3 class="font-semibold text-brand-text">${beach.name}</h3>
-                        <p class="text-sm text-brand-muted">${beach.municipality}</p>
+                        <h3 class="font-semibold text-warm-900">${beach.name}</h3>
+                        <p class="text-sm text-warm-500">${beach.municipality}</p>
                     </div>
                     <div class="match-score ${beach.score >= 90 ? 'excellent' : beach.score >= 75 ? 'great' : 'good'}">
                         ${beach.score}%
@@ -682,13 +682,13 @@ function displayResults(matches) {
                 ${beach.match_reasons ? `
                     <div class="flex flex-wrap gap-1 mt-2">
                         ${beach.match_reasons.slice(0, 3).map(reason => `
-                            <span class="text-xs bg-brand-yellow/20 text-brand-yellow px-2 py-0.5 rounded-full">${reason}</span>
+                            <span class="text-xs bg-sunset-400/20 text-sunset-400 px-2 py-0.5 rounded-full">${reason}</span>
                         `).join('')}
                     </div>
                 ` : ''}
                 <div class="mt-3">
                     <button data-action="openBeachDrawer" data-action-args='["${beach.id}"]'
-                            class="text-sm text-brand-yellow hover:text-yellow-300 font-medium">
+                            class="text-sm text-sunset-400 hover:text-sunset-400 font-medium">
                         ${QUIZ_STRINGS.view_details} →
                     </button>
                 </div>
@@ -783,8 +783,8 @@ function unlockFullList() {
             <div class="flex-1 min-w-0">
                 <div class="flex items-start justify-between gap-2">
                     <div>
-                        <h3 class="font-semibold text-brand-text">${beach.name}</h3>
-                        <p class="text-sm text-brand-muted">${beach.municipality}</p>
+                        <h3 class="font-semibold text-warm-900">${beach.name}</h3>
+                        <p class="text-sm text-warm-500">${beach.municipality}</p>
                     </div>
                     <div class="match-score ${beach.score >= 90 ? 'excellent' : beach.score >= 75 ? 'great' : 'good'}">
                         ${beach.score}%
@@ -792,7 +792,7 @@ function unlockFullList() {
                 </div>
                 <div class="mt-2">
                     <button data-action="openBeachDrawer" data-action-args='["${beach.id}"]'
-                            class="text-sm text-brand-yellow hover:text-yellow-300 font-medium">
+                            class="text-sm text-sunset-400 hover:text-sunset-400 font-medium">
                         ${QUIZ_STRINGS.view_details} →
                     </button>
                 </div>

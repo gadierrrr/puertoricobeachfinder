@@ -1,0 +1,222 @@
+/* =========================================
+   Chat System — Floating Bubble + Panel
+   ========================================= */
+
+/* --- Floating Action Button --- */
+.chat-fab-container {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: var(--z-chat, 70);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+}
+
+.chat-fab {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    box-shadow: 0 4px 20px rgba(29, 78, 216, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.chat-fab:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 28px rgba(29, 78, 216, 0.6), 0 3px 12px rgba(0, 0, 0, 0.3);
+}
+.chat-fab:active {
+    transform: scale(0.95);
+}
+.chat-fab svg {
+    width: 24px;
+    height: 24px;
+    color: #fff;
+}
+
+/* --- Badge --- */
+.chat-fab-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #ef4444;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 9999px;
+    min-width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    animation: chat-badge-pulse 2s infinite;
+}
+@keyframes chat-badge-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
+    70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+/* --- Panel --- */
+.chat-panel {
+    width: 380px;
+    height: 560px;
+    border-radius: 16px;
+    background: var(--color-ocean-800);
+    border: 1px solid var(--color-ocean-700);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: opacity 0.25s, transform 0.25s;
+}
+.chat-panel.closed {
+    opacity: 0;
+    transform: translateY(16px) scale(0.95);
+    pointer-events: none;
+}
+.chat-panel.open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* --- Panel Header --- */
+.chat-panel-header {
+    background: var(--color-ocean-900);
+    border-bottom: 1px solid var(--color-ocean-700);
+    padding: 0.75rem 1rem;
+    flex-shrink: 0;
+}
+
+/* --- Messages Scroll Area --- */
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
+.chat-messages::-webkit-scrollbar { width: 4px; }
+.chat-messages::-webkit-scrollbar-track { background: transparent; }
+.chat-messages::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 4px; }
+
+/* --- Compose Bar --- */
+.chat-compose {
+    border-top: 1px solid var(--color-ocean-700);
+    background: var(--color-ocean-900);
+    padding: 0.625rem 0.75rem;
+    flex-shrink: 0;
+}
+.chat-compose textarea {
+    background: var(--color-ocean-800);
+    border: 1px solid var(--color-ocean-700);
+    border-radius: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+    color: #fff;
+    resize: none;
+    width: 100%;
+    outline: none;
+}
+.chat-compose textarea::placeholder { color: rgba(255, 255, 255, 0.4); }
+.chat-compose textarea:focus { box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); }
+.chat-compose-btn {
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 0.75rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: background 0.15s;
+    flex-shrink: 0;
+}
+.chat-compose-btn:hover { background: #3b82f6; }
+
+/* --- Message Bubbles --- */
+.chat-bubble-mine {
+    background: #1d4ed8;
+    border-radius: 18px 18px 4px 18px;
+}
+.chat-bubble-other {
+    background: var(--color-ocean-700);
+    color: rgba(255, 255, 255, 0.9);
+    border-radius: 18px 18px 18px 4px;
+}
+
+/* --- Avatars --- */
+.chat-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 11px;
+    flex-shrink: 0;
+    color: #fff;
+}
+
+/* --- Inbox Items --- */
+.chat-convo-item {
+    transition: background 0.15s;
+    cursor: pointer;
+    border: none;
+    text-align: left;
+    background: none;
+    width: 100%;
+}
+.chat-convo-item:hover { background: rgba(255, 255, 255, 0.05); }
+
+.chat-unread-dot {
+    width: 8px;
+    height: 8px;
+    background: #3b82f6;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* --- Sign-in CTA (guests) --- */
+.chat-signin-cta {
+    border-top: 1px solid var(--color-ocean-700);
+    background: var(--color-ocean-900);
+    padding: 0.75rem;
+    text-align: center;
+    flex-shrink: 0;
+}
+.chat-signin-cta a {
+    display: inline-block;
+    background: #2563eb;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+.chat-signin-cta a:hover { background: #3b82f6; }
+
+/* --- Report Button --- */
+.chat-report-btn {
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+.chat-message-row:hover .chat-report-btn,
+.chat-message-row:focus-within .chat-report-btn,
+.chat-report-btn:focus { opacity: 1; }
+
+/* --- Fade-in Animation --- */
+.chat-fade-in {
+    animation: chat-fade-in 0.3s ease;
+}
+@keyframes chat-fade-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
