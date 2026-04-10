@@ -197,4 +197,3 @@ foreach ($tagPages as $enSlug => $esSlug):
 
 </urlset>
 
-This approach won't work since the file already has closing tags. Let me edit inline.
