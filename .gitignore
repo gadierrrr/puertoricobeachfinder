@@ -48,3 +48,5 @@ audit-results/
 data/cache/login-stats.json
 data/migration-output.log
 data/logs/
+data/gsc-tokens.json
+data/gsc-*.json
