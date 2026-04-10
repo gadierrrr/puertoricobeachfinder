@@ -204,10 +204,124 @@ function requireAuth() {
     $_SESSION["LAST_ACTIVITY"] = time();
 }
 
-function slugify($str) {
-    $str = strtolower(trim($str));
-    $str = preg_replace('/[^a-z0-9-]/', '-', $str);
-    return trim(preg_replace('/-+/', '-', $str), '-');
+/**
+ * Convert any string into a URL-safe ASCII slug.
+ *
+ * Spanish diacritics are transliterated through stripAccents() (deterministic
+ * strtr map), so "Niños" becomes "ninos" and "Boquerón" becomes "boqueron"
+ * rather than "ni-os" / "boquer-n". Apostrophes (', ’, `) are stripped to
+ * nothing rather than dashes, so "Almendro's" becomes "almendros" rather
+ * than "almendro-s". Any other non-ASCII byte is replaced by a dash and runs
+ * collapse to a single dash. Round-trip stable: slugify(slugify($x)) === slugify($x).
+ *
+ * Used for: beach_tags.tag, beach_amenities.amenity (controlled vocabularies),
+ * beach_lists.slug (free-form user list names), and referral_providers /
+ * referral_campaigns admin slugs.
+ *
+ * For beach detail page slugs use generateUniqueBeachSlug() instead — it
+ * adds collision handling against beaches.slug + beach_slug_redirects.
+ *
+ * @param mixed $str  Anything castable to string. null and false coerce to ''.
+ * @return string     Lowercase ASCII slug, or '' for empty/all-non-alpha input.
+ */
+function slugify($str): string {
+    $str = trim((string) $str);
+    if ($str === '') {
+        return '';
+    }
+    $str = stripAccents($str);
+    $str = strtolower($str);
+    $str = str_replace(["'", "\u{2019}", "`"], '', $str);
+    $str = preg_replace('/[^a-z0-9]+/', '-', $str);
+    return trim((string) $str, '-');
+}
+
+/**
+ * Slugify a beach name for use in /beach/{slug} and /es/playa/{slug} URLs.
+ *
+ * Unlike slugify(), this transliterates Spanish diacritics via stripAccents()
+ * before stripping non-alphanumerics, so "Boquerón" → "boqueron" rather than
+ * "boquern". Apostrophes are dropped entirely so "Almendro's" → "almendros"
+ * rather than "almendro-s".
+ *
+ * Returns '' if the input is empty or contains no slug-safe characters; the
+ * caller is responsible for the empty-result fallback (see generateUniqueBeachSlug).
+ */
+function slugifyBeachName($str): string {
+    $str = trim((string) $str);
+    if ($str === '') {
+        return '';
+    }
+    $str = stripAccents($str);
+    $str = strtolower($str);
+    $str = str_replace(["'", "\u{2019}", "`"], '', $str);
+    $str = preg_replace('/[^a-z0-9]+/', '-', $str);
+    return trim((string) $str, '-');
+}
+
+/**
+ * Compute a unique beach slug from a name + municipality.
+ *
+ * - Tries the bare base slug first (happy path).
+ * - On collision, falls back to "{base}-{municipality}", then "-2", "-3"...
+ * - Collision check covers BOTH beaches.slug AND beach_slug_redirects.old_slug,
+ *   so a future rename can never silently shadow an existing redirect.
+ * - $excludeId lets a beach be re-slugged without colliding with itself.
+ * - Throws RuntimeException if no candidate fits within 99 attempts.
+ */
+function generateUniqueBeachSlug(string $name, string $municipality, ?string $excludeId = null): string {
+    $base = slugifyBeachName($name);
+    if ($base === '') {
+        $base = slugifyBeachName($municipality);
+    }
+    if ($base === '') {
+        $base = 'beach';
+    }
+
+    $municipalitySlug = slugifyBeachName($municipality);
+
+    $candidates = [$base];
+    if ($municipalitySlug !== '' && $municipalitySlug !== $base) {
+        $candidates[] = $base . '-' . $municipalitySlug;
+        for ($i = 2; $i <= 99; $i++) {
+            $candidates[] = $base . '-' . $municipalitySlug . '-' . $i;
+        }
+    } else {
+        for ($i = 2; $i <= 99; $i++) {
+            $candidates[] = $base . '-' . $i;
+        }
+    }
+
+    foreach ($candidates as $candidate) {
+        if (beachSlugIsAvailable($candidate, $excludeId)) {
+            return $candidate;
+        }
+    }
+
+    throw new RuntimeException("generateUniqueBeachSlug: exhausted candidates for '$name' / '$municipality'");
+}
+
+/**
+ * Returns true if the given slug is not in use by any published or draft beach
+ * (other than $excludeId) AND is not present in beach_slug_redirects.old_slug.
+ */
+function beachSlugIsAvailable(string $slug, ?string $excludeId = null): bool {
+    if ($slug === '') {
+        return false;
+    }
+    $params = [':slug' => $slug];
+    $sql = 'SELECT 1 FROM beaches WHERE slug = :slug';
+    if ($excludeId !== null && $excludeId !== '') {
+        $sql .= ' AND id <> :exclude_id';
+        $params[':exclude_id'] = $excludeId;
+    }
+    if (queryOne($sql, $params)) {
+        return false;
+    }
+    if (queryOne('SELECT 1 FROM beach_slug_redirects WHERE old_slug = :slug', [':slug' => $slug])) {
+        return false;
+    }
+    return true;
 }
 
 function isHtmx() {
@@ -1178,6 +1292,47 @@ function getSimilarBeaches($beachId, $beachTags, $limit = 4) {
     }
 
     return $similarBeaches;
+}
+
+/**
+ * Get nearby beaches by geographic proximity using Haversine distance
+ * @param int $beachId Current beach ID to exclude
+ * @param float $lat Latitude of current beach
+ * @param float $lng Longitude of current beach
+ * @param int $limit Maximum number of results
+ * @return array Nearby beaches sorted by distance with distance_formatted field
+ */
+function getNearbyBeaches(string $beachId, float $lat, float $lng, int $limit = 4): array {
+    require_once __DIR__ . '/db.php';
+    require_once __DIR__ . '/geo.php';
+
+    $sql = "
+        SELECT b.id, b.slug, b.name, b.municipality, b.cover_image,
+               b.google_rating, b.google_review_count, b.lat, b.lng
+        FROM beaches b
+        WHERE b.id <> :beach_id
+          AND b.publish_status = 'published'
+          AND b.lat IS NOT NULL AND b.lng IS NOT NULL
+        ORDER BY (
+            (b.lat - :lat) * (b.lat - :lat) +
+            (b.lng - :lng) * (b.lng - :lng)
+        ) ASC
+        LIMIT " . intval($limit) . "
+    ";
+
+    $nearby = query($sql, [
+        ':beach_id' => $beachId,
+        ':lat' => $lat,
+        ':lng' => $lng,
+    ]);
+
+    // Calculate actual formatted distances
+    foreach ($nearby as &$b) {
+        $dist = calculateDistance($lat, $lng, (float)$b['lat'], (float)$b['lng']);
+        $b['distance_formatted'] = formatDistanceDisplay($dist);
+    }
+
+    return $nearby;
 }
 
 /**

@@ -382,8 +382,7 @@ try {
 
     // Generate ID and slug
     $id = adminGenerateUuid();
-    $baseSlug = slugify($name);
-    $slug = $baseSlug . '-' . substr($id, 0, 8);
+    $slug = generateUniqueBeachSlug($name, $municipality);
 
     // Process cover image
     $coverImage = '/images/beaches/placeholder-beach.webp';

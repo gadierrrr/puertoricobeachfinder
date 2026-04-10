@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = adminGenerateUuid();
         }
 
-        $slug = slugify($_POST['name']) . '-' . substr($id, 0, 8);
+        $slug = generateUniqueBeachSlug($_POST['name'] ?? '', $_POST['municipality'] ?? '');
 
         $db = getDb();
         $stmt = $db->prepare($isNew ? "

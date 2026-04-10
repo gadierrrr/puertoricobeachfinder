@@ -585,37 +585,15 @@ function downloadAndOptimizePhoto($photoResourceName, $apiKey, $beachSlug) {
 }
 
 /**
- * Generate unique slug for beach
+ * Generate unique slug for beach.
+ *
+ * Thin wrapper around generateUniqueBeachSlug() in inc/helpers.php so any
+ * future re-import uses the same slug logic as the admin and quick-add paths.
+ * Lat/lng are accepted for backwards compatibility but no longer used —
+ * collisions are resolved by municipality + numeric ladder, not coordinates.
  */
-function generateUniqueSlug($name, $lat, $lng) {
-    $baseSlug = slugify($name);
-
-    // Check if slug already exists
-    $existing = queryOne(
-        'SELECT slug FROM beaches WHERE slug = :slug',
-        [':slug' => $baseSlug]
-    );
-
-    if (!$existing) {
-        return $baseSlug;
-    }
-
-    // Append coordinate-based suffix
-    $coordSuffix = round($lat * 100) . '-' . abs(round($lng * 100));
-    $slug = $baseSlug . '-' . $coordSuffix;
-
-    // Final check
-    $existing = queryOne(
-        'SELECT slug FROM beaches WHERE slug = :slug',
-        [':slug' => $slug]
-    );
-
-    if (!$existing) {
-        return $slug;
-    }
-
-    // Last resort: append random string
-    return $slug . '-' . substr(uniqid(), -6);
+function generateUniqueSlug($name, $lat, $lng, $municipality = '') {
+    return generateUniqueBeachSlug((string) $name, (string) $municipality);
 }
 
 // ============================================================================
@@ -801,7 +779,7 @@ foreach ($beachesJson as $index => $beachData) {
                                 strpos($match['beach']['cover_image'], 'placeholder') !== false));
 
                 if ($needsPhoto && !$dryRun) {
-                    $slug = $match['beach']['slug'] ?? generateUniqueSlug($name, $lat, $lng);
+                    $slug = $match['beach']['slug'] ?? generateUniqueSlug($name, $lat, $lng, $municipality ?? '');
                     $coverImage = downloadAndOptimizePhoto(
                         $placeDetails['photos'][0]['photo_reference'],
                         $GOOGLE_API_KEY,
@@ -887,7 +865,7 @@ foreach ($beachesJson as $index => $beachData) {
             logMsg("  [DRY-RUN] Would insert new beach: $name", 'INFO');
         } else {
             $id = uuid();
-            $slug = generateUniqueSlug($name, $lat, $lng);
+            $slug = generateUniqueSlug($name, $lat, $lng, $municipality ?? '');
 
             // Use placeholder if no photo downloaded
             if (!$coverImage) {

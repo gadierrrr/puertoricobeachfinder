@@ -41,6 +41,25 @@ if (!$slug) {
 $beach = queryOne('SELECT * FROM beaches WHERE slug = :slug AND publish_status = "published"', [':slug' => $slug]);
 
 if (!$beach) {
+    // Slug not found in beaches — check the redirect table for an old slug.
+    $redirect = queryOne(
+        'SELECT b.slug FROM beach_slug_redirects r
+         JOIN beaches b ON b.id = r.beach_id
+         WHERE r.old_slug = :slug AND b.publish_status = "published"',
+        [':slug' => $slug]
+    );
+    if ($redirect) {
+        $isSpanish = $lang === 'es' || str_starts_with($_SERVER['REQUEST_URI'] ?? '', '/es/');
+        $prefix    = $isSpanish ? '/es/playa/' : '/beach/';
+        // Drop the 'slug' query param — it's the nginx-rewrite artifact, not a real
+        // user param. Anything else (utm, ref, etc.) is preserved.
+        parse_str($_SERVER['QUERY_STRING'] ?? '', $qsParams);
+        unset($qsParams['slug']);
+        $qs = http_build_query($qsParams);
+        header('Location: ' . $prefix . $redirect['slug'] . ($qs !== '' ? '?' . $qs : ''), true, 301);
+        exit;
+    }
+
     http_response_code(404);
     $pageTitle = __('errors.beach_not_found');
     include APP_ROOT . '/components/header.php';
@@ -244,6 +263,8 @@ include APP_ROOT . '/components/header.php';
             <?php if (!empty($reviews)): ?>
             <?php include APP_ROOT . '/components/beach/reviews.php'; ?>
             <?php endif; ?>
+
+            <?php include APP_ROOT . '/components/beach/faq.php'; ?>
 
         </div>
 
