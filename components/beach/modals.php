@@ -22,23 +22,65 @@
 </div>
 
 <script <?= cspNonceAttr() ?>>
-// Initialize small map for sidebar
-document.addEventListener('DOMContentLoaded', () => {
-    const mapContainer = document.getElementById('beach-map');
-    if (mapContainer && typeof maplibregl !== 'undefined') {
+// Initialize small map for sidebar.
+// The sidebar sits far below the fold on mobile, so the container is off-screen
+// at init time. iOS Safari measures it as 0-height, and MapLibre's internal
+// auto-resize doesn't always fire. We trigger map.resize() via IntersectionObserver
+// (plus scroll + timer fallbacks) the first time the container becomes visible.
+(function () {
+    function initBeachMap() {
+        const mapContainer = document.getElementById('beach-map');
+        if (!mapContainer) return;
+        if (typeof maplibregl === 'undefined') {
+            // maplibre-gl JS loads with `defer`; wait a tick on slow connections.
+            setTimeout(initBeachMap, 100);
+            return;
+        }
+
+        const lng = <?= json_encode((float) $beach['lng']) ?>;
+        const lat = <?= json_encode((float) $beach['lat']) ?>;
+
         const map = new maplibregl.Map({
             container: 'beach-map',
             style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
-            center: [<?= $beach['lng'] ?>, <?= $beach['lat'] ?>],
+            center: [lng, lat],
             zoom: 13,
             interactive: false
         });
 
         new maplibregl.Marker({ color: '#2563eb' })
-            .setLngLat([<?= $beach['lng'] ?>, <?= $beach['lat'] ?>])
+            .setLngLat([lng, lat])
             .addTo(map);
+
+        let resized = false;
+        function doResize() {
+            if (resized) return;
+            try { map.resize(); resized = true; } catch (e) {}
+        }
+
+        if (typeof IntersectionObserver !== 'undefined') {
+            const io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (e) {
+                    if (e.isIntersecting) {
+                        doResize();
+                        io.disconnect();
+                    }
+                });
+            }, { threshold: 0.1 });
+            io.observe(mapContainer);
+        }
+
+        window.addEventListener('scroll', doResize, { passive: true, once: true });
+        setTimeout(doResize, 1500);
+        setTimeout(doResize, 3500);
     }
-});
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initBeachMap);
+    } else {
+        initBeachMap();
+    }
+})();
 </script>
 
 <script <?= cspNonceAttr() ?>>
