@@ -204,6 +204,94 @@ $tagPages = [
             ['q' => 'Do popular beaches have facilities?', 'a' => 'Most popular beaches have good facilities including parking, restrooms, food vendors or nearby restaurants, and shade structures. Government-managed balnearios typically have the best infrastructure.'],
         ],
     ],
+    'surfing' => [
+        'tag' => 'surfing',
+        'type' => 'tag',
+        'en' => [
+            'title' => 'Best Surfing Beaches in Puerto Rico | 57+ Surf Spots',
+            'description' => 'Find the best surfing beaches in Puerto Rico. Browse 57+ world-class surf spots from Rincón to Aguadilla, with breaks for every skill level.',
+            'h1' => 'Best Surfing Beaches in Puerto Rico',
+            'intro' => 'Puerto Rico is the Caribbean\'s surfing capital, hosting world-class breaks along the west and north coasts. From the legendary winter swells at Rincón, Aguadilla, and Isabela to gentler beach breaks perfect for learning, these 57+ beaches cover every skill level and every season.',
+            'slug_es' => 'surf',
+        ],
+        'es' => [
+            'title' => 'Mejores Playas para Surfear en Puerto Rico | 57+ Spots',
+            'description' => 'Encuentra las mejores playas para surfear en Puerto Rico. Más de 57 spots de clase mundial desde Rincón hasta Aguadilla, para todos los niveles.',
+            'h1' => 'Mejores Playas para Surfear en Puerto Rico',
+            'intro' => 'Puerto Rico es la capital caribeña del surf, con olas de clase mundial en las costas oeste y norte. Desde las legendarias marejadas invernales de Rincón, Aguadilla e Isabela hasta olas suaves ideales para aprender, estas 57+ playas ofrecen algo para cada nivel.',
+        ],
+        'faqs' => [
+            ['q' => 'Where are the best surfing beaches in Puerto Rico?', 'a' => 'The west coast is Puerto Rico\'s surfing heartland. Rincón (Domes, Maria\'s, Tres Palmas), Aguadilla (Crash Boat, Wilderness, Gas Chambers), and Isabela (Jobos, Shacks) host the most consistent and famous breaks. The north coast also fires during winter swells, particularly around Arecibo and Manatí.'],
+            ['q' => 'When is the best time of year for surfing in Puerto Rico?', 'a' => 'The prime surf season runs from October through March, when North Atlantic swells reach the west and north coasts. Winter brings head-high to overhead waves at most spots, with the biggest swells in December and January. Summer surf is smaller but still surfable, especially early mornings before the trade winds pick up.'],
+            ['q' => 'Are there surf spots for beginners in Puerto Rico?', 'a' => 'Yes. Sandy Beach and Playa Shacks in Isabela, and Jobos on smaller days, are popular beginner spots with sandy bottoms and forgiving waves. Rincón\'s Sandy Beach and several Aguadilla breaks also suit learners. Many local surf schools offer lessons and board rentals at these beaches.'],
+        ],
+    ],
+    'snorkeling' => [
+        'tag' => 'snorkeling',
+        'type' => 'tag',
+        'en' => [
+            'title' => 'Best Snorkeling Beaches in Puerto Rico | 95+ Snorkel Spots',
+            'description' => 'Discover the best snorkeling beaches in Puerto Rico. Browse 95+ spots with coral reefs, tropical fish, and crystal-clear Caribbean water.',
+            'h1' => 'Best Snorkeling Beaches in Puerto Rico',
+            'intro' => 'Puerto Rico\'s reefs, protected bays, and offshore cays offer some of the Caribbean\'s best snorkeling. Culebra and Vieques are world-famous for clear water and healthy coral, while spots around Guánica, Fajardo, and La Parguera let you drift over reef gardens teeming with tropical fish. Explore these 95+ snorkel-friendly beaches below.',
+            'slug_es' => 'snorkel',
+        ],
+        'es' => [
+            'title' => 'Mejores Playas para Hacer Snorkel en Puerto Rico | 95+ Spots',
+            'description' => 'Descubre las mejores playas para hacer snorkel en Puerto Rico. Más de 95 lugares con arrecifes de coral, peces tropicales y aguas cristalinas.',
+            'h1' => 'Mejores Playas para Hacer Snorkel en Puerto Rico',
+            'intro' => 'Los arrecifes de Puerto Rico, sus bahías protegidas y cayos cercanos ofrecen algunos de los mejores lugares para hacer snorkel en el Caribe. Culebra y Vieques son famosas por sus aguas cristalinas y corales saludables, mientras que Guánica, Fajardo y La Parguera permiten flotar sobre jardines de arrecife llenos de vida.',
+        ],
+        'faqs' => [
+            ['q' => 'What are the top snorkeling beaches in Puerto Rico?', 'a' => 'Carlos Rosario and Tamarindo in Culebra are widely considered the island\'s best, with easy shore entry and healthy reef just offshore. Other top picks include Playa Escondida and Sun Bay on Vieques, Playa Tres in Guánica, and Seven Seas and La Cordillera cays near Fajardo. Steps Beach in Rincón is excellent during calmer months.'],
+            ['q' => 'Do I need to bring my own snorkel gear?', 'a' => 'It\'s a good idea. While outfitters in Culebra, Fajardo, Rincón, and La Parguera rent mask, snorkel, and fins, more remote beaches have no rentals available. Packing your own gear guarantees a good fit and lets you snorkel spontaneously wherever the water looks clear.'],
+            ['q' => 'Is snorkeling in Puerto Rico safe for beginners?', 'a' => 'Yes — many top spots have calm, shallow, protected water ideal for first-timers, including Tamarindo (Culebra), Seven Seas (Fajardo), and Steps Beach (Rincón) on mild days. Always snorkel with a buddy, check local conditions, avoid touching or stepping on coral, and watch for boat traffic in busier areas.'],
+        ],
+    ],
+    'family-friendly' => [
+        'tag' => 'family-friendly',
+        'type' => 'tag',
+        'en' => [
+            'title' => 'Family-Friendly Beaches in Puerto Rico | 155+ Beaches for Kids',
+            'description' => 'Plan a beach day with kids. Browse 155+ family-friendly beaches in Puerto Rico with calm water, shallow entry, parking, restrooms, and lifeguards.',
+            'h1' => 'Family-Friendly Beaches in Puerto Rico',
+            'intro' => 'Traveling with kids? Puerto Rico has 155+ beaches built for families, with calm shallow water, shaded picnic areas, food kioskos, and on-duty lifeguards at the island\'s balnearios. These pages help you find the right mix of gentle surf, parking, and facilities for your family\'s next beach day.',
+            'slug_es' => 'familiares',
+        ],
+        'es' => [
+            'title' => 'Playas Familiares en Puerto Rico | 155+ Playas para Niños',
+            'description' => 'Planifica un día de playa con niños. Más de 155 playas familiares en Puerto Rico con aguas tranquilas, entrada suave, estacionamiento y salvavidas.',
+            'h1' => 'Playas Familiares en Puerto Rico',
+            'intro' => '¿Viajas con niños? Puerto Rico tiene más de 155 playas pensadas para familias, con aguas tranquilas y poco profundas, áreas de picnic con sombra, kioscos de comida y salvavidas en los balnearios. Estas páginas te ayudan a encontrar la mezcla ideal de olas suaves, estacionamiento y facilidades.',
+        ],
+        'faqs' => [
+            ['q' => 'Which Puerto Rico beaches are best for small children?', 'a' => 'Balneario de Luquillo, Balneario de Boquerón, Playa Buyé in Cabo Rojo, Sun Bay in Vieques, and Seven Seas in Fajardo all have calm, shallow water and good facilities. The south and west coasts are generally calmer than the Atlantic north coast, making them safer choices for toddlers.'],
+            ['q' => 'Do family beaches have lifeguards and restrooms?', 'a' => 'The island\'s balnearios (public beaches) staff lifeguards on weekends and many weekdays, and provide restrooms, showers, picnic shelters, and parking. Luquillo, Carolina, Boquerón, Escambrón, and Seven Seas are reliable choices. Smaller local beaches may not have lifeguards, so always check before you go.'],
+            ['q' => 'Which balnearios are best for families?', 'a' => 'Balneario de Luquillo is the most popular family beach, with rows of food kioskos, calm water, and accessibility features. Balneario de Carolina near San Juan and Balneario de Boquerón on the west coast are also excellent. Balneario Sun Bay in Vieques offers a quieter, more scenic family beach experience.'],
+        ],
+    ],
+    'secluded' => [
+        'tag' => 'secluded',
+        'type' => 'tag',
+        'en' => [
+            'title' => 'Secluded Beaches in Puerto Rico | 121+ Hidden & Quiet Beaches',
+            'description' => 'Escape the crowds. Find 121+ secluded, hidden, and off-the-beaten-path beaches in Puerto Rico, from Vieques coves to remote west coast stretches.',
+            'h1' => 'Secluded Beaches in Puerto Rico',
+            'intro' => 'If you\'d rather share a beach with the pelicans than the crowds, Puerto Rico has 121+ secluded options. Many require a short hike, a 4WD ride, or a boat to reach — and most have no facilities, so you\'ll want to pack water, food, shade, and a trash bag. What you get in return is empty sand, clear water, and the rare Caribbean luxury of silence.',
+            'slug_es' => 'aisladas',
+        ],
+        'es' => [
+            'title' => 'Playas Aisladas en Puerto Rico | 121+ Playas Escondidas',
+            'description' => 'Escapa de las multitudes. Encuentra más de 121 playas aisladas y escondidas en Puerto Rico, desde las calas de Vieques hasta la costa oeste remota.',
+            'h1' => 'Playas Aisladas en Puerto Rico',
+            'intro' => 'Si prefieres compartir la playa con los pelícanos en vez de con la multitud, Puerto Rico tiene más de 121 opciones aisladas. Muchas requieren una caminata corta, 4x4 o bote, y la mayoría no tienen facilidades, así que trae agua, comida, sombra y una bolsa para basura.',
+        ],
+        'faqs' => [
+            ['q' => 'What are the most secluded beaches in Puerto Rico?', 'a' => 'Playa La Chiva and Playa Caracas on Vieques, Playa Sucia\'s surrounding coves in Cabo Rojo, Playuela and the western cliffs of Aguadilla, and the beaches of Mona Island all reward the effort of getting there with near-total solitude. The offshore cays of La Cordillera near Fajardo are also essentially private on weekdays.'],
+            ['q' => 'How do I get to secluded beaches in Puerto Rico?', 'a' => 'Some are a short walk from a parking area, others need a 4WD vehicle or a boat. Playa La Chiva and Caracas on Vieques are reached via the former Navy base roads — 4WD recommended but not required. Mona Island requires a licensed boat charter and advance permits. Always check current road and access conditions before setting out.'],
+            ['q' => 'What should I bring to a secluded beach?', 'a' => 'Pack more than you think you\'ll need: plenty of water, snacks or lunch, sunscreen, shade (umbrella or beach tent), reef-safe bug spray, a trash bag, a charged phone, and a first-aid kit. Most secluded beaches have no vendors, restrooms, or cell service. Let someone know where you\'re going and plan to leave before dusk.'],
+        ],
+    ],
     // Amenity-based pages
     'with-parking' => [
         'tag' => 'parking',
@@ -332,6 +420,17 @@ $tagPages = [
         ],
     ],
 ];
+
+// Resolve Spanish slugs to English keys
+if (!isset($tagPages[$tagSlug])) {
+    foreach ($tagPages as $enSlug => $cfg) {
+        if (($cfg['en']['slug_es'] ?? '') === $tagSlug) {
+            $tagSlug = $enSlug;
+            $lang = 'es';
+            break;
+        }
+    }
+}
 
 // Validate tag slug
 if (!isset($tagPages[$tagSlug])) {

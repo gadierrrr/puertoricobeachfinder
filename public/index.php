@@ -383,7 +383,7 @@ include APP_ROOT . '/components/header.php';
                 'family-friendly'  => ['emoji' => '👨‍👩‍👧', 'label' => __('pages.home.category_family'),     'bg' => 'bg-amber-100'],
                 'secluded'         => ['emoji' => '🌴',    'label' => __('pages.home.category_secluded'),   'bg' => 'bg-green-100'],
                 'swimming'         => ['emoji' => '🏊',    'label' => __('tags.swimming'),                  'bg' => 'bg-cyan-100'],
-                'sunset'           => ['emoji' => '🌅',    'label' => __('tags.sunset'),                    'bg' => 'bg-orange-100'],
+                'scenic'           => ['emoji' => '🏞️',    'label' => __('tags.scenic'),                    'bg' => 'bg-orange-100'],
             ];
             foreach ($categories as $tag => $cat):
                 $count = $tagCounts[$tag] ?? 0;
