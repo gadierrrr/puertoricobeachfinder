@@ -65,13 +65,32 @@
     var links = nav.querySelectorAll(".beach-nav-link");
     var sections = document.querySelectorAll("[id^='section-']");
 
+    function expandIfDetails(el) {
+        if (el && el.tagName === 'DETAILS' && !el.open) el.open = true;
+    }
+
     links.forEach(function(link){
         link.addEventListener("click", function(e){
             e.preventDefault();
             var target = document.querySelector(link.getAttribute("href"));
-            if (target) target.scrollIntoView({behavior: "smooth"});
+            if (target) {
+                expandIfDetails(target);
+                target.scrollIntoView({behavior: "smooth"});
+            }
         });
     });
+
+    // Open the targeted accordion if the page is loaded with a #section-* hash
+    if (window.location.hash) {
+        try {
+            var initial = document.querySelector(window.location.hash);
+            if (initial) {
+                expandIfDetails(initial);
+                // Re-scroll after opening so the browser's initial hash scroll lands correctly
+                requestAnimationFrame(function(){ initial.scrollIntoView(); });
+            }
+        } catch (err) { /* invalid selector — ignore */ }
+    }
 
     if (typeof IntersectionObserver !== "undefined") {
         var observer = new IntersectionObserver(function(entries){
@@ -86,19 +105,6 @@
         sections.forEach(function(s){ observer.observe(s); });
     }
 })();
-
-// Collapsible section toggle (CSP-safe via data-action)
-function toggleSection(el) {
-    var section = el.closest('.section-collapsible');
-    if (!section) return;
-    section.classList.toggle('expanded');
-    var isExpanded = section.classList.contains('expanded');
-    if (typeof lucide !== 'undefined') lucide.createIcons();
-    section.querySelectorAll('.read-more-text').forEach(function(el) {
-        el.textContent = isExpanded ? '<?= h($lang === "es" ? "Mostrar menos" : "Show less") ?>' : '<?= h($lang === "es" ? "Leer más" : "Read more") ?>';
-    });
-    if (typeof lucide !== 'undefined') lucide.createIcons();
-}
 
 // Sticky bar auto-hide on scroll down
 (function() {

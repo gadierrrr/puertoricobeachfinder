@@ -557,8 +557,8 @@ $topMunicipalities = array_slice($munCounts, 0, 6, true);
 <section class="relative bg-gradient-to-b from-slate-900 via-slate-800 to-slate-700 text-white py-16 md:py-24">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 class="text-3xl md:text-5xl font-bold mb-4"><?= h($tagData['h1']) ?></h1>
-        <p class="text-lg md:text-xl text-warm-700 max-w-3xl mx-auto mb-6"><?= h($tagData['intro']) ?></p>
-        <div class="flex flex-wrap justify-center gap-4 text-sm text-warm-500">
+        <p class="text-lg md:text-xl text-white/90 max-w-3xl mx-auto mb-6"><?= h($tagData['intro']) ?></p>
+        <div class="flex flex-wrap justify-center gap-4 text-sm text-white/80">
             <span class="bg-slate-700/50 px-3 py-1 rounded-full"><?= $beachCount ?> <?= $lang === 'es' ? 'playas' : 'beaches' ?></span>
             <?php if ($avgRating > 0): ?>
             <span class="bg-slate-700/50 px-3 py-1 rounded-full">★ <?= number_format($avgRating, 1) ?> <?= $lang === 'es' ? 'promedio' : 'avg rating' ?></span>

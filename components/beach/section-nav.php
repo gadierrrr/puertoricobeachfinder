@@ -15,14 +15,11 @@
         <a href="#section-nearby" class="beach-nav-link whitespace-nowrap px-4 py-3 text-sm font-medium text-warm-500 hover:text-warm-900 transition-colors border-b-2 border-transparent" data-section="section-nearby"><?= h($lang === 'es' ? 'Cercano' : 'Nearby') ?></a>
         <a href="#section-tips" class="beach-nav-link whitespace-nowrap px-4 py-3 text-sm font-medium text-warm-500 hover:text-warm-900 transition-colors border-b-2 border-transparent" data-section="section-tips"><?= h($lang === 'es' ? 'Consejos' : 'Tips') ?></a>
         <a href="#section-map" class="beach-nav-link whitespace-nowrap px-4 py-3 text-sm font-medium text-warm-500 hover:text-warm-900 transition-colors border-b-2 border-transparent" data-section="section-map"><?= h($lang === 'es' ? 'Mapa' : 'Map') ?></a>
+        <a href="#faq" class="beach-nav-link whitespace-nowrap px-4 py-3 text-sm font-medium text-warm-500 hover:text-warm-900 transition-colors border-b-2 border-transparent" data-section="faq">FAQ</a>
     </nav></div>
 
     <?php
     // Pre-fetch data needed for sidebar (weather loaded client-side for fast TTFB)
-    require_once APP_ROOT . '/inc/crowd.php';
-    $weather = null;
-    $recommendation = null;
-    $crowdLevel = getBeachCrowdLevel($beach['id'], 4);
     $sunTimes = getSunTimes($beach['lat'], $beach['lng']);
     ?>
 

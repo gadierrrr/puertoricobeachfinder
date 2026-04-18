@@ -272,26 +272,6 @@ include APP_ROOT . '/components/header.php';
                     <div id="search-results" class="max-h-64 overflow-y-auto"></div>
                 </div>
             </form>
-
-            <!-- Quick Filter Chips -->
-            <div class="flex flex-wrap gap-2 mt-4">
-                <?php
-                $searchChips = [
-                    'surfing' => ['label' => __('pages.home.category_surfing'), 'emoji' => '🏄‍♂️'],
-                    'snorkeling' => ['label' => __('pages.home.category_snorkeling'), 'emoji' => '🤿'],
-                    'family-friendly' => ['label' => __('pages.home.category_family'), 'emoji' => '👨‍👩‍👧'],
-                    'secluded' => ['label' => __('pages.home.category_secluded'), 'emoji' => '🌴'],
-                ];
-                foreach ($searchChips as $tag => $chip):
-                    $isActive = in_array($tag, $selectedTags);
-                ?>
-                <a href="/?tags[]=<?= h($tag) ?>#beaches"
-                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] transition-all <?= $isActive ? 'bg-ocean-100 text-ocean-700' : 'bg-teal-50 text-warm-700 hover:bg-teal-100' ?>">
-                    <span><?= $chip['emoji'] ?></span>
-                    <span class="font-medium"><?= h($chip['label']) ?></span>
-                </a>
-                <?php endforeach; ?>
-            </div>
         </div>
     </div>
 </header>

@@ -1915,13 +1915,13 @@ function getRelatedGuides($beachTags = [], $limit = 3) {
             'priority' => 8
         ],
         'secluded' => [
-            'title' => function_exists('__') ? __('related_guides.getting_there') : 'Getting to Puerto Rico Beaches',
+            'title' => function_exists('__') ? __('related_guides.transport') : 'Getting to Puerto Rico Beaches',
             'url' => '/guides/getting-to-puerto-rico-beaches',
             'icon' => 'map-pin',
             'priority' => 7
         ],
         'remote' => [
-            'title' => function_exists('__') ? __('related_guides.getting_there') : 'Getting to Puerto Rico Beaches',
+            'title' => function_exists('__') ? __('related_guides.transport') : 'Getting to Puerto Rico Beaches',
             'url' => '/guides/getting-to-puerto-rico-beaches',
             'icon' => 'map-pin',
             'priority' => 7

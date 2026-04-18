@@ -140,6 +140,7 @@ return [
         'unknown_crowd' => 'Desconocido',
         'details' => 'Detalles',
         'go' => 'Ir',
+        'directions' => 'Direcciones',
         'compare' => 'Comparar',
         'share_text' => '¡Descubre :name en :municipality, Puerto Rico!',
         'beach_fallback_desc' => 'Descubre esta hermosa playa en Puerto Rico.',

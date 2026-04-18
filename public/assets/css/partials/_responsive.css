@@ -136,16 +136,84 @@
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: var(--z-drawer);
+    z-index: 60;
     background: rgba(19, 32, 36, 0.95);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     padding: 0.625rem 1rem;
+    padding-bottom: max(0.625rem, env(safe-area-inset-bottom));
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    align-items: stretch;
+    justify-content: space-around;
     gap: 0.5rem;
+}
+
+.beach-sticky-bar .sticky-directions {
+    color: #ffffff !important;
+}
+.beach-sticky-bar .sticky-directions svg,
+.beach-sticky-bar .sticky-directions i,
+.beach-sticky-bar .sticky-directions svg * {
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+    fill: none !important;
+}
+
+.beach-sticky-bar .sticky-secondary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.125rem;
+    background: transparent !important;
+    border: none;
+    color: #ffffff !important;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    line-height: 1;
+    padding: 0.5rem 0.75rem;
+    min-width: 56px;
+    min-height: 48px;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.beach-sticky-bar .sticky-secondary svg,
+.beach-sticky-bar .sticky-secondary i,
+.beach-sticky-bar .sticky-secondary svg * {
+    width: 1.125rem;
+    height: 1.125rem;
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+    fill: none !important;
+}
+
+.beach-sticky-bar .sticky-secondary span {
+    color: #ffffff !important;
+}
+
+.beach-sticky-bar .sticky-secondary:hover,
+.beach-sticky-bar .sticky-secondary:focus-visible {
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: #ffffff !important;
+    outline: none;
+}
+
+.beach-sticky-bar .sticky-secondary:focus-visible {
+    box-shadow: 0 0 0 2px rgba(253, 224, 71, 0.6);
+}
+
+.beach-sticky-bar .sticky-secondary[aria-pressed="true"],
+.beach-sticky-bar .sticky-secondary[aria-pressed="true"] span {
+    color: #fde047 !important;
+}
+.beach-sticky-bar .sticky-secondary[aria-pressed="true"] svg,
+.beach-sticky-bar .sticky-secondary[aria-pressed="true"] i,
+.beach-sticky-bar .sticky-secondary[aria-pressed="true"] svg * {
+    color: #fde047 !important;
+    stroke: #fde047 !important;
 }
 
 .sticky-weather,
@@ -829,10 +897,22 @@
     }
 }
 
+/* Welcome popup - scrollable on mobile so close/dismiss buttons stay reachable */
+@media (max-width: 640px) {
+    .welcome-popup-overlay {
+        align-items: flex-start;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+}
+
 /* Clear the beach sticky bar on mobile */
 @media (max-width: 1023px) {
+    body:has(.beach-sticky-bar) .chat-fab-container,
     .page-has-sticky-bar .chat-fab-container {
-        bottom: 5rem;
+        bottom: 5.5rem !important;
     }
 }
 

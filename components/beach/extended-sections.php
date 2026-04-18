@@ -47,26 +47,24 @@
                         ? $section['heading_es'] : $section['heading'];
                     $_sectionContent = ($lang === 'es' && !empty($section['content_es']))
                         ? $section['content_es'] : $section['content'];
+                    // Map section_type to nav-friendly hyphenated id; local_tips is exposed as "tips" in section nav.
+                    $_idMap = ['local_tips' => 'tips'];
+                    $_sectionId = 'section-' . str_replace('_', '-', $_idMap[$section['section_type']] ?? $section['section_type']);
                     ?>
-                    <section class="beach-detail-card p-5 rounded-xl section-collapsible scroll-mt-[120px]" id="section-<?= h($section['section_type']) ?>">
-                        <div class="section-toggle flex items-center justify-between" data-action="toggleSection" data-action-args='["__this__"]'>
+                    <details id="<?= h($_sectionId) ?>" class="group beach-detail-card rounded-xl overflow-hidden scroll-mt-[120px]">
+                        <summary class="flex items-center justify-between gap-3 px-5 py-4 cursor-pointer list-none select-none hover:bg-warm-50 transition-colors">
                             <h2 class="text-lg font-bold text-warm-900 flex items-center gap-2">
-                                <i data-lucide="<?= h(CONTENT_SECTIONS[$section['section_type']]['icon'] ?? 'info') ?>" class="w-5 h-5 text-sunset-400"></i>
-                                <?= h($_sectionHeading) ?>
+                                <i data-lucide="<?= h(CONTENT_SECTIONS[$section['section_type']]['icon'] ?? 'info') ?>" class="w-5 h-5 text-sunset-400" aria-hidden="true"></i>
+                                <span><?= h($_sectionHeading) ?></span>
                             </h2>
-                            <i data-lucide="chevron-down" class="w-5 h-5 text-warm-400 toggle-icon flex-shrink-0"></i>
-                        </div>
-                        <div class="section-content mt-3">
-                            <div class="prose prose-invert prose-brand max-w-none text-base">
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-warm-400 flex-shrink-0 transition-transform group-open:rotate-180" aria-hidden="true"></i>
+                        </summary>
+                        <div class="px-5 pb-5">
+                            <div class="prose prose-brand max-w-none text-base">
                                 <?= sanitizeContentHtml($_sectionContent) ?>
                             </div>
                         </div>
-                        <button class="mt-3 text-sm font-medium text-sunset-400 hover:text-sunset-300 transition-colors flex items-center gap-1"
-                                data-action="toggleSection" data-action-args='["__this__"]'>
-                            <span class="read-more-text"><?= h($lang === 'es' ? 'Leer más' : 'Read more') ?></span>
-                            <i data-lucide="chevron-down" class="w-3.5 h-3.5 toggle-icon"></i>
-                        </button>
-                    </section>
+                    </details>
                 <?php endforeach; ?>
             </div>
             <?php endif; ?>

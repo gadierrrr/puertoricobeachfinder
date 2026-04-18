@@ -4,7 +4,7 @@
  * Run once to generate app icons: php scripts/generate-icons.php
  */
 
-$sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+$sizes = [72, 96, 128, 144, 152, 180, 192, 384, 512];
 $outputDir = __DIR__ . '/../public/assets/icons';
 
 // Beach emoji/icon colors
@@ -133,6 +133,78 @@ foreach ($shortcuts as $name => $color) {
     }
 
     $filename = "$outputDir/{$name}-96x96.png";
+    imagepng($image, $filename);
+    imagedestroy($image);
+
+    echo "Generated: $filename\n";
+}
+
+// Generate maskable icons (content inset to 80% safe zone)
+$maskableSizes = [192, 512];
+
+foreach ($maskableSizes as $size) {
+    $image = imagecreatetruecolor($size, $size);
+    imagealphablending($image, true);
+    imagesavealpha($image, true);
+
+    $bg = imagecolorallocate($image, $bgColor[0], $bgColor[1], $bgColor[2]);
+    $sand = imagecolorallocate($image, $sandColor[0], $sandColor[1], $sandColor[2]);
+    $wave = imagecolorallocate($image, $waveColor[0], $waveColor[1], $waveColor[2]);
+    $white = imagecolorallocate($image, 255, 255, 255);
+
+    // Fill background
+    imagefilledrectangle($image, 0, 0, $size, $size, $bg);
+
+    // Maskable safe zone: inset 10% on each side (content in inner 80%)
+    $inset = $size * 0.10;
+    $innerSize = $size - ($inset * 2);
+
+    // Draw beach scene scaled to safe zone
+    $margin = $inset + $innerSize * 0.15;
+
+    // Sand (bottom arc) - shifted inward
+    imagefilledellipse($image, $size/2, $size - $inset + $innerSize*0.3, $innerSize * 1.0, $innerSize * 0.8, $sand);
+
+    // Wave lines - within safe zone
+    $waveY = $inset + $innerSize * 0.45;
+    $waveHeight = $innerSize * 0.08;
+    for ($i = 0; $i < 3; $i++) {
+        $y = $waveY + ($i * $waveHeight * 1.5);
+        $amplitude = $innerSize * 0.05;
+
+        for ($x = $margin; $x < $size - $margin; $x++) {
+            $yOffset = sin(($x / $size) * 4 * M_PI) * $amplitude;
+            imagesetpixel($image, $x, $y + $yOffset, $white);
+            imagesetpixel($image, $x, $y + $yOffset + 1, $white);
+            imagesetpixel($image, $x, $y + $yOffset + 2, $white);
+        }
+    }
+
+    // Sun - within safe zone
+    $sunRadius = $innerSize * 0.12;
+    $sunX = $inset + $innerSize * 0.72;
+    $sunY = $inset + $innerSize * 0.25;
+    imagefilledellipse($image, $sunX, $sunY, $sunRadius * 2, $sunRadius * 2, $sand);
+
+    // Palm tree - within safe zone
+    $trunkX = $inset + $innerSize * 0.3;
+    $trunkBottom = $inset + $innerSize * 0.6;
+    $trunkTop = $inset + $innerSize * 0.25;
+    $brown = imagecolorallocate($image, 139, 90, 43);
+    $green = imagecolorallocate($image, 34, 197, 94);
+
+    imagesetthickness($image, max(2, $innerSize * 0.03));
+    imageline($image, $trunkX, $trunkBottom, $trunkX - $innerSize*0.02, $trunkTop, $brown);
+
+    $leafLen = $innerSize * 0.15;
+    for ($angle = -60; $angle <= 60; $angle += 30) {
+        $rad = deg2rad($angle - 90);
+        $endX = $trunkX - $innerSize*0.02 + cos($rad) * $leafLen;
+        $endY = $trunkTop + sin($rad) * $leafLen;
+        imageline($image, $trunkX - $innerSize*0.02, $trunkTop, $endX, $endY, $green);
+    }
+
+    $filename = "$outputDir/icon-maskable-{$size}x{$size}.png";
     imagepng($image, $filename);
     imagedestroy($image);
 

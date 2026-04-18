@@ -121,9 +121,13 @@ $traits = array_slice(array_values(array_unique($traits)), 0, 3);
         <?php endif; ?>
 
         <div class="collection-card__actions">
-            <a class="collection-card__primary" href="<?= h($beachUrl) ?>"><?= h($_t ? __('collection.view_details') : 'View Details') ?></a>
+            <a class="collection-card__primary" href="<?= h($beachUrl) ?>">
+                <i data-lucide="book-open" aria-hidden="true"></i>
+                <?= h($_t ? __('collection.view_details') : 'View Details') ?>
+            </a>
             <a class="collection-card__secondary" href="<?= h(getDirectionsUrl($beach)) ?>" target="_blank" rel="noopener noreferrer">
-                <?= h($_t ? __('collection.get_directions') : 'Get Directions') ?>
+                <i data-lucide="navigation" aria-hidden="true"></i>
+                <?= h($_t ? __('collection.get_directions') : 'Directions') ?>
             </a>
         </div>
     </div>

@@ -214,10 +214,9 @@ include APP_ROOT . '/components/header.php';
         <!-- Left Column: Main Content -->
         <div class="lg:w-[63%] space-y-8">
 
-            <?php include APP_ROOT . '/components/beach/quick-facts.php'; ?>
-
-
-            <?php include APP_ROOT . "/components/beach/at-a-glance.php"; ?>
+            <div id="section-overview" class="scroll-mt-[120px]">
+                <?php include APP_ROOT . "/components/beach/at-a-glance.php"; ?>
+            </div>
             <!-- Mobile Weather Strip (hidden on desktop) -->
             <div class="lg:hidden weather-strip"
                  data-lat="<?= h($beach['lat']) ?>" data-lng="<?= h($beach['lng']) ?>">

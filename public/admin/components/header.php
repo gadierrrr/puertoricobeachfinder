@@ -100,6 +100,22 @@ $currentPage = basename($_SERVER['PHP_SELF'], '.php');
                     <?php endif; ?>
                 </a>
 
+                <a href="/admin/chat-moderation"
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg <?= $currentPage === 'chat-moderation' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800' ?>">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    Chat
+                    <?php
+                    require_once APP_ROOT . '/inc/chat_moderation.php';
+                    $chatModStats = chatModerationStats();
+                    $chatPending = $chatModStats['flagged'] + $chatModStats['pending_reports'];
+                    if ($chatPending > 0):
+                    ?>
+                    <span class="ml-auto bg-yellow-500 text-xs px-2 py-0.5 rounded-full"><?= $chatPending ?></span>
+                    <?php endif; ?>
+                </a>
+
                 <a href="/admin/users"
                    class="flex items-center gap-3 px-3 py-2 rounded-lg <?= $currentPage === 'users' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800' ?>">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

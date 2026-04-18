@@ -3,14 +3,14 @@
  * Handles offline caching and background sync
  */
 
-const CACHE_VERSION = 'v1.1.2';
+const CACHE_VERSION = 'v2.1.0';
 const CACHE_NAME = `beach-finder-${CACHE_VERSION}`;
 const DATA_CACHE_NAME = `beach-finder-data-${CACHE_VERSION}`;
 
 // Assets to cache immediately on install
 const PRECACHE_ASSETS = [
     '/',
-    '/offline.php',
+    '/offline',
     '/manifest.json',
     '/assets/css/styles.css',
     '/assets/css/tailwind.min.css',
@@ -22,51 +22,57 @@ const PRECACHE_ASSETS = [
     '/assets/icons/icon-512x512.png'
 ];
 
-// External resources to cache
-const EXTERNAL_ASSETS = [
-    'https://cdn.tailwindcss.com',
-    'https://unpkg.com/htmx.org@1.9.10',
-    'https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css',
-    'https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css'
-];
+// Max cache entries per cache type
+const MAX_IMAGE_CACHE = 200;
+const MAX_DATA_CACHE = 50;
 
 // Install event - cache core assets
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME)
-            .then((cache) => {
-                // Cache local assets
-                return cache.addAll(PRECACHE_ASSETS);
-            })
-            .then(() => {
-                // Skip waiting to activate immediately
-                return self.skipWaiting();
-            })
+            .then((cache) => cache.addAll(PRECACHE_ASSETS))
             .catch((error) => {
                 console.error('[SW] Precache failed:', error);
             })
     );
 });
 
-// Activate event - clean up old caches
+// Activate event - clean up old caches, enable navigation preload
 self.addEventListener('activate', (event) => {
     const currentCaches = [CACHE_NAME, DATA_CACHE_NAME];
 
     event.waitUntil(
-        caches.keys()
-            .then((cacheNames) => {
-                return Promise.all(
-                    cacheNames
-                        .filter((name) => name.startsWith('beach-finder-') && !currentCaches.includes(name))
-                        .map((name) => caches.delete(name))
-                );
-            })
-            .then(() => {
-                // Take control of all pages immediately
-                return self.clients.claim();
-            })
+        (async () => {
+            // Enable navigation preload if supported
+            if (self.registration.navigationPreload) {
+                await self.registration.navigationPreload.enable();
+            }
+
+            // Clean up old caches
+            const cacheNames = await caches.keys();
+            await Promise.all(
+                cacheNames
+                    .filter((name) => name.startsWith('beach-finder-') && !currentCaches.includes(name))
+                    .map((name) => caches.delete(name))
+            );
+
+            // Take control of all pages immediately
+            await self.clients.claim();
+        })()
     );
 });
+
+/**
+ * Trim a cache to a maximum number of entries (LRU eviction).
+ */
+async function trimCache(cacheName, maxEntries) {
+    const cache = await caches.open(cacheName);
+    const keys = await cache.keys();
+    if (keys.length > maxEntries) {
+        await cache.delete(keys[0]);
+        return trimCache(cacheName, maxEntries);
+    }
+}
 
 // Fetch event - serve from cache, fallback to network
 self.addEventListener('fetch', (event) => {
@@ -74,6 +80,13 @@ self.addEventListener('fetch', (event) => {
 
     // Skip non-GET requests
     if (event.request.method !== 'GET') {
+        return;
+    }
+
+    // Skip auth endpoints
+    if (url.pathname.startsWith('/auth/') ||
+        url.pathname.includes('login') ||
+        url.pathname.includes('logout')) {
         return;
     }
 
@@ -88,6 +101,7 @@ self.addEventListener('fetch', (event) => {
                             const clone = response.clone();
                             caches.open(DATA_CACHE_NAME).then((cache) => {
                                 cache.put(event.request, clone);
+                                trimCache(DATA_CACHE_NAME, MAX_DATA_CACHE);
                             });
                         }
                         return response;
@@ -120,19 +134,24 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Skip auth endpoints
-    if (url.pathname.startsWith('/auth/') ||
-        url.pathname.includes('login') ||
-        url.pathname.includes('logout')) {
-        return;
-    }
-
-    // For HTML pages - Network first, fallback to cache, then offline page
-    if (event.request.headers.get('Accept')?.includes('text/html')) {
+    // For navigation requests - use preload response if available
+    if (event.request.mode === 'navigate') {
         event.respondWith(
-            fetch(event.request)
-                .then((response) => {
-                    // Clone and cache successful responses
+            (async () => {
+                try {
+                    // Use navigation preload response if available
+                    const preloadResponse = await event.preloadResponse;
+                    if (preloadResponse) {
+                        // Cache the preloaded response
+                        const clone = preloadResponse.clone();
+                        caches.open(CACHE_NAME).then((cache) => {
+                            cache.put(event.request, clone);
+                        });
+                        return preloadResponse;
+                    }
+
+                    // Otherwise fetch normally
+                    const response = await fetch(event.request);
                     if (response.ok) {
                         const clone = response.clone();
                         caches.open(CACHE_NAME).then((cache) => {
@@ -140,16 +159,14 @@ self.addEventListener('fetch', (event) => {
                         });
                     }
                     return response;
-                })
-                .catch(() => {
+                } catch (error) {
                     // Try cache first
-                    return caches.match(event.request)
-                        .then((cached) => {
-                            if (cached) return cached;
-                            // Fallback to offline page
-                            return caches.match('/offline.php');
-                        });
-                })
+                    const cached = await caches.match(event.request);
+                    if (cached) return cached;
+                    // Fallback to offline page
+                    return caches.match('/offline');
+                }
+            })()
         );
         return;
     }
@@ -167,6 +184,7 @@ self.addEventListener('fetch', (event) => {
                                 const clone = response.clone();
                                 caches.open(CACHE_NAME).then((cache) => {
                                     cache.put(event.request, clone);
+                                    trimCache(CACHE_NAME, MAX_IMAGE_CACHE);
                                 });
                             }
                             return response;
@@ -215,28 +233,7 @@ self.addEventListener('message', (event) => {
     }
 });
 
-// Background sync for offline actions (favorites, reviews)
-self.addEventListener('sync', (event) => {
-    if (event.tag === 'sync-favorites') {
-        event.waitUntil(syncFavorites());
-    }
-
-    if (event.tag === 'sync-reviews') {
-        event.waitUntil(syncReviews());
-    }
-});
-
-// Sync pending favorites
-async function syncFavorites() {
-    // This would sync any offline favorite actions
-    // Implementation depends on IndexedDB storage of pending actions
-}
-
-// Sync pending reviews
-async function syncReviews() {
-}
-
-// Push notifications (for future use)
+// Push notifications
 self.addEventListener('push', (event) => {
     if (!event.data) return;
 

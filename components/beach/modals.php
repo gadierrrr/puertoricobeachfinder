@@ -23,19 +23,37 @@
 
 <script <?= cspNonceAttr() ?>>
 // Initialize small map for sidebar.
-// The sidebar sits far below the fold on mobile, so the container is off-screen
-// at init time. iOS Safari measures it as 0-height, and MapLibre's internal
-// auto-resize doesn't always fire. We trigger map.resize() via IntersectionObserver
-// (plus scroll + timer fallbacks) the first time the container becomes visible.
+//
+// Two race conditions must both be handled or the map renders broken on mobile:
+//
+// 1. maplibre-gl.css is loaded via <link rel="preload" as="style"> and only
+//    flipped to rel="stylesheet" once the preload finishes. If we init the map
+//    before that flip happens, none of maplibre's positioning CSS applies —
+//    the marker and attribution fall into normal document flow below the
+//    canvas, spilling outside the container.
+// 2. The sidebar is far below the fold on mobile. iOS Safari can measure the
+//    container as 0-height at init, and MapLibre's internal auto-resize
+//    doesn't always fire, leaving the canvas mis-sized.
+//
+// So we wait for BOTH (a) maplibre-gl.css applied and (b) container has
+// non-zero dimensions, then instantiate. Extra resize() calls on scroll /
+// IntersectionObserver act as belt-and-braces for late layout shifts.
 (function () {
-    function initBeachMap() {
+    function maplibreCssReady() {
+        const links = document.querySelectorAll('link[href*="maplibre-gl"][href*=".css"]');
+        if (links.length === 0) return true; // no CSS link at all — nothing to wait for
+        for (let i = 0; i < links.length; i++) {
+            const l = links[i];
+            if (l.rel === 'stylesheet') return true;
+            // preload finished parsing — .sheet is populated as soon as CSSOM is built
+            if (l.sheet) return true;
+        }
+        return false;
+    }
+
+    function createMap() {
         const mapContainer = document.getElementById('beach-map');
         if (!mapContainer) return;
-        if (typeof maplibregl === 'undefined') {
-            // maplibre-gl JS loads with `defer`; wait a tick on slow connections.
-            setTimeout(initBeachMap, 100);
-            return;
-        }
 
         const lng = <?= json_encode((float) $beach['lng']) ?>;
         const lat = <?= json_encode((float) $beach['lat']) ?>;
@@ -52,10 +70,8 @@
             .setLngLat([lng, lat])
             .addTo(map);
 
-        let resized = false;
         function doResize() {
-            if (resized) return;
-            try { map.resize(); resized = true; } catch (e) {}
+            try { map.resize(); } catch (e) {}
         }
 
         if (typeof IntersectionObserver !== 'undefined') {
@@ -75,10 +91,30 @@
         setTimeout(doResize, 3500);
     }
 
+    function tryInit(attempts) {
+        if (typeof maplibregl === 'undefined' || !maplibreCssReady()) {
+            if (attempts > 100) return; // give up after ~10s
+            setTimeout(function () { tryInit(attempts + 1); }, 100);
+            return;
+        }
+        const mapContainer = document.getElementById('beach-map');
+        if (!mapContainer) return;
+        // Wait until the container has measurable height — avoids iOS Safari
+        // init-with-zero-height state.
+        if (mapContainer.offsetHeight === 0) {
+            if (attempts > 100) { createMap(); return; } // give up waiting, init anyway
+            setTimeout(function () { tryInit(attempts + 1); }, 100);
+            return;
+        }
+        createMap();
+    }
+
+    function start() { tryInit(0); }
+
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initBeachMap);
+        document.addEventListener('DOMContentLoaded', start);
     } else {
-        initBeachMap();
+        start();
     }
 })();
 </script>
