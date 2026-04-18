@@ -223,7 +223,8 @@ include APP_ROOT . '/components/header.php';
             <?php
                 $beachNamesList = [];
                 foreach (array_slice($topBeaches, 0, 3) as $tb) {
-                    $beachNamesList[] = '<strong>' . h($tb['name']) . '</strong>';
+                    $beachUrl = routeUrl('beach_detail', $lang, ['slug' => $tb['slug']]);
+                    $beachNamesList[] = '<a href="' . h($beachUrl) . '" class="font-semibold text-ocean-600 hover:text-sunset-400 underline transition-colors">' . h($tb['name']) . '</a>';
                 }
                 $beachNames = implode(', ', $beachNamesList);
             ?>
@@ -259,6 +260,49 @@ include APP_ROOT . '/components/header.php';
                 <?php endforeach; ?>
             </div>
         </div>
+
+        <!-- Nearby Areas -->
+        <?php
+        // Find nearby municipalities by average beach coordinates
+        $nearbyMunicipalities = query("
+            SELECT m.municipality, COUNT(*) as beach_count,
+                   AVG(m.lat) as avg_lat, AVG(m.lng) as avg_lng
+            FROM beaches m
+            WHERE m.publish_status = 'published'
+              AND m.municipality <> :municipality
+              AND m.lat IS NOT NULL
+            GROUP BY m.municipality
+            HAVING beach_count > 0
+            ORDER BY (
+                (AVG(m.lat) - :center_lat) * (AVG(m.lat) - :center_lat) +
+                (AVG(m.lng) - :center_lng) * (AVG(m.lng) - :center_lng)
+            ) ASC
+            LIMIT 5
+        ", [
+            ':municipality' => $municipality,
+            ':center_lat' => $beaches[0]['lat'] ?? 18.2,
+            ':center_lng' => $beaches[0]['lng'] ?? -66.5,
+        ]);
+        if (!empty($nearbyMunicipalities)):
+        ?>
+        <div class="mt-12 max-w-4xl">
+            <h2 class="text-2xl font-bold text-warm-900 mb-4 flex items-center gap-2">
+                <i data-lucide="map" class="w-6 h-6 text-sunset-400" aria-hidden="true"></i>
+                <?= h($lang === 'es' ? 'Áreas Cercanas' : 'Nearby Areas') ?>
+            </h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                <?php foreach ($nearbyMunicipalities as $nm):
+                    $nmSlug = strtolower(str_replace(' ', '-', $nm['municipality']));
+                ?>
+                <a href="<?= h(routeUrl('municipality', $lang, ['municipality' => $nmSlug])) ?>"
+                   class="flex flex-col items-center gap-1 p-4 rounded-xl bg-warm-50 hover:bg-sunset-400/10 border border-warm-200 hover:border-sunset-400/30 transition-colors text-center">
+                    <span class="font-semibold text-warm-900 text-sm"><?= h($nm['municipality']) ?></span>
+                    <span class="text-xs text-warm-500"><?= h($nm['beach_count']) ?> <?= h($lang === 'es' ? 'playas' : 'beaches') ?></span>
+                </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php endif; ?>
     </div>
 </section>
 

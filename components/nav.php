@@ -54,7 +54,7 @@ if (!is_string($navMapHref) || $navMapHref === '') {
             <div class="relative" id="beaches-dropdown">
                 <button type="button"
                         data-action="toggleBeachesDropdown"
-                        class="flex items-center gap-1 text-sm text-white/70 hover:text-sunset-400 px-3 py-1.5 transition-colors"
+                        class="flex items-center gap-1 text-sm font-medium text-white/70 hover:text-sunset-400 px-3 py-1.5 transition-colors"
                         role="menuitem"
                         aria-expanded="false"
                         aria-haspopup="true">
@@ -63,23 +63,23 @@ if (!is_string($navMapHref) || $navMapHref === '') {
                 </button>
                 <div id="beaches-dropdown-menu" class="hidden absolute left-0 top-full mt-3 w-56 bg-ocean-800 rounded-xl shadow-glass border border-ocean-700 py-2 z-50">
                     <div class="px-3 py-2 text-xs text-white/40 uppercase tracking-wider"><?= h(__('nav.find_by_activity')) ?></div>
-                    <a href="<?= h($homeFilterHref('surfing')) ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-white/80 hover:text-sunset-400 hover:bg-white/5 transition-colors">
+                    <a href="<?= h(getTagPageUrl('surfing', $currentLang)) ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-white/80 hover:text-sunset-400 hover:bg-white/5 transition-colors">
                         <span class="text-lg">🏄‍♂️</span>
                         <span><?= h(__('tags.surfing')) ?></span>
                     </a>
-                    <a href="<?= h($homeFilterHref('snorkeling')) ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-white/80 hover:text-sunset-400 hover:bg-white/5 transition-colors">
+                    <a href="<?= h(getTagPageUrl('snorkeling', $currentLang)) ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-white/80 hover:text-sunset-400 hover:bg-white/5 transition-colors">
                         <span class="text-lg">🤿</span>
                         <span><?= h(__('tags.snorkeling')) ?></span>
                     </a>
-                    <a href="<?= h($homeFilterHref('family-friendly')) ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-white/80 hover:text-sunset-400 hover:bg-white/5 transition-colors">
+                    <a href="<?= h(getTagPageUrl('family-friendly', $currentLang)) ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-white/80 hover:text-sunset-400 hover:bg-white/5 transition-colors">
                         <span class="text-lg">👨‍👩‍👧</span>
                         <span><?= h(__('tags.family-friendly')) ?></span>
                     </a>
-                    <a href="<?= h($homeFilterHref('secluded')) ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-white/80 hover:text-sunset-400 hover:bg-white/5 transition-colors">
+                    <a href="<?= h(getTagPageUrl('secluded', $currentLang)) ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-white/80 hover:text-sunset-400 hover:bg-white/5 transition-colors">
                         <span class="text-lg">🌴</span>
                         <span><?= h(__('tags.secluded')) ?></span>
                     </a>
-                    <a href="<?= h($homeFilterHref('swimming')) ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-white/80 hover:text-sunset-400 hover:bg-white/5 transition-colors">
+                    <a href="<?= h(getTagPageUrl('swimming', $currentLang)) ?>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-white/80 hover:text-sunset-400 hover:bg-white/5 transition-colors">
                         <span class="text-lg">🏊</span>
                         <span><?= h(__('tags.swimming')) ?></span>
                     </a>
@@ -92,10 +92,10 @@ if (!is_string($navMapHref) || $navMapHref === '') {
                 </div>
             </div>
 
-            <a href="/guides" class="text-sm text-white/70 hover:text-sunset-400 px-3 py-1.5 transition-colors" role="menuitem"><?= h(__('nav.guides')) ?></a>
-            <a href="<?= h($localizedQuiz) ?>" class="text-sm text-white/70 hover:text-sunset-400 px-3 py-1.5 transition-colors" role="menuitem"><?= h(__('nav.quiz')) ?></a>
+            <a href="/guides" class="text-sm font-medium text-white/70 hover:text-sunset-400 px-3 py-1.5 transition-colors" role="menuitem"><?= h(__('nav.guides')) ?></a>
+            <a href="<?= h($localizedQuiz) ?>" class="text-sm font-medium text-white/70 hover:text-sunset-400 px-3 py-1.5 transition-colors" role="menuitem"><?= h(__('nav.quiz')) ?></a>
             <a href="<?= h($navMapHref) ?>"
-               class="text-sm text-white/70 hover:text-sunset-400 px-3 py-1.5 transition-colors"
+               class="text-sm font-medium text-white/70 hover:text-sunset-400 px-3 py-1.5 transition-colors"
                role="menuitem"
                data-context-map-link><?= h(__('nav.map')) ?></a>
         </div>
@@ -106,7 +106,7 @@ if (!is_string($navMapHref) || $navMapHref === '') {
             <div class="relative" id="lang-dropdown">
                 <button type="button"
                         data-action="toggleLangDropdown"
-                        class="flex items-center gap-1 px-2 py-1.5 text-sm text-white/70 hover:text-white rounded-lg transition-colors"
+                        class="flex items-center gap-1 px-2 py-1.5 text-sm font-medium text-white/70 hover:text-white rounded-lg transition-colors"
                         aria-label="<?= h(__('nav.language')) ?>"
                         aria-expanded="false"
                         aria-haspopup="true">
@@ -168,19 +168,19 @@ if (!is_string($navMapHref) || $navMapHref === '') {
         <div class="px-4 py-4 space-y-1">
             <!-- Beaches Section -->
             <div class="text-xs text-white/40 uppercase tracking-wider px-3 pt-2 pb-1"><?= h(__('nav.find_beaches')) ?></div>
-            <a href="<?= h($homeFilterHref('surfing')) ?>" class="flex items-center gap-3 text-white/80 hover:text-sunset-400 py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
+            <a href="<?= h(getTagPageUrl('surfing', $currentLang)) ?>" class="flex items-center gap-3 text-white/80 hover:text-sunset-400 py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
                 <span class="text-lg">🏄‍♂️</span>
                 <span><?= h(__('tags.surfing')) ?></span>
             </a>
-            <a href="<?= h($homeFilterHref('snorkeling')) ?>" class="flex items-center gap-3 text-white/80 hover:text-sunset-400 py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
+            <a href="<?= h(getTagPageUrl('snorkeling', $currentLang)) ?>" class="flex items-center gap-3 text-white/80 hover:text-sunset-400 py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
                 <span class="text-lg">🤿</span>
                 <span><?= h(__('tags.snorkeling')) ?></span>
             </a>
-            <a href="<?= h($homeFilterHref('family-friendly')) ?>" class="flex items-center gap-3 text-white/80 hover:text-sunset-400 py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
+            <a href="<?= h(getTagPageUrl('family-friendly', $currentLang)) ?>" class="flex items-center gap-3 text-white/80 hover:text-sunset-400 py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
                 <span class="text-lg">👨‍👩‍👧</span>
                 <span><?= h(__('tags.family-friendly')) ?></span>
             </a>
-            <a href="<?= h($homeFilterHref('secluded')) ?>" class="flex items-center gap-3 text-white/80 hover:text-sunset-400 py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
+            <a href="<?= h(getTagPageUrl('secluded', $currentLang)) ?>" class="flex items-center gap-3 text-white/80 hover:text-sunset-400 py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
                 <span class="text-lg">🌴</span>
                 <span><?= h(__('tags.secluded')) ?></span>
             </a>

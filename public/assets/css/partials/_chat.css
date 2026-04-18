@@ -12,6 +12,7 @@
     flex-direction: column;
     align-items: flex-end;
     gap: 0.75rem;
+    pointer-events: none;
 }
 
 .chat-fab {
@@ -27,6 +28,7 @@
     justify-content: center;
     position: relative;
     transition: transform 0.2s, box-shadow 0.2s;
+    pointer-events: auto;
 }
 .chat-fab:hover {
     transform: scale(1.08);
@@ -38,7 +40,13 @@
 .chat-fab svg {
     width: 24px;
     height: 24px;
-    color: #fff;
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+    fill: none !important;
+}
+.chat-fab svg * {
+    stroke: #ffffff !important;
+    fill: none !important;
 }
 
 /* --- Badge --- */
@@ -86,6 +94,7 @@
 .chat-panel.open {
     opacity: 1;
     transform: translateY(0) scale(1);
+    pointer-events: auto;
 }
 
 /* --- Panel Header --- */

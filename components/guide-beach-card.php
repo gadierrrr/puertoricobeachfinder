@@ -94,8 +94,14 @@ $traits = array_slice(array_values(array_unique($traits)), 0, 5);
             </div>
             <?php endif; ?>
             <div class="flex gap-2 mt-auto pt-1">
-                <a href="/beach/<?= h($slug) ?>" class="inline-flex items-center justify-center gap-1.5 text-sm font-semibold px-4 py-2 rounded-lg transition-colors no-underline bg-sunset-400 text-ocean-900 hover:bg-sunset-300">View Details</a>
-                <a href="<?= h(getDirectionsUrl($beach)) ?>" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 text-warm-700 text-sm font-medium px-4 py-2 rounded-lg transition-colors no-underline bg-warm-100 border border-warm-200 hover:bg-warm-200">Directions</a>
+                <a href="/beach/<?= h($slug) ?>" class="inline-flex items-center justify-center gap-1.5 text-sm font-semibold px-4 py-2 min-h-[44px] rounded-lg transition-colors no-underline bg-ocean-600 text-white hover:bg-ocean-700">
+                    <i data-lucide="book-open" class="w-4 h-4" aria-hidden="true"></i>
+                    View Details
+                </a>
+                <a href="<?= h(getDirectionsUrl($beach)) ?>" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 text-warm-700 text-sm font-medium px-4 py-2 min-h-[44px] rounded-lg transition-colors no-underline bg-white border border-warm-200 hover:bg-warm-100">
+                    <i data-lucide="navigation" class="w-4 h-4" aria-hidden="true"></i>
+                    Directions
+                </a>
             </div>
         </div>
     </div>

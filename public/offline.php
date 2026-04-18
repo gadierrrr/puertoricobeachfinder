@@ -14,20 +14,12 @@ $pageTitle = 'Offline';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Offline | Puerto Rico Beach Finder</title>
-    <script src="https://cdn.tailwindcss.com" <?= cspNonceAttr() ?>></script>
-    <style>
-        .wave {
-            animation: wave 2s ease-in-out infinite;
-        }
-        @keyframes wave {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-    </style>
+    <link rel="stylesheet" href="/assets/css/tailwind.min.css">
+    <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
 <body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
     <div class="text-center max-w-md">
-        <div class="text-8xl mb-6 wave">🏖️</div>
+        <div class="text-8xl mb-6 animate-bounce">🏖️</div>
 
         <h1 class="text-3xl font-bold text-gray-900 mb-4">
             You're Offline

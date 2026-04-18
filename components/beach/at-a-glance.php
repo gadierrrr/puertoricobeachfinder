@@ -175,11 +175,11 @@ $summaryText = generateAtAGlanceSummary($beach, $lang);
         <!-- Activity/amenity grid -->
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
             <?php foreach ($glanceCells as $cell): ?>
-            <div class="flex items-center gap-2.5 px-3 py-2 rounded-lg" style="background: rgba(245,240,235,0.6);">
-                <span class="text-lg flex-shrink-0"><?= $cell['icon'] ?></span>
-                <div class="min-w-0">
+            <div class="flex items-start gap-2.5 px-3 py-2.5 rounded-lg" style="background: rgba(245,240,235,0.6);">
+                <span class="text-lg flex-shrink-0 leading-tight"><?= $cell['icon'] ?></span>
+                <div class="min-w-0 flex-1">
                     <div class="text-[10px] uppercase tracking-wide text-warm-500"><?= h($cell['label']) ?></div>
-                    <div class="text-[13px] font-semibold text-warm-700 truncate"><?= h($cell['value']) ?></div>
+                    <div class="text-[13px] font-semibold text-warm-700 leading-snug break-words"><?= h($cell['value']) ?></div>
                 </div>
             </div>
             <?php endforeach; ?>

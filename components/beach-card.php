@@ -6,7 +6,7 @@
  * @param float|null $distance - Distance in meters (if user location available)
  * @param bool $isFavorite - Whether the beach is in user's favorites
  * @param array|null $crowdData - Crowd level data (optional)
- * @param array|null $weatherData - Weather data (optional)
+ * @param array|null $weatherData - Weather data (unused, kept for call-site compatibility)
  */
 
 require_once __DIR__ . '/../inc/helpers.php';
@@ -32,7 +32,6 @@ $beach = $beach ?? [];
 $distance = $distance ?? null;
 $isFavorite = $isFavorite ?? false;
 $crowdData = $crowdData ?? null;
-$weatherData = $weatherData ?? null;
 
 $slug = $beach['slug'] ?? '';
 $name = $beach['name'] ?? $cardT('beach.unknown', 'Unknown Beach');
@@ -57,14 +56,15 @@ $scoreBadgeClass = $googleRating ? getScoreBadgeClass((float)$googleRating) : ''
 // Get responsive image attributes
 $imageAttrs = getResponsiveImageAttrs($coverImage);
 
+// Build locale-aware beach detail URL
+$_cardLang = function_exists('getCurrentLanguage') ? getCurrentLanguage() : 'en';
+$beachUrl = function_exists('routeUrl')
+    ? routeUrl('beach_detail', $_cardLang, ['slug' => $slug])
+    : '/beach/' . $slug;
+
 // Get WebP version if available
 $webpImage = getWebPImage($coverImage);
 
-// Get beach conditions
-$sargassum = $beach['sargassum'] ?? null;
-$surf = $beach['surf'] ?? null;
-$wind = $beach['wind'] ?? null;
-$hasConditions = $sargassum || $surf || $wind;
 ?>
 
 <article class="beach-card relative group rounded-2xl overflow-hidden bg-white shadow-card border border-warm-200 hover:border-sunset-400/30 transition-all duration-300 cursor-pointer"
@@ -145,104 +145,63 @@ $hasConditions = $sargassum || $surf || $wind;
         <!-- Bottom content overlay -->
         <div class="absolute bottom-0 left-0 right-16 p-4 z-20 text-shadow-hero">
             <span class="text-xs text-sunset-400 uppercase tracking-wider font-medium"><?= h($municipality) ?></span>
-            <h3 class="text-lg font-bold text-white mt-0.5 line-clamp-1"><?= h($name) ?></h3>
+            <h3 class="text-lg font-bold text-white mt-0.5 line-clamp-1"><a href="<?= h($beachUrl) ?>" class="text-white hover:text-sunset-400 no-underline" data-action="noop" data-action-stop><?= h($name) ?></a></h3>
         </div>
     </div>
 
     <!-- Card Actions - Dark glass style -->
     <div class="p-4 bg-white">
-        <!-- Live Data: Conditions, Weather & Crowd -->
-        <div class="flex flex-wrap items-center gap-2 mb-3 <?= (!$hasConditions && !$crowdData) ? 'weather-row-placeholder' : '' ?>"
-             data-beach-id="<?= h($beach['id']) ?>">
-            <!-- Weather badge (loaded async via JS) -->
-            <span class="weather-badge inline-flex items-center gap-1 text-xs bg-warm-100 text-warm-600 px-2 py-0.5 rounded-full hidden"
-                  data-beach-id="<?= h($beach['id']) ?>">
-                <span class="weather-icon">🌤️</span>
-                <span class="weather-temp font-medium"></span>
-            </span>
-
-            <?php if ($crowdData): ?>
-            <?php
-            $crowdColors = [
-                'green' => 'bg-green-500/20 text-green-400',
-                'yellow' => 'bg-yellow-500/20 text-yellow-400',
-                'orange' => 'bg-orange-500/20 text-orange-400',
-                'red' => 'bg-red-500/20 text-red-400',
-                'gray' => 'bg-white/10 text-white/60'
-            ];
-            $crowdColorClass = $crowdColors[$crowdData['color']] ?? $crowdColors['gray'];
-            ?>
+        <?php if ($crowdData): ?>
+        <?php
+        $crowdColors = [
+            'green' => 'bg-green-500/20 text-green-400',
+            'yellow' => 'bg-yellow-500/20 text-yellow-400',
+            'orange' => 'bg-orange-500/20 text-orange-400',
+            'red' => 'bg-red-500/20 text-red-400',
+            'gray' => 'bg-white/10 text-white/60'
+        ];
+        $crowdColorClass = $crowdColors[$crowdData['color']] ?? $crowdColors['gray'];
+        ?>
+        <div class="flex items-center gap-2 mb-3">
             <span class="inline-flex items-center gap-1 text-xs <?= $crowdColorClass ?> px-2 py-0.5 rounded-full" title="<?= h($crowdData['time_label'] ?? '') ?>">
                 <span>👥</span>
                 <span class="font-medium"><?= h($crowdData['label'] ?? $cardT('beach.unknown_crowd', 'Unknown')) ?></span>
             </span>
-            <?php endif; ?>
-
-            <?php if ($hasConditions): ?>
-            <!-- Condition Indicators -->
-            <div class="condition-indicators flex items-center gap-1.5 ml-auto" aria-label="<?= h($cardT('beach.beach_conditions', 'Beach Conditions')) ?>">
-                <?php if ($sargassum): ?>
-                <span class="condition-dot <?= getConditionDotClass($sargassum) ?>"
-                      title="<?= h($cardT('beach.condition_sargassum', 'Sargassum')) ?>: <?= h(getConditionLabel('sargassum', $sargassum)) ?>"
-                      aria-label="<?= h($cardT('beach.condition_sargassum', 'Sargassum')) ?>: <?= h(getConditionLabel('sargassum', $sargassum)) ?>">
-                    <i data-lucide="leaf" class="w-3 h-3" aria-hidden="true"></i>
-                </span>
-                <?php endif; ?>
-                <?php if ($surf): ?>
-                <span class="condition-dot <?= getConditionDotClass($surf) ?>"
-                      title="<?= h($cardT('beach.condition_surf', 'Surf')) ?>: <?= h(getConditionLabel('surf', $surf)) ?>"
-                      aria-label="<?= h($cardT('beach.condition_surf', 'Surf')) ?>: <?= h(getConditionLabel('surf', $surf)) ?>">
-                    <i data-lucide="waves" class="w-3 h-3" aria-hidden="true"></i>
-                </span>
-                <?php endif; ?>
-                <?php if ($wind): ?>
-                <span class="condition-dot <?= getConditionDotClass($wind) ?>"
-                      title="<?= h($cardT('beach.condition_wind', 'Wind')) ?>: <?= h(getConditionLabel('wind', $wind)) ?>"
-                      aria-label="<?= h($cardT('beach.condition_wind', 'Wind')) ?>: <?= h(getConditionLabel('wind', $wind)) ?>">
-                    <i data-lucide="wind" class="w-3 h-3" aria-hidden="true"></i>
-                </span>
-                <?php endif; ?>
-            </div>
-            <?php endif; ?>
         </div>
+        <?php endif; ?>
 
-        <!-- Action Buttons - Single Row -->
-        <div class="card-actions flex gap-2">
+        <!-- Action Buttons - Primary + Split Secondary -->
+        <div class="card-actions flex flex-col gap-2">
             <button type="button"
                     data-action-stop data-action="openBeachDrawer" data-action-args='["<?= h($beach['id']) ?>"]'
-                    class="flex-1 flex items-center justify-center gap-1.5 bg-ocean-500 hover:bg-ocean-600 text-white text-sm font-semibold h-10 px-3 rounded-lg transition-colors">
+                    class="w-full flex items-center justify-center gap-1.5 bg-ocean-500 hover:bg-ocean-600 text-white text-sm font-semibold h-10 px-3 rounded-lg transition-colors">
                 <i data-lucide="book-open" class="w-4 h-4 shrink-0" aria-hidden="true"></i>
                 <span><?= h($cardT('beach.details', 'Details')) ?></span>
             </button>
-            <a href="<?= h(getDirectionsUrl($beach)) ?>"
-               target="_blank"
-               rel="noopener noreferrer"
-               data-action-stop data-action="noop" data-on="click"
-               data-bf-track="directions"
-               data-bf-beach-id="<?= h($beach['id']) ?>"
-               data-bf-beach-slug="<?= h($slug) ?>"
-               data-bf-municipality="<?= h($municipality) ?>"
-               data-bf-source="card"
-               class="flex-1 flex items-center justify-center gap-1.5 bg-warm-100 hover:bg-warm-200 text-warm-700 text-sm font-medium h-10 px-3 rounded-lg transition-colors border border-warm-200"
-               aria-label="<?= h($cardT('beach.go', 'Go')) ?> <?= h($name) ?>">
-                <i data-lucide="navigation" class="w-4 h-4 shrink-0" aria-hidden="true"></i>
-                <span><?= h($cardT('beach.go', 'Go')) ?></span>
-            </a>
-            <button type="button"
-                    data-action-stop data-action="toggleCompare" data-action-args='["<?= h($beach['id']) ?>","<?= h(addslashes($name)) ?>","<?= h($coverImage) ?>","__this__"]'
-                    class="compare-btn flex-none flex items-center justify-center bg-warm-100 hover:bg-warm-200 text-warm-700 text-sm h-10 w-10 rounded-lg transition-colors border border-warm-200"
-                    aria-label="<?= h($cardT('beach.compare', 'Compare')) ?> <?= h($name) ?>"
-                    title="<?= h($cardT('beach.compare', 'Compare')) ?>"
-                    data-beach-id="<?= h($beach['id']) ?>">
-                <i data-lucide="git-compare" class="w-4 h-4" aria-hidden="true"></i>
-            </button>
-            <button type="button"
-                    data-action-stop data-action="shareBeach" data-action-args='["<?= h($slug) ?>","<?= h(addslashes($name)) ?>"]'
-                    class="flex-none flex items-center justify-center bg-warm-100 hover:bg-warm-200 text-warm-700 text-sm h-10 w-10 rounded-lg transition-colors border border-warm-200"
-                    aria-label="<?= h($cardT('common.share', 'Share')) ?> <?= h($name) ?>"
-                    title="<?= h($cardT('common.share', 'Share')) ?>">
-                <i data-lucide="share-2" class="w-4 h-4" aria-hidden="true"></i>
-            </button>
+            <div class="flex gap-2">
+                <a href="<?= h(getDirectionsUrl($beach)) ?>"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   data-action-stop data-action="noop" data-on="click"
+                   data-bf-track="directions"
+                   data-bf-beach-id="<?= h($beach['id']) ?>"
+                   data-bf-beach-slug="<?= h($slug) ?>"
+                   data-bf-municipality="<?= h($municipality) ?>"
+                   data-bf-source="card"
+                   class="flex-1 flex items-center justify-center gap-1.5 bg-warm-100 hover:bg-warm-200 text-warm-700 text-sm font-medium h-10 px-3 rounded-lg transition-colors border border-warm-200"
+                   aria-label="<?= h($cardT('beach.directions', 'Directions')) ?> <?= h($name) ?>">
+                    <i data-lucide="compass" class="w-4 h-4 shrink-0" aria-hidden="true"></i>
+                    <span><?= h($cardT('beach.directions', 'Directions')) ?></span>
+                </a>
+                <button type="button"
+                        data-action-stop data-action="shareBeach" data-action-args='["<?= h($slug) ?>","<?= h(addslashes($name)) ?>"]'
+                        class="flex-1 flex items-center justify-center gap-1.5 bg-warm-100 hover:bg-warm-200 text-warm-700 text-sm font-medium h-10 px-3 rounded-lg transition-colors border border-warm-200"
+                        aria-label="<?= h($cardT('common.share', 'Share')) ?> <?= h($name) ?>"
+                        title="<?= h($cardT('common.share', 'Share')) ?>">
+                    <i data-lucide="share-2" class="w-4 h-4 shrink-0" aria-hidden="true"></i>
+                    <span><?= h($cardT('common.share', 'Share')) ?></span>
+                </button>
+            </div>
         </div>
     </div>
 </article>

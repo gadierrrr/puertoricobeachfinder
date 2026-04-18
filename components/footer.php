@@ -243,6 +243,15 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
     window.BF_CONFIG = Object.assign({}, window.BF_CONFIG || {}, {
         appEnv: <?= json_encode((string) appEnv()) ?>
     });
+    <?php if (isAuthenticated() && isset($_SESSION['user_id'])): ?>
+    // Link PostHog session to authenticated user for user-level analytics
+    if (window.posthog && typeof window.posthog.identify === 'function') {
+        window.posthog.identify(<?= json_encode((string)$_SESSION['user_id']) ?>, {
+            email: <?= json_encode((string)($_SESSION['user_email'] ?? '')) ?>,
+            name: <?= json_encode((string)($_SESSION['user_name'] ?? '')) ?>
+        });
+    }
+    <?php endif; ?>
     </script>
     <!-- App JavaScript (defer for non-blocking load) -->
     <script defer src="/assets/js/app.min.js?v=2.0" <?= cspNonceAttr() ?>></script>
@@ -271,6 +280,13 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
     <script <?= cspNonceAttr() ?>>
     // Register service worker
     if ('serviceWorker' in navigator) {
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (refreshing) return;
+            refreshing = true;
+            window.location.reload();
+        });
+
         window.addEventListener('load', async () => {
             try {
                 const registration = await navigator.serviceWorker.register('/sw.js');
@@ -283,13 +299,25 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
                             // New version available
                             if (confirm((window.BF_STRINGS || {}).sw_update || 'A new version is available! Reload to update?')) {
                                 newWorker.postMessage('skipWaiting');
-                                window.location.reload();
+                                // Reload happens via controllerchange listener above
                             }
                         }
                     });
                 });
             } catch (error) {
                 console.error('SW registration failed:', error);
+            }
+        });
+
+        // Offline/online indicators
+        window.addEventListener('offline', () => {
+            if (typeof showToast === 'function') {
+                showToast('You are offline. Some features may be unavailable.', 'warning');
+            }
+        });
+        window.addEventListener('online', () => {
+            if (typeof showToast === 'function') {
+                showToast('Back online!', 'success', 3000);
             }
         });
     }

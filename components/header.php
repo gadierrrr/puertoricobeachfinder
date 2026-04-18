@@ -21,7 +21,7 @@ $currentLang = getCurrentLanguage();
 $allowedBodyVariants = ['default', 'collection-light', 'collection-dark'];
 $requestedBodyVariant = isset($bodyVariant) ? (string) $bodyVariant : 'default';
 $bodyVariant = in_array($requestedBodyVariant, $allowedBodyVariants, true) ? $requestedBodyVariant : 'default';
-$bodyClasses = 'min-h-screen flex flex-col font-sans';
+$bodyClasses = trim(($bodyClasses ?? '') . ' min-h-screen flex flex-col font-sans');
 if ($bodyVariant === 'collection-light') {
     $bodyClasses .= ' collection-light bg-sand-50 text-warm-900';
     $htmlTheme = 'light';
@@ -48,10 +48,10 @@ if ($bodyVariant === 'collection-light') {
     <meta name="theme-color" content="#105258">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Beach Finder">
     <link rel="manifest" href="/manifest.json">
-    <link rel="apple-touch-icon" href="/assets/icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/icon-180x180.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/icons/icon-152x152.png">
     <link rel="icon" href="/favicon.ico" sizes="32x32">
     <link rel="alternate" type="application/rss+xml" title="Puerto Rico Beach Finder" href="/feed.xml">
     <link rel="icon" href="/assets/icons/icon-96x96.png" sizes="96x96" type="image/png">
@@ -117,6 +117,21 @@ if ($bodyVariant === 'collection-light') {
             '/beaches-near-san-juan.php',
             '/beaches-near-san-juan-airport.php',
             '/hidden-beaches-puerto-rico.php',
+            '/best-diving-beaches.php',
+            '/best-fishing-beaches.php',
+            '/best-accessible-beaches.php',
+            '/best-scenic-beaches.php',
+            '/best-swimming-beaches.php',
+            '/best-camping-beaches.php',
+            '/best-calm-water-beaches.php',
+            '/best-secluded-beaches.php',
+            '/best-beaches-cabo-rojo.php',
+            '/best-beaches-rincon.php',
+            '/best-beaches-isabela.php',
+            '/best-beaches-fajardo.php',
+            '/best-beaches-vieques.php',
+            '/best-beaches-culebra.php',
+            '/best-beaches-luquillo.php',
             '/quiz.php',
             '/quiz-results.php',
             '/compare.php',
@@ -210,6 +225,13 @@ if ($bodyVariant === 'collection-light') {
         posthog.init('phc_vcMhXo3ENA9N3W7hU7sPZvvvMbtojcG38uk4rMGPPwmD', {
             api_host: 'https://t.puertoricobeachfinder.com',
             person_profiles: 'identified_only',
+            autocapture: true,
+            capture_pageview: true,
+            capture_pageleave: true,
+            session_recording: {
+                maskAllInputs: true,
+                maskTextSelector: '[data-ph-mask]'
+            }
         })
     </script>
 
@@ -231,15 +253,15 @@ if ($bodyVariant === 'collection-light') {
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
     <!-- Preload critical CSS -->
-    <link rel="preload" href="/assets/css/tailwind.min.css?v=3.6" as="style">
-    <link rel="preload" href="/assets/css/styles.css?v=4.2" as="style">
+    <link rel="preload" href="/assets/css/tailwind.min.css?v=3.7" as="style">
+    <link rel="preload" href="/assets/css/styles.css?v=4.7" as="style">
 
     <!-- DM Sans + DM Serif Display Fonts - loaded asynchronously to avoid render blocking -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" as="style" data-lazy-style>
     <noscript><link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"></noscript>
 
     <!-- Tailwind CSS (local build - no render-blocking JS) -->
-    <link rel="stylesheet" href="/assets/css/tailwind.min.css?v=3.6">
+    <link rel="stylesheet" href="/assets/css/tailwind.min.css?v=3.7">
 
     <?php if (!isset($skipMapCSS) || !$skipMapCSS): ?>
     <!-- MapLibre GL CSS - loaded asynchronously to avoid render blocking -->
@@ -263,7 +285,7 @@ if ($bodyVariant === 'collection-light') {
     <script src="/assets/js/csp-bindings.js" <?= cspNonceAttr() ?>></script>
 
     <!-- Custom styles -->
-    <link rel="stylesheet" href="/assets/css/styles.css?v=4.2">
+    <link rel="stylesheet" href="/assets/css/styles.css?v=4.7">
 
     <!-- Deferred scripts (non-blocking) -->
     <script defer

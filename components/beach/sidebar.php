@@ -1,17 +1,17 @@
 <?php
 /**
  * Beach Detail: Sidebar (Right Column)
- * Weather widget, current conditions, crowd level, map, amenities, practical info.
+ * Weather widget, map, amenities, practical info.
  *
- * Expects: $beach, $lang, $crowdLevel, $sunTimes
+ * Expects: $beach, $lang, $sunTimes
  */
 ?>
             <!-- Right Column: Sidebar -->
         <div class="lg:w-[37%] mt-8 lg:mt-0">
             <div class="lg:sticky lg:top-24 space-y-4">
 
-                <!-- Weather Widget (loaded client-side) -->
-                <div class="beach-detail-card p-4" id="weather-widget-container" style="max-height: 200px; overflow: hidden;"
+                <!-- Weather Widget (loaded client-side) — desktop only; mobile uses .weather-strip in beach.php -->
+                <div class="beach-detail-card p-4 hidden lg:block" id="weather-widget-container" style="max-height: 200px; overflow: hidden;"
                      data-lat="<?= h($beach['lat']) ?>" data-lng="<?= h($beach['lng']) ?>">
                     <div class="animate-pulse">
                         <div class="flex items-center justify-between mb-3">
@@ -24,95 +24,6 @@
                             <div class="h-14 bg-warm-100 rounded"></div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Current Conditions -->
-                <?php if ($beach['sargassum'] || $beach['surf'] || $beach['wind']): ?>
-                <div class="beach-detail-card p-4">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="font-bold text-warm-900 text-sm"><?= h(__('beach.conditions')) ?></h3>
-                        <?php if ($beach['updated_at']): ?>
-                        <span class="text-xs text-warm-500"><?= h(timeAgo($beach['updated_at'])) ?></span>
-                        <?php endif; ?>
-                    </div>
-                    <div class="space-y-2">
-                        <?php if ($beach['sargassum']): ?>
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-warm-500 inline-flex items-center gap-1.5">
-                                <i data-lucide="leaf" class="w-3.5 h-3.5" aria-hidden="true"></i><?= __('beach.condition_sargassum') ?>
-                            </span>
-                            <span class="<?= getConditionClass($beach['sargassum'], 'sargassum') ?> px-2 py-0.5 rounded text-xs">
-                                <?= h(getConditionLabel('sargassum', $beach['sargassum'])) ?>
-                            </span>
-                        </div>
-                        <?php endif; ?>
-                        <?php if ($beach['surf']): ?>
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-warm-500 inline-flex items-center gap-1.5">
-                                <i data-lucide="waves" class="w-3.5 h-3.5" aria-hidden="true"></i><?= __('beach.condition_surf') ?>
-                            </span>
-                            <span class="<?= getConditionClass($beach['surf'], 'surf') ?> px-2 py-0.5 rounded text-xs">
-                                <?= h(getConditionLabel('surf', $beach['surf'])) ?>
-                            </span>
-                        </div>
-                        <?php endif; ?>
-                        <?php if ($beach['wind']): ?>
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-warm-500 inline-flex items-center gap-1.5">
-                                <i data-lucide="wind" class="w-3.5 h-3.5" aria-hidden="true"></i><?= __('beach.condition_wind') ?>
-                            </span>
-                            <span class="<?= getConditionClass($beach['wind'], 'wind') ?> px-2 py-0.5 rounded text-xs">
-                                <?= h(getConditionLabel('wind', $beach['wind'])) ?>
-                            </span>
-                        </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-                <?php endif; ?>
-
-                <!-- Live Updates / Crowd -->
-                <div class="beach-detail-card p-4">
-                    <?php if ($crowdLevel): ?>
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="font-bold text-warm-900 text-sm flex items-center gap-1.5">
-                            <i data-lucide="radio" class="w-3.5 h-3.5 text-green-400" aria-hidden="true"></i>
-                            <?= h(__('beach.live_updates')) ?>
-                        </h3>
-                        <button data-action="openCheckinModal" data-action-args='["<?= h($beach['id']) ?>","<?= h(addslashes($beach['name'])) ?>"]'
-                                class="text-xs <?= isAuthenticated() ? 'bg-green-600 hover:bg-green-700 text-warm-900' : 'bg-warm-100 hover:bg-warm-200 text-warm-900' ?> px-2 py-1 rounded font-medium transition-colors border border-warm-200">
-                            <?= h(__('beach.check_in')) ?>
-                        </button>
-                    </div>
-                    <?php
-                    $crowdColors = [
-                        'green' => 'bg-green-500/10 text-green-400 border-green-500/20',
-                        'yellow' => 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
-                        'orange' => 'bg-orange-500/10 text-orange-400 border-orange-500/20',
-                        'red' => 'bg-red-500/10 text-red-400 border-red-500/20',
-                        'gray' => 'bg-warm-50 text-warm-500 border-warm-200'
-                    ];
-                    $crowdColorClass = $crowdColors[$crowdLevel['color']] ?? $crowdColors['gray'];
-                    ?>
-                    <div class="p-2 rounded-lg border <?= $crowdColorClass ?> text-sm">
-                        <div class="flex items-center gap-2">
-                            <span>👥</span>
-                            <span class="font-medium"><?= h($crowdLevel['label']) ?></span>
-                            <span class="text-xs opacity-75 ml-auto"><?= h($crowdLevel['time_label']) ?></span>
-                        </div>
-                    </div>
-                    <?php else: ?>
-                    <div class="flex items-center justify-between">
-                        <h3 class="font-bold text-warm-900 text-sm flex items-center gap-1.5">
-                            <i data-lucide="radio" class="w-3.5 h-3.5 text-green-400" aria-hidden="true"></i>
-                            <?= h(__('beach.live_updates')) ?>
-                        </h3>
-                        <span class="text-xs text-warm-400"><?= h(__('beach.no_crowd_data')) ?></span>
-                        <button data-action="openCheckinModal" data-action-args='["<?= h($beach['id']) ?>","<?= h(addslashes($beach['name'])) ?>"]'
-                                class="text-xs bg-warm-100 hover:bg-warm-200 text-warm-900 px-2.5 py-1 rounded font-medium transition-colors border border-warm-200">
-                            <?= h(__('beach.check_in')) ?>
-                        </button>
-                    </div>
-                    <?php endif; ?>
                 </div>
 
                 <!-- Map + Directions -->

@@ -183,6 +183,10 @@
       } else {
         warnUmamiUnavailable(eventName);
       }
+      // Dual-send to PostHog for funnels, session replay, and cohort analysis
+      if (window.posthog && typeof window.posthog.capture === "function") {
+        window.posthog.capture(eventName, payload);
+      }
     } catch (e) {
       // Never throw from analytics.
     }
@@ -544,8 +548,56 @@
     window.bfTrack("compare_page_view", { beach_count: slugs.length, beaches: slugs.join(",") });
   }
 
+  /* ===== PostHog Page Context ===== */
+  function initPostHogPageContext() {
+    if (!window.posthog || typeof window.posthog.register === "function" === false) return;
+
+    var path = window.location.pathname;
+    var pageType = "other";
+    var pageProps = {};
+
+    if (path === "/" || path === "/es") {
+      pageType = "homepage";
+    } else if (path.indexOf("/beach/") === 0 || path.indexOf("/playa/") === 0) {
+      pageType = "beach_detail";
+      pageProps.beach_slug = path.split("/").pop() || "";
+    } else if (path.indexOf("/beaches-in-") === 0 || path.indexOf("/playas-en-") === 0) {
+      pageType = "municipality";
+      pageProps.municipality = path.replace(/^\/(beaches-in-|playas-en-)/, "");
+    } else if (path.indexOf("/beaches-near-") === 0 || path.indexOf("/playas-cerca-") === 0) {
+      pageType = "proximity";
+    } else if (path.indexOf("/beaches/") === 0 || path.indexOf("/playas/") === 0) {
+      pageType = "tag_landing";
+      pageProps.tag = path.split("/").pop() || "";
+    } else if (path.indexOf("/best-") === 0 || path.indexOf("/mejores-") === 0) {
+      pageType = "collection";
+    } else if (path.indexOf("/guides/") === 0 || path.indexOf("/es/guias/") === 0) {
+      pageType = "guide";
+      pageProps.guide_slug = path.split("/").pop() || "";
+    } else if (path.indexOf("/quiz") === 0) {
+      pageType = "quiz";
+    } else if (path.indexOf("/compare") === 0) {
+      pageType = "compare";
+    } else if (path.indexOf("/favorites") === 0) {
+      pageType = "favorites";
+    } else if (path.indexOf("/profile") === 0) {
+      pageType = "profile";
+    }
+
+    pageProps.page_type = pageType;
+
+    // Register as super properties so they attach to all subsequent events
+    window.posthog.register(pageProps);
+
+    // Set first-seen page type as a person property
+    if (pageType === "beach_detail" && pageProps.beach_slug) {
+      window.posthog.setPersonPropertiesForFlags({ last_beach_viewed: pageProps.beach_slug });
+    }
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     ensureAnonId();
+    initPostHogPageContext();
     trackSignupAttribution();
     initDelegatedClickTracking();
     initReferralImpressionTracking();
