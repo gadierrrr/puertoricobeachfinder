@@ -235,6 +235,21 @@ if ($bodyVariant === 'collection-light') {
         })
     </script>
 
+    <?php
+    $gaMeasurementId = function_exists('env') ? (string) (env('GA_MEASUREMENT_ID', '') ?? '') : '';
+    $gaEnabled = (bool) preg_match('/^G-[A-Z0-9]+$/i', $gaMeasurementId);
+    ?>
+    <?php if ($gaEnabled): ?>
+    <!-- Google Analytics 4 (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<?= h($gaMeasurementId) ?>" <?= cspNonceAttr() ?>></script>
+    <script <?= cspNonceAttr() ?>>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '<?= h($gaMeasurementId) ?>');
+    </script>
+    <?php endif; ?>
+
     <!-- Geographic Meta Tags -->
     <meta name="geo.region" content="US-PR">
     <meta name="geo.placename" content="Puerto Rico">

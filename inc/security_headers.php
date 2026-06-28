@@ -77,6 +77,25 @@ if ($umamiEnabled && $umamiScriptUrl !== '') {
     }
 }
 
+// Google Analytics 4 (gtag.js) — only whitelist Google's hosts when a valid
+// GA4 Measurement ID (G-XXXXXXXXXX) is configured.
+$gaMeasurementId = function_exists('env') ? (string) (env('GA_MEASUREMENT_ID', '') ?? '') : '';
+$gaEnabled = (bool) preg_match('/^G-[A-Z0-9]+$/i', $gaMeasurementId);
+
+if ($gaEnabled) {
+    // gtag.js loader (host-source kept for browsers without 'strict-dynamic').
+    $scriptSources[] = 'www.googletagmanager.com';
+    // Measurement beacons + tag config fetches.
+    $connectSources[] = 'www.googletagmanager.com';
+    $connectSources[] = 'www.google-analytics.com';
+    $connectSources[] = '*.google-analytics.com';
+    $connectSources[] = '*.analytics.google.com';
+    // Legacy/pixel image beacons.
+    $imgSources[] = 'www.googletagmanager.com';
+    $imgSources[] = 'www.google-analytics.com';
+    $imgSources[] = '*.google-analytics.com';
+}
+
 $scriptSources = array_values(array_unique($scriptSources));
 $styleSources = array_values(array_unique($styleSources));
 $imgSources = array_values(array_unique($imgSources));
