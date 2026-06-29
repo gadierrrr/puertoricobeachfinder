@@ -509,9 +509,7 @@ if (!empty($tagFaqs)) {
     $extraHead .= faqSchema($faqItems);
 }
 
-// Alternate language links
-$extraHead .= '<link rel="alternate" hreflang="en" href="' . absoluteUrl('/beaches/' . $enSlug) . '">';
-$extraHead .= '<link rel="alternate" hreflang="es" href="' . absoluteUrl('/es/playas/' . $esSlug) . '">';
+// Hreflang tags are emitted by header.php (via localeRouteMatch + routeUrl for beaches_by_tag)
 
 // Breadcrumbs
 $breadcrumbs = [

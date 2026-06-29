@@ -518,6 +518,60 @@ function localeRouteMatch(string $path): ?array
         ];
     }
 
+    // Tag/amenity landing pages: /beaches/{tag} and /es/playas/{tag}
+    if (preg_match('#^/beaches/([a-z0-9-]+)$#', $path, $matches)) {
+        return [
+            'route_key' => 'beaches_by_tag',
+            'locale' => 'en',
+            'params' => ['tag' => $matches[1]],
+            'indexable' => true,
+        ];
+    }
+    if (preg_match('#^/es/playas/([a-z0-9-]+)$#', $path, $matches)) {
+        return [
+            'route_key' => 'beaches_by_tag',
+            'locale' => 'es',
+            'params' => ['tag' => $matches[1]],
+            'indexable' => true,
+        ];
+    }
+
+    // Proximity pages: /beaches-near-{location} and /es/playas-cerca-de-{location}
+    if (preg_match('#^/beaches-near-([a-z0-9-]+)$#', $path, $matches)) {
+        return [
+            'route_key' => 'beaches_near',
+            'locale' => 'en',
+            'params' => ['location' => $matches[1]],
+            'indexable' => true,
+        ];
+    }
+    if (preg_match('#^/es/playas-cerca-de-([a-z0-9-]+)$#', $path, $matches)) {
+        return [
+            'route_key' => 'beaches_near',
+            'locale' => 'es',
+            'params' => ['location' => $matches[1]],
+            'indexable' => true,
+        ];
+    }
+
+    // Individual guide pages: /guides/{slug} and /es/guias/{slug}
+    if (preg_match('#^/guides/([a-z0-9-]+)$#', $path, $matches)) {
+        return [
+            'route_key' => 'guide_detail',
+            'locale' => 'en',
+            'params' => ['slug' => $matches[1]],
+            'indexable' => true,
+        ];
+    }
+    if (preg_match('#^/es/guias/([a-z0-9-]+)$#', $path, $matches)) {
+        return [
+            'route_key' => 'guide_detail',
+            'locale' => 'es',
+            'params' => ['slug' => $matches[1]],
+            'indexable' => true,
+        ];
+    }
+
     return null;
 }
 
@@ -551,6 +605,71 @@ function routeUrl(string $routeKey, string $locale = 'en', array $params = []): 
         return $locale === 'es'
             ? '/es/playas-en-' . $municipality
             : '/beaches-in-' . $municipality;
+    }
+
+    if ($routeKey === 'beaches_by_tag') {
+        $tag = trim((string) ($params['tag'] ?? ''));
+        if ($tag === '') {
+            return $locale === 'es' ? '/es' : '/';
+        }
+        if ($locale === 'es') {
+            // EN slug → ES slug mapping for tag/amenity pages
+            static $tagSlugEs = [
+                'swimming' => 'natacion', 'scenic' => 'escenicas',
+                'calm-waters' => 'aguas-tranquilas', 'fishing' => 'pesca',
+                'accessible' => 'accesibles', 'diving' => 'buceo',
+                'camping' => 'acampar', 'popular' => 'populares',
+                'surfing' => 'surf', 'snorkeling' => 'snorkel',
+                'family-friendly' => 'familiares', 'secluded' => 'aisladas',
+                'with-parking' => 'con-estacionamiento', 'with-restrooms' => 'con-banos',
+                'with-showers' => 'con-duchas', 'with-lifeguard' => 'con-salvavidas',
+                'with-picnic-areas' => 'con-areas-picnic', 'with-food' => 'con-comida',
+            ];
+            // Also build reverse map (ES slug → ES slug identity) for when tag is already Spanish
+            static $tagSlugEsReverse = null;
+            if ($tagSlugEsReverse === null) {
+                $tagSlugEsReverse = array_flip($tagSlugEs);
+            }
+            $esTag = $tagSlugEs[$tag] ?? (isset($tagSlugEsReverse[$tag]) ? $tag : $tag);
+            return '/es/playas/' . $esTag;
+        }
+        // If locale is EN but tag might be a Spanish slug, reverse-map it
+        static $tagSlugEn = null;
+        if ($tagSlugEn === null) {
+            $tagSlugEn = [
+                'natacion' => 'swimming', 'escenicas' => 'scenic',
+                'aguas-tranquilas' => 'calm-waters', 'pesca' => 'fishing',
+                'accesibles' => 'accessible', 'buceo' => 'diving',
+                'acampar' => 'camping', 'populares' => 'popular',
+                'surf' => 'surfing', 'snorkel' => 'snorkeling',
+                'familiares' => 'family-friendly', 'aisladas' => 'secluded',
+                'con-estacionamiento' => 'with-parking', 'con-banos' => 'with-restrooms',
+                'con-duchas' => 'with-showers', 'con-salvavidas' => 'with-lifeguard',
+                'con-areas-picnic' => 'with-picnic-areas', 'con-comida' => 'with-food',
+            ];
+        }
+        $enTag = $tagSlugEn[$tag] ?? $tag;
+        return '/beaches/' . $enTag;
+    }
+
+    if ($routeKey === 'beaches_near') {
+        $location = trim((string) ($params['location'] ?? ''));
+        if ($location === '') {
+            return $locale === 'es' ? '/es' : '/';
+        }
+        return $locale === 'es'
+            ? '/es/playas-cerca-de-' . $location
+            : '/beaches-near-' . $location;
+    }
+
+    if ($routeKey === 'guide_detail') {
+        $slug = trim((string) ($params['slug'] ?? ''));
+        if ($slug === '') {
+            return $locale === 'es' ? '/es/guias' : '/guides/';
+        }
+        return $locale === 'es'
+            ? '/es/guias/' . $slug
+            : '/guides/' . $slug;
     }
 
     return $locale === 'es' ? '/es' : '/';
