@@ -6,6 +6,13 @@ require_once __DIR__ . '/helpers.php';
 require_once __DIR__ . '/email.php';
 require_once __DIR__ . '/rate_limiter.php';
 
+/**
+ * Create (if needed) a user for $email and email them a 15-minute magic login link.
+ * Rate-limited per email and per IP. Always returns a success-shaped response to
+ * prevent account enumeration.
+ * @param string $email
+ * @return array{success:bool,message?:string,error?:string}
+ */
 function sendMagicLink($email) {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return ['success' => false, 'error' => 'Invalid email address'];
@@ -93,6 +100,12 @@ function sendMagicLink($email) {
     return ['success' => true, 'message' => 'Check your email for the login link!'];
 }
 
+/**
+ * Validate a magic-link token; on success start an authenticated session
+ * (regenerates id, stores user + fingerprint) and marks the link used.
+ * @param string $token Raw token from the verify URL
+ * @return array{success:bool,user?:array,error?:string}
+ */
 function verifyMagicLink($token) {
     $tokenHash = hash('sha256', $token);
 
@@ -131,6 +144,10 @@ function verifyMagicLink($token) {
     return ['success' => true, 'user' => $user];
 }
 
+/**
+ * Clear session data, delete the session cookie, and destroy the session.
+ * @return void
+ */
 function logout() {
     // Clear all session data
     $_SESSION = [];

@@ -1,4 +1,8 @@
 <?php
+/**
+ * Site Footer — full footer with nav columns, language switcher, and legal links.
+ * Expects: $currentLang (optional; defaults via getCurrentLanguage())
+ */
 $currentLang = $currentLang ?? getCurrentLanguage();
 $homePath = routeUrl('home', $currentLang);
 $homeAnchorHref = static function (string $anchor) use ($homePath): string {

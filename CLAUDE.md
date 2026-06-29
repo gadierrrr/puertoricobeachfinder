@@ -6,6 +6,32 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Puerto Rico Beach Finder is a PHP-based web application that provides a searchable database of 468 beaches across Puerto Rico. It uses SQLite for data storage, HTMX for dynamic interactions, and Tailwind CSS for styling.
 
+## Documentation Index
+
+**CLAUDE.md (this file) is the canonical guide.** Other docs are either generated
+references or topic deep-dives — read the relevant one before diving into code.
+
+| Doc | What it covers |
+|-----|----------------|
+| `CLAUDE.md` (this file) | Canonical architecture, conventions, commands, gotchas |
+| `README.md` | Setup, env vars, deploy flow, health checks, backups |
+| `AGENTS.md` | Short agent orientation + guardrails (points back here) |
+| `DESIGN-SYSTEM.md` | Design tokens, color system, dark mode, breakpoints |
+| `docs/database-schema.md` | **Generated** — every table, column, FK, index |
+| `docs/api-manifest.md` | **Generated** — index of all `public/api/` endpoints |
+| `components/CATALOG.md` | **Generated** — every component + the variables it expects |
+| `docs/helpers-index.md` | **Generated** — every function in `inc/`, with summaries |
+| `docs/schema-quick-reference.md` | SEO **JSON-LD** schema markup (NOT the DB schema) |
+| `docs/codebase-map.md` | Legacy navigation notes (superseded by this file) |
+| `docs/analytics-umami.md` | Analytics + event instrumentation |
+| `docs/email-resend.md` | Email delivery + webhook operations |
+| `docs/mobile-homepage-bug-report.md` | Known bugs in the inactive Discovery redesign |
+| `scripts/SYSTEM-ARCHITECTURE.md` | Content/generation system deep-dive |
+
+> The four **Generated** docs are produced by `npm run docs:gen` — never hand-edit
+> them. Regenerate after schema/endpoint/component/helper changes (the DB schema
+> dump needs a local database).
+
 ## Common Commands
 
 **Build all assets (CSS + Tailwind):**
@@ -43,6 +69,23 @@ php scripts/init-db.php
 php scripts/migrate.php
 ```
 
+**Verify a change before reporting it done:**
+```bash
+npm run check          # PHP lint sweep + duplicate-function guard + route smoke test
+                       # (design-system lint + migration status run as warnings)
+```
+
+**Regenerate the auto-generated reference docs:**
+```bash
+npm run docs:gen       # docs/database-schema.md, docs/api-manifest.md,
+                       # components/CATALOG.md, docs/helpers-index.md
+```
+
+**Run the app locally (PHP built-in server):**
+```bash
+php -S localhost:8082 -t public scripts/dev-router.php
+```
+
 ## Architecture
 
 ### Technology Stack
@@ -55,7 +98,7 @@ php scripts/migrate.php
 ### Directory Structure
 - `inc/` - Core PHP includes (db.php, helpers.php, constants.php, auth.php)
 - `components/` - Reusable PHP UI components (header, footer, beach-card, filters)
-  - `components/beach/` - Beach detail page components (13 files, see Beach Detail Architecture below)
+  - `components/beach/` - Beach detail page components (see Beach Detail Architecture below + `components/CATALOG.md`)
   - `components/chat/` - Chat system UI components (panel, inbox-item, message)
   - `components/collection/` - Collection/list page components
 - `public/` - Web document root (ONLY this should be web-served)
@@ -100,6 +143,28 @@ php scripts/migrate.php
 - `components/beach/*.php` - Beach detail page components (see Beach Detail Architecture below)
 - Always use shared components for consistency; avoid creating inline variants of existing components
 
+### Bootstrapping & Entrypoint Conventions
+
+- Every public entrypoint starts with:
+  `require_once $_SERVER['DOCUMENT_ROOT'] . '/../bootstrap.php';`
+  This defines `APP_ROOT` / `PUBLIC_ROOT` and loads env + error handling.
+- For cross-directory includes prefer stable paths — `APP_ROOT . '/inc/...'`,
+  `APP_ROOT . '/components/...'`, `PUBLIC_ROOT . '/assets/...'`. Avoid `../../` traversal.
+- CLI scripts bootstrap by requiring `inc/db.php` (it pulls in the full bootstrap + env).
+- Reuse shared components (`components/header.php`, `components/page-shell.php`) for the
+  page head / CSS loading — never hand-roll head setup.
+
+### Common Change Playbooks
+
+- **Add a public page:** create `public/<page>.php`, start with the bootstrap require,
+  use `components/page-shell.php` (set `$pageTitle`, optional `$pageDescription`).
+- **Add an API endpoint:** create `public/api/<endpoint>.php`, require bootstrap, return
+  HTML for `HX-Request` and JSON otherwise (see `docs/api-manifest.md` for examples).
+- **Add a migration:** add `migrations/<n>-name.php`, run `php scripts/migrate.php --dry-run`,
+  then `php scripts/migrate.php`; regenerate the schema doc with `npm run docs:gen`.
+- **Update CSS:** edit `public/assets/css/partials/`, then `npm run build:css`.
+- **After any change:** run `npm run check` before reporting it done.
+
 ### URL Conventions & Routing
 
 **Always use clean URLs (no `.php` extensions) in links, nav, footer, sitemap, and templates.** Nginx handles extensionless routing (e.g., `/quiz` serves `quiz.php`, `/compare` serves `compare.php`). Using `.php` URLs causes an unnecessary 301 redirect hop.
@@ -118,25 +183,30 @@ php scripts/migrate.php
 
 ### Beach Detail Page Architecture
 
-The beach detail page (`public/beach.php`) is decomposed into 13 focused components. The main file (~230 lines) handles data fetching, SEO, and component includes only.
+The beach detail page (`public/beach.php`) handles data fetching, SEO, and component includes only. It composes **14 focused components** (shown below in include order). For the always-current list with the variables each component expects, see the generated `components/CATALOG.md`.
 
 ```
-public/beach.php                        (230 lines) — data + includes
+public/beach.php           — data fetching, SEO, component includes
 components/beach/
-  ├── hero.php             (55 lines)  — Cover photo, gradient, breadcrumbs, title
-  ├── info-bar.php         (67 lines)  — Rating badge, tags, directions, share
-  ├── section-nav.php      (29 lines)  — Sticky horizontal tab navigation
-  ├── quick-facts.php      (94 lines)  — 2x2 Quick Facts grid (emoji icons)
-  ├── about.php            (50 lines)  — Description + feature badges + visitor tips
-  ├── extended-sections.php(79 lines)  — Grouped sections: Plan Your Visit / About This Beach
-  ├── photos.php           (50 lines)  — Gallery + user photo uploads (conditional)
-  ├── reviews.php          (46 lines)  — User reviews (conditional, hidden when empty)
-  ├── sidebar.php          (175 lines) — Weather, conditions, crowd, map, amenities, safety
-  ├── related.php          (74 lines)  — Planning guides + similar beaches
-  ├── sticky-bar.php       (57 lines)  — Mobile bottom action bar (directions/save/share)
-  ├── modals.php           (1166 lines)— All modal dialogs (share, lightbox, report, checkin, review, upload)
-  └── scripts.php          (73 lines)  — Weather widget loader + section nav observer
+  ├── hero.php             — Cover photo, gradient, breadcrumbs, title
+  ├── info-bar.php         — Rating badge, tags, directions, share
+  ├── section-nav.php      — Sticky horizontal tab navigation
+  ├── at-a-glance.php      — AI-optimized summary block (key facts)
+  ├── about.php            — Description + feature badges + visitor tips
+  ├── extended-sections.php— Grouped sections: Plan Your Visit / About This Beach
+  ├── photos.php           — Gallery + user photo uploads (conditional)
+  ├── reviews.php          — User reviews (conditional, hidden when empty)
+  ├── faq.php              — Beach FAQ (also emits FAQPage JSON-LD)
+  ├── sidebar.php          — Weather, conditions, crowd, map, amenities, safety
+  ├── related.php          — Planning guides + similar beaches
+  ├── sticky-bar.php       — Mobile bottom action bar (directions/save/share)
+  ├── modals.php           — All modal dialogs (share, lightbox, report, checkin, review, upload); largest component (~1,200 lines)
+  └── scripts.php          — Weather widget loader + section nav observer
 ```
+
+> Five untracked `components/beach/*` files NOT in this list (`facts-row`,
+> `plan-row`, `local-tips`, `nearby-pills`, `conditions-getting-there`) belong to an
+> **inactive redesign** — see "Inactive / Work-in-Progress Areas" below.
 
 **To edit a section:** Open the specific component file. Each has a docblock listing its expected variables.
 
@@ -155,6 +225,22 @@ components/beach/
 3. `getting_there` is skipped (users use GPS)
 
 **Empty state handling:** Photos and reviews sections are only rendered when content exists. No empty placeholders.
+
+### Inactive / Work-in-Progress Areas
+
+A **map-first "Discovery" redesign** (homepage + beach detail) was started but never
+shipped. The files are untracked, **not referenced by any live page**, and have 12+
+known bugs (`docs/mobile-homepage-bug-report.md`). Each carries a `⚠️ INACTIVE / WIP`
+header banner. **Do not build on these without reviving the effort.**
+
+- `components/discovery/` — `shell.php`, `filter-bar.php`, `compact-card.php`
+- `components/mobile-tabbar.php`
+- `components/beach/` redesign wireframes — `facts-row.php`, `plan-row.php`, `local-tips.php`, `nearby-pills.php`, `conditions-getting-there.php`
+- `public/assets/js/discovery.js` (action handlers unwired), `public/assets/js/review-filter.js`
+- `public/assets/css/partials/_discovery.css`, `_beach-detail.css` (NOT in `scripts/build-css.sh`)
+
+Local-only dev scripts (untracked, not part of the app): `scripts/seed-local-demo.php`
+(seeds demo tags/amenities), `scripts/sync-from-prod.php` (pulls prod beaches into the local DB).
 
 ### Dynamic Pages (Programmatic SEO)
 

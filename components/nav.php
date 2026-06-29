@@ -1,4 +1,8 @@
 <?php
+/**
+ * Primary site navigation bar (logo, links, language + theme toggles, auth menu).
+ * Expects: $appName, $currentLang, $user (all optional; resolved here if unset)
+ */
 $appName = $appName ?? ($_ENV['APP_NAME'] ?? 'Beach Finder');
 $currentLang = $currentLang ?? getCurrentLanguage();
 $user = $user ?? currentUser();

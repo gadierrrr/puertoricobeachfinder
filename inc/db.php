@@ -3,6 +3,10 @@
 
 require_once __DIR__ . '/bootstrap.php';
 
+/**
+ * Return the shared SQLite3 connection (lazily opened, WAL mode, FK enforcement).
+ * @return SQLite3
+ */
 function getDB() {
     static $db = null;
 
@@ -68,6 +72,10 @@ function pathIsAbsolute(string $path): bool {
     return preg_match('/^[A-Za-z]:[\\\\\\/]/', $path) === 1;
 }
 
+/**
+ * Generate a random RFC-4122 v4 UUID string.
+ * @return string
+ */
 function uuid() {
     return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
         mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff),
@@ -76,6 +84,12 @@ function uuid() {
     );
 }
 
+/**
+ * Run a SELECT and return all matching rows.
+ * @param string $sql    SQL with positional (?) or named (:name) placeholders
+ * @param array  $params Values to bind
+ * @return array|false   Array of associative-array rows, or false on error
+ */
 function query($sql, $params = []) {
     $db = getDB();
     $stmt = $db->prepare($sql);
@@ -103,11 +117,23 @@ function query($sql, $params = []) {
     return $rows;
 }
 
+/**
+ * Run a SELECT and return only the first row (or null if none).
+ * @param string $sql    SQL with positional (?) or named (:name) placeholders
+ * @param array  $params Values to bind
+ * @return array|null    Single row, or null when no rows / on error
+ */
 function queryOne($sql, $params = []) {
     $rows = query($sql, $params);
     return $rows ? ($rows[0] ?? null) : null;
 }
 
+/**
+ * Run an INSERT/UPDATE/DELETE (or other write) statement.
+ * @param string $sql    SQL with positional (?) or named (:name) placeholders
+ * @param array  $params Values to bind
+ * @return bool          True on success, false on prepare/execute error
+ */
 function execute($sql, $params = []) {
     $db = getDB();
     $stmt = $db->prepare($sql);

@@ -1,3 +1,4 @@
+<?php /** Minimal Footer — closes <main>, renders the toast container + slim footer + scripts for auth/standalone pages. */ ?>
     </main>
 
     <!-- Toast Container (for notifications) -->

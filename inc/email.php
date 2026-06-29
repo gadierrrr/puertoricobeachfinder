@@ -18,6 +18,11 @@ const EMAIL_TEMPLATE_CATEGORY_MAP = [
     'quiz-results' => 'non_critical',
 ];
 
+/**
+ * Fetch an active email template row by slug, or null if missing/inactive.
+ * @param string $slug
+ * @return array|null
+ */
 function getEmailTemplate($slug) {
     return queryOne(
         'SELECT * FROM email_templates WHERE slug = :slug AND is_active = 1',
@@ -25,6 +30,12 @@ function getEmailTemplate($slug) {
     );
 }
 
+/**
+ * Substitute {{variables}} into a template string, HTML-escaping each value.
+ * @param string $template Raw template body with {{placeholders}}
+ * @param array  $variables key => value substitutions
+ * @return string Rendered output
+ */
 function renderEmailTemplate($template, $variables) {
     foreach ($variables as $key => $value) {
         $safeValue = $value ?? '';
@@ -334,6 +345,14 @@ function emailSendInternal(string $to, string $subject, string $html, array $opt
     return false;
 }
 
+/**
+ * Render the DB-stored template for $slug and send it to $to.
+ * Returns false if the template is missing/inactive.
+ * @param string $slug      Template slug (e.g. 'magic-link')
+ * @param string $to        Recipient email
+ * @param array  $variables Template variable substitutions
+ * @return bool             True if the email was sent
+ */
 function sendTemplateEmail($slug, $to, $variables = []) {
     $template = getEmailTemplate($slug);
     if (!$template) {
@@ -357,10 +376,25 @@ function sendTemplateEmail($slug, $to, $variables = []) {
     ]);
 }
 
+/**
+ * Send a raw HTML email. Public entry point; delegates to emailSendInternal().
+ * @param string $to      Recipient email
+ * @param string $subject Subject line
+ * @param string $html    HTML body
+ * @param array  $options e.g. template_slug, category, critical
+ * @return bool           True if the email was sent
+ */
 function sendEmail($to, $subject, $html, $options = []) {
     return emailSendInternal((string) $to, (string) $subject, (string) $html, is_array($options) ? $options : []);
 }
 
+/**
+ * Send the welcome email to a new user, personalized by their preferences.
+ * @param string $email
+ * @param string $name
+ * @param array  $preferences Optional onboarding preferences (e.g. activities)
+ * @return bool
+ */
 function sendWelcomeEmail($email, $name, $preferences = []) {
     $activityText = '';
     if (!empty($preferences['activities'])) {

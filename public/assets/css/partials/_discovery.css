@@ -1,0 +1,1356 @@
+/* ⚠️ INACTIVE / WIP — unshipped Discovery redesign. NOT included in scripts/build-css.sh
+   and not loaded anywhere. Do not build on without reviving. See docs/mobile-homepage-bug-report.md. */
+/* ============================================================
+   Home · Map-first discovery — wireframe 1:1 implementation.
+   Uses only tokens declared in _variables.css. Radii match the
+   rounded-2xl (24px) / rounded-xl (16px) conventions used
+   elsewhere on the site. Typography uses DM Sans (body) and
+   DM Serif Display (card titles) — both already loaded by the
+   global header.
+   ============================================================ */
+
+/* ---------- SHELL ---------- */
+
+.discovery-shell {
+    background: var(--color-sand-50);
+    min-height: calc(100vh - 72px);
+    padding: 0;
+}
+
+/* ---------- FILTER BAR ---------- */
+
+.discovery-filter-bar {
+    position: sticky;
+    /* Sticky offset is measured from the scrollport's PADDING EDGE. body
+       already has padding-top: 56px (to clear the fixed nav), so we want
+       top: 0 here — that places the filter bar flush under the nav with
+       no gap. Any non-zero value would stack below body's padding-top
+       offset and introduce visible space. */
+    top: 0;
+    z-index: var(--z-sticky);
+    background: #fff;
+    border-bottom: 1px solid var(--color-gray-200);
+    padding: 12px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.discovery-filter-bar__pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+.discovery-filter-bar__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+.discovery-filter-bar__label {
+    font: 600 12px/1 "DM Sans", system-ui, sans-serif;
+    color: var(--color-warm-500);
+    letter-spacing: .02em;
+    margin-right: 4px;
+    flex-shrink: 0;
+}
+.discovery-filter-bar__clear {
+    margin-left: auto;
+}
+
+.discovery-dropdown {
+    position: relative;
+}
+.discovery-dropdown__trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border: 1px solid var(--color-gray-200);
+    border-radius: 999px;
+    background: #fff;
+    font: 500 13px/1 "DM Sans", system-ui, sans-serif;
+    color: var(--color-warm-700);
+    cursor: pointer;
+    list-style: none;
+    transition: border-color .12s ease, background-color .12s ease;
+}
+.discovery-dropdown__trigger::-webkit-details-marker { display: none; }
+.discovery-dropdown__trigger:hover {
+    border-color: var(--color-sunset-400);
+}
+.discovery-dropdown[open] > .discovery-dropdown__trigger {
+    background: var(--color-gray-100);
+    border-color: var(--color-gray-300);
+}
+.discovery-dropdown__menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    z-index: 20;
+    background: #fff;
+    border: 1px solid var(--color-gray-200);
+    border-radius: 12px;
+    box-shadow: var(--shadow-popup);
+    min-width: 220px;
+    max-height: 360px;
+    overflow-y: auto;
+    padding: 6px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.discovery-dropdown__menu--single { grid-template-columns: 1fr; }
+.discovery-dropdown__group {
+    padding: 6px 8px;
+}
+.discovery-dropdown__group-title {
+    font: 600 11px/1 "DM Sans", system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--color-warm-500);
+    padding: 4px 0 8px;
+}
+.discovery-dropdown__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    font: 500 13px/1.3 "DM Sans", system-ui, sans-serif;
+    color: var(--color-text-dark);
+    cursor: pointer;
+    text-decoration: none;
+    border: 0;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+}
+.discovery-dropdown__item:hover {
+    background: var(--color-gray-100);
+}
+.discovery-dropdown__item.is-active {
+    background: var(--color-sunset-400);
+    color: #fff;
+}
+.discovery-dropdown__checkbox { accent-color: var(--color-sunset-400); }
+.discovery-dropdown__item-icon {
+    width: 14px;
+    height: 14px;
+    flex: 0 0 auto;
+}
+
+/* Active filter chips (row 2) */
+.discovery-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px 5px 12px;
+    border: 1px solid var(--color-gray-200);
+    border-radius: 999px;
+    background: #fff;
+    font: 500 12px/1 "DM Sans", system-ui, sans-serif;
+    color: var(--color-warm-700);
+    cursor: default;
+}
+.discovery-chip--active {
+    background: var(--color-ocean-50);
+    border-color: var(--color-ocean-300);
+    color: var(--color-ocean-700);
+}
+.discovery-chip__remove {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 1;
+    padding: 2px;
+    color: inherit;
+    opacity: .7;
+}
+.discovery-chip__remove:hover { opacity: 1; }
+.discovery-chip--clear {
+    background: transparent;
+    border-color: transparent;
+    color: var(--color-warm-500);
+    cursor: pointer;
+    padding: 5px 10px;
+}
+.discovery-chip--clear:hover { color: var(--color-warm-700); }
+
+/* ---------- SPLIT GRID ---------- */
+
+.discovery-split-v2 {
+    display: grid;
+    grid-template-columns: minmax(420px, 480px) 1fr;
+    gap: 0;
+    align-items: stretch;
+    height: calc(100vh - 150px);
+    min-height: 640px;
+}
+
+/* Left list column */
+.discovery__list {
+    border-right: 1px solid var(--color-gray-200);
+    background: var(--color-sand-50);
+    overflow-y: auto;
+    padding: 14px 14px 24px;
+    scrollbar-gutter: stable;
+}
+.discovery__list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 6px 12px;
+    position: sticky;
+    top: 0;
+    background: var(--color-sand-50);
+    z-index: 2;
+}
+.discovery__list-title {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font: 400 14px/1 "DM Sans", system-ui, sans-serif;
+    margin: 0;
+}
+.discovery__list-label {
+    font: 700 12px/1 "DM Sans", system-ui, sans-serif;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--color-warm-500);
+}
+.discovery__list-count {
+    color: var(--color-text-primary);
+    font-weight: 600;
+}
+.discovery__sort {
+    font: 500 12px/1 "DM Sans", system-ui, sans-serif;
+    color: var(--color-warm-500);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.discovery__sort select {
+    border: 1px solid var(--color-gray-200);
+    border-radius: 8px;
+    background: #fff;
+    padding: 6px 10px;
+    font: 500 12px/1 "DM Sans", system-ui, sans-serif;
+    color: var(--color-text-primary);
+}
+
+.discovery__cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.discovery__empty {
+    background: #fff;
+    border: 1px solid var(--color-gray-200);
+    border-radius: 16px;
+    padding: 28px 24px;
+    text-align: center;
+    color: var(--color-warm-500);
+}
+.discovery__empty h3 {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 20px;
+    color: var(--color-text-primary);
+    margin-bottom: 6px;
+}
+.discovery__load-more {
+    padding: 16px 6px 8px;
+    text-align: center;
+}
+
+/* ---------- COMPACT CARD ---------- */
+
+.discovery-card {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 12px;
+    background: #fff;
+    border: 1px solid var(--color-gray-200);
+    border-radius: 16px;
+    padding: 10px;
+    box-shadow: var(--shadow-card);
+    transition: border-color .12s ease, transform .12s ease;
+}
+.discovery-card:hover {
+    border-color: rgba(251,146,60,.3);
+    transform: translateY(-1px);
+}
+.discovery-card__thumb {
+    position: relative;
+    height: 120px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--color-ocean-200), var(--color-sand-200));
+    display: block;
+}
+.discovery-card__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.discovery-card__badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(255,255,255,0.92);
+    color: var(--color-ocean-800);
+    padding: 3px 9px;
+    border-radius: 999px;
+    font: 600 11px/1 "DM Sans", system-ui, sans-serif;
+}
+.discovery-card__body {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.discovery-card__title {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 1.15;
+    margin: 0;
+    color: var(--color-text-primary);
+}
+.discovery-card__title a {
+    color: inherit;
+    text-decoration: none;
+}
+.discovery-card__title a:hover {
+    color: var(--color-sunset-500);
+}
+.discovery-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    color: var(--color-warm-500);
+    font: 500 12px/1 "DM Sans", system-ui, sans-serif;
+}
+.discovery-card__rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    color: var(--color-sunset-500);
+    font-weight: 700;
+}
+.discovery-card__tag {
+    color: var(--color-warm-600);
+}
+.discovery-card__tag::before { content: "· "; color: var(--color-warm-400); }
+
+/* Unified kv pill row — amenities + live conditions as small rounded
+   pills (wireframe .kv span style). Colors: neutral / ok / warn / sun. */
+.discovery-card__kv {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+}
+.discovery-card__kv-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font: 500 11px/1.4 "DM Sans", system-ui, sans-serif;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: var(--color-warm-100);
+    color: var(--color-warm-700);
+    white-space: nowrap;
+}
+.discovery-card__kv-pill--ok   { background: rgba(34,197,94,0.14);  color: var(--color-palm-700); }
+.discovery-card__kv-pill--warn { background: rgba(239,68,68,0.10);  color: var(--color-coral-600); }
+.discovery-card__kv-pill--sun  { background: rgba(245,158,11,0.14); color: #a16207; }
+.discovery-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font: 500 11px/1.4 "DM Sans", system-ui, sans-serif;
+    background: var(--color-gray-100);
+    color: var(--color-warm-700);
+}
+.discovery-pill--green  { background: rgba(34,197,94,0.12); color: var(--color-palm-700); }
+.discovery-pill--yellow { background: rgba(245,158,11,0.12); color: #a16207; }
+.discovery-pill--red    { background: rgba(239,68,68,0.10); color: var(--color-coral-600); }
+.discovery-pill--gray   { background: var(--color-gray-100); color: var(--color-warm-600); }
+
+.discovery-card__actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+}
+.discovery-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    border: 1px solid var(--color-gray-200);
+    border-radius: 8px;
+    background: #fff;
+    font: 600 12px/1 "DM Sans", system-ui, sans-serif;
+    color: var(--color-warm-700);
+    cursor: pointer;
+    transition: border-color .12s ease, color .12s ease;
+}
+.discovery-action:hover {
+    border-color: var(--color-sunset-400);
+    color: var(--color-sunset-500);
+}
+.discovery-action--save i { color: var(--color-coral-500); }
+
+/* ---------- MAP COLUMN ---------- */
+
+.discovery__map {
+    position: relative;
+    height: 100%;
+    min-height: 640px;
+    background:
+        radial-gradient(800px 400px at 70% 20%, var(--color-ocean-100), transparent 60%),
+        radial-gradient(600px 400px at 20% 80%, var(--color-ocean-50), transparent 60%),
+        linear-gradient(180deg, var(--color-ocean-50), #f2fbff);
+    overflow: hidden;
+}
+.discovery__map #map-container {
+    width: 100%;
+    height: 100%;
+}
+
+/* Bottom bar: [Near me] [30-min drive] [Legend] — wireframe 1:1 */
+.discovery-map__bottom-bar {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    z-index: 4;
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+}
+.discovery-map__btn,
+.discovery-map__bottom-bar summary.discovery-map__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-gray-200);
+    border-radius: 999px;
+    padding: 7px 12px;
+    font: 600 13px/1 "DM Sans", system-ui, sans-serif;
+    box-shadow: var(--shadow-card);
+    cursor: pointer;
+    transition: border-color .12s ease;
+    list-style: none;
+}
+.discovery-map__bottom-bar summary::-webkit-details-marker { display: none; }
+.discovery-map__btn:hover { border-color: var(--color-sunset-400); }
+
+.discovery-map__legend-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 12px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-gray-200);
+    border-radius: 999px;
+    box-shadow: var(--shadow-card);
+    font: 500 12px/1 "DM Sans", system-ui, sans-serif;
+    color: var(--color-warm-700);
+}
+.discovery-map__legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+.discovery-map__legend-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 3px 0;
+}
+.pin-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.08);
+}
+.pin-dot--family   { background: var(--color-sunset-400); }
+.pin-dot--surf     { background: var(--color-ocean-500); }
+.pin-dot--snorkel  { background: var(--color-palm-500); }
+.pin-dot--secluded { background: var(--color-coral-400); }
+
+/* Map markers rendered as colored circle pins (wireframe 1:1).
+   The JS leaves .beach-marker text-free; this pseudo-element draws
+   the solid dot so map pins stay visually consistent with the legend.
+   IMPORTANT: position:absolute + top/left:0 are required. Without them
+   MapLibre's translate(x,y) lays markers in normal flow and inflates
+   the map canvas container's height by their sum (~10000px+). */
+.beach-marker {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 22px;
+    height: 22px;
+    font-size: 0;
+    color: transparent;
+    line-height: 0;
+    will-change: transform;
+}
+/* Safety net: MapLibre's own marker class should always be absolutely
+   positioned. Restate here so nothing in the global stylesheet can
+   accidentally override it. */
+.maplibregl-marker { position: absolute !important; top: 0 !important; left: 0 !important; }
+
+/* MapLibre expects its .maplibregl-canvas-container to be absolutely
+   positioned inside .maplibregl-map so markers (which use transform
+   translations inside it) line up with the canvas. The base rule is
+   missing in the version we ship, causing the container to collapse
+   and markers to drift outside the viewport. Force the correct box. */
+.maplibregl-map {
+    position: relative;
+    overflow: hidden;
+}
+.maplibregl-map .maplibregl-canvas-container {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+.maplibregl-map .maplibregl-canvas {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+}
+.beach-marker::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,.25);
+    background: var(--color-gray-400);
+    transition: transform .12s ease, box-shadow .12s ease;
+}
+.beach-marker:hover::before,
+.beach-marker.selected::before {
+    transform: scale(1.15);
+    box-shadow: 0 4px 10px rgba(0,0,0,.3);
+}
+.beach-marker--family::before    { background: var(--color-sunset-400); }
+.beach-marker--surf::before      { background: var(--color-ocean-500); }
+.beach-marker--snorkel::before   { background: var(--color-palm-500); }
+.beach-marker--secluded::before  { background: var(--color-coral-400); }
+
+/* ---------- ASK THE ASSISTANT FAB ---------- */
+
+.discovery-assistant-fab {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: var(--z-chat);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--color-ocean-800);
+    color: #fff;
+    border: 0;
+    border-radius: 999px;
+    padding: 12px 20px;
+    font: 700 13px/1 "DM Sans", system-ui, sans-serif;
+    box-shadow: var(--shadow-lg);
+    cursor: pointer;
+    transition: background-color .12s ease, transform .12s ease;
+}
+.discovery-assistant-fab:hover {
+    background: var(--color-ocean-900);
+    transform: translateY(-1px);
+}
+
+/* ---------- MOBILE: top search + quick-action chip row ---------- */
+
+/* Desktop / tablet: hide the mobile-only top block entirely. */
+.discovery-mobile-top { display: none; }
+
+.discovery-quick-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border: 1px solid var(--color-gray-200);
+    border-radius: 999px;
+    background: #fff;
+    font: 500 13px/1 "DM Sans", system-ui, sans-serif;
+    color: var(--color-warm-700);
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    min-height: 40px;
+}
+.discovery-quick-chip:hover {
+    border-color: var(--color-sunset-400);
+    color: var(--color-sunset-500);
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 1023px) {
+    .discovery-split-v2 {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+    .discovery__list {
+        border-right: 0;
+        border-bottom: 1px solid var(--color-gray-200);
+        max-height: 70vh;
+    }
+    .discovery__map {
+        height: 420px;
+        min-height: 0;
+    }
+    .discovery-filter-bar {
+        padding: 10px 16px;
+    }
+    .discovery-assistant-fab {
+        bottom: 74px; /* clear the mobile tab bar */
+    }
+}
+
+/* ---------- MOBILE (≤767px): single-column, full-screen map/list toggle ---------- */
+
+@media (max-width: 767px) {
+    /* Mobile search + chip row block, flush inside the sand container. */
+    .discovery-mobile-top {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px 16px 4px;
+        background: var(--color-sand-50);
+    }
+    .discovery-mobile-search {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: var(--color-warm-100);
+        border: 1px solid var(--color-gray-200);
+        color: var(--color-text-primary);
+        min-height: 40px;
+    }
+    .discovery-mobile-search i { color: var(--color-warm-500); flex-shrink: 0; }
+    .discovery-mobile-search input {
+        flex: 1;
+        min-width: 0;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        font: 500 14px/1 "DM Sans", system-ui, sans-serif;
+        color: var(--color-text-primary);
+    }
+    .discovery-mobile-search input::placeholder { color: var(--color-warm-500); }
+
+    .discovery-mobile-quick {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 8px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        padding: 2px 0 6px;
+        scrollbar-width: none;
+    }
+    .discovery-mobile-quick::-webkit-scrollbar { display: none; }
+
+    /* Filter bar: horizontal-scroll pill strip; dropdowns no-wrap. */
+    .discovery-filter-bar {
+        padding: 8px 16px;
+        gap: 6px;
+    }
+    .discovery-filter-bar__pills,
+    .discovery-filter-bar__chips {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 2px;
+    }
+    .discovery-filter-bar__pills::-webkit-scrollbar,
+    .discovery-filter-bar__chips::-webkit-scrollbar { display: none; }
+    .discovery-filter-bar__pills > *,
+    .discovery-filter-bar__chips > * { flex-shrink: 0; scroll-snap-align: start; }
+    .discovery-dropdown__trigger,
+    .discovery-chip {
+        min-height: 40px;
+    }
+    /* Dropdown menus on mobile: anchor wider so they don't clip at screen edge. */
+    .discovery-dropdown__menu {
+        grid-template-columns: 1fr;
+        min-width: min(260px, calc(100vw - 32px));
+        max-width: calc(100vw - 32px);
+    }
+
+    /* Full-screen mobile list / map toggle (driven by body class). */
+    .discovery__list {
+        max-height: none;
+        padding: 10px 12px 20px;
+        border-bottom: 0;
+    }
+    .discovery__map {
+        height: calc(100vh - 200px);
+        min-height: 420px;
+    }
+    body.mobile-view-map .discovery__list { display: none; }
+    body.mobile-view-list .discovery__map { display: none; }
+
+    /* Hide "Ask the assistant" FAB on mobile — chat lives in tab bar. */
+    .discovery-assistant-fab { display: none; }
+
+    /* Compact card: side-by-side thumb + body already fits at 360px; trim. */
+    .discovery-card {
+        grid-template-columns: 104px 1fr;
+        padding: 8px;
+        gap: 10px;
+    }
+    .discovery-card__thumb { height: 104px; }
+    .discovery-card__title { font-size: 18px; }
+}
+
+/* ---------- MOBILE NAV COLLAPSE (≤767px): hamburger + brand + user ---------- */
+
+@media (max-width: 767px) {
+    .nav-discovery__inner {
+        gap: 10px;
+    }
+    .nav-discovery__brand {
+        flex: 1 1 auto;
+        justify-content: center;
+    }
+    .nav-discovery__brand-emoji {
+        width: 26px;
+        height: 26px;
+        font-size: 15px;
+        border-radius: 8px;
+    }
+    .nav-discovery__search,
+    .nav-discovery__links,
+    .nav-discovery__right { display: none; }
+
+    /* Compact user-icon link on the right next to hamburger. */
+    .nav-discovery__mobile-user {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 999px;
+        color: rgba(255, 255, 255, 0.85);
+        text-decoration: none;
+    }
+    .nav-discovery__mobile-user:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
+}
+@media (min-width: 768px) {
+    .nav-discovery__mobile-user { display: none; }
+}
+
+/* ---------- REVIEW VISIT-TYPE CHIPS (Phase 2, beach detail) ---------- */
+
+.reviews-visit-filter .chip-review {
+    transition: background-color .12s ease, color .12s ease;
+}
+.reviews-visit-filter .chip-review--active {
+    box-shadow: var(--shadow-sm);
+}
+
+/* ---------- MOBILE BOTTOM TAB BAR (Phase 3, site-wide) ---------- */
+
+.mobile-tabbar {
+    display: none;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: var(--z-drawer);
+    background: var(--color-ocean-900);
+    border-top: 1px solid var(--color-ocean-800);
+    padding: 6px env(safe-area-inset-right, 0) calc(6px + env(safe-area-inset-bottom, 0)) env(safe-area-inset-left, 0);
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+}
+.mobile-tabbar__tab {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 8px 4px;
+    font: 600 11px/1 "DM Sans", system-ui, sans-serif;
+    color: rgba(255, 255, 255, 0.72);
+    background: transparent;
+    border: 0;
+    text-decoration: none;
+    cursor: pointer;
+    min-height: 56px;
+    transition: color .12s ease;
+}
+.mobile-tabbar__tab i { width: 22px; height: 22px; }
+.mobile-tabbar__tab:hover,
+.mobile-tabbar__tab:focus-visible {
+    color: #fff;
+}
+.mobile-tabbar__tab.is-active {
+    color: var(--color-sunset-400);
+    font-weight: 700;
+}
+.mobile-tabbar__tab.is-active i { stroke-width: 2.25; }
+@media (max-width: 1023px) {
+    .mobile-tabbar { display: flex; }
+    /* Body padding clears the fixed tabbar (inc. iOS safe-area). */
+    body { padding-bottom: calc(64px + env(safe-area-inset-bottom, 0)); }
+
+    /* Fixed bottom elements must stack above the tabbar, not under it.
+       The comparison bar and PWA install banner both live at bottom:0 and
+       would otherwise be covered by .mobile-tabbar (z-index: var(--z-drawer)).
+       The compare-bar toggles visibility via Tailwind's .translate-y-full,
+       which only moves the bar by its own height — not enough to clear our
+       extra bottom offset. Override the "hidden" transform so the bar fully
+       slides off-screen below the tabbar on mobile. */
+    #compare-bar {
+        bottom: calc(64px + env(safe-area-inset-bottom, 0));
+        z-index: calc(var(--z-drawer) + 1);
+    }
+    #compare-bar.translate-y-full {
+        transform: translateY(calc(100% + 64px + env(safe-area-inset-bottom, 0))) !important;
+    }
+    #pwa-install-banner {
+        bottom: calc(72px + env(safe-area-inset-bottom, 0));
+        z-index: calc(var(--z-drawer) + 1);
+    }
+}
+
+/* ---------- FOOTER (mobile polish) ---------- */
+
+@media (max-width: 767px) {
+    /* Tighter vertical rhythm so the 4-column stack doesn't feel endless.
+       Side padding gets the iOS safe-area treatment to avoid notch clipping. */
+    footer.bg-ocean-900 {
+        padding-top: 28px;
+        padding-bottom: calc(20px + env(safe-area-inset-bottom, 0));
+        padding-left: max(16px, env(safe-area-inset-left, 0));
+        padding-right: max(16px, env(safe-area-inset-right, 0));
+    }
+    /* Trim the gap between stacked footer columns so the page doesn't
+       scroll forever on mobile. */
+    footer .grid.grid-cols-1 { gap: 24px; }
+
+    /* Brand column: collapses a full-height hero into a compact masthead.
+       The brand logo + tagline + tools list previously took ~one screen on
+       mobile before the first link list appeared. */
+    .footer-brand-col { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .footer-brand-col .footer-brand-row { margin-bottom: 0; gap: 8px; }
+    .footer-brand-col .footer-about { font-size: 12px; line-height: 1.4; margin-bottom: 0; }
+    .footer-brand-col .footer-tools { margin-top: 4px; }
+    .footer-brand-col .footer-tools-heading { margin-bottom: 6px; }
+    .footer-brand-col .footer-tools ul { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; }
+    .footer-brand-col .footer-tools ul li a { font-size: 12px; }
+
+    /* Palm-tree decoration: 256px at 360px viewport is oversized and
+       drifts into the bottom-right copy; scale it and anchor it in a
+       corner where it's purely decorative. */
+    footer .absolute.bottom-0.right-0.w-64 {
+        width: 120px;
+        height: 120px;
+    }
+    /* Copyright line gets extra breathing room above the tabbar. */
+    .footer-copyright { margin-top: 20px; padding-top: 16px; }
+}
+
+/* ---------- BEACH DETAIL polish (Phase 2/4) ---------- */
+
+.live-conditions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px 18px;
+    font-size: 13px;
+}
+.live-conditions-grid .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--color-gray-200);
+    color: var(--color-text-secondary);
+}
+.live-conditions-grid .row:nth-last-child(-n+2) {
+    border-bottom: 0;
+}
+.live-conditions-grid .row b {
+    color: var(--color-text-primary);
+    font-weight: 600;
+}
+
+.plan-your-day-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+}
+.plan-your-day-actions .btn-plan {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font: 600 13px/1 "DM Sans", system-ui, sans-serif;
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-gray-200);
+    cursor: pointer;
+    transition: border-color .12s ease, background-color .12s ease;
+    text-decoration: none;
+}
+.plan-your-day-actions .btn-plan:hover { border-color: var(--color-sunset-400); }
+.plan-your-day-actions .btn-plan--primary {
+    background: var(--color-ocean-700);
+    color: #fff;
+    border-color: var(--color-ocean-700);
+}
+.plan-your-day-actions .btn-plan--primary:hover {
+    background: var(--color-ocean-800);
+    border-color: var(--color-ocean-800);
+}
+
+.nearby-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+.nearby-pills .nearby-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--color-gray-100);
+    color: var(--color-text-secondary);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font: 500 13px/1 "DM Sans", system-ui, sans-serif;
+    text-decoration: none;
+    transition: background-color .12s ease;
+}
+.nearby-pills .nearby-pill:hover {
+    background: var(--color-gray-200);
+    color: var(--color-text-primary);
+}
+
+.local-tips-card {
+    background: linear-gradient(180deg, var(--color-sand-100), var(--color-sand-50));
+    border: 1px solid var(--color-sand-200);
+    border-radius: 16px;
+    padding: 18px 22px;
+    margin-top: 16px;
+}
+.local-tips-card__byline {
+    color: var(--color-sunset-600);
+    font: 600 11px/1 "DM Sans", system-ui, sans-serif;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+.local-tips-card__title {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 22px;
+    margin-bottom: 6px;
+    color: var(--color-text-primary);
+}
+.local-tips-card__body {
+    color: var(--color-text-dark);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* ============================================================
+   TOP NAV — Home · Map-first discovery (wireframe 1:1)
+   ============================================================ */
+
+.nav-discovery {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-nav);
+    background: var(--color-ocean-800);
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+}
+.nav-discovery__inner {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-discovery__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+.nav-discovery__brand-emoji {
+    font-size: 20px;
+    line-height: 1;
+    width: 34px;
+    height: 34px;
+    display: inline-grid;
+    place-items: center;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--color-sunset-400), var(--color-sunset-500));
+    box-shadow: 0 2px 8px rgba(251, 146, 60, .35);
+}
+.nav-discovery__brand-name {
+    font: 700 16px/1 "DM Sans", system-ui, sans-serif;
+    color: #fff;
+    letter-spacing: .005em;
+    white-space: nowrap;
+}
+
+.nav-discovery__links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+.nav-discovery__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font: 500 14px/1 "DM Sans", system-ui, sans-serif;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    transition: color .12s ease, background-color .12s ease;
+}
+.nav-discovery__link:hover,
+.nav-discovery__link:focus-visible {
+    color: var(--color-sunset-400);
+}
+.nav-discovery__link--has-caret {
+    padding-right: 10px;
+}
+
+.nav-discovery__search {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 420px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    padding: 8px 14px;
+    transition: background-color .12s ease, border-color .12s ease;
+}
+.nav-discovery__search:focus-within {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.32);
+}
+.nav-discovery__search input {
+    background: transparent;
+    border: 0;
+    outline: 0;
+    flex: 1;
+    min-width: 0;
+    color: #fff;
+    font: 500 14px/1 "DM Sans", system-ui, sans-serif;
+}
+.nav-discovery__search input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.nav-discovery__right {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+.nav-discovery__lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font: 600 13px/1 "DM Sans", system-ui, sans-serif;
+    color: rgba(255, 255, 255, 0.85);
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    letter-spacing: .02em;
+    transition: color .12s ease;
+}
+.nav-discovery__lang:hover { color: var(--color-sunset-400); }
+.nav-discovery__lang-sep { opacity: .4; margin: 0 4px; }
+
+.nav-discovery__signin {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    color: rgba(255, 255, 255, 0.9);
+    border-radius: 999px;
+    font: 600 13px/1 "DM Sans", system-ui, sans-serif;
+    text-decoration: none;
+    transition: background-color .12s ease, border-color .12s ease, color .12s ease;
+}
+.nav-discovery__signin:hover {
+    background: var(--color-sunset-400);
+    border-color: var(--color-sunset-400);
+    color: var(--color-ocean-900);
+}
+
+.nav-discovery__user {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: background-color .12s ease, color .12s ease;
+}
+.nav-discovery__user:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+.nav-discovery__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    display: inline-grid;
+    place-items: center;
+    color: #fff;
+    font: 700 12px/1 "DM Sans", system-ui, sans-serif;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Top padding offset for the fixed nav */
+body { padding-top: 56px; }
+
+@media (max-width: 767px) {
+    .nav-discovery { padding: 0 16px; height: 52px; }
+    body { padding-top: 52px; }
+    .nav-discovery__brand-name { font-size: 14px; }
+}
+
+/* The legacy chat FAB is a round 56px button; the discovery shell replaces
+   it with a larger labeled pill ("Ask the assistant") that triggers the same
+   panel. Hide the legacy FAB on pages that set body.home-discovery. */
+body.home-discovery #chat-fab { display: none !important; }
+
+/* ============================================================
+   MOBILE AUTOCOMPLETE + CLUSTER STYLES (post-audit features)
+   ============================================================ */
+
+/* Autocomplete results panel anchored to the mobile-search pill. */
+.discovery-mobile-search { position: relative; }
+.discovery-mobile-search__results {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    z-index: var(--z-modal);
+    background: #fff;
+    border: 1px solid var(--color-gray-200);
+    border-radius: 14px;
+    box-shadow: var(--shadow-popup);
+    max-height: min(60vh, 420px);
+    overflow-y: auto;
+    padding: 4px;
+    -webkit-overflow-scrolling: touch;
+}
+.discovery-mobile-search__result {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    color: var(--color-text-primary);
+    text-decoration: none;
+    font: 500 14px/1.3 "DM Sans", system-ui, sans-serif;
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+}
+.discovery-mobile-search__result:hover,
+.discovery-mobile-search__result[aria-selected="true"] {
+    background: var(--color-gray-100);
+}
+.discovery-mobile-search__result-icon {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    background: var(--color-sunset-100, rgba(251,146,60,0.16));
+    display: grid;
+    place-items: center;
+    color: var(--color-sunset-500);
+    font-size: 14px;
+}
+.discovery-mobile-search__result-text {
+    flex: 1;
+    min-width: 0;
+}
+.discovery-mobile-search__result-name {
+    display: block;
+    color: var(--color-text-primary);
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.discovery-mobile-search__result-muni {
+    display: block;
+    font-size: 11px;
+    color: var(--color-warm-500);
+    margin-top: 2px;
+}
+.discovery-mobile-search__empty {
+    padding: 14px;
+    text-align: center;
+    color: var(--color-warm-500);
+    font: 500 13px/1.3 "DM Sans", system-ui, sans-serif;
+}
+
+/* Map cluster pill: a synthetic marker representing N nearby beaches. */
+.beach-cluster {
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    background: var(--color-ocean-700);
+    color: #fff;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    display: grid;
+    place-items: center;
+    font: 700 12px/1 "DM Sans", system-ui, sans-serif;
+    cursor: pointer;
+    transition: transform .12s ease;
+}
+.beach-cluster:hover { transform: scale(1.08); }
+.beach-cluster--lg { width: 40px; height: 40px; font-size: 14px; }
+.beach-cluster--xl { width: 48px; height: 48px; font-size: 15px; }
+
+/* ============================================================
+   MOBILE FIXES (post-audit). Loaded LAST so they win cascade
+   ties against earlier rules in this file.
+   ============================================================ */
+
+/* Closed dropdown <details> should not paint its menu. The earlier base rule
+   sets display:grid unconditionally; restore the spec'd hidden-on-closed. */
+details.discovery-dropdown:not([open]) > .discovery-dropdown__menu { display: none; }
+
+@media (max-width: 767px) {
+    /* Force the desktop nav to stay collapsed on phones. Specificity tied with
+       earlier display:flex rules — these load later, so they win. */
+    .nav-discovery__links,
+    .nav-discovery__search,
+    .nav-discovery__right { display: none !important; }
+
+    /* Mobile menu is a flex sibling of the brand row; without explicit
+       positioning it shrinks to ~2px in the flex container. Pin it absolutely
+       below the nav so it spans the viewport when toggled open. */
+    #mobile-menu:not(.hidden) {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        margin-top: 0;
+        max-height: calc(100vh - 52px);
+        overflow-y: auto;
+        border-radius: 0 0 16px 16px;
+        z-index: var(--z-nav);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Filter-bar dropdowns: parent has overflow-y:hidden for horizontal scroll,
+       which clips the menu. Render open menus as a bottom-sheet instead so
+       they're never clipped. */
+    details.discovery-dropdown[open] > .discovery-dropdown__menu {
+        position: fixed;
+        left: 12px;
+        right: 12px;
+        top: auto;
+        bottom: calc(64px + env(safe-area-inset-bottom, 0) + 12px);
+        max-width: none;
+        max-height: 60vh;
+        z-index: var(--z-modal);
+        box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.18);
+    }
+    /* Backdrop hint when a dropdown is open. */
+    body:has(details.discovery-dropdown[open])::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.32);
+        z-index: calc(var(--z-modal) - 1);
+        pointer-events: none;
+    }
+
+    /* Sticky filter-bar lands flush below the fixed nav (52px) and gets a
+       subtle drop-shadow once it engages so it visually separates from the
+       map content sliding under it. */
+    .discovery-filter-bar {
+        top: 52px;
+        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
+    }
+
+    /* Toasts stack ABOVE the mobile tabbar, not under it. */
+    .toast-container {
+        bottom: calc(64px + env(safe-area-inset-bottom, 0) + 12px) !important;
+    }
+
+    /* Lift the entire bottom-bar (Near me / 30-min / legend pills) above the
+       fixed mobile tabbar. The previous rule targeted .discovery-map__legend-inline
+       directly, but that element is a non-positioned flex child of the bar, so
+       its `bottom` was a no-op. Move the parent. */
+    .discovery-map__bottom-bar {
+        bottom: calc(64px + env(safe-area-inset-bottom, 0) + 12px);
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        max-width: calc(100vw - 28px);
+    }
+
+    /* Legacy .map-legend (added by map.js's addMapLegend) duplicates the new
+       wireframe's inline legend AND clips behind the mobile tabbar. Hide on
+       the discovery shell (which always provides the new legend). */
+    .discovery__map .map-legend { display: none; }
+}

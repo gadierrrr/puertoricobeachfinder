@@ -13,7 +13,10 @@ cd "$(dirname "$0")/.."
 
 echo "Building CSS from partials..."
 
-# Concatenate partials in correct order
+# Write the generated-file banner first, then append partials
+echo "/* GENERATED FILE — DO NOT EDIT. Edit partials in public/assets/css/partials/ then run: npm run build:css */" > "$OUTPUT_FILE"
+
+# Concatenate partials in correct order (append after the banner)
 cat "$PARTIALS_DIR/_variables.css" \
     "$PARTIALS_DIR/_base.css" \
     "$PARTIALS_DIR/_loading.css" \
@@ -32,7 +35,7 @@ cat "$PARTIALS_DIR/_variables.css" \
     "$PARTIALS_DIR/_accessibility.css" \
     "$PARTIALS_DIR/_dark-mode.css" \
     "$PARTIALS_DIR/_responsive.css" \
-    "$PARTIALS_DIR/_print.css" > "$OUTPUT_FILE"
+    "$PARTIALS_DIR/_print.css" >> "$OUTPUT_FILE"
 
 # Get file size
 SIZE=$(wc -c < "$OUTPUT_FILE" | tr -d ' ')
