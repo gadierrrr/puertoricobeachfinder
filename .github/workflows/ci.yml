@@ -81,6 +81,7 @@ jobs:
           echo "=== DIAG: homepage status ==="; curl -s -o /tmp/ci-home.html -w 'status=%{http_code}\n' http://127.0.0.1:8082/ || true
           echo "=== DIAG: homepage body (head) ==="; head -40 /tmp/ci-home.html || true
           echo "=== DIAG: dev server log ==="; cat /tmp/beach-finder-ci-server.log || true
+          echo "=== DIAG: app.log (exception trace) ==="; tail -30 data/logs/app.log 2>/dev/null || true
           php scripts/check-analytics-umami.php \
             --urls=http://127.0.0.1:8082/,http://127.0.0.1:8082/best-beaches \
             --expect-website-id=ci-umami-website-id \
