@@ -183,7 +183,10 @@ if ($bodyVariant === 'collection-light') {
     $canonical = absoluteUrl($canonicalPath);
     $canonicalEn = absoluteUrl(localizePath($canonicalPath, 'en'));
     $canonicalEs = absoluteUrl(localizePath($canonicalPath, 'es'));
-    $emitHreflang = isIndexableLocalePath($canonicalPath);
+    // Only emit hreflang alternates for routes that genuinely have both an
+    // English and Spanish version (skips indexable English-only pages like
+    // unmapped guides, which would otherwise advertise a 404'ing /es alternate).
+    $emitHreflang = isIndexableLocalePath($canonicalPath) && isLocalizedLocalePath($canonicalPath);
 
     // Normalize before checking indexability so /login and /login.php behave the same.
     $normalizedRequestPath = $normalizeCanonicalPath($requestPath);
