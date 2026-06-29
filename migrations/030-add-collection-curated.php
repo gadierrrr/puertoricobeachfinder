@@ -48,7 +48,13 @@ $curatedBeaches = [
     ['best-beaches', 'b225eae8-1627-4a33-8f66-239338be77e0', 15], // Balneario de Boqueron
 ];
 
-$stmt = $db->prepare('INSERT OR IGNORE INTO collection_curated (collection_key, beach_id, rank) VALUES (:key, :beach_id, :rank)');
+// Only seed beaches that exist (INSERT OR IGNORE does not suppress FOREIGN
+// KEY failures, so guard with EXISTS to stay safe on an empty/fresh DB, e.g. CI).
+$stmt = $db->prepare(
+    'INSERT OR IGNORE INTO collection_curated (collection_key, beach_id, rank)
+     SELECT :key, :beach_id, :rank
+     WHERE EXISTS (SELECT 1 FROM beaches WHERE id = :beach_id)'
+);
 
 $inserted = 0;
 foreach ($curatedBeaches as [$key, $beachId, $rank]) {
