@@ -554,13 +554,18 @@ function localeRouteMatch(string $path): ?array
         ];
     }
 
-    // Individual guide pages: /guides/{slug} and /es/guias/{slug}
+    // Individual guide pages: /guides/{slug} and /es/guias/{slug}.
+    // Indexable, but NOT localized: most guides are English-only, so we must
+    // not advertise an /es/guias/{slug} hreflang alternate that 404s. Guides
+    // that have a real Spanish version are mapped explicitly in localeRoutes()
+    // (with translated slugs) and match above before reaching here.
     if (preg_match('#^/guides/([a-z0-9-]+)$#', $path, $matches)) {
         return [
             'route_key' => 'guide_detail',
             'locale' => 'en',
             'params' => ['slug' => $matches[1]],
             'indexable' => true,
+            'localized' => false,
         ];
     }
     if (preg_match('#^/es/guias/([a-z0-9-]+)$#', $path, $matches)) {
@@ -569,6 +574,7 @@ function localeRouteMatch(string $path): ?array
             'locale' => 'es',
             'params' => ['slug' => $matches[1]],
             'indexable' => true,
+            'localized' => false,
         ];
     }
 
@@ -788,6 +794,20 @@ function isIndexableLocalePath(string $path): bool
         return false;
     }
     return (bool) ($match['indexable'] ?? true);
+}
+
+/**
+ * Whether a path has a genuine alternate-language version, i.e. whether
+ * hreflang alternates should be emitted. Indexable-but-English-only routes
+ * (guides without a Spanish translation) return false.
+ */
+function isLocalizedLocalePath(string $path): bool
+{
+    $match = localeRouteMatch($path);
+    if (!is_array($match)) {
+        return false;
+    }
+    return (bool) ($match['localized'] ?? true);
 }
 
 /**
