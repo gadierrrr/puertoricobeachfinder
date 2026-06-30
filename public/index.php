@@ -205,22 +205,24 @@ $publishedCount = queryOne('SELECT COUNT(*) as cnt FROM beaches WHERE publish_st
 include APP_ROOT . '/components/header.php';
 ?>
 
-<!-- Hero Section - Tropical Daytime Split Layout -->
-<header class="relative w-full min-h-[85vh] flex items-end overflow-hidden">
-    <!-- Background with gradient overlay -->
+<!-- Hero Section - Consolidated, search-first layout -->
+<header class="relative w-full min-h-[600px] lg:min-h-[620px] flex items-center pt-20 overflow-hidden">
+    <!-- Background with gradient overlays -->
     <div class="absolute inset-0 -z-10">
         <img src="/images/beaches/jobos-beach-isabela-18513-67085.jpg"
              alt="Jobos Beach in Isabela, Puerto Rico - famous for surfing"
              class="w-full h-full object-cover scale-110"
              loading="eager">
+        <!-- bottom-up brand gradient -->
         <div class="absolute inset-0 bg-hero-gradient"></div>
-        <div class="absolute inset-0 bg-black/30"></div>
+        <!-- left scrim keeps the consolidated text column legible wherever it sits -->
+        <div class="absolute inset-0 bg-gradient-to-r from-ocean-900/75 via-ocean-900/30 to-transparent"></div>
+        <div class="absolute inset-0 bg-black/15"></div>
     </div>
 
-    <!-- Hero Content - Split Grid -->
-    <div class="z-10 w-full max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-[73px] pb-12 pt-32 grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-8 lg:gap-10 items-end">
-        <!-- Left: Text Content -->
-        <div class="text-left animate-fade-in-up">
+    <!-- Hero Content - single consolidated column -->
+    <div class="relative z-10 w-full max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-[73px]">
+        <div class="max-w-[680px] text-left animate-fade-in-up">
             <!-- Eyebrow Badge -->
             <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/15 backdrop-blur-sm text-orange-300 text-xs mb-4">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
@@ -228,50 +230,51 @@ include APP_ROOT . '/components/header.php';
             </div>
 
             <!-- Headline -->
-            <h1 class="text-[56px] font-serif text-white leading-[1.1] mb-3.5">
+            <h1 class="text-[40px] sm:text-[52px] lg:text-[56px] font-serif text-white leading-[1.1] mb-3.5">
                 <?= h(__('pages.home.hero_headline_1')) ?> <em style="color: #a3e8ea"><?= h(__('pages.home.hero_headline_2')) ?></em>
             </h1>
 
             <!-- Subtitle -->
-            <p class="text-base mb-6" style="color: rgba(255,255,255,0.75); max-width: 440px">
+            <p class="text-base mb-6" style="color: rgba(255,255,255,0.82); max-width: 540px">
                 <?= h(__('pages.home.hero_subtitle', ['count' => number_format($totalBeaches)])) ?>
             </p>
 
-            <!-- Stat Pills -->
-            <div class="flex items-center gap-3">
-                <span class="inline-flex items-center gap-1.5 px-4 py-[7px] rounded-full bg-white/10 backdrop-blur-sm text-white text-[13px]">
+            <!-- Search (primary anchor, directly under the headline) -->
+            <div class="bg-white rounded-2xl p-2 shadow-search animate-fade-in-up delay-100 w-full max-w-[600px]">
+                <form action="/#beaches" method="GET" class="hero-search-form relative" id="hero-search-form">
+                    <div class="flex items-center px-3 py-2">
+                        <i data-lucide="search" class="w-[18px] h-[18px] text-warm-400 flex-shrink-0" aria-hidden="true"></i>
+                        <input type="text"
+                               name="q"
+                               id="hero-search-input"
+                               placeholder="<?= h(__('pages.home.search_placeholder')) ?>"
+                               value="<?= h($searchQuery) ?>"
+                               class="flex-1 bg-transparent border-none text-warm-900 placeholder-warm-400 px-3 py-2 focus:outline-none text-[15px]"
+                               aria-label="<?= h(__('common.search')) ?>"
+                               autocomplete="off">
+                        <button type="submit" class="bg-ocean-600 hover:bg-ocean-700 text-white w-[42px] h-[42px] rounded-full flex items-center justify-center transition-colors flex-shrink-0" aria-label="<?= h(__('pages.home.search_button')) ?>">
+                            <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+                        </button>
+                    </div>
+                    <!-- Search Autocomplete Dropdown -->
+                    <div id="search-autocomplete" class="hidden absolute left-0 right-0 top-full mt-2 bg-white shadow-lg border border-warm-200 rounded-xl overflow-hidden z-50">
+                        <div id="search-results" class="max-h-64 overflow-y-auto"></div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Stats (inline row, under the search) -->
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-5 text-[13px]" style="color: rgba(255,255,255,0.85)">
+                <span class="inline-flex items-center gap-1.5">
                     <svg class="w-4 h-4 text-sunset-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                     <?= h(__('pages.home.hero_stat_rating', ['rating' => number_format($siteStats['avg_rating'], 1)])) ?>
                 </span>
-                <span class="inline-flex items-center gap-1.5 px-4 py-[7px] rounded-full bg-white/10 backdrop-blur-sm text-white text-[13px]">
+                <span aria-hidden="true" style="color: rgba(255,255,255,0.35)">&middot;</span>
+                <span class="inline-flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full bg-sunset-400"></span>
                     <?= h(__('pages.home.hero_stat_reviews', ['count' => number_format($siteStats['total_reviews'] / 1000) . 'K'])) ?>
                 </span>
             </div>
-        </div>
-
-        <!-- Right: Search Card -->
-        <div class="bg-white rounded-2xl p-2 shadow-search animate-fade-in-up delay-200">
-            <form action="/#beaches" method="GET" class="hero-search-form relative" id="hero-search-form">
-                <div class="flex items-center px-3 py-2">
-                    <i data-lucide="search" class="w-[18px] h-[18px] text-warm-400 flex-shrink-0" aria-hidden="true"></i>
-                    <input type="text"
-                           name="q"
-                           id="hero-search-input"
-                           placeholder="<?= h(__('pages.home.search_placeholder')) ?>"
-                           value="<?= h($searchQuery) ?>"
-                           class="flex-1 bg-transparent border-none text-warm-900 placeholder-warm-400 px-3 py-2 focus:outline-none text-[15px]"
-                           aria-label="<?= h(__('common.search')) ?>"
-                           autocomplete="off">
-                    <button type="submit" class="bg-ocean-600 hover:bg-ocean-700 text-white w-[42px] h-[42px] rounded-full flex items-center justify-center transition-colors flex-shrink-0" aria-label="<?= h(__('pages.home.search_button')) ?>">
-                        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
-                    </button>
-                </div>
-                <!-- Search Autocomplete Dropdown -->
-                <div id="search-autocomplete" class="hidden absolute left-0 right-0 top-full mt-2 bg-white shadow-lg border border-warm-200 rounded-xl overflow-hidden z-50">
-                    <div id="search-results" class="max-h-64 overflow-y-auto"></div>
-                </div>
-            </form>
         </div>
     </div>
 </header>
@@ -352,31 +355,33 @@ include APP_ROOT . '/components/header.php';
 })();
 </script>
 
-<!-- Category Cards -->
-<section class="py-12 bg-white">
+<!-- Category Cards - floating strip overlapping the hero's bottom edge -->
+<section class="bg-white pb-12">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            <?php
-            $categories = [
-                'surfing'          => ['emoji' => '🏄‍♂️', 'label' => __('pages.home.category_surfing'),    'bg' => 'bg-blue-100'],
-                'snorkeling'       => ['emoji' => '🤿',    'label' => __('pages.home.category_snorkeling'), 'bg' => 'bg-teal-100'],
-                'family-friendly'  => ['emoji' => '👨‍👩‍👧', 'label' => __('pages.home.category_family'),     'bg' => 'bg-amber-100'],
-                'secluded'         => ['emoji' => '🌴',    'label' => __('pages.home.category_secluded'),   'bg' => 'bg-green-100'],
-                'swimming'         => ['emoji' => '🏊',    'label' => __('tags.swimming'),                  'bg' => 'bg-cyan-100'],
-                'scenic'           => ['emoji' => '🏞️',    'label' => __('tags.scenic'),                    'bg' => 'bg-orange-100'],
-            ];
-            foreach ($categories as $tag => $cat):
-                $count = $tagCounts[$tag] ?? 0;
-            ?>
-            <a href="/beaches/<?= h($tag) ?>"
-               class="flex flex-col items-center gap-3 py-5 px-3 bg-white rounded-xl border-[1.5px] border-warm-200 hover:shadow-lg hover:border-ocean-300 transition-all group">
-                <div class="w-12 h-12 rounded-xl <?= $cat['bg'] ?> flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                    <?= $cat['emoji'] ?>
-                </div>
-                <span class="font-semibold text-warm-900 text-sm"><?= h($cat['label']) ?></span>
-                <span class="text-xs text-warm-500"><?= $count ?> <?= $count === 1 ? 'beach' : 'beaches' ?></span>
-            </a>
-            <?php endforeach; ?>
+        <div class="relative z-20 -mt-14 md:-mt-20 bg-white rounded-2xl shadow-xl border border-warm-100 p-4 md:p-5">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-3">
+                <?php
+                $categories = [
+                    'surfing'          => ['emoji' => '🏄‍♂️', 'label' => __('pages.home.category_surfing'),    'bg' => 'bg-blue-100'],
+                    'snorkeling'       => ['emoji' => '🤿',    'label' => __('pages.home.category_snorkeling'), 'bg' => 'bg-teal-100'],
+                    'family-friendly'  => ['emoji' => '👨‍👩‍👧', 'label' => __('pages.home.category_family'),     'bg' => 'bg-amber-100'],
+                    'secluded'         => ['emoji' => '🌴',    'label' => __('pages.home.category_secluded'),   'bg' => 'bg-green-100'],
+                    'swimming'         => ['emoji' => '🏊',    'label' => __('tags.swimming'),                  'bg' => 'bg-cyan-100'],
+                    'scenic'           => ['emoji' => '🏞️',    'label' => __('tags.scenic'),                    'bg' => 'bg-orange-100'],
+                ];
+                foreach ($categories as $tag => $cat):
+                    $count = $tagCounts[$tag] ?? 0;
+                ?>
+                <a href="/beaches/<?= h($tag) ?>"
+                   class="flex flex-col items-center gap-2.5 py-4 px-3 rounded-xl hover:bg-warm-50 transition-colors group">
+                    <div class="w-12 h-12 rounded-xl <?= $cat['bg'] ?> flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                        <?= $cat['emoji'] ?>
+                    </div>
+                    <span class="font-semibold text-warm-900 text-sm"><?= h($cat['label']) ?></span>
+                    <span class="text-xs text-warm-500"><?= $count ?> <?= $count === 1 ? 'beach' : 'beaches' ?></span>
+                </a>
+                <?php endforeach; ?>
+            </div>
         </div>
     </div>
 </section>
