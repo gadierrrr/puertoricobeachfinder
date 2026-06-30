@@ -5,6 +5,12 @@
  */
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/../bootstrap.php';
+// This page hand-rolls its <head> (it must stay self-contained for the offline
+// fallback) instead of using components/header.php, so it must pull in the CSP
+// helpers itself — otherwise the cspNonceAttr() call below fatals with
+// "undefined function" and the page 500s. security_headers.php also emits the
+// CSP/security headers and guards against output being already sent.
+require_once APP_ROOT . '/inc/security_headers.php';
 
 $pageTitle = 'Offline';
 ?>

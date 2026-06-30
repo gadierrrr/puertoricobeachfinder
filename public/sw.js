@@ -3,7 +3,7 @@
  * Handles offline caching and background sync
  */
 
-const CACHE_VERSION = 'v2.1.0';
+const CACHE_VERSION = 'v2.2.0';
 const CACHE_NAME = `beach-finder-${CACHE_VERSION}`;
 const DATA_CACHE_NAME = `beach-finder-data-${CACHE_VERSION}`;
 
@@ -28,6 +28,10 @@ const MAX_DATA_CACHE = 50;
 
 // Install event - cache core assets
 self.addEventListener('install', (event) => {
+    // Activate this updated worker immediately so fixes (e.g. the OAuth
+    // duplicate-request fix below) take effect on the user's next visit
+    // instead of waiting for every old-worker-controlled tab to close.
+    self.skipWaiting();
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => cache.addAll(PRECACHE_ASSETS))
@@ -37,15 +41,29 @@ self.addEventListener('install', (event) => {
     );
 });
 
-// Activate event - clean up old caches, enable navigation preload
+// Activate event - clean up old caches, disable navigation preload, claim clients
 self.addEventListener('activate', (event) => {
     const currentCaches = [CACHE_NAME, DATA_CACHE_NAME];
 
     event.waitUntil(
         (async () => {
-            // Enable navigation preload if supported
+            // Navigation preload is intentionally DISABLED.
+            //
+            // When enabled, the browser fires a preload network request for every
+            // navigation. Any navigation this worker does NOT answer with
+            // respondWith() — notably the /auth/, /login, /logout bypass in the
+            // fetch handler below — then triggers the browser's own fallback fetch
+            // as well, so TWO requests reach the server for a single navigation.
+            // For idempotent pages that is merely wasteful, but for
+            // /auth/google/callback.php the first request consumed the one-time
+            // OAuth state token and Google's single-use authorization code, so the
+            // duplicate second request failed the state check and showed users
+            // "Invalid request. Please try again." Disabling it (and undoing any
+            // enable() left over from a previously-installed worker, since the
+            // setting persists across worker updates) guarantees one request per
+            // navigation.
             if (self.registration.navigationPreload) {
-                await self.registration.navigationPreload.enable();
+                await self.registration.navigationPreload.disable();
             }
 
             // Clean up old caches
