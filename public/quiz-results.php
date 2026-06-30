@@ -106,6 +106,54 @@ include APP_ROOT . '/components/header.php';
     </div>
 </section>
 
+<?php
+// Quiz -> sign-up / keep-your-matches band (Sprint 2 item 7).
+$qrIsAuthed = isAuthenticated();
+$qrSaveCount = count($beachIds);
+$qrCsrf = $qrIsAuthed ? csrfToken() : '';
+$qrAutoSave = ($qrIsAuthed && ($_GET['save'] ?? '') === '1');
+$qrLang = getCurrentLanguage();
+$qrIsEs = ($qrLang === 'es');
+$qrLoginRedirect = '/quiz-results?token=' . rawurlencode($token) . '&save=1';
+?>
+<section class="py-6 bg-sand-50">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-ocean-900 text-white rounded-2xl p-6 sm:p-7 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <h2 class="text-lg sm:text-xl font-bold">
+                    <?= $qrIsAuthed
+                        ? ($qrIsEs ? 'Guarda tus playas ideales' : 'Keep your beach matches')
+                        : ($qrIsEs ? '¿Quieres guardar estos resultados?' : 'Want to keep these matches?') ?>
+                </h2>
+                <p class="text-white/70 text-sm mt-1">
+                    <?= $qrIsAuthed
+                        ? ($qrIsEs
+                            ? ('Guarda estas ' . $qrSaveCount . ' playas en tus favoritas para no perderlas.')
+                            : ('Save these ' . $qrSaveCount . ' beaches to your favorites so you never lose them.'))
+                        : ($qrIsEs
+                            ? ('Crea una cuenta gratis para guardar estas ' . $qrSaveCount . ' playas en tus favoritas.')
+                            : ('Create a free account to save these ' . $qrSaveCount . ' beaches to your favorites.')) ?>
+                </p>
+            </div>
+            <?php if ($qrIsAuthed): ?>
+            <button type="button" id="qr-save-btn"
+                    data-token="<?= h($token) ?>" data-csrf="<?= h($qrCsrf) ?>"
+                    class="shrink-0 inline-flex items-center justify-center gap-2 bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-6 py-3 rounded-lg font-semibold transition-colors">
+                <i data-lucide="heart" class="w-5 h-5"></i>
+                <?= $qrIsEs ? ('Guardar ' . $qrSaveCount . ' en favoritas') : ('Save ' . $qrSaveCount . ' to favorites') ?>
+            </button>
+            <?php else: ?>
+            <a href="<?= h(routeUrl('login', $qrLang)) ?>?redirect=<?= rawurlencode($qrLoginRedirect) ?>"
+               class="shrink-0 inline-flex items-center justify-center gap-2 bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-6 py-3 rounded-lg font-semibold transition-colors">
+                <i data-lucide="user-plus" class="w-5 h-5"></i>
+                <?= $qrIsEs ? 'Crear una cuenta gratis' : 'Create a free account' ?>
+            </a>
+            <?php endif; ?>
+        </div>
+        <div id="qr-save-msg" class="hidden mt-3 text-sm px-4 py-3 rounded-lg"></div>
+    </div>
+</section>
+
 <section class="py-10 bg-sand-50">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="bg-warm-50 border border-warm-200 rounded-2xl p-6">
@@ -202,4 +250,52 @@ async function bfShareCurrentQuizResults() {
         }
     }
 }
+
+// Quiz -> favorites save (authed) + auto-save when arriving with ?save=1 after sign-up.
+const QR_SAVE = <?= json_encode([
+    'saving'    => $qrIsEs ? 'Guardando…' : 'Saving…',
+    'saved'     => $qrIsEs ? 'Guardado ✓' : 'Saved ✓',
+    'saved_msg' => $qrIsEs ? 'Tus playas se guardaron en favoritas.' : 'Your matches were saved to your favorites.',
+    'error'     => $qrIsEs ? 'No se pudieron guardar. Inténtalo de nuevo.' : 'Could not save. Please try again.',
+]) ?>;
+(function(){
+    const btn = document.getElementById('qr-save-btn');
+    const msg = document.getElementById('qr-save-msg');
+    if (!btn) return;
+    let done = false;
+    async function saveMatches(auto){
+        if (done || btn.disabled) return;
+        const prev = btn.innerHTML;
+        btn.disabled = true;
+        btn.textContent = QR_SAVE.saving;
+        try {
+            const fd = new FormData();
+            fd.set('results_token', btn.dataset.token || '');
+            if (btn.dataset.csrf) fd.set('csrf_token', btn.dataset.csrf);
+            const res = await fetch('/api/favorites/bulk-add.php', { method: 'POST', body: fd });
+            const payload = await res.json();
+            if (!res.ok || !payload.success) throw new Error(payload.error || 'Save failed');
+            done = true;
+            btn.textContent = QR_SAVE.saved;
+            if (msg){ msg.textContent = QR_SAVE.saved_msg; msg.className = 'mt-3 text-sm px-4 py-3 rounded-lg bg-green-50 text-green-700 border border-green-200'; }
+            if (typeof window.showToast === 'function') window.showToast(QR_SAVE.saved, 'success', 3000);
+            if (typeof window.bfTrack === 'function') window.bfTrack('A2_quiz_saved', { source: 'quiz_results', auto: !!auto });
+            // Strip ?save=1 so a reload or a shared URL doesn't re-fire the save / analytics.
+            try {
+                const u = new URL(window.location.href);
+                if (u.searchParams.has('save')) {
+                    u.searchParams.delete('save');
+                    window.history.replaceState(null, '', u.pathname + u.search + u.hash);
+                }
+            } catch (e) {}
+        } catch (e) {
+            btn.disabled = false; btn.innerHTML = prev;
+            if (msg){ msg.textContent = QR_SAVE.error; msg.className = 'mt-3 text-sm px-4 py-3 rounded-lg bg-red-50 text-red-700 border border-red-200'; }
+        }
+    }
+    btn.addEventListener('click', () => saveMatches(false));
+<?php if ($qrAutoSave): ?>
+    saveMatches(true);
+<?php endif; ?>
+})();
 </script>

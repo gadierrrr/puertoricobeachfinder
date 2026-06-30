@@ -6,7 +6,7 @@ require_once __DIR__ . '/helpers.php';
 require_once __DIR__ . '/email.php';
 require_once __DIR__ . '/rate_limiter.php';
 
-function sendMagicLink($email) {
+function sendMagicLink($email, $redirect = '') {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return ['success' => false, 'error' => 'Invalid email address'];
     }
@@ -14,8 +14,24 @@ function sendMagicLink($email) {
     // Rate limiting - prevent abuse
     $rateLimiter = new RateLimiter(getDB());
 
+    // Normalize the address for the rate-limit KEY only (not for sending/storage) so that
+    // plus-tags and Gmail dot-tricks that all land in one inbox share a single limit,
+    // instead of each variant getting its own 3/hr budget (mailbomb defense).
+    $rateKey = strtolower(trim($email));
+    if (strpos($rateKey, '@') !== false) {
+        [$rkLocal, $rkDomain] = explode('@', $rateKey, 2);
+        $plusPos = strpos($rkLocal, '+');
+        if ($plusPos !== false) {
+            $rkLocal = substr($rkLocal, 0, $plusPos);
+        }
+        if ($rkDomain === 'gmail.com' || $rkDomain === 'googlemail.com') {
+            $rkLocal = str_replace('.', '', $rkLocal);
+        }
+        $rateKey = $rkLocal . '@' . $rkDomain;
+    }
+
     // Check email-based rate limit
-    $emailLimit = $rateLimiter->check($email, 'magic_link_email', 3, 60);
+    $emailLimit = $rateLimiter->check($rateKey, 'magic_link_email', 3, 60);
     if (!$emailLimit['allowed']) {
         return ['success' => false, 'error' => 'Too many requests. Please try again later.'];
     }
@@ -27,21 +43,11 @@ function sendMagicLink($email) {
         return ['success' => false, 'error' => 'Too many requests from your network. Please try again later.'];
     }
 
-    // Create user if doesn't exist - SAME CODE PATH FOR ALL (prevents enumeration)
-    $user = queryOne('SELECT * FROM users WHERE email = :email', [':email' => $email]);
-    $isNewUser = false;
-    if (!$user) {
-        $isNewUser = true;
-        $userId = uuid();
-        $name = explode('@', $email)[0]; // Use email prefix as default name
-        execute(
-            'INSERT INTO users (id, email, name, created_at) VALUES (:id, :email, :name, datetime("now"))',
-            [':id' => $userId, ':email' => $email, ':name' => $name]
-        );
-
-        // Send welcome email to new users (async - don't block the flow)
-        sendWelcomeEmail($email, $name);
-    }
+    // NOTE: the user account is intentionally NOT created here. Creating a user row (and
+    // sending a welcome email) on every link request would let a bot inflate the users
+    // table and mail unsolicited welcome emails to arbitrary addresses. The account is
+    // created in verifyMagicLink() only after the emailed token is proven. The magic_links
+    // table is keyed by email, so a pending link can exist before the user does.
 
     // Generate token
     $token = generateToken(32);
@@ -57,7 +63,8 @@ function sendMagicLink($email) {
     // Send email
     $appUrl = $_ENV['APP_URL'] ?? 'http://localhost:8082';
     $appName = $_ENV['APP_NAME'] ?? 'Beach Finder';
-    $loginUrl = $appUrl . '/verify?token=' . $token;
+    $loginUrl = $appUrl . '/verify?token=' . $token
+        . ($redirect !== '' ? '&redirect=' . urlencode($redirect) : '');
 
     // Try to use database template first
     $emailSent = sendTemplateEmail('magic-link', $email, [
@@ -109,11 +116,30 @@ function verifyMagicLink($token) {
     // Mark as used
     execute('UPDATE magic_links SET used = 1 WHERE id = :id', [':id' => $link['id']]);
 
-    // Get user
+    // Find or create the user now that the token is proven. Deferring account creation to
+    // this point (rather than at link-request time) keeps unverified/bot emails from
+    // creating accounts or triggering welcome mail.
     $user = queryOne('SELECT * FROM users WHERE email = :email', [':email' => $link['email']]);
 
     if (!$user) {
-        return ['success' => false, 'error' => 'User not found'];
+        // Idempotent create: INSERT OR IGNORE so a concurrent first-verify (double-tap,
+        // link-preview / mail-scanner prefetch) can't fail on the UNIQUE(email) constraint.
+        // Send the welcome email only when THIS request actually inserted the row, then
+        // re-fetch BY EMAIL so a concurrent loser still resolves to the winning account.
+        $userId = uuid();
+        $name = explode('@', $link['email'])[0]; // email prefix as default name
+        execute(
+            'INSERT OR IGNORE INTO users (id, email, name, created_at) VALUES (:id, :email, :name, datetime("now"))',
+            [':id' => $userId, ':email' => $link['email'], ':name' => $name]
+        );
+        if (getDB()->changes() > 0) {
+            // Welcome email fires only for a verified, real, first-time sign-in.
+            sendWelcomeEmail($link['email'], $name);
+        }
+        $user = queryOne('SELECT * FROM users WHERE email = :email', [':email' => $link['email']]);
+        if (!$user) {
+            return ['success' => false, 'error' => 'Could not create your account. Please try again.'];
+        }
     }
 
     // Create session

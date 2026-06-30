@@ -743,10 +743,15 @@ function initUnlockBlock() {
         if (!token) return;
 
         if (!QUIZ_AUTHENTICATED) {
+            // Thread the results token through login so the matches actually get saved
+            // afterward (the old '/quiz?src=quiz' target restarted the SPA and lost the
+            // token, so the post-login save silently never happened). /quiz-results?save=1
+            // auto-saves on landing once the user is authenticated.
+            const saveReturn = '/quiz-results?token=' + encodeURIComponent(token) + '&save=1';
             if (typeof showSignupPrompt === 'function') {
-                showSignupPrompt('favorites', '/quiz?src=quiz');
+                showSignupPrompt('quiz', saveReturn);
             } else {
-                window.location.href = '/login?redirect=' + encodeURIComponent('/quiz?src=quiz');
+                window.location.href = '/login?redirect=' + encodeURIComponent(saveReturn);
             }
             return;
         }

@@ -4,6 +4,10 @@ $homePath = routeUrl('home', $currentLang);
 $homeAnchorHref = static function (string $anchor) use ($homePath): string {
     return $homePath . '#' . ltrim($anchor, '#');
 };
+// Needed by the sign-up prompt (item 8: send the CTA straight to Google OAuth when available).
+if (!function_exists('isGoogleOAuthEnabled')) {
+    require_once __DIR__ . '/../inc/google-oauth.php';
+}
 ?>
 
     </main>
@@ -426,6 +430,9 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
                         <i data-lucide="log-in" class="w-5 h-5"></i>
                         <?= h(__('footer.signup_cta')) ?>
                     </a>
+                    <a href="<?= h(routeUrl('login', $currentLang)) ?>" id="signup-prompt-alt" class="hidden text-center text-gray-400 hover:text-white py-1 text-sm transition-colors">
+                        <?= h(__('footer.signup_more_options')) ?>
+                    </a>
                     <button type="button" data-action="closeSignupPrompt" class="text-gray-400 hover:text-white py-2 text-sm font-medium transition-colors">
                         <?= h(__('footer.signup_dismiss')) ?>
                     </button>
@@ -464,6 +471,12 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
                 'description' => __('footer.signup_ctx_photos_desc'),
                 'icon' => 'camera',
             ],
+            'quiz' => [
+                'title' => __('footer.signup_ctx_quiz_title'),
+                'subtitle' => __('footer.signup_ctx_quiz_subtitle'),
+                'description' => __('footer.signup_ctx_quiz_desc'),
+                'icon' => 'trophy',
+            ],
         ], JSON_UNESCAPED_UNICODE) ?>;
 
         const config = contexts[context] || contexts.favorites;
@@ -473,10 +486,22 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
         description.textContent = config.description;
         icon.innerHTML = `<i data-lucide="${config.icon}" class="w-6 h-6 text-sunset-400"></i>`;
 
-        // Set redirect URL
+        // Return the user to exactly where they were (or an explicit target).
+        const returnUrl = redirectUrl || (window.location.pathname + window.location.search);
         const loginBasePath = <?= json_encode(routeUrl('login', $currentLang)) ?>;
-        const loginUrl = redirectUrl ? `${loginBasePath}?redirect=${encodeURIComponent(redirectUrl)}` : loginBasePath;
-        cta.href = loginUrl;
+        const googleEnabled = <?= isGoogleOAuthEnabled() ? 'true' : 'false' ?>;
+        const altLink = document.getElementById('signup-prompt-alt');
+
+        // Primary CTA goes straight to Google OAuth (skips the /login interstitial) when
+        // available, then returns to this page. The "more options" link still routes to
+        // /login for the email/magic-link channel.
+        cta.href = googleEnabled
+            ? `/auth/google/?redirect=${encodeURIComponent(returnUrl)}`
+            : `${loginBasePath}?redirect=${encodeURIComponent(returnUrl)}`;
+        if (altLink) {
+            altLink.href = `${loginBasePath}?redirect=${encodeURIComponent(returnUrl)}`;
+            altLink.classList.toggle('hidden', !googleEnabled);
+        }
 
         // Show modal
         modal.classList.remove('hidden');

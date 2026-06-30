@@ -23,11 +23,9 @@ if (isAuthenticated()) {
 $error = '';
 $success = '';
 $accountDeleted = isset($_GET['account_deleted']) && $_GET['account_deleted'] === '1';
-// Magic link temporarily disabled - redirect to main login if someone tries to access it
-$showMagicLinkForm = false; // Was: isset($_GET['method']) && $_GET['method'] === 'email';
-if (isset($_GET['method']) && $_GET['method'] === 'email') {
-    redirect('/login' . ($redirectUrl !== '/' ? '?redirect=' . urlencode($redirectUrl) : ''));
-}
+// Magic-link (email) sign-in is offered as a second channel alongside Google OAuth.
+// ?method=email reveals the email form.
+$showMagicLinkForm = isset($_GET['method']) && $_GET['method'] === 'email';
 
 // Handle OAuth error codes from callback
 if (isset($_GET['error'])) {
@@ -56,9 +54,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate CSRF
     if (!validateCsrf($_POST['csrf_token'] ?? '')) {
         $error = __('login.error_csrf');
+    } elseif (trim($_POST['website'] ?? '') !== '') {
+        // Honeypot: a real user never fills the hidden "website" field. Silently
+        // pretend success (don't send) so bots can't tell they were caught.
+        $success = 'Check your email for the login link!';
     } else {
         $email = trim($_POST['email'] ?? '');
-        $result = sendMagicLink($email);
+        $postRedirect = sanitizeInternalRedirect($_POST['redirect'] ?? '/');
+        $result = sendMagicLink($email, $postRedirect !== '/' ? $postRedirect : '');
 
         if ($result['success']) {
             $success = $result['message'];
@@ -69,6 +72,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $googleEnabled = isGoogleOAuthEnabled();
+
+// If Google OAuth is unavailable, default to the email/magic-link form so users still have
+// a working way to sign in (otherwise the email channel is only linked from the Google branch).
+if (!$googleEnabled && !$showMagicLinkForm) {
+    $showMagicLinkForm = true;
+}
 
 // Cache social proof stats (5 min cache) to avoid DB queries on every page load
 $cacheFile = APP_ROOT . '/data/cache/login-stats.json';
@@ -289,8 +298,7 @@ include APP_ROOT . '/components/header.php';
                         <span><?= h(__('login.trust_signal')) ?></span>
                     </div>
 
-                    <!-- Magic Link Option - Temporarily disabled -->
-                    <?php /*
+                    <!-- Magic Link (email) option — second sign-in channel -->
                     <div class="relative">
                         <div class="absolute inset-0 flex items-center">
                             <div class="w-full border-t border-warm-200"></div>
@@ -302,9 +310,8 @@ include APP_ROOT . '/components/header.php';
                     <a href="?method=email<?= $redirectUrl !== '/' ? '&redirect=' . urlencode($redirectUrl) : '' ?>"
                        class="w-full flex items-center justify-center gap-3 bg-warm-50 hover:bg-warm-100 border border-warm-200 text-warm-900 py-3.5 px-4 rounded-xl font-medium transition-all">
                         <i data-lucide="mail" class="w-5 h-5"></i>
-                        <span>Continue with Email</span>
+                        <span><?= h(__('login.continue_email')) ?></span>
                     </a>
-                    */ ?>
                     <?php else: ?>
                     <div class="text-center py-8 text-warm-500">
                         <i data-lucide="alert-triangle" class="w-12 h-12 mx-auto mb-4 text-yellow-500/50"></i>
@@ -318,6 +325,9 @@ include APP_ROOT . '/components/header.php';
                     <form method="POST" action="" class="space-y-4">
                         <?= csrfField() ?>
                         <input type="hidden" name="redirect" value="<?= h($redirectUrl) ?>">
+                        <!-- Honeypot: must stay empty; positioned offscreen for real users -->
+                        <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true"
+                               class="hidden" value="">
 
                         <div>
                             <label for="email" class="block text-sm font-medium text-warm-600 mb-2"><?= h(__('login.email_label')) ?></label>
