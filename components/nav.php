@@ -126,8 +126,11 @@ if (!is_string($navMapHref) || $navMapHref === '') {
 
             <?php if ($user): ?>
                 <div class="flex items-center gap-3">
-                    <a href="<?= h($localizedProfile) ?>?tab=favorites" class="text-white/70 hover:text-sunset-400 transition-colors">
+                    <a href="<?= h($localizedProfile) ?>?tab=favorites" class="text-white/70 hover:text-sunset-400 transition-colors" aria-label="<?= h($currentLang === 'es' ? 'Favoritas' : 'Favorites') ?>" title="<?= h($currentLang === 'es' ? 'Favoritas' : 'Favorites') ?>">
                         <i data-lucide="heart" class="w-5 h-5"></i>
+                    </a>
+                    <a href="/lists" class="text-white/70 hover:text-sunset-400 transition-colors" aria-label="<?= h($currentLang === 'es' ? 'Mis listas' : 'My Lists') ?>" title="<?= h($currentLang === 'es' ? 'Mis listas' : 'My Lists') ?>">
+                        <i data-lucide="list" class="w-5 h-5"></i>
                     </a>
                     <a href="<?= h($localizedProfile) ?>" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
                         <?php
@@ -212,6 +215,10 @@ if (!is_string($navMapHref) || $navMapHref === '') {
                 <a href="<?= h($localizedProfile) ?>?tab=favorites" class="flex items-center gap-3 text-white/80 hover:text-sunset-400 py-3 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
                     <i data-lucide="heart" class="w-5 h-5 text-red-400 fill-red-400"></i>
                     <span><?= h(__('nav.favorites')) ?></span>
+                </a>
+                <a href="/lists" class="flex items-center gap-3 text-white/80 hover:text-sunset-400 py-3 px-3 rounded-lg hover:bg-white/5 transition-colors" role="menuitem">
+                    <i data-lucide="list" class="w-5 h-5"></i>
+                    <span><?= h($currentLang === 'es' ? 'Mis listas' : 'My Lists') ?></span>
                 </a>
                 <div class="pt-3 mt-3 border-t border-ocean-700">
                     <div class="flex items-center gap-3 py-2 px-3">
