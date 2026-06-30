@@ -38,7 +38,15 @@ if ($bodyVariant === 'collection-light') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= isset($pageTitle) ? h($pageTitle) . ' | ' : '' ?><?= h($appName) ?></title>
+    <title><?php
+        if (isset($pageTitle)) {
+            // A hand-written SEO title override is rendered verbatim; otherwise
+            // append the " | $appName" brand suffix as before.
+            echo h($pageTitle) . (empty($pageTitleNoBrandSuffix) ? ' | ' . h($appName) : '');
+        } else {
+            echo h($appName);
+        }
+    ?></title>
 
     <?php if (isset($pageDescription)): ?>
     <meta name="description" content="<?= h($pageDescription) ?>">

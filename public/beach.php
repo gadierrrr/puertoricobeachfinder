@@ -122,30 +122,55 @@ $avgUserRating = $beach['avg_user_rating'] ?? null;
 
 // Page metadata
 $siteLabel = $lang === 'es' ? 'Playas de Puerto Rico' : 'Puerto Rico Beach Finder';
-$pageTitle = $beach['name'] . ' - ' . $beach['municipality'];
 
-// Enrich title with top activities if total <title> stays under 65 chars
-// header.php appends " | $appName" so account for that suffix
-$titleSuffix = ' | ' . $siteLabel;
-$topTags = array_slice($beach['tags'] ?? [], 0, 2);
-if (!empty($topTags)) {
-    $labels = array_map('getTagLabel', $topTags);
-    $candidate = $beach['name'] . ' - ' . $beach['municipality'] . ' | ' . implode(', ', $labels);
-    if (mb_strlen($candidate . $titleSuffix) <= 65) {
-        $pageTitle = $candidate;
+// Hand-written per-beach SEO title override takes precedence over the
+// auto-generated title. When present it is rendered verbatim (header.php is
+// told not to append the " | $appName" brand suffix), giving full control of
+// the SERP title and length in both languages.
+$seoTitleOverride = ($lang === 'es' && !empty($beach['seo_title_es']))
+    ? $beach['seo_title_es']
+    : (!empty($beach['seo_title']) ? $beach['seo_title'] : null);
+
+if ($seoTitleOverride !== null) {
+    $pageTitle = $seoTitleOverride;
+    $pageTitleNoBrandSuffix = true;
+} else {
+    $pageTitle = $beach['name'] . ' - ' . $beach['municipality'];
+
+    // Enrich title with top activities if total <title> stays under 65 chars
+    // header.php appends " | $appName" so account for that suffix
+    $titleSuffix = ' | ' . $siteLabel;
+    $topTags = array_slice($beach['tags'] ?? [], 0, 2);
+    if (!empty($topTags)) {
+        $labels = array_map('getTagLabel', $topTags);
+        $candidate = $beach['name'] . ' - ' . $beach['municipality'] . ' | ' . implode(', ', $labels);
+        if (mb_strlen($candidate . $titleSuffix) <= 65) {
+            $pageTitle = $candidate;
+        }
     }
 }
-$_descSource = ($lang === 'es' && !empty($beach['description_es']))
-    ? $beach['description_es']
-    : ($beach['description'] ?? '');
-$_descFallback = $lang === 'es'
-    ? 'Descubre ' . $beach['name'] . ' en ' . $beach['municipality'] . ', Puerto Rico.'
-    : 'Discover ' . $beach['name'] . ' in ' . $beach['municipality'] . ', Puerto Rico. View beach conditions, amenities, photos, and directions.';
-$pageDescription = $_descSource
-    ? (mb_strlen($_descSource) > 155
-        ? mb_substr($_descSource, 0, strrpos(mb_substr($_descSource, 0, 155), ' ') ?: 155) . '...'
-        : $_descSource)
-    : $_descFallback;
+
+// Hand-written per-beach meta description override takes precedence and is
+// rendered verbatim (no 155-char truncation — overrides are authored to length).
+$seoDescOverride = ($lang === 'es' && !empty($beach['seo_description_es']))
+    ? $beach['seo_description_es']
+    : (!empty($beach['seo_description']) ? $beach['seo_description'] : null);
+
+if ($seoDescOverride !== null) {
+    $pageDescription = $seoDescOverride;
+} else {
+    $_descSource = ($lang === 'es' && !empty($beach['description_es']))
+        ? $beach['description_es']
+        : ($beach['description'] ?? '');
+    $_descFallback = $lang === 'es'
+        ? 'Descubre ' . $beach['name'] . ' en ' . $beach['municipality'] . ', Puerto Rico.'
+        : 'Discover ' . $beach['name'] . ' in ' . $beach['municipality'] . ', Puerto Rico. View beach conditions, amenities, photos, and directions.';
+    $pageDescription = $_descSource
+        ? (mb_strlen($_descSource) > 155
+            ? mb_substr($_descSource, 0, strrpos(mb_substr($_descSource, 0, 155), ' ') ?: 155) . '...'
+            : $_descSource)
+        : $_descFallback;
+}
 
 // Generate structured data using SEO component (consolidated with reviews)
 $extraHead = beachSchema($beach, $reviews);

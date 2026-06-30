@@ -58,12 +58,15 @@ function getRatingSchema(array $beach) {
         ];
     }
 
-    // Fall back to Google ratings
-    if (!empty($beach['google_rating'])) {
+    // Fall back to Google ratings — only emit when we have a real review count
+    // (>=3). Never fabricate a placeholder count, which Google flags as a thin
+    // / invalid AggregateRating and can disqualify the page from rich results.
+    $googleCount = (int) ($beach['google_review_count'] ?? 0);
+    if (!empty($beach['google_rating']) && $googleCount >= 3) {
         return [
             '@type' => 'AggregateRating',
             'ratingValue' => $beach['google_rating'],
-            'reviewCount' => $beach['google_review_count'] ?? 1,
+            'reviewCount' => $googleCount,
             'bestRating' => 5,
             'worstRating' => 1
         ];

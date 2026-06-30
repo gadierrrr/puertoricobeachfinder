@@ -44,17 +44,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $db->prepare($isNew ? "
             INSERT INTO beaches (id, slug, name, municipality, lat, lng, place_id, description, cover_image,
                 sargassum, surf, wind, access_label, notes, parking_details, safety_info, local_tips,
-                best_time, publish_status, created_at, updated_at)
+                best_time, seo_title, seo_title_es, seo_description, seo_description_es,
+                publish_status, created_at, updated_at)
             VALUES (:id, :slug, :name, :municipality, :lat, :lng, :place_id, :description, :cover_image,
                 :sargassum, :surf, :wind, :access_label, :notes, :parking_details, :safety_info, :local_tips,
-                :best_time, :publish_status, datetime('now'), datetime('now'))
+                :best_time, :seo_title, :seo_title_es, :seo_description, :seo_description_es,
+                :publish_status, datetime('now'), datetime('now'))
         " : "
             UPDATE beaches SET
                 name = :name, municipality = :municipality, lat = :lat, lng = :lng, place_id = :place_id,
                 description = :description, cover_image = :cover_image, sargassum = :sargassum,
                 surf = :surf, wind = :wind, access_label = :access_label, notes = :notes,
                 parking_details = :parking_details, safety_info = :safety_info, local_tips = :local_tips,
-                best_time = :best_time, publish_status = :publish_status, updated_at = datetime('now')
+                best_time = :best_time, seo_title = :seo_title, seo_title_es = :seo_title_es,
+                seo_description = :seo_description, seo_description_es = :seo_description_es,
+                publish_status = :publish_status, updated_at = datetime('now')
             WHERE id = :id
         ");
 
@@ -78,6 +82,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindValue(':safety_info', trim($_POST['safety_info'] ?? ''), SQLITE3_TEXT);
         $stmt->bindValue(':local_tips', trim($_POST['local_tips'] ?? ''), SQLITE3_TEXT);
         $stmt->bindValue(':best_time', trim($_POST['best_time'] ?? ''), SQLITE3_TEXT);
+        $stmt->bindValue(':seo_title', trim($_POST['seo_title'] ?? '') ?: null, SQLITE3_TEXT);
+        $stmt->bindValue(':seo_title_es', trim($_POST['seo_title_es'] ?? '') ?: null, SQLITE3_TEXT);
+        $stmt->bindValue(':seo_description', trim($_POST['seo_description'] ?? '') ?: null, SQLITE3_TEXT);
+        $stmt->bindValue(':seo_description_es', trim($_POST['seo_description_es'] ?? '') ?: null, SQLITE3_TEXT);
         $stmt->bindValue(':publish_status', $_POST['publish_status'] ?? 'draft', SQLITE3_TEXT);
 
         if ($stmt->execute()) {
@@ -387,6 +395,36 @@ if ($action === 'list'):
                         <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
                         <textarea name="description" rows="4"
                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"><?= h($beach['description'] ?? '') ?></textarea>
+                    </div>
+
+                    <div class="border-t border-gray-200 pt-4 mt-2">
+                        <p class="text-sm font-semibold text-gray-700 mb-2">SEO overrides <span class="font-normal text-gray-500">(leave blank to auto-generate)</span></p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">SEO title (EN)</label>
+                                <input type="text" name="seo_title" value="<?= h($beach['seo_title'] ?? '') ?>" maxlength="70"
+                                       placeholder="~55 chars, full &lt;title&gt; (no brand suffix added)"
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">SEO title (ES)</label>
+                                <input type="text" name="seo_title_es" value="<?= h($beach['seo_title_es'] ?? '') ?>" maxlength="70"
+                                       placeholder="~55 caracteres, título completo"
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Meta description (EN)</label>
+                                <textarea name="seo_description" rows="2" maxlength="170"
+                                          placeholder="~150 chars"
+                                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"><?= h($beach['seo_description'] ?? '') ?></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Meta description (ES)</label>
+                                <textarea name="seo_description_es" rows="2" maxlength="170"
+                                          placeholder="~150 caracteres"
+                                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"><?= h($beach['seo_description_es'] ?? '') ?></textarea>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
