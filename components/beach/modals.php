@@ -664,6 +664,18 @@ async function submitCheckin(event) {
                 window.bfTrack('U1_checkin_submitted', { source: 'beach_page', beach_slug: <?= json_encode($beach['slug']) ?> });
             }
 
+            // Explorer level-up celebration (levels are recomputed server-side on each check-in)
+            if (data.leveled_up) {
+                const levelMsg = <?= json_encode($lang === 'es' ? '¡Subiste de nivel! Ahora eres ' : 'Level up! You\'re now a ') ?>
+                    + (data.level_icon || '🏆') + ' ' + (data.level_label || '');
+                if (typeof showToast === 'function') {
+                    showToast(levelMsg, 'success', 6000);
+                }
+                if (typeof window.bfTrack === 'function') {
+                    window.bfTrack('U1_explorer_level_up', { level: data.explorer_level || '' });
+                }
+            }
+
             // Refresh check-ins list
             if (typeof htmx !== 'undefined') {
                 htmx.trigger('#checkins-list', 'load');

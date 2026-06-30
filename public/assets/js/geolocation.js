@@ -261,3 +261,31 @@ function updateDistanceBadges() {
         }
     });
 }
+
+// PWA "Find Nearby" shortcut: manifest.json defines a shortcut to /?action=nearby.
+// That param was previously unhandled (the shortcut just opened the homepage). Detect
+// it on load and trigger the geolocation request so "Find Nearby" works as intended.
+(function() {
+    function handleNearbyShortcut() {
+        var params;
+        try {
+            params = new URLSearchParams(window.location.search);
+        } catch (e) {
+            return;
+        }
+        if (params.get("action") !== "nearby") return;
+        if (typeof requestUserLocation === "function") {
+            requestUserLocation();
+        }
+        // Strip the param so reloads / back-navigation don't re-prompt for location.
+        params.delete("action");
+        var qs = params.toString();
+        var clean = window.location.pathname + (qs ? "?" + qs : "") + window.location.hash;
+        try { window.history.replaceState({}, "", clean); } catch (e) {}
+    }
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", handleNearbyShortcut);
+    } else {
+        handleNearbyShortcut();
+    }
+})();

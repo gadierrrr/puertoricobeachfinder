@@ -153,11 +153,30 @@ function submitCheckin() {
     }
 
     if ($result) {
-        jsonResponse([
+        $response = [
             'success' => true,
             'message' => 'Thanks for checking in! Your update helps other beachgoers.',
             'requires_signup' => !$isAuthed,
-        ]);
+        ];
+
+        // Activate explorer levels: recompute the user's level after each
+        // authenticated check-in (updateUserExplorerLevel was previously never
+        // called, so levels/progress were frozen). Surface a level-up moment.
+        if ($isAuthed && $userId) {
+            $prev = queryOne('SELECT explorer_level FROM users WHERE id = :id', [':id' => $userId]);
+            $prevLevel = $prev['explorer_level'] ?? 'newcomer';
+            $progress = updateUserExplorerLevel($userId);
+            $response['beaches_visited'] = $progress['beaches_visited'];
+            $response['explorer_level'] = $progress['level'];
+            if ($progress['level'] !== $prevLevel) {
+                $levelInfo = getExplorerLevelInfo($progress['level']);
+                $response['leveled_up'] = true;
+                $response['level_label'] = $levelInfo['label'] ?? $progress['level'];
+                $response['level_icon'] = $levelInfo['icon'] ?? '🏆';
+            }
+        }
+
+        jsonResponse($response);
     } else {
         jsonResponse(['error' => 'Failed to save check-in'], 500);
     }

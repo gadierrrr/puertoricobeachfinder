@@ -255,7 +255,7 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
     </script>
     <!-- App JavaScript (defer for non-blocking load) -->
     <script defer src="/assets/js/app.min.js?v=2.0" <?= cspNonceAttr() ?>></script>
-    <script defer src="/assets/js/geolocation.js?v=2.0" <?= cspNonceAttr() ?>></script>
+    <script defer src="/assets/js/geolocation.js?v=2.1" <?= cspNonceAttr() ?>></script>
     <script defer src="/assets/js/filters.js" <?= cspNonceAttr() ?>></script>
     <script defer src="/assets/js/analytics.js?v=2.0" <?= cspNonceAttr() ?>></script>
     <script defer src="/assets/js/share.js" <?= cspNonceAttr() ?>></script>
@@ -502,6 +502,79 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
     });
     </script>
 
+    <!-- Post-onboarding welcome: shown once after a user completes onboarding.
+         Activates the previously-dead $_SESSION['show_welcome'] flag set in public/onboarding.php. -->
+    <?php if (isAuthenticated() && !empty($_SESSION['show_welcome'])): ?>
+    <?php
+        unset($_SESSION['show_welcome']);
+        $welcomeUser = currentUser();
+        $welcomeFirstName = ($welcomeUser && !empty($welcomeUser['name']))
+            ? trim(explode(' ', (string)$welcomeUser['name'])[0]) : '';
+        $isEs = ($currentLang === 'es');
+        $quizUrl = routeUrl('quiz', $currentLang);
+        $welcomeHome = routeUrl('home', $currentLang);
+    ?>
+    <div id="onboarding-welcome-overlay" class="welcome-popup-overlay active" role="dialog" aria-modal="true" aria-labelledby="onboarding-welcome-title" style="position:fixed;inset:0;">
+        <div class="welcome-popup">
+            <button type="button" data-action="dismissOnboardingWelcome" class="welcome-popup-close" aria-label="<?= __('aria.close') ?>">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+                </svg>
+            </button>
+            <div class="welcome-popup-body">
+                <h2 id="onboarding-welcome-title" class="welcome-popup-title">
+                    <span>🎉</span>
+                    <?= $isEs
+                        ? ('¡Bienvenido' . ($welcomeFirstName !== '' ? ', ' . h($welcomeFirstName) : '') . '!')
+                        : ('Welcome aboard' . ($welcomeFirstName !== '' ? ', ' . h($welcomeFirstName) : '') . '!') ?>
+                </h2>
+                <p class="welcome-popup-subtitle">
+                    <?= $isEs ? 'Aquí tienes tres formas de empezar:' : 'Here are three ways to get started:' ?>
+                </p>
+                <div class="space-y-2 my-4 text-left">
+                    <a href="<?= h($welcomeHome) ?>" class="flex items-center gap-3 p-3 rounded-lg border border-stone-200 hover:border-sunset-400 hover:bg-stone-50 transition-colors">
+                        <span class="text-xl" aria-hidden="true">🔍</span>
+                        <span class="text-sm font-medium text-stone-700"><?= $isEs ? 'Explora las playas y guarda tus favoritas' : 'Browse beaches and save your favorites' ?></span>
+                    </a>
+                    <a href="<?= h($quizUrl) ?>" class="flex items-center gap-3 p-3 rounded-lg border border-stone-200 hover:border-sunset-400 hover:bg-stone-50 transition-colors">
+                        <span class="text-xl" aria-hidden="true">✨</span>
+                        <span class="text-sm font-medium text-stone-700"><?= $isEs ? 'Haz el quiz para encontrar tu playa ideal' : 'Take the quiz to find your perfect beach' ?></span>
+                    </a>
+                    <a href="<?= h($welcomeHome) ?>?action=nearby" class="flex items-center gap-3 p-3 rounded-lg border border-stone-200 hover:border-sunset-400 hover:bg-stone-50 transition-colors">
+                        <span class="text-xl" aria-hidden="true">📍</span>
+                        <span class="text-sm font-medium text-stone-700"><?= $isEs ? 'Descubre playas cerca de ti' : 'Find beaches near you' ?></span>
+                    </a>
+                </div>
+                <button type="button" data-action="dismissOnboardingWelcome" class="w-full inline-flex items-center justify-center bg-sunset-400 hover:bg-sunset-500 text-ocean-900 font-semibold px-4 py-3 rounded-lg transition-colors">
+                    <?= $isEs ? 'Empezar a explorar' : 'Start exploring' ?>
+                </button>
+            </div>
+        </div>
+    </div>
+    <script <?= cspNonceAttr() ?>>
+    (function() {
+        const overlay = document.getElementById('onboarding-welcome-overlay');
+        if (!overlay) return;
+        document.body.style.overflow = 'hidden';
+        window.dismissOnboardingWelcome = function() {
+            overlay.classList.remove('active');
+            overlay.style.opacity = '0';
+            overlay.style.visibility = 'hidden';
+            document.body.style.overflow = '';
+        };
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) window.dismissOnboardingWelcome();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && overlay.classList.contains('active')) window.dismissOnboardingWelcome();
+        });
+        if (typeof window.bfTrack === 'function') {
+            window.bfTrack('U2_onboarding_welcome_shown', {});
+        }
+    })();
+    </script>
+    <?php endif; ?>
+
     <!-- Welcome Popup (Registration CTA for non-authenticated visitors) -->
     <?php
     // Include Google OAuth helper if not already loaded
@@ -571,16 +644,9 @@ $homeAnchorHref = static function (string $anchor) use ($homePath): string {
                     </a>
                     <?php endif; ?>
 
-                    <a href="<?= h(routeUrl('login', $currentLang)) ?>?method=email" class="welcome-popup-btn-email">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-                        </svg>
-                        <?= h(__('footer.welcome_email')) ?>
-                    </a>
-
-                    <div class="welcome-popup-divider">
-                        <span><?= h(__('footer.welcome_or')) ?></span>
-                    </div>
+                    <?php /* Email/magic-link sign-up is currently disabled (login.php redirects
+                            ?method=email back to Google), so the dead "Continue with email" button
+                            and its "or" divider were removed. Re-add when magic link is re-enabled. */ ?>
 
                     <button type="button" data-action="dismissWelcomePopup" class="welcome-popup-btn-dismiss">
                         <?= h(__('footer.welcome_dismiss')) ?>
