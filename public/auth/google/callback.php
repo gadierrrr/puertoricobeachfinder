@@ -12,6 +12,21 @@ require_once APP_ROOT . '/inc/db.php';
 require_once APP_ROOT . '/inc/helpers.php';
 require_once APP_ROOT . '/inc/google-oauth.php';
 
+// Idempotency guard for duplicate callback requests.
+//
+// Browsers, prefetchers, and mobile retries sometimes fire this callback more
+// than once for a single login. The first request consumes the one-time OAuth
+// state token and Google's single-use authorization code and logs the user in;
+// a duplicate that arrives afterward (carrying the now-current, post-login
+// session cookie) would otherwise fail the state check and show a misleading
+// "Invalid request. Please try again." If we're already authenticated, the work
+// is done — treat the duplicate as success instead of an error.
+if (isAuthenticated()) {
+    $redirectUrl = sanitizeInternalRedirect($_SESSION['google_oauth_redirect'] ?? '/', '/');
+    unset($_SESSION['google_oauth_redirect']);
+    redirectInternal($redirectUrl);
+}
+
 // Check for errors from Google
 if (isset($_GET['error'])) {
     $error = $_GET['error'];
