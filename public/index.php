@@ -206,7 +206,7 @@ include APP_ROOT . '/components/header.php';
 ?>
 
 <!-- Hero Section - Consolidated, search-first layout -->
-<header class="relative w-full min-h-[600px] lg:min-h-[620px] flex items-center pt-20 overflow-hidden">
+<header class="relative w-full min-h-[540px] sm:min-h-[600px] lg:min-h-[620px] flex items-center pt-20 overflow-hidden">
     <!-- Background with gradient overlays -->
     <div class="absolute inset-0 -z-10">
         <img src="/images/beaches/jobos-beach-isabela-18513-67085.jpg"
@@ -217,7 +217,7 @@ include APP_ROOT . '/components/header.php';
         <div class="absolute inset-0 bg-hero-gradient"></div>
         <!-- left scrim keeps the consolidated text column legible wherever it sits -->
         <div class="absolute inset-0 bg-gradient-to-r from-ocean-900/75 via-ocean-900/30 to-transparent"></div>
-        <div class="absolute inset-0 bg-black/15"></div>
+        <div class="absolute inset-0 bg-black/30 sm:bg-black/15"></div>
     </div>
 
     <!-- Hero Content - single consolidated column -->
@@ -230,12 +230,12 @@ include APP_ROOT . '/components/header.php';
             </div>
 
             <!-- Headline -->
-            <h1 class="text-[40px] sm:text-[52px] lg:text-[56px] font-serif text-white leading-[1.1] mb-3.5">
+            <h1 class="text-[34px] sm:text-[48px] lg:text-[56px] font-serif text-white leading-[1.1] mb-3.5">
                 <?= h(__('pages.home.hero_headline_1')) ?> <em style="color: #a3e8ea"><?= h(__('pages.home.hero_headline_2')) ?></em>
             </h1>
 
             <!-- Subtitle -->
-            <p class="text-base mb-6" style="color: rgba(255,255,255,0.82); max-width: 540px">
+            <p class="text-[15px] sm:text-base mb-6" style="color: rgba(255,255,255,0.82); max-width: 540px">
                 <?= h(__('pages.home.hero_subtitle', ['count' => number_format($totalBeaches)])) ?>
             </p>
 
@@ -358,7 +358,7 @@ include APP_ROOT . '/components/header.php';
 <!-- Category Cards - floating strip overlapping the hero's bottom edge -->
 <section class="bg-white pb-12">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
-        <div class="relative z-20 -mt-14 md:-mt-20 bg-white rounded-2xl shadow-xl border border-warm-100 p-4 md:p-5">
+        <div class="relative z-20 -mt-10 sm:-mt-14 md:-mt-20 bg-white rounded-2xl shadow-xl border border-warm-100 p-4 md:p-5">
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-3">
                 <?php
                 $categories = [
