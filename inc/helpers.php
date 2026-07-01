@@ -1729,6 +1729,8 @@ function getAchievementsCatalog() {
         'first_review'     => ['label' => $t('achievements.first_review', 'First Review'),          'desc' => $t('achievements.first_review_desc', 'Wrote your first review'),        'icon' => '✍️', 'colorClass' => 'text-amber-400 bg-amber-500/20 border-amber-500/30',   'signal' => 'reviews',        'threshold' => 1],
         'trusted_reviewer' => ['label' => $t('achievements.trusted_reviewer', 'Trusted Reviewer'), 'desc' => $t('achievements.trusted_reviewer_desc', 'Wrote 5 reviews'),            'icon' => '⭐', 'colorClass' => 'text-yellow-400 bg-yellow-500/20 border-yellow-500/30', 'signal' => 'reviews',        'threshold' => 5],
         'shutterbug'       => ['label' => $t('achievements.shutterbug', 'Shutterbug'),              'desc' => $t('achievements.shutterbug_desc', 'Shared your first photo'),          'icon' => '📷', 'colorClass' => 'text-cyan-400 bg-cyan-500/20 border-cyan-500/30',     'signal' => 'photos',         'threshold' => 1],
+        'first_referral'   => ['label' => $t('achievements.first_referral', 'Recruiter'),          'desc' => $t('achievements.first_referral_desc', 'Invited a friend who joined'), 'icon' => '🤝', 'colorClass' => 'text-green-400 bg-green-500/20 border-green-500/30',   'signal' => 'referrals',      'threshold' => 1],
+        'ambassador'       => ['label' => $t('achievements.ambassador', 'Ambassador'),             'desc' => $t('achievements.ambassador_desc', 'Invited 5 friends who joined'),   'icon' => '🌟', 'colorClass' => 'text-purple-400 bg-purple-500/20 border-purple-500/30', 'signal' => 'referrals',      'threshold' => 5],
     ];
 }
 
@@ -1753,6 +1755,7 @@ function getUserAchievementSignals($userId) {
         'checkins'       => $one('SELECT COUNT(*) c FROM beach_checkins WHERE user_id = :id', [':id' => $userId]),
         'unique_beaches' => $one('SELECT COUNT(DISTINCT beach_id) c FROM beach_checkins WHERE user_id = :id', [':id' => $userId]),
         'municipalities' => $one('SELECT COUNT(DISTINCT b.municipality) c FROM beach_checkins c2 JOIN beaches b ON b.id = c2.beach_id WHERE c2.user_id = :id AND b.municipality IS NOT NULL AND b.municipality != ""', [':id' => $userId]),
+        'referrals'      => $one("SELECT COUNT(*) c FROM user_referrals WHERE referrer_user_id = :id AND status = 'completed'", [':id' => $userId]),
     ];
 }
 

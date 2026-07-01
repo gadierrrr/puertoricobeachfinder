@@ -63,6 +63,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             [':id' => $user['id']]
         );
 
+        // Referral reward: onboarding is the "meaningful action" that completes a referral
+        // and (re)awards the referrer's achievement badges.
+        require_once APP_ROOT . '/inc/invite.php';
+        inviteMarkCompleted($user['id']);
+
         // Redirect to home with welcome message
         $_SESSION['show_welcome'] = true;
         redirectInternal($redirectUrl);

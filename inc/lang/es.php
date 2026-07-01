@@ -1903,6 +1903,10 @@ return [
         'trusted_reviewer_desc' => 'Escribiste 5 reseñas',
         'shutterbug' => 'Fotógrafo',
         'shutterbug_desc' => 'Compartiste tu primera foto',
+        'first_referral' => 'Reclutador',
+        'first_referral_desc' => 'Invitaste a un amigo que se unió',
+        'ambassador' => 'Embajador',
+        'ambassador_desc' => 'Invitaste a 5 amigos que se unieron',
     ],
     'best_for_labels' => [
         'families' => 'Familias',

@@ -2404,6 +2404,10 @@ return [
         'trusted_reviewer_desc' => 'Wrote 5 reviews',
         'shutterbug' => 'Shutterbug',
         'shutterbug_desc' => 'Shared your first photo',
+        'first_referral' => 'Recruiter',
+        'first_referral_desc' => 'Invited a friend who joined',
+        'ambassador' => 'Ambassador',
+        'ambassador_desc' => 'Invited 5 friends who joined',
     ],
     'best_for_labels' => [
         'families' => 'Families',

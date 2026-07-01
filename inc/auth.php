@@ -5,6 +5,7 @@ require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/helpers.php';
 require_once __DIR__ . '/email.php';
 require_once __DIR__ . '/rate_limiter.php';
+require_once __DIR__ . '/invite.php';
 
 function sendMagicLink($email, $redirect = '') {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -132,13 +133,18 @@ function verifyMagicLink($token) {
             'INSERT OR IGNORE INTO users (id, email, name, created_at) VALUES (:id, :email, :name, datetime("now"))',
             [':id' => $userId, ':email' => $link['email'], ':name' => $name]
         );
-        if (getDB()->changes() > 0) {
+        $isNewUser = (getDB()->changes() > 0);
+        if ($isNewUser) {
             // Welcome email fires only for a verified, real, first-time sign-in.
             sendWelcomeEmail($link['email'], $name);
         }
         $user = queryOne('SELECT * FROM users WHERE email = :email', [':email' => $link['email']]);
         if (!$user) {
             return ['success' => false, 'error' => 'Could not create your account. Please try again.'];
+        }
+        // Attribute an invite referral for genuinely-new accounts (bf_ref cookie).
+        if ($isNewUser && function_exists('inviteAttribute')) {
+            inviteAttribute($user['id']);
         }
     }
 

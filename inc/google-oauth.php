@@ -4,6 +4,8 @@
  * Handles the OAuth flow for Google Sign-In
  */
 
+require_once __DIR__ . '/invite.php'; // referral attribution on new-user signup
+
 /**
  * Get Google OAuth configuration
  */
@@ -273,6 +275,10 @@ function findOrCreateGoogleUser(array $googleUser): ?array {
     if ($user) {
         sendWelcomeEmail($user['email'], $user['name']);
         $user['_is_new_user'] = true;
+        // Attribute an invite referral if this signup came from a ?ref link (bf_ref cookie).
+        if (function_exists('inviteAttribute')) {
+            inviteAttribute($userId);
+        }
     }
 
     return $user;

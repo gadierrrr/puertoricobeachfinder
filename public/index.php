@@ -14,6 +14,10 @@ require_once APP_ROOT . '/inc/collection_query.php';
 require_once APP_ROOT . '/inc/i18n.php';
 require_once APP_ROOT . '/inc/locale_routes.php';
 require_once APP_ROOT . '/components/seo-schemas.php';
+require_once APP_ROOT . '/inc/invite.php';
+
+// Capture an invite (?ref=CODE) into a cookie before any output (referral loop).
+inviteCaptureRefFromRequest();
 
 $requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 if ($requestPath === '/index.php') {

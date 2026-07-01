@@ -343,6 +343,81 @@ include APP_ROOT . '/components/header.php';
         <?php endif; ?>
     </div>
 
+    <!-- Invite friends (referral loop) -->
+    <?php
+        require_once APP_ROOT . '/inc/invite.php';
+        $profileIsEs = (getCurrentLanguage() === 'es');
+        $inviteCode = inviteEnsureCode($user['id']);
+        $inviteUrl = $inviteCode !== '' ? (getPublicBaseUrl() . '/?ref=' . rawurlencode($inviteCode)) : '';
+    ?>
+    <?php if ($inviteUrl !== ''): ?>
+    <div class="bg-white rounded-xl border border-warm-200 p-6 mb-8">
+        <h2 class="text-lg font-semibold text-warm-900 flex items-center gap-2 mb-1">
+            <i data-lucide="gift" class="w-5 h-5 text-sunset-400"></i>
+            <?= $profileIsEs ? 'Invita a tus amigos' : 'Invite friends' ?>
+        </h2>
+        <p class="text-sm text-warm-500 mb-3"><?= $profileIsEs ? 'Comparte tu enlace — ganas una insignia cuando un amigo se une y completa su registro.' : 'Share your link — earn a badge when a friend joins and finishes signing up.' ?></p>
+        <div class="flex items-center gap-2">
+            <input type="text" readonly value="<?= h($inviteUrl) ?>" id="invite-link"
+                   data-action="selectInviteLink" data-on="click"
+                   class="flex-1 min-w-0 px-3 py-2 rounded-lg border border-warm-200 bg-warm-50 text-sm text-warm-700">
+            <button type="button" data-action="copyInviteLink" data-action-args='[<?= json_encode($inviteUrl) ?>]'
+                    class="shrink-0 inline-flex items-center gap-1 bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-4 py-2 rounded-lg text-sm font-semibold">
+                <i data-lucide="share-2" class="w-4 h-4"></i><?= $profileIsEs ? 'Compartir' : 'Share' ?>
+            </button>
+        </div>
+    </div>
+    <script <?= cspNonceAttr() ?>>
+    window.selectInviteLink = function () { var el = document.getElementById('invite-link'); if (el) el.select(); };
+    window.copyInviteLink = function (url) {
+        if (navigator.share) { navigator.share({ url: url }).catch(function () {}); return; }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(function () {
+                if (typeof showToast === 'function') showToast(<?= json_encode($profileIsEs ? 'Enlace copiado' : 'Link copied!') ?>, 'success', 2000);
+            }).catch(function () {});
+        }
+    };
+    </script>
+    <?php endif; ?>
+
+    <!-- Notifications settings (weekly digest opt in/out) -->
+    <?php
+        $profileIsEs = (getCurrentLanguage() === 'es');
+        $prefRow = queryOne('SELECT weekly_digest FROM user_preferences WHERE user_id = :id', [':id' => $user['id']]);
+        $weeklyDigestOn = $prefRow ? ((int) $prefRow['weekly_digest'] === 1) : true;
+    ?>
+    <div class="bg-white rounded-xl border border-warm-200 p-6 mb-8">
+        <h2 class="text-lg font-semibold text-warm-900 flex items-center gap-2 mb-3">
+            <i data-lucide="bell" class="w-5 h-5 text-sunset-400"></i>
+            <?= $profileIsEs ? 'Notificaciones' : 'Notifications' ?>
+        </h2>
+        <label class="flex items-center justify-between gap-4 cursor-pointer">
+            <span class="text-sm text-warm-700"><?= $profileIsEs ? 'Recibe un resumen semanal con buenas condiciones en tus playas favoritas.' : 'Get a weekly digest of good beach days at your favorite beaches.' ?></span>
+            <input type="checkbox" id="pref-weekly-digest" <?= $weeklyDigestOn ? 'checked' : '' ?>
+                   data-action="updateWeeklyDigest" data-on="change"
+                   class="w-5 h-5 shrink-0 rounded border-gray-300 text-sunset-500 focus:ring-sunset-400">
+        </label>
+    </div>
+    <script <?= cspNonceAttr() ?>>
+    window.updateWeeklyDigest = function () {
+        const cb = document.getElementById('pref-weekly-digest');
+        if (!cb) return;
+        const body = new URLSearchParams();
+        body.set('csrf_token', <?= json_encode(csrfToken()) ?>);
+        body.set('weekly_digest', cb.checked ? '1' : '0');
+        fetch('/api/account/preferences.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString() })
+            .then(function (r) { return r.json(); })
+            .then(function (d) {
+                if (!d || !d.success) throw new Error();
+                if (typeof showToast === 'function') showToast(<?= json_encode($profileIsEs ? 'Preferencias guardadas' : 'Preferences saved') ?>, 'success', 2000);
+            })
+            .catch(function () {
+                cb.checked = !cb.checked;
+                if (typeof showToast === 'function') showToast(<?= json_encode($profileIsEs ? 'No se pudo guardar' : 'Could not save') ?>, 'error', 3000);
+            });
+    };
+    </script>
+
     <section class="bg-red-950/40 rounded-xl border border-red-500/30 p-6 mb-8" aria-labelledby="account-danger-zone">
         <div class="flex items-start gap-3 mb-5">
             <i data-lucide="triangle-alert" class="w-5 h-5 text-red-300 mt-0.5"></i>

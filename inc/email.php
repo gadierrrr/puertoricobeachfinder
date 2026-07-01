@@ -16,7 +16,37 @@ const EMAIL_TEMPLATE_CATEGORY_MAP = [
     'welcome' => 'non_critical',
     'list-send' => 'non_critical',
     'quiz-results' => 'non_critical',
+    'weekly-digest' => 'non_critical',
 ];
+
+/**
+ * Server secret used to sign unsubscribe (and similar) tokens. Prefers APP_SECRET;
+ * falls back to a value derived from stable env so the site works without extra config.
+ */
+function appSecret(): string {
+    $s = (string) env('APP_SECRET', '');
+    if ($s !== '') {
+        return $s;
+    }
+    return hash('sha256', 'bf-app-secret|' . (string) env('APP_URL', '') . '|' . (string) env('RESEND_API_KEY', ''));
+}
+
+/**
+ * One-click unsubscribe URL for a recipient (HMAC-signed, no DB row needed).
+ */
+function emailUnsubscribeUrl(string $email): string {
+    $token = hash_hmac('sha256', emailNormalizeAddress($email), appSecret());
+    $base = rtrim((string) env('APP_URL', 'http://localhost:8082'), '/');
+    return $base . '/unsubscribe?e=' . rawurlencode($email) . '&t=' . $token;
+}
+
+/**
+ * Verify an unsubscribe token (constant-time).
+ */
+function emailVerifyUnsubscribeToken(string $email, string $token): bool {
+    $expected = hash_hmac('sha256', emailNormalizeAddress($email), appSecret());
+    return $token !== '' && hash_equals($expected, $token);
+}
 
 function getEmailTemplate($slug) {
     return queryOne(
