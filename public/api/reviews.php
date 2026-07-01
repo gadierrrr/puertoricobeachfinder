@@ -12,6 +12,7 @@ require_once APP_ROOT . '/inc/session.php';
 session_start();
 require_once APP_ROOT . '/inc/db.php';
 require_once APP_ROOT . '/inc/helpers.php';
+ require_once APP_ROOT . '/inc/i18n.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 
@@ -230,11 +231,18 @@ function createReview() {
 
     if ($result) {
         $reviewId = getDB()->lastInsertRowID();
-        jsonResponse([
+        $response = [
             'success' => true,
             'message' => 'Thanks for your review!',
             'review_id' => $reviewId
-        ]);
+        ];
+        $newBadges = awardAchievements($userId);
+        if (!empty($newBadges)) {
+            $response['newly_earned_badges'] = array_map(static function ($b) {
+                return ['label' => $b['label'], 'icon' => $b['icon']];
+            }, $newBadges);
+        }
+        jsonResponse($response);
     } else {
         jsonResponse(['error' => 'Failed to save review'], 500);
     }

@@ -386,10 +386,57 @@ include APP_ROOT . '/components/header.php';
     </div>
 </section>
 
+<!-- For You — personalized from onboarding preferences (signed-in, onboarded users only) -->
+<?php
+$showDiscovery = !empty($selectedTags) || !empty($selectedMunicipality) || $hasLifeguard ? false : true;
+$forYouBeaches = [];
+if ($showDiscovery && isAuthenticated() && isset($user) && is_array($user) && !empty($user['onboarding_completed'])) {
+    $prefsRow = queryOne('SELECT preferred_activities, preferred_vibe FROM user_preferences WHERE user_id = :id', [':id' => $_SESSION['user_id']]);
+    if ($prefsRow) {
+        $activityToTags = [
+            'swimming' => ['swimming'], 'snorkeling' => ['snorkeling'], 'surfing' => ['surfing'],
+            'relaxing' => ['calm-waters', 'scenic'], 'family' => ['family-friendly'],
+            'photography' => ['scenic'], 'hiking' => ['secluded', 'scenic'], 'secluded' => ['secluded'],
+        ];
+        $vibeToTags = [
+            'relaxing' => ['calm-waters'], 'adventurous' => ['surfing', 'diving'],
+            'family' => ['family-friendly'], 'romantic' => ['secluded', 'scenic'],
+        ];
+        $wantTags = [];
+        $acts = json_decode($prefsRow['preferred_activities'] ?? '[]', true);
+        if (is_array($acts)) {
+            foreach ($acts as $a) {
+                foreach ($activityToTags[$a] ?? [] as $t) { $wantTags[] = $t; }
+            }
+        }
+        foreach ($vibeToTags[$prefsRow['preferred_vibe'] ?? ''] ?? [] as $t) { $wantTags[] = $t; }
+        $wantTags = array_values(array_filter(array_unique($wantTags)));
+        if (!empty($wantTags)) {
+            $forYouBeaches = getBeachesForYou($wantTags, $userFavorites, 8);
+        }
+    }
+}
+$forYouEs = (getCurrentLanguage() === 'es');
+?>
+<?php if (!empty($forYouBeaches)): ?>
+<section class="py-12 md:py-16 px-4 sm:px-6 md:px-20 bg-white">
+    <div class="mb-6 md:mb-8">
+        <h2 class="text-[28px] font-serif font-normal text-warm-900"><?= $forYouEs ? 'Para ti' : 'For You' ?></h2>
+        <p class="text-warm-500 text-sm mt-1"><?= $forYouEs ? 'Según tus preferencias' : 'Based on your preferences' ?></p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <?php foreach ($forYouBeaches as $beach):
+            $distance = null;
+            $isFavorite = in_array($beach['id'], $userFavorites, true);
+            include APP_ROOT . '/components/beach-card.php';
+        endforeach; ?>
+    </div>
+</section>
+<?php endif; ?>
+
 <!-- Trending Now - Horizontal Carousel -->
 <?php
 $trendingBeaches = getTrendingBeaches(8);
-        $showDiscovery = !empty($selectedTags) || !empty($selectedMunicipality) || $hasLifeguard ? false : true;
 ?>
 <?php if ($showDiscovery && !empty($trendingBeaches)): ?>
 <section class="py-12 md:py-16 pl-4 sm:pl-6 md:pl-20 bg-sand-50">

@@ -260,6 +260,33 @@ if (!function_exists('isGoogleOAuthEnabled')) {
     <!-- App JavaScript (defer for non-blocking load) -->
     <script defer src="/assets/js/app.min.js?v=2.0" <?= cspNonceAttr() ?>></script>
     <script defer src="/assets/js/geolocation.js?v=2.1" <?= cspNonceAttr() ?>></script>
+    <script <?= cspNonceAttr() ?>>
+    // Achievement badge celebration (shared across favorite/review/photo/check-in flows).
+    window.BF_BADGE_PREFIX = <?= json_encode(($currentLang ?? 'en') === 'es' ? 'Insignia desbloqueada: ' : 'Badge unlocked: ') ?>;
+    window.bfCelebrateBadges = function (badges) {
+        if (!Array.isArray(badges) || !badges.length || typeof showToast !== 'function') return;
+        badges.forEach(function (b, i) {
+            setTimeout(function () {
+                showToast((b.icon || '🏅') + ' ' + (window.BF_BADGE_PREFIX || '') + (b.label || ''), 'success', 5000);
+            }, 300 + i * 1100);
+        });
+        if (typeof window.bfTrack === 'function') window.bfTrack('U3_badge_earned', { count: badges.length });
+    };
+    // Queue badges to celebrate AFTER a full-page reload (used by flows that reload, e.g. reviews/photos).
+    window.bfQueueBadgeToasts = function (badges) {
+        if (!Array.isArray(badges) || !badges.length) return;
+        try {
+            var q = JSON.parse(sessionStorage.getItem('bf_badge_queue') || '[]');
+            sessionStorage.setItem('bf_badge_queue', JSON.stringify(q.concat(badges)));
+        } catch (e) {}
+    };
+    document.addEventListener('DOMContentLoaded', function () {
+        try {
+            var q = JSON.parse(sessionStorage.getItem('bf_badge_queue') || '[]');
+            if (q.length) { sessionStorage.removeItem('bf_badge_queue'); window.bfCelebrateBadges(q); }
+        } catch (e) {}
+    });
+    </script>
     <script defer src="/assets/js/filters.js" <?= cspNonceAttr() ?>></script>
     <script defer src="/assets/js/analytics.js?v=2.0" <?= cspNonceAttr() ?>></script>
     <script defer src="/assets/js/share.js" <?= cspNonceAttr() ?>></script>

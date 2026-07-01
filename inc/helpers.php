@@ -1367,6 +1367,65 @@ function getTrendingBeaches($limit = 6, $days = 7) {
 }
 
 /**
+ * Personalized "For You" beaches: published beaches matching a set of preference tags,
+ * ranked by how many of the tags they match (then rating). Optionally excludes beaches
+ * the user already saved. Mirrors getTrendingBeaches' query+attachBeachMetadata pattern.
+ *
+ * @param array $tags       Mapped preference tags (must be valid beach_tags values)
+ * @param array $excludeIds Beach ids to exclude (e.g. already-favorited)
+ * @param int   $limit
+ * @return array Full beach rows ready for beach-card, or [] when $tags is empty
+ */
+function getBeachesForYou(array $tags, array $excludeIds = [], $limit = 8) {
+    require_once __DIR__ . '/db.php';
+
+    $tags = array_values(array_filter(array_unique($tags)));
+    if (empty($tags)) {
+        return [];
+    }
+
+    $params = [];
+    $tagPlaceholders = [];
+    foreach ($tags as $i => $tag) {
+        $ph = ':tag' . $i;
+        $tagPlaceholders[] = $ph;
+        $params[$ph] = $tag;
+    }
+
+    $excludeClause = '';
+    $excludeIds = array_values(array_filter(array_unique($excludeIds)));
+    if (!empty($excludeIds)) {
+        $exPh = [];
+        foreach ($excludeIds as $j => $eid) {
+            $ph = ':ex' . $j;
+            $exPh[] = $ph;
+            $params[$ph] = $eid;
+        }
+        $excludeClause = ' AND b.id NOT IN (' . implode(',', $exPh) . ')';
+    }
+
+    $params[':limit'] = (int) $limit;
+
+    $sql = "
+        SELECT b.*, COUNT(DISTINCT bt.tag) AS match_score
+        FROM beaches b
+        INNER JOIN beach_tags bt ON b.id = bt.beach_id AND bt.tag IN (" . implode(',', $tagPlaceholders) . ")
+        WHERE b.publish_status = 'published' AND (b.location_type = 'beach' OR b.location_type IS NULL)" . $excludeClause . "
+        GROUP BY b.id
+        ORDER BY match_score DESC, b.google_rating DESC
+        LIMIT :limit
+    ";
+
+    $beaches = query($sql, $params);
+
+    if (!empty($beaches)) {
+        attachBeachMetadata($beaches);
+    }
+
+    return $beaches;
+}
+
+/**
  * Format view count for display (e.g., 1500 -> "1.5k")
  * @param int $count The view count
  * @return string Formatted view count
@@ -1645,6 +1704,97 @@ function updateUserExplorerLevel($userId) {
     );
 
     return ['level' => $level, 'beaches_visited' => $beachesVisited];
+}
+
+// ========================================
+// Badges / Achievements
+// ========================================
+
+/**
+ * Badge catalog. Award-only (never revoked). Each entry maps a user-activity signal
+ * to a threshold. Mirrors the explorer-level helper structure (label via __(),
+ * emoji icon, Tailwind colorClass pill).
+ */
+function getAchievementsCatalog() {
+    $t = static function ($key, $fallback) {
+        return function_exists('__') ? __($key) : $fallback;
+    };
+    return [
+        'first_checkin'    => ['label' => $t('achievements.first_checkin', 'First Check-in'),      'desc' => $t('achievements.first_checkin_desc', 'Reported conditions at a beach'), 'icon' => '📍', 'colorClass' => 'text-amber-400 bg-amber-500/20 border-amber-500/30',   'signal' => 'checkins',       'threshold' => 1],
+        'explorer_5'       => ['label' => $t('achievements.explorer_5', 'Getting Around'),          'desc' => $t('achievements.explorer_5_desc', 'Visited 5 different beaches'),      'icon' => '🗺️', 'colorClass' => 'text-cyan-400 bg-cyan-500/20 border-cyan-500/30',     'signal' => 'unique_beaches', 'threshold' => 5],
+        'explorer_25'      => ['label' => $t('achievements.explorer_25', 'Beach Connoisseur'),      'desc' => $t('achievements.explorer_25_desc', 'Visited 25 different beaches'),    'icon' => '🏆', 'colorClass' => 'text-purple-400 bg-purple-500/20 border-purple-500/30', 'signal' => 'unique_beaches', 'threshold' => 25],
+        'island_hopper'    => ['label' => $t('achievements.island_hopper', 'Island Hopper'),        'desc' => $t('achievements.island_hopper_desc', 'Checked in across 5 towns'),     'icon' => '🏝️', 'colorClass' => 'text-green-400 bg-green-500/20 border-green-500/30',   'signal' => 'municipalities', 'threshold' => 5],
+        'first_favorite'   => ['label' => $t('achievements.first_favorite', 'First Save'),          'desc' => $t('achievements.first_favorite_desc', 'Saved your first beach'),       'icon' => '❤️', 'colorClass' => 'text-coral-400 bg-coral-500/20 border-coral-500/30',   'signal' => 'favorites',      'threshold' => 1],
+        'collector'        => ['label' => $t('achievements.collector', 'Collector'),                'desc' => $t('achievements.collector_desc', 'Saved 10 beaches'),                 'icon' => '📌', 'colorClass' => 'text-yellow-400 bg-yellow-500/20 border-yellow-500/30', 'signal' => 'favorites',      'threshold' => 10],
+        'first_review'     => ['label' => $t('achievements.first_review', 'First Review'),          'desc' => $t('achievements.first_review_desc', 'Wrote your first review'),        'icon' => '✍️', 'colorClass' => 'text-amber-400 bg-amber-500/20 border-amber-500/30',   'signal' => 'reviews',        'threshold' => 1],
+        'trusted_reviewer' => ['label' => $t('achievements.trusted_reviewer', 'Trusted Reviewer'), 'desc' => $t('achievements.trusted_reviewer_desc', 'Wrote 5 reviews'),            'icon' => '⭐', 'colorClass' => 'text-yellow-400 bg-yellow-500/20 border-yellow-500/30', 'signal' => 'reviews',        'threshold' => 5],
+        'shutterbug'       => ['label' => $t('achievements.shutterbug', 'Shutterbug'),              'desc' => $t('achievements.shutterbug_desc', 'Shared your first photo'),          'icon' => '📷', 'colorClass' => 'text-cyan-400 bg-cyan-500/20 border-cyan-500/30',     'signal' => 'photos',         'threshold' => 1],
+    ];
+}
+
+function getAchievementInfo($key) {
+    $catalog = getAchievementsCatalog();
+    return $catalog[$key] ?? null;
+}
+
+/**
+ * Compute the activity signals a user's badges depend on (one indexed COUNT each).
+ */
+function getUserAchievementSignals($userId) {
+    require_once __DIR__ . '/db.php';
+    $one = static function ($sql, $params) {
+        $r = queryOne($sql, $params);
+        return (int)($r['c'] ?? 0);
+    };
+    return [
+        'favorites'      => $one('SELECT COUNT(*) c FROM user_favorites WHERE user_id = :id', [':id' => $userId]),
+        'reviews'        => $one("SELECT COUNT(*) c FROM beach_reviews WHERE user_id = :id AND status = 'published'", [':id' => $userId]),
+        'photos'         => $one("SELECT COUNT(*) c FROM beach_photos WHERE user_id = :id AND status = 'published'", [':id' => $userId]),
+        'checkins'       => $one('SELECT COUNT(*) c FROM beach_checkins WHERE user_id = :id', [':id' => $userId]),
+        'unique_beaches' => $one('SELECT COUNT(DISTINCT beach_id) c FROM beach_checkins WHERE user_id = :id', [':id' => $userId]),
+        'municipalities' => $one('SELECT COUNT(DISTINCT b.municipality) c FROM beach_checkins c2 JOIN beaches b ON b.id = c2.beach_id WHERE c2.user_id = :id AND b.municipality IS NOT NULL AND b.municipality != ""', [':id' => $userId]),
+    ];
+}
+
+/**
+ * Earned badges for a user: [badge_key => earned_at].
+ */
+function getUserAchievements($userId) {
+    require_once __DIR__ . '/db.php';
+    $rows = query('SELECT badge_key, earned_at FROM user_badges WHERE user_id = :id', [':id' => $userId]) ?: [];
+    $out = [];
+    foreach ($rows as $r) {
+        $out[$r['badge_key']] = $r['earned_at'];
+    }
+    return $out;
+}
+
+/**
+ * Award any newly-qualified badges to a user (idempotent, award-only, never revokes).
+ * Returns an array of newly-earned badge info arrays (each with a 'key') so the caller
+ * can celebrate them. No-ops for guests / empty user id.
+ */
+function awardAchievements($userId) {
+    if (empty($userId)) {
+        return [];
+    }
+    require_once __DIR__ . '/db.php';
+    $signals = getUserAchievementSignals($userId);
+    $catalog = getAchievementsCatalog();
+    $newly = [];
+    foreach ($catalog as $key => $badge) {
+        if (($signals[$badge['signal']] ?? 0) < $badge['threshold']) {
+            continue;
+        }
+        execute(
+            'INSERT OR IGNORE INTO user_badges (user_id, badge_key, earned_at) VALUES (:id, :k, datetime("now"))',
+            [':id' => $userId, ':k' => $key]
+        );
+        if (getDB()->changes() > 0) {
+            $newly[] = ['key' => $key] + $badge;
+        }
+    }
+    return $newly;
 }
 
 // ========================================

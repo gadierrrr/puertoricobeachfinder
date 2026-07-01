@@ -153,6 +153,16 @@ $db->exec('CREATE INDEX IF NOT EXISTS idx_favorites_user ON user_favorites(user_
 $db->exec('CREATE INDEX IF NOT EXISTS idx_favorites_beach ON user_favorites(beach_id)');
 echo "- Created user_favorites table\n";
 
+// Create user_badges table (achievements; see inc/helpers.php getAchievementsCatalog + migration 038)
+$db->exec('CREATE TABLE IF NOT EXISTS user_badges (
+    user_id TEXT NOT NULL,
+    badge_key TEXT NOT NULL,
+    earned_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, badge_key)
+)');
+$db->exec('CREATE INDEX IF NOT EXISTS idx_user_badges_user ON user_badges(user_id)');
+echo "- Created user_badges table\n";
+
 // Create rate_limits table
 $db->exec('CREATE TABLE IF NOT EXISTS rate_limits (
     id TEXT PRIMARY KEY,

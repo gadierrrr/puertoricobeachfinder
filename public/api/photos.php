@@ -13,6 +13,7 @@ require_once APP_ROOT . '/inc/session.php';
 session_start();
 require_once APP_ROOT . '/inc/db.php';
 require_once APP_ROOT . '/inc/helpers.php';
+ require_once APP_ROOT . '/inc/i18n.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 
@@ -212,7 +213,7 @@ function uploadPhoto() {
 
     if ($result) {
         $photoId = getDB()->lastInsertRowID();
-        jsonResponse([
+        $response = [
             'success' => true,
             'message' => 'Photo uploaded!',
             'photo' => [
@@ -221,7 +222,14 @@ function uploadPhoto() {
                 'url' => '/uploads/photos/' . $filename,
                 'thumb_url' => '/uploads/photos/thumbs/' . $filename
             ]
-        ]);
+        ];
+        $newBadges = awardAchievements($userId);
+        if (!empty($newBadges)) {
+            $response['newly_earned_badges'] = array_map(static function ($b) {
+                return ['label' => $b['label'], 'icon' => $b['icon']];
+            }, $newBadges);
+        }
+        jsonResponse($response);
     } else {
         // Clean up files on failure
         @unlink($uploadPath);

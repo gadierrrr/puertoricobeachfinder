@@ -52,6 +52,19 @@
                     </div>
                 </div>
 
+                <!-- Report conditions (check-in) — opens the previously-unreachable check-in modal -->
+                <div class="beach-detail-card p-4">
+                    <h3 class="font-bold text-warm-900 text-sm mb-1"><?= h(__('beach.checkin_sidebar_title')) ?></h3>
+                    <p class="text-xs text-warm-500 mb-3"><?= h(__('beach.checkin_sidebar_desc')) ?></p>
+                    <button type="button"
+                            data-action="openCheckinModal"
+                            data-action-args='<?= h(json_encode([$beach['id'], $beach['name']])) ?>'
+                            class="w-full inline-flex items-center justify-center gap-2 bg-ocean-500 hover:bg-ocean-600 text-white py-2 rounded-lg font-medium text-sm transition-colors">
+                        <i data-lucide="map-pin" class="w-4 h-4" aria-hidden="true"></i>
+                        <?= h(__('beach.checkin_sidebar_cta')) ?>
+                    </button>
+                </div>
+
                 <!-- Amenities -->
                 <?php if (!empty($beach['amenities'])): ?>
                 <div class="beach-detail-card p-4">

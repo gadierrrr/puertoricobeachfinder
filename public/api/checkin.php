@@ -12,6 +12,7 @@ require_once APP_ROOT . '/inc/session.php';
 session_start();
 require_once APP_ROOT . '/inc/db.php';
 require_once APP_ROOT . '/inc/helpers.php';
+ require_once APP_ROOT . '/inc/i18n.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 
@@ -173,6 +174,14 @@ function submitCheckin() {
                 $response['leveled_up'] = true;
                 $response['level_label'] = $levelInfo['label'] ?? $progress['level'];
                 $response['level_icon'] = $levelInfo['icon'] ?? '🏆';
+            }
+
+            // Award any newly-earned achievement badges (check-in / explorer / island-hopper).
+            $newBadges = awardAchievements($userId);
+            if (!empty($newBadges)) {
+                $response['newly_earned_badges'] = array_map(static function ($b) {
+                    return ['label' => $b['label'], 'icon' => $b['icon']];
+                }, $newBadges);
             }
         }
 

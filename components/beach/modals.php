@@ -159,6 +159,10 @@ async function toggleStickyFavorite() {
         if (typeof window.bfTrack === 'function') {
             window.bfTrack(isFav ? 'favorite_add' : 'favorite_remove', { source: 'beach_page_sticky', beach_slug: <?= json_encode($beach['slug']) ?> });
         }
+        // Celebrate any achievement badges earned by saving (no reload here).
+        if (isFav && typeof window.bfCelebrateBadges === 'function') {
+            window.bfCelebrateBadges(payload.newly_earned_badges);
+        }
     } catch (e) {
         if (typeof showToast === 'function') showToast('<?= __('beach.favorite_error') ?>', 'error', 3500);
     } finally {
@@ -622,6 +626,16 @@ function closeCheckinModal() {
     document.body.style.overflow = '';
 }
 
+// Bridge from the post-check-in nudge to the review modal for the same beach.
+function openReviewFromCheckin() {
+    const beachId = document.getElementById('checkin-beach-id')?.value || '';
+    const beachName = document.getElementById('checkin-beach-name')?.textContent || '';
+    closeCheckinModal();
+    if (typeof openReviewForm === 'function') {
+        openReviewForm(beachId, beachName);
+    }
+}
+
 async function submitCheckin(event) {
     event.preventDefault();
 
@@ -676,16 +690,58 @@ async function submitCheckin(event) {
                 }
             }
 
+            // Newly-earned achievement badges (staggered so they don't collide with the level-up toast)
+            if (Array.isArray(data.newly_earned_badges) && data.newly_earned_badges.length && typeof showToast === 'function') {
+                const badgePrefix = <?= json_encode($lang === 'es' ? 'Insignia desbloqueada: ' : 'Badge unlocked: ') ?>;
+                data.newly_earned_badges.forEach((b, i) => {
+                    setTimeout(() => {
+                        showToast((b.icon || '🏅') + ' ' + badgePrefix + (b.label || ''), 'success', 5000);
+                    }, (data.leveled_up ? 1200 : 300) + i * 1100);
+                });
+                if (typeof window.bfTrack === 'function') {
+                    window.bfTrack('U3_badge_earned', { count: data.newly_earned_badges.length });
+                }
+            }
+
             // Refresh check-ins list
             if (typeof htmx !== 'undefined') {
                 htmx.trigger('#checkins-list', 'load');
             }
 
-            setTimeout(() => {
-                closeCheckinModal();
+            // Post-check-in review nudge: for authed users who haven't reviewed THIS beach,
+            // offer a one-tap review instead of auto-closing (frequency-capped per beach).
+            <?php
+                $checkinCanReview = false;
+                if (function_exists('isAuthenticated') && isAuthenticated() && !empty($_SESSION['user_id'])) {
+                    // Check across ALL statuses (published/pending/hidden) so we don't nudge a
+                    // user who already reviewed and would just be rejected by createReview().
+                    $checkinCanReview = !queryOne(
+                        'SELECT 1 AS x FROM beach_reviews WHERE beach_id = :b AND user_id = :u LIMIT 1',
+                        [':b' => $beach['id'], ':u' => (string)$_SESSION['user_id']]
+                    );
+                }
+            ?>
+            const bfCheckinCanReview = <?= $checkinCanReview ? 'true' : 'false' ?>;
+            const bfCheckinBeachId = document.getElementById('checkin-beach-id')?.value || '';
+            let bfShowReviewNudge = false;
+            try {
+                bfShowReviewNudge = bfCheckinCanReview && !data.requires_signup && bfCheckinBeachId
+                    && !localStorage.getItem('bf_review_nudge_' + bfCheckinBeachId);
+            } catch (e) {}
+
+            if (bfShowReviewNudge) {
+                try { localStorage.setItem('bf_review_nudge_' + bfCheckinBeachId, '1'); } catch (e) {}
+                messageDiv.innerHTML = '<div class="mb-2"><?= h(__('beach.checkin_review_nudge')) ?></div>'
+                    + '<button type="button" data-action="openReviewFromCheckin" class="inline-flex items-center gap-1 bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-3 py-1.5 rounded-lg text-sm font-semibold"><?= h(__('beach.checkin_review_nudge_cta')) ?></button>';
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i><span><?= __('beach.checkin_submit') ?></span>';
-            }, 1000);
+            } else {
+                setTimeout(() => {
+                    closeCheckinModal();
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i><span><?= __('beach.checkin_submit') ?></span>';
+                }, 1000);
+            }
 
             // Reward gate for guests: contribute -> signup.
             if (data.requires_signup && typeof showSignupPrompt === 'function') {
@@ -1017,6 +1073,10 @@ async function submitReview(event) {
             if (typeof showToast === 'function') {
                 showToast('Review submitted!', 'success', 3000);
             }
+            // Queue any earned badges to celebrate after the reload below.
+            if (typeof window.bfQueueBadgeToasts === 'function') {
+                window.bfQueueBadgeToasts(data.newly_earned_badges);
+            }
 
             setTimeout(() => {
                 closeReviewModal();
@@ -1098,6 +1158,10 @@ async function submitPhotoUpload(event) {
 
             if (typeof showToast === 'function') {
                 showToast('Photo uploaded!', 'success', 3000);
+            }
+            // Queue any earned badges to celebrate after the reload below.
+            if (typeof window.bfQueueBadgeToasts === 'function') {
+                window.bfQueueBadgeToasts(data.newly_earned_badges);
             }
 
             setTimeout(() => {

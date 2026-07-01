@@ -310,6 +310,39 @@ include APP_ROOT . '/components/header.php';
         </div>
     </div>
 
+    <!-- Badges / Achievements -->
+    <?php
+        $achievementsCatalog = getAchievementsCatalog();
+        $earnedBadges = getUserAchievements($user['id']);
+        $earnedCount = count($earnedBadges);
+        $totalBadges = count($achievementsCatalog);
+    ?>
+    <div class="bg-white rounded-xl border border-warm-200 p-6 mb-8">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-semibold text-warm-900 flex items-center gap-2">
+                <i data-lucide="award" class="w-5 h-5 text-sunset-400"></i>
+                <?= h(__('achievements.title')) ?>
+            </h2>
+            <span class="text-sm text-gray-500"><?= $earnedCount ?> / <?= $totalBadges ?></span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <?php foreach ($achievementsCatalog as $bKey => $badge):
+                $isEarned = isset($earnedBadges[$bKey]);
+            ?>
+            <div class="flex items-center gap-3 rounded-lg border p-3 <?= $isEarned ? 'border-warm-200 bg-warm-50' : 'border-warm-100 bg-warm-50/40 opacity-60' ?>">
+                <div class="text-2xl leading-none"><?= $isEarned ? $badge['icon'] : '🔒' ?></div>
+                <div class="min-w-0">
+                    <div class="text-sm font-semibold text-warm-900 truncate"><?= h($badge['label']) ?></div>
+                    <div class="text-xs text-gray-500"><?= h($badge['desc']) ?></div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <?php if ($earnedCount === 0): ?>
+        <p class="text-sm text-gray-500 mt-4"><?= h(__('achievements.hint')) ?></p>
+        <?php endif; ?>
+    </div>
+
     <section class="bg-red-950/40 rounded-xl border border-red-500/30 p-6 mb-8" aria-labelledby="account-danger-zone">
         <div class="flex items-start gap-3 mb-5">
             <i data-lucide="triangle-alert" class="w-5 h-5 text-red-300 mt-0.5"></i>
@@ -420,10 +453,15 @@ include APP_ROOT . '/components/header.php';
         <div class="text-center py-16 bg-warm-50 border border-warm-200 rounded-xl">
             <div class="text-6xl mb-4">❤️</div>
             <h2 class="text-xl font-semibold text-warm-900 mb-2"><?= h(__('profile.no_favorites')) ?></h2>
-            <p class="text-warm-500 mb-6"><?= h(__('profile.no_favorites_cta')) ?></p>
-            <a href="/" class="inline-block bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-6 py-3 rounded-lg font-medium transition-colors">
-                <?= h(__('profile.explore_beaches')) ?>
-            </a>
+            <p class="text-warm-500 mb-6 max-w-md mx-auto"><?= h(__('profile.no_favorites_cta')) ?></p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <a href="/best-beaches" class="inline-block bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-6 py-3 rounded-lg font-medium transition-colors">
+                    <?= h(__('profile.explore_beaches')) ?>
+                </a>
+                <a href="/quiz" class="inline-block text-sunset-400 hover:text-sunset-300 px-6 py-3 rounded-lg font-medium transition-colors">
+                    <?= h(__('profile.no_favorites_quiz')) ?>
+                </a>
+            </div>
         </div>
         <?php else: ?>
         <div id="beach-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

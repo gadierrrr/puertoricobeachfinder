@@ -76,10 +76,15 @@ include APP_ROOT . '/components/header.php';
     <div class="text-center py-16 bg-gray-50 rounded-xl">
         <div class="text-6xl mb-4">🏖️</div>
         <h2 class="text-xl font-semibold text-gray-700 mb-2"><?= h(__('profile.no_favorites')) ?></h2>
-        <p class="text-gray-500 mb-6"><?= h(__('profile.no_favorites_cta')) ?></p>
-        <a href="/" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium">
-            <?= h(__('profile.explore_beaches')) ?>
-        </a>
+        <p class="text-gray-500 mb-6 max-w-md mx-auto"><?= h(__('profile.no_favorites_cta')) ?></p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <a href="/best-beaches" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium">
+                <?= h(__('profile.explore_beaches')) ?>
+            </a>
+            <a href="/quiz" class="inline-block text-blue-600 hover:text-blue-700 px-6 py-3 rounded-lg font-medium">
+                <?= h(__('profile.no_favorites_quiz')) ?>
+            </a>
+        </div>
     </div>
     <?php else: ?>
 

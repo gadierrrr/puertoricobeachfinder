@@ -16,6 +16,7 @@ require_once APP_ROOT . '/inc/session.php';
 session_start();
 require_once APP_ROOT . '/inc/db.php';
 require_once APP_ROOT . '/inc/helpers.php';
+ require_once APP_ROOT . '/inc/i18n.php';
 
 $format = isset($_GET['format']) ? (string)$_GET['format'] : 'html';
 $wantsJson = $format === 'json';
@@ -83,6 +84,7 @@ $existing = queryOne(
     [':user_id' => $userId, ':beach_id' => $beachId]
 );
 
+$newBadges = [];
 if ($existing) {
     // Remove from favorites
     execute('DELETE FROM user_favorites WHERE id = :id', [':id' => $existing['id']]);
@@ -95,14 +97,22 @@ if ($existing) {
         [':id' => $favoriteId, ':user_id' => $userId, ':beach_id' => $beachId]
     );
     $isFavorite = true;
+    // Award favorite-based achievement badges (award-only; never revoked on un-favorite).
+    $newBadges = awardAchievements($userId);
 }
 
 if ($wantsJson) {
-    jsonResponse([
+    $resp = [
         'success' => true,
         'beach_id' => $beachId,
         'is_favorite' => $isFavorite,
-    ]);
+    ];
+    if (!empty($newBadges)) {
+        $resp['newly_earned_badges'] = array_map(static function ($b) {
+            return ['label' => $b['label'], 'icon' => $b['icon']];
+        }, $newBadges);
+    }
+    jsonResponse($resp);
 }
 
 // Return updated button
