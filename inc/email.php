@@ -28,6 +28,10 @@ function appSecret(): string {
     if ($s !== '') {
         return $s;
     }
+    // Fallback keeps the site working without extra config, but ties token validity to a
+    // rotatable API key (and would be a public constant if all are empty). Warn loudly so
+    // APP_SECRET is set explicitly in prod before any bulk send — see .env.example.
+    error_log('WARNING: APP_SECRET is not set; unsubscribe tokens are using a derived fallback secret. Set APP_SECRET in .env.');
     return hash('sha256', 'bf-app-secret|' . (string) env('APP_URL', '') . '|' . (string) env('RESEND_API_KEY', ''));
 }
 

@@ -1782,22 +1782,29 @@ function awardAchievements($userId) {
         return [];
     }
     require_once __DIR__ . '/db.php';
-    $signals = getUserAchievementSignals($userId);
-    $catalog = getAchievementsCatalog();
-    $newly = [];
-    foreach ($catalog as $key => $badge) {
-        if (($signals[$badge['signal']] ?? 0) < $badge['threshold']) {
-            continue;
+    // Badge awarding is a non-critical side-effect of core actions (favorite/review/
+    // check-in/photo). Never let a badge-system error bubble up and fail the action.
+    try {
+        $signals = getUserAchievementSignals($userId);
+        $catalog = getAchievementsCatalog();
+        $newly = [];
+        foreach ($catalog as $key => $badge) {
+            if (($signals[$badge['signal']] ?? 0) < $badge['threshold']) {
+                continue;
+            }
+            execute(
+                'INSERT OR IGNORE INTO user_badges (user_id, badge_key, earned_at) VALUES (:id, :k, datetime("now"))',
+                [':id' => $userId, ':k' => $key]
+            );
+            if (getDB()->changes() > 0) {
+                $newly[] = ['key' => $key] + $badge;
+            }
         }
-        execute(
-            'INSERT OR IGNORE INTO user_badges (user_id, badge_key, earned_at) VALUES (:id, :k, datetime("now"))',
-            [':id' => $userId, ':k' => $key]
-        );
-        if (getDB()->changes() > 0) {
-            $newly[] = ['key' => $key] + $badge;
-        }
+        return $newly;
+    } catch (\Throwable $e) {
+        error_log('awardAchievements failed for user ' . $userId . ': ' . $e->getMessage());
+        return [];
     }
-    return $newly;
 }
 
 // ========================================

@@ -47,8 +47,17 @@ function pushStoreSubscription(?string $userId, array $sub): bool {
     return true;
 }
 
+/** Prune a subscription by endpoint (used by the sender on a 404/410 dead endpoint). */
 function pushDeleteSubscription(string $endpoint): void {
     execute('DELETE FROM push_subscriptions WHERE endpoint = :e', [':e' => $endpoint]);
+}
+
+/** Remove a subscription owned by a specific user (user-initiated unsubscribe; avoids IDOR). */
+function pushDeleteUserSubscription(string $userId, string $endpoint): void {
+    execute(
+        'DELETE FROM push_subscriptions WHERE endpoint = :e AND user_id = :u',
+        [':e' => $endpoint, ':u' => $userId]
+    );
 }
 
 /**

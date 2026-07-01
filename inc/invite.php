@@ -54,8 +54,11 @@ function inviteCaptureRefFromRequest(): void {
     if ($code === '') {
         return;
     }
-    // Don't attribute an already-signed-in user.
-    if (function_exists('isAuthenticated') && isAuthenticated()) {
+    // Skip only if a session is actually active AND the user is signed in. On the sessionless
+    // homepage this is a no-op, and that's fine: attribution is gated to genuinely-new signups
+    // (inviteAttribute is only called in the new-user branches, with a self-referral guard), so
+    // a stray cookie on a logged-in user's browser is never acted on.
+    if (session_status() === PHP_SESSION_ACTIVE && function_exists('isAuthenticated') && isAuthenticated()) {
         return;
     }
     if (!headers_sent()) {

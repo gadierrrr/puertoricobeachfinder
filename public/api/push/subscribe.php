@@ -38,7 +38,8 @@ $userId = $_SESSION['user_id'];
 if ($action === 'unsubscribe') {
     $endpoint = is_array($sub) ? (string) ($sub['endpoint'] ?? '') : '';
     if ($endpoint !== '') {
-        pushDeleteSubscription($endpoint);
+        // Scope the delete to the current user so one user can't remove another's subscription.
+        pushDeleteUserSubscription($userId, $endpoint);
     }
     jsonResponse(['success' => true]);
 }
