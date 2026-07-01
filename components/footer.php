@@ -554,13 +554,40 @@ if (!function_exists('isGoogleOAuthEnabled')) {
     });
     </script>
 
-    <!-- Post-onboarding welcome: shown once after a user completes onboarding.
-         Activates the previously-dead $_SESSION['show_welcome'] flag set in public/onboarding.php. -->
-    <?php if (isAuthenticated() && !empty($_SESSION['show_welcome'])): ?>
+    <!-- Welcome modal: shown exactly once per user. Triggers:
+         - $_SESSION['show_welcome']: set right after a user completes onboarding.
+         - users.welcome_seen = 0 (migration 040): catches users who skipped onboarding
+           or signed up before this modal existed.
+         Suppressed on the onboarding page itself via $bfSuppressWelcome so it never
+         covers that form. Persisted to users.welcome_seen so it never recurs. -->
+    <?php
+    $bfShowWelcome = false;
+    $welcomeUser = null;
+    if (isAuthenticated() && empty($bfSuppressWelcome) && empty($_SESSION['welcome_rendered'])) {
+        // Reuse the row header.php already loaded ($user); only query if it isn't in scope.
+        $welcomeUser = (isset($user) && is_array($user)) ? $user : currentUser();
+        // Decide once per session so we don't re-check (or re-query) on every pageview.
+        $_SESSION['welcome_rendered'] = true;
+        if ($welcomeUser) {
+            // Pre-migration safety: if users.welcome_seen doesn't exist yet, treat it as
+            // already-seen so only the post-onboarding session flag can fire the modal.
+            $bfWelcomeSeen = array_key_exists('welcome_seen', $welcomeUser)
+                ? !empty($welcomeUser['welcome_seen']) : true;
+            if (!empty($_SESSION['show_welcome']) || !$bfWelcomeSeen) {
+                $bfShowWelcome = true;
+            }
+        }
+    }
+    ?>
+    <?php if ($bfShowWelcome): ?>
     <?php
         unset($_SESSION['show_welcome']);
-        $welcomeUser = currentUser();
-        $welcomeFirstName = ($welcomeUser && !empty($welcomeUser['name']))
+        // Persist so it never shows again (skip the write if the column isn't there yet).
+        if (array_key_exists('welcome_seen', $welcomeUser)) {
+            require_once __DIR__ . '/../inc/db.php';
+            execute('UPDATE users SET welcome_seen = 1 WHERE id = :id', [':id' => $welcomeUser['id']]);
+        }
+        $welcomeFirstName = (!empty($welcomeUser['name']))
             ? trim(explode(' ', (string)$welcomeUser['name'])[0]) : '';
         $isEs = ($currentLang === 'es');
         $quizUrl = routeUrl('quiz', $currentLang);

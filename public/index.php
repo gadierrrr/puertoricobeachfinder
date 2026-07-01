@@ -390,43 +390,64 @@ include APP_ROOT . '/components/header.php';
     </div>
 </section>
 
-<!-- For You — personalized from onboarding preferences (signed-in, onboarded users only) -->
+<!-- For You — personalized from onboarding preferences, or inferred from saved beaches -->
 <?php
 $showDiscovery = !empty($selectedTags) || !empty($selectedMunicipality) || $hasLifeguard ? false : true;
 $forYouBeaches = [];
-if ($showDiscovery && isAuthenticated() && isset($user) && is_array($user) && !empty($user['onboarding_completed'])) {
-    $prefsRow = queryOne('SELECT preferred_activities, preferred_vibe FROM user_preferences WHERE user_id = :id', [':id' => $_SESSION['user_id']]);
-    if ($prefsRow) {
-        $activityToTags = [
-            'swimming' => ['swimming'], 'snorkeling' => ['snorkeling'], 'surfing' => ['surfing'],
-            'relaxing' => ['calm-waters', 'scenic'], 'family' => ['family-friendly'],
-            'photography' => ['scenic'], 'hiking' => ['secluded', 'scenic'], 'secluded' => ['secluded'],
-        ];
-        $vibeToTags = [
-            'relaxing' => ['calm-waters'], 'adventurous' => ['surfing', 'diving'],
-            'family' => ['family-friendly'], 'romantic' => ['secluded', 'scenic'],
-        ];
-        $wantTags = [];
-        $acts = json_decode($prefsRow['preferred_activities'] ?? '[]', true);
-        if (is_array($acts)) {
-            foreach ($acts as $a) {
-                foreach ($activityToTags[$a] ?? [] as $t) { $wantTags[] = $t; }
+$forYouReason = ''; // 'preferences' | 'favorites' — drives the subtitle copy
+if ($showDiscovery && isAuthenticated() && isset($user) && is_array($user)) {
+    $wantTags = [];
+
+    // 1) Explicit onboarding preferences (strongest signal, when the user has them)
+    if (!empty($user['onboarding_completed'])) {
+        $prefsRow = queryOne('SELECT preferred_activities, preferred_vibe FROM user_preferences WHERE user_id = :id', [':id' => $_SESSION['user_id']]);
+        if ($prefsRow) {
+            $activityToTags = [
+                'swimming' => ['swimming'], 'snorkeling' => ['snorkeling'], 'surfing' => ['surfing'],
+                'relaxing' => ['calm-waters', 'scenic'], 'family' => ['family-friendly'],
+                'photography' => ['scenic'], 'hiking' => ['secluded', 'scenic'], 'secluded' => ['secluded'],
+            ];
+            $vibeToTags = [
+                'relaxing' => ['calm-waters'], 'adventurous' => ['surfing', 'diving'],
+                'family' => ['family-friendly'], 'romantic' => ['secluded', 'scenic'],
+            ];
+            $acts = json_decode($prefsRow['preferred_activities'] ?? '[]', true);
+            if (is_array($acts)) {
+                foreach ($acts as $a) {
+                    foreach ($activityToTags[$a] ?? [] as $t) { $wantTags[] = $t; }
+                }
+            }
+            foreach ($vibeToTags[$prefsRow['preferred_vibe'] ?? ''] ?? [] as $t) { $wantTags[] = $t; }
+            $wantTags = array_values(array_filter(array_unique($wantTags)));
+            if (!empty($wantTags)) {
+                $forYouReason = 'preferences';
             }
         }
-        foreach ($vibeToTags[$prefsRow['preferred_vibe'] ?? ''] ?? [] as $t) { $wantTags[] = $t; }
-        $wantTags = array_values(array_filter(array_unique($wantTags)));
+    }
+
+    // 2) Fallback: infer preferences from the beaches this user has saved, so the
+    //    row also appears for users who skipped onboarding but have favorites.
+    if (empty($wantTags) && !empty($userFavorites)) {
+        $wantTags = getPreferredTagsFromFavorites($userFavorites, 4);
         if (!empty($wantTags)) {
-            $forYouBeaches = getBeachesForYou($wantTags, $userFavorites, 8);
+            $forYouReason = 'favorites';
         }
+    }
+
+    if (!empty($wantTags)) {
+        $forYouBeaches = getBeachesForYou($wantTags, $userFavorites, 8);
     }
 }
 $forYouEs = (getCurrentLanguage() === 'es');
+$forYouSubtitle = $forYouReason === 'favorites'
+    ? ($forYouEs ? 'Según las playas que guardaste' : 'Based on beaches you\'ve saved')
+    : ($forYouEs ? 'Según tus preferencias' : 'Based on your preferences');
 ?>
 <?php if (!empty($forYouBeaches)): ?>
 <section class="py-12 md:py-16 px-4 sm:px-6 md:px-20 bg-white">
     <div class="mb-6 md:mb-8">
         <h2 class="text-[28px] font-serif font-normal text-warm-900"><?= $forYouEs ? 'Para ti' : 'For You' ?></h2>
-        <p class="text-warm-500 text-sm mt-1"><?= $forYouEs ? 'Según tus preferencias' : 'Based on your preferences' ?></p>
+        <p class="text-warm-500 text-sm mt-1"><?= h($forYouSubtitle) ?></p>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         <?php foreach ($forYouBeaches as $beach):

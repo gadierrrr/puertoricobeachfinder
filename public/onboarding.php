@@ -195,4 +195,9 @@ include APP_ROOT . '/components/header.php';
     </div>
 </div>
 
-<?php include APP_ROOT . '/components/footer.php'; ?>
+<?php
+// The welcome modal (in footer.php) fires for any not-yet-welcomed user; suppress it
+// here so it never renders on top of the onboarding form itself.
+$bfSuppressWelcome = true;
+include APP_ROOT . '/components/footer.php';
+?>
