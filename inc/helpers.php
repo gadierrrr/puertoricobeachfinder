@@ -1426,6 +1426,45 @@ function getBeachesForYou(array $tags, array $excludeIds = [], $limit = 8) {
 }
 
 /**
+ * Infer a user's preferred activity tags from the beaches they've saved.
+ * Used as the "For You" fallback when a user has no explicit onboarding
+ * preferences, so personalization reaches everyone who has favorited a beach.
+ *
+ * @param array $favoriteIds Beach IDs the user has favorited
+ * @param int   $limit       Max number of tags to return (most common first)
+ * @return array Ordered list of tag slugs (may be empty)
+ */
+function getPreferredTagsFromFavorites(array $favoriteIds, int $limit = 4): array {
+    require_once __DIR__ . '/db.php';
+
+    $favoriteIds = array_values(array_filter(array_unique($favoriteIds)));
+    if (empty($favoriteIds)) {
+        return [];
+    }
+
+    $placeholders = [];
+    $params = [];
+    foreach ($favoriteIds as $i => $id) {
+        $ph = ':fav' . $i;
+        $placeholders[] = $ph;
+        $params[$ph] = $id;
+    }
+    $params[':limit'] = (int) $limit;
+
+    $rows = query(
+        "SELECT tag, COUNT(*) AS c
+         FROM beach_tags
+         WHERE beach_id IN (" . implode(',', $placeholders) . ")
+         GROUP BY tag
+         ORDER BY c DESC, tag ASC
+         LIMIT :limit",
+        $params
+    );
+
+    return array_column($rows, 'tag');
+}
+
+/**
  * Format view count for display (e.g., 1500 -> "1.5k")
  * @param int $count The view count
  * @return string Formatted view count
