@@ -207,6 +207,17 @@ $publishedCount = queryOne('SELECT COUNT(*) as cnt FROM beaches WHERE publish_st
 
 // Include header
 include APP_ROOT . '/components/header.php';
+
+// header.php is what actually starts the session, so the $userFavorites lookup near the
+// top of this script (which runs before the session is active) comes back empty for
+// logged-in users. Reload it now that the session is up, so the favorite hearts and the
+// personalized "For You" row below both see the user's saved beaches.
+if (empty($userFavorites) && isAuthenticated() && !empty($_SESSION['user_id'])) {
+    $userFavorites = array_column(
+        query('SELECT beach_id FROM user_favorites WHERE user_id = :user_id', [':user_id' => $_SESSION['user_id']]),
+        'beach_id'
+    );
+}
 ?>
 
 <!-- Hero Section - Consolidated, search-first layout -->
