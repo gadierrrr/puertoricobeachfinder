@@ -17,6 +17,7 @@ if (!function_exists('isGoogleOAuthEnabled')) {
         <!-- Toasts will be dynamically added here -->
     </div>
 
+    <?php if (empty($redesignLayout)): ?>
     <!-- Footer - Dark Glassmorphism -->
     <footer class="bg-ocean-900 border-t border-ocean-700 pt-16 pb-8 px-4 sm:px-6 mt-auto relative overflow-hidden">
         <!-- Decorative palm tree (bottom right) -->
@@ -163,6 +164,7 @@ if (!function_exists('isGoogleOAuthEnabled')) {
             </div>
         </div>
     </footer>
+    <?php endif; ?>
 
     <?php if (!isset($skipMapScripts) || !$skipMapScripts): ?>
     <!-- MapLibre GL JS (defer for non-blocking load) -->

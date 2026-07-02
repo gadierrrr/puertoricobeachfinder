@@ -27,6 +27,7 @@ const ENV_SCHEMA = [
     'BACKUP_KEEP_DAYS' => ['required' => false, 'type' => 'string'],
     'APP_ENV' => ['required' => true, 'type' => 'enum', 'allowed' => ['dev', 'staging', 'prod']],
     'APP_DEBUG' => ['required' => true, 'type' => 'bool'],
+    'HOMEPAGE_DESIGN' => ['required' => false, 'type' => 'enum', 'allowed' => ['classic', 'redesign']],
     'UMAMI_ENABLED' => ['required' => false, 'type' => 'bool'],
     'UMAMI_SCRIPT_URL' => ['required' => false, 'type' => 'url'],
     'UMAMI_WEBSITE_ID' => ['required' => false, 'type' => 'string'],
@@ -155,6 +156,23 @@ function appEnv(): string {
 
 function appDebug(): bool {
     return envBool('APP_DEBUG', false);
+}
+
+/**
+ * Whether to render the v2 "redesign" templates (homepage + beach page) instead
+ * of the classic ones. Gated by the HOMEPAGE_DESIGN env var so staging can flip
+ * it on while prod stays classic; going live = set HOMEPAGE_DESIGN=redesign.
+ * Supports a ?design=redesign|classic override for quick previews.
+ */
+function useRedesign(): bool {
+    $override = strtolower(trim((string) ($_GET['design'] ?? '')));
+    if ($override === 'redesign') {
+        return true;
+    }
+    if ($override === 'classic') {
+        return false;
+    }
+    return strtolower((string) env('HOMEPAGE_DESIGN', 'classic')) === 'redesign';
 }
 
 function validateEnvironment(): void {

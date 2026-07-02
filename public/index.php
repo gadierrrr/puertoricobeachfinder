@@ -206,7 +206,14 @@ $siteStats = getSiteStats();
 $publishedCount = queryOne('SELECT COUNT(*) as cnt FROM beaches WHERE publish_status = "published" AND (location_type = "beach" OR location_type IS NULL)')['cnt'];
 
 // Include header
+$redesignLayout = useRedesign();
 include APP_ROOT . '/components/header.php';
+
+if ($redesignLayout) {
+    include APP_ROOT . '/templates/redesign/home.php';
+    include APP_ROOT . '/components/footer.php';
+    return;
+}
 
 // header.php is what actually starts the session, so the $userFavorites lookup near the
 // top of this script (which runs before the session is active) comes back empty for

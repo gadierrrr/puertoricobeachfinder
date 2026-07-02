@@ -223,7 +223,14 @@ $beachReferralBottom = referralRenderBeachAnchor(
     $referralBaseCtx
 );
 
+$redesignLayout = useRedesign();
 include APP_ROOT . '/components/header.php';
+
+if ($redesignLayout) {
+    include APP_ROOT . '/templates/redesign/beach.php';
+    include APP_ROOT . '/components/footer.php';
+    return;
+}
 ?>
 
 

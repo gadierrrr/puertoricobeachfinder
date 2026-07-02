@@ -319,6 +319,12 @@ if ($bodyVariant === 'collection-light') {
     <!-- Custom styles -->
     <link rel="stylesheet" href="/assets/css/styles.css?v=4.7">
 
+    <?php if (function_exists('useRedesign') && useRedesign()): ?>
+    <!-- Redesign v2 (tropical) fonts + standalone stylesheet -->
+    <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Saira+Semi+Condensed:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=Kaushan+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/redesign.css?v=1">
+    <?php endif; ?>
+
     <!-- Deferred scripts (non-blocking) -->
     <script defer
             src="https://unpkg.com/htmx.org@1.9.10/dist/htmx.min.js"
@@ -328,8 +334,10 @@ if ($bodyVariant === 'collection-light') {
 
     <?php if (isset($extraHead)) echo $extraHead; ?>
 </head>
-<body class="<?= h($bodyClasses) ?>">
+<body class="<?= h($bodyClasses) ?><?= (!empty($redesignLayout)) ? ' redesign' : '' ?>">
+    <?php if (empty($redesignLayout)): ?>
     <?php include __DIR__ . '/nav.php'; ?>
+    <?php endif; ?>
 
     <!-- Main Content -->
     <main id="main-content" class="flex-1" role="main" aria-label="Page content">
