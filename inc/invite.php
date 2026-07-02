@@ -84,6 +84,33 @@ function inviteClearRefCookie(): void {
 }
 
 /**
+ * Resolve the referrer behind the current request's bf_ref cookie, used to decide
+ * whether to show a guest the "you were invited" signup prompt.
+ *
+ * Returns:
+ *   - null   : no ref cookie, or the code is invalid / matches no real user
+ *              (caller shows nothing referral-specific)
+ *   - ''     : a valid referrer that has no display name (show a generic invite prompt)
+ *   - 'Ana'  : the referrer's first name (show a personalized invite prompt)
+ */
+function inviteReferrerName(): ?string {
+    $code = inviteValidateCode((string) ($_COOKIE['bf_ref'] ?? ''));
+    if ($code === '') {
+        return null;
+    }
+    $referrer = queryOne('SELECT name FROM users WHERE referral_code = :c', [':c' => $code]);
+    if (!$referrer) {
+        return null;
+    }
+    $name = trim((string) ($referrer['name'] ?? ''));
+    if ($name === '') {
+        return '';
+    }
+    $parts = preg_split('/\s+/', $name) ?: [$name];
+    return $parts[0] !== '' ? $parts[0] : '';
+}
+
+/**
  * Attribute a newly-created user to a referrer (write-once). Uses the bf_ref cookie
  * unless an explicit code is passed. No-ops on self-referral or unknown code.
  */

@@ -63,7 +63,9 @@ Defined in `.env.example`:
 - `BACKUP_KEEP_DAYS` (default: `30`)
 - `APP_ENV` (`dev`, `staging`, `prod`)
 - `APP_DEBUG` (`0` or `1`)
-- Umami analytics (optional):
+- Google Analytics 4 (primary):
+  - `GA_MEASUREMENT_ID` (e.g. `G-XXXXXXXXXX`; empty disables the tag)
+- Umami analytics (legacy, optional):
   - `UMAMI_ENABLED` (`0` or `1`)
   - `UMAMI_SCRIPT_URL` (default: `https://cloud.umami.is/script.js`)
   - `UMAMI_WEBSITE_ID`
@@ -71,7 +73,8 @@ Defined in `.env.example`:
 
 ## Funnel + analytics notes
 
-This codebase includes a lightweight funnel implementation and Umami-compatible client tracking:
+This codebase includes a lightweight funnel implementation with a client tracking wrapper that
+routes events to Google Analytics 4 (primary), plus legacy Umami / PostHog when loaded:
 
 - Quiz:
   - `/quiz` returns a `results_token` from `public/api/quiz/match.php` and can generate a shareable URL.
@@ -83,9 +86,8 @@ This codebase includes a lightweight funnel implementation and Umami-compatible 
   - Webhook receiver: `public/api/webhooks/resend.php`
   - Email health probe: `public/api/health/email.php`
 - Tracking:
-  - `public/assets/js/analytics.js` defines `window.bfTrack()` and forwards events to Umami when available.
-  - 
-  - Event naming follows the funnel schema (A1/A2/A3, L1/L2, S1/S2, U1...).
+  - `public/assets/js/analytics.js` defines `window.bfTrack()`, which routes events to GA4 via `gtag('event', ...)` (and to Umami/PostHog when present).
+  - Event naming follows the funnel schema (A1/A2/A3, L1/L2, S1/S2, U1...), plus referral events `referral_prompt_shown` / `referral_cta_click`.
   - See `docs/analytics-umami.md` for the event map and implementation details.
 
 ## Email health check

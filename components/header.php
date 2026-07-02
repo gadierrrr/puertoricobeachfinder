@@ -13,6 +13,12 @@ require_once __DIR__ . '/../inc/security_headers.php';
 require_once __DIR__ . '/../inc/helpers.php';
 require_once __DIR__ . '/../inc/i18n.php';
 require_once __DIR__ . '/../inc/locale_routes.php';
+require_once __DIR__ . '/../inc/invite.php';
+
+// Capture an invite (?ref=CODE) into a cookie before any output, on EVERY page
+// (referral loop). No-op without ?ref; skips signed-in users. Lives here — not just
+// in index.php — so referral links that land on beach pages, guides, etc. still attribute.
+inviteCaptureRefFromRequest();
 
 $user = currentUser();
 $appName = $_ENV['APP_NAME'] ?? 'Beach Finder';

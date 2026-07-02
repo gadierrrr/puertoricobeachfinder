@@ -178,6 +178,11 @@
       if (!eventName) return;
       setInteracted();
       const payload = baseProps(props);
+      // Primary analytics: Google Analytics 4 (gtag). Loaded site-wide in the header
+      // when GA_MEASUREMENT_ID is configured; guarded so it no-ops when absent.
+      if (typeof window.gtag === "function") {
+        window.gtag("event", eventName, payload);
+      }
       if (window.umami && typeof window.umami.track === "function") {
         window.umami.track(eventName, payload);
       } else {

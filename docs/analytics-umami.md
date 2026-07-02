@@ -1,11 +1,22 @@
-# Analytics Integration (Umami)
+# Analytics Integration (GA4 + client wrapper)
 
-This repo uses Umami (Cloud or self-hosted) for product analytics, with a thin client wrapper that is safe when analytics is disabled or blocked.
+> **Update (2026-07):** Google Analytics 4 (gtag) is now the primary analytics sink. The
+> `window.bfTrack()` wrapper routes every custom event to GA4 via `gtag('event', ...)`. The
+> legacy Umami path documented below is retained but disabled in production (`UMAMI_ENABLED=0`);
+> PostHog is also dual-sent when present. Enable GA4 by setting `GA_MEASUREMENT_ID` (see below).
+
+This repo ships a thin client wrapper (`public/assets/js/analytics.js`) that is safe when
+analytics is disabled or blocked, and forwards events to whichever sinks are loaded.
 
 
 ## Configuration
 
-Set these in `.env` (see `.env.example`):
+**GA4 (primary):**
+
+- `GA_MEASUREMENT_ID=G-XXXXXXXXXX` — enables the gtag.js tag (injected in `components/header.php`)
+  and activates the `bfTrack() → gtag('event', ...)` routing. Leave empty to disable.
+
+**Umami (legacy, optional):** set these in `.env` (see `.env.example`):
 
 - `UMAMI_ENABLED=1`
 - `UMAMI_SCRIPT_URL=https://cloud.umami.is/script.js`
@@ -18,7 +29,9 @@ The script tag is injected in `components/header.php` only when `UMAMI_ENABLED=1
 ## Client wrapper
 
 - `public/assets/js/analytics.js` defines `window.bfTrack(eventName, props)`.
-- If Umami is available, events are forwarded via `window.umami.track(eventName, props)`.
+- Events are routed to **GA4** via `window.gtag('event', eventName, props)` whenever the gtag tag is loaded (primary sink).
+- If Umami is available, events are also forwarded via `window.umami.track(eventName, props)` (legacy path).
+- If PostHog is present, events are dual-sent via `window.posthog.capture(eventName, props)`.
 - A persistent anonymous id cookie `BF_ANON_ID` is created (180 days) and included in event props, plus `authenticated` and `user_id` when available.
 - In `prod`, `bfTrack()` logs a one-time console warning when Umami is unavailable.
 - Add `?bf_analytics_probe=1` to any page URL to fire `health_analytics_probe` and send a client probe beacon to `/api/health/analytics.php`.
@@ -45,6 +58,11 @@ UGC:
 
 - `U1_checkin_submitted`: fired after a check-in is successfully submitted.
 
+Referral (user-to-user invite loop — see `inc/invite.php`):
+
+- `referral_prompt_shown`: fired when a referred guest (arrived via `/?ref=CODE`, `bf_ref` cookie set) is shown the invite-aware signup popup in `components/footer.php`. Param: `referrer` (referrer's first name).
+- `referral_cta_click`: fired when that guest clicks the popup's "Continue with Google" CTA. Param: `referrer`.
+
 Other utility events (implementation-specific):
 
 - `share_click`, `share_copy_link` from `public/assets/js/share.js`
@@ -63,6 +81,10 @@ Other utility events (implementation-specific):
 - Synthetic browser smoke script: `scripts/synthetic-analytics-probe.sh`
 
 ## Operational checks
+
+> These probes target the **legacy Umami** tag. With Umami disabled in prod they will report
+> `umami_tag_present: false` — that is expected, not an outage. GA4 delivery is verified in the
+> GA4 DebugView / Realtime reports instead. (Migrating these probes to GA4 is a tracked follow-up.)
 
 Configuration + page probe:
 

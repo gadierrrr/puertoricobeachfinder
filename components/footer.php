@@ -288,7 +288,7 @@ if (!function_exists('isGoogleOAuthEnabled')) {
     });
     </script>
     <script defer src="/assets/js/filters.js" <?= cspNonceAttr() ?>></script>
-    <script defer src="/assets/js/analytics.js?v=2.0" <?= cspNonceAttr() ?>></script>
+    <script defer src="/assets/js/analytics.js?v=2.1" <?= cspNonceAttr() ?>></script>
     <script defer src="/assets/js/share.js" <?= cspNonceAttr() ?>></script>
     <?php endif; ?>
 
@@ -662,6 +662,16 @@ if (!function_exists('isGoogleOAuthEnabled')) {
     }
     ?>
     <?php if (!isAuthenticated()): ?>
+    <?php
+        // Referral awareness: if this guest arrived via /?ref=CODE (captured to the
+        // bf_ref cookie) and the code resolves to a real referrer, show an immediate,
+        // referral-specific variant of this popup instead of the generic timed one.
+        if (!function_exists('inviteReferrerName')) {
+            require_once __DIR__ . '/../inc/invite.php';
+        }
+        $bfReferrerName = inviteReferrerName();   // null = no/invalid referral; '' or name = valid
+        $bfIsReferral = $bfReferrerName !== null;
+    ?>
     <div id="welcome-popup-overlay" class="welcome-popup-overlay" role="dialog" aria-modal="true" aria-labelledby="welcome-popup-title" style="position:fixed;inset:0;opacity:0;visibility:hidden;">
         <div class="welcome-popup">
             <!-- Close button -->
@@ -681,10 +691,18 @@ if (!function_exists('isGoogleOAuthEnabled')) {
             <!-- Content -->
             <div class="welcome-popup-body">
                 <h2 id="welcome-popup-title" class="welcome-popup-title">
-                    <span>🏝️</span> <?= h(__('footer.welcome_title')) ?>
+                    <?php if ($bfIsReferral): ?>
+                        <span>🏝️</span> <?= $bfReferrerName !== ''
+                            ? h(__('footer.welcome_referral_title_named', ['name' => $bfReferrerName]))
+                            : h(__('footer.welcome_referral_title')) ?>
+                    <?php else: ?>
+                        <span>🏝️</span> <?= h(__('footer.welcome_title')) ?>
+                    <?php endif; ?>
                 </h2>
                 <p class="welcome-popup-subtitle">
-                    <?= h(__('footer.welcome_subtitle', ['count' => number_format(getSiteStats()['total_users'] ?: 500)])) ?>
+                    <?= $bfIsReferral
+                        ? h(__('footer.welcome_referral_subtitle'))
+                        : h(__('footer.welcome_subtitle', ['count' => number_format(getSiteStats()['total_users'] ?: 500)])) ?>
                 </p>
 
                 <!-- Benefits -->
@@ -746,9 +764,14 @@ if (!function_exists('isGoogleOAuthEnabled')) {
     <!-- Welcome Popup JavaScript -->
     <script <?= cspNonceAttr() ?>>
     (function() {
-        const POPUP_DELAY = 30000;  // 30 seconds
+        // Referral visitors (arrived via /?ref=CODE) get an immediate, referral-aware
+        // prompt on ANY page, with its own dismissal key so the generic 30-day welcome
+        // dismissal never suppresses it.
+        const IS_REFERRAL = <?= $bfIsReferral ? 'true' : 'false' ?>;
+        const REFERRER_NAME = <?= json_encode((string) ($bfReferrerName ?? ''), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
+        const POPUP_DELAY = IS_REFERRAL ? 0 : 30000;  // referral: show immediately
         const DISMISS_DURATION = 30 * 24 * 60 * 60 * 1000;  // 30 days in ms
-        const STORAGE_KEY = 'welcome_popup_dismissed';
+        const STORAGE_KEY = IS_REFERRAL ? 'referral_popup_dismissed' : 'welcome_popup_dismissed';
 
         let popupShown = false;
         let popupTimer = null;
@@ -803,6 +826,11 @@ if (!function_exists('isGoogleOAuthEnabled')) {
                 // Clean up timer and observer
                 if (popupTimer) clearTimeout(popupTimer);
                 if (scrollObserver) scrollObserver.disconnect();
+
+                // Funnel instrumentation (referral variant only).
+                if (IS_REFERRAL && typeof window.bfTrack === 'function') {
+                    window.bfTrack('referral_prompt_shown', { referrer: REFERRER_NAME || '' });
+                }
             }
         }
 
@@ -822,7 +850,13 @@ if (!function_exists('isGoogleOAuthEnabled')) {
         function initWelcomePopup() {
             if (!shouldShowWelcomePopup()) return;
 
-            // Only show on homepage
+            // Referred visitors: show immediately, on any page (not just the homepage).
+            if (IS_REFERRAL) {
+                showWelcomePopup();
+                return;
+            }
+
+            // Only show on homepage (generic timed popup)
             if (window.location.pathname !== '/' &&
                 window.location.pathname !== '/index.php' &&
                 window.location.pathname !== '/es' &&
@@ -869,6 +903,16 @@ if (!function_exists('isGoogleOAuthEnabled')) {
                 dismissWelcomePopup();
             }
         });
+
+        // Track referral CTA clicks (signup intent) for funnel measurement.
+        if (IS_REFERRAL) {
+            document.getElementById('welcome-popup-overlay')?.addEventListener('click', function(e) {
+                const cta = e.target.closest ? e.target.closest('.welcome-popup-btn-google') : null;
+                if (cta && typeof window.bfTrack === 'function') {
+                    window.bfTrack('referral_cta_click', { referrer: REFERRER_NAME || '' });
+                }
+            });
+        }
 
         // Initialize when DOM is ready
         if (document.readyState === 'loading') {
