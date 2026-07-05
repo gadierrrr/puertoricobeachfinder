@@ -23,6 +23,7 @@ const ENV_SCHEMA = [
     'EMAIL_PROVIDER' => ['required' => false, 'type' => 'enum', 'allowed' => ['resend']],
     'ANTHROPIC_API_KEY' => ['required' => false, 'type' => 'string'],
     'REFERRAL_ALLOWED_HOSTS' => ['required' => false, 'type' => 'string'],
+    'VIATOR_PID' => ['required' => false, 'type' => 'string'],
     'BACKUP_DIR' => ['required' => false, 'type' => 'string'],
     'BACKUP_KEEP_DAYS' => ['required' => false, 'type' => 'string'],
     'APP_ENV' => ['required' => true, 'type' => 'enum', 'allowed' => ['dev', 'staging', 'prod']],

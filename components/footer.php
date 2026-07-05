@@ -54,6 +54,10 @@ if (!function_exists('isGoogleOAuthEnabled')) {
                                 <i data-lucide="map" class="w-4 h-4"></i>
                                 <?= h(__('footer.interactive_map')) ?>
                             </a></li>
+                            <li><a href="/advertise" class="text-gray-400 hover:text-sunset-400 transition-colors flex items-center gap-2">
+                                <i data-lucide="megaphone" class="w-4 h-4"></i>
+                                <?= h($currentLang === 'es' ? 'Anuncia tu negocio' : 'Advertise your business') ?>
+                            </a></li>
                         </ul>
                     </div>
                 </div>
@@ -290,7 +294,7 @@ if (!function_exists('isGoogleOAuthEnabled')) {
     });
     </script>
     <script defer src="/assets/js/filters.js" <?= cspNonceAttr() ?>></script>
-    <script defer src="/assets/js/analytics.js?v=2.1" <?= cspNonceAttr() ?>></script>
+    <script defer src="/assets/js/analytics.js?v=2.2" <?= cspNonceAttr() ?>></script>
     <script defer src="/assets/js/share.js" <?= cspNonceAttr() ?>></script>
     <?php endif; ?>
 

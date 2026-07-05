@@ -286,6 +286,10 @@ if ($redesignLayout) {
 
             <?php include APP_ROOT . '/components/beach/extended-sections.php'; ?>
 
+            <?php include APP_ROOT . '/components/beach/tours.php'; ?>
+
+            <?php include APP_ROOT . '/components/beach/local-listings.php'; ?>
+
             <?php $hasPhotos = !empty($beach['gallery']) || !empty($userPhotos ?? []); ?>
             <?php if ($hasPhotos): ?>
             <?php include APP_ROOT . '/components/beach/photos.php'; ?>

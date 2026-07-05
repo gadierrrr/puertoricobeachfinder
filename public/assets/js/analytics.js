@@ -282,6 +282,45 @@
         window.bfTrack("R2_referral_click", Object.assign({}, props, referralProps));
         return;
       }
+
+      if (kind === "listing-click") {
+        window.bfTrack("M1_local_listing_click", Object.assign({}, props, listingPropsFromEl(target)));
+        return;
+      }
+    });
+  }
+
+  function listingPropsFromEl(el) {
+    const props = {};
+    const id = el.getAttribute("data-bf-listing-id");
+    const action = el.getAttribute("data-bf-listing-action");
+    const beach = el.getAttribute("data-bf-listing-beach");
+    if (id) props.listing_id = id;
+    if (action) props.listing_action = action;
+    if (beach) props.beach_slug = beach;
+    return props;
+  }
+
+  function initListingImpressionTracking() {
+    if (typeof window.IntersectionObserver !== "function") return;
+
+    const seen = new WeakSet();
+    const observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          if (seen.has(el)) return;
+          seen.add(el);
+          observer.unobserve(el);
+          window.bfTrack("M2_local_listing_impression", listingPropsFromEl(el));
+        });
+      },
+      { threshold: 0.25 }
+    );
+
+    document.querySelectorAll('[data-bf-track="listing-impression"]').forEach(function (node) {
+      observer.observe(node);
     });
   }
 
@@ -606,6 +645,7 @@
     trackSignupAttribution();
     initDelegatedClickTracking();
     initReferralImpressionTracking();
+    initListingImpressionTracking();
     initHtmxDrawerTracking();
     initFavoriteTrackingFromHtmx();
     initSendListForms();

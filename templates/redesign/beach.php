@@ -7,6 +7,8 @@
 require_once APP_ROOT . '/inc/beach_score.php';
 require_once APP_ROOT . '/inc/island_chart.php';
 require_once APP_ROOT . '/inc/weather.php';
+require_once APP_ROOT . '/inc/tours.php';
+require_once APP_ROOT . '/inc/listings.php';
 
 $isEs = ($lang ?? 'en') === 'es';
 $tags = $beach['tags'] ?? [];
@@ -131,7 +133,7 @@ $nearby = array_slice(getNearbyBeaches((string) $beach['id'], $lat, $lng, 4) ?: 
 
 <nav class="subnav"><div class="wrap">
   <a href="#overview" class="on">Overview</a><a href="#scores">Scores</a><a href="#about">About</a>
-  <a href="#tips">Tips</a><a href="#getting">Getting there</a><a href="#nearby">Nearby</a><a href="#faq">FAQ</a>
+  <a href="#tips">Tips</a><a href="#getting">Getting there</a><a href="#tours">Tours</a><a href="#nearby">Nearby</a><a href="#faq">FAQ</a>
 </div></nav>
 
 <div class="wrap"><div class="body">
@@ -184,6 +186,10 @@ $nearby = array_slice(getNearbyBeaches((string) $beach['id'], $lat, $lng, 4) ?: 
         <?php endif; ?>
       </div>
     </section>
+
+    <?= renderToursSection($beach, $lang, 'redesign') ?>
+
+    <?= renderLocalListingsSection($beach, $lang, 'redesign') ?>
 
     <?php if ($nearby): ?>
     <section id="nearby" class="block">

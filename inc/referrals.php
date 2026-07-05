@@ -33,7 +33,7 @@ function referralJsonDecode(?string $json, array $fallback = []): array
 
 function referralAllowedTargetHosts(): array
 {
-    $hosts = ['expedia.com', 'www.expedia.com'];
+    $hosts = ['expedia.com', 'www.expedia.com', 'viator.com', 'www.viator.com'];
 
     $envHosts = trim((string) env('REFERRAL_ALLOWED_HOSTS', ''));
     if ($envHosts !== '') {
@@ -375,6 +375,33 @@ function referralLogClick(array $campaign, array $context = []): string
     return $clickId;
 }
 
+/**
+ * Provider-level tracking params appended at redirect time (never stored on
+ * campaigns). Viator attribution activates when VIATOR_PID is set in .env —
+ * until then links resolve fine, just unattributed. mcid 42383 + medium=link
+ * is Viator's standard identifier for text-link affiliate traffic.
+ */
+function referralProviderTrackingParams(array $campaign): array
+{
+    $providerSlug = strtolower(trim((string) ($campaign['provider_slug'] ?? '')));
+
+    if ($providerSlug === 'viator') {
+        $pid = trim((string) env('VIATOR_PID', ''));
+        if ($pid !== '') {
+            // campaign = our campaign slug so Viator's Performance reports
+            // break down by placement (viator-tours-san-juan, etc.).
+            return [
+                'pid' => $pid,
+                'mcid' => '42383',
+                'medium' => 'link',
+                'campaign' => (string) ($campaign['slug'] ?? ''),
+            ];
+        }
+    }
+
+    return [];
+}
+
 function referralResolveRedirect(string $campaignSlug, array $context = []): array
 {
     $campaign = referralGetCampaignBySlug($campaignSlug, true);
@@ -387,7 +414,10 @@ function referralResolveRedirect(string $campaignSlug, array $context = []): arr
     }
 
     $clickId = referralLogClick($campaign, $context);
-    $target = referralBuildTargetUrl($campaign, ['bf_click_id' => $clickId]);
+    $target = referralBuildTargetUrl($campaign, array_merge(
+        referralProviderTrackingParams($campaign),
+        ['bf_click_id' => $clickId]
+    ));
 
     if ($target === '') {
         return [

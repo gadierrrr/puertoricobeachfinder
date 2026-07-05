@@ -322,7 +322,7 @@ if ($bodyVariant === 'collection-light') {
     <?php if (function_exists('useRedesign') && useRedesign()): ?>
     <!-- Redesign v2 (tropical) fonts + standalone stylesheet -->
     <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Saira+Semi+Condensed:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=Kaushan+Script&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/redesign.css?v=1">
+    <link rel="stylesheet" href="/assets/css/redesign.css?v=2">
     <?php endif; ?>
 
     <!-- Deferred scripts (non-blocking) -->
