@@ -95,6 +95,18 @@ function localeRoutes(): array
             'changefreq' => 'weekly',
             'priority' => '0.7',
         ],
+        // Single bilingual URL (content follows the language cookie), so no
+        // hreflang alternates — but the page is a lead-gen surface that should
+        // be indexable and in the sitemap.
+        'advertise' => [
+            'en' => '/advertise',
+            'es' => '/advertise',
+            'script' => '/advertise.php',
+            'indexable' => true,
+            'localized' => false,
+            'changefreq' => 'monthly',
+            'priority' => '0.5',
+        ],
         'best_beaches' => [
             'en' => '/best-beaches',
             'es' => '/es/mejores-playas',
@@ -472,6 +484,7 @@ function localeRouteMatch(string $path): ?array
                 'locale' => 'en',
                 'params' => [],
                 'indexable' => (bool) ($route['indexable'] ?? true),
+                'localized' => (bool) ($route['localized'] ?? true),
             ];
         }
         if ($path === normalizeLocalePath((string) $route['es'])) {
@@ -480,6 +493,7 @@ function localeRouteMatch(string $path): ?array
                 'locale' => 'es',
                 'params' => [],
                 'indexable' => (bool) ($route['indexable'] ?? true),
+                'localized' => (bool) ($route['localized'] ?? true),
             ];
         }
     }

@@ -48,6 +48,7 @@ $beaches = query("
     FROM beaches b
     WHERE b.municipality = :municipality
     AND b.publish_status = 'published'
+    AND (b.location_type = 'beach' OR b.location_type IS NULL)
     ORDER BY
         CASE WHEN b.google_rating IS NOT NULL THEN 1 ELSE 2 END,
         b.google_rating DESC,
@@ -237,12 +238,13 @@ include APP_ROOT . '/components/header.php';
         <!-- Beach Grid -->
         <div id="beach-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <?php
+            $favoriteBeachIds = [];
+            if (isAuthenticated()) {
+                $userFavorites = query('SELECT beach_id FROM user_favorites WHERE user_id = :user_id', [':user_id' => $_SESSION['user_id']]);
+                $favoriteBeachIds = array_column($userFavorites, 'beach_id');
+            }
             foreach ($beaches as $beach):
-                $isFavorite = false;
-                if (isAuthenticated()) {
-                    $userFavorites = query('SELECT beach_id FROM user_favorites WHERE user_id = :user_id', [':user_id' => $_SESSION['user_id']]);
-                    $isFavorite = in_array($beach['id'], array_column($userFavorites, 'beach_id'));
-                }
+                $isFavorite = in_array($beach['id'], $favoriteBeachIds);
                 include APP_ROOT . '/components/beach-card.php';
             endforeach;
             ?>

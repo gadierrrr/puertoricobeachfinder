@@ -59,11 +59,11 @@ $locName = $loc['name'];
 
 $pageTitle = "Beaches Near $locName, Puerto Rico | $beachCount Beaches Within {$radiusKm}km";
 $pageH1 = "Beaches Near $locName";
-$pageDesc = "Find $beachCount beaches near $locName on $loc[region] of Puerto Rico. Browse beaches sorted by distance with ratings, amenities, and directions.";
+$pageDescription = "Find $beachCount beaches near $locName on $loc[region] of Puerto Rico. Browse beaches sorted by distance with ratings, amenities, and directions.";
 if ($lang === 'es') {
     $pageTitle = "Playas Cerca de $locName, Puerto Rico | $beachCount Playas";
     $pageH1 = "Playas Cerca de $locName";
-    $pageDesc = "Encuentra $beachCount playas cerca de $locName en $loc[region] de Puerto Rico.";
+    $pageDescription = "Encuentra $beachCount playas cerca de $locName en $loc[region] de Puerto Rico.";
 }
 
 $canonicalUrl = absoluteUrl('/beaches-near-' . $locSlug);

@@ -60,6 +60,8 @@ Disallow: /*?municipality=
 Disallow: /*?tags[]=
 Disallow: /*?sort=
 Disallow: /*?page=
+# Design-variant preview override (canonical already strips it)
+Disallow: /*?design=
 
 # Sitemap location
 Sitemap: https://www.puertoricobeachfinder.com/sitemap.xml

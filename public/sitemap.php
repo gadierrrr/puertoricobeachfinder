@@ -45,7 +45,9 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
 <?php
 foreach (sitemapLocaleRoutes() as $entry):
-    $localePaths = [$entry['en'], $entry['es']];
+    // Single-URL bilingual routes (e.g. /advertise) list the same path for both
+    // locales — emit it once.
+    $localePaths = array_unique([$entry['en'], $entry['es']]);
     // Determine lastmod from script file
     $routeLastmod = $fallbackDate;
     foreach (localeRoutes() as $routeKey => $route) {
