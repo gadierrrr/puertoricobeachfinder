@@ -14,23 +14,30 @@ if (defined('TOURS_INCLUDED')) {
 }
 define('TOURS_INCLUDED', true);
 
+require_once __DIR__ . '/helpers.php';
 require_once __DIR__ . '/referrals.php';
 require_once __DIR__ . '/island_chart.php';
 
 /**
- * Active tour campaigns for a beach: region-scoped first, PR-wide fallback.
+ * Active tour campaigns for a beach, most specific scope first:
+ * municipality slug (e.g. 'vieques') > island region > 'global' PR-wide.
  */
 function toursCampaignsForBeach(array $beach, int $limit = 2): array
 {
-    $region = islandRegionForMunicipality($beach['municipality'] ?? '') ?? '';
-    $scopes = $region !== '' ? [$region, 'global'] : ['global'];
+    $municipality = (string) ($beach['municipality'] ?? '');
+    $muniSlug = slugify($municipality);
+    $region = islandRegionForMunicipality($municipality) ?? '';
+
+    $scopes = array_values(array_filter(array_unique([$muniSlug, $region, 'global'])));
 
     $placeholders = [];
     $params = [];
+    $orderCases = [];
     foreach ($scopes as $i => $scope) {
         $key = ':scope' . $i;
         $placeholders[] = $key;
         $params[$key] = $scope;
+        $orderCases[] = 'WHEN ' . $key . ' THEN ' . $i;
     }
 
     $rows = query(
@@ -42,7 +49,8 @@ function toursCampaignsForBeach(array $beach, int $limit = 2): array
            AND c.status = "active"
            AND p.status = "active"
            AND c.destination_scope IN (' . implode(', ', $placeholders) . ')
-         ORDER BY (c.destination_scope = "global") ASC, c.priority ASC',
+         ORDER BY CASE c.destination_scope ' . implode(' ', $orderCases) . ' ELSE 99 END ASC,
+                  c.priority ASC',
         $params
     );
 
@@ -84,6 +92,22 @@ function toursCardCopy(string $slug, string $lang): array
         'viator-tours-pr' => [
             'en' => ['Top-rated Puerto Rico tours', 'Snorkeling, bio bays, rainforest hikes and boat days across the island.'],
             'es' => ['Tours mejor valorados en Puerto Rico', 'Snorkel, bahías bioluminiscentes, El Yunque y días de bote en toda la isla.'],
+        ],
+        'viator-tours-rincon' => [
+            'en' => ['Rincón & west coast adventures', 'Surf lessons, Tres Palmas snorkeling, horseback rides and sunset sails.'],
+            'es' => ['Aventuras en Rincón y el oeste', 'Clases de surf, snorkel en Tres Palmas, cabalgatas y veleros al atardecer.'],
+        ],
+        'viator-tours-arecibo' => [
+            'en' => ['North coast caves & adventures', 'Cueva del Indio, cave tubing, waterfalls and eco tours near Arecibo.'],
+            'es' => ['Cuevas y aventuras del norte', 'Cueva del Indio, ríos subterráneos, cascadas y ecoturismo cerca de Arecibo.'],
+        ],
+        'viator-tours-ponce' => [
+            'en' => ['Ponce & south coast tours', 'City walks, La Parguera bio bay and island day trips from the south.'],
+            'es' => ['Tours en Ponce y el sur', 'Recorridos por Ponce, bahía bioluminiscente de La Parguera y excursiones.'],
+        ],
+        'viator-tours-vieques' => [
+            'en' => ['Vieques bio bay & island tours', 'Mosquito Bay kayaks, beach hopping and snorkeling on Vieques.'],
+            'es' => ['Bahía bioluminiscente y tours en Vieques', 'Kayak en Mosquito Bay, playas escondidas y snorkel en Vieques.'],
         ],
     ];
 
