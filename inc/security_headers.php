@@ -48,7 +48,13 @@ if (!function_exists('cspHostSourceFromUrl')) {
 
 // Security Headers
 header('X-Content-Type-Options: nosniff');
-header('X-Frame-Options: DENY');
+// The admin homepage-design editor previews the homepage in a same-origin
+// iframe (?rdedit=1). SAMEORIGIN still blocks all cross-site framing.
+if (isset($_GET['rdedit']) && $_GET['rdedit'] === '1') {
+    header('X-Frame-Options: SAMEORIGIN');
+} else {
+    header('X-Frame-Options: DENY');
+}
 header('X-XSS-Protection: 1; mode=block');
 header('Referrer-Policy: strict-origin-when-cross-origin');
 header('Strict-Transport-Security: max-age=31536000; includeSubDomains');

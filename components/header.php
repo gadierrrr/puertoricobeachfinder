@@ -321,8 +321,20 @@ if ($bodyVariant === 'collection-light') {
 
     <?php if (function_exists('useRedesign') && useRedesign()): ?>
     <!-- Redesign v2 (tropical) fonts + standalone stylesheet -->
-    <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Saira+Semi+Condensed:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=Kaushan+Script&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/redesign.css?v=2">
+    <?php
+    // Display font comes from the admin homepage-design settings; the editor
+    // preview (?rdedit=1, admins only) loads every picker face so switching
+    // is instant.
+    require_once APP_ROOT . '/inc/settings.php';
+    require_once APP_ROOT . '/inc/homepage_fonts.php';
+    require_once APP_ROOT . '/inc/admin.php';
+    $rdDesign = getHomepageDesign();
+    $rdEditorMode = isset($_GET['rdedit']) && $_GET['rdedit'] === '1' && isAdmin();
+    $rdFont = homepageFont($rdDesign['font']);
+    ?>
+    <link href="<?= h(redesignFontsUrl($rdDesign['font'], $rdEditorMode)) ?>" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/redesign.css?v=3">
+    <style>.rd{--disp:<?= $rdFont['stack'] ?>}.rd-home .headline,.rd-home .dir-head h2{font-weight:<?= (int) $rdFont['weight'] ?>}</style>
     <?php endif; ?>
 
     <!-- Deferred scripts (non-blocking) -->

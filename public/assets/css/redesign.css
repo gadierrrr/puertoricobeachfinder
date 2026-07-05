@@ -250,3 +250,34 @@ body.redesign.rd-has-dock{padding-bottom:70px}
 .rd-beach .advert-teaser{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;border:1px dashed var(--ink-14);border-radius:11px;padding:11px 15px;background:transparent;margin-top:10px}
 .rd-beach .advert-teaser span{color:var(--ink-60);font-size:.85rem}
 .rd-beach .advert-teaser a{font-family:var(--data);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.72rem;color:var(--coral);text-decoration:none}
+
+/* ============================================================================
+   Homepage design settings (admin-editable via /admin/homepage-design):
+   hero background layers, light-background text swap, decor stickers.
+   Ported from the redesign-v2 design workbench mockup.
+   ============================================================================ */
+.rd-home .hero-bg{position:absolute;inset:0;z-index:0;background-size:cover;background-position:center}
+.rd-home .hero-scrim{position:absolute;inset:0;z-index:1}
+.rd-home .sticker-layer{position:absolute;inset:0;z-index:6;pointer-events:none;overflow:hidden}
+/* light flat backgrounds flip hero text to ink */
+.rd-home .hero-band.dark-hero .eyebrow,.rd-home .hero-band.dark-hero .lede{color:rgba(21,34,43,.72)}
+.rd-home .hero-band.dark-hero .headline,.rd-home .hero-band.dark-hero .headline .em,
+.rd-home .hero-band.dark-hero .brand,.rd-home .hero-band.dark-hero .nav a,
+.rd-home .hero-band.dark-hero .count,.rd-home .hero-band.dark-hero .count b{color:var(--ink)}
+.rd-home .hero-band.dark-hero .chip{color:var(--ink);border-color:rgba(21,34,43,.28)}
+.rd-home .hero-band.dark-hero .lang{color:var(--ink);border-color:rgba(21,34,43,.3)}
+/* stickers */
+.rd-home .sticker{position:absolute;pointer-events:auto;user-select:none;transform:translate(-50%,-50%) rotate(var(--rot,0deg)) scale(var(--sc,1))}
+.rd-home .sticker .st-text{font-family:'Kaushan Script',cursive;line-height:1.05;white-space:nowrap;outline:none;font-weight:400}
+.rd-home .sticker-note{background:var(--stk);color:var(--stkt);padding:12px 18px;border-radius:5px;box-shadow:6px 7px 0 rgba(20,30,40,.16);font-size:1.35rem}
+.rd-home .sticker-circle{background:var(--stk);color:var(--stkt);border-radius:50%;width:122px;height:122px;display:flex;align-items:center;justify-content:center;text-align:center;padding:12px;box-shadow:6px 7px 0 rgba(20,30,40,.16)}
+.rd-home .sticker-circle .st-text{white-space:normal;font-size:1.15rem}
+.rd-home .sticker-banner{background:var(--stk);color:var(--stkt);padding:12px 32px;font-size:1.3rem;clip-path:polygon(0 0,100% 0,93% 50%,100% 100%,0 100%,7% 50%);box-shadow:4px 6px 0 rgba(20,30,40,.16)}
+.rd-home .sticker-star svg{display:block;width:60px;height:60px;fill:var(--stk);filter:drop-shadow(3px 4px 0 rgba(20,30,40,.12))}
+.rd-home .sticker-swash svg{display:block;width:190px;height:32px;stroke:var(--stk);fill:none;stroke-width:9;stroke-linecap:round}
+/* editor-only affordances (activated by redesign-editor-preview.js) */
+.rd-home .rd-editing .sticker{cursor:grab}
+.rd-home .rd-editing .sticker.dragging{cursor:grabbing}
+.rd-home .rd-editing .sticker.selected{outline:2px dashed rgba(21,34,43,.6);outline-offset:5px}
+.rd-home .rd-editing .sticker .st-text[contenteditable="true"]{cursor:text}
+@media (max-width:700px){.rd-home .sticker{display:none}}

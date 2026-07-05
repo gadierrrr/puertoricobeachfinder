@@ -57,12 +57,46 @@ $regionMeta = [
     'cays'  => ['The Cays', '92%', '19%', [508, 196]],
 ];
 $popular = array_slice($popularBeaches ?? [], 0, 3);
+
+// ---- homepage design settings (admin-editable: /admin/homepage-design) ----
+require_once APP_ROOT . '/inc/settings.php';
+require_once APP_ROOT . '/inc/homepage_fonts.php';
+$hpDesign = $rdDesign ?? getHomepageDesign();
+$hpEditor = $rdEditorMode ?? false;
+$heroStyle = '';
+if ($hpDesign['bg_mode'] === 'color' && $hpDesign['bg_color'] !== 'default') {
+    $heroStyle = 'background:' . h($hpDesign['bg_color']);
+}
+$heroClasses = 'hero-band' . (homepageHeroIsLight($hpDesign) ? ' dark-hero' : '');
+// sticker text color mirrors the design-workbench palette rules
+$stickerInk = function (string $c): string {
+    $light = ['#F7E14C', '#E9A81F', '#F5EFDF'];
+    if (in_array(strtoupper($c), array_map('strtoupper', $light), true)) { return '#D2352A'; }
+    return strtoupper($c) === '#EE3640' ? '#F8E14A' : '#FFFFFF';
+};
+$stickerSvg = [
+    'star'  => "<svg viewBox='0 0 100 100'><path d='M50 0 L59 41 L100 50 L59 59 L50 100 L41 59 L0 50 L41 41 Z'/></svg>",
+    'swash' => "<svg viewBox='0 0 190 32' preserveAspectRatio='none'><path d='M7 20 C45 30 75 6 105 15 S160 30 183 12'/></svg>",
+];
 ?>
 <div class="rd rd-home">
 
 <!-- ===== HERO BAND ===== -->
-<header class="hero-band">
-  <div class="hero-grain"></div>
+<header class="<?= $heroClasses ?>"<?= $heroStyle ? ' style="' . $heroStyle . '"' : '' ?>>
+  <?php if ($hpDesign['bg_mode'] === 'photo' && $hpDesign['bg_photo'] !== ''): ?>
+  <div class="hero-bg" style="background-image:url('<?= h($hpDesign['bg_photo']) ?>');opacity:<?= $hpDesign['photo_opacity'] / 100 ?>"></div>
+  <div class="hero-scrim" style="background:rgba(9,22,32,<?= $hpDesign['darken'] / 100 ?>)"></div>
+  <?php endif; ?>
+  <div class="hero-grain" style="opacity:<?= $hpDesign['texture'] / 100 ?>"></div>
+  <div class="sticker-layer" id="rdStickerLayer">
+    <?php foreach ($hpDesign['stickers'] as $s): ?>
+    <div class="sticker sticker-<?= h($s['type']) ?>" data-type="<?= h($s['type']) ?>"
+         style="left:<?= $s['x'] ?>%;top:<?= $s['y'] ?>%;--rot:<?= $s['rot'] ?>deg;--sc:<?= $s['sc'] ?>;--stk:<?= h($s['color']) ?>;--stkt:<?= $stickerInk($s['color']) ?>">
+      <?php if (isset($stickerSvg[$s['type']])): ?><?= $stickerSvg[$s['type']] ?>
+      <?php else: ?><div class="st-text"><?= h($s['text']) ?></div><?php endif; ?>
+    </div>
+    <?php endforeach; ?>
+  </div>
   <div class="wrap">
     <div class="topbar">
       <a class="brand" href="<?= h(routeUrl('home', $lang)) ?>"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke-linecap="round"/></svg>Playa Finder</a>
@@ -162,3 +196,7 @@ $popular = array_slice($popularBeaches ?? [], 0, 3);
 
 <script <?= cspNonceAttr() ?>>window.RD_BEACHES = <?= json_encode($rd, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?>;</script>
 <script <?= cspNonceAttr() ?> src="/assets/js/redesign-home.js?v=1"></script>
+<?php if ($hpEditor): ?>
+<!-- Admin homepage-design editor preview (loaded only inside /admin/homepage-design iframe) -->
+<script <?= cspNonceAttr() ?> src="/assets/js/redesign-editor-preview.js?v=1"></script>
+<?php endif; ?>
