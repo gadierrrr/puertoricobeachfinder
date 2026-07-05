@@ -83,7 +83,7 @@
     set("rdDirSub", st.region ? "Filtered by coast" : "The whole island");
     var scope = document.getElementById("rdScope"); if (scope) scope.textContent = st.region ? "· " + RN[st.region] : "· many municipios";
     draw();
-    if (st.region) { var d = document.getElementById("beachdir"); if (d) d.scrollIntoView({ behavior: "smooth", block: "start" }); }
+    if (st.region) { var d = document.getElementById("beaches"); if (d) d.scrollIntoView({ behavior: "smooth", block: "start" }); }
   }
   document.querySelectorAll(".region").forEach(function (b) {
     b.addEventListener("click", function () {

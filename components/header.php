@@ -319,8 +319,11 @@ if ($bodyVariant === 'collection-light') {
     <!-- Custom styles -->
     <link rel="stylesheet" href="/assets/css/styles.css?v=4.7">
 
-    <?php if (function_exists('useRedesign') && useRedesign()): ?>
-    <!-- Redesign v2 (tropical) fonts + standalone stylesheet -->
+    <?php if (!empty($redesignLayout)): ?>
+    <!-- Redesign v2 (tropical) fonts + standalone stylesheet.
+         Gated on $redesignLayout (set by pages that render a redesign
+         template), NOT on useRedesign(), so classic-markup pages never pay
+         for fonts/CSS they don't use while the flag is on. -->
     <?php
     // Display font comes from the admin homepage-design settings; the editor
     // preview (?rdedit=1, admins only) loads every picker face so switching
@@ -333,7 +336,7 @@ if ($bodyVariant === 'collection-light') {
     $rdFont = homepageFont($rdDesign['font']);
     ?>
     <link href="<?= h(redesignFontsUrl($rdDesign['font'], $rdEditorMode)) ?>" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/redesign.css?v=3">
+    <link rel="stylesheet" href="/assets/css/redesign.css?v=4">
     <style>.rd{--disp:<?= $rdFont['stack'] ?>}.rd-home .headline,.rd-home .dir-head h2{font-weight:<?= (int) $rdFont['weight'] ?>}</style>
     <?php endif; ?>
 
@@ -349,6 +352,8 @@ if ($bodyVariant === 'collection-light') {
 <body class="<?= h($bodyClasses) ?><?= (!empty($redesignLayout)) ? ' redesign' : '' ?>">
     <?php if (empty($redesignLayout)): ?>
     <?php include __DIR__ . '/nav.php'; ?>
+    <?php else: ?>
+    <?php include __DIR__ . '/redesign/nav.php'; ?>
     <?php endif; ?>
 
     <!-- Main Content -->

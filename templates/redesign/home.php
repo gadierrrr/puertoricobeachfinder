@@ -98,11 +98,6 @@ $stickerSvg = [
     <?php endforeach; ?>
   </div>
   <div class="wrap">
-    <div class="topbar">
-      <a class="brand" href="<?= h(routeUrl('home', $lang)) ?>"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke-linecap="round"/></svg>Playa Finder</a>
-      <nav class="nav"><a href="#beachdir">Coasts</a><a href="#beachdir">Conditions</a><a href="/guides">Guides</a><a href="/quiz">Quiz</a></nav>
-      <span class="lang">EN · ES</span>
-    </div>
     <div class="hero-grid">
       <div>
         <p class="eyebrow"><?= h($isEs ? 'Las playas de la isla, en un mapa' : "The island's beaches, charted") ?></p>
@@ -147,7 +142,7 @@ $stickerSvg = [
 
 <!-- ===== DIRECTORY ===== -->
 <div class="wrap">
-<section id="beachdir" class="beachdir">
+<section id="beaches" class="beachdir">
   <div class="dir-head">
     <div><span class="sub" id="rdDirSub"><?= h($isEs ? 'Toda la isla' : 'The whole island') ?></span><h2 id="rdDirTitle"><?= h($isEs ? 'Encuentra tu playa' : 'Find your beach') ?></h2></div>
     <span class="dir-count" id="rdDirCount"><?= number_format($total) ?> beaches</span>
@@ -190,12 +185,11 @@ $stickerSvg = [
     </aside>
   </div>
 </section>
-<footer class="foot"><span>Playa Finder · Puerto Rico</span><span><?= h($isEs ? 'Rediseño en progreso' : 'New design · in progress') ?></span></footer>
 </div>
 </div>
 
 <script <?= cspNonceAttr() ?>>window.RD_BEACHES = <?= json_encode($rd, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?>;</script>
-<script <?= cspNonceAttr() ?> src="/assets/js/redesign-home.js?v=1"></script>
+<script <?= cspNonceAttr() ?> src="/assets/js/redesign-home.js?v=2"></script>
 <?php if ($hpEditor): ?>
 <!-- Admin homepage-design editor preview (loaded only inside /admin/homepage-design iframe) -->
 <script <?= cspNonceAttr() ?> src="/assets/js/redesign-editor-preview.js?v=1"></script>

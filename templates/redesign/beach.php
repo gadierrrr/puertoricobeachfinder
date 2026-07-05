@@ -92,19 +92,13 @@ $tipList = array_slice($tipList, 0, 6);
 // nearby
 $nearby = array_slice(getNearbyBeaches((string) $beach['id'], $lat, $lng, 4) ?: [], 0, 4);
 ?>
-<div class="rd rd-beach" style="padding-bottom:70px">
+<div class="rd rd-beach">
 
 <header class="hero">
   <div class="hero-photo" style="background-image:url('<?= h($cover) ?>')"></div>
   <div class="hero-scrim"></div>
   <svg class="h-star" viewBox="0 0 100 100"><path d="M50 0 L59 41 L100 50 L59 59 L50 100 L41 59 L0 50 L41 41 Z"/></svg>
   <?php if ($isBoat): ?><div class="h-sticker">solo en bote<small>boat access only</small></div><?php endif; ?>
-
-  <div class="topbar"><div class="wrap">
-    <a class="brand" href="<?= h(routeUrl('home', $lang)) ?>"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke-linecap="round"/></svg>Playa Finder</a>
-    <nav class="nav"><a href="/#beaches">Beaches</a><a href="/guides">Guides</a><a href="/quiz">Quiz</a><a href="/#beaches">Map</a></nav>
-    <span class="signin"><?= h($isEs ? 'Entrar' : 'Sign in') ?></span>
-  </div></div>
 
   <div class="wrap" style="width:100%">
     <div class="crumb"><a href="<?= h(routeUrl('home', $lang)) ?>">Home</a> / <a href="/#beaches">Beaches</a> / <?= h($beach['municipality']) ?> / <?= h($beach['name']) ?></div>
@@ -249,8 +243,6 @@ $nearby = array_slice(getNearbyBeaches((string) $beach['id'], $lat, $lng, 4) ?: 
   </aside>
 </div></div>
 
-<div class="wrap"><footer class="foot"><span>Playa Finder · Puerto Rico</span><span><?= h($isEs ? 'Rediseño en progreso' : 'New design · in progress') ?></span></footer></div>
-
 <div class="dockbar">
   <a class="btn coral" href="<?= h($dirUrl) ?>" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 3 21l9-4 9 4z"/></svg><?= h($isEs ? 'Cómo llegar' : 'Directions') ?></a>
   <a class="btn" href="#">♡ <?= h($isEs ? 'Guardar' : 'Save') ?></a>
@@ -261,6 +253,8 @@ $nearby = array_slice(getNearbyBeaches((string) $beach['id'], $lat, $lng, 4) ?: 
 <script <?= cspNonceAttr() ?>>
 (function(){
   var lat=<?= json_encode($lat) ?>, lng=<?= json_encode($lng) ?>;
+  // Fixed dockbar needs body padding + chat-FAB clearance (see redesign.css)
+  document.body.classList.add('rd-has-dock');
   // subnav scroll-spy
   var secs=[].slice.call(document.querySelectorAll('.rd-beach section[id]'));
   var links=[].slice.call(document.querySelectorAll('.rd-beach .subnav a'));

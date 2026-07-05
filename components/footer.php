@@ -168,6 +168,8 @@ if (!function_exists('isGoogleOAuthEnabled')) {
             </div>
         </div>
     </footer>
+    <?php else: ?>
+    <?php include __DIR__ . '/redesign/footer.php'; ?>
     <?php endif; ?>
 
     <?php if (!isset($skipMapScripts) || !$skipMapScripts): ?>

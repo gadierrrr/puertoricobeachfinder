@@ -20,14 +20,68 @@ body.redesign{background:var(--paper);background-image:radial-gradient(circle at
 .rd .brand{display:flex;align-items:center;gap:9px;font-family:var(--data);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:.9rem}
 .rd .brand .sun{width:19px;height:19px;color:var(--sun)}
 
+/* ===================== SITE CHROME (shared nav + footer) ===================== */
+.rd-topnav{background:var(--paper);border-bottom:1px solid var(--ink-14);position:relative;z-index:50}
+.rd-topnav .bar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding-top:13px;padding-bottom:13px}
+.rd-topnav .brand{color:var(--ink);white-space:nowrap}
+.rd-topnav .links{display:flex;align-items:center;gap:2px;font-family:var(--data);text-transform:uppercase;letter-spacing:.09em;font-size:.8rem;font-weight:600}
+.rd-topnav .links>a,.rd-topnav .links .dd>button{color:var(--ink-60);padding:8px 12px;border-radius:9px;background:none;border:0;cursor:pointer;font:inherit;letter-spacing:inherit;text-transform:inherit;display:inline-flex;align-items:center;gap:5px}
+.rd-topnav .links>a:hover,.rd-topnav .links .dd>button:hover{color:var(--ink);background:var(--paper-2)}
+.rd-topnav .dd{position:relative}
+.rd-topnav .dd>button svg{width:13px;height:13px}
+.rd-topnav .menu{position:absolute;left:0;top:calc(100% + 8px);min-width:232px;background:#fff;border:1px solid var(--ink-14);border-radius:13px;box-shadow:0 16px 44px rgba(21,34,43,.16);padding:8px;z-index:60}
+.rd-topnav .menu.right{left:auto;right:0;min-width:176px}
+.rd-topnav .menu-label{font-family:var(--data);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:.62rem;color:var(--ink-40);padding:8px 10px 4px}
+.rd-topnav .menu a,.rd-topnav .menu button{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border-radius:9px;font-family:var(--data);font-size:.83rem;font-weight:500;letter-spacing:.05em;color:var(--ink);background:none;border:0;cursor:pointer;text-align:left}
+.rd-topnav .menu a:hover,.rd-topnav .menu button:hover{background:var(--sea-pale)}
+.rd-topnav .menu .ic{font-size:1rem;line-height:1}
+.rd-topnav .menu .all,.rd-topnav .menu .on{color:var(--sea-deep);font-weight:700}
+.rd-topnav .side{display:flex;align-items:center;gap:9px}
+.rd-topnav .lang{border:1px solid var(--ink-14);border-radius:999px;padding:6px 13px;font-family:var(--data);font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:.73rem;color:var(--ink-60);background:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.rd-topnav .lang:hover{color:var(--ink);border-color:var(--ink-40)}
+.rd-topnav .iconlink{color:var(--ink-60);padding:6px;border-radius:9px;display:inline-flex}
+.rd-topnav .iconlink:hover{color:var(--coral);background:var(--paper-2)}
+.rd-topnav .iconlink svg{width:18px;height:18px}
+.rd-topnav .avatar{width:30px;height:30px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-family:var(--data);font-weight:700;font-size:.68rem;letter-spacing:.04em}
+.rd-topnav .quiet{font-family:var(--data);font-size:.73rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-40)}
+.rd-topnav .quiet:hover{color:var(--ink)}
+.rd-topnav .signin{background:var(--coral);color:#fff;border-radius:999px;padding:8px 18px;font-family:var(--data);font-weight:700;text-transform:uppercase;letter-spacing:.09em;font-size:.75rem}
+.rd-topnav .burger{display:none;background:none;border:0;color:var(--ink);padding:6px;cursor:pointer}
+.rd-topnav .burger svg{width:23px;height:23px}
+.rd-topnav .mobile{border-top:1px solid var(--ink-14);background:var(--paper);padding:6px clamp(16px,4vw,40px) 16px}
+.rd-topnav .mobile .menu-label{font-family:var(--data);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:.62rem;color:var(--ink-40);padding:14px 2px 4px}
+.rd-topnav .mobile a{display:flex;align-items:center;gap:11px;padding:10px 2px;font-family:var(--data);font-weight:500;font-size:.92rem;letter-spacing:.04em;color:var(--ink)}
+.rd-topnav .mobile a .ic{font-size:1.05rem;line-height:1}
+.rd-topnav .mobile .all{color:var(--sea-deep);font-weight:700}
+.rd-topnav .mobile .logout{color:var(--coral)}
+.rd-topnav .mobile .signin-block{justify-content:center;background:var(--coral);color:#fff;border-radius:11px;margin-top:6px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:.8rem}
+.rd-topnav .langrow{display:flex;gap:8px;padding:4px 2px 2px}
+.rd-topnav .langrow button{flex:1;border:1px solid var(--ink-14);background:#fff;border-radius:10px;padding:9px;font-family:var(--data);font-weight:600;font-size:.8rem;letter-spacing:.05em;color:var(--ink-60);cursor:pointer}
+.rd-topnav .langrow button.on{background:var(--sea-deep);border-color:var(--sea-deep);color:#fff}
+@media(max-width:900px){.rd-topnav .links,.rd-topnav .side{display:none}.rd-topnav .burger{display:inline-flex}}
+
+.rd-sitefoot{background:var(--ink);color:rgba(245,239,223,.72);margin-top:56px}
+.rd-sitefoot .cols{display:grid;grid-template-columns:1.1fr 1.15fr 1fr .9fr;gap:38px;padding:52px 0 36px}
+.rd-sitefoot .brand{color:var(--paper)}
+.rd-sitefoot .about{font-size:.88rem;line-height:1.55;margin:14px 0 8px;max-width:32ch}
+.rd-sitefoot h4{font-family:var(--data);font-weight:700;text-transform:uppercase;letter-spacing:.13em;font-size:.78rem;color:var(--paper);margin:0 0 14px}
+.rd-sitefoot h5{font-family:var(--data);font-weight:700;text-transform:uppercase;letter-spacing:.13em;font-size:.65rem;color:rgba(245,239,223,.42);margin:20px 0 10px}
+.rd-sitefoot ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:.87rem}
+.rd-sitefoot ul.two-col{grid-template-columns:1fr 1fr;column-gap:14px}
+.rd-sitefoot a:hover{color:var(--sun)}
+.rd-sitefoot .all{color:var(--sun);font-weight:600}
+.rd-sitefoot .signin{display:inline-flex;margin-top:18px;background:var(--coral);color:#fff;border-radius:10px;padding:10px 18px;font-family:var(--data);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:.76rem}
+.rd-sitefoot .legal{border-top:1px solid rgba(245,239,223,.14);padding:20px 0 34px;text-align:center;font-size:.75rem;color:rgba(245,239,223,.5)}
+@media(max-width:900px){.rd-sitefoot .cols{grid-template-columns:1fr 1fr;gap:30px}}
+@media(max-width:560px){.rd-sitefoot .cols{grid-template-columns:1fr}}
+
+/* Chat FAB clears the fixed beach dockbar */
+body.redesign.rd-has-dock .chat-fab-container{bottom:86px}
+
 /* ===================== HOMEPAGE ===================== */
 .rd-home .hero-band{position:relative;background:linear-gradient(180deg,#4FA8DE 0%,#3A93CB 100%);color:#fff;overflow:hidden}
 .rd-home .hero-grain{position:absolute;inset:0;z-index:1;pointer-events:none;mix-blend-mode:overlay;opacity:.22;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:180px}
 .rd-home .hero-band>*{position:relative;z-index:2}
-.rd-home .topbar{display:flex;align-items:center;justify-content:space-between;padding:20px 0}
-.rd-home .nav{display:flex;gap:24px;font-family:var(--data);text-transform:uppercase;letter-spacing:.1em;font-size:.8rem;font-weight:500}
-.rd-home .nav a{opacity:.85}.rd-home .nav a:hover{opacity:1}
-.rd-home .lang{border:1px solid rgba(255,255,255,.45);border-radius:999px;padding:6px 13px;font-family:var(--data);text-transform:uppercase;letter-spacing:.1em;font-size:.75rem;color:#fff}
 .rd-home .hero-grid{display:grid;grid-template-columns:1.02fr 1.18fr;gap:clamp(24px,4vw,56px);align-items:center;padding:clamp(20px,4vw,50px) 0 clamp(30px,5vw,60px)}
 .rd-home .headline{font-family:var(--disp);font-size:clamp(3rem,7vw,5.6rem);line-height:.92;letter-spacing:-.01em;color:var(--paper)}
 .rd-home .headline .em{color:var(--paper)}.rd-home .headline .dot{color:var(--coral)}
@@ -112,18 +166,12 @@ body.redesign{background:var(--paper);background-image:radial-gradient(circle at
 .rd-home .nearby .mi{font-family:var(--data);font-size:.67rem;letter-spacing:.06em;text-transform:uppercase;color:var(--coral);font-weight:600}
 .rd-home .dir-more{text-align:center;margin:24px 0 30px}
 .rd-home .dir-more button{font-family:var(--data);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.82rem;background:none;border:1px solid var(--ink);border-radius:10px;padding:12px 26px;cursor:pointer;color:var(--ink)}
-.rd-home .foot{border-top:1px solid var(--ink);padding:24px 0 40px;font-family:var(--data);text-transform:uppercase;letter-spacing:.1em;font-size:.76rem;color:var(--ink-60);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
 
 /* ===================== BEACH PAGE ===================== */
 .rd-beach .hero{position:relative;min-height:62vh;display:flex;flex-direction:column;color:#fff;overflow:hidden}
 .rd-beach .hero-photo{position:absolute;inset:0;background-size:cover;background-position:center;z-index:0}
 .rd-beach .hero-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(10,24,34,.5) 0%,rgba(10,24,34,.12) 26%,rgba(10,24,34,.15) 52%,rgba(9,22,32,.82) 100%)}
 .rd-beach .hero>*:not(.hero-photo):not(.hero-scrim):not(.h-star):not(.h-sticker){position:relative;z-index:3}
-.rd-beach .topbar{display:flex;align-items:center;justify-content:space-between;padding:20px 0 0}
-.rd-beach .topbar .wrap{display:flex;align-items:center;justify-content:space-between;width:100%}
-.rd-beach .nav{display:flex;gap:24px;font-family:var(--data);text-transform:uppercase;letter-spacing:.1em;font-size:.8rem;font-weight:500}
-.rd-beach .nav a{opacity:.85}
-.rd-beach .signin{border:1px solid rgba(255,255,255,.5);border-radius:999px;padding:6px 15px;font-family:var(--data);text-transform:uppercase;letter-spacing:.1em;font-size:.75rem}
 .rd-beach .crumb{font-family:var(--data);letter-spacing:.06em;text-transform:uppercase;font-size:.72rem;opacity:.82;margin:22px 0 0}
 .rd-beach .hero-body{margin-top:auto;padding-bottom:34px}
 .rd-beach .h-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
@@ -217,12 +265,11 @@ body.redesign{background:var(--paper);background-image:radial-gradient(circle at
 .rd-beach .loc-note{margin-top:11px;font-family:var(--data);font-size:.78rem;color:var(--ink-60);display:flex;justify-content:space-between}
 .rd-beach .loc-note b{font-family:var(--disp);color:var(--ink);font-weight:400}
 .rd-beach .checkin{background:var(--sea);color:#fff;border:none;border-radius:12px;padding:14px;width:100%;cursor:pointer;font-family:var(--data);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.82rem}
-.rd-beach .foot{border-top:1px solid var(--ink);padding:24px 0 40px;font-family:var(--data);text-transform:uppercase;letter-spacing:.1em;font-size:.76rem;color:var(--ink-60);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
 .rd-beach .dockbar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(18,30,37,.97);display:flex;justify-content:center;gap:10px;padding:11px 16px;box-shadow:0 -8px 30px rgba(0,0,0,.28)}
 body.redesign.rd-has-dock{padding-bottom:70px}
 
 @media(max-width:1000px){.rd-home .dir-body{grid-template-columns:1fr}.rd-home .dir-side{position:static;flex-direction:row;flex-wrap:wrap}.rd-home .card-w{flex:1;min-width:230px}}
-@media(max-width:900px){.rd-home .hero-grid{grid-template-columns:1fr}.rd-home .nav,.rd-home .lang{display:none}.rd-beach .body{grid-template-columns:1fr}.rd-beach .side{position:static}.rd-beach .glance{grid-template-columns:1fr 1fr}.rd-beach .ngrid{grid-template-columns:1fr 1fr}.rd-beach .scores{grid-template-columns:1fr}.rd-beach .nav,.rd-beach .signin{display:none}}
+@media(max-width:900px){.rd-home .hero-grid{grid-template-columns:1fr}.rd-beach .body{grid-template-columns:1fr}.rd-beach .side{position:static}.rd-beach .glance{grid-template-columns:1fr 1fr}.rd-beach .ngrid{grid-template-columns:1fr 1fr}.rd-beach .scores{grid-template-columns:1fr}}
 @media(max-width:680px){.rd-home .dir-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:520px){.rd-home .dir-grid{grid-template-columns:1fr}.rd-beach .glance,.rd-beach .ngrid{grid-template-columns:1fr}.rd-beach .h-star,.rd-beach .h-sticker{display:none}}
 
