@@ -2294,6 +2294,23 @@ function getTagPageUrl(string $tag, string $lang = "en"): string {
     return "/?tags[]=" . urlencode($tag);
 }
 
+/**
+ * Locale-aware variant of getTagPageUrl(). getTagPageUrl() ignores its $lang
+ * argument (pre-existing), so Spanish pages historically emitted English tag
+ * URLs; redesign templates use this wrapper to keep ES pages linking to ES
+ * routes without changing classic markup.
+ */
+function getLocalizedTagPageUrl(string $tag, string $lang = 'en'): string {
+    $url = getTagPageUrl($tag, 'en');
+    if ($lang !== 'es') {
+        return $url;
+    }
+    if (str_starts_with($url, '/?')) {
+        return '/es' . substr($url, 1);
+    }
+    return localizePath($url, 'es');
+}
+
 
 /**
  * Generate a concise, AI-extractable summary paragraph for a beach.

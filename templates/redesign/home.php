@@ -256,7 +256,7 @@ $stickerSvg = [
   <span class="sub"><?= h($isEs ? 'Por actividad' : 'By activity') ?></span>
   <div class="actrow">
     <?php foreach (['swimming', 'snorkeling', 'surfing', 'family-friendly', 'calm-waters', 'secluded', 'scenic', 'diving', 'accessible', 'fishing', 'camping', 'popular'] as $actTag): ?>
-    <a href="<?= h(getTagPageUrl($actTag, $lang)) ?>"><?= h(__('tags.' . $actTag)) ?><?php if (!empty($tagCounts[$actTag])): ?> <b><?= (int) $tagCounts[$actTag] ?></b><?php endif; ?></a>
+    <a href="<?= h(getLocalizedTagPageUrl($actTag, $lang)) ?>"><?= h(__('tags.' . $actTag)) ?><?php if (!empty($tagCounts[$actTag])): ?> <b><?= (int) $tagCounts[$actTag] ?></b><?php endif; ?></a>
     <?php endforeach; ?>
   </div>
 </section>

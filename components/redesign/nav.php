@@ -69,7 +69,7 @@ $rdNavTags = [
                 <div id="beaches-dropdown-menu" class="hidden menu">
                     <div class="menu-label"><?= h(__('nav.find_by_activity')) ?></div>
                     <?php foreach ($rdNavTags as $tag => $emoji): ?>
-                    <a href="<?= h(getTagPageUrl($tag, $currentLang)) ?>"><span class="ic"><?= $emoji ?></span><span><?= h(__('tags.' . $tag)) ?></span></a>
+                    <a href="<?= h(getLocalizedTagPageUrl($tag, $currentLang)) ?>"><span class="ic"><?= $emoji ?></span><span><?= h(__('tags.' . $tag)) ?></span></a>
                     <?php endforeach; ?>
                     <a class="all" href="<?= h($localizedHome) ?>#beaches"><?= h(__('nav.view_all_beaches')) ?> →</a>
                 </div>
@@ -135,7 +135,7 @@ $rdNavTags = [
     <div id="mobile-menu" class="hidden mobile" role="menu" aria-labelledby="mobile-menu-button">
         <div class="menu-label"><?= h(__('nav.find_beaches')) ?></div>
         <?php foreach ($rdNavTags as $tag => $emoji): ?>
-        <a href="<?= h(getTagPageUrl($tag, $currentLang)) ?>" role="menuitem"><span class="ic"><?= $emoji ?></span><span><?= h(__('tags.' . $tag)) ?></span></a>
+        <a href="<?= h(getLocalizedTagPageUrl($tag, $currentLang)) ?>" role="menuitem"><span class="ic"><?= $emoji ?></span><span><?= h(__('tags.' . $tag)) ?></span></a>
         <?php endforeach; ?>
         <a class="all" href="<?= h($localizedHome) ?>#beaches" role="menuitem"><?= h(__('nav.view_all_beaches')) ?> →</a>
 

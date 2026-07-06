@@ -224,6 +224,12 @@ $beachReferralBottom = referralRenderBeachAnchor(
 );
 
 $redesignLayout = useRedesign();
+if ($redesignLayout) {
+    // Redesign beach uses the SVG island locator + lazy satellite iframe —
+    // no MapLibre map, so skip its CSS preload and JS bundle.
+    $skipMapCSS = true;
+    $skipMapScripts = true;
+}
 include APP_ROOT . '/components/header.php';
 
 if ($redesignLayout) {

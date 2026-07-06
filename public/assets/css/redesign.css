@@ -174,6 +174,8 @@ body.redesign.rd-has-dock .chat-fab-container{bottom:86px}
 /* ===================== BEACH PAGE ===================== */
 .rd-beach .hero{position:relative;min-height:62vh;display:flex;flex-direction:column;color:#fff;overflow:hidden}
 .rd-beach .hero-photo{position:absolute;inset:0;background-size:cover;background-position:center;z-index:0}
+.rd-beach img.hero-photo{width:100%;height:100%;object-fit:cover;object-position:center}
+.rd-beach .hero-photo-fallback{background:linear-gradient(135deg,#2E86C4 0%,#15222B 100%)}
 .rd-beach .hero-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(10,24,34,.5) 0%,rgba(10,24,34,.12) 26%,rgba(10,24,34,.15) 52%,rgba(9,22,32,.82) 100%)}
 .rd-beach .hero>*:not(.hero-photo):not(.hero-scrim):not(.h-star):not(.h-sticker){position:relative;z-index:3}
 .rd-beach .crumb{font-family:var(--data);letter-spacing:.06em;text-transform:uppercase;font-size:.72rem;opacity:.82;margin:22px 0 0}
@@ -269,6 +271,42 @@ body.redesign.rd-has-dock .chat-fab-container{bottom:86px}
 .rd-beach .loc-note{margin-top:11px;font-family:var(--data);font-size:.78rem;color:var(--ink-60);display:flex;justify-content:space-between}
 .rd-beach .loc-note b{font-family:var(--disp);color:var(--ink);font-weight:400}
 .rd-beach .checkin{background:var(--sea);color:#fff;border:none;border-radius:12px;padding:14px;width:100%;cursor:pointer;font-family:var(--data);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.82rem}
+.rd-beach .secrow{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.rd-beach .secrow .h2{margin:0}
+.rd-beach .h2 small{font-family:var(--data);font-size:.85rem;color:var(--ink-60);font-weight:600;letter-spacing:.03em}
+.rd-beach .minor{font-family:var(--data);font-size:.82rem;font-weight:600;letter-spacing:.05em;color:var(--sea-deep)}
+.rd-beach .feats{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.rd-beach .feat{font-family:var(--data);font-size:.82rem;font-weight:500;letter-spacing:.04em;background:#fff;border:1px solid var(--ink-14);border-radius:9px;padding:7px 12px;color:var(--ink)}
+.rd-beach .grouplab{display:flex;align-items:center;gap:12px;margin:20px 0 10px;font-family:var(--data);font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:.68rem;color:var(--ink-40)}
+.rd-beach .grouplab i{flex:1;height:1px;background:var(--ink-14)}
+.rd-beach .xsec{background:#fff;border:1px solid var(--ink-14);border-radius:13px;margin-bottom:10px;overflow:hidden}
+.rd-beach .xsec summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px 18px;cursor:pointer;list-style:none;font-family:var(--data);font-weight:700;letter-spacing:.04em;font-size:.98rem;color:var(--ink)}
+.rd-beach .xsec summary::-webkit-details-marker{display:none}
+.rd-beach .xsec summary b{color:var(--ink-40);font-weight:400;font-size:1.2rem;line-height:1}
+.rd-beach .xsec[open] summary b{transform:rotate(45deg)}
+.rd-beach .xsec .xbody{padding:0 18px 16px;font-size:.95rem;line-height:1.65;color:var(--ink)}
+.rd-beach .xsec .xbody p{margin:0 0 10px}
+.rd-beach .xsec .xbody ul,.rd-beach .xsec .xbody ol{margin:0 0 10px 18px}
+.rd-beach .gal{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.rd-beach .gal img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:11px;cursor:pointer;border:1px solid var(--ink-14)}
+.rd-beach .vphotos{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.rd-beach .vphotos button{border:0;padding:0;background:none;cursor:pointer;border-radius:9px;overflow:hidden;aspect-ratio:1}
+.rd-beach .vphotos img{width:100%;height:100%;object-fit:cover}
+.rd-beach .revlist{display:grid;gap:12px}
+.rd-beach .relguides{display:grid;gap:10px}
+.rd-beach .relguide{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1px solid var(--ink-14);border-radius:12px;padding:14px 17px;transition:.15s}
+.rd-beach .relguide:hover{border-color:var(--sea)}
+.rd-beach .relguide .gt{font-family:var(--data);font-weight:600;letter-spacing:.03em;font-size:.94rem}
+.rd-beach .relguide .ar{color:var(--coral);font-weight:700}
+.rd-beach .tagrow{display:flex;flex-wrap:wrap;gap:9px}
+.rd-beach .tagrow a{font-family:var(--data);font-weight:500;letter-spacing:.04em;font-size:.86rem;color:var(--ink);border:1px solid var(--ink-14);background:#fff;border-radius:999px;padding:8px 16px;transition:.15s}
+.rd-beach .tagrow a:hover{border-color:var(--sea);color:var(--sea-deep)}
+.rd-beach .cta{background:var(--sea-pale);border:1px solid rgba(69,163,217,.4);border-radius:15px;padding:26px;text-align:center}
+.rd-beach .cta p{color:var(--ink-60);margin:6px 0 16px}
+.rd-beach .amen{display:flex;flex-wrap:wrap;gap:7px}
+.rd-beach .amen span{font-family:var(--data);font-size:.78rem;font-weight:500;letter-spacing:.04em;background:var(--paper);border:1px solid var(--ink-14);border-radius:8px;padding:6px 10px;color:var(--ink)}
+.rd-beach .refslot{padding:12px}
+@media(max-width:680px){.rd-beach .gal{grid-template-columns:1fr 1fr}.rd-beach .vphotos{grid-template-columns:repeat(4,1fr)}}
 .rd-beach .dockbar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(18,30,37,.97);display:flex;justify-content:center;gap:10px;padding:11px 16px;box-shadow:0 -8px 30px rgba(0,0,0,.28)}
 body.redesign.rd-has-dock{padding-bottom:70px}
 
