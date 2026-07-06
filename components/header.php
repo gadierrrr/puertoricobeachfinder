@@ -336,7 +336,7 @@ if ($bodyVariant === 'collection-light') {
     $rdFont = homepageFont($rdDesign['font']);
     ?>
     <link href="<?= h(redesignFontsUrl($rdDesign['font'], $rdEditorMode)) ?>" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/redesign.css?v=6">
+    <link rel="stylesheet" href="/assets/css/redesign.css?v=7">
     <style>.rd{--disp:<?= $rdFont['stack'] ?>}.rd-home .headline,.rd-home .dir-head h2{font-weight:<?= (int) $rdFont['weight'] ?>}</style>
     <?php endif; ?>
 
