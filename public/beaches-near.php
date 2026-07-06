@@ -74,11 +74,56 @@ $breadcrumbs = [
     ['name' => $pageH1]
 ];
 
-$bodyVariant = 'collection-light';
-include APP_ROOT . '/components/header.php';
-
 $ratedBeaches = array_filter($beaches, fn($b) => !empty($b['google_rating']));
 $avgRating = !empty($ratedBeaches) ? array_sum(array_column($ratedBeaches, 'google_rating')) / count($ratedBeaches) : 0;
+
+$bodyVariant = 'collection-light';
+$redesignLayout = useRedesign();
+include APP_ROOT . '/components/header.php';
+
+if ($redesignLayout) {
+    $isEs = $lang === 'es';
+
+    // km/mi badge on every row (classic shows km/mi on tiles, km on the list)
+    foreach ($beaches as $rdIdx => $rdBeach) {
+        $rdKm = round($rdBeach['distance_km'], 1);
+        $beaches[$rdIdx]['distance_formatted'] = $rdKm . ' km / ' . round($rdKm * 0.621371, 1) . ' mi';
+    }
+
+    // Sibling proximity areas — same hardcoded list as classic, but hrefs are
+    // localized via routeUrl (classic emits EN URLs on ES pages).
+    $rdSiblings = [];
+    foreach ($locations as $slug => $l) {
+        if ($slug === $locSlug) continue;
+        $rdSiblings[] = [$l['name'], routeUrl('beaches_near', $lang, ['location' => $slug]), $l['region']];
+    }
+
+    $rdStats = [[(string) $beachCount, $isEs ? 'playas' : 'beaches']];
+    if ($avgRating > 0) {
+        $rdStats[] = ['★ ' . number_format($avgRating, 1), $isEs ? 'promedio' : 'avg rating'];
+    }
+    $rdStats[] = ['~' . $loc['drive'], $isEs ? 'desde San Juan' : 'from San Juan'];
+
+    $listing = [
+        'eyebrow' => $isEs ? 'Playas por área' : ucfirst($loc['region']),
+        'h1' => $pageH1,
+        'intro' => [
+            $isEs
+                ? "Descubre $beachCount playas a menos de {$radiusKm}km de $locName, Puerto Rico."
+                : "Discover $beachCount beaches within {$radiusKm}km of $locName on $loc[region] of Puerto Rico. From San Juan, $locName is about $loc[drive].",
+        ],
+        'stats' => $rdStats,
+        'beachesHeading' => $isEs ? "Todas las $beachCount Playas" : "All $beachCount Beaches",
+        'beachesSub' => $isEs ? 'Ordenadas por distancia' : 'Sorted by distance from ' . $locName,
+        'beaches' => $beaches,
+        'siblings' => $rdSiblings,
+        'siblingsHeading' => $isEs ? 'Explorar Otras Áreas' : 'Explore Other Areas',
+        'quizCta' => true,
+    ];
+    include APP_ROOT . '/templates/redesign/listing.php';
+    include APP_ROOT . '/components/footer.php';
+    return;
+}
 ?>
 
 <section class="relative bg-gradient-to-b from-slate-900 via-slate-800 to-slate-700 text-white py-16 md:py-24">
