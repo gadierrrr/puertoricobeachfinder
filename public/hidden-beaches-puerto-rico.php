@@ -118,6 +118,7 @@ $breadcrumbs = [
 ];
 
 $bodyVariant = 'collection-light';
+$redesignLayout = useRedesign();
 include APP_ROOT . '/components/header.php';
 ?>
 <?php include APP_ROOT . '/components/collection/explorer.php'; ?>
