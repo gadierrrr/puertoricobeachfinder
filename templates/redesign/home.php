@@ -32,17 +32,70 @@ foreach ($rows as $b) {
     $secl = 55; foreach ($sc['bars'] as $bar) { if ($bar[0] === 'Seclusion') { $secl = $bar[1]; } }
     $crowd = $secl >= 74 ? 'low' : ($secl >= 45 ? 'med' : 'high');
     $rd[] = [
-        'n' => $b['name'], 'slug' => $b['slug'], 'm' => $b['municipality'],
+        'id' => (string) $b['id'], 'n' => $b['name'], 'slug' => $b['slug'], 'm' => $b['municipality'],
         'rg' => $region, 'img' => $b['cover_image'] ?: '/images/beaches/placeholder-beach.webp',
         'sc' => $sc['overall'], 'rt' => round((float) $sc['rating'], 1),
         'water' => $surf ?: 'calm', 'surf' => $surfWord[$surf] ?? 'flat', 'crowd' => $crowd,
-        'bars' => $sc['bars'],
+        'bars' => $sc['bars'], 't' => array_values($b['tags'] ?? []),
     ];
 }
 // default order: Beach Score desc
 usort($rd, fn($a, $b) => $b['sc'] <=> $a['sc']);
 $total = count($rd);
 $municipios = count(array_unique(array_column($rd, 'm')));
+
+// Hero condition chips — each backed by a real tag so the JS filter works.
+$chipTags = [
+    'calm-waters', 'surfing', 'snorkeling', 'family-friendly', 'secluded', 'accessible',
+];
+
+// Strings shared between the PHP-rendered first page of tiles and the JS
+// re-renders (filters, sort, load-more) — keep the two in sync.
+$rdI18n = [
+    'beaches' => $isEs ? 'playas' : 'beaches',
+    'viewBeach' => $isEs ? 'Ver playa →' : 'View beach →',
+    'noMatch' => $isEs ? 'Ninguna playa coincide — prueba otra costa o búsqueda.' : 'No beaches match — try another coast or search.',
+    'findYourBeach' => $isEs ? 'Encuentra tu playa' : 'Find your beach',
+    'wholeIsland' => $isEs ? 'Toda la isla' : 'The whole island',
+    'byCoast' => $isEs ? 'Filtrado por costa' : 'Filtered by coast',
+    'manyMunicipios' => $isEs ? '· varios municipios' : '· many municipios',
+    'save' => $isEs ? 'Guardar' : 'Save',
+    'overall' => $isEs ? '⭐ General' : '⭐ Overall',
+    'water' => ['calm' => $isEs ? 'calmada' : 'calm', 'small' => $isEs ? 'suave' : 'small', 'medium' => $isEs ? 'media' : 'medium', 'large' => $isEs ? 'fuerte' : 'large'],
+    'crowd' => ['low' => $isEs ? 'poco' : 'low', 'med' => $isEs ? 'medio' : 'med', 'high' => $isEs ? 'mucho' : 'high'],
+    'barLabels' => [
+        'Calm water' => $isEs ? '🌊 Calma' : '🌊 Calm', 'Snorkeling' => '🤿 Snorkel',
+        'Seclusion' => $isEs ? '🌾 Tranquila' : '🌾 Quiet', 'Family' => $isEs ? '👨‍👩‍👧 Familia' : '👨‍👩‍👧 Family',
+        'Facilities' => $isEs ? '🚻 Servicios' : '🚻 Facilities',
+    ],
+];
+$regionNames = [
+    'north' => $isEs ? 'Costa Norte' : 'North Coast', 'metro' => $isEs ? 'Metro · San Juan' : 'Metro · San Juan',
+    'west' => 'Porta del Sol', 'south' => $isEs ? 'Costa Sur' : 'South Coast',
+    'east' => $isEs ? 'Este · Fajardo' : 'East · Fajardo', 'cays' => $isEs ? 'Los Cayos' : 'The Cays',
+];
+$beachUrlPrefix = $isEs ? '/es/playa/' : '/beach/';
+
+/** Server-rendered beach tile — MUST mirror tile() in redesign-home.js. */
+$rdTile = function (array $b, int $rank) use ($rdI18n, $beachUrlPrefix, &$favIds): string {
+    $url = $beachUrlPrefix . $b['slug'];
+    $barColor = $b['sc'] >= 67 ? 'g' : ($b['sc'] >= 40 ? 'a' : 'r');
+    $bars = '<div class="score"><span>' . h($rdI18n['overall']) . '</span><div class="bar"><i class="' . $barColor . '" style="width:' . $b['sc'] . '%"></i></div></div>';
+    foreach ($b['bars'] as $bar) {
+        $label = $rdI18n['barLabels'][$bar[0]] ?? $bar[0];
+        $bars .= '<div class="score"><span>' . h($label) . '</span><div class="bar"><i class="' . h($bar[2]) . '" style="width:' . (int) $bar[1] . '%"></i></div></div>';
+    }
+    $fav = in_array($b['id'], $favIds, true);
+    return '<a class="btile" href="' . h($url) . '">'
+        . '<div class="btile-photo" style="background-image:url(\'' . h($b['img']) . '\')"></div><div class="btile-grad"></div>'
+        . '<div class="btile-rest"><div class="bt-top"><span class="bt-rank">' . $rank . '</span>'
+        . '<span class="bt-water">🌊 ' . h($rdI18n['water'][$b['water']] ?? $b['water']) . '</span></div>'
+        . '<div class="bt-name">' . h($b['n']) . '</div><div class="bt-muni">' . h($b['m']) . '</div>'
+        . '<div class="bt-rest-stats"><span>👥 ' . h($rdI18n['crowd'][$b['crowd']] ?? $b['crowd']) . '</span><span>🏄 ' . h($b['surf']) . '</span>' . ($b['rt'] ? '<span>⭐ ' . number_format($b['rt'], 1) . '</span>' : '') . '</div></div>'
+        . '<div class="btile-hover"><div class="bt-hovtop"><button class="bt-fav' . ($fav ? ' on' : '') . '" type="button" data-id="' . h($b['id']) . '" title="' . h($rdI18n['save']) . '">' . ($fav ? '♥' : '♡') . '</button><span>Beach Score ' . $b['sc'] . '</span></div>'
+        . '<div class="scores">' . $bars . '</div>'
+        . '<span class="bt-view" style="margin-top:8px;text-align:center;display:block">' . h($rdI18n['viewBeach']) . '</span></div></a>';
+};
 
 // island-representative conditions (San Juan) — cached
 $w = null; try { $w = getWeatherForLocation(18.46, -66.11); } catch (\Throwable $e) {}
@@ -57,6 +110,16 @@ $regionMeta = [
     'cays'  => ['The Cays', '92%', '19%', [508, 196]],
 ];
 $popular = array_slice($popularBeaches ?? [], 0, 3);
+
+// Favorites for the tile hearts. index.php's lookup runs before header.php
+// starts the session, so re-query here now that the session is active.
+$favIds = [];
+if (isAuthenticated() && !empty($_SESSION['user_id'])) {
+    $favIds = array_map('strval', array_column(
+        query('SELECT beach_id FROM user_favorites WHERE user_id = :user_id', [':user_id' => $_SESSION['user_id']]),
+        'beach_id'
+    ));
+}
 
 // ---- homepage design settings (admin-editable: /admin/homepage-design) ----
 require_once APP_ROOT . '/inc/settings.php';
@@ -108,9 +171,9 @@ $stickerSvg = [
           <input id="heroSearch" type="text" placeholder="<?= h($isEs ? 'Busca una playa o pueblo…' : 'Search a beach or town…') ?>" aria-label="Search beaches">
         </div>
         <p class="count"><span class="tri">▸</span> <?= h($isEs ? 'Mostrando' : 'Showing') ?> <b id="rdCount"><?= number_format($total) ?></b>&nbsp;<?= h($isEs ? 'playas' : 'beaches') ?> <span class="muted" id="rdScope">· <?= $municipios ?> municipios</span></p>
-        <div class="chips" role="group" aria-label="Filter by condition">
-          <?php foreach (['Calm & clear', 'Surf', 'Snorkeling', 'Balneario', 'Secluded', 'Bandera Azul', 'Accessible'] as $c): ?>
-          <button class="chip" type="button" aria-pressed="false"><?= h($c) ?></button>
+        <div class="chips" role="group" aria-label="<?= h($isEs ? 'Filtrar por actividad' : 'Filter by activity') ?>">
+          <?php foreach ($chipTags as $chipTag): ?>
+          <button class="chip" type="button" data-tag="<?= h($chipTag) ?>" aria-pressed="false"><?= h(__('tags.' . $chipTag)) ?></button>
           <?php endforeach; ?>
         </div>
       </div>
@@ -132,7 +195,7 @@ $stickerSvg = [
         </svg>
         <?php foreach ($regionMeta as $key => $m): ?>
         <button class="region<?= $key === 'cays' ? ' cays' : '' ?>" data-region="<?= $key ?>" data-pt="<?= $m[3][0] ?>,<?= $m[3][1] ?>" style="left:<?= $m[1] ?>;top:<?= $m[2] ?>" aria-pressed="false">
-          <span class="rname"><?= h($m[0]) ?></span><span class="rcount"><?= $regionCounts[$key] ?> beaches</span>
+          <span class="rname"><?= h($regionNames[$key] ?? $m[0]) ?></span><span class="rcount"><?= $regionCounts[$key] ?> <?= h($rdI18n['beaches']) ?></span>
         </button>
         <?php endforeach; ?>
       </div>
@@ -144,24 +207,26 @@ $stickerSvg = [
 <div class="wrap">
 <section id="beaches" class="beachdir">
   <div class="dir-head">
-    <div><span class="sub" id="rdDirSub"><?= h($isEs ? 'Toda la isla' : 'The whole island') ?></span><h2 id="rdDirTitle"><?= h($isEs ? 'Encuentra tu playa' : 'Find your beach') ?></h2></div>
-    <span class="dir-count" id="rdDirCount"><?= number_format($total) ?> beaches</span>
+    <div><span class="sub" id="rdDirSub"><?= h($rdI18n['wholeIsland']) ?></span><h2 id="rdDirTitle"><?= h($rdI18n['findYourBeach']) ?></h2></div>
+    <span class="dir-count" id="rdDirCount"><?= number_format($total) ?> <?= h($rdI18n['beaches']) ?></span>
   </div>
   <div class="dir-toolbar">
-    <button class="tbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5h18M6 12h12M10 19h4" stroke-linecap="round"/></svg>Filters</button>
-    <div class="dir-search"><svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3" stroke-linecap="round"/></svg><input id="rdSearch" placeholder="<?= h($isEs ? 'Busca una playa o pueblo…' : 'Search a beach or town…') ?>" aria-label="Search beaches"></div>
-    <select class="dir-select" id="rdSort" aria-label="Sort beaches">
+    <div class="dir-search"><svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3" stroke-linecap="round"/></svg><input id="rdSearch" placeholder="<?= h($isEs ? 'Busca una playa o pueblo…' : 'Search a beach or town…') ?>" aria-label="<?= h($isEs ? 'Buscar playas' : 'Search beaches') ?>"></div>
+    <select class="dir-select" id="rdSort" aria-label="<?= h($isEs ? 'Ordenar playas' : 'Sort beaches') ?>">
       <option value="score"><?= h($isEs ? 'Orden: Puntuación' : 'Sort: Beach Score') ?></option>
       <option value="rating"><?= h($isEs ? 'Mejor calificadas' : 'Top rated') ?></option>
       <option value="calm"><?= h($isEs ? 'Aguas más calmadas' : 'Calmest water') ?></option>
       <option value="crowd"><?= h($isEs ? 'Menos gentío' : 'Least crowded') ?></option>
     </select>
-    <div class="seg"><button class="on" data-view="grid">▦ Grid</button><button data-view="map">◵ Map</button></div>
   </div>
   <div class="dir-body">
     <div>
-      <div class="dir-grid" id="rdGrid"></div>
-      <div class="dir-more"><button id="rdMore"><?= h($isEs ? 'Ver más' : 'Load more') ?> · <span id="rdRemain">0</span> beaches</button></div>
+      <div class="dir-grid" id="rdGrid"><?php
+        // First page server-rendered so the beach links are crawlable without
+        // JS; redesign-home.js re-renders the same markup on filter/sort.
+        foreach (array_slice($rd, 0, 9) as $i => $b) { echo $rdTile($b, $i + 1); }
+      ?></div>
+      <div class="dir-more"><button id="rdMore"><?= h($isEs ? 'Ver más' : 'Load more') ?> · <span id="rdRemain"><?= max(0, $total - 9) ?></span> <?= h($rdI18n['beaches']) ?></button></div>
     </div>
     <aside class="dir-side">
       <div class="card-w"><h4><?= h($isEs ? 'Ahora en la costa' : 'On the coast right now') ?></h4>
@@ -185,11 +250,31 @@ $stickerSvg = [
     </aside>
   </div>
 </section>
+
+<!-- Browse-by-activity links to the 12 tag landing pages (server-rendered) -->
+<section class="actlinks" aria-label="<?= h($isEs ? 'Playas por actividad' : 'Beaches by activity') ?>">
+  <span class="sub"><?= h($isEs ? 'Por actividad' : 'By activity') ?></span>
+  <div class="actrow">
+    <?php foreach (['swimming', 'snorkeling', 'surfing', 'family-friendly', 'calm-waters', 'secluded', 'scenic', 'diving', 'accessible', 'fishing', 'camping', 'popular'] as $actTag): ?>
+    <a href="<?= h(getTagPageUrl($actTag, $lang)) ?>"><?= h(__('tags.' . $actTag)) ?><?php if (!empty($tagCounts[$actTag])): ?> <b><?= (int) $tagCounts[$actTag] ?></b><?php endif; ?></a>
+    <?php endforeach; ?>
+  </div>
+</section>
 </div>
 </div>
 
-<script <?= cspNonceAttr() ?>>window.RD_BEACHES = <?= json_encode($rd, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?>;</script>
-<script <?= cspNonceAttr() ?> src="/assets/js/redesign-home.js?v=2"></script>
+<script <?= cspNonceAttr() ?>>
+window.RD_BEACHES = <?= json_encode($rd, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?>;
+window.RD_CFG = <?= json_encode([
+    'urlPrefix' => $beachUrlPrefix,
+    'authed' => isAuthenticated(),
+    'csrf' => function_exists('csrfToken') ? csrfToken() : '',
+    'favs' => $favIds,
+    'i18n' => $rdI18n,
+    'regionNames' => $regionNames,
+], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?>;
+</script>
+<script <?= cspNonceAttr() ?> src="/assets/js/redesign-home.js?v=3"></script>
 <?php if ($hpEditor): ?>
 <!-- Admin homepage-design editor preview (loaded only inside /admin/homepage-design iframe) -->
 <script <?= cspNonceAttr() ?> src="/assets/js/redesign-editor-preview.js?v=1"></script>

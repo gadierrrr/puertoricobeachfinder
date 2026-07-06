@@ -130,6 +130,16 @@ if (!isValidCollectionKey((string)$selectedCollection)) {
     $selectedCollection = '';
 }
 
+// The redesign homepage builds its own dataset in the template; the map view
+// (?view=map) keeps the classic page until the redesign grows a map, so nav
+// and footer "Interactive Map" links stay functional after the flip.
+$redesignLayout = useRedesign() && $viewMode !== 'map';
+if ($redesignLayout) {
+    // No map on the redesign homepage — skip MapLibre CSS (header) + JS (footer).
+    $skipMapCSS = true;
+    $skipMapScripts = true;
+}
+
 // Build query
 $sql = 'SELECT DISTINCT b.* FROM beaches b';
 $params = [];
@@ -181,16 +191,23 @@ switch ($sortBy) {
         $sql .= ' ORDER BY b.name ASC';
 }
 
-// Get all beaches (for map view and client-side filtering)
-$allBeaches = query($sql, $params);
+// Get all beaches (for map view and client-side filtering). The redesign
+// template queries its own slimmer dataset, so skip the classic double-load.
+$allBeaches = [];
+$totalBeaches = 0;
+$totalPages = 0;
+$beaches = [];
+if (!$redesignLayout) {
+    $allBeaches = query($sql, $params);
 
-// Batch fetch tags and amenities (2 queries instead of 2*N queries)
-attachBeachMetadata($allBeaches);
+    // Batch fetch tags and amenities (2 queries instead of 2*N queries)
+    attachBeachMetadata($allBeaches);
 
-// Paginate for list view
-$totalBeaches = count($allBeaches);
-$totalPages = ceil($totalBeaches / $perPage);
-$beaches = array_slice($allBeaches, ($page - 1) * $perPage, $perPage);
+    // Paginate for list view
+    $totalBeaches = count($allBeaches);
+    $totalPages = ceil($totalBeaches / $perPage);
+    $beaches = array_slice($allBeaches, ($page - 1) * $perPage, $perPage);
+}
 
 // Get user favorites if logged in
 $userFavorites = [];
@@ -205,8 +222,7 @@ $popularBeaches = getPopularBeaches(4);
 $siteStats = getSiteStats();
 $publishedCount = queryOne('SELECT COUNT(*) as cnt FROM beaches WHERE publish_status = "published" AND (location_type = "beach" OR location_type IS NULL)')['cnt'];
 
-// Include header
-$redesignLayout = useRedesign();
+// Include header ($redesignLayout was resolved before the listing query)
 include APP_ROOT . '/components/header.php';
 
 if ($redesignLayout) {
