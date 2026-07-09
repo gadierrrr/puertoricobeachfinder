@@ -47,7 +47,7 @@ echo "[9/9] Smoke checks"
 php scripts/migrate.php --check
 php scripts/test-beach-images.php
 GOOGLE_KEY_PREFIX="AI""za"
-if grep -R "$GOOGLE_KEY_PREFIX" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=audit-results --exclude-dir=data --exclude='*.md'; then
+if git grep -n "$GOOGLE_KEY_PREFIX" -- ':!*.md'; then
   echo "Found Google API key pattern in active code."
   exit 1
 fi
