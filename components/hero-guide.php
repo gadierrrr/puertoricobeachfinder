@@ -10,13 +10,13 @@
  * - $breadcrumbs (array): Breadcrumb navigation items
  * - $heroImage (string): URL of a background photo; when set, shown behind a dark overlay
  */
-$bgStyle = '';
-if (!empty($heroImage)) {
+$bgStyle = pageHeroAttributes('guides');
+if ($bgStyle === '' && !empty($heroImage)) {
     $esc = htmlspecialchars($heroImage, ENT_QUOTES, 'UTF-8');
     $bgStyle = ' style="background-image: linear-gradient(rgba(15,23,42,0.65),rgba(15,23,42,0.75)), url(' . $esc . '); background-size: cover; background-position: center;"';
 }
 ?>
-<section class="hero-gradient-dark text-white py-16"<?= $bgStyle ?>>
+<section class="hero-gradient-dark managed-page-hero text-white py-16"<?= $bgStyle ?>>
     <div class="container mx-auto px-4 container-padding">
         <?php if (isset($breadcrumbs) && !empty($breadcrumbs)): ?>
         <nav class="text-sm mb-6 text-gray-200" aria-label="Breadcrumb">

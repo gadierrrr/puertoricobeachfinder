@@ -144,6 +144,7 @@
 
     function mapViewHrefForCurrentPage() {
         const params = new URLSearchParams(window.location.search);
+        params.delete("design");
         params.set("view", "map");
         const query = params.toString();
         return query ? `${window.location.pathname}?${query}` : `${window.location.pathname}?view=map`;

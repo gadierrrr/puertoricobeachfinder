@@ -48,7 +48,13 @@ if (!function_exists('cspHostSourceFromUrl')) {
 
 // Security Headers
 header('X-Content-Type-Options: nosniff');
-header('X-Frame-Options: DENY');
+// The admin homepage-design editor previews the homepage in a same-origin
+// iframe (?rdedit=1). SAMEORIGIN still blocks all cross-site framing.
+if (isset($_GET['rdedit']) && $_GET['rdedit'] === '1') {
+    header('X-Frame-Options: SAMEORIGIN');
+} else {
+    header('X-Frame-Options: DENY');
+}
 header('X-XSS-Protection: 1; mode=block');
 header('Referrer-Policy: strict-origin-when-cross-origin');
 header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
@@ -59,7 +65,7 @@ header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
 // If a JS library requires eval, add a specific hash/nonce instead.
 $scriptSources = ["'self'", 't.puertoricobeachfinder.com', "'nonce-" . CSP_NONCE . "'", "'strict-dynamic'", 'cdn.tailwindcss.com', 'unpkg.com', 'cdn.jsdelivr.net', 'cloud.umami.is'];
 $styleSources = ["'self'", "'unsafe-inline'", 'cdn.tailwindcss.com', 'unpkg.com', 'cdn.jsdelivr.net', 'fonts.googleapis.com'];
-$imgSources = ["'self'", 'data:', 'blob:', 'https://*.basemaps.cartocdn.com', 'https://a.basemaps.cartocdn.com', 'https://b.basemaps.cartocdn.com', 'https://c.basemaps.cartocdn.com', 'https://d.basemaps.cartocdn.com'];
+$imgSources = ["'self'", 'data:', 'blob:', 'https://media.tacdn.com', 'https://*.basemaps.cartocdn.com', 'https://a.basemaps.cartocdn.com', 'https://b.basemaps.cartocdn.com', 'https://c.basemaps.cartocdn.com', 'https://d.basemaps.cartocdn.com'];
 $fontSources = ["'self'", 'data:', 'fonts.gstatic.com'];
 $connectSources = ["'self'", 't.puertoricobeachfinder.com', 'https://basemaps.cartocdn.com', 'https://*.basemaps.cartocdn.com', 'unpkg.com', 'cdn.jsdelivr.net', 'cloud.umami.is', 'api-gateway.umami.dev', ];
 $workerSources = ["'self'", 'blob:'];

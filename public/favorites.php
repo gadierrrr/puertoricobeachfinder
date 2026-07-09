@@ -49,6 +49,8 @@ $breadcrumbs = [
     ['name' => __('profile.favorites')]
 ];
 
+$redesignLayout = useRedesign();
+$bodyClasses = trim(($bodyClasses ?? '') . ' rd-account');
 include APP_ROOT . '/components/header.php';
 ?>
 
@@ -57,7 +59,7 @@ include APP_ROOT . '/components/header.php';
     <div class="mb-6">
         <?php include APP_ROOT . '/components/breadcrumbs.php'; ?>
     </div>
-    <div class="flex items-center justify-between mb-8">
+    <div class="flex items-center justify-between mb-8 managed-page-hero page-heading-hero"<?= pageHeroAttributes('account') ?>>
         <div>
             <h1 class="text-3xl font-bold text-gray-900"><?= h(__('favorites_page.title')) ?></h1>
             <p class="text-gray-600 mt-1">

@@ -187,7 +187,7 @@ async function toggleStickyFavorite() {
 
         <!-- Image container -->
         <div class="lightbox-content">
-            <img id="lightbox-image" src="" alt="" class="lightbox-image">
+            <img id="lightbox-image" alt="" class="lightbox-image">
             <div id="lightbox-counter" class="lightbox-counter"></div>
         </div>
 
@@ -320,12 +320,12 @@ function handleSwipe() {
                 </label>
                 <textarea name="details" id="report-details" rows="3" maxlength="500"
                           placeholder="<?= h(__('beach.report_placeholder')) ?>"
-                          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none text-sm"></textarea>
+                          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-500 focus:border-ocean-500 resize-none text-sm"></textarea>
             </div>
 
             <div class="flex gap-3 pt-2">
                 <button type="submit" id="report-submit-btn"
-                        class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-medium transition-colors text-sm">
+                        class="flex-1 bg-ocean-600 hover:bg-ocean-700 text-white py-2.5 rounded-lg font-medium transition-colors text-sm">
                     <?= __('beach.report_submit') ?>
                 </button>
                 <button type="button" data-action="closeReportModal"
@@ -384,7 +384,7 @@ async function submitReport(event) {
     // For now, just show success (you can implement the API endpoint later)
     setTimeout(() => {
         messageDiv.textContent = '<?= __('beach.report_success') ?>';
-        messageDiv.className = 'bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-lg';
+        messageDiv.className = 'bg-ocean-50 border border-ocean-200 text-palm-700 text-sm px-4 py-3 rounded-lg';
         messageDiv.classList.remove('hidden');
 
         // Show toast and close after delay
@@ -412,7 +412,7 @@ document.addEventListener('keydown', (e) => {
     <div class="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto" data-action-stop data-action="noop" data-on="click">
         <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
             <h2 id="checkin-modal-title" class="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                <i data-lucide="map-pin" class="w-5 h-5 text-green-600" aria-hidden="true"></i>
+                <i data-lucide="map-pin" class="w-5 h-5 text-palm-600" aria-hidden="true"></i>
                 <span><?= __('beach.checkin_modal_title') ?></span>
             </h2>
             <button data-action="closeCheckinModal" class="text-gray-400 hover:text-gray-600 p-1" aria-label="Close">
@@ -583,12 +583,12 @@ document.addEventListener('keydown', (e) => {
                 </label>
                 <textarea name="notes" id="checkin-notes" rows="2" maxlength="280"
                           placeholder="<?= h(__('beach.checkin_notes_placeholder')) ?>"
-                          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 resize-none text-sm"></textarea>
+                          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-500 focus:border-ocean-500 resize-none text-sm"></textarea>
             </div>
 
             <div class="flex gap-3 pt-2">
                 <button type="submit" id="checkin-submit-btn"
-                        class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2.5 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+                        class="flex-1 bg-palm-600 hover:bg-palm-700 text-white py-2.5 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
                     <i data-lucide="check" class="w-4 h-4"></i>
                     <span><?= __('beach.checkin_submit') ?></span>
                 </button>
@@ -667,7 +667,7 @@ async function submitCheckin(event) {
 
         if (data.success) {
             messageDiv.textContent = data.message || '<?= __('beach.checkin_success') ?>';
-            messageDiv.className = 'bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-lg';
+            messageDiv.className = 'bg-ocean-50 border border-ocean-200 text-palm-700 text-sm px-4 py-3 rounded-lg';
             messageDiv.classList.remove('hidden');
 
             if (typeof showToast === 'function') {
@@ -810,7 +810,7 @@ document.addEventListener('keydown', (e) => {
                 </label>
                 <input type="text" name="title" id="review-title" maxlength="100"
                        placeholder="<?= h(__('beach.review_title_placeholder')) ?>"
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-500 focus:border-ocean-500">
             </div>
 
             <!-- Review Text -->
@@ -820,19 +820,19 @@ document.addEventListener('keydown', (e) => {
                 </label>
                 <textarea name="review_text" id="review-text" rows="4" minlength="20" maxlength="5000" required
                           placeholder="<?= h(__('beach.review_body_placeholder')) ?>"
-                          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"></textarea>
+                          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-500 focus:border-ocean-500 resize-none"></textarea>
                 <p class="text-xs text-gray-400 mt-1"><?= __('beach.review_min_chars') ?></p>
             </div>
 
             <!-- Pros/Cons -->
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label for="review-pros" class="block text-sm font-medium text-green-700 mb-1">
+                    <label for="review-pros" class="block text-sm font-medium text-palm-700 mb-1">
                         <?= __('reviews.pros') ?> <span class="text-gray-400"><?= __('beach.optional') ?></span>
                     </label>
                     <textarea name="pros" id="review-pros" rows="2" maxlength="500"
                               placeholder="<?= h(__('reviews.pros_placeholder')) ?>"
-                              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 resize-none text-sm"></textarea>
+                              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-500 focus:border-ocean-500 resize-none text-sm"></textarea>
                 </div>
                 <div>
                     <label for="review-cons" class="block text-sm font-medium text-red-700 mb-1">
@@ -851,14 +851,14 @@ document.addEventListener('keydown', (e) => {
                         <?= __('beach.review_when_visit') ?>
                     </label>
                     <input type="month" name="visit_date" id="review-visit-date"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-500 focus:border-ocean-500">
                 </div>
                 <div>
                     <label for="review-visited-with" class="block text-sm font-medium text-gray-700 mb-1">
                         <?= __('beach.review_who_with') ?>
                     </label>
                     <select name="visited_with" id="review-visited-with"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-500 focus:border-ocean-500">
                         <option value=""><?= __('beach.review_select') ?></option>
                         <option value="solo"><?= __('beach.review_solo') ?></option>
                         <option value="partner"><?= __('beach.review_partner') ?></option>
@@ -874,7 +874,7 @@ document.addEventListener('keydown', (e) => {
                 <label class="block text-sm font-medium text-gray-700 mb-2">
                     <?= __('beach.review_add_photos') ?> <span class="text-gray-400"><?= __('beach.optional') ?></span>
                 </label>
-                <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors">
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-ocean-400 transition-colors">
                     <input type="file" name="photos[]" id="review-photos" accept="image/jpeg,image/png,image/webp" multiple
                            class="hidden" data-action="previewPhotos" data-action-args='["__this__"]' data-on="change">
                     <label for="review-photos" class="cursor-pointer">
@@ -888,7 +888,7 @@ document.addEventListener('keydown', (e) => {
 
             <div class="flex gap-3 pt-2">
                 <button type="submit" id="review-submit-btn"
-                        class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-medium transition-colors">
+                        class="flex-1 bg-ocean-600 hover:bg-ocean-700 text-white py-2.5 rounded-lg font-medium transition-colors">
                     <?= __('beach.review_submit') ?>
                 </button>
                 <button type="button" data-action="closeReviewModal"
@@ -932,7 +932,7 @@ document.addEventListener('keydown', (e) => {
                     </label>
                 </div>
                 <div id="upload-preview" class="mt-3 hidden">
-                    <img id="upload-preview-img" src="" alt="Preview" class="max-h-48 mx-auto rounded-lg">
+                    <img id="upload-preview-img" alt="Preview" class="max-h-48 mx-auto rounded-lg">
                 </div>
             </div>
 
@@ -968,7 +968,7 @@ document.addEventListener('keydown', (e) => {
         <i data-lucide="x" class="w-8 h-8"></i>
     </button>
     <div class="max-w-5xl max-h-[90vh] p-4" data-action-stop data-action="noop" data-on="click">
-        <img id="photo-lightbox-img" src="" alt="" class="max-w-full max-h-[85vh] object-contain rounded-lg">
+        <img id="photo-lightbox-img" alt="" class="max-w-full max-h-[85vh] object-contain rounded-lg">
         <p id="photo-lightbox-caption" class="text-white/80 text-center mt-3 text-sm"></p>
     </div>
 </div>
@@ -1067,7 +1067,7 @@ async function submitReview(event) {
 
         if (data.success) {
             messageDiv.textContent = data.message || 'Review submitted!';
-            messageDiv.className = 'bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-lg';
+            messageDiv.className = 'bg-ocean-50 border border-ocean-200 text-palm-700 text-sm px-4 py-3 rounded-lg';
             messageDiv.classList.remove('hidden');
 
             if (typeof showToast === 'function') {
@@ -1153,7 +1153,7 @@ async function submitPhotoUpload(event) {
 
         if (data.success) {
             messageDiv.textContent = data.message || 'Photo uploaded!';
-            messageDiv.className = 'bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-lg';
+            messageDiv.className = 'bg-ocean-50 border border-ocean-200 text-palm-700 text-sm px-4 py-3 rounded-lg';
             messageDiv.classList.remove('hidden');
 
             if (typeof showToast === 'function') {
@@ -1228,11 +1228,11 @@ async function voteReview(reviewId, btn) {
             btn.dataset.voted = isVoted ? 'false' : 'true';
 
             if (isVoted) {
-                btn.classList.remove('text-blue-600');
+                btn.classList.remove('text-ocean-600');
                 btn.classList.add('text-gray-500');
             } else {
                 btn.classList.remove('text-gray-500');
-                btn.classList.add('text-blue-600');
+                btn.classList.add('text-ocean-600');
             }
 
             // Update count

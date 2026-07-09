@@ -28,7 +28,7 @@ if ($pageKey !== '' && function_exists('__')) {
     }
 }
 ?>
-<section class="collection-hero">
+<section class="collection-hero managed-page-hero"<?= pageHeroAttributes('listings') ?>>
     <div class="collection-hero__inner">
         <h1 class="collection-hero__title"><?= h($heroTitle) ?></h1>
         <p class="collection-hero__subtitle"><?= h($heroSubtitle) ?></p>

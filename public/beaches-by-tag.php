@@ -524,9 +524,6 @@ if (isAuthenticated()) {
     $userFavorites = array_column($favorites, 'beach_id');
 }
 
-$bodyVariant = 'collection-light';
-include APP_ROOT . '/components/header.php';
-
 // Calculate stats for hero
 $ratedBeaches = array_filter($beaches, fn($b) => !empty($b['google_rating']));
 $avgRating = !empty($ratedBeaches) ? array_sum(array_column($ratedBeaches, 'google_rating')) / count($ratedBeaches) : 0;
@@ -549,6 +546,61 @@ foreach ($beaches as $beach) {
 }
 arsort($munCounts);
 $topMunicipalities = array_slice($munCounts, 0, 6, true);
+
+$bodyVariant = 'collection-dark';
+$redesignLayout = useRedesign();
+include APP_ROOT . '/components/header.php';
+
+if ($redesignLayout) {
+    $isEs = $lang === 'es';
+    // Classic tag-distribution chips are non-linked spans — keep that (null url).
+    $rdTagLinks = [];
+    foreach ($topTags as $tag => $count) {
+        if ($tag === $config['tag']) continue;
+        $rdTagLinks[] = [ucwords(str_replace('-', ' ', $tag)), null, $count];
+    }
+    $rdMunicipalities = [];
+    foreach ($topMunicipalities as $mun => $count) {
+        $rdMunicipalities[] = [$mun, routeUrl('municipality', $lang, ['municipality' => strtolower(str_replace(' ', '-', $mun))]), $count];
+    }
+    $rdAnchors = [
+        [$isEs ? 'Todas las Playas' : 'All Beaches', '#beaches'],
+        [$isEs ? 'Por Municipio' : 'By Municipality', '#by-municipality'],
+    ];
+    if (!empty($tagFaqs)) {
+        $rdAnchors[] = ['FAQ', '#faq'];
+    }
+    $rdStats = [[(string) $beachCount, $isEs ? 'playas' : 'beaches']];
+    if ($avgRating > 0) {
+        $rdStats[] = ['★ ' . number_format($avgRating, 1), $isEs ? 'promedio' : 'avg rating'];
+    }
+    $rdStats[] = [(string) count($munCounts), $isEs ? 'municipios' : 'municipalities'];
+    $rdCrumbLabel = $config['type'] === 'amenity' ? getAmenityLabel($config['tag']) : getTagLabel($config['tag']);
+    $listing = [
+        'breadcrumbs' => [
+            [$isEs ? 'Inicio' : 'Home', routeUrl('home', $lang)],
+            [$isEs ? 'Playas' : 'Beaches', routeUrl('home', $lang) . '#beaches'],
+            [$rdCrumbLabel, null],
+        ],
+        'eyebrow' => $config['type'] === 'amenity'
+            ? ($isEs ? 'Playas por servicio' : 'Beaches by amenity')
+            : ($isEs ? 'Playas por actividad' : 'Beaches by activity'),
+        'h1' => $tagData['h1'],
+        'intro' => [$tagData['intro']],
+        'stats' => $rdStats,
+        'anchors' => $rdAnchors,
+        'tagLinks' => $rdTagLinks,
+        'beachesHeading' => $isEs ? 'Todas las Playas' : 'All ' . $beachCount . ' Beaches',
+        'beachesSub' => $isEs ? 'Ordenadas por calificación' : 'Sorted by rating',
+        'beaches' => $beaches,
+        'municipalities' => $rdMunicipalities,
+        'faqs' => array_map(fn($f) => [$f['q'], $f['a']], $tagFaqs),
+        'quizCta' => true,
+    ];
+    include APP_ROOT . '/templates/redesign/listing.php';
+    include APP_ROOT . '/components/footer.php';
+    return;
+}
 ?>
 
 <!-- Hero Section -->
@@ -606,7 +658,8 @@ $beachIdx++; ?>
             <a href="<?= h(routeUrl('beach_detail', $lang, ['slug' => $beach['slug']])) ?>"
                class="group bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                 <div class="aspect-[4/3] overflow-hidden">
-                    <img src="<?= h($beach['cover_image']) ?>"
+                    <img src="<?= h(getBeachImageUrl($beach, 'medium')) ?>"
+                         data-fallback-src="/images/beaches/placeholder-beach.webp"
                          alt="<?= h($beach['name']) ?>"
                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                          loading="<?= $beachIdx <= 6 ? "eager" : "lazy" ?>" width="400" height="300">
@@ -640,7 +693,8 @@ $beachIdx++; ?>
                 <?php foreach (array_slice($beaches, 30) as $beach): ?>
                 <a href="<?= h(routeUrl('beach_detail', $lang, ['slug' => $beach['slug']])) ?>"
                    class="flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
-                    <img src="<?= h($beach['cover_image']) ?>"
+                    <img src="<?= h(getBeachImageUrl($beach, 'thumb')) ?>"
+                         data-fallback-src="/images/beaches/placeholder-beach.webp"
                          alt="<?= h($beach['name']) ?>"
                          class="w-16 h-16 object-cover rounded-lg flex-shrink-0"
                          loading="lazy" width="64" height="64">

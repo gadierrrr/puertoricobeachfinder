@@ -178,7 +178,8 @@ $extraHead .= <<<BREADCRUMB
 </script>
 BREADCRUMB;
 
-$bodyVariant = 'collection-light';
+$bodyVariant = 'collection-dark';
+$redesignLayout = useRedesign();
 include APP_ROOT . '/components/header.php';
 ?>
 <?php include APP_ROOT . '/components/collection/explorer.php'; ?>

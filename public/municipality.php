@@ -135,11 +135,111 @@ $extraHead .= breadcrumbSchema([
     ['name' => $municipality, 'url' => routeUrl('municipality', $lang, ['municipality' => $municipalitySlug])]
 ]);
 
+$redesignLayout = useRedesign();
 include APP_ROOT . '/components/header.php';
+
+if ($redesignLayout) {
+    require_once APP_ROOT . '/inc/island_chart.php';
+    $isEs = $lang === 'es';
+
+    // Region eyebrow (same mapping as the redesign beach template)
+    $rdRegion = islandRegionForMunicipality($municipality);
+    $rdRegionLabel = [
+        'metro' => 'Metro · San Juan', 'north' => $isEs ? 'Costa Norte' : 'North Coast', 'west' => 'Porta del Sol',
+        'south' => $isEs ? 'Costa Sur' : 'South Coast', 'east' => $isEs ? 'Este · Fajardo' : 'East · Fajardo', 'cays' => $isEs ? 'Los Cayos' : 'The Cays',
+    ][$rdRegion] ?? ($isEs ? 'Municipio' : 'Municipality');
+
+    // Intro paragraphs — same i18n strings/values as classic, with the
+    // top-3 beach links rebuilt for the .rd prose styles (pre-escaped).
+    $rdIntroHtml = [h(__('pages.municipality.intro_p1', ['municipality' => $municipality, 'count' => $beachCount]))];
+    if (!empty($topBeaches)) {
+        $rdBeachNames = [];
+        foreach (array_slice($topBeaches, 0, 3) as $tb) {
+            $rdBeachNames[] = '<a href="' . h(routeUrl('beach_detail', $lang, ['slug' => $tb['slug']])) . '">' . h($tb['name']) . '</a>';
+        }
+        $rdIntroHtml[] = __('pages.municipality.intro_popular', ['beaches' => implode(', ', $rdBeachNames)]);
+    }
+
+    // Top-5 tag quick-links → homepage filter URLs (same hrefs as classic)
+    $rdTagLinks = [];
+    foreach ($topTags as $tag) {
+        $rdTagLinks[] = [getTagLabel($tag), '/?municipality=' . urlencode($municipality) . '&tags[]=' . $tag . '#beaches', $tagCounts[$tag]];
+    }
+
+    // 5 nearest municipalities with beach counts (same query as classic)
+    $rdNearby = query("
+        SELECT m.municipality, COUNT(*) as beach_count,
+               AVG(m.lat) as avg_lat, AVG(m.lng) as avg_lng
+        FROM beaches m
+        WHERE m.publish_status = 'published'
+          AND m.municipality <> :municipality
+          AND m.lat IS NOT NULL
+        GROUP BY m.municipality
+        HAVING beach_count > 0
+        ORDER BY (
+            (AVG(m.lat) - :center_lat) * (AVG(m.lat) - :center_lat) +
+            (AVG(m.lng) - :center_lng) * (AVG(m.lng) - :center_lng)
+        ) ASC
+        LIMIT 5
+    ", [
+        ':municipality' => $municipality,
+        ':center_lat' => $beaches[0]['lat'] ?? 18.2,
+        ':center_lng' => $beaches[0]['lng'] ?? -66.5,
+    ]);
+    $rdSiblings = [];
+    foreach ($rdNearby as $nm) {
+        $nmSlug = strtolower(str_replace(' ', '-', $nm['municipality']));
+        $rdSiblings[] = [$nm['municipality'], routeUrl('municipality', $lang, ['municipality' => $nmSlug]), $nm['beach_count'] . ' ' . ($isEs ? 'playas' : 'beaches')];
+    }
+
+    // Send-list email capture (shared component, renders standalone)
+    ob_start();
+    $contextType = 'municipality';
+    $contextKey = (string) $municipalitySlug;
+    $filtersQuery = '';
+    $title = __('pages.municipality.send_title');
+    $subtitle = __('pages.municipality.send_subtitle', ['municipality' => $municipality]);
+    include APP_ROOT . '/components/send-list-capture.php';
+    $rdExtraHtml = ob_get_clean();
+
+    $rdStats = [[(string) $beachCount, $isEs ? 'playas' : 'beaches']];
+    if ($avgRating > 0) {
+        $rdStats[] = ['★ ' . number_format($avgRating, 1), __('pages.municipality.avg_rating')];
+    }
+    if (!empty($topTags)) {
+        $rdStats[] = [getTagLabel($topTags[0]) . ', ' . getTagLabel($topTags[1] ?? $topTags[0]), __('pages.municipality.and_more')];
+    }
+
+    $listing = [
+        'breadcrumbs' => [
+            [__('nav.home'), routeUrl('home', $lang)],
+            [__('nav.beaches'), routeUrl('home', $lang) . '#beaches'],
+            [$municipality, null],
+        ],
+        'eyebrow' => $rdRegionLabel,
+        'h1' => __('pages.municipality.hero_title', ['municipality' => $municipality]),
+        'intro' => [__('pages.municipality.hero_subtitle', ['municipality' => $municipality, 'count' => $beachCount])],
+        'stats' => $rdStats,
+        'extraHtml' => $rdExtraHtml,
+        'tagLinks' => $rdTagLinks,
+        'tagLinksLabel' => __('pages.municipality.popular'),
+        'introHtml' => $rdIntroHtml,
+        'beachesHeading' => $isEs ? 'Todas las Playas' : 'All ' . $beachCount . ' Beaches',
+        'beachesSub' => $isEs ? 'Ordenadas por calificación' : 'Sorted by rating',
+        'beaches' => $beaches,
+        'faqs' => array_map(fn($f) => [$f['question'], $f['answer']], $pageFaqs),
+        'faqHeading' => __('pages.municipality.faq_title'),
+        'siblings' => $rdSiblings,
+        'siblingsHeading' => $isEs ? 'Áreas Cercanas' : 'Nearby Areas',
+    ];
+    include APP_ROOT . '/templates/redesign/listing.php';
+    include APP_ROOT . '/components/footer.php';
+    return;
+}
 ?>
 
 <!-- Hero Section -->
-<section class="hero-gradient-dark text-white py-12 md:py-16">
+<section class="hero-gradient-dark managed-page-hero text-white py-12 md:py-16"<?= pageHeroAttributes('listings') ?>>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Breadcrumbs -->
         <nav class="text-white/70 text-sm mb-4" aria-label="Breadcrumb">
@@ -237,12 +337,13 @@ include APP_ROOT . '/components/header.php';
         <!-- Beach Grid -->
         <div id="beach-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <?php
+            $favoriteBeachIds = [];
+            if (isAuthenticated()) {
+                $userFavorites = query('SELECT beach_id FROM user_favorites WHERE user_id = :user_id', [':user_id' => $_SESSION['user_id']]);
+                $favoriteBeachIds = array_column($userFavorites, 'beach_id');
+            }
             foreach ($beaches as $beach):
-                $isFavorite = false;
-                if (isAuthenticated()) {
-                    $userFavorites = query('SELECT beach_id FROM user_favorites WHERE user_id = :user_id', [':user_id' => $_SESSION['user_id']]);
-                    $isFavorite = in_array($beach['id'], array_column($userFavorites, 'beach_id'));
-                }
+                $isFavorite = in_array($beach['id'], $favoriteBeachIds);
                 include APP_ROOT . '/components/beach-card.php';
             endforeach;
             ?>

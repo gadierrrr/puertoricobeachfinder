@@ -45,9 +45,11 @@ $ok = (($_GET['ok'] ?? '') === '1');
 $pageTitle = 'Unsubscribe';
 $skipMapCSS = true;
 $robotsOverride = 'noindex, nofollow';
+$redesignLayout = useRedesign();
+$bodyClasses = trim(($bodyClasses ?? '') . ' rd-legal');
 include APP_ROOT . '/components/header.php';
 ?>
-<div class="max-w-md mx-auto px-4 py-20 text-center">
+<div class="max-w-md mx-auto px-4 py-20 text-center managed-page-hero page-heading-hero"<?= pageHeroAttributes('legal') ?>>
     <?php if ($ok): ?>
     <div class="text-6xl mb-4">✅</div>
     <h1 class="text-2xl font-bold text-warm-900 mb-2">You're unsubscribed</h1>

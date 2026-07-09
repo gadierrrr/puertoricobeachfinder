@@ -14,6 +14,7 @@ require_once __DIR__ . '/../inc/helpers.php';
 require_once __DIR__ . '/../inc/i18n.php';
 require_once __DIR__ . '/../inc/locale_routes.php';
 require_once __DIR__ . '/../inc/invite.php';
+require_once __DIR__ . '/../inc/page_heroes.php';
 
 // Capture an invite (?ref=CODE) into a cookie before any output, on EVERY page
 // (referral loop). No-op without ?ref; skips signed-in users. Lives here — not just
@@ -28,6 +29,7 @@ $allowedBodyVariants = ['default', 'collection-light', 'collection-dark'];
 $requestedBodyVariant = isset($bodyVariant) ? (string) $bodyVariant : 'default';
 $bodyVariant = in_array($requestedBodyVariant, $allowedBodyVariants, true) ? $requestedBodyVariant : 'default';
 $bodyClasses = trim(($bodyClasses ?? '') . ' min-h-screen flex flex-col font-sans');
+$rdBodyStyle = '';
 if ($bodyVariant === 'collection-light') {
     $bodyClasses .= ' collection-light bg-sand-50 text-warm-900';
     $htmlTheme = 'light';
@@ -286,7 +288,7 @@ if ($bodyVariant === 'collection-light') {
 
     <!-- Preload critical CSS -->
     <link rel="preload" href="/assets/css/tailwind.min.css?v=3.9" as="style">
-    <link rel="preload" href="/assets/css/styles.css?v=4.7" as="style">
+    <link rel="preload" href="/assets/css/styles.css?v=4.9" as="style">
 
     <!-- DM Sans + DM Serif Display Fonts - loaded asynchronously to avoid render blocking -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" as="style" data-lazy-style>
@@ -317,12 +319,27 @@ if ($bodyVariant === 'collection-light') {
     <script src="/assets/js/csp-bindings.js" <?= cspNonceAttr() ?>></script>
 
     <!-- Custom styles -->
-    <link rel="stylesheet" href="/assets/css/styles.css?v=4.7">
+    <link rel="stylesheet" href="/assets/css/styles.css?v=5.0">
 
-    <?php if (function_exists('useRedesign') && useRedesign()): ?>
-    <!-- Redesign v2 (tropical) fonts + standalone stylesheet -->
-    <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Saira+Semi+Condensed:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=Kaushan+Script&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/redesign.css?v=2">
+    <?php if (!empty($redesignLayout)): ?>
+    <!-- Redesign v2 (tropical) fonts + standalone stylesheet.
+         Gated on $redesignLayout (set by pages that render a redesign
+         template), NOT on useRedesign(), so classic-markup pages never pay
+         for fonts/CSS they don't use while the flag is on. -->
+    <?php
+    // Display font comes from the admin homepage-design settings; the editor
+    // preview (?rdedit=1, admins only) loads every picker face so switching
+    // is instant.
+    require_once APP_ROOT . '/inc/settings.php';
+    require_once APP_ROOT . '/inc/homepage_fonts.php';
+    require_once APP_ROOT . '/inc/admin.php';
+    $rdDesign = getHomepageDesign();
+    $rdEditorMode = isset($_GET['rdedit']) && $_GET['rdedit'] === '1' && isAdmin();
+    $rdFont = homepageFont($rdDesign['font']);
+    $rdBodyStyle = '--disp:' . $rdFont['stack'] . ';--rd-heading-weight:' . (int) $rdFont['weight'];
+    ?>
+    <link href="<?= h(redesignFontsUrl($rdDesign['font'], $rdEditorMode)) ?>" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/redesign.css?v=59">
     <?php endif; ?>
 
     <!-- Deferred scripts (non-blocking) -->
@@ -334,9 +351,11 @@ if ($bodyVariant === 'collection-light') {
 
     <?php if (isset($extraHead)) echo $extraHead; ?>
 </head>
-<body class="<?= h($bodyClasses) ?><?= (!empty($redesignLayout)) ? ' redesign' : '' ?>">
+<body class="<?= h($bodyClasses) ?><?= (!empty($redesignLayout)) ? ' redesign' : '' ?>"<?= $rdBodyStyle !== '' ? ' style="' . h($rdBodyStyle) . '"' : '' ?>>
     <?php if (empty($redesignLayout)): ?>
     <?php include __DIR__ . '/nav.php'; ?>
+    <?php else: ?>
+    <?php include __DIR__ . '/redesign/nav.php'; ?>
     <?php endif; ?>
 
     <!-- Main Content -->

@@ -30,7 +30,7 @@ $description = $beach['description'] ?? '';
 if ($lang === 'es' && !empty($beach['description_es'])) {
     $description = $beach['description_es'];
 }
-$coverImage = $beach['cover_image'] ?? '';
+$coverImage = getBeachImageUrl($beach, 'medium');
 $accessLabel = getAccessLabelTranslated($beach['access_label'] ?? '');
 $notes = ($lang === 'es' && !empty($beach['notes_es'])) ? $beach['notes_es'] : ($beach['notes'] ?? '');
 $sargassum = $beach['sargassum'] ?? null;
@@ -88,7 +88,7 @@ $beachUrl = routeUrl('beach_detail', $lang, ['slug' => $beach['slug'] ?? '']);
         <?php if ($webpImage['webp']): ?>
         <source srcset="<?= h($webpImage['webp']) ?>" type="image/webp">
         <?php endif; ?>
-        <img src="<?= h($coverImage) ?>" alt="<?= h($name) ?>" class="w-full h-full object-cover">
+        <img src="<?= h($coverImage) ?>" data-fallback-src="/images/beaches/placeholder-beach.webp" alt="<?= h($name) ?>" class="w-full h-full object-cover">
     </picture>
     <?php else: ?>
     <div class="w-full h-full bg-gradient-to-br from-ocean-800 to-ocean-900 flex items-center justify-center">

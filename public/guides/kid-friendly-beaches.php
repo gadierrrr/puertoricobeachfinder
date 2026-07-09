@@ -99,6 +99,7 @@ $extraHead .= breadcrumbSchema([
 ]);
 
 $pageTheme = "guide";
+$redesignLayout = useRedesign();
 $pageShellMode = "start";
 include APP_ROOT . "/components/page-shell.php";
 ?>
@@ -135,11 +136,11 @@ include APP_ROOT . '/components/hero-guide.php';
 
 <h2 id="quick-picks" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Quick Picks by Use Case</h2>
 <div class="grid md:grid-cols-2 gap-4 mb-8">
-<div class="border-l-4 border-green-400 p-4 rounded-r-lg" style="background:rgba(15,23,42,0.55)">
+<div class="border-l-4 border-palm-400 p-4 rounded-r-lg" style="background:rgba(15,23,42,0.55)">
 <p class="font-bold text-white mb-1">Best All-Around Family Beach</p>
 <p class="text-gray-300 text-sm"><?php if (isset($gb['luquillo'])): ?><a href="/beach/<?= h($gb['luquillo']['slug']) ?>" class="text-yellow-300 underline hover:no-underline"><?= h($gb['luquillo']['name']) ?></a><?php else: ?>Luquillo Beach<?php endif; ?> — facilities, food, parking, and generally calm conditions.</p>
 </div>
-<div class="border-l-4 border-blue-400 p-4 rounded-r-lg" style="background:rgba(15,23,42,0.55)">
+<div class="border-l-4 border-ocean-400 p-4 rounded-r-lg" style="background:rgba(15,23,42,0.55)">
 <p class="font-bold text-white mb-1">Best Near San Juan</p>
 <p class="text-gray-300 text-sm"><?php if (isset($gb['carolina'])): ?><a href="/beach/<?= h($gb['carolina']['slug']) ?>" class="text-yellow-300 underline hover:no-underline"><?= h($gb['carolina']['name']) ?></a><?php else: ?>Balneario de Carolina<?php endif; ?> — maintained beach close to hotels without a long drive.</p>
 </div>
@@ -155,7 +156,7 @@ include APP_ROOT . '/components/hero-guide.php';
 <p class="font-bold text-white mb-1">Best Natural Rock Pool</p>
 <p class="text-gray-300 text-sm"><?php if (isset($gb['puerto-nuevo'])): ?><a href="/beach/<?= h($gb['puerto-nuevo']['slug']) ?>" class="text-yellow-300 underline hover:no-underline"><?= h($gb['puerto-nuevo']['name']) ?></a><?php else: ?>Playa Puerto Nuevo<?php endif; ?> — protected natural pool with calm water on one side.</p>
 </div>
-<div class="border-l-4 border-teal-400 p-4 rounded-r-lg" style="background:rgba(15,23,42,0.55)">
+<div class="border-l-4 border-ocean-400 p-4 rounded-r-lg" style="background:rgba(15,23,42,0.55)">
 <p class="font-bold text-white mb-1">Best Scenic Excursion</p>
 <p class="text-gray-300 text-sm"><?php if (isset($gb['flamenco'])): ?><a href="/beach/<?= h($gb['flamenco']['slug']) ?>" class="text-yellow-300 underline hover:no-underline"><?= h($gb['flamenco']['name']) ?></a><?php else: ?>Flamenco Beach<?php endif; ?> — worth the ferry for one of the Caribbean's most striking beaches.</p>
 </div>
@@ -168,7 +169,7 @@ include APP_ROOT . '/components/hero-guide.php';
 <p class="text-sm text-gray-500 mb-4">Luquillo · ~45 min from San Juan</p>
 <p class="mb-4">Luquillo is the beach most frequently recommended to families, and the recommendation holds up. The crescent of sand lined with coconut palms provides natural shade in spots. The famous kioskos (food stalls) just outside the beach area mean you do not need to pack every meal. Water conditions along the main balneario section are generally approachable under typical conditions.</p>
 <div class="grid md:grid-cols-2 gap-4 mb-6">
-<div><p class="font-bold text-green-400 mb-2">Pros</p>
+<div><p class="font-bold text-palm-400 mb-2">Pros</p>
 <ul class="list-disc list-inside space-y-1 text-gray-700 text-sm"><li>Maintained bathrooms and showers</li><li>Nearby kioskos for food and drinks</li><li>Parking on site (fee may apply)</li><li>Natural shade from palm trees along the tree line</li><li>Calm water under typical conditions</li></ul></div>
 <div><p class="font-bold text-red-400 mb-2">Cons</p>
 <ul class="list-disc list-inside space-y-1 text-gray-700 text-sm"><li>Gets busy on weekends and holidays</li><li>Not always calm — check conditions before going</li><li>Shade is uneven; bring your own if sitting farther from the tree line</li></ul></div>
@@ -180,7 +181,7 @@ include APP_ROOT . '/components/hero-guide.php';
 <p class="text-sm text-gray-500 mb-4">Carolina · Just east of Isla Verde</p>
 <p class="mb-4">Balneario de Carolina sits just east of Isla Verde, making it one of the most accessible options for families staying in the San Juan metro area. A long stretch of sand with maintained facilities across multiple sections, including restrooms, lifeguards, and fenced parking.</p>
 <div class="grid md:grid-cols-2 gap-4 mb-6">
-<div><p class="font-bold text-green-400 mb-2">Pros</p>
+<div><p class="font-bold text-palm-400 mb-2">Pros</p>
 <ul class="list-disc list-inside space-y-1 text-gray-700 text-sm"><li>Close to San Juan hotels (Isla Verde and Carolina)</li><li>Restrooms, showers, and lifeguards during operating hours</li><li>Long beach stretch with room to spread out</li></ul></div>
 <div><p class="font-bold text-red-400 mb-2">Cons</p>
 <ul class="list-disc list-inside space-y-1 text-gray-700 text-sm"><li>Water conditions vary — surf can be stronger than Luquillo</li><li>Less natural shade; bring your own canopy</li></ul></div>
@@ -192,7 +193,7 @@ include APP_ROOT . '/components/hero-guide.php';
 <p class="text-sm text-gray-500 mb-4">San Juan · Puerta de Tierra, near Old San Juan</p>
 <p class="mb-4">A smaller, crescent-shaped beach in San Juan with a coral reef offshore that buffers wave energy. The water is often calmer than other nearby beaches. Free parking, restrooms, security, and Blue Flag beach status. Walking distance from Condado and Old San Juan — convenient for families without a car.</p>
 <div class="grid md:grid-cols-2 gap-4 mb-6">
-<div><p class="font-bold text-green-400 mb-2">Pros</p>
+<div><p class="font-bold text-palm-400 mb-2">Pros</p>
 <ul class="list-disc list-inside space-y-1 text-gray-700 text-sm"><li>Reef-buffered water — generally calmer than open-coast beaches</li><li>Free parking and restrooms</li><li>Walking distance from Condado and Old San Juan</li><li>Snorkeling for older kids along the reef</li></ul></div>
 <div><p class="font-bold text-red-400 mb-2">Cons</p>
 <ul class="list-disc list-inside space-y-1 text-gray-700 text-sm"><li>Smaller beach — can feel crowded on popular days</li><li>Urban setting, less "tropical escape" feel</li><li>Limited natural shade</li></ul></div>
@@ -204,7 +205,7 @@ include APP_ROOT . '/components/hero-guide.php';
 <p class="text-sm text-gray-500 mb-4">Cabo Rojo · Southwest coast</p>
 <p class="mb-4">A balneario on Puerto Rico's west coast with a reputation for easier parking, maintained facilities, and typically calmer bay water. The town of Boquerón is within walking distance, adding food options without requiring a car trip.</p>
 <div class="grid md:grid-cols-2 gap-4 mb-6">
-<div><p class="font-bold text-green-400 mb-2">Pros</p>
+<div><p class="font-bold text-palm-400 mb-2">Pros</p>
 <ul class="list-disc list-inside space-y-1 text-gray-700 text-sm"><li>Bathrooms, showers, and parking at the balneario</li><li>Walkable town nearby with restaurants and shops</li><li>Generally calmer water along the bay</li></ul></div>
 <div><p class="font-bold text-red-400 mb-2">Cons</p>
 <ul class="list-disc list-inside space-y-1 text-gray-700 text-sm"><li>Far from San Juan (~2.5-hour drive)</li><li>Can get busy on weekends with local families</li></ul></div>
@@ -216,7 +217,7 @@ include APP_ROOT . '/components/hero-guide.php';
 <p class="text-sm text-gray-500 mb-4">Vieques · Within the National Wildlife Refuge</p>
 <p class="mb-4">Also called Red Beach, Playa Caracas is located within the Vieques National Wildlife Refuge. The sheltered bay typically offers gentler conditions than open-coast beaches, in a scenic, uncrowded setting compared to mainland balnearios.</p>
 <div class="grid md:grid-cols-2 gap-4 mb-6">
-<div><p class="font-bold text-green-400 mb-2">Pros</p>
+<div><p class="font-bold text-palm-400 mb-2">Pros</p>
 <ul class="list-disc list-inside space-y-1 text-gray-700 text-sm"><li>Generally calm water in a sheltered bay</li><li>Scenic, uncrowded setting</li><li>Basic facilities including portable restrooms</li></ul></div>
 <div><p class="font-bold text-red-400 mb-2">Cons</p>
 <ul class="list-disc list-inside space-y-1 text-gray-700 text-sm"><li>Requires travel to Vieques by ferry or small plane</li><li>Fewer facilities than mainland balnearios</li><li>Limited shade and no food access — pack everything</li></ul></div>
@@ -228,7 +229,7 @@ include APP_ROOT . '/components/hero-guide.php';
 <p class="text-sm text-gray-500 mb-4">Cabo Rojo · Near the salt flats</p>
 <p class="mb-4">Another west coast option near Cabo Rojo with a reputation for calmer, shallower water along parts of its stretch. More relaxed atmosphere than busier balnearios, with small restaurants along the road for food access. Pairs well with a visit to the Cabo Rojo salt flats.</p>
 <div class="grid md:grid-cols-2 gap-4 mb-6">
-<div><p class="font-bold text-green-400 mb-2">Pros</p>
+<div><p class="font-bold text-palm-400 mb-2">Pros</p>
 <ul class="list-disc list-inside space-y-1 text-gray-700 text-sm"><li>Shallow, generally calm water along sections</li><li>Nearby food options along the beachfront road</li><li>Less crowded than metro-area beaches</li></ul></div>
 <div><p class="font-bold text-red-400 mb-2">Cons</p>
 <ul class="list-disc list-inside space-y-1 text-gray-700 text-sm"><li>Limited formal facilities</li><li>Far from San Juan — southwest coast option only</li><li>Parking can be informal</li></ul></div>
@@ -240,7 +241,7 @@ include APP_ROOT . '/components/hero-guide.php';
 <p class="text-sm text-gray-500 mb-4">Culebra · Ferry from Ceiba</p>
 <p class="mb-4">Flamenco consistently appears on "best beaches" lists, and the turquoise water and white sand genuinely live up to the reputation. The beach has restrooms, some shade structures, and food vendors, making it more equipped than many remote island beaches. Generally calm water along the main swimming stretch.</p>
 <div class="grid md:grid-cols-2 gap-4 mb-6">
-<div><p class="font-bold text-green-400 mb-2">Pros</p>
+<div><p class="font-bold text-palm-400 mb-2">Pros</p>
 <ul class="list-disc list-inside space-y-1 text-gray-700 text-sm"><li>Strikingly beautiful water and sand</li><li>Restrooms and food vendors on-site</li><li>Generally calm water along the main stretch</li></ul></div>
 <div><p class="font-bold text-red-400 mb-2">Cons</p>
 <ul class="list-disc list-inside space-y-1 text-gray-700 text-sm"><li>Requires ferry (~45 min each way) or small plane</li><li>Ferry reservations fill up on weekends and peak season</li><li>Full-day commitment — may be exhausting for very young children</li></ul></div>
@@ -252,7 +253,7 @@ include APP_ROOT . '/components/hero-guide.php';
 <p class="text-sm text-gray-500 mb-4">Carolina · Hotel zone</p>
 <p class="mb-4">The Isla Verde area includes a mix of hotel-fronted beach and balneario-managed sections. Balneario sections offer bathrooms, showers, and parking. The hotel stretches offer proximity and convenience if you are already staying in the area. A low-effort option, not a destination beach.</p>
 <div class="grid md:grid-cols-2 gap-4 mb-6">
-<div><p class="font-bold text-green-400 mb-2">Pros</p>
+<div><p class="font-bold text-palm-400 mb-2">Pros</p>
 <ul class="list-disc list-inside space-y-1 text-gray-700 text-sm"><li>Walk-out convenience for families at Isla Verde hotels</li><li>Balneario sections have restrooms and showers</li><li>Restaurants and shops along the strip</li></ul></div>
 <div><p class="font-bold text-red-400 mb-2">Cons</p>
 <ul class="list-disc list-inside space-y-1 text-gray-700 text-sm"><li>Water conditions vary significantly by stretch and day</li><li>Some sections can have stronger currents</li><li>Can feel commercial along hotel-heavy sections</li></ul></div>
@@ -354,7 +355,7 @@ $dotColors = [
     0 => 'text-gray-600',
     1 => 'text-red-400',
     2 => 'text-yellow-400',
-    3 => 'text-green-400',
+    3 => 'text-palm-400',
 ];
 $waterBadge = [
     'green' => 'background:rgba(34,197,94,0.15);color:#86efac;',
@@ -377,7 +378,7 @@ foreach ($tableBeaches as $i => $tb):
 </tbody>
 </table>
 </div>
-<p class="text-xs text-gray-500 mb-8"><span class="text-green-400">&#9679;&#9679;&#9679;</span> Full facilities &nbsp; <span class="text-yellow-400">&#9679;&#9679;</span> Some/partial &nbsp; <span class="text-red-400">&#9679;</span> Basic/limited &nbsp; <span class="text-gray-600">—</span> None</p>
+<p class="text-xs text-gray-500 mb-8"><span class="text-palm-400">&#9679;&#9679;&#9679;</span> Full facilities &nbsp; <span class="text-yellow-400">&#9679;&#9679;</span> Some/partial &nbsp; <span class="text-red-400">&#9679;</span> Basic/limited &nbsp; <span class="text-gray-600">—</span> None</p>
 
 <h2 id="by-category" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Beaches by Category</h2>
 

@@ -18,13 +18,38 @@ require_once APP_ROOT . '/inc/constants.php';
 require_once APP_ROOT . '/inc/locale_routes.php';
 require_once APP_ROOT . '/inc/i18n.php';
 
+function renderQuizResultsRedesignState(string $heading, string $description): void
+{
+    $locale = getCurrentLanguage();
+    ?>
+    <div class="rd rd-qresults">
+        <div class="wrap qres-state managed-page-hero"<?= pageHeroAttributes('quiz-results') ?>>
+            <p class="eyebrow"><?= h($locale === 'es' ? 'Resultados del quiz' : 'Beach quiz results') ?></p>
+            <h1><?= h($heading) ?><span class="dot">.</span></h1>
+            <p><?= h($description) ?></p>
+            <div class="qres-actions">
+                <a class="qres-btn qres-btn-coral" href="<?= h(routeUrl('quiz', $locale)) ?>"><?= h(__('quiz_results.take_quiz')) ?></a>
+                <a class="qres-btn qres-btn-light" href="<?= h(routeUrl('best_beaches', $locale)) ?>"><?= h(__('quiz_results.browse_best')) ?></a>
+            </div>
+        </div>
+    </div>
+    <?php
+}
+
 $token = trim((string)($_GET['token'] ?? ''));
 if ($token === '') {
     $pageTitle = __('quiz_results.title');
     $pageDescription = __('quiz_results.no_quiz_desc');
+    $redesignLayout = useRedesign();
+    $bodyClasses = trim(($bodyClasses ?? '') . ' rd-tool');
     include APP_ROOT . '/components/header.php';
+    if ($redesignLayout) {
+        renderQuizResultsRedesignState(__('quiz_results.title'), __('quiz_results.no_quiz_desc'));
+        include APP_ROOT . '/components/footer.php';
+        exit;
+    }
     ?>
-    <section class="hero-gradient-dark text-white py-12 md:py-16">
+    <section class="hero-gradient-dark managed-page-hero text-white py-12 md:py-16"<?= pageHeroAttributes('quiz-results') ?>>
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 class="text-3xl md:text-5xl font-bold mb-4"><?= h(__('quiz_results.title')) ?></h1>
             <p class="text-lg md:text-xl opacity-90"><?= h(__('quiz_results.no_quiz_desc')) ?></p>
@@ -49,7 +74,14 @@ if (!$row) {
     http_response_code(404);
     $pageTitle = __('quiz_results.not_found_title');
     $pageDescription = __('quiz_results.not_found_desc');
+    $redesignLayout = useRedesign();
+    $bodyClasses = trim(($bodyClasses ?? '') . ' rd-tool');
     include APP_ROOT . '/components/header.php';
+    if ($redesignLayout) {
+        renderQuizResultsRedesignState(__('quiz_results.not_found_heading'), __('quiz_results.not_found_expired'));
+        include APP_ROOT . '/components/footer.php';
+        exit;
+    }
     echo '<div class="max-w-2xl mx-auto px-4 py-16 text-center"><h1 class="text-2xl font-bold text-warm-900 mb-3">' . h(__('quiz_results.not_found_heading')) . '</h1><p class="text-warm-500">' . h(__('quiz_results.not_found_expired')) . '</p></div>';
     include APP_ROOT . '/components/footer.php';
     exit;
@@ -60,7 +92,14 @@ if (!is_array($matches) || empty($matches)) {
     http_response_code(404);
     $pageTitle = __('quiz_results.not_found_title');
     $pageDescription = __('quiz_results.not_found_desc');
+    $redesignLayout = useRedesign();
+    $bodyClasses = trim(($bodyClasses ?? '') . ' rd-tool');
     include APP_ROOT . '/components/header.php';
+    if ($redesignLayout) {
+        renderQuizResultsRedesignState(__('quiz_results.not_found_heading'), __('quiz_results.not_found_empty'));
+        include APP_ROOT . '/components/footer.php';
+        exit;
+    }
     echo '<div class="max-w-2xl mx-auto px-4 py-16 text-center"><h1 class="text-2xl font-bold text-warm-900 mb-3">' . h(__('quiz_results.not_found_heading')) . '</h1><p class="text-warm-500">' . h(__('quiz_results.not_found_empty')) . '</p></div>';
     include APP_ROOT . '/components/footer.php';
     exit;
@@ -85,10 +124,25 @@ if (!empty($beachIds)) {
 
 $pageTitle = __('quiz_results.your_matches');
 $pageDescription = __('quiz_results.matches_desc');
+$redesignLayout = useRedesign();
+$bodyClasses = trim(($bodyClasses ?? '') . ' rd-tool');
+$qrIsAuthed = isAuthenticated();
+$qrSaveCount = count($beachIds);
+$qrCsrf = $qrIsAuthed ? csrfToken() : '';
+$qrAutoSave = ($qrIsAuthed && ($_GET['save'] ?? '') === '1');
+$qrLang = getCurrentLanguage();
+$qrIsEs = ($qrLang === 'es');
+$qrLoginRedirect = '/quiz-results?token=' . rawurlencode($token) . '&save=1';
 include APP_ROOT . '/components/header.php';
+
+if ($redesignLayout) {
+    include APP_ROOT . '/templates/redesign/quiz-results.php';
+    include APP_ROOT . '/components/footer.php';
+    exit;
+}
 ?>
 
-<section class="hero-gradient-dark text-white py-12 md:py-16">
+<section class="hero-gradient-dark managed-page-hero text-white py-12 md:py-16"<?= pageHeroAttributes('quiz-results') ?>>
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 class="text-3xl md:text-5xl font-bold mb-4"><?= h(__('quiz_results.your_matches')) ?></h1>
         <p class="text-lg md:text-xl opacity-90"><?= h(__('quiz_results.save_link')) ?></p>
@@ -106,16 +160,7 @@ include APP_ROOT . '/components/header.php';
     </div>
 </section>
 
-<?php
-// Quiz -> sign-up / keep-your-matches band (Sprint 2 item 7).
-$qrIsAuthed = isAuthenticated();
-$qrSaveCount = count($beachIds);
-$qrCsrf = $qrIsAuthed ? csrfToken() : '';
-$qrAutoSave = ($qrIsAuthed && ($_GET['save'] ?? '') === '1');
-$qrLang = getCurrentLanguage();
-$qrIsEs = ($qrLang === 'es');
-$qrLoginRedirect = '/quiz-results?token=' . rawurlencode($token) . '&save=1';
-?>
+<?php // Quiz -> sign-up / keep-your-matches band (classic layout). ?>
 <section class="py-6 bg-sand-50">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="bg-ocean-900 text-white rounded-2xl p-6 sm:p-7 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -168,14 +213,17 @@ $qrLoginRedirect = '/quiz-results?token=' . rawurlencode($token) . '&save=1';
                     $slug = (string)($b['slug'] ?? ($m['slug'] ?? ''));
                     $name = (string)($b['name'] ?? ($m['name'] ?? __('beach.beach')));
                     $muni = (string)($b['municipality'] ?? ($m['municipality'] ?? ''));
-                    $cover = (string)($b['cover_image'] ?? ($m['cover_image'] ?? '/images/beaches/placeholder-beach.webp'));
+                    $cover = getBeachImageUrl(is_array($b) ? $b : $m, 'medium');
                 ?>
                 <div class="flex gap-4 bg-warm-50 border border-warm-200 rounded-xl p-4"
                      data-bf-beach-id="<?= h($id) ?>"
                      data-bf-beach-slug="<?= h($slug) ?>"
                      data-bf-municipality="<?= h($muni) ?>"
                      data-bf-source="quiz_results">
-                    <img src="<?= h($cover) ?>" alt="<?= h($name) ?>" class="w-20 h-20 rounded-lg object-cover shrink-0">
+                    <img src="<?= h($cover) ?>"
+                         data-fallback-src="/images/beaches/placeholder-beach.webp"
+                         alt="<?= h($name) ?>"
+                         class="w-20 h-20 rounded-lg object-cover shrink-0">
                     <div class="flex-1 min-w-0">
                         <div class="flex items-start justify-between gap-3">
                             <div>

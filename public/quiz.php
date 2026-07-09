@@ -16,7 +16,8 @@ require_once APP_ROOT . '/inc/i18n.php';
 $pageTitle = __('quiz.title');
 $pageDescription = __('quiz.description');
 
-// Include header
+$redesignLayout = useRedesign();
+$bodyClasses = trim(($bodyClasses ?? '') . ' rd-tool' . ($redesignLayout ? ' rd-quiz-page' : ''));
 include APP_ROOT . '/components/header.php';
 
 // Breadcrumbs
@@ -26,36 +27,71 @@ $breadcrumbs = [
 ];
 ?>
 
-<!-- Quiz Hero -->
-<section class="hero-gradient-dark text-white py-12 md:py-16">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <!-- Breadcrumbs -->
-        <div class="mb-6">
-            <?php include APP_ROOT . '/components/breadcrumbs.php'; ?>
+<?php if ($redesignLayout): ?>
+<div class="rd rd-quiz">
+    <section class="quiz-hero managed-page-hero"<?= pageHeroAttributes('quiz') ?>>
+        <div class="wrap quiz-hero-grid">
+            <div class="quiz-hero-copy">
+                <div class="quiz-crumb">
+                    <a href="<?= h(routeUrl('home', getCurrentLanguage())) ?>"><?= h(__('nav.home')) ?></a>
+                    <span>/</span>
+                    <span><?= h(__('quiz.breadcrumb')) ?></span>
+                </div>
+                <p class="eyebrow"><?= h(__('quiz.quick_questions')) ?></p>
+                <h1><?= h(__('quiz.heading')) ?></h1>
+                <p class="lede"><?= h(__('quiz.intro')) ?></p>
+                <div class="quiz-signals" aria-label="Quiz matching signals">
+                    <span><?= h(__('quiz.signal_vibe')) ?></span>
+                    <span><?= h(__('quiz.signal_group')) ?></span>
+                    <span><?= h(__('quiz.signal_amenities')) ?></span>
+                    <span><?= h(__('quiz.signal_coast')) ?></span>
+                </div>
+            </div>
+            <div class="quiz-photo-panel" aria-hidden="true">
+                <div class="quiz-photo"></div>
+                <div class="quiz-cardlet qcard-a">
+                    <b>01</b>
+                    <span>Pick your beach day</span>
+                </div>
+                <div class="quiz-cardlet qcard-b">
+                    <b>PR</b>
+                    <span>Match route</span>
+                </div>
+            </div>
         </div>
-        <h1 class="text-3xl md:text-5xl font-bold mb-4">
-            <?= h(__('quiz.heading')) ?>
-        </h1>
-        <p class="text-lg md:text-xl opacity-90 max-w-2xl mx-auto">
-            <?= h(__('quiz.intro')) ?>
-        </p>
-    </div>
-</section>
+    </section>
+<?php else: ?>
+    <!-- Quiz Hero -->
+    <section class="hero-gradient-dark managed-page-hero text-white py-12 md:py-16"<?= pageHeroAttributes('quiz') ?>>
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <!-- Breadcrumbs -->
+            <div class="mb-6">
+                <?php include APP_ROOT . '/components/breadcrumbs.php'; ?>
+            </div>
+            <h1 class="text-3xl md:text-5xl font-bold mb-4">
+                <?= h(__('quiz.heading')) ?>
+            </h1>
+            <p class="text-lg md:text-xl opacity-90 max-w-2xl mx-auto">
+                <?= h(__('quiz.intro')) ?>
+            </p>
+        </div>
+    </section>
+<?php endif; ?>
 
 <!-- Quiz Container -->
-<section class="py-8 md:py-12">
-    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="<?= $redesignLayout ? 'quiz-shell wrap' : 'py-8 md:py-12' ?>">
+    <div class="<?= $redesignLayout ? 'quiz-layout' : 'max-w-2xl mx-auto px-4 sm:px-6 lg:px-8' ?>">
 
         <!-- Quiz Card -->
-        <div id="quiz-container" class="bg-white border border-warm-200 rounded-2xl shadow-card overflow-hidden">
+        <div id="quiz-container" class="<?= $redesignLayout ? 'quiz-panel' : 'bg-white border border-warm-200 rounded-2xl shadow-card overflow-hidden' ?>">
 
             <!-- Progress Bar -->
-            <div class="bg-warm-200 h-2">
-                <div id="progress-bar" class="h-full bg-ocean-500 transition-all duration-300" style="width: 0%"></div>
+            <div class="<?= $redesignLayout ? 'quiz-progress-track' : 'bg-warm-200 h-2' ?>">
+                <div id="progress-bar" class="<?= $redesignLayout ? 'quiz-progress-bar' : 'h-full bg-ocean-500 transition-all duration-300' ?>" style="width: 0%"></div>
             </div>
 
             <!-- Quiz Content -->
-            <div class="p-6 md:p-8">
+            <div class="<?= $redesignLayout ? 'quiz-content' : 'p-6 md:p-8' ?>">
 
                 <!-- Question 1: Activity -->
                 <div class="quiz-step" data-step="1">
@@ -356,7 +392,7 @@ $breadcrumbs = [
         </div>
 
         <!-- Info Box -->
-        <div class="mt-6 bg-warm-50 border border-warm-200 rounded-lg p-4">
+        <div class="<?= $redesignLayout ? 'quiz-info' : 'mt-6 bg-warm-50 border border-warm-200 rounded-lg p-4' ?>">
             <div class="flex gap-3">
                 <i data-lucide="lightbulb" class="w-6 h-6 text-sunset-400 shrink-0" aria-hidden="true"></i>
                 <div>
@@ -369,6 +405,9 @@ $breadcrumbs = [
         </div>
     </div>
 </section>
+<?php if ($redesignLayout): ?>
+</div>
+<?php endif; ?>
 
 <style>
 .quiz-option {
@@ -667,6 +706,7 @@ function displayResults(matches) {
     resultsList.innerHTML = top3.map((beach, index) => `
         <div class="result-card">
             <img src="${beach.cover_image || '/images/beaches/placeholder-beach.webp'}"
+                 data-fallback-src="/images/beaches/placeholder-beach.webp"
                  alt="${beach.name}"
                  class="w-24 h-24 object-cover rounded-lg shrink-0">
             <div class="flex-1 min-w-0">
@@ -783,6 +823,7 @@ function unlockFullList() {
     fullList.innerHTML = matches.slice(0, 8).map((beach) => `
         <div class="result-card">
             <img src="${beach.cover_image || '/images/beaches/placeholder-beach.webp'}"
+                 data-fallback-src="/images/beaches/placeholder-beach.webp"
                  alt="${beach.name}"
                  class="w-20 h-20 object-cover rounded-lg shrink-0">
             <div class="flex-1 min-w-0">

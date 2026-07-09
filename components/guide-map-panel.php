@@ -31,13 +31,13 @@ $guideMapEmptyNotice = isset($guideMapEmptyNotice) ? (string)$guideMapEmptyNotic
 $hasGuideMap = !empty($guideMapIds);
 ?>
 <div id="guide-list-view" class="">
-    <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-8 mt-12">
+    <div class="bg-gradient-to-r from-ocean-50 to-ocean-50 rounded-lg p-8 mt-12">
         <h2 class="text-2xl font-bold text-gray-900 mb-4"><?= h($guideMapTitle) ?></h2>
         <p class="text-gray-700 mb-6"><?= h($guideMapDescription) ?></p>
         <?php if ($hasGuideMap): ?>
         <a href="?view=map#guide-map-view"
            data-context-map-action="show-map"
-           class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+           class="inline-block bg-palm-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-palm-700 transition-colors">
             <?= h($guideMapButtonLabel) ?>
         </a>
         <?php else: ?>
@@ -50,7 +50,7 @@ $hasGuideMap = !empty($guideMapIds);
 </div>
 
 <?php if ($hasGuideMap): ?>
-<div id="guide-map-view" class="hidden bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-8 mt-12">
+<div id="guide-map-view" class="hidden bg-gradient-to-r from-ocean-50 to-ocean-50 rounded-lg p-8 mt-12">
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
         <h2 class="text-2xl font-bold text-gray-900"><?= __('guide_map.map_view') ?></h2>
         <a href="?view=list#guide-list-view"
@@ -62,7 +62,7 @@ $hasGuideMap = !empty($guideMapIds);
     <div id="guide-map-loading" class="text-sm text-gray-500 mb-3"><?= __('guide_map.loading_map') ?></div>
     <div id="guide-map-error" class="hidden text-sm text-red-600 mb-3"><?= __('guide_map.map_error') ?></div>
     <div id="guide-map-empty" class="hidden text-sm text-gray-500 mb-3"><?= h($guideMapEmptyNotice) ?></div>
-    <div id="guide-map-container" class="rounded-xl overflow-hidden border border-green-200 bg-white" style="height: 520px;"></div>
+    <div id="guide-map-container" class="rounded-xl overflow-hidden border border-ocean-200 bg-white" style="height: 520px;"></div>
 </div>
 
 <script <?= cspNonceAttr() ?>>

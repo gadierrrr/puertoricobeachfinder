@@ -232,7 +232,7 @@ if ($action === 'list'):
             <tr class="hover:bg-gray-50">
                 <td class="px-6 py-4">
                     <div class="flex items-center gap-3">
-                        <img src="<?= h($beach['cover_image']) ?>" alt="" class="w-12 h-12 rounded-lg object-cover">
+                        <img src="<?= h(getBeachImageUrl($beach)) ?>" data-fallback-src="/images/beaches/placeholder-beach.webp" alt="" class="w-12 h-12 rounded-lg object-cover">
                         <div>
                             <p class="font-medium text-gray-900"><?= h($beach['name']) ?></p>
                             <p class="text-sm text-gray-500"><?= h($beach['slug']) ?></p>

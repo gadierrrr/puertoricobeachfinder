@@ -130,6 +130,16 @@ if (!isValidCollectionKey((string)$selectedCollection)) {
     $selectedCollection = '';
 }
 
+// The redesign homepage builds its own dataset in the template, including the
+// map-first view for ?view=map.
+$redesignLayout = useRedesign();
+if ($redesignLayout) {
+    // The redesign map is rendered from the homepage beach dataset; skip the
+    // classic MapLibre stack.
+    $skipMapCSS = true;
+    $skipMapScripts = true;
+}
+
 // Build query
 $sql = 'SELECT DISTINCT b.* FROM beaches b';
 $params = [];
@@ -181,16 +191,23 @@ switch ($sortBy) {
         $sql .= ' ORDER BY b.name ASC';
 }
 
-// Get all beaches (for map view and client-side filtering)
-$allBeaches = query($sql, $params);
+// Get all beaches (for map view and client-side filtering). The redesign
+// template queries its own slimmer dataset, so skip the classic double-load.
+$allBeaches = [];
+$totalBeaches = 0;
+$totalPages = 0;
+$beaches = [];
+if (!$redesignLayout) {
+    $allBeaches = query($sql, $params);
 
-// Batch fetch tags and amenities (2 queries instead of 2*N queries)
-attachBeachMetadata($allBeaches);
+    // Batch fetch tags and amenities (2 queries instead of 2*N queries)
+    attachBeachMetadata($allBeaches);
 
-// Paginate for list view
-$totalBeaches = count($allBeaches);
-$totalPages = ceil($totalBeaches / $perPage);
-$beaches = array_slice($allBeaches, ($page - 1) * $perPage, $perPage);
+    // Paginate for list view
+    $totalBeaches = count($allBeaches);
+    $totalPages = ceil($totalBeaches / $perPage);
+    $beaches = array_slice($allBeaches, ($page - 1) * $perPage, $perPage);
+}
 
 // Get user favorites if logged in
 $userFavorites = [];
@@ -205,8 +222,7 @@ $popularBeaches = getPopularBeaches(4);
 $siteStats = getSiteStats();
 $publishedCount = queryOne('SELECT COUNT(*) as cnt FROM beaches WHERE publish_status = "published" AND (location_type = "beach" OR location_type IS NULL)')['cnt'];
 
-// Include header
-$redesignLayout = useRedesign();
+// Include header ($redesignLayout was resolved before the listing query)
 include APP_ROOT . '/components/header.php';
 
 if ($redesignLayout) {
@@ -214,6 +230,7 @@ if ($redesignLayout) {
     include APP_ROOT . '/components/footer.php';
     return;
 }
+$classicHomeHero = pageHeroResolve('home');
 
 // header.php is what actually starts the session, so the $userFavorites lookup near the
 // top of this script (which runs before the session is active) comes back empty for
@@ -231,15 +248,16 @@ if (empty($userFavorites) && isAuthenticated() && !empty($_SESSION['user_id'])) 
 <header class="relative w-full min-h-[540px] sm:min-h-[600px] lg:min-h-[620px] flex items-center pt-20 overflow-hidden">
     <!-- Background with gradient overlays -->
     <div class="absolute inset-0 -z-10">
-        <img src="/images/beaches/jobos-beach-isabela-18513-67085.jpg"
+        <img src="<?= h($classicHomeHero['image'] ?? '/images/beaches/jobos-beach-isabela-18513-67085.jpg') ?>"
              alt="Jobos Beach in Isabela, Puerto Rico - famous for surfing"
              class="w-full h-full object-cover scale-110"
+             <?= $classicHomeHero !== null ? 'style="object-position:' . h($classicHomeHero['position']) . '"' : '' ?>
              loading="eager">
         <!-- bottom-up brand gradient -->
         <div class="absolute inset-0 bg-hero-gradient"></div>
         <!-- left scrim keeps the consolidated text column legible wherever it sits -->
         <div class="absolute inset-0 bg-gradient-to-r from-ocean-900/75 via-ocean-900/30 to-transparent"></div>
-        <div class="absolute inset-0 bg-black/30 sm:bg-black/15"></div>
+        <div class="absolute inset-0 bg-black/30 sm:bg-black/15"<?= $classicHomeHero !== null ? ' style="opacity:' . h((string) ($classicHomeHero['overlay'] / 100)) . '"' : '' ?>></div>
     </div>
 
     <!-- Hero Content - single consolidated column -->
@@ -503,7 +521,8 @@ $trendingBeaches = getTrendingBeaches(8);
            class="w-[280px] snap-start relative group rounded-xl overflow-hidden flex-shrink-0">
             <!-- Image -->
             <div class="relative overflow-hidden" style="height: 373px">
-                <img src="<?= h(getThumbnailUrl($tb['cover_image'])) ?>"
+                <img src="<?= h(getBeachImageUrl($tb, 'medium')) ?>"
+                     data-fallback-src="/images/beaches/placeholder-beach.webp"
                      alt="<?= h($tb['name']) ?>"
                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                      loading="lazy">

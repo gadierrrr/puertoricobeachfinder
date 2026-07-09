@@ -4,89 +4,120 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/../bootstrap.php';
 require_once APP_ROOT . '/inc/db.php';
 require_once APP_ROOT . '/inc/helpers.php';
 require_once APP_ROOT . '/inc/constants.php';
+require_once APP_ROOT . '/inc/i18n.php';
+require_once APP_ROOT . '/inc/locale_routes.php';
 
-$pageTitle = 'Puerto Rico Beach Guides';
-$pageDescription = 'Expert guides to help you plan the perfect Puerto Rico beach vacation. From safety tips to transportation, snorkeling spots to photography advice.';
+$lang = function_exists('getCurrentLanguage') ? getCurrentLanguage() : 'en';
+$pageTitle = __('guides_index.page_title');
+$pageDescription = __('guides_index.page_description');
 
 $guides = [
     [
-        'title' => 'Getting to Puerto Rico Beaches',
+        'title' => __('guides_index.guide_transport_title'),
         'slug' => 'getting-to-puerto-rico-beaches',
-        'description' => 'Complete transportation guide including car rentals, ferries, public transit, and tips for reaching every beach.',
+        'route' => 'guide_transportation',
+        'description' => __('guides_index.guide_transport_desc'),
         'icon' => '🚗',
-        'readTime' => '12 min read'
+        'kicker' => $lang === 'es' ? 'Logistica' : 'Logistics',
+        'readTime' => __('guides_index.guide_transport_time')
     ],
     [
-        'title' => 'Beach Safety Tips',
+        'title' => __('guides_index.guide_safety_title'),
         'slug' => 'beach-safety-tips',
-        'description' => 'Essential safety information covering rip currents, sun protection, marine life, and emergency contacts.',
+        'route' => 'guide_safety',
+        'description' => __('guides_index.guide_safety_desc'),
         'icon' => '🛟',
-        'readTime' => '10 min read'
+        'kicker' => $lang === 'es' ? 'Seguridad' : 'Safety',
+        'readTime' => __('guides_index.guide_safety_time')
     ],
     [
-        'title' => 'Best Time to Visit',
+        'title' => __('guides_index.guide_besttime_title'),
         'slug' => 'best-time-visit-puerto-rico-beaches',
-        'description' => 'Month-by-month breakdown of weather patterns, peak seasons, and ideal times for your beach getaway.',
+        'route' => 'guide_best_time',
+        'description' => __('guides_index.guide_besttime_desc'),
         'icon' => '📅',
-        'readTime' => '11 min read'
+        'kicker' => $lang === 'es' ? 'Temporada' : 'Season',
+        'readTime' => __('guides_index.guide_besttime_time')
     ],
     [
-        'title' => 'Beach Packing List',
+        'title' => __('guides_index.guide_packing_title'),
         'slug' => 'beach-packing-list',
-        'description' => 'Comprehensive checklist of everything you need for a perfect day at Puerto Rico\'s beaches.',
+        'route' => 'guide_packing',
+        'description' => __('guides_index.guide_packing_desc'),
         'icon' => '🎒',
-        'readTime' => '8 min read'
+        'kicker' => $lang === 'es' ? 'Preparacion' : 'Prep',
+        'readTime' => __('guides_index.guide_packing_time')
     ],
     [
-        'title' => 'Culebra vs Vieques',
+        'title' => __('guides_index.guide_islands_title'),
         'slug' => 'culebra-vs-vieques',
-        'description' => 'Side-by-side comparison of Puerto Rico\'s two island paradise destinations to help you choose.',
+        'route' => 'guide_culebra_vieques',
+        'description' => __('guides_index.guide_islands_desc'),
         'icon' => '🏝️',
-        'readTime' => '13 min read'
+        'kicker' => $lang === 'es' ? 'Islas' : 'Islands',
+        'readTime' => __('guides_index.guide_islands_time')
     ],
     [
-        'title' => 'Bioluminescent Bays Guide',
+        'title' => __('guides_index.guide_bio_title'),
         'slug' => 'bioluminescent-bays',
-        'description' => 'Everything you need to know about Puerto Rico\'s magical glowing waters and how to visit them.',
+        'route' => 'guide_bio_bays',
+        'description' => __('guides_index.guide_bio_desc'),
         'icon' => '✨',
-        'readTime' => '10 min read'
+        'kicker' => $lang === 'es' ? 'Noche' : 'Night',
+        'readTime' => __('guides_index.guide_bio_time')
     ],
     [
-        'title' => 'Snorkeling Guide',
+        'title' => __('guides_index.guide_snorkeling_title'),
         'slug' => 'snorkeling-guide',
-        'description' => 'Top snorkeling spots, equipment tips, techniques, and what marine life you\'ll encounter.',
+        'route' => 'guide_snorkeling',
+        'description' => __('guides_index.guide_snorkeling_desc'),
         'icon' => '🤿',
-        'readTime' => '14 min read'
+        'kicker' => $lang === 'es' ? 'Agua' : 'Water',
+        'readTime' => __('guides_index.guide_snorkeling_time')
     ],
     [
-        'title' => 'Surfing Guide',
+        'title' => __('guides_index.guide_surfing_title'),
         'slug' => 'surfing-guide',
-        'description' => 'Best surf breaks, seasonal patterns, board rentals, surf schools, and etiquette for all skill levels.',
+        'route' => 'guide_surfing',
+        'description' => __('guides_index.guide_surfing_desc'),
         'icon' => '🏄',
-        'readTime' => '12 min read'
+        'kicker' => $lang === 'es' ? 'Olas' : 'Surf',
+        'readTime' => __('guides_index.guide_surfing_time')
     ],
     [
-        'title' => 'Beach Photography Tips',
+        'title' => __('guides_index.guide_photo_title'),
         'slug' => 'beach-photography-tips',
-        'description' => 'Capture stunning beach photos with expert tips on lighting, composition, equipment, and drone rules.',
+        'route' => 'guide_photography',
+        'description' => __('guides_index.guide_photo_desc'),
         'icon' => '📸',
-        'readTime' => '9 min read'
+        'kicker' => $lang === 'es' ? 'Luz' : 'Light',
+        'readTime' => __('guides_index.guide_photo_time')
     ],
     [
-        'title' => 'Family Beach Vacation Planning',
+        'title' => __('guides_index.guide_family_title'),
         'slug' => 'family-beach-vacation-planning',
-        'description' => 'Plan the perfect family beach trip with kid-friendly beaches, sample itineraries, and budget tips.',
+        'route' => 'guide_family_planning',
+        'description' => __('guides_index.guide_family_desc'),
         'icon' => '👨‍👩‍👧‍👦',
-        'readTime' => '15 min read'
+        'kicker' => $lang === 'es' ? 'Familia' : 'Family',
+        'readTime' => __('guides_index.guide_family_time')
     ],
     [
         'title' => 'Kid-Friendly Beaches',
         'slug' => 'kid-friendly-beaches',
         'description' => 'The best beaches in Puerto Rico for kids — calm water, facilities, and tips for safe beach days with toddlers and children.',
         'icon' => '👶',
+        'kicker' => $lang === 'es' ? 'Ninos' : 'Kids',
         'readTime' => '18 min read'
     ]
 ];
+
+foreach ($guides as &$guide) {
+    $guide['url'] = !empty($guide['route']) && function_exists('routeUrl')
+        ? routeUrl($guide['route'], $lang)
+        : '/guides/' . $guide['slug'];
+}
+unset($guide);
 
 $collectionPageSchema = [
     "@context" => "https://schema.org",
@@ -118,10 +149,71 @@ $extraHead .= '<script type="application/ld+json">' . json_encode($collectionPag
 $pageTheme = "guide";
 $skipMapCSS = true;
 $skipMapScripts = true;
+$redesignLayout = useRedesign();
 $pageShellMode = "start";
 include APP_ROOT . "/components/page-shell.php";
 ?>
 
+<?php if ($redesignLayout): ?>
+    <div class="rd rd-guides">
+        <section class="guides-hero managed-page-hero"<?= pageHeroAttributes('guides') ?>>
+            <div class="wrap guides-hero-grid">
+                <div class="guides-hero-copy">
+                    <nav class="guides-crumb" aria-label="Breadcrumb">
+                        <a href="<?= h(routeUrl('home', $lang)) ?>"><?= h(__('guides_index.breadcrumb_home')) ?></a>
+                        <span aria-hidden="true">/</span>
+                        <span aria-current="page"><?= h(__('guides_index.breadcrumb_guides')) ?></span>
+                    </nav>
+                    <p class="eyebrow"><?= h($lang === 'es' ? 'Guias de campo' : 'Field guides') ?></p>
+                    <h1><?= h($pageTitle) ?></h1>
+                    <p class="lede"><?= h($pageDescription) ?></p>
+                    <div class="guide-stats" aria-label="<?= h($lang === 'es' ? 'Resumen de guias' : 'Guide summary') ?>">
+                        <span><b><?= count($guides) ?></b> <?= h($lang === 'es' ? 'guias' : 'guides') ?></span>
+                        <span><b>4</b> <?= h($lang === 'es' ? 'formas de planificar' : 'planning modes') ?></span>
+                        <span><b>PR</b> <?= h($lang === 'es' ? 'playas y costas' : 'beaches and coasts') ?></span>
+                    </div>
+                </div>
+                <div class="guides-postcards" aria-hidden="true">
+                    <div class="postcard pc1" style="background-image:url('/images/beaches/flamenco-beach-culebra.webp')"><span>Culebra</span></div>
+                    <div class="postcard pc2" style="background-image:url('/images/beaches/crash-boat-beach-aguadilla-18458-67164.webp')"><span>Aguadilla</span></div>
+                    <div class="postcard pc3" style="background-image:url('/images/beaches/playa-negra-black-sand-beach-vieques-18119-65507.webp')"><span>Vieques</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="guides-index wrap" aria-labelledby="guidesGridHeading">
+            <div class="guides-index-head">
+                <div>
+                    <p class="eyebrow"><?= h($lang === 'es' ? 'Elige el tipo de ayuda' : 'Choose the kind of help') ?></p>
+                    <h2 id="guidesGridHeading"><?= h($lang === 'es' ? 'Planifica por decision' : 'Plan by decision') ?></h2>
+                </div>
+                <a class="guide-home-link" href="<?= h(routeUrl('home', $lang)) ?>#beaches"><?= h(__('guides_index.cta_button')) ?></a>
+            </div>
+
+            <div class="guide-grid">
+                <?php foreach ($guides as $index => $guide): ?>
+                <a class="guide-card<?= $index === 0 ? ' guide-card-feature' : '' ?>" href="<?= h($guide['url']) ?>">
+                    <span class="guide-num"><?= str_pad((string)($index + 1), 2, '0', STR_PAD_LEFT) ?></span>
+                    <span class="guide-icon" aria-hidden="true"><?= $guide['icon'] ?></span>
+                    <span class="guide-kicker"><?= h($guide['kicker']) ?></span>
+                    <h3><?= h($guide['title']) ?></h3>
+                    <p><?= h($guide['description']) ?></p>
+                    <span class="guide-read"><span><?= h($guide['readTime']) ?></span><span><?= h(__('guides_index.read_guide')) ?> →</span></span>
+                </a>
+                <?php endforeach; ?>
+            </div>
+        </section>
+
+        <section class="guides-cta wrap">
+            <div>
+                <p class="eyebrow"><?= h($lang === 'es' ? 'Despues de leer' : 'After the reading') ?></p>
+                <h2><?= h(__('guides_index.cta_title')) ?></h2>
+                <p><?= h(__('guides_index.cta_desc')) ?></p>
+            </div>
+            <a href="<?= h(routeUrl('home', $lang)) ?>#beaches"><?= h(__('guides_index.cta_button')) ?></a>
+        </section>
+    </div>
+<?php else: ?>
     <!-- Hero Section -->
     <?php
     $breadcrumbs = [
@@ -165,6 +257,7 @@ include APP_ROOT . "/components/page-shell.php";
             </a>
         </div>
     </main>
+<?php endif; ?>
 
 <?php
 $pageShellMode = "end";

@@ -79,6 +79,8 @@ if ($slug !== '') {
 if (!$list) {
     http_response_code(404);
     $pageTitle = $L['not_found_title'];
+    $redesignLayout = useRedesign();
+    $bodyClasses = trim(($bodyClasses ?? '') . ' rd-account');
     include APP_ROOT . '/components/header.php';
     echo '<div class="max-w-3xl mx-auto px-4 py-20 text-center">';
     echo '<div class="text-6xl mb-4">🔍</div>';
@@ -133,6 +135,8 @@ $breadcrumbs = [
     ['name' => $list['name']],
 ];
 
+$redesignLayout = useRedesign();
+$bodyClasses = trim(($bodyClasses ?? '') . ' rd-account');
 include APP_ROOT . '/components/header.php';
 ?>
 
@@ -141,7 +145,7 @@ include APP_ROOT . '/components/header.php';
         <?php include APP_ROOT . '/components/breadcrumbs.php'; ?>
     </div>
 
-    <div class="flex items-start justify-between gap-4 flex-wrap mb-8">
+    <div class="flex items-start justify-between gap-4 flex-wrap mb-8 managed-page-hero page-heading-hero"<?= pageHeroAttributes('account') ?>>
         <div class="min-w-0">
             <div class="flex items-center gap-3 mb-1">
                 <h1 class="text-3xl font-bold text-gray-900"><?= h($list['name']) ?></h1>

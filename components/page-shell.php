@@ -18,6 +18,9 @@ if (!isset($bodyVariant)) {
 }
 
 if ($pageShellMode === 'start') {
+    if (!empty($redesignLayout) && $pageTheme === 'guide') {
+        $bodyClasses = trim(($bodyClasses ?? '') . ' rd-guide-page');
+    }
     include __DIR__ . '/header.php';
     return;
 }

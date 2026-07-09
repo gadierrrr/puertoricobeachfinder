@@ -12,7 +12,9 @@
       "^\\.guide-article\\s+a:not\\(\\[class\\]\\)",
       "^\\.collection-legacy-content\\s+\\.beach-description\\s+a:not\\(\\[class\\]\\)"
     ],
-    "deadComponentAllowlistRegex": []
+    "deadComponentAllowlistRegex": [
+      "^components/quick-fact-card\\.php$"
+    ]
   },
   "files": {
     "public/beach.php": {

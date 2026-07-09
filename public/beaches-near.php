@@ -59,11 +59,11 @@ $locName = $loc['name'];
 
 $pageTitle = "Beaches Near $locName, Puerto Rico | $beachCount Beaches Within {$radiusKm}km";
 $pageH1 = "Beaches Near $locName";
-$pageDesc = "Find $beachCount beaches near $locName on $loc[region] of Puerto Rico. Browse beaches sorted by distance with ratings, amenities, and directions.";
+$pageDescription = "Find $beachCount beaches near $locName on $loc[region] of Puerto Rico. Browse beaches sorted by distance with ratings, amenities, and directions.";
 if ($lang === 'es') {
     $pageTitle = "Playas Cerca de $locName, Puerto Rico | $beachCount Playas";
     $pageH1 = "Playas Cerca de $locName";
-    $pageDesc = "Encuentra $beachCount playas cerca de $locName en $loc[region] de Puerto Rico.";
+    $pageDescription = "Encuentra $beachCount playas cerca de $locName en $loc[region] de Puerto Rico.";
 }
 
 $canonicalUrl = absoluteUrl('/beaches-near-' . $locSlug);
@@ -74,11 +74,56 @@ $breadcrumbs = [
     ['name' => $pageH1]
 ];
 
-$bodyVariant = 'collection-light';
-include APP_ROOT . '/components/header.php';
-
 $ratedBeaches = array_filter($beaches, fn($b) => !empty($b['google_rating']));
 $avgRating = !empty($ratedBeaches) ? array_sum(array_column($ratedBeaches, 'google_rating')) / count($ratedBeaches) : 0;
+
+$bodyVariant = 'collection-dark';
+$redesignLayout = useRedesign();
+include APP_ROOT . '/components/header.php';
+
+if ($redesignLayout) {
+    $isEs = $lang === 'es';
+
+    // km/mi badge on every row (classic shows km/mi on tiles, km on the list)
+    foreach ($beaches as $rdIdx => $rdBeach) {
+        $rdKm = round($rdBeach['distance_km'], 1);
+        $beaches[$rdIdx]['distance_formatted'] = $rdKm . ' km / ' . round($rdKm * 0.621371, 1) . ' mi';
+    }
+
+    // Sibling proximity areas — same hardcoded list as classic, but hrefs are
+    // localized via routeUrl (classic emits EN URLs on ES pages).
+    $rdSiblings = [];
+    foreach ($locations as $slug => $l) {
+        if ($slug === $locSlug) continue;
+        $rdSiblings[] = [$l['name'], routeUrl('beaches_near', $lang, ['location' => $slug]), $l['region']];
+    }
+
+    $rdStats = [[(string) $beachCount, $isEs ? 'playas' : 'beaches']];
+    if ($avgRating > 0) {
+        $rdStats[] = ['★ ' . number_format($avgRating, 1), $isEs ? 'promedio' : 'avg rating'];
+    }
+    $rdStats[] = ['~' . $loc['drive'], $isEs ? 'desde San Juan' : 'from San Juan'];
+
+    $listing = [
+        'eyebrow' => $isEs ? 'Playas por área' : ucfirst($loc['region']),
+        'h1' => $pageH1,
+        'intro' => [
+            $isEs
+                ? "Descubre $beachCount playas a menos de {$radiusKm}km de $locName, Puerto Rico."
+                : "Discover $beachCount beaches within {$radiusKm}km of $locName on $loc[region] of Puerto Rico. From San Juan, $locName is about $loc[drive].",
+        ],
+        'stats' => $rdStats,
+        'beachesHeading' => $isEs ? "Todas las $beachCount Playas" : "All $beachCount Beaches",
+        'beachesSub' => $isEs ? 'Ordenadas por distancia' : 'Sorted by distance from ' . $locName,
+        'beaches' => $beaches,
+        'siblings' => $rdSiblings,
+        'siblingsHeading' => $isEs ? 'Explorar Otras Áreas' : 'Explore Other Areas',
+        'quizCta' => true,
+    ];
+    include APP_ROOT . '/templates/redesign/listing.php';
+    include APP_ROOT . '/components/footer.php';
+    return;
+}
 ?>
 
 <section class="relative bg-gradient-to-b from-slate-900 via-slate-800 to-slate-700 text-white py-16 md:py-24">
@@ -112,7 +157,8 @@ $beachIndex++;
             <a href="<?= h(routeUrl('beach_detail', $lang, ['slug' => $beach['slug']])) ?>"
                class="group bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                 <div class="aspect-[4/3] overflow-hidden relative">
-                    <img src="<?= h($beach['cover_image']) ?>"
+                    <img src="<?= h(getBeachImageUrl($beach, 'medium')) ?>"
+                         data-fallback-src="/images/beaches/placeholder-beach.webp"
                          alt="<?= h($beach['name']) ?>"
                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                          loading="<?= $beachIndex <= 6 ? "eager" : "lazy" ?>" width="400" height="300">
@@ -149,7 +195,9 @@ $beachIndex++;
             ?>
             <a href="<?= h(routeUrl('beach_detail', $lang, ['slug' => $beach['slug']])) ?>"
                class="flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
-                <img src="<?= h($beach['cover_image']) ?>" alt="<?= h($beach['name']) ?>"
+                <img src="<?= h(getBeachImageUrl($beach, 'thumb')) ?>"
+                     data-fallback-src="/images/beaches/placeholder-beach.webp"
+                     alt="<?= h($beach['name']) ?>"
                      class="w-16 h-16 object-cover rounded-lg flex-shrink-0" loading="lazy" width="64" height="64">
                 <div class="min-w-0">
                     <p class="font-medium text-gray-900 truncate"><?= h($beach['name']) ?></p>

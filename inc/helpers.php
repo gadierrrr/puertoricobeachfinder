@@ -1541,6 +1541,11 @@ function getBeachCountsByTag() {
 function getPopularBeaches($limit = 4) {
     require_once __DIR__ . '/db.php';
 
+    $trafficBeaches = getPopularBeachesFromTraffic((int) $limit);
+    if (!empty($trafficBeaches)) {
+        return $trafficBeaches;
+    }
+
     $sql = "
         SELECT b.name, b.slug, b.municipality
         FROM beaches b
@@ -1552,6 +1557,96 @@ function getPopularBeaches($limit = 4) {
     ";
 
     return query($sql, [':limit' => $limit]);
+}
+
+/**
+ * Create the small daily aggregate used for homepage "Popular now" data.
+ */
+function ensureBeachPageViewsDailyTable(): void {
+    static $ready = false;
+    if ($ready) {
+        return;
+    }
+
+    require_once __DIR__ . '/db.php';
+    $db = getDB();
+    $db->exec("
+        CREATE TABLE IF NOT EXISTS beach_page_views_daily (
+            view_date TEXT NOT NULL,
+            beach_id TEXT NOT NULL,
+            views INTEGER NOT NULL DEFAULT 0,
+            updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+            PRIMARY KEY (view_date, beach_id),
+            FOREIGN KEY (beach_id) REFERENCES beaches(id) ON DELETE CASCADE
+        )
+    ");
+    $db->exec('CREATE INDEX IF NOT EXISTS idx_beach_page_views_daily_date_views ON beach_page_views_daily(view_date, views DESC)');
+
+    $ready = true;
+}
+
+/**
+ * Record one beach detail page view into a daily aggregate.
+ */
+function recordBeachPageView($beachId): void {
+    $beachId = (string) $beachId;
+    if ($beachId === '') {
+        return;
+    }
+
+    $method = strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET'));
+    if (!in_array($method, ['GET', 'HEAD'], true)) {
+        return;
+    }
+
+    $userAgent = strtolower((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''));
+    if ($userAgent !== '' && preg_match('/bot|crawl|spider|slurp|facebookexternalhit|whatsapp|telegrambot|preview|validator|monitor|pingdom|uptime/i', $userAgent)) {
+        return;
+    }
+
+    ensureBeachPageViewsDailyTable();
+
+    $date = (new DateTimeImmutable('now', new DateTimeZone('America/Puerto_Rico')))->format('Y-m-d');
+    execute(
+        "INSERT INTO beach_page_views_daily (view_date, beach_id, views, updated_at)
+         VALUES (:view_date, :beach_id, 1, datetime('now'))
+         ON CONFLICT(view_date, beach_id) DO UPDATE SET
+            views = views + 1,
+            updated_at = datetime('now')",
+        [
+            ':view_date' => $date,
+            ':beach_id' => $beachId,
+        ]
+    );
+}
+
+/**
+ * Return yesterday's most viewed beach detail pages.
+ */
+function getPopularBeachesFromTraffic(int $limit = 3, ?string $date = null): array {
+    require_once __DIR__ . '/db.php';
+
+    $limit = max(1, min(12, $limit));
+    $date = $date ?: (new DateTimeImmutable('yesterday', new DateTimeZone('America/Puerto_Rico')))->format('Y-m-d');
+
+    ensureBeachPageViewsDailyTable();
+
+    $rows = query(
+        "SELECT b.name, b.slug, b.municipality, v.views AS yesterday_views, v.view_date AS popular_view_date
+         FROM beach_page_views_daily v
+         INNER JOIN beaches b ON b.id = v.beach_id
+         WHERE v.view_date = :view_date
+           AND b.publish_status = 'published'
+           AND (b.location_type = 'beach' OR b.location_type IS NULL)
+         ORDER BY v.views DESC, b.name ASC
+         LIMIT :limit",
+        [
+            ':view_date' => $date,
+            ':limit' => $limit,
+        ]
+    );
+
+    return is_array($rows) ? $rows : [];
 }
 
 /**
@@ -1861,28 +1956,88 @@ function awardAchievements($userId) {
  * @param string $size Size variant: 'original', 'large', 'medium', 'thumb', 'placeholder'
  * @return string Image URL
  */
+function getAdminBeachImagePathFromUrl(string $url, string $size = 'medium'): string {
+    $filename = basename(parse_url($url, PHP_URL_PATH) ?: $url);
+    $baseName = preg_replace('/(_\d+|_placeholder)?\.webp$/', '', $filename);
+
+    $suffix = match($size) {
+        'original' => '',
+        'large' => '_1200',
+        'medium' => '_800',
+        'thumb' => '_400',
+        'placeholder' => '_placeholder',
+        default => '_800'
+    };
+
+    return '/uploads/admin/beaches/' . $baseName . $suffix . '.webp';
+}
+
+function adminBeachImageFileExists(string $url): bool {
+    $path = parse_url($url, PHP_URL_PATH) ?: $url;
+    if (strpos($path, '/uploads/admin/beaches/') !== 0) {
+        return false;
+    }
+
+    $root = defined('APP_ROOT') ? APP_ROOT : dirname(__DIR__);
+    return is_file($root . $path);
+}
+
+function findAdminBeachImageByPrefix(string $prefix, string $size = 'medium', bool $allowHyphenSuffix = true): ?string {
+    $prefix = preg_replace('/[^a-z0-9-]/', '', strtolower($prefix));
+    if ($prefix === '') {
+        return null;
+    }
+
+    $root = defined('APP_ROOT') ? APP_ROOT : dirname(__DIR__);
+    $dir = $root . '/uploads/admin/beaches';
+    if (!is_dir($dir)) {
+        return null;
+    }
+
+    $suffix = match($size) {
+        'original' => '',
+        'large' => '_1200',
+        'medium' => '_800',
+        'thumb' => '_400',
+        'placeholder' => '_placeholder',
+        default => '_800'
+    };
+    $matches = glob($dir . '/' . $prefix . '_*' . $suffix . '.webp') ?: [];
+    if ($allowHyphenSuffix) {
+        $matches = array_merge($matches, glob($dir . '/' . $prefix . '-*' . $suffix . '.webp') ?: []);
+    }
+    if (empty($matches) && $size !== 'original') {
+        $matches = glob($dir . '/' . $prefix . '_*.webp') ?: [];
+        if ($allowHyphenSuffix) {
+            $matches = array_merge($matches, glob($dir . '/' . $prefix . '-*.webp') ?: []);
+        }
+    }
+    if (empty($matches)) {
+        return null;
+    }
+
+    usort($matches, static fn($a, $b) => filemtime($b) <=> filemtime($a));
+    return '/uploads/admin/beaches/' . basename($matches[0]);
+}
+
 function getBeachImageUrl($beach, $size = 'medium') {
     $coverImage = $beach['cover_image'] ?? '';
 
     // Check if this is an admin-uploaded image (in /uploads/admin/beaches/)
     if (strpos($coverImage, '/uploads/admin/beaches/') === 0) {
-        // Extract base filename (without size suffix and extension)
-        $filename = basename($coverImage);
+        $url = getAdminBeachImagePathFromUrl($coverImage, $size);
+        if (adminBeachImageFileExists($url)) {
+            return $url;
+        }
 
-        // Remove any existing size suffix and extension
-        $baseName = preg_replace('/(_\d+|_placeholder)?\.webp$/', '', $filename);
+        $storedBase = preg_replace('/(_[0-9a-f]{6,}_[0-9]+)?(_\d+|_placeholder)?\.webp$/i', '', basename($coverImage));
+        $recovered = findAdminBeachImageByPrefix((string)$storedBase, $size, substr_count((string)$storedBase, '-') > 0)
+            ?? findAdminBeachImageByPrefix((string)($beach['slug'] ?? ''), $size, false);
+        if ($recovered !== null) {
+            return $recovered;
+        }
 
-        // Build URL for requested size
-        $suffix = match($size) {
-            'original' => '',
-            'large' => '_1200',
-            'medium' => '_800',
-            'thumb' => '_400',
-            'placeholder' => '_placeholder',
-            default => '_800'
-        };
-
-        return '/uploads/admin/beaches/' . $baseName . $suffix . '.webp';
+        return '/images/beaches/placeholder-beach.webp';
     }
 
     // Legacy image - return as-is
@@ -1906,17 +2061,27 @@ function getBeachImageSrcset($beach) {
         return '';
     }
 
-    // Extract base filename
-    $filename = basename($coverImage);
+    $medium = getBeachImageUrl($beach, 'medium');
+    if (strpos($medium, '/uploads/admin/beaches/') !== 0 || !adminBeachImageFileExists($medium)) {
+        return '';
+    }
+
+    $filename = basename($medium);
     $baseName = preg_replace('/(_\d+|_placeholder)?\.webp$/', '', $filename);
     $basePath = '/uploads/admin/beaches/' . $baseName;
 
-    $srcset = [
-        $basePath . '_400.webp 400w',
-        $basePath . '_800.webp 800w',
-        $basePath . '_1200.webp 1200w',
-        $basePath . '.webp 2400w',
+    $candidates = [
+        $basePath . '_400.webp' => '400w',
+        $basePath . '_800.webp' => '800w',
+        $basePath . '_1200.webp' => '1200w',
+        $basePath . '.webp' => '2400w',
     ];
+    $srcset = [];
+    foreach ($candidates as $url => $descriptor) {
+        if (adminBeachImageFileExists($url)) {
+            $srcset[] = $url . ' ' . $descriptor;
+        }
+    }
 
     return implode(', ', $srcset);
 }
@@ -1996,7 +2161,9 @@ function getImageDimensions($imagePath) {
 
     // If relative path, prepend document root
     if (strpos($imagePath, 'http') !== 0 && strpos($imagePath, '/') === 0) {
-        $fullPath = $docRoot . $imagePath;
+        $fullPath = str_starts_with($imagePath, '/uploads/') && defined('APP_ROOT')
+            ? APP_ROOT . $imagePath
+            : $docRoot . $imagePath;
     }
 
     // If HTTP URL, can't get dimensions easily - return default
@@ -2292,6 +2459,23 @@ function getTagPageUrl(string $tag, string $lang = "en"): string {
         return $tagPages[$tag];
     }
     return "/?tags[]=" . urlencode($tag);
+}
+
+/**
+ * Locale-aware variant of getTagPageUrl(). getTagPageUrl() ignores its $lang
+ * argument (pre-existing), so Spanish pages historically emitted English tag
+ * URLs; redesign templates use this wrapper to keep ES pages linking to ES
+ * routes without changing classic markup.
+ */
+function getLocalizedTagPageUrl(string $tag, string $lang = 'en'): string {
+    $url = getTagPageUrl($tag, 'en');
+    if ($lang !== 'es') {
+        return $url;
+    }
+    if (str_starts_with($url, '/?')) {
+        return '/es' . substr($url, 1);
+    }
+    return localizePath($url, 'es');
 }
 
 

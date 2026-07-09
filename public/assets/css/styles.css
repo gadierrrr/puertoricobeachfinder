@@ -2284,7 +2284,46 @@ a.btn-loading,
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
 }
+/* Admin-managed header photography. The variables are emitted only when a
+   family or page-specific override exists, so shipped page designs remain
+   unchanged until an admin publishes a photo. */
+.managed-page-hero[data-managed-page-hero] {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    color: #fff;
+    background-image:
+        linear-gradient(
+            rgb(9 22 32 / var(--managed-hero-overlay, .46)),
+            rgb(9 22 32 / var(--managed-hero-overlay, .46))
+        ),
+        var(--managed-hero-image) !important;
+    background-position: var(--managed-hero-position, center) !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+}
 
+.managed-page-hero[data-managed-page-hero] :is(h1, h2) {
+    color: #fff;
+}
+
+.managed-page-hero[data-managed-page-hero] :is(p, .lede) {
+    color: rgb(255 255 255 / .84);
+}
+
+.managed-page-hero[data-managed-page-hero] a:not(.ui-btn-primary):not(.ui-btn-secondary) {
+    color: rgb(255 255 255 / .88);
+}
+
+.managed-page-hero[data-managed-page-hero] :is(h1, h2, p, nav) {
+    text-shadow: 0 1px 18px rgb(0 0 0 / .34);
+}
+
+.page-heading-hero[data-managed-page-hero] {
+    padding: clamp(1.25rem, 3vw, 2.5rem);
+    border-radius: 18px;
+    box-shadow: 0 16px 42px rgb(9 22 32 / .16);
+}
 /* ==========================================================
    _guides.css — Guide page layout, table of contents, related guides
    Used by: public/guides/*.php
@@ -3151,9 +3190,6 @@ body.collection-dark {
     border: 1px solid var(--color-border);
     padding: 0 0.75rem;
     text-decoration: none;
-}
-
-    color: var(--color-gray-900);
 }
 
 @media (max-width: 1024px) {

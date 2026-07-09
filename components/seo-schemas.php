@@ -16,6 +16,9 @@ require_once __DIR__ . '/../inc/constants.php';
  * @return array ImageObject schema
  */
 function imageObjectSchema($imageUrl, $caption = null) {
+    if (is_string($imageUrl) && str_starts_with($imageUrl, '/uploads/admin/beaches/')) {
+        $imageUrl = getBeachImageUrl(['cover_image' => $imageUrl], 'large');
+    }
     $absoluteUrl = absoluteUrl($imageUrl);
 
     // Get dimensions
@@ -141,7 +144,7 @@ function beachSchema(array $beach, $reviews = null): string {
 
     // Add image with ImageObject wrapper (includes dimensions)
     if (!empty($beach['cover_image'])) {
-        $schema['image'] = imageObjectSchema($beach['cover_image'], $beach['name']);
+        $schema['image'] = imageObjectSchema(getBeachImageUrl($beach, 'large'), $beach['name']);
     }
 
     // Add intelligent rating (user or Google)
@@ -518,7 +521,7 @@ function touristAttractionSchema(array $beach): string {
 
     // Add image with ImageObject wrapper
     if (!empty($beach['cover_image'])) {
-        $schema['image'] = imageObjectSchema($beach['cover_image'], $beach['name']);
+        $schema['image'] = imageObjectSchema(getBeachImageUrl($beach, 'large'), $beach['name']);
     }
 
     // Note: AggregateRating is already included in the Beach schema

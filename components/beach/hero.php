@@ -10,7 +10,7 @@
 $heroSrcset = getBeachImageSrcset($beach);
 if (!$heroSrcset) {
     // Legacy image — use getResponsiveImageAttrs for thumbnail variants
-    $heroAttrs = getResponsiveImageAttrs($beach['cover_image'] ?? '', '100vw');
+    $heroAttrs = getResponsiveImageAttrs(getBeachImageUrl($beach, 'large'), '100vw');
     $heroSrcset = $heroAttrs['srcset'] ?? '';
 }
 $heroSizes = '100vw';
@@ -19,6 +19,7 @@ $heroSizes = '100vw';
 <div class="relative h-[50vh] max-h-[450px] overflow-hidden">
     <?php if ($beach['cover_image']): ?>
     <img src="<?= h(getBeachImageUrl($beach, 'large')) ?>"
+         data-fallback-src="/images/beaches/placeholder-beach.webp"
          <?php if ($heroSrcset): ?>
          srcset="<?= h($heroSrcset) ?>"
          sizes="<?= h($heroSizes) ?>"

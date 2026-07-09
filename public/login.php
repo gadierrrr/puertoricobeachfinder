@@ -26,6 +26,14 @@ $accountDeleted = isset($_GET['account_deleted']) && $_GET['account_deleted'] ==
 // Magic-link (email) sign-in is offered as a second channel alongside Google OAuth.
 // ?method=email reveals the email form.
 $showMagicLinkForm = isset($_GET['method']) && $_GET['method'] === 'email';
+$devHost = strtolower((string) ($_SERVER['HTTP_HOST'] ?? ''));
+$devLoginEnabled = appEnv() === 'dev'
+    && appDebug()
+    && (
+        str_starts_with($devHost, 'localhost')
+        || str_starts_with($devHost, '127.0.0.1')
+        || str_starts_with($devHost, '[::1]')
+    );
 
 // Handle OAuth error codes from callback
 if (isset($_GET['error'])) {
@@ -47,13 +55,41 @@ if (isset($_GET['timeout'])) {
     $error = __('login.error_timeout');
 }
 
-// Handle form submission (magic link)
+// Handle form submission (local dev login or magic link)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require_once APP_ROOT . '/inc/auth.php';
 
     // Validate CSRF
     if (!validateCsrf($_POST['csrf_token'] ?? '')) {
         $error = __('login.error_csrf');
+    } elseif (($_POST['auth_action'] ?? '') === 'dev_login') {
+        if (!$devLoginEnabled) {
+            $error = __('login.error_generic');
+        } else {
+            $testEmail = 'local-test@puertoricobeachfinder.test';
+            $testName = 'Local Test User';
+            $user = queryOne('SELECT * FROM users WHERE email = :email', [':email' => $testEmail]);
+
+            if (!$user) {
+                execute(
+                    'INSERT OR IGNORE INTO users (id, email, name, created_at, updated_at)
+                     VALUES (:id, :email, :name, datetime("now"), datetime("now"))',
+                    [
+                        ':id' => uuid(),
+                        ':email' => $testEmail,
+                        ':name' => $testName,
+                    ]
+                );
+                $user = queryOne('SELECT * FROM users WHERE email = :email', [':email' => $testEmail]);
+            }
+
+            if (!$user) {
+                $error = __('login.error_generic');
+            } else {
+                loginUser($user);
+                redirectInternal(sanitizeInternalRedirect($_POST['redirect'] ?? '/'));
+            }
+        }
     } elseif (trim($_POST['website'] ?? '') !== '') {
         // Honeypot: a real user never fills the hidden "website" field. Silently
         // pretend success (don't send) so bots can't tell they were caught.
@@ -92,7 +128,7 @@ if (!$stats) {
     // Query stats and cache them
     $stats = [
         'userCount' => queryOne('SELECT COUNT(*) as count FROM users', [])['count'] ?? 0,
-        'photoCount' => queryOne('SELECT COUNT(*) as count FROM beach_photos WHERE status = "approved"', [])['count'] ?? 0,
+        'photoCount' => queryOne('SELECT COUNT(*) as count FROM beach_photos WHERE status = "published"', [])['count'] ?? 0,
         'reviewCount' => queryOne('SELECT COUNT(*) as count FROM beach_reviews WHERE status = "published"', [])['count'] ?? 0,
         'checkinCount' => queryOne('SELECT COUNT(*) as count FROM beach_checkins', [])['count'] ?? 0,
         'featuredBeach' => queryOne(
@@ -115,7 +151,10 @@ $featuredBeach = $stats['featuredBeach'];
 
 $pageTitle = __('login.title');
 $skipMapCSS = true; // Auth pages don't need map
+$redesignLayout = useRedesign();
+$bodyClasses = trim(($bodyClasses ?? '') . ' rd-auth');
 include APP_ROOT . '/components/header.php';
+$loginManagedHero = pageHeroResolve('account');
 ?>
 
 <div class="min-h-screen flex pt-16">
@@ -123,8 +162,14 @@ include APP_ROOT . '/components/header.php';
     <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden">
         <!-- Background Image -->
         <div class="absolute inset-0">
-            <?php if ($featuredBeach && $featuredBeach['cover_image']): ?>
-            <img src="<?= h($featuredBeach['cover_image']) ?>"
+            <?php if ($loginManagedHero !== null): ?>
+            <img src="<?= h($loginManagedHero['image']) ?>"
+                 alt="Puerto Rico coast"
+                 class="w-full h-full object-cover"
+                 style="object-position:<?= h($loginManagedHero['position']) ?>">
+            <?php elseif ($featuredBeach && $featuredBeach['cover_image']): ?>
+            <img src="<?= h(getBeachImageUrl($featuredBeach, 'large')) ?>"
+                 data-fallback-src="/images/beaches/placeholder-beach.webp"
                  alt="Beautiful Puerto Rico beach"
                  class="w-full h-full object-cover">
             <?php else: ?>
@@ -132,7 +177,7 @@ include APP_ROOT . '/components/header.php';
                  alt="Jobos Beach, Puerto Rico"
                  class="w-full h-full object-cover">
             <?php endif; ?>
-            <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40"<?= $loginManagedHero !== null ? ' style="opacity:' . h((string) ($loginManagedHero['overlay'] / 100)) . '"' : '' ?>></div>
         </div>
 
         <!-- Content Overlay -->
@@ -352,6 +397,7 @@ include APP_ROOT . '/components/header.php';
                         </p>
                     </form>
 
+                    <?php if ($googleEnabled): ?>
                     <!-- Back to Google option -->
                     <div class="relative">
                         <div class="absolute inset-0 flex items-center">
@@ -372,6 +418,30 @@ include APP_ROOT . '/components/header.php';
                         </svg>
                         <span><?= h(__('login.continue_google_instead')) ?></span>
                     </a>
+                    <?php endif; ?>
+                <?php endif; ?>
+
+                <?php if ($devLoginEnabled): ?>
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-warm-200"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-4 bg-white text-warm-500"><?= h(__('login.dev_login_separator')) ?></span>
+                        </div>
+                    </div>
+
+                    <form method="POST" action="" class="space-y-3">
+                        <?= csrfField() ?>
+                        <input type="hidden" name="auth_action" value="dev_login">
+                        <input type="hidden" name="redirect" value="<?= h($redirectUrl) ?>">
+                        <button type="submit"
+                                class="w-full flex items-center justify-center gap-3 bg-ocean-500 hover:bg-ocean-600 text-white py-3.5 px-4 rounded-xl font-semibold transition-all hover:-translate-y-0.5 hover:shadow-lg">
+                            <i data-lucide="flask-conical" class="w-5 h-5"></i>
+                            <span><?= h(__('login.dev_login_button')) ?></span>
+                        </button>
+                        <p class="text-center text-xs text-warm-500"><?= h(__('login.dev_login_note')) ?></p>
+                    </form>
                 <?php endif; ?>
             </div>
 

@@ -124,6 +124,10 @@ $beaches = query($sql, $params);
 
 // Batch fetch tags and amenities (2 queries instead of 2*N queries)
 attachBeachMetadata($beaches);
+foreach ($beaches as &$beach) {
+    $beach['image_url'] = getBeachImageUrl($beach, 'thumb');
+}
+unset($beach);
 
 // Get user favorites if logged in
 $userFavorites = [];

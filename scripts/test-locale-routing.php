@@ -45,6 +45,31 @@ $assertSame(
     localizePathAndQuery('/beach.php', 'slug=flamenco-beach&view=map', 'es'),
     '/es/playa/flamenco-beach?view=map'
 );
+
+$assertRoute(
+    'dynamic English tag route',
+    '/beaches/with-parking',
+    '/beaches-by-tag.php',
+    ['tag' => 'with-parking']
+);
+$assertRoute(
+    'dynamic Spanish tag route',
+    '/es/playas/con-estacionamiento',
+    '/beaches-by-tag.php',
+    ['tag' => 'con-estacionamiento']
+);
+$assertRoute(
+    'dynamic English proximity route',
+    '/beaches-near-ponce',
+    '/beaches-near.php',
+    ['loc' => 'ponce']
+);
+$assertRoute(
+    'dynamic Spanish proximity route',
+    '/es/playas-cerca-de-ponce',
+    '/beaches-near.php',
+    ['loc' => 'ponce']
+);
 $assertSame(
     'legacy municipality script to es',
     localizePathAndQuery('/municipality.php', 'm=san-juan', 'es'),

@@ -45,7 +45,9 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
 <?php
 foreach (sitemapLocaleRoutes() as $entry):
-    $localePaths = [$entry['en'], $entry['es']];
+    // Single-URL bilingual routes (e.g. /advertise) list the same path for both
+    // locales — emit it once.
+    $localePaths = array_unique([$entry['en'], $entry['es']]);
     // Determine lastmod from script file
     $routeLastmod = $fallbackDate;
     foreach (localeRoutes() as $routeKey => $route) {
@@ -78,16 +80,17 @@ $beaches = query("
 
 foreach ($beaches as $beach):
     $lastmod = $beach['updated_at'] ? date('Y-m-d', strtotime($beach['updated_at'])) : $fallbackDate;
-    $imageUrl = strpos($beach['cover_image'], 'http') === 0
-        ? $beach['cover_image']
-        : $appUrl . $beach['cover_image'];
+    $resolvedImage = getBeachImageUrl($beach, 'medium');
+    $imageUrl = strpos($resolvedImage, 'http') === 0
+        ? $resolvedImage
+        : $appUrl . $resolvedImage;
 ?>
     <url>
         <loc><?= h($appUrl) ?>/beach/<?= h($beach['slug']) ?></loc>
         <lastmod><?= $lastmod ?></lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
-        <?php if ($beach['cover_image'] && strpos($beach['cover_image'], 'placeholder') === false): ?>
+        <?php if (strpos($resolvedImage, 'placeholder') === false): ?>
         <image:image>
             <image:loc><?= h($imageUrl) ?></image:loc>
             <image:title><?= h($beach['name']) ?></image:title>
@@ -99,7 +102,7 @@ foreach ($beaches as $beach):
         <lastmod><?= $lastmod ?></lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
-        <?php if ($beach['cover_image'] && strpos($beach['cover_image'], 'placeholder') === false): ?>
+        <?php if (strpos($resolvedImage, 'placeholder') === false): ?>
         <image:image>
             <image:loc><?= h($imageUrl) ?></image:loc>
             <image:title><?= h($beach['name']) ?></image:title>
@@ -200,4 +203,3 @@ foreach ($tagPages as $enSlug => $esSlug):
 <?php endforeach; ?>
 
 </urlset>
-

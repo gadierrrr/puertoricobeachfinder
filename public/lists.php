@@ -102,6 +102,8 @@ $breadcrumbs = [
     ['name' => $L['title']],
 ];
 
+$redesignLayout = useRedesign();
+$bodyClasses = trim(($bodyClasses ?? '') . ' rd-account');
 include APP_ROOT . '/components/header.php';
 ?>
 
@@ -110,7 +112,7 @@ include APP_ROOT . '/components/header.php';
         <?php include APP_ROOT . '/components/breadcrumbs.php'; ?>
     </div>
 
-    <div class="flex items-center justify-between mb-8 gap-4 flex-wrap">
+    <div class="flex items-center justify-between mb-8 gap-4 flex-wrap managed-page-hero page-heading-hero"<?= pageHeroAttributes('account') ?>>
         <div>
             <h1 class="text-3xl font-bold text-gray-900"><?= h($L['title']) ?></h1>
             <p class="text-gray-600 mt-1">
@@ -158,7 +160,7 @@ include APP_ROOT . '/components/header.php';
                 </p>
             </a>
             <div class="border-t border-gray-100 px-5 py-3 flex items-center gap-4 text-sm">
-                <a href="<?= h($listUrl) ?>" class="text-blue-600 hover:text-blue-700 font-medium"><?= h($L['view']) ?></a>
+                <a href="<?= h($listUrl) ?>" class="text-ocean-600 hover:text-ocean-700 font-medium"><?= h($L['view']) ?></a>
                 <button type="button" class="text-gray-600 hover:text-gray-900"
                         data-action="openEditListModal"
                         data-action-args='[<?= (int)$list['id'] ?>, <?= json_encode($list['name']) ?>, <?= json_encode($list['description'] ?? '') ?>, <?= $isPublic ? 'true' : 'false' ?>]'>
