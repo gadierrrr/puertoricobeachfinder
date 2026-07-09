@@ -51,10 +51,10 @@ attachBeachMetadata($vieques_beaches);
 
 // Semantic tag colors — used across all 4 beach sections
 $tagColor = static fn(string $tag): string => match($tag) {
-    'snorkeling'      => 'bg-teal-50 text-teal-700',
+    'snorkeling'      => 'bg-ocean-50 text-ocean-700',
     'surfing'         => 'bg-amber-50 text-amber-700',
     'popular'         => 'bg-red-50 text-red-700',
-    'calm-waters'     => 'bg-green-50 dark:bg-green-900/40 text-green-700 dark:text-green-300',
+    'calm-waters'     => 'bg-ocean-50 dark:bg-palm-700/40 text-palm-700 dark:text-ocean-300',
     'scenic'          => 'bg-purple-50 text-purple-700',
     'family-friendly' => 'bg-pink-50 text-pink-700',
     'swimming'        => 'bg-sky-50 text-sky-700',
@@ -67,7 +67,7 @@ $tagColor = static fn(string $tag): string => match($tag) {
 $heroBeach = queryOne(
     "SELECT cover_image FROM beaches WHERE slug = 'condado-beach' AND publish_status = 'published'"
 );
-$heroImage = $heroBeach['cover_image'] ?? '';
+$heroImage = $heroBeach ? getBeachImageUrl($heroBeach, 'large') : '';
 
 // Build combined map IDs from all groups
 $toMapIds = static function (array $beaches): array {
@@ -115,6 +115,7 @@ $extraHead .= breadcrumbSchema([
 ]);
 
 $pageTheme = "guide";
+$redesignLayout = useRedesign();
 $pageShellMode = "start";
 include APP_ROOT . "/components/page-shell.php";
 ?>
@@ -125,7 +126,7 @@ $breadcrumbs = [
     ['name' => __('guide_spring_break.breadcrumb')],
 ];
 $heroCtas = '<div class="flex gap-3 flex-wrap mt-6">'
-    . '<a href="' . h(AFFILIATE_LINKS['flights_sju']) . '" class="inline-flex items-center gap-2 bg-blue-600 text-white font-semibold text-sm px-5 py-3 rounded-lg hover:bg-blue-700 transition-colors" rel="nofollow sponsored" target="_blank">' . h(__('guide_spring_break.hero_cta_flights')) . '</a>'
+    . '<a href="' . h(AFFILIATE_LINKS['flights_sju']) . '" class="inline-flex items-center gap-2 bg-ocean-600 text-white font-semibold text-sm px-5 py-3 rounded-lg hover:bg-ocean-700 transition-colors" rel="nofollow sponsored" target="_blank">' . h(__('guide_spring_break.hero_cta_flights')) . '</a>'
     . '<a href="' . h(AFFILIATE_LINKS['hotels_sanjuan']) . '" class="inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-lg hover:opacity-90 transition-colors" style="background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.25);" rel="nofollow sponsored" target="_blank">' . h(__('guide_spring_break.hero_cta_hotels')) . '</a>'
     . '<a href="' . h($mapUrl) . '" class="inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-lg hover:opacity-90 transition-colors" style="background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.25);">' . h(__('guide_spring_break.hero_cta_map')) . '</a>'
     . '</div>';
@@ -165,7 +166,7 @@ include APP_ROOT . '/components/hero-guide.php';
                 $stripRincon  = affiliateCTA('hotels_rincon',  __('guide_spring_break.strip_cta_rincon_hotels'),   'primary');
                 $stripCars    = affiliateCTA('cars_sju',       __('guide_spring_break.strip_cta_rent_car'),      'primary');
                 if ($stripFlight || $stripSJ || $stripRincon || $stripCars): ?>
-                <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 my-6">
+                <div class="bg-ocean-50 border border-ocean-100 rounded-xl p-4 my-6">
                     <div class="flex flex-wrap items-center gap-3">
                         <p class="text-sm text-amber-500 dark:text-amber-400 font-medium flex-1 min-w-40">
                             <?= h(__('guide_spring_break.strip_urgency')) ?>
@@ -196,7 +197,7 @@ include APP_ROOT . '/components/hero-guide.php';
                     ] as [$hotel, $rating, $area, $price, $photo]): ?>
                     <a href="<?= h(AFFILIATE_LINKS['hotels_sanjuan']) ?>"
                        rel="nofollow sponsored" target="_blank"
-                       class="flex flex-col border border-gray-200 rounded-xl overflow-hidden hover:border-blue-400 hover:shadow-md transition-all bg-white group no-underline">
+                       class="flex flex-col border border-gray-200 rounded-xl overflow-hidden hover:border-ocean-400 hover:shadow-md transition-all bg-white group no-underline">
                         <div class="relative h-36 overflow-hidden">
                             <img src="<?= h($photo) ?>"
                                  alt="<?= h($hotel) ?>"
@@ -208,10 +209,10 @@ include APP_ROOT . '/components/hero-guide.php';
                             </span>
                         </div>
                         <div class="p-4">
-                            <p class="font-semibold text-gray-900 text-sm group-hover:text-blue-700"><?= h($hotel) ?></p>
+                            <p class="font-semibold text-gray-900 text-sm group-hover:text-ocean-700"><?= h($hotel) ?></p>
                             <p class="text-xs text-gray-500"><?= h($area) ?></p>
-                            <p class="text-xs text-green-700 font-semibold mt-1"><?= h(str_replace(':price', $price, __('guide_spring_break.from_per_night'))) ?></p>
-                            <span class="block mt-2 text-center bg-blue-600 text-white text-xs font-semibold py-2 px-3 rounded-lg"><?= h(__('guide_spring_break.book_on_expedia')) ?> &rarr;</span>
+                            <p class="text-xs text-palm-700 font-semibold mt-1"><?= h(str_replace(':price', $price, __('guide_spring_break.from_per_night'))) ?></p>
+                            <span class="block mt-2 text-center bg-ocean-600 text-white text-xs font-semibold py-2 px-3 rounded-lg"><?= h(__('guide_spring_break.book_on_expedia')) ?> &rarr;</span>
                         </div>
                     </a>
                     <?php endforeach; ?>
@@ -227,23 +228,21 @@ include APP_ROOT . '/components/hero-guide.php';
                     foreach ($party_beaches as $beach):
                         $i++;
                         $isLastOdd = ($i === $beachCount && $beachCount % 2 === 1);
-                        $thumb = !empty($beach['cover_image'])
-                            ? htmlspecialchars($beach['cover_image'], ENT_QUOTES, 'UTF-8')
-                            : '/images/beaches/placeholder-beach.webp';
+                        $thumb = getBeachImageUrl($beach, 'medium');
                         $desc = !empty($beach['description'])
                             ? mb_substr(strip_tags($beach['description']), 0, 100) . '…'
                             : '';
                         $tags = array_slice($beach['tags'] ?? [], 0, 3);
                     ?>
                     <a href="<?= h(routeUrl('beach_detail', $lang, ['slug' => $beach['slug']])) ?>"
-                       class="flex flex-col bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-blue-300 transition-all group no-underline <?= $isLastOdd ? 'col-span-2' : '' ?>">
+                       class="flex flex-col bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-ocean-300 transition-all group no-underline <?= $isLastOdd ? 'col-span-2' : '' ?>">
                         <div class="relative h-40 overflow-hidden flex-shrink-0">
                             <img src="<?= $thumb ?>" alt="<?= h($beach['name']) ?>"
                                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                  loading="lazy">
                         </div>
                         <div class="p-4 flex-1 flex flex-col">
-                            <p class="font-bold text-gray-900 group-hover:text-blue-700 transition-colors"><?= h($beach['name']) ?></p>
+                            <p class="font-bold text-gray-900 group-hover:text-ocean-700 transition-colors"><?= h($beach['name']) ?></p>
                             <p class="text-xs text-gray-500 mb-2"><?= h($beach['municipality']) ?></p>
                             <?php if ($desc): ?>
                             <p class="text-sm text-gray-600 leading-snug flex-1"><?= h($desc) ?></p>
@@ -293,7 +292,7 @@ include APP_ROOT . '/components/hero-guide.php';
                     ] as [$hotel, $rating, $area, $price, $photo]): ?>
                     <a href="<?= h(AFFILIATE_LINKS['hotels_rincon']) ?>"
                        rel="nofollow sponsored" target="_blank"
-                       class="flex flex-col border border-gray-200 rounded-xl overflow-hidden hover:border-green-400 hover:shadow-md transition-all bg-white group no-underline">
+                       class="flex flex-col border border-gray-200 rounded-xl overflow-hidden hover:border-palm-400 hover:shadow-md transition-all bg-white group no-underline">
                         <div class="relative h-36 overflow-hidden">
                             <img src="<?= h($photo) ?>"
                                  alt="<?= h($hotel) ?>"
@@ -305,10 +304,10 @@ include APP_ROOT . '/components/hero-guide.php';
                             </span>
                         </div>
                         <div class="p-4">
-                            <p class="font-semibold text-gray-900 text-sm group-hover:text-green-700"><?= h($hotel) ?></p>
+                            <p class="font-semibold text-gray-900 text-sm group-hover:text-palm-700"><?= h($hotel) ?></p>
                             <p class="text-xs text-gray-500"><?= h($area) ?></p>
-                            <p class="text-xs text-green-700 font-semibold mt-1"><?= h(str_replace(':price', $price, __('guide_spring_break.from_per_night'))) ?></p>
-                            <span class="block mt-2 text-center bg-blue-600 text-white text-xs font-semibold py-2 px-3 rounded-lg"><?= h(__('guide_spring_break.book_on_expedia')) ?> &rarr;</span>
+                            <p class="text-xs text-palm-700 font-semibold mt-1"><?= h(str_replace(':price', $price, __('guide_spring_break.from_per_night'))) ?></p>
+                            <span class="block mt-2 text-center bg-ocean-600 text-white text-xs font-semibold py-2 px-3 rounded-lg"><?= h(__('guide_spring_break.book_on_expedia')) ?> &rarr;</span>
                         </div>
                     </a>
                     <?php endforeach; ?>
@@ -324,23 +323,21 @@ include APP_ROOT . '/components/hero-guide.php';
                     foreach ($surf_beaches as $beach):
                         $i++;
                         $isLastOdd = ($i === $beachCount && $beachCount % 2 === 1);
-                        $thumb = !empty($beach['cover_image'])
-                            ? htmlspecialchars($beach['cover_image'], ENT_QUOTES, 'UTF-8')
-                            : '/images/beaches/placeholder-beach.webp';
+                        $thumb = getBeachImageUrl($beach, 'medium');
                         $desc = !empty($beach['description'])
                             ? mb_substr(strip_tags($beach['description']), 0, 100) . '…'
                             : '';
                         $tags = array_slice($beach['tags'] ?? [], 0, 3);
                     ?>
                     <a href="<?= h(routeUrl('beach_detail', $lang, ['slug' => $beach['slug']])) ?>"
-                       class="flex flex-col bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-green-300 transition-all group no-underline <?= $isLastOdd ? 'col-span-2' : '' ?>">
+                       class="flex flex-col bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-ocean-300 transition-all group no-underline <?= $isLastOdd ? 'col-span-2' : '' ?>">
                         <div class="relative h-40 overflow-hidden flex-shrink-0">
                             <img src="<?= $thumb ?>" alt="<?= h($beach['name']) ?>"
                                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                  loading="lazy">
                         </div>
                         <div class="p-4 flex-1 flex flex-col">
-                            <p class="font-bold text-gray-900 group-hover:text-green-700 transition-colors"><?= h($beach['name']) ?></p>
+                            <p class="font-bold text-gray-900 group-hover:text-palm-700 transition-colors"><?= h($beach['name']) ?></p>
                             <p class="text-xs text-gray-500 mb-2"><?= h($beach['municipality']) ?></p>
                             <?php if ($desc): ?>
                             <p class="text-sm text-gray-600 leading-snug flex-1"><?= h($desc) ?></p>
@@ -374,8 +371,8 @@ include APP_ROOT . '/components/hero-guide.php';
                 <?php endif; ?>
 
                 <div class="flex items-center gap-3 mt-12 mb-3">
-                    <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center text-green-600 text-base">🐠</div>
-                    <span class="text-xs font-semibold uppercase tracking-widest text-green-600"><?= h(__('guide_spring_break.section_culebra_label')) ?></span>
+                    <div class="w-8 h-8 bg-ocean-100 rounded-lg flex items-center justify-center text-palm-600 text-base">🐠</div>
+                    <span class="text-xs font-semibold uppercase tracking-widest text-palm-600"><?= h(__('guide_spring_break.section_culebra_label')) ?></span>
                 </div>
                 <h2 id="culebra" class="text-3xl font-bold text-gray-900 mb-4"><?= h(__('guide_spring_break.section_culebra_heading')) ?></h2>
 
@@ -395,9 +392,7 @@ include APP_ROOT . '/components/hero-guide.php';
                         $i++;
                         $isLastOdd = ($i === $beachCount && $beachCount % 2 === 1);
                         $thumb = $beachPhotoOverrides[$beach['slug']]
-                            ?? (!empty($beach['cover_image'])
-                                ? htmlspecialchars($beach['cover_image'], ENT_QUOTES, 'UTF-8')
-                                : '/images/beaches/placeholder-beach.webp');
+                            ?? getBeachImageUrl($beach, 'medium');
                         $desc = !empty($beach['description'])
                             ? mb_substr(strip_tags($beach['description']), 0, 100) . '…'
                             : '';
@@ -453,9 +448,7 @@ include APP_ROOT . '/components/hero-guide.php';
                     foreach ($vieques_beaches as $beach):
                         $i++;
                         $isLastOdd = ($i === $beachCount && $beachCount % 2 === 1);
-                        $thumb = !empty($beach['cover_image'])
-                            ? htmlspecialchars($beach['cover_image'], ENT_QUOTES, 'UTF-8')
-                            : '/images/beaches/placeholder-beach.webp';
+                        $thumb = getBeachImageUrl($beach, 'medium');
                         $desc = !empty($beach['description'])
                             ? mb_substr(strip_tags($beach['description']), 0, 100) . '…'
                             : '';
@@ -532,9 +525,9 @@ include APP_ROOT . '/components/hero-guide.php';
                 $hasBookingCtas    = $bookingCtaFlight || $bookingCtaSj || $bookingCtaRincon || $bookingCtaCars;
                 ?>
                 <?php if ($hasBookingCtas): ?>
-                <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl p-6 my-8 text-white">
+                <div class="bg-gradient-to-r from-ocean-600 to-ocean-700 rounded-xl p-6 my-8 text-white">
                     <h3 class="text-xl font-bold mb-2"><?= h(__('guide_spring_break.ready_to_book')) ?></h3>
-                    <p class="text-blue-100 text-sm mb-4">
+                    <p class="text-ocean-100 text-sm mb-4">
                         <?= h(__('guide_spring_break.ready_to_book_desc')) ?>
                     </p>
                     <div class="flex flex-wrap gap-3">
@@ -550,7 +543,7 @@ include APP_ROOT . '/components/hero-guide.php';
 
                 <div class="space-y-6">
                     <?php foreach ($faqs as $faq): ?>
-                    <div class="border-l-4 border-blue-500 pl-4">
+                    <div class="border-l-4 border-ocean-500 pl-4">
                         <h3 class="text-xl font-bold text-gray-900 mb-2"><?= h($faq['question']) ?></h3>
                         <p class="text-gray-700"><?= h($faq['answer']) ?></p>
                     </div>

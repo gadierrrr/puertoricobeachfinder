@@ -13,6 +13,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/../bootstrap.php';
 require_once APP_ROOT . '/inc/security_headers.php';
 
 $pageTitle = 'Offline';
+$redesignLayout = useRedesign();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,8 +23,12 @@ $pageTitle = 'Offline';
     <title>Offline | Puerto Rico Beach Finder</title>
     <link rel="stylesheet" href="/assets/css/tailwind.min.css">
     <link rel="stylesheet" href="/assets/css/styles.css">
+    <?php if ($redesignLayout): ?>
+    <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Hanken+Grotesk:wght@400;500;600;700&family=Saira+Semi+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/redesign.css?v=30">
+    <?php endif; ?>
 </head>
-<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4<?= $redesignLayout ? ' redesign rd-error' : '' ?>">
     <div class="text-center max-w-md">
         <div class="text-8xl mb-6 animate-bounce">🏖️</div>
 

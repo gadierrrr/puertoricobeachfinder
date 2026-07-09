@@ -72,7 +72,7 @@ $photos = query(
     'SELECT p.*, b.name as beach_name, b.slug as beach_slug
      FROM beach_photos p
      INNER JOIN beaches b ON p.beach_id = b.id
-     WHERE p.user_id = :user_id AND p.status = "approved"
+     WHERE p.user_id = :user_id AND p.status = "published"
      ORDER BY p.created_at DESC',
     [':user_id' => $user['id']]
 );
@@ -98,6 +98,7 @@ $stats = [
 
 // Calculate member since
 $memberSince = date('F Y', strtotime($user['created_at'] ?? 'now'));
+$profileIsEs = (getCurrentLanguage() === 'es');
 
 $userFavorites = array_column($favorites, 'id');
 
@@ -117,59 +118,62 @@ $breadcrumbs = [
     ['name' => __('profile.my_profile')]
 ];
 
+$redesignLayout = useRedesign();
+$bodyClasses = trim(($bodyClasses ?? '') . ' rd-account rd-profile');
 include APP_ROOT . '/components/header.php';
 ?>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
+<div class="profile-shell max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
     <!-- Breadcrumbs -->
-    <div class="mb-6">
+    <div class="profile-breadcrumb mb-6">
         <?php include APP_ROOT . '/components/breadcrumbs.php'; ?>
     </div>
     <!-- Profile Header -->
-    <div class="bg-white rounded-xl border border-warm-200 p-6 mb-8">
-        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+    <div class="profile-hero mb-8">
+        <div class="profile-hero-main flex flex-col sm:flex-row items-center sm:items-start gap-6">
             <!-- Avatar -->
             <div class="flex-shrink-0">
                 <?php
                 require_once APP_ROOT . '/inc/chat.php';
                 $_profileAvatar = chatUserDisplayInfo($user);
                 ?>
-                <div class="w-24 h-24 rounded-full <?= h($_profileAvatar['color']) ?> flex items-center justify-center text-white text-3xl font-bold border-4 border-warm-200">
+                <div class="profile-avatar w-24 h-24 rounded-full <?= h($_profileAvatar['color']) ?> flex items-center justify-center text-white text-3xl font-bold border-4 border-warm-200">
                     <?= h($_profileAvatar['initials']) ?>
                 </div>
             </div>
 
             <!-- User Info -->
-            <div class="flex-1 text-center sm:text-left">
+            <div class="profile-identity flex-1 text-center sm:text-left">
+                <p class="profile-kicker"><?= $profileIsEs ? 'Cuaderno de playa' : 'Beach logbook' ?></p>
                 <div class="flex items-center justify-center sm:justify-start gap-3 flex-wrap">
                     <h1 class="text-2xl font-bold text-warm-900">
                         <?= h($user['name'] ?? __('profile.beach_explorer')) ?>
                     </h1>
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium border <?= h($levelInfo['colorClass']) ?>">
+                    <span class="profile-level inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium border <?= h($levelInfo['colorClass']) ?>">
                         <span><?= h($levelInfo['icon']) ?></span>
                         <span><?= h($levelInfo['label']) ?></span>
                     </span>
                 </div>
-                <p class="text-warm-500 mt-1">
+                <p class="profile-member text-warm-500 mt-1">
                     <i data-lucide="calendar" class="w-4 h-4 inline-block mr-1"></i>
                     <?= h(__('profile.member_since', ['date' => $memberSince])) ?>
                 </p>
 
                 <!-- Stats -->
-                <div class="flex flex-wrap justify-center sm:justify-start gap-6 mt-4">
-                    <div class="text-center">
+                <div class="profile-stat-grid flex flex-wrap justify-center sm:justify-start gap-6 mt-4">
+                    <div class="profile-stat text-center">
                         <div class="text-2xl font-bold text-sunset-400"><?= $stats['favorites'] ?></div>
                         <div class="text-xs text-gray-500 uppercase tracking-wide"><?= h(__('profile.favorites')) ?></div>
                     </div>
-                    <div class="text-center">
+                    <div class="profile-stat text-center">
                         <div class="text-2xl font-bold text-amber-400"><?= $stats['reviews'] ?></div>
                         <div class="text-xs text-gray-500 uppercase tracking-wide"><?= h(__('profile.reviews')) ?></div>
                     </div>
-                    <div class="text-center">
+                    <div class="profile-stat text-center">
                         <div class="text-2xl font-bold text-purple-400"><?= $stats['photos'] ?></div>
                         <div class="text-xs text-gray-500 uppercase tracking-wide"><?= h(__('profile.photos')) ?></div>
                     </div>
-                    <div class="text-center">
+                    <div class="profile-stat text-center">
                         <div class="text-2xl font-bold text-green-400"><?= $stats['checkins'] ?></div>
                         <div class="text-xs text-gray-500 uppercase tracking-wide"><?= h(__('profile.checkins')) ?></div>
                     </div>
@@ -177,12 +181,12 @@ include APP_ROOT . '/components/header.php';
             </div>
 
             <!-- Actions -->
-            <div class="flex flex-col gap-2">
-                <a href="/" class="inline-flex items-center gap-2 bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-4 py-2 rounded-lg font-medium text-sm transition-colors">
+            <div class="profile-actions flex flex-col gap-2">
+                <a href="/" class="profile-primary-action inline-flex items-center gap-2 bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-4 py-2 rounded-lg font-medium text-sm transition-colors">
                     <i data-lucide="compass" class="w-4 h-4"></i>
                     <span><?= h(__('profile.explore_beaches')) ?></span>
                 </a>
-	                <a href="/logout" class="inline-flex items-center gap-2 border border-warm-200 hover:border-warm-300 text-warm-500 hover:text-warm-900 px-4 py-2 rounded-lg font-medium text-sm transition-colors">
+	                <a href="/logout" class="profile-secondary-action inline-flex items-center gap-2 border border-warm-200 hover:border-warm-300 text-warm-500 hover:text-warm-900 px-4 py-2 rounded-lg font-medium text-sm transition-colors">
 	                    <i data-lucide="log-out" class="w-4 h-4"></i>
 	                    <span><?= h(__('profile.sign_out')) ?></span>
 	                </a>
@@ -191,15 +195,15 @@ include APP_ROOT . '/components/header.php';
     </div>
 
     <?php if ($deleteError !== ''): ?>
-    <div class="bg-red-500/10 border border-red-500/30 text-red-200 px-4 py-3 rounded-xl mb-8">
+    <div class="profile-alert bg-red-500/10 border border-red-500/30 text-red-200 px-4 py-3 rounded-xl mb-8">
         <?= h($deleteErrorMessages[$deleteError] ?? __('profile.delete_error_failed')) ?>
     </div>
     <?php endif; ?>
 
     <!-- Dashboard Widgets -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <div class="profile-dashboard grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <!-- Explorer Progress Card -->
-        <div class="bg-white rounded-xl border border-warm-200 p-6">
+        <div class="profile-panel profile-progress-card bg-white rounded-xl border border-warm-200 p-6">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-lg font-semibold text-warm-900 flex items-center gap-2">
                     <i data-lucide="trophy" class="w-5 h-5 text-sunset-400"></i>
@@ -245,7 +249,7 @@ include APP_ROOT . '/components/header.php';
         </div>
 
         <!-- Favorite Beaches Weather Card -->
-        <div class="bg-white rounded-xl border border-warm-200 p-6">
+        <div class="profile-panel profile-weather-card bg-white rounded-xl border border-warm-200 p-6">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-lg font-semibold text-warm-900 flex items-center gap-2">
                     <i data-lucide="sun" class="w-5 h-5 text-sunset-400"></i>
@@ -272,7 +276,8 @@ include APP_ROOT . '/components/header.php';
                 <a href="/beach/<?= h($beach['slug']) ?>"
                    class="flex items-center justify-between p-3 rounded-lg bg-warm-50 hover:bg-warm-100 border border-warm-100 hover:border-sunset-400/30 transition-all group">
                     <div class="flex items-center gap-3 min-w-0">
-                        <img src="<?= h(getThumbnailUrl($beach['cover_image'] ?? '')) ?>"
+                        <img src="<?= h(getBeachImageUrl($beach, 'thumb')) ?>"
+                             data-fallback-src="/images/beaches/placeholder-beach.webp"
                              alt="<?= h($beach['name']) ?>"
                              class="w-10 h-10 rounded-lg object-cover flex-shrink-0">
                         <span class="text-warm-900 font-medium truncate group-hover:text-sunset-400 transition-colors">
@@ -317,7 +322,7 @@ include APP_ROOT . '/components/header.php';
         $earnedCount = count($earnedBadges);
         $totalBadges = count($achievementsCatalog);
     ?>
-    <div class="bg-white rounded-xl border border-warm-200 p-6 mb-8">
+    <div class="profile-panel profile-achievements bg-white rounded-xl border border-warm-200 p-6 mb-8">
         <div class="flex items-center justify-between mb-4">
             <h2 class="text-lg font-semibold text-warm-900 flex items-center gap-2">
                 <i data-lucide="award" class="w-5 h-5 text-sunset-400"></i>
@@ -346,12 +351,11 @@ include APP_ROOT . '/components/header.php';
     <!-- Invite friends (referral loop) -->
     <?php
         require_once APP_ROOT . '/inc/invite.php';
-        $profileIsEs = (getCurrentLanguage() === 'es');
         $inviteCode = inviteEnsureCode($user['id']);
         $inviteUrl = $inviteCode !== '' ? (getPublicBaseUrl() . '/?ref=' . rawurlencode($inviteCode)) : '';
     ?>
     <?php if ($inviteUrl !== ''): ?>
-    <div class="bg-white rounded-xl border border-warm-200 p-6 mb-8">
+    <div class="profile-panel profile-invite bg-white rounded-xl border border-warm-200 p-6 mb-8">
         <h2 class="text-lg font-semibold text-warm-900 flex items-center gap-2 mb-1">
             <i data-lucide="gift" class="w-5 h-5 text-sunset-400"></i>
             <?= $profileIsEs ? 'Invita a tus amigos' : 'Invite friends' ?>
@@ -382,11 +386,10 @@ include APP_ROOT . '/components/header.php';
 
     <!-- Notifications settings (weekly digest opt in/out) -->
     <?php
-        $profileIsEs = (getCurrentLanguage() === 'es');
         $prefRow = queryOne('SELECT weekly_digest FROM user_preferences WHERE user_id = :id', [':id' => $user['id']]);
         $weeklyDigestOn = $prefRow ? ((int) $prefRow['weekly_digest'] === 1) : true;
     ?>
-    <div class="bg-white rounded-xl border border-warm-200 p-6 mb-8">
+    <div class="profile-panel profile-notifications bg-white rounded-xl border border-warm-200 p-6 mb-8">
         <h2 class="text-lg font-semibold text-warm-900 flex items-center gap-2 mb-3">
             <i data-lucide="bell" class="w-5 h-5 text-sunset-400"></i>
             <?= $profileIsEs ? 'Notificaciones' : 'Notifications' ?>
@@ -418,7 +421,7 @@ include APP_ROOT . '/components/header.php';
     };
     </script>
 
-    <section class="bg-red-950/40 rounded-xl border border-red-500/30 p-6 mb-8" aria-labelledby="account-danger-zone">
+    <section class="profile-danger bg-red-950/40 rounded-xl border border-red-500/30 p-6 mb-8" aria-labelledby="account-danger-zone">
         <div class="flex items-start gap-3 mb-5">
             <i data-lucide="triangle-alert" class="w-5 h-5 text-red-300 mt-0.5"></i>
             <div>
@@ -483,12 +486,12 @@ include APP_ROOT . '/components/header.php';
     </section>
 
     <!-- Tabs -->
-    <div class="border-b border-warm-200 mb-6">
+    <div class="profile-tabs-wrap border-b border-warm-200 mb-6">
         <nav class="flex gap-1 overflow-x-auto" role="tablist" aria-label="Profile sections">
             <a href="?tab=favorites"
                role="tab"
                aria-selected="<?= $activeTab === 'favorites' ? 'true' : 'false' ?>"
-               class="flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors <?= $activeTab === 'favorites' ? 'border-sunset-400 text-sunset-400' : 'border-transparent text-warm-500 hover:text-warm-900 hover:border-warm-300' ?>">
+               class="profile-tab flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors <?= $activeTab === 'favorites' ? 'border-sunset-400 text-sunset-400' : 'border-transparent text-warm-500 hover:text-warm-900 hover:border-warm-300' ?>">
                 <i data-lucide="heart" class="w-4 h-4"></i>
                 <span><?= h(__('profile.favorites')) ?></span>
                 <span class="bg-warm-100 text-warm-600 text-xs px-2 py-0.5 rounded-full"><?= $stats['favorites'] ?></span>
@@ -496,7 +499,7 @@ include APP_ROOT . '/components/header.php';
             <a href="?tab=reviews"
                role="tab"
                aria-selected="<?= $activeTab === 'reviews' ? 'true' : 'false' ?>"
-               class="flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors <?= $activeTab === 'reviews' ? 'border-sunset-400 text-sunset-400' : 'border-transparent text-warm-500 hover:text-warm-900 hover:border-warm-300' ?>">
+               class="profile-tab flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors <?= $activeTab === 'reviews' ? 'border-sunset-400 text-sunset-400' : 'border-transparent text-warm-500 hover:text-warm-900 hover:border-warm-300' ?>">
                 <i data-lucide="star" class="w-4 h-4"></i>
                 <span><?= h(__('profile.reviews')) ?></span>
                 <span class="bg-warm-100 text-warm-600 text-xs px-2 py-0.5 rounded-full"><?= $stats['reviews'] ?></span>
@@ -504,7 +507,7 @@ include APP_ROOT . '/components/header.php';
             <a href="?tab=photos"
                role="tab"
                aria-selected="<?= $activeTab === 'photos' ? 'true' : 'false' ?>"
-               class="flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors <?= $activeTab === 'photos' ? 'border-sunset-400 text-sunset-400' : 'border-transparent text-warm-500 hover:text-warm-900 hover:border-warm-300' ?>">
+               class="profile-tab flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors <?= $activeTab === 'photos' ? 'border-sunset-400 text-sunset-400' : 'border-transparent text-warm-500 hover:text-warm-900 hover:border-warm-300' ?>">
                 <i data-lucide="image" class="w-4 h-4"></i>
                 <span><?= h(__('profile.photos')) ?></span>
                 <span class="bg-warm-100 text-warm-600 text-xs px-2 py-0.5 rounded-full"><?= $stats['photos'] ?></span>
@@ -512,7 +515,7 @@ include APP_ROOT . '/components/header.php';
             <a href="?tab=checkins"
                role="tab"
                aria-selected="<?= $activeTab === 'checkins' ? 'true' : 'false' ?>"
-               class="flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors <?= $activeTab === 'checkins' ? 'border-sunset-400 text-sunset-400' : 'border-transparent text-warm-500 hover:text-warm-900 hover:border-warm-300' ?>">
+               class="profile-tab flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors <?= $activeTab === 'checkins' ? 'border-sunset-400 text-sunset-400' : 'border-transparent text-warm-500 hover:text-warm-900 hover:border-warm-300' ?>">
                 <i data-lucide="map-pin" class="w-4 h-4"></i>
                 <span><?= h(__('profile.checkins')) ?></span>
                 <span class="bg-warm-100 text-warm-600 text-xs px-2 py-0.5 rounded-full"><?= $stats['checkins'] ?></span>
@@ -521,11 +524,11 @@ include APP_ROOT . '/components/header.php';
     </div>
 
     <!-- Tab Content -->
-    <div role="tabpanel">
+    <div class="profile-tab-panel" role="tabpanel">
         <?php if ($activeTab === 'favorites'): ?>
         <!-- Favorites Tab -->
         <?php if (empty($favorites)): ?>
-        <div class="text-center py-16 bg-warm-50 border border-warm-200 rounded-xl">
+        <div class="profile-empty text-center py-16 bg-warm-50 border border-warm-200 rounded-xl">
             <div class="text-6xl mb-4">❤️</div>
             <h2 class="text-xl font-semibold text-warm-900 mb-2"><?= h(__('profile.no_favorites')) ?></h2>
             <p class="text-warm-500 mb-6 max-w-md mx-auto"><?= h(__('profile.no_favorites_cta')) ?></p>
@@ -554,7 +557,7 @@ include APP_ROOT . '/components/header.php';
         <?php elseif ($activeTab === 'reviews'): ?>
         <!-- Reviews Tab -->
         <?php if (empty($reviews)): ?>
-        <div class="text-center py-16 bg-warm-50 border border-warm-200 rounded-xl">
+        <div class="profile-empty text-center py-16 bg-warm-50 border border-warm-200 rounded-xl">
             <div class="text-6xl mb-4">⭐</div>
             <h2 class="text-xl font-semibold text-warm-900 mb-2"><?= h(__('profile.no_reviews')) ?></h2>
             <p class="text-warm-500 mb-6"><?= h(__('profile.no_reviews_cta')) ?></p>
@@ -565,11 +568,12 @@ include APP_ROOT . '/components/header.php';
         <?php else: ?>
         <div class="space-y-4">
             <?php foreach ($reviews as $review): ?>
-            <div class="bg-white rounded-xl border border-warm-200 p-5 hover:border-sunset-400/30 transition-all">
+            <div class="profile-list-card bg-white rounded-xl border border-warm-200 p-5 hover:border-sunset-400/30 transition-all">
                 <div class="flex items-start gap-4">
                     <!-- Beach Image -->
                     <a href="/beach/<?= h($review['beach_slug']) ?>" class="flex-shrink-0">
-                        <img src="<?= h(getThumbnailUrl($review['beach_image'] ?? '/images/beaches/placeholder-beach.webp')) ?>"
+                        <img src="<?= h(getBeachImageUrl(['cover_image' => $review['beach_image'] ?? '', 'slug' => $review['beach_slug'] ?? ''], 'thumb')) ?>"
+                             data-fallback-src="/images/beaches/placeholder-beach.webp"
                              alt="<?= h($review['beach_name']) ?>"
                              class="w-20 h-20 rounded-lg object-cover">
                     </a>
@@ -619,7 +623,7 @@ include APP_ROOT . '/components/header.php';
         <?php elseif ($activeTab === 'photos'): ?>
         <!-- Photos Tab -->
         <?php if (empty($photos)): ?>
-        <div class="text-center py-16 bg-warm-50 border border-warm-200 rounded-xl">
+        <div class="profile-empty text-center py-16 bg-warm-50 border border-warm-200 rounded-xl">
             <div class="text-6xl mb-4">📷</div>
             <h2 class="text-xl font-semibold text-warm-900 mb-2"><?= h(__('profile.no_photos')) ?></h2>
             <p class="text-warm-500 mb-6"><?= h(__('profile.no_photos_cta')) ?></p>
@@ -628,9 +632,9 @@ include APP_ROOT . '/components/header.php';
             </a>
         </div>
         <?php else: ?>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div class="profile-photo-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <?php foreach ($photos as $photo): ?>
-            <div class="group relative aspect-square rounded-xl overflow-hidden bg-warm-100">
+            <div class="profile-photo group relative aspect-square rounded-xl overflow-hidden bg-warm-100">
                 <img src="<?= h($photo['thumbnail_url'] ?? $photo['photo_url']) ?>"
                      alt="<?= h(__('profile.photo_at', ['name' => $photo['beach_name']])) ?>"
                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -653,7 +657,7 @@ include APP_ROOT . '/components/header.php';
         <?php elseif ($activeTab === 'checkins'): ?>
         <!-- Check-ins Tab -->
         <?php if (empty($checkins)): ?>
-        <div class="text-center py-16 bg-warm-50 border border-warm-200 rounded-xl">
+        <div class="profile-empty text-center py-16 bg-warm-50 border border-warm-200 rounded-xl">
             <div class="text-6xl mb-4">📍</div>
             <h2 class="text-xl font-semibold text-warm-900 mb-2"><?= h(__('profile.no_checkins')) ?></h2>
             <p class="text-warm-500 mb-6"><?= h(__('profile.no_checkins_cta')) ?></p>
@@ -664,10 +668,11 @@ include APP_ROOT . '/components/header.php';
         <?php else: ?>
         <div class="space-y-3">
             <?php foreach ($checkins as $checkin): ?>
-            <div class="bg-white rounded-lg border border-warm-200 p-4 flex items-center gap-4 hover:border-sunset-400/30 transition-all">
+            <div class="profile-list-card bg-white rounded-lg border border-warm-200 p-4 flex items-center gap-4 hover:border-sunset-400/30 transition-all">
                 <!-- Beach Image -->
                 <a href="/beach/<?= h($checkin['beach_slug']) ?>" class="flex-shrink-0">
-                    <img src="<?= h(getThumbnailUrl($checkin['beach_image'] ?? '/images/beaches/placeholder-beach.webp')) ?>"
+                    <img src="<?= h(getBeachImageUrl(['cover_image' => $checkin['beach_image'] ?? '', 'slug' => $checkin['beach_slug'] ?? ''], 'thumb')) ?>"
+                         data-fallback-src="/images/beaches/placeholder-beach.webp"
                          alt="<?= h($checkin['beach_name']) ?>"
                          class="w-14 h-14 rounded-lg object-cover">
                 </a>

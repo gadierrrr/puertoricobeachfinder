@@ -74,6 +74,8 @@ $breadcrumbs = [
     ['name' => __('compare.title')]
 ];
 
+$redesignLayout = useRedesign();
+$bodyClasses = trim(($bodyClasses ?? '') . ' rd-tool');
 include APP_ROOT . '/components/header.php';
 ?>
 
@@ -142,7 +144,8 @@ include APP_ROOT . '/components/header.php';
                 <?php $beach = $beaches[0]; ?>
                 <div class="beach-detail-card overflow-hidden">
                     <div class="relative">
-                        <img src="<?= h($beach['cover_image'] ?: '/images/beaches/placeholder-beach.webp') ?>"
+                        <img src="<?= h(getBeachImageUrl($beach, 'medium')) ?>"
+                             data-fallback-src="/images/beaches/placeholder-beach.webp"
                              alt="<?= h($beach['name']) ?>"
                              class="w-full h-48 object-cover">
                         <button data-action="removeFromComparison" data-action-args='["<?= h($beach['id']) ?>"]'
@@ -170,7 +173,8 @@ include APP_ROOT . '/components/header.php';
                 <div class="beach-detail-card overflow-hidden">
                     <div class="relative">
                         <a href="/beach/<?= h($beach['slug']) ?>">
-                            <img src="<?= h($beach['cover_image'] ?: '/images/beaches/placeholder-beach.webp') ?>"
+                            <img src="<?= h(getBeachImageUrl($beach, 'medium')) ?>"
+                                 data-fallback-src="/images/beaches/placeholder-beach.webp"
                                  alt="<?= h($beach['name']) ?>"
                                  class="w-full h-40 object-cover hover:opacity-90 transition-opacity">
                         </a>
@@ -431,7 +435,7 @@ include APP_ROOT . '/components/header.php';
 <script <?= cspNonceAttr() ?>>
 // Current comparison beaches
 let comparisonBeaches = <?= json_encode(array_column($beaches, 'id')) ?>;
-const MAX_COMPARE = 3;
+const MAX_COMPARE_PAGE = 3;
 
 // Translated strings for JS
 const COMPARE_STRINGS = <?= json_encode([
@@ -446,10 +450,29 @@ let allBeaches = [];
 // Load all beaches for selector
 async function loadAllBeaches() {
     try {
-        const response = await fetch('/api/beaches.php?format=json&limit=500');
+        const response = await fetch('/api/beaches.php?format=json&limit=50&page=1');
+        if (!response.ok) throw new Error('Beach list request failed');
         const data = await response.json();
         allBeaches = data.data || data.beaches || [];
-        renderBeachList();
+
+        const totalPages = Math.max(1, Number(data.meta?.pages || 1));
+        if (totalPages > 1) {
+            const pageRequests = [];
+            for (let page = 2; page <= totalPages; page++) {
+                pageRequests.push(
+                    fetch('/api/beaches.php?format=json&limit=50&page=' + page)
+                        .then(pageResponse => {
+                            if (!pageResponse.ok) throw new Error('Beach list page request failed');
+                            return pageResponse.json();
+                        })
+                );
+            }
+            const pageResults = await Promise.all(pageRequests);
+            pageResults.forEach(pageData => {
+                allBeaches.push(...(pageData.data || pageData.beaches || []));
+            });
+        }
+        renderBeachList(document.getElementById('beach-search')?.value || '');
     } catch (error) {
         console.error('Failed to load beaches:', error);
     }
@@ -474,8 +497,9 @@ function renderBeachList(filter = '') {
     container.innerHTML = filtered.slice(0, 50).map(beach => `
         <button data-action="addToComparison" data-action-args='["${beach.id}"]'
                 class="w-full flex items-center gap-3 p-3 hover:bg-warm-50 rounded-lg transition-colors text-left"
-                ${comparisonBeaches.length >= MAX_COMPARE ? 'disabled' : ''}>
-            <img src="${beach.cover_image || '/images/beaches/placeholder-beach.webp'}"
+                ${comparisonBeaches.length >= MAX_COMPARE_PAGE ? 'disabled' : ''}>
+            <img src="${beach.image_url || beach.cover_image || '/images/beaches/placeholder-beach.webp'}"
+                 data-fallback-src="/images/beaches/placeholder-beach.webp"
                  alt="${escapeHtml(beach.name)}" class="w-12 h-12 rounded-lg object-cover flex-shrink-0">
             <div class="flex-1 min-w-0">
                 <div class="font-medium text-warm-900 truncate">${escapeHtml(beach.name)}</div>
@@ -485,7 +509,7 @@ function renderBeachList(filter = '') {
         </button>
     `).join('');
 
-    if (comparisonBeaches.length >= MAX_COMPARE) {
+    if (comparisonBeaches.length >= MAX_COMPARE_PAGE) {
         container.innerHTML = '<div class="text-center py-4 text-sunset-400 bg-sunset-400/10 border border-sunset-400/30 rounded-lg mb-2">' + escapeHtml(COMPARE_STRINGS.max_alert) + '</div>' + container.innerHTML;
     }
 }
@@ -523,7 +547,7 @@ function closeBeachSelector() {
 }
 
 function addToComparison(beachId) {
-    if (comparisonBeaches.length >= MAX_COMPARE) {
+    if (comparisonBeaches.length >= MAX_COMPARE_PAGE) {
         alert(COMPARE_STRINGS.max_alert_js);
         return;
     }

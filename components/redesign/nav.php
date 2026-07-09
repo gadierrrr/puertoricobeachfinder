@@ -20,15 +20,7 @@ $langSwitchEsUrl = getLocalizedUrlForCurrentRequest('es');
 
 $navMapHref = $navMapHref ?? null;
 if (!is_string($navMapHref) || $navMapHref === '') {
-    $requestUri = (string)($_SERVER['REQUEST_URI'] ?? '/');
-    $currentPath = (string)(parse_url($requestUri, PHP_URL_PATH) ?? '/');
-    if ($currentPath === '') {
-        $currentPath = $localizedHome;
-    }
-    $queryParams = $_GET;
-    $queryParams['view'] = 'map';
-    $queryString = http_build_query($queryParams);
-    $navMapHref = $currentPath . ($queryString !== '' ? '?' . $queryString : '?view=map');
+    $navMapHref = $localizedHome . '?view=map';
 }
 
 $rdNavTags = [

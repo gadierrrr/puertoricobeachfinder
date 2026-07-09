@@ -48,7 +48,6 @@ $beaches = query("
     FROM beaches b
     WHERE b.municipality = :municipality
     AND b.publish_status = 'published'
-    AND (b.location_type = 'beach' OR b.location_type IS NULL)
     ORDER BY
         CASE WHEN b.google_rating IS NOT NULL THEN 1 ELSE 2 END,
         b.google_rating DESC,

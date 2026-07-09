@@ -236,11 +236,53 @@ function guideCmsRenderArticlePage(array $article, array $blocks, string $locale
 
     $extraHead = ($extraHead ?? '') . guideCmsBuildHead($article, $locale);
 
+    $articleBlocksHtml = '';
+    if (!empty($blocks)) {
+        foreach ($blocks as $block) {
+            $html = guideCmsRenderBlock($block, $article, $locale);
+            if ($html === '') {
+                continue;
+            }
+            $articleBlocksHtml .= $html;
+        }
+    }
+
     $pageTheme = 'guide';
     $skipMapCSS = true;
     $skipMapScripts = true;
+    $redesignLayout = useRedesign();
     $pageShellMode = 'start';
     include APP_ROOT . '/components/page-shell.php';
+
+    if ($redesignLayout) {
+        echo '<div class="rd rd-guide-detail rd-guide-cms">';
+        echo '<section class="guide-detail-hero">';
+        echo '<div class="wrap guide-detail-hero-grid">';
+        echo '<div class="guide-detail-copy">';
+        echo '<nav class="guide-detail-crumb" aria-label="Breadcrumb">';
+        echo '<a href="' . h($locale === 'es' ? '/es' : '/') . '">' . h($locale === 'es' ? 'Inicio' : 'Home') . '</a>';
+        echo '<span aria-hidden="true">/</span>';
+        echo '<a href="' . h($locale === 'es' ? '/es/guias/' : '/guides/') . '">' . h($locale === 'es' ? 'Guias' : 'Guides') . '</a>';
+        echo '<span aria-hidden="true">/</span>';
+        echo '<span aria-current="page">' . h($pageTitle) . '</span>';
+        echo '</nav>';
+        echo '<p class="eyebrow">' . h($locale === 'es' ? 'Guia de campo' : 'Field guide') . '</p>';
+        echo '<h1>' . h($pageTitle) . '</h1>';
+        echo '<p class="lede">' . h($pageDescription) . '</p>';
+        echo '</div>';
+        echo '</div>';
+        echo '</section>';
+        echo '<div class="wrap guide-detail-shell">';
+        echo '<article class="guide-detail-content guide-article">';
+        echo '<div class="prose prose-lg max-w-none guide-detail-prose">' . $articleBlocksHtml . '</div>';
+        echo '</article>';
+        echo '</div>';
+        echo '</div>';
+
+        $pageShellMode = 'end';
+        include APP_ROOT . '/components/page-shell.php';
+        return;
+    }
 
     $breadcrumbs = [
         ['name' => $locale === 'es' ? 'Inicio' : 'Home', 'url' => $locale === 'es' ? '/es' : '/'],
@@ -251,16 +293,7 @@ function guideCmsRenderArticlePage(array $article, array $blocks, string $locale
 
     echo '<main class="container mx-auto px-4 container-padding py-10">';
     echo '<article class="guide-article bg-white rounded-lg shadow-card p-6 md:p-8">';
-
-    if (!empty($blocks)) {
-        foreach ($blocks as $block) {
-            $html = guideCmsRenderBlock($block, $article, $locale);
-            if ($html === '') {
-                continue;
-            }
-            echo $html;
-        }
-    }
+    echo $articleBlocksHtml;
 
     echo '</article>';
     echo '</main>';

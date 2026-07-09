@@ -7,6 +7,10 @@ on:
 jobs:
   build-and-validate:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['8.3', '8.4']
 
     steps:
       - name: Checkout
@@ -15,7 +19,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: ${{ matrix.php-version }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -56,7 +60,19 @@ jobs:
         run: npm run build
 
       - name: Verify generated assets are committed
-        run: git diff --exit-code -- public/assets/css/tailwind.min.css public/assets/js/app.min.js public/assets/js/collection-explorer.min.js
+        run: |
+          git diff --exit-code -- \
+            public/assets/css/styles.css \
+            public/assets/css/tailwind.min.css \
+            public/assets/js/app.min.js \
+            public/assets/js/chat.min.js \
+            public/assets/js/collection-explorer.min.js
+
+      - name: Validate design system
+        run: npm run check:design
+
+      - name: Validate locale routing
+        run: php scripts/test-locale-routing.php
 
       - name: Initialize base schema
         run: php scripts/init-db.php
@@ -72,6 +88,14 @@ jobs:
       - name: Seed beach data (headless, no Google API)
         run: php migrations/010-import-beach-json.php --skip-api
 
+      - name: Verify published beach images
+        run: php scripts/test-beach-images.php
+
+      - name: Verify database backup and restore
+        run: |
+          php scripts/backup-db.php --output-dir=/tmp/beach-finder-backups --keep-days=1
+          BACKUP_DIR=/tmp/beach-finder-backups php scripts/restore-smoke-test.php
+
       - name: Verify analytics guardrails
         run: |
           php -S 127.0.0.1:8082 -t public scripts/dev-router.php >/tmp/beach-finder-ci-server.log 2>&1 &
@@ -82,6 +106,10 @@ jobs:
             --urls=http://127.0.0.1:8082/,http://127.0.0.1:8082/best-beaches \
             --expect-website-id=ci-umami-website-id \
             --expect-script-host=cloud.umami.is
+          php scripts/test-release-http.php \
+            --base-url=http://127.0.0.1:8082 \
+            --design=both \
+            --limit=80
           curl -fsS "http://127.0.0.1:8082/api/health/analytics.php" >/tmp/analytics-health.json
           php -r '$d=json_decode(file_get_contents("/tmp/analytics-health.json"), true); if(!is_array($d) || ($d["ok"] ?? false) !== true){fwrite(STDERR, "Analytics health endpoint returned unhealthy status\n"); exit(1);} echo "Analytics health endpoint OK\n";'
 

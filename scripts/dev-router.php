@@ -34,6 +34,31 @@ if ($canonicalPath !== $uriPath) {
 
 $requestedPath = $publicRoot . $uriPath;
 
+// Match the production Nginx alias for user uploads while keeping uploads
+// outside the public document root. Only existing static image files are served.
+if (str_starts_with($uriPath, '/uploads/')) {
+    $uploadsRoot = realpath(__DIR__ . '/../uploads');
+    $uploadsPath = realpath(__DIR__ . '/..' . $uriPath);
+    if ($uploadsRoot !== false
+        && $uploadsPath !== false
+        && str_starts_with($uploadsPath, $uploadsRoot . DIRECTORY_SEPARATOR)
+        && is_file($uploadsPath)
+    ) {
+        $types = [
+            'webp' => 'image/webp',
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+        ];
+        $extension = strtolower(pathinfo($uploadsPath, PATHINFO_EXTENSION));
+        header('Content-Type: ' . ($types[$extension] ?? 'application/octet-stream'));
+        header('Content-Length: ' . (string) filesize($uploadsPath));
+        readfile($uploadsPath);
+        return true;
+    }
+}
+
 // Canonical redirects: .php -> extensionless public URLs.
 if (preg_match('~^/(best-beaches|best-beaches-san-juan|best-snorkeling-beaches|best-surfing-beaches|best-family-beaches|beaches-near-san-juan|beaches-near-san-juan-airport|hidden-beaches-puerto-rico)\.php$~', $uriPath, $matches)) {
     $target = '/' . $matches[1];

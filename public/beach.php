@@ -75,6 +75,8 @@ if (!$beach) {
     exit;
 }
 
+recordBeachPageView($beach['id'] ?? '');
+
 // Fetch related data
 $beach['tags'] = array_column(
     query('SELECT tag FROM beach_tags WHERE beach_id = :id', [':id' => $beach['id']]),
@@ -194,10 +196,11 @@ $extraHead .= faqSchema($faqs);
 $extraHead .= speakableSchema();
 
 // Set Open Graph image
-$ogImage = $beach['cover_image'] ? absoluteUrl($beach['cover_image']) : null;
+$resolvedCoverImage = getBeachImageUrl($beach, 'large');
+$ogImage = absoluteUrl($resolvedCoverImage);
 
 // Get WebP version of cover image for optimized delivery
-$webpImage = getWebPImage($beach['cover_image'] ?? '');
+$webpImage = getWebPImage($resolvedCoverImage);
 
 $referralLocale = $lang === 'es' ? 'es' : 'en';
 $referralBaseCtx = [
@@ -229,6 +232,7 @@ if ($redesignLayout) {
     // no MapLibre map, so skip its CSS preload and JS bundle.
     $skipMapCSS = true;
     $skipMapScripts = true;
+    $bodyClasses = trim(($bodyClasses ?? '') . ' rd-beach-page');
 }
 include APP_ROOT . '/components/header.php';
 
@@ -296,14 +300,9 @@ if ($redesignLayout) {
 
             <?php include APP_ROOT . '/components/beach/local-listings.php'; ?>
 
-            <?php $hasPhotos = !empty($beach['gallery']) || !empty($userPhotos ?? []); ?>
-            <?php if ($hasPhotos): ?>
             <?php include APP_ROOT . '/components/beach/photos.php'; ?>
-            <?php endif; ?>
 
-            <?php if (!empty($reviews)): ?>
             <?php include APP_ROOT . '/components/beach/reviews.php'; ?>
-            <?php endif; ?>
 
             <?php include APP_ROOT . '/components/beach/faq.php'; ?>
 

@@ -77,7 +77,7 @@ $breadcrumbs = [
 $ratedBeaches = array_filter($beaches, fn($b) => !empty($b['google_rating']));
 $avgRating = !empty($ratedBeaches) ? array_sum(array_column($ratedBeaches, 'google_rating')) / count($ratedBeaches) : 0;
 
-$bodyVariant = 'collection-light';
+$bodyVariant = 'collection-dark';
 $redesignLayout = useRedesign();
 include APP_ROOT . '/components/header.php';
 
@@ -157,7 +157,8 @@ $beachIndex++;
             <a href="<?= h(routeUrl('beach_detail', $lang, ['slug' => $beach['slug']])) ?>"
                class="group bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                 <div class="aspect-[4/3] overflow-hidden relative">
-                    <img src="<?= h($beach['cover_image']) ?>"
+                    <img src="<?= h(getBeachImageUrl($beach, 'medium')) ?>"
+                         data-fallback-src="/images/beaches/placeholder-beach.webp"
                          alt="<?= h($beach['name']) ?>"
                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                          loading="<?= $beachIndex <= 6 ? "eager" : "lazy" ?>" width="400" height="300">
@@ -194,7 +195,9 @@ $beachIndex++;
             ?>
             <a href="<?= h(routeUrl('beach_detail', $lang, ['slug' => $beach['slug']])) ?>"
                class="flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
-                <img src="<?= h($beach['cover_image']) ?>" alt="<?= h($beach['name']) ?>"
+                <img src="<?= h(getBeachImageUrl($beach, 'thumb')) ?>"
+                     data-fallback-src="/images/beaches/placeholder-beach.webp"
+                     alt="<?= h($beach['name']) ?>"
                      class="w-16 h-16 object-cover rounded-lg flex-shrink-0" loading="lazy" width="64" height="64">
                 <div class="min-w-0">
                     <p class="font-medium text-gray-900 truncate"><?= h($beach['name']) ?></p>

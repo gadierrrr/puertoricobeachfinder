@@ -77,7 +77,7 @@ $breadcrumbs = [
     ['name' => __('footer.snorkeling_beaches')]
 ];
 
-$bodyVariant = 'collection-light';
+$bodyVariant = 'collection-dark';
 $redesignLayout = useRedesign();
 include APP_ROOT . '/components/header.php';
 ?>

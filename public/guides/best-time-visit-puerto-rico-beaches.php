@@ -48,6 +48,7 @@ $extraHead .= breadcrumbSchema([
 $pageTheme = "guide";
 $skipMapCSS = true;
 $skipMapScripts = true;
+$redesignLayout = useRedesign();
 $pageShellMode = "start";
 include APP_ROOT . "/components/page-shell.php";
 ?>

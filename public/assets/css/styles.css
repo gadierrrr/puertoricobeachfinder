@@ -3153,9 +3153,6 @@ body.collection-dark {
     text-decoration: none;
 }
 
-    color: var(--color-gray-900);
-}
-
 @media (max-width: 1024px) {
     .collection-card--cards,
     .collection-card--list {

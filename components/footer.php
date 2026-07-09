@@ -54,7 +54,7 @@ if (!function_exists('isGoogleOAuthEnabled')) {
                                 <i data-lucide="map" class="w-4 h-4"></i>
                                 <?= h(__('footer.interactive_map')) ?>
                             </a></li>
-                            <li><a href="/advertise" class="text-gray-400 hover:text-sunset-400 transition-colors flex items-center gap-2">
+                            <li><a href="<?= h(routeUrl('advertise', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors flex items-center gap-2">
                                 <i data-lucide="megaphone" class="w-4 h-4"></i>
                                 <?= h($currentLang === 'es' ? 'Anuncia tu negocio' : 'Advertise your business') ?>
                             </a></li>
@@ -178,7 +178,7 @@ if (!function_exists('isGoogleOAuthEnabled')) {
             src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"
             integrity="sha384-3WUbXI7T+/GIrWP/5MDMjhzLyHQ+0utF3PnJ7ozD7UeN1/bbZ96Hk+Vvd024VYfW"
             crossorigin="anonymous" <?= cspNonceAttr() ?>></script>
-    <script defer src="/assets/js/context-map-view.js?v=2.0" <?= cspNonceAttr() ?>></script>
+    <script defer src="/assets/js/context-map-view.js?v=2.1" <?= cspNonceAttr() ?>></script>
     <?php endif; ?>
 
     <?php if (!isset($skipAppScripts) || !$skipAppScripts): ?>
@@ -296,7 +296,7 @@ if (!function_exists('isGoogleOAuthEnabled')) {
     });
     </script>
     <script defer src="/assets/js/filters.js" <?= cspNonceAttr() ?>></script>
-    <script defer src="/assets/js/analytics.js?v=2.2" <?= cspNonceAttr() ?>></script>
+    <script defer src="/assets/js/analytics.js?v=2.4" <?= cspNonceAttr() ?>></script>
     <script defer src="/assets/js/share.js" <?= cspNonceAttr() ?>></script>
     <?php endif; ?>
 
@@ -571,7 +571,8 @@ if (!function_exists('isGoogleOAuthEnabled')) {
     <?php
     $bfShowWelcome = false;
     $welcomeUser = null;
-    if (isAuthenticated() && empty($bfSuppressWelcome) && empty($_SESSION['welcome_rendered'])) {
+    $bfForceWelcome = !empty($_SESSION['show_welcome']);
+    if (isAuthenticated() && empty($bfSuppressWelcome) && ($bfForceWelcome || empty($_SESSION['welcome_rendered']))) {
         // Reuse the row header.php already loaded ($user); only query if it isn't in scope.
         $welcomeUser = (isset($user) && is_array($user)) ? $user : currentUser();
         // Decide once per session so we don't re-check (or re-query) on every pageview.

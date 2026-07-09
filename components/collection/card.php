@@ -13,7 +13,10 @@ $cardViewMode = in_array($viewMode ?? 'cards', ['cards', 'list', 'grid'], true) 
 $name = $beach['name'] ?? (function_exists('__') ? __('beach.unknown') : 'Unknown Beach');
 $slug = $beach['slug'] ?? '';
 $municipality = $beach['municipality'] ?? '';
-$imageUrl = $beach['cover_image'] ?? '/images/beaches/placeholder-beach.webp';
+$_t = function_exists('__');
+$imageUrl = function_exists('getBeachImageUrl')
+    ? getBeachImageUrl($beach, 'medium')
+    : ($beach['cover_image'] ?? '/images/beaches/placeholder-beach.webp');
 $description = trim((string)($beach['description'] ?? ''));
 $_lang = function_exists('getCurrentLanguage') ? getCurrentLanguage() : 'en';
 if ($_lang === 'es' && !empty($beach['description_es'])) {
@@ -28,8 +31,6 @@ $reviewCount = intval($beach['google_review_count'] ?? 0);
 $distanceKm = isset($beach['distance_km']) ? floatval($beach['distance_km']) : null;
 $tags = array_slice($beach['tags'] ?? [], 0, 4);
 $amenities = $beach['amenities'] ?? [];
-
-$_t = function_exists('__');
 
 // Build locale-aware beach detail URL (uses $_lang set above)
 $beachUrl = function_exists('routeUrl')

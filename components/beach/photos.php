@@ -1,14 +1,11 @@
 <?php
 /**
  * Beach Detail: Visitor Photos Section
- * Gallery grid with user photo uploads. Only rendered when photos exist.
+ * Gallery grid with user photo uploads and first-photo empty state.
  *
- * Expects: $beach, $lang, $hasPhotos (checked by parent)
+ * Expects: $beach, $lang
  */
 ?>
-            <!-- Visitor Photos - Hidden when empty -->
-            <?php $hasPhotos = !empty($beach['gallery']) || !empty($userPhotos ?? []); ?>
-            <?php if ($hasPhotos): ?>
             <section id="user-photos">
                 <?php
                 $userPhotos = query("SELECT p.id, p.filename, p.caption, p.created_at, u.name as user_name FROM beach_photos p LEFT JOIN users u ON p.user_id = u.id WHERE p.beach_id = :beach_id AND p.status = 'published' ORDER BY p.created_at DESC LIMIT 12", [':beach_id' => $beach['id']]);
@@ -43,8 +40,21 @@
                     <?php endforeach; ?>
                 </div>
                 <?php else: ?>
-                <p class="text-sm text-warm-500"><?= h(__('beach.no_photos_yet')) ?></p>
+                <div class="rounded-xl border border-dashed border-warm-200 bg-white p-4 flex flex-col sm:flex-row sm:items-center gap-3">
+                    <div class="text-2xl" aria-hidden="true">📷</div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-warm-900"><?= h(__('beach.no_photos_yet')) ?></p>
+                        <p class="text-sm text-warm-500"><?= h($lang === 'es' ? 'Las fotos recientes ayudan a otros a reconocer el acceso y las condiciones.' : 'Recent photos help others recognize the access point and current conditions.') ?></p>
+                    </div>
+                    <?php if (isAuthenticated()): ?>
+                    <button data-action="openPhotoUploadModal" data-action-args='["<?= h($beach['id']) ?>","<?= h(addslashes($beach['name'])) ?>"]'
+                            class="bg-purple-600 hover:bg-purple-700 text-warm-900 px-3 py-1.5 rounded-lg font-medium transition-colors text-sm">
+                        <?= h(__('beach.add_photo')) ?>
+                    </button>
+                    <?php else: ?>
+                    <a href="<?= h(routeUrl('login', $lang)) ?>?redirect=<?= urlencode(routeUrl('beach_detail', $lang, ['slug' => $beach['slug']]) . '#user-photos') ?>"
+                       class="text-sm text-purple-400 hover:text-purple-300 font-medium"><?= h(__('beach.sign_in_to_add')) ?></a>
+                    <?php endif; ?>
+                </div>
                 <?php endif; ?>
             </section>
-
-            <?php endif; // hasPhotos ?>

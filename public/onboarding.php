@@ -11,6 +11,7 @@ session_start();
 require_once APP_ROOT . '/inc/db.php';
 require_once APP_ROOT . '/inc/helpers.php';
 require_once APP_ROOT . '/inc/constants.php';
+require_once APP_ROOT . '/inc/island_chart.php';
 require_once APP_ROOT . '/inc/locale_routes.php';
 require_once APP_ROOT . '/inc/i18n.php';
 
@@ -94,104 +95,165 @@ $vibeOptions = [
     ['id' => 'romantic', 'icon' => '💑', 'label' => __('onboarding.vibe_romantic'), 'desc' => __('onboarding.vibe_romantic_desc')],
 ];
 
+$redesignLayout = useRedesign();
+$bodyClasses = trim(($bodyClasses ?? '') . ' rd-auth rd-onboarding');
 include APP_ROOT . '/components/header.php';
 ?>
 
-<div class="min-h-screen flex items-center justify-center px-4 py-16 pt-24">
-    <div class="w-full max-w-2xl">
-        <!-- Welcome Header -->
-        <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-sunset-400/20 mb-6">
-                <span class="text-4xl">👋</span>
-            </div>
-            <h1 class="text-3xl sm:text-4xl font-bold text-warm-900 mb-3">
+<div class="onboarding-shell">
+    <div class="onboarding-hero">
+        <div>
+            <p class="onboarding-kicker"><?= h(__('onboarding.setup_label')) ?></p>
+            <h1>
                 <?= h(__('onboarding.welcome', ['name' => $user['name'] ?? __('profile.beach_explorer')])) ?>
             </h1>
-            <p class="text-warm-500 text-lg">
+            <p class="onboarding-lede">
                 <?= h(__('onboarding.personalize')) ?>
             </p>
         </div>
 
-        <form method="POST" action="" class="space-y-8">
+        <div class="onboarding-progress" aria-label="<?= h(__('onboarding.almost_there')) ?>">
+            <span class="is-active"><?= h(__('onboarding.progress_activities')) ?></span>
+            <i></i>
+            <span><?= h(__('onboarding.progress_results')) ?></span>
+        </div>
+    </div>
+
+    <div class="onboarding-layout">
+        <form method="POST" action="" class="onboarding-form">
             <?= csrfField() ?>
 
-            <!-- Step 1: Activities -->
-            <div class="bg-white rounded-xl border border-warm-200 p-6">
-                <h2 class="text-xl font-semibold text-warm-900 mb-2 flex items-center gap-2">
-                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-sunset-400 text-ocean-900 text-sm font-bold">1</span>
-                    <?= h(__('onboarding.step1_title')) ?>
-                </h2>
-                <p class="text-warm-500 text-sm mb-6"><?= h(__('onboarding.step1_subtitle')) ?></p>
+            <?php if (!empty($error)): ?>
+            <div class="onboarding-alert" role="alert">
+                <i data-lucide="alert-circle" aria-hidden="true"></i>
+                <span><?= h($error) ?></span>
+            </div>
+            <?php endif; ?>
 
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <section class="onboarding-section" aria-labelledby="onboarding-activities-title">
+                <div class="onboarding-section-head">
+                    <span class="onboarding-step">1</span>
+                    <div>
+                        <h2 id="onboarding-activities-title"><?= h(__('onboarding.step1_title')) ?></h2>
+                        <p><?= h(__('onboarding.step1_subtitle')) ?></p>
+                    </div>
+                </div>
+
+                <div class="onboarding-options onboarding-options-activities">
                     <?php foreach ($activityOptions as $activity): ?>
-                    <label class="activity-option cursor-pointer">
+                    <label class="onboarding-choice activity-option">
                         <input type="checkbox"
                                name="activities[]"
                                value="<?= h($activity['id']) ?>"
-                               class="sr-only peer">
-                        <div class="p-4 rounded-xl border-2 border-warm-200 bg-warm-50 text-center transition-all
-                                    hover:border-ocean-400 hover:bg-ocean-50
-                                    peer-checked:border-ocean-500 peer-checked:bg-ocean-50">
-                            <span class="text-3xl block mb-2"><?= $activity['icon'] ?></span>
-                            <span class="text-warm-900 font-medium text-sm block"><?= h($activity['label']) ?></span>
-                            <span class="text-gray-500 text-xs"><?= h($activity['desc']) ?></span>
+                               class="sr-only">
+                        <div class="onboarding-choice-card">
+                            <span class="onboarding-choice-icon" aria-hidden="true"><?= $activity['icon'] ?></span>
+                            <span class="onboarding-choice-title"><?= h($activity['label']) ?></span>
+                            <span class="onboarding-choice-desc"><?= h($activity['desc']) ?></span>
+                            <span class="onboarding-choice-check" aria-hidden="true">
+                                <i data-lucide="check"></i>
+                            </span>
                         </div>
                     </label>
                     <?php endforeach; ?>
                 </div>
-            </div>
+            </section>
 
-            <!-- Step 2: Vibe -->
-            <div class="bg-white rounded-xl border border-warm-200 p-6">
-                <h2 class="text-xl font-semibold text-warm-900 mb-2 flex items-center gap-2">
-                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-sunset-400 text-ocean-900 text-sm font-bold">2</span>
-                    <?= h(__('onboarding.step2_title')) ?>
-                </h2>
-                <p class="text-warm-500 text-sm mb-6"><?= h(__('onboarding.step2_subtitle')) ?></p>
+            <section class="onboarding-section" aria-labelledby="onboarding-vibe-title">
+                <div class="onboarding-section-head">
+                    <span class="onboarding-step">2</span>
+                    <div>
+                        <h2 id="onboarding-vibe-title"><?= h(__('onboarding.step2_title')) ?></h2>
+                        <p><?= h(__('onboarding.step2_subtitle')) ?></p>
+                    </div>
+                </div>
 
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div class="onboarding-options onboarding-options-vibes">
                     <?php foreach ($vibeOptions as $index => $vibe): ?>
-                    <label class="vibe-option cursor-pointer">
+                    <label class="onboarding-choice vibe-option">
                         <input type="radio"
                                name="vibe"
                                value="<?= h($vibe['id']) ?>"
-                               class="sr-only peer"
+                               class="sr-only"
                                <?= $index === 0 ? 'checked' : '' ?>>
-                        <div class="p-4 rounded-xl border-2 border-warm-200 bg-warm-50 text-center transition-all
-                                    hover:border-ocean-400 hover:bg-ocean-50
-                                    peer-checked:border-ocean-500 peer-checked:bg-ocean-50">
-                            <span class="text-3xl block mb-2"><?= $vibe['icon'] ?></span>
-                            <span class="text-warm-900 font-medium text-sm block"><?= h($vibe['label']) ?></span>
-                            <span class="text-gray-500 text-xs"><?= h($vibe['desc']) ?></span>
+                        <div class="onboarding-choice-card">
+                            <span class="onboarding-choice-icon" aria-hidden="true"><?= $vibe['icon'] ?></span>
+                            <span class="onboarding-choice-title"><?= h($vibe['label']) ?></span>
+                            <span class="onboarding-choice-desc"><?= h($vibe['desc']) ?></span>
+                            <span class="onboarding-choice-check" aria-hidden="true">
+                                <i data-lucide="check"></i>
+                            </span>
                         </div>
                     </label>
                     <?php endforeach; ?>
                 </div>
-            </div>
+            </section>
 
-            <!-- Submit -->
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-	                <a href="/onboarding?skip=1<?= $redirectUrl !== '/' ? '&redirect=' . urlencode($redirectUrl) : '' ?>"
-	                   class="text-gray-500 hover:text-gray-300 text-sm transition-colors order-2 sm:order-1">
-	                    <?= h(__('onboarding.skip')) ?>
-	                </a>
+            <div class="onboarding-actions">
+                <a href="/onboarding?skip=1<?= $redirectUrl !== '/' ? '&redirect=' . urlencode($redirectUrl) : '' ?>">
+                    <?= h(__('onboarding.skip')) ?>
+                </a>
                 <button type="submit"
-                        class="w-full sm:w-auto bg-sunset-400 hover:bg-sunset-300 text-ocean-900 px-8 py-3 rounded-xl font-semibold transition-all hover:-translate-y-0.5 hover:shadow-lg order-1 sm:order-2">
+                        class="onboarding-submit">
                     <?= h(__('onboarding.submit')) ?>
+                    <i data-lucide="arrow-right" aria-hidden="true"></i>
                 </button>
             </div>
         </form>
 
-        <!-- Progress indicator -->
-        <div class="mt-8 flex items-center justify-center gap-2">
-            <div class="w-3 h-3 rounded-full bg-sunset-400"></div>
-            <div class="w-12 h-1 rounded-full bg-sunset-400"></div>
-            <div class="w-3 h-3 rounded-full bg-warm-200"></div>
-        </div>
-        <p class="text-center text-gray-500 text-xs mt-2">
-            <?= h(__('onboarding.almost_there')) ?>
-        </p>
+        <aside class="onboarding-aside" aria-labelledby="onboarding-aside-title">
+            <div class="onboarding-aside-map" aria-hidden="true">
+                <svg class="onboarding-mini-map" viewBox="0 0 560 360" focusable="false">
+                    <defs>
+                        <linearGradient id="onboardingSea" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0" stop-color="#E8F6FC"/>
+                            <stop offset="1" stop-color="#BFDFF3"/>
+                        </linearGradient>
+                        <linearGradient id="onboardingSand" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0" stop-color="#F0C452"/>
+                            <stop offset="1" stop-color="#D6A129"/>
+                        </linearGradient>
+                    </defs>
+                    <rect class="mini-map-sea" x="20" y="32" width="520" height="296" rx="24"/>
+                    <path class="mini-map-grid" d="M164 56V318M382 56V318M44 122H516M44 250H516"/>
+                    <text class="mini-map-coord" x="158" y="146">67 W</text>
+                    <text class="mini-map-coord" x="376" y="146">66 W</text>
+                    <path class="mini-map-contour contour-far"
+                          transform="translate(247.5,201.7) scale(1.08) translate(-247.5,-201.7)"
+                          d="<?= ISLAND_CHART_CONTOUR_D ?>"/>
+                    <path class="mini-map-contour contour-near"
+                          transform="translate(247.5,201.7) scale(1.025) translate(-247.5,-201.7)"
+                          d="<?= ISLAND_CHART_CONTOUR_D ?>"/>
+                    <path class="mini-map-island" d="<?= ISLAND_CHART_ISLAND_D ?>"/>
+                    <path class="mini-map-cay" d="<?= ISLAND_CHART_CUL_D ?>"/>
+                    <path class="mini-map-cay" d="<?= ISLAND_CHART_VIE_D ?>"/>
+                    <g class="mini-map-marker" transform="translate(198 132)">
+                        <circle r="13"/>
+                        <text y="4">N</text>
+                    </g>
+                    <g class="mini-map-marker" transform="translate(90 202)">
+                        <circle r="13"/>
+                        <text y="4">W</text>
+                    </g>
+                    <g class="mini-map-marker" transform="translate(398 196)">
+                        <circle r="13"/>
+                        <text y="4">E</text>
+                    </g>
+                    <g class="mini-map-marker" transform="translate(276 268)">
+                        <circle r="13"/>
+                        <text y="4">S</text>
+                    </g>
+                </svg>
+            </div>
+            <p class="onboarding-aside-kicker"><?= h(__('onboarding.aside_kicker')) ?></p>
+            <h2 id="onboarding-aside-title"><?= h(__('onboarding.aside_title')) ?></h2>
+            <p><?= h(__('onboarding.aside_body')) ?></p>
+            <ul>
+                <li><i data-lucide="sparkles" aria-hidden="true"></i><?= h(__('onboarding.aside_item_1')) ?></li>
+                <li><i data-lucide="map" aria-hidden="true"></i><?= h(__('onboarding.aside_item_2')) ?></li>
+                <li><i data-lucide="sliders-horizontal" aria-hidden="true"></i><?= h(__('onboarding.aside_item_3')) ?></li>
+            </ul>
+        </aside>
     </div>
 </div>
 

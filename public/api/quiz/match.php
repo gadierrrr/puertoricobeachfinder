@@ -364,7 +364,7 @@ foreach ($beaches as $beach) {
         'slug' => $beach['slug'],
         'name' => $beach['name'],
         'municipality' => $beach['municipality'],
-        'cover_image' => $beach['cover_image'],
+        'cover_image' => getBeachImageUrl($beach, 'medium'),
         'google_rating' => $beach['google_rating'],
         'score' => $percentageScore,
         'match_reasons' => array_values($matchReasons),

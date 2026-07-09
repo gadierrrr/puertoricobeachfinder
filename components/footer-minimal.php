@@ -3,6 +3,9 @@
     <!-- Toast Container (for notifications) -->
     <div class="toast-container" aria-live="polite" aria-atomic="true" role="status"></div>
 
+    <?php if (!empty($redesignLayout)): ?>
+    <?php include __DIR__ . '/redesign/footer.php'; ?>
+    <?php else: ?>
     <!-- Minimal Footer for Auth Pages -->
     <footer class="bg-ocean-900 border-t border-ocean-700 py-8 px-4 sm:px-6 mt-auto">
         <div class="max-w-7xl mx-auto text-center">
@@ -11,6 +14,7 @@
             </p>
         </div>
     </footer>
+    <?php endif; ?>
 
     <!-- Minimal JS - only what's needed for auth pages -->
     <script <?= cspNonceAttr() ?>>

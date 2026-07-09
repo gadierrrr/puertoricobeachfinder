@@ -9,6 +9,8 @@ $lang = getCurrentLanguage();
 $pageTitle = $lang === 'es' ? 'Política de Privacidad' : 'Privacy Policy';
 $pageDescription = $lang === 'es' ? 'Política de Privacidad de Puerto Rico Beach Finder.' : 'Privacy Policy for Puerto Rico Beach Finder.';
 $pageTheme = 'light';
+$redesignLayout = useRedesign();
+$bodyClasses = trim(($bodyClasses ?? '') . ' rd-legal');
 
 $pageShellMode = 'start';
 include APP_ROOT . '/components/page-shell.php';

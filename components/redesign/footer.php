@@ -10,6 +10,7 @@
  * Phase 3 SEO diff harness fails on any link lost between variants.
  */
 $currentLang = $currentLang ?? getCurrentLanguage();
+$homePath = $homePath ?? routeUrl('home', $currentLang);
 
 $rdFootCollections = [
     ['best_beaches', __('footer.best_beaches')],
@@ -54,7 +55,7 @@ $rdFootMoreGuides = [
                         <li><a href="<?= h(routeUrl('quiz', $currentLang)) ?>"><?= h(__('footer.beach_match_quiz')) ?></a></li>
                         <li><a href="<?= h(routeUrl('compare', $currentLang)) ?>"><?= h(__('footer.compare_beaches')) ?></a></li>
                         <li><a href="<?= h($homePath . '?view=map') ?>"><?= h(__('footer.interactive_map')) ?></a></li>
-                        <li><a href="/advertise"><?= h($currentLang === 'es' ? 'Anuncia tu negocio' : 'Advertise your business') ?></a></li>
+                        <li><a href="<?= h(routeUrl('advertise', $currentLang)) ?>"><?= h($currentLang === 'es' ? 'Anuncia tu negocio' : 'Advertise your business') ?></a></li>
                     </ul>
                 </div>
 

@@ -102,6 +102,8 @@ $breadcrumbs = [
     ['name' => $L['title']],
 ];
 
+$redesignLayout = useRedesign();
+$bodyClasses = trim(($bodyClasses ?? '') . ' rd-account');
 include APP_ROOT . '/components/header.php';
 ?>
 
@@ -158,7 +160,7 @@ include APP_ROOT . '/components/header.php';
                 </p>
             </a>
             <div class="border-t border-gray-100 px-5 py-3 flex items-center gap-4 text-sm">
-                <a href="<?= h($listUrl) ?>" class="text-blue-600 hover:text-blue-700 font-medium"><?= h($L['view']) ?></a>
+                <a href="<?= h($listUrl) ?>" class="text-ocean-600 hover:text-ocean-700 font-medium"><?= h($L['view']) ?></a>
                 <button type="button" class="text-gray-600 hover:text-gray-900"
                         data-action="openEditListModal"
                         data-action-args='[<?= (int)$list['id'] ?>, <?= json_encode($list['name']) ?>, <?= json_encode($list['description'] ?? '') ?>, <?= $isPublic ? 'true' : 'false' ?>]'>

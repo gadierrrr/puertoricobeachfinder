@@ -36,7 +36,7 @@ $crowdData = $crowdData ?? null;
 $slug = $beach['slug'] ?? '';
 $name = $beach['name'] ?? $cardT('beach.unknown', 'Unknown Beach');
 $municipality = $beach['municipality'] ?? '';
-$coverImage = $beach['cover_image'] ?? '/images/beaches/placeholder-beach.webp';
+$coverImage = getBeachImageUrl($beach, 'medium');
 $googleRating = $beach['google_rating'] ?? null;
 $googleReviewCount = $beach['google_review_count'] ?? 0;
 $description = $beach['description'] ?? '';
@@ -64,6 +64,118 @@ $beachUrl = function_exists('routeUrl')
 
 // Get WebP version if available
 $webpImage = getWebPImage($coverImage);
+
+if (!empty($redesignLayout)) {
+    $beachId = (string)($beach['id'] ?? '');
+    $ratingText = $googleRating ? number_format((float)$googleRating, 1) : '';
+    ?>
+
+<article class="rd-card beach-card"
+         data-beach-id="<?= h($beachId) ?>"
+         data-lat="<?= h($lat) ?>"
+         data-lng="<?= h($lng) ?>">
+    <div class="rd-card-media">
+        <a href="<?= h($beachUrl) ?>"
+           data-bf-track="A1_list_to_detail_click"
+           data-bf-beach-id="<?= h($beachId) ?>"
+           data-bf-beach-slug="<?= h($slug) ?>"
+           data-bf-source="card">
+            <picture>
+                <?php if ($webpImage['webp']): ?>
+                <source srcset="<?= h($webpImage['webp']) ?>" type="image/webp">
+                <?php endif; ?>
+                <img src="<?= h($imageAttrs['src']) ?>"
+                     data-fallback-src="/images/beaches/placeholder-beach.webp"
+                     <?php if ($imageAttrs['srcset']): ?>
+                     srcset="<?= h($imageAttrs['srcset']) ?>"
+                     sizes="<?= h($imageAttrs['sizes']) ?>"
+                     <?php endif; ?>
+                     alt="<?= h(getBeachImageAlt($beach)) ?>"
+                     loading="lazy"
+                     decoding="async">
+            </picture>
+        </a>
+        <div class="rd-card-grad" aria-hidden="true"></div>
+        <div class="rd-card-top">
+            <?php if (isAuthenticated()): ?>
+            <button class="rd-fav<?= $isFavorite ? ' on' : '' ?>"
+                    type="button"
+                    hx-post="/api/toggle-favorite.php?variant=redesign"
+                    hx-target="this"
+                    hx-swap="outerHTML"
+                    hx-vals='{"beach_id": "<?= h($beachId) ?>", "csrf_token": "<?= h(csrfToken()) ?>"}'
+                    data-action-stop data-action="noop" data-on="click"
+                    aria-label="<?= $isFavorite ? h($cardT('beach.remove_favorite', 'Remove from favorites')) : h($cardT('beach.add_favorite', 'Add to favorites')) ?>"
+                    aria-pressed="<?= $isFavorite ? 'true' : 'false' ?>"
+                    title="<?= $isFavorite ? h($cardT('beach.remove_favorite', 'Remove from favorites')) : h($cardT('beach.add_favorite', 'Add to favorites')) ?>"><?= $isFavorite ? '♥' : '♡' ?></button>
+            <?php else: ?>
+            <button class="rd-fav"
+                    type="button"
+                    data-action-stop data-action="showSignupPrompt" data-action-args='["favorites"]'
+                    aria-label="<?= h($cardT('beach.sign_in_to_save', 'Sign in to save this beach')) ?>"
+                    title="<?= h($cardT('beach.sign_in_to_save', 'Sign in to save this beach')) ?>">♡</button>
+            <?php endif; ?>
+            <span class="rd-card-chip"><?= h($primaryTag) ?></span>
+        </div>
+        <?php if ($distanceFormatted): ?>
+        <span class="rd-card-dist"><?= h($distanceFormatted) ?></span>
+        <?php endif; ?>
+        <div class="rd-card-title">
+            <span><?= h($municipality) ?></span>
+            <h3><a href="<?= h($beachUrl) ?>"
+                   data-bf-track="A1_list_to_detail_click"
+                   data-bf-beach-id="<?= h($beachId) ?>"
+                   data-bf-beach-slug="<?= h($slug) ?>"
+                   data-bf-source="card"><?= h($name) ?></a></h3>
+        </div>
+    </div>
+    <div class="rd-card-body">
+        <div class="rd-card-meta">
+            <?php if ($ratingText !== ''): ?>
+            <span>★ <?= h($ratingText) ?><?php if ($googleReviewCount): ?> <em>(<?= number_format((int)$googleReviewCount) ?>)</em><?php endif; ?></span>
+            <?php endif; ?>
+            <?php foreach (array_slice($tags, 1, 2) as $tag): ?>
+            <span><?= h(getTagLabel($tag)) ?></span>
+            <?php endforeach; ?>
+        </div>
+        <?php if ($crowdData): ?>
+        <p class="rd-card-note">👥 <?= h($crowdData['label'] ?? $cardT('beach.unknown_crowd', 'Unknown')) ?></p>
+        <?php endif; ?>
+        <div class="rd-card-actions">
+            <button type="button"
+                    data-action-stop data-action="openBeachDrawer" data-action-args='["<?= h($beachId) ?>"]'
+                    data-bf-track="A1_list_to_detail_click"
+                    data-bf-beach-id="<?= h($beachId) ?>"
+                    data-bf-beach-slug="<?= h($slug) ?>"
+                    data-bf-source="card-drawer">
+                <?= h($cardT('beach.details', 'Details')) ?>
+            </button>
+            <a href="<?= h(getDirectionsUrl($beach)) ?>"
+               target="_blank"
+               rel="noopener noreferrer"
+               data-action-stop data-action="noop" data-on="click"
+               data-bf-track="directions"
+               data-bf-beach-id="<?= h($beachId) ?>"
+               data-bf-beach-slug="<?= h($slug) ?>"
+               data-bf-municipality="<?= h($municipality) ?>"
+               data-bf-source="card">
+                <?= h($cardT('beach.directions', 'Directions')) ?>
+            </a>
+            <button type="button"
+                    data-action-stop data-action="shareBeach" data-action-args='["<?= h($slug) ?>","<?= h(addslashes($name)) ?>"]'
+                    data-bf-track="share_click"
+                    data-bf-beach-id="<?= h($beachId) ?>"
+                    data-bf-beach-slug="<?= h($slug) ?>"
+                    data-bf-source="card"
+                    aria-label="<?= h($cardT('common.share', 'Share')) ?> <?= h($name) ?>">
+                <?= h($cardT('common.share', 'Share')) ?>
+            </button>
+        </div>
+    </div>
+</article>
+<?php
+    return;
+}
 
 ?>
 

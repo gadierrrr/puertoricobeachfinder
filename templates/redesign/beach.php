@@ -39,7 +39,7 @@ $dirUrl = 'https://www.google.com/maps/dir/?api=1&destination=' . $lat . ',' . $
 // hero image (real <img> with srcset for LCP + image search, like classic)
 $heroSrcset = getBeachImageSrcset($beach);
 if (!$heroSrcset) {
-    $heroAttrs = getResponsiveImageAttrs($beach['cover_image'] ?? '', '100vw');
+    $heroAttrs = getResponsiveImageAttrs(getBeachImageUrl($beach, 'large'), '100vw');
     $heroSrcset = $heroAttrs['srcset'] ?? '';
 }
 
@@ -85,6 +85,24 @@ if (!empty($chipTags)) {
     $glance[] = ['🌾', $isEs ? 'Ambiente' : 'Vibe', __('tags.' . $chipTags[0]), ''];
 }
 
+$heroAccess = trim((string) ($beach['access_label'] ?? ''));
+$heroParking = trim((string) ($beach['parking_details'] ?? ''));
+$heroVibe = !empty($chipTags) ? getTagLabel($chipTags[0]) : ($isEs ? 'Explora con calma' : 'Scout conditions');
+$heroWater = trim((string) preg_replace('/^(Easy|Fácil|Moderado|Advanced|Avanzado)\s*[—-]\s*/u', '', $swimTile[0]));
+$heroWater = $heroWater !== '' ? mb_strtoupper(mb_substr($heroWater, 0, 1)) . mb_substr($heroWater, 1) : ($isEs ? 'Verifica condiciones' : 'Check conditions');
+$amenityCount = count($amenities);
+$amenityWord = $isEs
+    ? ($amenityCount === 1 ? 'servicio' : 'servicios')
+    : ($amenityCount === 1 ? 'amenity' : 'amenities');
+$heroSnapshot = [
+    ['value' => (string) $score['overall'], 'label' => $isEs ? 'Puntuación' : 'Score', 'tone' => 'score'],
+    ['value' => $heroWater, 'label' => $isEs ? 'Agua' : 'Water', 'tone' => $swimTile[1]],
+    ['value' => $heroAccess !== '' ? ucfirst($heroAccess) : ($isEs ? 'Verifica acceso' : 'Check access'), 'label' => $isEs ? 'Acceso' : 'Access', 'tone' => $isBoat ? 'r' : ''],
+    ['value' => $heroParking !== '' ? ($isEs ? 'Info disponible' : 'Info listed') : ($isEs ? 'Verifica antes' : 'Check ahead'), 'label' => $isEs ? 'Parking' : 'Parking', 'tone' => $heroParking !== '' ? 'g' : 'a'],
+    ['value' => $heroVibe, 'label' => $isEs ? 'Ambiente' : 'Vibe', 'tone' => ''],
+    ['value' => $amenityCount > 0 ? $amenityCount . ' ' . $amenityWord : ($isEs ? 'Sin lista' : 'Not listed'), 'label' => $isEs ? 'Servicios' : 'Amenities', 'tone' => $amenityCount > 0 ? 'g' : 'a'],
+];
+
 // AI at-a-glance summary (same generator as classic); falls back to nothing
 $aiSummary = trim((string) generateAtAGlanceSummary($beach, $lang));
 
@@ -122,15 +140,83 @@ $xGroups = array_filter([
 $relatedGuides = getRelatedGuides($tags, 3);
 $similarBeaches = getSimilarBeaches($beach['id'], $tags, 4);
 $nearby = array_slice(getNearbyBeaches((string) $beach['id'], $lat, $lng, 4) ?: [], 0, 4);
+$cardImageUrl = function (array $row, string $size = 'medium'): string {
+    return getBeachImageUrl($row, $size);
+};
 
 // visitor photos (published) — same source as classic photos.php
 $userPhotos = query("SELECT p.id, p.filename, p.caption, p.created_at, u.name as user_name FROM beach_photos p LEFT JOIN users u ON p.user_id = u.id WHERE p.beach_id = :beach_id AND p.status = 'published' ORDER BY p.created_at DESC LIMIT 12", [':beach_id' => $beach['id']]);
 $totalUserPhotos = (int) (queryOne("SELECT COUNT(*) as count FROM beach_photos WHERE beach_id = :beach_id AND status = 'published'", [':beach_id' => $beach['id']])['count'] ?? 0);
 $hasGallery = !empty($beach['gallery']);
-$hasPhotosSection = $hasGallery || !empty($userPhotos);
-$hasReviews = !empty($reviews);
+$hasPhotosContent = $hasGallery || !empty($userPhotos);
+$hasReviewsContent = !empty($reviews);
+$beachDetailUrl = routeUrl('beach_detail', $lang, ['slug' => $beach['slug']]);
+$photoLoginUrl = routeUrl('login', $lang) . '?redirect=' . urlencode($beachDetailUrl . '#photos');
+$reviewLoginUrl = routeUrl('login', $lang) . '?redirect=' . urlencode($beachDetailUrl . '#reviews');
+$photoActionArgs = '["' . h($beach['id']) . '","' . h(addslashes($beach['name'])) . '"]';
+$reviewActionArgs = $photoActionArgs;
+$bestForItems = array_values(array_filter(array_unique(array_merge(
+    array_map(fn($t) => getTagLabel($t), array_slice($chipTags, 0, 3)),
+    [$snorkelGood ? 'Snorkeling' : null, in_array($surf, ['calm', 'small'], true) ? ($isEs ? 'Agua calmada' : 'Calm water') : null]
+))));
+$bestForItems = array_slice($bestForItems, 0, 4);
+$knowBeforeItems = array_values(array_filter([
+    $heroAccess !== '' ? ucfirst($heroAccess) : ($isEs ? 'Verifica acceso antes de ir' : 'Check access before you go'),
+    $heroParking !== '' ? ($isEs ? 'Parking: ' . $heroParking : 'Parking: ' . $heroParking) : ($isEs ? 'Verifica parking antes de ir' : 'Check parking before you go'),
+    $isBoat ? ($isEs ? 'Requiere bote o kayak' : 'Boat or kayak access') : null,
+]));
+$facilityItems = !empty($amenities)
+    ? array_slice(array_map(fn($a) => getAmenityLabel($a), $amenities), 0, 5)
+    : [$isEs ? 'Pocos servicios listados' : 'Limited listed facilities'];
+$facilityScore = null;
+foreach (($score['bars'] ?? []) as $scoreBar) {
+    if (($scoreBar[0] ?? '') === 'Facilities') {
+        $facilityScore = (int) ($scoreBar[1] ?? 0);
+        break;
+    }
+}
+$similarReason = function (array $row) use ($tags, $isEs): string {
+    $shared = array_values(array_intersect($tags, $row['tags'] ?? []));
+    if (!empty($shared)) {
+        $labels = array_map(fn($t) => getTagLabel($t), array_slice($shared, 0, 2));
+        return ($isEs ? 'Similar: ' : 'Similar: ') . implode(' · ', $labels);
+    }
+    return $isEs ? 'Ambiente parecido' : 'Similar beach feel';
+};
+$renderConditionsCard = function (string $extraClass = '') use ($cur, $uvLabel, $weather, $fmtTime, $isEs): void {
+    ?>
+    <div class="card conditions-card <?= h($extraClass) ?>">
+      <h4><?= h($isEs ? 'Condiciones hoy' : 'Conditions today') ?></h4>
+      <?php if ($cur): $uv = $uvLabel($cur['uv_index'] ?? 0); ?>
+      <div class="cond-now"><span class="t"><?= round((float) ($cur['temperature'] ?? 0)) ?>°</span><span class="d"><?= h($cur['description'] ?? '') ?></span></div>
+      <div class="cond-grid">
+        <div><div class="k"><?= h($isEs ? 'Viento' : 'Wind') ?></div><div class="v"><?= round((float) ($cur['wind_speed'] ?? 0)) ?> <span style="font-size:.7rem;color:var(--ink-60)">km/h</span></div></div>
+        <div><div class="k"><?= h($isEs ? 'Índice UV' : 'UV index') ?></div><div class="v" style="color:<?= $uv[1] === 'r' ? 'var(--coral)' : ($uv[1] === 'a' ? '#B7860B' : 'var(--green)') ?>"><?= h($uv[0]) ?></div></div>
+        <div><div class="k"><?= h($isEs ? 'Humedad' : 'Humidity') ?></div><div class="v"><?= round((float) ($cur['humidity'] ?? 0)) ?>%</div></div>
+        <div><div class="k"><?= h($isEs ? 'Se siente' : 'Feels like') ?></div><div class="v"><?= round((float) ($cur['feels_like'] ?? ($cur['temperature'] ?? 0))) ?>°</div></div>
+      </div>
+      <div class="suntimes"><span>☀ <?= h($isEs ? 'Amanecer' : 'Sunrise') ?> <b><?= $fmtTime($weather['sunrise'] ?? null) ?></b></span><span>🌙 <?= h($isEs ? 'Atardecer' : 'Sunset') ?> <b><?= $fmtTime($weather['sunset'] ?? null) ?></b></span></div>
+      <?php else: ?>
+      <p style="font-size:.85rem;color:var(--ink-60)"><?= h($isEs ? 'Clima no disponible ahora.' : 'Live conditions unavailable right now.') ?></p>
+      <?php endif; ?>
+    </div>
+    <?php
+};
+$renderLocationCard = function (string $extraClass = '') use ($isEs, $lat, $lng, $beach, $regionLabel): void {
+    ?>
+    <div class="card loc-card <?= h($extraClass) ?>">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:13px">
+        <h4 style="margin:0"><?= h($isEs ? 'Dónde queda' : 'Where it is') ?></h4>
+        <div class="locseg"><button class="on" data-loc="chart" type="button"><?= h($isEs ? 'Mapa' : 'Chart') ?></button><button data-loc="sat" type="button"><?= h($isEs ? 'Satélite' : 'Satellite') ?></button></div>
+      </div>
+      <div class="loc-chart"><?= renderIslandLocator($lat, $lng) ?></div>
+      <div class="loc-sat" style="display:none"></div>
+      <div class="loc-note"><span><?= h($beach['municipality']) ?><?= $regionLabel ? ' · ' . h($regionLabel) : '' ?></span><b><?= number_format($lat, 2) ?>°N <?= number_format(abs($lng), 2) ?>°W</b></div>
+    </div>
+    <?php
+};
 
-// favorite state for the dockbar Save button (session is active here)
+// favorite state for the hero Save button (session is active here)
 $isFavorite = false;
 if (isAuthenticated() && !empty($_SESSION['user_id'])) {
     $isFavorite = (bool) queryOne(
@@ -144,9 +230,9 @@ $subnav = array_values(array_filter([
     ['scores', $isEs ? 'Puntuación' : 'Scores', true],
     ['about', $isEs ? 'Sobre' : 'About', !empty($aboutParas) || !empty($beach['features'])],
     ['tips', $isEs ? 'Consejos' : 'Tips', !empty($tipList)],
-    ['photos', $isEs ? 'Fotos' : 'Photos', $hasPhotosSection],
-    ['reviews', $isEs ? 'Reseñas' : 'Reviews', $hasReviews],
     ['getting', $isEs ? 'Cómo llegar' : 'Getting there', true],
+    ['photos', $isEs ? 'Fotos' : 'Photos', true],
+    ['reviews', $isEs ? 'Reseñas' : 'Reviews', true],
     ['tours', 'Tours', true],
     ['nearby', $isEs ? 'Cercanas' : 'Nearby', !empty($nearby)],
     ['faq', $isEs ? 'Preguntas' : 'FAQ', !empty($faqs)],
@@ -157,6 +243,7 @@ $subnav = array_values(array_filter([
 <header class="hero">
   <?php if (!empty($beach['cover_image'])): ?>
   <img class="hero-photo" src="<?= h(getBeachImageUrl($beach, 'large')) ?>"
+       data-fallback-src="/images/beaches/placeholder-beach.webp"
        <?php if ($heroSrcset): ?>srcset="<?= h($heroSrcset) ?>" sizes="100vw"<?php endif; ?>
        alt="<?= h(getBeachImageAlt($beach, 'scenic beach view')) ?>"
        fetchpriority="high">
@@ -164,7 +251,6 @@ $subnav = array_values(array_filter([
   <div class="hero-photo hero-photo-fallback"></div>
   <?php endif; ?>
   <div class="hero-scrim"></div>
-  <svg class="h-star" viewBox="0 0 100 100"><path d="M50 0 L59 41 L100 50 L59 59 L50 100 L41 59 L0 50 L41 41 Z"/></svg>
   <?php if ($isBoat): ?><div class="h-sticker">solo en bote<small>boat access only</small></div><?php endif; ?>
 
   <div class="wrap" style="width:100%">
@@ -183,13 +269,29 @@ $subnav = array_values(array_filter([
     </div>
     <h1 class="h-title"><?= h($beach['name']) ?></h1>
     <div class="h-sub"><?= h($beach['municipality']) ?><?= $regionLabel ? ' · ' . h($regionLabel) : '' ?> <span class="coord">· <?= number_format($lat, 2) ?>°N <?= number_format(abs($lng), 2) ?>°W</span></div>
-    <div class="h-meta">
-      <div class="h-score"><span class="num"><?= $score['overall'] ?></span><span class="lab">Beach<br><b>Score</b></span></div>
-      <?php if ($rating > 0): ?>
-      <div><div class="stars"><?= str_repeat('★', (int) round($rating)) . str_repeat('☆', 5 - (int) round($rating)) ?></div><div style="font-family:var(--data);font-size:.8rem;letter-spacing:.04em;opacity:.85"><?= number_format($rating, 1) ?><?= $reviewCountGoogle ? ' · ' . number_format($reviewCountGoogle) . ' ' . ($isEs ? 'reseñas' : 'reviews') : '' ?></div></div>
-      <?php endif; ?>
+    <?php if ($rating > 0): ?>
+    <div class="h-rating">
+      <span class="stars"><?= str_repeat('★', (int) round($rating)) . str_repeat('☆', 5 - (int) round($rating)) ?></span>
+      <span><?= $reviewCountGoogle ? 'Google ' : '' ?><?= number_format($rating, 1) ?><?= $reviewCountGoogle ? ' · ' . number_format($reviewCountGoogle) . ' ' . ($isEs ? 'reseñas' : 'reviews') : '' ?></span>
+    </div>
+    <?php endif; ?>
+    <div class="h-command">
+      <div class="h-snapshot" aria-label="<?= h($isEs ? 'Resumen rápido de la playa' : 'Quick beach snapshot') ?>">
+        <?php foreach ($heroSnapshot as $item): ?>
+        <div class="h-snap <?= h($item['tone']) ?>">
+          <span class="v"><?= h($item['value']) ?></span>
+          <span class="k"><?= h($item['label']) ?></span>
+        </div>
+        <?php endforeach; ?>
+      </div>
       <div class="h-actions">
         <a class="btn coral" href="<?= h($dirUrl) ?>" target="_blank" rel="noopener" data-bf-track="directions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 3 21l9-4 9 4z"/></svg><?= h($isEs ? 'Cómo llegar' : 'Directions') ?></a>
+        <button class="btn" type="button" id="sticky-favorite-btn"
+                data-action="toggleStickyFavorite"
+                aria-pressed="<?= $isFavorite ? 'true' : 'false' ?>"
+                aria-label="<?= $isFavorite ? 'Remove from favorites' : 'Add to favorites' ?>">
+          <span id="sticky-favorite-icon" aria-hidden="true"><?= $isFavorite ? '❤️' : '🤍' ?></span> <?= h($isEs ? 'Guardar' : 'Save') ?>
+        </button>
         <button class="btn" type="button" data-action="shareBeach" data-action-args='["<?= h($beach['slug']) ?>","<?= h(addslashes($beach['name'])) ?>"]'>↗ <?= h($isEs ? 'Compartir' : 'Share') ?></button>
       </div>
     </div>
@@ -212,11 +314,35 @@ $subnav = array_values(array_filter([
       <span class="eyebrow"><?= h($isEs ? 'Vistazo' : 'At a glance') ?></span>
       <?php if ($aiSummary !== ''): ?><p class="lead" style="margin:8px 0 18px"><?= h($aiSummary) ?></p>
       <?php elseif (!empty($aboutParas)): ?><p class="lead" style="margin:8px 0 18px"><?= h(mb_strlen($aboutParas[0]) > 220 ? mb_substr($aboutParas[0], 0, 220) . '…' : $aboutParas[0]) ?></p><?php endif; ?>
+      <div class="decision-summary" aria-label="<?= h($isEs ? 'Resumen rápido' : 'Quick snapshot') ?>">
+        <div>
+          <h3><?= h($isEs ? 'Ideal para' : 'Best for') ?></h3>
+          <ul><?php foreach ($bestForItems as $item): ?><li><?= h($item) ?></li><?php endforeach; ?></ul>
+        </div>
+        <div>
+          <h3><?= h($isEs ? 'Antes de ir' : 'Know before') ?></h3>
+          <ul><?php foreach ($knowBeforeItems as $item): ?><li><?= h($item) ?></li><?php endforeach; ?></ul>
+        </div>
+        <div>
+          <h3><?= h($isEs ? 'Servicios' : 'Facilities') ?></h3>
+          <ul><?php foreach ($facilityItems as $item): ?><li><?= h($item) ?></li><?php endforeach; ?></ul>
+        </div>
+      </div>
       <div class="glance">
         <?php foreach ($glance as $g): ?>
         <div class="gtile"><span class="ic"><?= $g[0] ?></span><div><div class="k"><?= h($g[1]) ?></div><div class="v <?= $g[3] ?>"><?= h($g[2]) ?></div></div></div>
         <?php endforeach; ?>
       </div>
+      <?php if (!empty($amenities)): ?>
+      <div class="glance-amenities">
+        <h3><?= h($isEs ? 'Servicios' : 'Amenities') ?></h3>
+        <div class="amen">
+          <?php foreach ($amenities as $amenity): ?>
+          <span>✓ <?= h(getAmenityLabel($amenity)) ?></span>
+          <?php endforeach; ?>
+        </div>
+      </div>
+      <?php endif; ?>
     </section>
 
     <section id="scores" class="block">
@@ -232,7 +358,18 @@ $subnav = array_values(array_filter([
           <div class="score"><span><?= ($icons[$b[0]] ?? '•') . ' ' . h($barNames[$b[0]] ?? $b[0]) ?></span><div class="bar"><i class="<?= $b[2] ?>" style="width:<?= $b[1] ?>%"></i></div><span class="pct"><?= $b[1] ?></span></div>
           <?php endforeach; ?>
         </div>
+        <?php if ($facilityScore !== null && $facilityScore < 50): ?>
+        <div class="score-note">
+          <b><?= h($isEs ? 'Servicios limitados' : 'Limited facilities') ?></b>
+          <span><?= h($isEs ? 'Lleva agua, sombra, comida y todo lo necesario para el día.' : 'Bring water, shade, food, and everything you need for the day.') ?></span>
+        </div>
+        <?php endif; ?>
       </div>
+    </section>
+
+    <section class="mobile-planning block" aria-label="<?= h($isEs ? 'Planificación rápida' : 'Quick planning') ?>">
+      <?php $renderConditionsCard('mobile-card'); ?>
+      <?php $renderLocationCard('mobile-card'); ?>
     </section>
 
     <?php if (!empty($aboutParas) || !empty($beach['features'])): ?>
@@ -277,14 +414,45 @@ $subnav = array_values(array_filter([
     </section>
     <?php endif; ?>
 
-    <?php if ($hasPhotosSection): ?>
+    <section id="getting" class="block">
+      <h2 class="h2"><?= h($isEs ? 'Cómo llegar y seguridad' : 'Getting there & safety') ?></h2>
+      <div style="display:grid;gap:12px">
+        <?php if ($access !== '' || !empty($beach['parking_details'])): ?>
+        <div class="callout"><span class="ic"><?= $isBoat ? '🛥️' : '🧭' ?></span><div><h4><?= h($isEs ? 'Acceso' : 'Access') ?></h4><p><?= h(ucfirst((string) ($beach['access_label'] ?? ''))) ?><?= !empty($beach['parking_details']) ? '. ' . h($beach['parking_details']) : '' ?></p></div></div>
+        <?php endif; ?>
+        <?php if (!empty($beach['safety_info'])): ?>
+        <div class="callout warn"><span class="ic">⚠️</span><div><h4><?= h($isEs ? 'Seguridad' : 'Swim smart') ?></h4><p><?= h($beach['safety_info']) ?></p></div></div>
+        <?php endif; ?>
+      </div>
+    </section>
+
+    <section class="contrib-band block" aria-labelledby="contrib-heading">
+      <div>
+        <span class="eyebrow"><?= h($isEs ? 'Comparte lo que viste' : 'Share what you saw') ?></span>
+        <h2 id="contrib-heading"><?= h($isEs ? 'Ayuda a la próxima persona que visite esta playa' : 'Help the next person plan this beach') ?></h2>
+        <p><?= h($isEs ? 'Sube fotos recientes, deja una reseña o reporta las condiciones de hoy.' : "Add recent photos, leave a review, or report today's conditions.") ?></p>
+      </div>
+      <div class="contrib-actions">
+        <?php if (isAuthenticated()): ?>
+        <button class="btn coral" type="button" data-action="openPhotoUploadModal" data-action-args='<?= $photoActionArgs ?>'>+ <?= h($isEs ? 'Añadir foto' : 'Add photo') ?></button>
+        <button class="btn" type="button" data-action="openReviewForm" data-action-args='<?= $reviewActionArgs ?>'><?= h($isEs ? 'Escribir reseña' : 'Write review') ?></button>
+        <?php else: ?>
+        <a class="btn coral" href="<?= h($photoLoginUrl) ?>">+ <?= h($isEs ? 'Añadir foto' : 'Add photo') ?></a>
+        <a class="btn" href="<?= h($reviewLoginUrl) ?>"><?= h($isEs ? 'Escribir reseña' : 'Write review') ?></a>
+        <?php endif; ?>
+        <button class="btn sea" type="button" data-action="openCheckinModal" data-action-args='<?= h(json_encode([$beach['id'], $beach['name']])) ?>'>✔ <?= h($isEs ? 'Check in' : 'Check in') ?></button>
+      </div>
+    </section>
+
     <section id="photos" class="block">
       <div class="secrow">
         <h2 class="h2"><?= h($isEs ? 'Fotos' : 'Photos') ?><?php if ($totalUserPhotos > 0): ?> <small>(<?= $totalUserPhotos ?>)</small><?php endif; ?></h2>
+        <?php if ($hasPhotosContent): ?>
         <?php if (isAuthenticated()): ?>
-        <button class="btn" type="button" data-action="openPhotoUploadModal" data-action-args='["<?= h($beach['id']) ?>","<?= h(addslashes($beach['name'])) ?>"]'>+ <?= h($isEs ? 'Añadir foto' : 'Add photo') ?></button>
+        <button class="btn" type="button" data-action="openPhotoUploadModal" data-action-args='<?= $photoActionArgs ?>'>+ <?= h($isEs ? 'Añadir foto' : 'Add photo') ?></button>
         <?php else: ?>
-        <a class="minor" href="<?= h(routeUrl('login', $lang)) ?>?redirect=<?= urlencode(routeUrl('beach_detail', $lang, ['slug' => $beach['slug']]) . '#photos') ?>"><?= h($isEs ? 'Inicia sesión para añadir fotos' : 'Sign in to add photos') ?></a>
+        <a class="minor" href="<?= h($photoLoginUrl) ?>"><?= h($isEs ? 'Inicia sesión para añadir fotos' : 'Sign in to add photos') ?></a>
+        <?php endif; ?>
         <?php endif; ?>
       </div>
       <?php if ($hasGallery): ?>
@@ -302,36 +470,51 @@ $subnav = array_values(array_filter([
         </button>
         <?php endforeach; ?>
       </div>
+      <?php elseif (!$hasGallery): ?>
+      <div class="empty-contrib">
+        <span class="empty-icon">📷</span>
+        <div>
+          <h3><?= h($isEs ? 'Sé la primera persona en subir una foto' : 'Be the first to add a photo') ?></h3>
+          <p><?= h($isEs ? 'Las fotos recientes ayudan a otros a reconocer el acceso, el agua y el espacio para estacionar.' : 'Recent photos help others recognize the access point, water, and parking setup.') ?></p>
+        </div>
+        <?php if (isAuthenticated()): ?>
+        <button class="btn coral" type="button" data-action="openPhotoUploadModal" data-action-args='<?= $photoActionArgs ?>'><?= h($isEs ? 'Añadir foto' : 'Add photo') ?></button>
+        <?php else: ?>
+        <a class="btn coral" href="<?= h($photoLoginUrl) ?>"><?= h($isEs ? 'Iniciar sesión' : 'Sign in') ?></a>
+        <?php endif; ?>
+      </div>
       <?php endif; ?>
     </section>
-    <?php endif; ?>
 
-    <?php if ($hasReviews): ?>
     <section id="reviews" class="block">
       <div class="secrow">
-        <h2 class="h2"><?= h($isEs ? 'Reseñas' : 'Reviews') ?><?php if ($avgUserRating): ?> <small>★ <?= number_format($avgUserRating, 1) ?> (<?= $userReviewCount ?>)</small><?php endif; ?></h2>
+        <h2 class="h2"><?= h($isEs ? 'Reseñas de la comunidad' : 'Community reviews') ?><?php if ($avgUserRating): ?> <small>★ <?= number_format($avgUserRating, 1) ?> (<?= $userReviewCount ?>)</small><?php endif; ?></h2>
+        <?php if ($hasReviewsContent): ?>
         <?php if (isAuthenticated()): ?>
-        <button class="btn" type="button" data-action="openReviewForm" data-action-args='["<?= h($beach['id']) ?>","<?= h(addslashes($beach['name'])) ?>"]'><?= h($isEs ? 'Escribir reseña' : 'Write a review') ?></button>
+        <button class="btn" type="button" data-action="openReviewForm" data-action-args='<?= $reviewActionArgs ?>'><?= h($isEs ? 'Escribir reseña' : 'Write a review') ?></button>
         <?php else: ?>
-        <a class="minor" href="<?= h(routeUrl('login', $lang)) ?>?redirect=<?= urlencode(routeUrl('beach_detail', $lang, ['slug' => $beach['slug']]) . '#reviews') ?>"><?= h($isEs ? 'Inicia sesión para reseñar' : 'Sign in to review') ?></a>
+        <a class="minor" href="<?= h($reviewLoginUrl) ?>"><?= h($isEs ? 'Inicia sesión para reseñar' : 'Sign in to review') ?></a>
+        <?php endif; ?>
         <?php endif; ?>
       </div>
       <div class="revlist">
+        <?php if (!empty($reviews)): ?>
         <?php foreach ($reviews as $review): ?>
         <?php include APP_ROOT . '/components/review-card.php'; ?>
         <?php endforeach; ?>
-      </div>
-    </section>
-    <?php endif; ?>
-
-    <section id="getting" class="block">
-      <h2 class="h2"><?= h($isEs ? 'Cómo llegar y seguridad' : 'Getting there & safety') ?></h2>
-      <div style="display:grid;gap:12px">
-        <?php if ($access !== '' || !empty($beach['parking_details'])): ?>
-        <div class="callout"><span class="ic"><?= $isBoat ? '🛥️' : '🧭' ?></span><div><h4><?= h($isEs ? 'Acceso' : 'Access') ?></h4><p><?= h(ucfirst((string) ($beach['access_label'] ?? ''))) ?><?= !empty($beach['parking_details']) ? '. ' . h($beach['parking_details']) : '' ?></p></div></div>
-        <?php endif; ?>
-        <?php if (!empty($beach['safety_info'])): ?>
-        <div class="callout warn"><span class="ic">⚠️</span><div><h4><?= h($isEs ? 'Seguridad' : 'Swim smart') ?></h4><p><?= h($beach['safety_info']) ?></p></div></div>
+        <?php else: ?>
+        <div class="empty-contrib">
+          <span class="empty-icon">✍️</span>
+          <div>
+            <h3><?= h($isEs ? 'Todavía no hay reseñas de Puerto Rico Beach Finder' : 'No Puerto Rico Beach Finder reviews yet') ?></h3>
+            <p><?= h($isEs ? 'Comparte si el acceso fue fácil, cómo estaba el agua y qué debería saber la próxima persona.' : 'Share whether access was easy, how the water felt, and what the next person should know.') ?></p>
+          </div>
+          <?php if (isAuthenticated()): ?>
+          <button class="btn coral" type="button" data-action="openReviewForm" data-action-args='<?= $reviewActionArgs ?>'><?= h($isEs ? 'Escribir reseña' : 'Write review') ?></button>
+          <?php else: ?>
+          <a class="btn coral" href="<?= h($reviewLoginUrl) ?>"><?= h($isEs ? 'Iniciar sesión' : 'Sign in') ?></a>
+          <?php endif; ?>
+        </div>
         <?php endif; ?>
       </div>
     </section>
@@ -339,31 +522,6 @@ $subnav = array_values(array_filter([
     <?= renderToursSection($beach, $lang, 'redesign') ?>
 
     <?= renderLocalListingsSection($beach, $lang, 'redesign') ?>
-
-    <?php if ($nearby): ?>
-    <section id="nearby" class="block">
-      <h2 class="h2"><?= h($isEs ? 'Playas cercanas' : 'Nearby beaches') ?></h2>
-      <div class="ngrid">
-        <?php foreach ($nearby as $nb):
-          $nbImg = $nb['cover_image'] ?: '/images/beaches/placeholder-beach.webp';
-          $nbUrl = routeUrl('beach_detail', $lang, ['slug' => $nb['slug']]); ?>
-        <a class="btile" href="<?= h($nbUrl) ?>"><div class="ph" style="background-image:url('<?= h($nbImg) ?>')"></div><div class="gr"></div><span class="di"><?= h($nb['distance_formatted'] ?? '') ?></span><div class="info"><div class="nm"><?= h($nb['name']) ?></div><div class="mu"><?= h($nb['municipality']) ?></div></div></a>
-        <?php endforeach; ?>
-      </div>
-    </section>
-    <?php endif; ?>
-
-    <?php if (!empty($similarBeaches)): ?>
-    <section class="block">
-      <h2 class="h2"><?= h($isEs ? 'Playas similares' : 'Similar beaches') ?></h2>
-      <div class="ngrid">
-        <?php foreach ($similarBeaches as $sb):
-          $sbImg = $sb['cover_image'] ?: '/images/beaches/placeholder-beach.webp'; ?>
-        <a class="btile" href="<?= h(routeUrl('beach_detail', $lang, ['slug' => $sb['slug']])) ?>"><div class="ph" style="background-image:url('<?= h(getThumbnailUrl($sbImg)) ?>')"></div><div class="gr"></div><?php if (!empty($sb['google_rating'])): ?><span class="di">★ <?= number_format($sb['google_rating'], 1) ?></span><?php endif; ?><div class="info"><div class="nm"><?= h($sb['name']) ?></div><div class="mu"><?= h($sb['municipality']) ?></div></div></a>
-        <?php endforeach; ?>
-      </div>
-    </section>
-    <?php endif; ?>
 
     <?php if (!empty($relatedGuides)): ?>
     <section class="block">
@@ -387,6 +545,46 @@ $subnav = array_values(array_filter([
     </section>
     <?php endif; ?>
 
+  </main>
+
+  <aside class="side">
+    <?php $renderConditionsCard(); ?>
+    <?php $renderLocationCard(); ?>
+
+    <?php if (($beachReferralBottom ?? '') !== ''): ?>
+    <div class="card refslot"><?= $beachReferralBottom ?></div>
+    <?php endif; ?>
+  </aside>
+
+  <div class="post-amenities-recs">
+    <?php if ($nearby): ?>
+    <section id="nearby" class="block nearby-block">
+      <div class="secrow">
+        <h2 class="h2"><?= h($isEs ? 'Playas cercanas' : 'Nearby beaches') ?></h2>
+        <a class="minor" href="#getting"><?= h($isEs ? 'Ver ubicación' : 'View location') ?></a>
+      </div>
+      <div class="ngrid nearby-grid">
+        <?php foreach ($nearby as $nb):
+          $nbImg = $cardImageUrl($nb, 'medium');
+          $nbUrl = routeUrl('beach_detail', $lang, ['slug' => $nb['slug']]); ?>
+        <a class="btile" href="<?= h($nbUrl) ?>"><div class="ph" style="background-image:url('<?= h($nbImg) ?>')"></div><div class="gr"></div><span class="di"><?= h($nb['distance_formatted'] ?? '') ?></span><div class="info"><div class="nm"><?= h($nb['name']) ?></div><div class="mu"><?= h($nb['municipality']) ?></div></div></a>
+        <?php endforeach; ?>
+      </div>
+    </section>
+    <?php endif; ?>
+
+    <?php if (!empty($similarBeaches)): ?>
+    <section id="similar" class="block similar-block">
+      <h2 class="h2"><?= h($isEs ? 'Playas similares' : 'Similar beaches') ?></h2>
+      <div class="ngrid similar-grid">
+        <?php foreach ($similarBeaches as $sb):
+          $sbImg = $cardImageUrl($sb, 'thumb'); ?>
+        <a class="btile" href="<?= h(routeUrl('beach_detail', $lang, ['slug' => $sb['slug']])) ?>"><div class="ph" style="background-image:url('<?= h($sbImg) ?>')"></div><div class="gr"></div><?php if (!empty($sb['google_rating'])): ?><span class="di">★ <?= number_format($sb['google_rating'], 1) ?></span><?php endif; ?><div class="info"><div class="nm"><?= h($sb['name']) ?></div><div class="mu"><?= h($sb['municipality']) ?></div><div class="why"><?= h($similarReason($sb)) ?></div></div></a>
+        <?php endforeach; ?>
+      </div>
+    </section>
+    <?php endif; ?>
+
     <?php if (!empty($faqs)): ?>
     <section id="faq" class="block faq">
       <h2 class="h2"><?= h($isEs ? 'Preguntas' : 'Questions') ?></h2>
@@ -401,81 +599,21 @@ $subnav = array_values(array_filter([
       <p><?= h($isEs ? 'Explora más de 400 playas en toda la isla con filtros, mapas y guías detalladas.' : 'Explore 400+ beaches across the island with filters, maps, and detailed guides.') ?></p>
       <a class="btn coral" href="<?= h(routeUrl('home', $lang)) ?>#beaches"><?= h($isEs ? 'Explorar todas las playas' : 'Explore all beaches') ?></a>
     </section>
-  </main>
-
-  <aside class="side">
-    <div class="card">
-      <h4><?= h($isEs ? 'Condiciones hoy' : 'Conditions today') ?></h4>
-      <?php if ($cur): $uv = $uvLabel($cur['uv_index'] ?? 0); ?>
-      <div class="cond-now"><span class="t"><?= round((float) ($cur['temperature'] ?? 0)) ?>°</span><span class="d"><?= h($cur['description'] ?? '') ?></span></div>
-      <div class="cond-grid">
-        <div><div class="k"><?= h($isEs ? 'Viento' : 'Wind') ?></div><div class="v"><?= round((float) ($cur['wind_speed'] ?? 0)) ?> <span style="font-size:.7rem;color:var(--ink-60)">km/h</span></div></div>
-        <div><div class="k"><?= h($isEs ? 'Índice UV' : 'UV index') ?></div><div class="v" style="color:<?= $uv[1] === 'r' ? 'var(--coral)' : ($uv[1] === 'a' ? '#B7860B' : 'var(--green)') ?>"><?= h($uv[0]) ?></div></div>
-        <div><div class="k"><?= h($isEs ? 'Humedad' : 'Humidity') ?></div><div class="v"><?= round((float) ($cur['humidity'] ?? 0)) ?>%</div></div>
-        <div><div class="k"><?= h($isEs ? 'Se siente' : 'Feels like') ?></div><div class="v"><?= round((float) ($cur['feels_like'] ?? ($cur['temperature'] ?? 0))) ?>°</div></div>
-      </div>
-      <div class="suntimes"><span>☀ <?= h($isEs ? 'Amanecer' : 'Sunrise') ?> <b><?= $fmtTime($weather['sunrise'] ?? null) ?></b></span><span>🌙 <?= h($isEs ? 'Atardecer' : 'Sunset') ?> <b><?= $fmtTime($weather['sunset'] ?? null) ?></b></span></div>
-      <?php else: ?>
-      <p style="font-size:.85rem;color:var(--ink-60)"><?= h($isEs ? 'Clima no disponible ahora.' : 'Live conditions unavailable right now.') ?></p>
-      <?php endif; ?>
-    </div>
-
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:13px">
-        <h4 style="margin:0"><?= h($isEs ? 'Dónde queda' : 'Where it is') ?></h4>
-        <div class="locseg"><button class="on" data-loc="chart" type="button"><?= h($isEs ? 'Mapa' : 'Chart') ?></button><button data-loc="sat" type="button"><?= h($isEs ? 'Satélite' : 'Satellite') ?></button></div>
-      </div>
-      <div id="locChart"><?= renderIslandLocator($lat, $lng) ?></div>
-      <div id="locSat" class="loc-sat" style="display:none"></div>
-      <div class="loc-note"><span><?= h($beach['municipality']) ?><?= $regionLabel ? ' · ' . h($regionLabel) : '' ?></span><b><?= number_format($lat, 2) ?>°N <?= number_format(abs($lng), 2) ?>°W</b></div>
-    </div>
-
-    <div class="card">
-      <h4><?= h($isEs ? '¿Estuviste aquí?' : 'Been here?') ?></h4>
-      <p style="font-size:.9rem;color:var(--ink-60);margin-bottom:12px"><?= h($isEs ? 'Reporta las condiciones de hoy para ayudar a otros.' : "Report today's conditions to help other beachgoers.") ?></p>
-      <button class="checkin" type="button" data-action="openCheckinModal" data-action-args='<?= h(json_encode([$beach['id'], $beach['name']])) ?>'>✔ <?= h($isEs ? 'Check in' : 'Check in') ?></button>
-    </div>
-
-    <?php if (!empty($amenities)): ?>
-    <div class="card">
-      <h4><?= h($isEs ? 'Servicios' : 'Amenities') ?></h4>
-      <div class="amen">
-        <?php foreach ($amenities as $amenity): ?>
-        <span>✓ <?= h(getAmenityLabel($amenity)) ?></span>
-        <?php endforeach; ?>
-      </div>
-    </div>
-    <?php endif; ?>
-
-    <?php if (($beachReferralBottom ?? '') !== ''): ?>
-    <div class="card refslot"><?= $beachReferralBottom ?></div>
-    <?php endif; ?>
-  </aside>
+  </div>
 </div></div>
 
-<div class="dockbar">
-  <a class="btn coral" href="<?= h($dirUrl) ?>" target="_blank" rel="noopener" data-bf-track="directions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 3 21l9-4 9 4z"/></svg><?= h($isEs ? 'Cómo llegar' : 'Directions') ?></a>
-  <button class="btn" type="button" id="sticky-favorite-btn"
-          data-action="toggleStickyFavorite"
-          aria-pressed="<?= $isFavorite ? 'true' : 'false' ?>"
-          aria-label="<?= $isFavorite ? 'Remove from favorites' : 'Add to favorites' ?>">
-    <span id="sticky-favorite-icon" aria-hidden="true"><?= $isFavorite ? '❤️' : '🤍' ?></span> <?= h($isEs ? 'Guardar' : 'Save') ?>
-  </button>
-  <button class="btn" type="button" data-action="shareBeach" data-action-args='["<?= h($beach['slug']) ?>","<?= h(addslashes($beach['name'])) ?>"]'>↗ <?= h($isEs ? 'Compartir' : 'Share') ?></button>
-</div>
 </div>
 
 <?php
 // Shared beach dialogs + their JS (share, lightbox, report, check-in, review,
 // photo upload/lightbox, favorite toggle) — same component classic uses.
 include APP_ROOT . '/components/beach/modals.php';
+include APP_ROOT . '/components/beach/scripts.php';
 ?>
 
 <script <?= cspNonceAttr() ?>>
 (function(){
   var lat=<?= json_encode($lat) ?>, lng=<?= json_encode($lng) ?>;
-  // Fixed dockbar needs body padding + chat-FAB clearance (see redesign.css)
-  document.body.classList.add('rd-has-dock');
   // subnav scroll-spy
   var secs=[].slice.call(document.querySelectorAll('.rd-beach section[id]'));
   var links=[].slice.call(document.querySelectorAll('.rd-beach .subnav a'));
@@ -484,14 +622,16 @@ include APP_ROOT . '/components/beach/modals.php';
     secs.forEach(function(s){io.observe(s);});
   }
   // Chart / Satellite (Google Maps embed, lazy)
-  var chart=document.getElementById('locChart'), sat=document.getElementById('locSat'), loaded=false;
-  [].slice.call(document.querySelectorAll('.locseg [data-loc]')).forEach(function(b){
-    b.addEventListener('click',function(){
-      [].slice.call(document.querySelectorAll('.locseg [data-loc]')).forEach(function(x){x.classList.remove('on');});
-      b.classList.add('on');
-      var isSat=b.dataset.loc==='sat';
-      if(isSat&&!loaded){sat.innerHTML='<iframe title="Map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q='+lat+','+lng+'&t=k&z=14&output=embed"></iframe>';loaded=true;}
-      chart.style.display=isSat?'none':''; sat.style.display=isSat?'':'none';
+  [].slice.call(document.querySelectorAll('.loc-card')).forEach(function(card){
+    var chart=card.querySelector('.loc-chart'), sat=card.querySelector('.loc-sat'), loaded=false;
+    [].slice.call(card.querySelectorAll('.locseg [data-loc]')).forEach(function(b){
+      b.addEventListener('click',function(){
+        [].slice.call(card.querySelectorAll('.locseg [data-loc]')).forEach(function(x){x.classList.remove('on');});
+        b.classList.add('on');
+        var isSat=b.dataset.loc==='sat';
+        if(isSat&&!loaded){sat.innerHTML='<iframe title="Map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q='+lat+','+lng+'&t=k&z=14&output=embed"></iframe>';loaded=true;}
+        chart.style.display=isSat?'none':''; sat.style.display=isSat?'':'none';
+      });
     });
   });
 })();

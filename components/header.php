@@ -28,6 +28,7 @@ $allowedBodyVariants = ['default', 'collection-light', 'collection-dark'];
 $requestedBodyVariant = isset($bodyVariant) ? (string) $bodyVariant : 'default';
 $bodyVariant = in_array($requestedBodyVariant, $allowedBodyVariants, true) ? $requestedBodyVariant : 'default';
 $bodyClasses = trim(($bodyClasses ?? '') . ' min-h-screen flex flex-col font-sans');
+$rdBodyStyle = '';
 if ($bodyVariant === 'collection-light') {
     $bodyClasses .= ' collection-light bg-sand-50 text-warm-900';
     $htmlTheme = 'light';
@@ -286,7 +287,7 @@ if ($bodyVariant === 'collection-light') {
 
     <!-- Preload critical CSS -->
     <link rel="preload" href="/assets/css/tailwind.min.css?v=3.9" as="style">
-    <link rel="preload" href="/assets/css/styles.css?v=4.7" as="style">
+    <link rel="preload" href="/assets/css/styles.css?v=4.9" as="style">
 
     <!-- DM Sans + DM Serif Display Fonts - loaded asynchronously to avoid render blocking -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" as="style" data-lazy-style>
@@ -317,7 +318,7 @@ if ($bodyVariant === 'collection-light') {
     <script src="/assets/js/csp-bindings.js" <?= cspNonceAttr() ?>></script>
 
     <!-- Custom styles -->
-    <link rel="stylesheet" href="/assets/css/styles.css?v=4.7">
+    <link rel="stylesheet" href="/assets/css/styles.css?v=4.9">
 
     <?php if (!empty($redesignLayout)): ?>
     <!-- Redesign v2 (tropical) fonts + standalone stylesheet.
@@ -334,10 +335,10 @@ if ($bodyVariant === 'collection-light') {
     $rdDesign = getHomepageDesign();
     $rdEditorMode = isset($_GET['rdedit']) && $_GET['rdedit'] === '1' && isAdmin();
     $rdFont = homepageFont($rdDesign['font']);
+    $rdBodyStyle = '--disp:' . $rdFont['stack'] . ';--rd-heading-weight:' . (int) $rdFont['weight'];
     ?>
     <link href="<?= h(redesignFontsUrl($rdDesign['font'], $rdEditorMode)) ?>" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/redesign.css?v=8">
-    <style>.rd,body.redesign{--disp:<?= $rdFont['stack'] ?>}.rd-home .headline,.rd-home .dir-head h2{font-weight:<?= (int) $rdFont['weight'] ?>}</style>
+    <link rel="stylesheet" href="/assets/css/redesign.css?v=56">
     <?php endif; ?>
 
     <!-- Deferred scripts (non-blocking) -->
@@ -349,7 +350,7 @@ if ($bodyVariant === 'collection-light') {
 
     <?php if (isset($extraHead)) echo $extraHead; ?>
 </head>
-<body class="<?= h($bodyClasses) ?><?= (!empty($redesignLayout)) ? ' redesign' : '' ?>">
+<body class="<?= h($bodyClasses) ?><?= (!empty($redesignLayout)) ? ' redesign' : '' ?>"<?= $rdBodyStyle !== '' ? ' style="' . h($rdBodyStyle) . '"' : '' ?>>
     <?php if (empty($redesignLayout)): ?>
     <?php include __DIR__ . '/nav.php'; ?>
     <?php else: ?>

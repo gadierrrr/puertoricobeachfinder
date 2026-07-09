@@ -79,6 +79,8 @@ if ($slug !== '') {
 if (!$list) {
     http_response_code(404);
     $pageTitle = $L['not_found_title'];
+    $redesignLayout = useRedesign();
+    $bodyClasses = trim(($bodyClasses ?? '') . ' rd-account');
     include APP_ROOT . '/components/header.php';
     echo '<div class="max-w-3xl mx-auto px-4 py-20 text-center">';
     echo '<div class="text-6xl mb-4">🔍</div>';
@@ -133,6 +135,8 @@ $breadcrumbs = [
     ['name' => $list['name']],
 ];
 
+$redesignLayout = useRedesign();
+$bodyClasses = trim(($bodyClasses ?? '') . ' rd-account');
 include APP_ROOT . '/components/header.php';
 ?>
 

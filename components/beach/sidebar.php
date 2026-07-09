@@ -72,7 +72,7 @@
                     <div class="flex flex-wrap gap-1.5">
                         <?php foreach ($beach['amenities'] as $amenity): ?>
                         <span class="inline-flex items-center gap-1 text-xs bg-warm-50 text-warm-600 px-2 py-1 rounded">
-                            <i data-lucide="check" class="w-3 h-3 text-green-400" aria-hidden="true"></i>
+                            <i data-lucide="check" class="w-3 h-3 text-palm-400" aria-hidden="true"></i>
                             <?= h(getAmenityLabel($amenity)) ?>
                         </span>
                         <?php endforeach; ?>

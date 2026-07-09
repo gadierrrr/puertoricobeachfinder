@@ -547,7 +547,7 @@ foreach ($beaches as $beach) {
 arsort($munCounts);
 $topMunicipalities = array_slice($munCounts, 0, 6, true);
 
-$bodyVariant = 'collection-light';
+$bodyVariant = 'collection-dark';
 $redesignLayout = useRedesign();
 include APP_ROOT . '/components/header.php';
 
@@ -658,7 +658,8 @@ $beachIdx++; ?>
             <a href="<?= h(routeUrl('beach_detail', $lang, ['slug' => $beach['slug']])) ?>"
                class="group bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                 <div class="aspect-[4/3] overflow-hidden">
-                    <img src="<?= h($beach['cover_image']) ?>"
+                    <img src="<?= h(getBeachImageUrl($beach, 'medium')) ?>"
+                         data-fallback-src="/images/beaches/placeholder-beach.webp"
                          alt="<?= h($beach['name']) ?>"
                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                          loading="<?= $beachIdx <= 6 ? "eager" : "lazy" ?>" width="400" height="300">
@@ -692,7 +693,8 @@ $beachIdx++; ?>
                 <?php foreach (array_slice($beaches, 30) as $beach): ?>
                 <a href="<?= h(routeUrl('beach_detail', $lang, ['slug' => $beach['slug']])) ?>"
                    class="flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
-                    <img src="<?= h($beach['cover_image']) ?>"
+                    <img src="<?= h(getBeachImageUrl($beach, 'thumb')) ?>"
+                         data-fallback-src="/images/beaches/placeholder-beach.webp"
                          alt="<?= h($beach['name']) ?>"
                          class="w-16 h-16 object-cover rounded-lg flex-shrink-0"
                          loading="lazy" width="64" height="64">

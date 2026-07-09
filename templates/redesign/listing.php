@@ -106,10 +106,10 @@ $listing = $listing ?? [];
   <div class="lgrid">
     <?php foreach ($lstTiles as $lstIdx => $b):
         $bUrl = routeUrl('beach_detail', $lang, ['slug' => $b['slug']]);
-        $bImg = ($b['cover_image'] ?? '') ?: '/images/beaches/placeholder-beach.webp';
+        $bImg = getBeachImageUrl($b, 'medium');
     ?>
     <a class="btile" href="<?= h($bUrl) ?>">
-      <img class="btile-photo" src="<?= h($bImg) ?>" alt="<?= h($b['name']) ?>"
+      <img class="btile-photo" src="<?= h($bImg) ?>" data-fallback-src="/images/beaches/placeholder-beach.webp" alt="<?= h($b['name']) ?>"
            loading="<?= $lstIdx < 6 ? 'eager' : 'lazy' ?>" width="400" height="300">
       <div class="btile-grad"></div>
       <div class="bt-top">
@@ -136,10 +136,10 @@ $listing = $listing ?? [];
   <div class="clist">
     <?php foreach ($lstRest as $b):
         $bUrl = routeUrl('beach_detail', $lang, ['slug' => $b['slug']]);
-        $bImg = ($b['cover_image'] ?? '') ?: '/images/beaches/placeholder-beach.webp';
+        $bImg = getBeachImageUrl($b, 'thumb');
     ?>
     <a class="crow" href="<?= h($bUrl) ?>">
-      <img src="<?= h($bImg) ?>" alt="<?= h($b['name']) ?>" loading="lazy" width="64" height="64">
+      <img src="<?= h($bImg) ?>" data-fallback-src="/images/beaches/placeholder-beach.webp" alt="<?= h($b['name']) ?>" loading="lazy" width="64" height="64">
       <span class="ctx">
         <span class="cn"><?= h($b['name']) ?></span>
         <span class="cm"><?= h($b['municipality']) ?><?php if (!empty($b['distance_formatted'])): ?> · <?= h($b['distance_formatted']) ?><?php endif; ?></span>

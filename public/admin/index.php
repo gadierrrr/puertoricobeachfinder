@@ -253,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 showStatus('success', `
                     <div class="flex items-start gap-4">
-                        <img src="${escapeHtml(data.beach.cover_image)}" alt="" class="w-20 h-20 rounded-lg object-cover flex-shrink-0">
+                        <img src="${escapeHtml(data.beach.image_url || data.beach.cover_image || '/images/beaches/placeholder-beach.webp')}" data-fallback-src="/images/beaches/placeholder-beach.webp" alt="" class="w-20 h-20 rounded-lg object-cover flex-shrink-0">
                         <div class="flex-1 min-w-0">
                             <h4 class="font-semibold text-gray-900">${escapeHtml(data.beach.name)}</h4>
                             <p class="text-sm text-gray-500">${escapeHtml(data.beach.municipality)}</p>

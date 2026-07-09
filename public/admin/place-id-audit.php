@@ -306,6 +306,7 @@ function renderResults(results) {
             <td class="px-4 py-3">
                 <div class="flex items-center gap-3">
                     <img src="${escapeHtml(r.cover_image || '/images/beaches/placeholder-beach.webp')}"
+                         data-fallback-src="/images/beaches/placeholder-beach.webp"
                          alt="" class="w-10 h-10 rounded-lg object-cover">
                     <div>
 	                        <a href="/admin/beaches?action=edit&id=${r.beach_id}"

@@ -13,7 +13,7 @@ $beach = $beach ?? [];
 $slug = $beach['slug'] ?? '';
 $name = $beach['name'] ?? 'Unknown Beach';
 $municipality = $beach['municipality'] ?? '';
-$coverImage = $beach['cover_image'] ?? '/images/beaches/placeholder-beach.webp';
+$coverImage = getBeachImageUrl($beach, 'medium');
 $googleRating = $beach['google_rating'] ?? null;
 $googleReviewCount = intval($beach['google_review_count'] ?? 0);
 $description = trim((string)($beach['description'] ?? ''));
@@ -53,6 +53,7 @@ $traits = array_slice(array_values(array_unique($traits)), 0, 5);
                 <source srcset="<?= h($webpImage['webp']) ?>" type="image/webp">
                 <?php endif; ?>
                 <img src="<?= h($imageAttrs['src']) ?>"
+                     data-fallback-src="/images/beaches/placeholder-beach.webp"
                      alt="<?= h(getBeachImageAlt($beach)) ?>"
                      class="w-full h-48 sm:h-full object-cover"
                      loading="lazy" decoding="async">

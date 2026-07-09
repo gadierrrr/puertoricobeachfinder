@@ -90,7 +90,7 @@ $breadcrumbs = [
     ['name' => __('footer.san_juan_beaches')]
 ];
 
-$bodyVariant = 'collection-light';
+$bodyVariant = 'collection-dark';
 $redesignLayout = useRedesign();
 include APP_ROOT . '/components/header.php';
 ?>

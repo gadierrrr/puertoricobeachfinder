@@ -49,6 +49,8 @@ $breadcrumbs = [
     ['name' => __('profile.favorites')]
 ];
 
+$redesignLayout = useRedesign();
+$bodyClasses = trim(($bodyClasses ?? '') . ' rd-account');
 include APP_ROOT . '/components/header.php';
 ?>
 

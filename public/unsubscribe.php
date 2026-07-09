@@ -45,6 +45,8 @@ $ok = (($_GET['ok'] ?? '') === '1');
 $pageTitle = 'Unsubscribe';
 $skipMapCSS = true;
 $robotsOverride = 'noindex, nofollow';
+$redesignLayout = useRedesign();
+$bodyClasses = trim(($bodyClasses ?? '') . ' rd-legal');
 include APP_ROOT . '/components/header.php';
 ?>
 <div class="max-w-md mx-auto px-4 py-20 text-center">

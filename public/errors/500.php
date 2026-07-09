@@ -9,6 +9,7 @@ $errorId = $errorId ?? bin2hex(random_bytes(4));
 $showDetails = $showDetails ?? false;
 $errorMessage = $errorMessage ?? null;
 $currentLang = getCurrentLanguage();
+$redesignLayout = useRedesign();
 ?>
 <!doctype html>
 <html lang="<?= htmlspecialchars(getHtmlLang(), ENT_QUOTES, 'UTF-8') ?>">
@@ -16,6 +17,10 @@ $currentLang = getCurrentLanguage();
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= htmlspecialchars(__('errors.server_error_title'), ENT_QUOTES, 'UTF-8') ?> | <?= htmlspecialchars($appName, ENT_QUOTES, 'UTF-8') ?></title>
+    <?php if ($redesignLayout): ?>
+    <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Hanken+Grotesk:wght@400;500;600;700&family=Saira+Semi+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/redesign.css?v=30">
+    <?php endif; ?>
     <style>
         body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0f172a; color: #e2e8f0; }
         main { min-height: 100vh; display: grid; place-items: center; padding: 24px; }
@@ -27,7 +32,7 @@ $currentLang = getCurrentLanguage();
         a { display: inline-block; margin-top: 20px; background: #facc15; color: #0f172a; text-decoration: none; padding: 12px 18px; border-radius: 10px; font-weight: 600; }
     </style>
 </head>
-<body>
+<body class="<?= $redesignLayout ? 'redesign rd-error' : '' ?>">
 <main>
     <section class="card">
         <h1><?= htmlspecialchars(__('errors.server_error_title'), ENT_QUOTES, 'UTF-8') ?></h1>

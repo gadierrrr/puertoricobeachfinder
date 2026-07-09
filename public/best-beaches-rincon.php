@@ -61,7 +61,7 @@ $breadcrumbs = [
     ['name' => __('pages.best_beaches_rincon.breadcrumb')]
 ];
 
-$bodyVariant = 'collection-light';
+$bodyVariant = 'collection-dark';
 $redesignLayout = useRedesign();
 include APP_ROOT . '/components/header.php';
 ?>

@@ -67,6 +67,7 @@ $extraHead .= breadcrumbSchema([
 ]);
 
 $pageTheme = "guide";
+$redesignLayout = useRedesign();
 $pageShellMode = "start";
 include APP_ROOT . "/components/page-shell.php";
 ?>

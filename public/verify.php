@@ -16,6 +16,8 @@ $skipMapCSS = true; // Auth pages don't need map
 
 if (!$token) {
     $pageTitle = 'Invalid Link';
+    $redesignLayout = useRedesign();
+    $bodyClasses = trim(($bodyClasses ?? '') . ' rd-auth');
     include APP_ROOT . '/components/header.php';
     echo '<div class="max-w-md mx-auto px-4 py-16 text-center">
             <div class="text-6xl mb-4">❌</div>
@@ -33,6 +35,8 @@ $result = verifyMagicLink($token);
 
 if (!$result['success']) {
     $pageTitle = 'Link Expired';
+    $redesignLayout = useRedesign();
+    $bodyClasses = trim(($bodyClasses ?? '') . ' rd-auth');
     include APP_ROOT . '/components/header.php';
     echo '<div class="max-w-md mx-auto px-4 py-16 text-center">
             <div class="text-6xl mb-4">⏰</div>

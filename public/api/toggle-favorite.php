@@ -20,6 +20,8 @@ require_once APP_ROOT . '/inc/helpers.php';
 
 $format = isset($_GET['format']) ? (string)$_GET['format'] : 'html';
 $wantsJson = $format === 'json';
+$variant = isset($_GET['variant']) ? (string)$_GET['variant'] : '';
+$isRedesignVariant = $variant === 'redesign';
 
 // Require authentication
 if (!isAuthenticated()) {
@@ -30,6 +32,10 @@ if (!isAuthenticated()) {
         ], 401);
     }
     http_response_code(401);
+    if ($isRedesignVariant) {
+        echo '<button class="rd-fav" type="button" data-action-stop data-action="showSignupPrompt" data-action-args=\'["favorites"]\' aria-label="Sign in to save this beach" title="Sign in to save favorites">♡</button>';
+        exit;
+    }
     echo '<button class="favorite-btn w-9 h-9 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-sm border border-white/20 hover:bg-black/60 transition-colors" data-action-stop data-action="showSignupPrompt" data-action-args=\'["favorites"]\' aria-label="Sign in to save this beach" title="Sign in to save favorites"><i data-lucide="heart" class="w-4 h-4 text-white/50"></i></button>';
     exit;
 }
@@ -117,6 +123,18 @@ if ($wantsJson) {
 
 // Return updated button
 ?>
+<?php if ($isRedesignVariant): ?>
+<button class="rd-fav<?= $isFavorite ? ' on' : '' ?>"
+        type="button"
+        hx-post="/api/toggle-favorite.php?variant=redesign"
+        hx-target="this"
+        hx-swap="outerHTML"
+        hx-vals='{"beach_id": "<?= h($beachId) ?>", "csrf_token": "<?= h(csrfToken()) ?>"}'
+        data-action-stop data-action="noop" data-on="click"
+        aria-label="<?= $isFavorite ? 'Remove from favorites' : 'Add to favorites' ?>"
+        aria-pressed="<?= $isFavorite ? 'true' : 'false' ?>"
+        title="<?= $isFavorite ? 'Remove from favorites' : 'Add to favorites' ?>"><?= $isFavorite ? '♥' : '♡' ?></button>
+<?php else: ?>
 <button class="favorite-btn absolute top-3 left-3 w-8 h-8 flex items-center justify-center rounded-full bg-white/90 shadow hover:bg-white transition-colors"
         hx-post="/api/toggle-favorite.php"
         hx-target="this"
@@ -127,3 +145,4 @@ if ($wantsJson) {
         <?= $isFavorite ? '❤️' : '🤍' ?>
     </span>
 </button>
+<?php endif; ?>

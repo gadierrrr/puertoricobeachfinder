@@ -51,7 +51,9 @@
             <?php foreach ($similarBeaches as $similar): ?>
             <a href="<?= h(routeUrl('beach_detail', $lang, ['slug' => $similar['slug']])) ?>" class="group beach-detail-card overflow-hidden hover:border-sunset-400/30 transition-all">
                 <div class="aspect-video relative overflow-hidden">
-                    <img src="<?= h(getThumbnailUrl($similar['cover_image'])) ?>" alt="<?= h($similar['name']) ?>"
+                    <img src="<?= h(getBeachImageUrl($similar, 'thumb')) ?>"
+                         data-fallback-src="/images/beaches/placeholder-beach.webp"
+                         alt="<?= h($similar['name']) ?>"
                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
                 </div>
                 <div class="p-3">
@@ -86,7 +88,9 @@
             <?php foreach ($nearbyBeaches as $nearby): ?>
             <a href="<?= h(routeUrl('beach_detail', $lang, ['slug' => $nearby['slug']])) ?>" class="group beach-detail-card overflow-hidden hover:border-sunset-400/30 transition-all">
                 <div class="aspect-video relative overflow-hidden">
-                    <img src="<?= h(getThumbnailUrl($nearby['cover_image'])) ?>" alt="<?= h($nearby['name']) ?>"
+                    <img src="<?= h(getBeachImageUrl($nearby, 'thumb')) ?>"
+                         data-fallback-src="/images/beaches/placeholder-beach.webp"
+                         alt="<?= h($nearby['name']) ?>"
                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
                 </div>
                 <div class="p-3">

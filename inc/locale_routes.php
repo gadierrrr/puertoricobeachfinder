@@ -859,6 +859,27 @@ function resolvePublicScriptFromLocalizedPath(string $path): ?array
         ];
     }
 
+    if ($routeKey === 'beaches_by_tag') {
+        return [
+            'script' => '/beaches-by-tag.php',
+            'query' => ['tag' => (string) ($params['tag'] ?? '')],
+        ];
+    }
+
+    if ($routeKey === 'beaches_near') {
+        return [
+            'script' => '/beaches-near.php',
+            'query' => ['loc' => (string) ($params['location'] ?? '')],
+        ];
+    }
+
+    if ($routeKey === 'guide_detail') {
+        return [
+            'script' => '/guides/cms-router.php',
+            'query' => ['slug' => (string) ($params['slug'] ?? '')],
+        ];
+    }
+
     return null;
 }
 

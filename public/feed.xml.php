@@ -92,7 +92,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
     <!-- Recent Beaches -->
 <?php foreach ($beaches as $beach):
-    $imageUrl = (strpos($beach['cover_image'], 'http') === 0) ? $beach['cover_image'] : $appUrl . $beach['cover_image'];
+    $resolvedImage = getBeachImageUrl($beach, 'medium');
+    $imageUrl = (strpos($resolvedImage, 'http') === 0) ? $resolvedImage : $appUrl . $resolvedImage;
     $pubDate = $beach['updated_at'] ? date('r', strtotime($beach['updated_at'])) : date('r');
     $desc = mb_substr(strip_tags($beach['description'] ?? ''), 0, 300);
 ?>
@@ -103,7 +104,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
       <description><?= h($desc) ?></description>
       <pubDate><?= $pubDate ?></pubDate>
       <category>Beach</category>
-<?php if ($beach['cover_image'] && strpos($beach['cover_image'], 'placeholder') === false): ?>
+<?php if (strpos($resolvedImage, 'placeholder') === false): ?>
       <media:content url="<?= h($imageUrl) ?>" medium="image"/>
 <?php endif; ?>
     </item>

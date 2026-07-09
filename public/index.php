@@ -130,12 +130,12 @@ if (!isValidCollectionKey((string)$selectedCollection)) {
     $selectedCollection = '';
 }
 
-// The redesign homepage builds its own dataset in the template; the map view
-// (?view=map) keeps the classic page until the redesign grows a map, so nav
-// and footer "Interactive Map" links stay functional after the flip.
-$redesignLayout = useRedesign() && $viewMode !== 'map';
+// The redesign homepage builds its own dataset in the template, including the
+// map-first view for ?view=map.
+$redesignLayout = useRedesign();
 if ($redesignLayout) {
-    // No map on the redesign homepage — skip MapLibre CSS (header) + JS (footer).
+    // The redesign map is rendered from the homepage beach dataset; skip the
+    // classic MapLibre stack.
     $skipMapCSS = true;
     $skipMapScripts = true;
 }
@@ -519,7 +519,8 @@ $trendingBeaches = getTrendingBeaches(8);
            class="w-[280px] snap-start relative group rounded-xl overflow-hidden flex-shrink-0">
             <!-- Image -->
             <div class="relative overflow-hidden" style="height: 373px">
-                <img src="<?= h(getThumbnailUrl($tb['cover_image'])) ?>"
+                <img src="<?= h(getBeachImageUrl($tb, 'medium')) ?>"
+                     data-fallback-src="/images/beaches/placeholder-beach.webp"
                      alt="<?= h($tb['name']) ?>"
                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                      loading="lazy">
