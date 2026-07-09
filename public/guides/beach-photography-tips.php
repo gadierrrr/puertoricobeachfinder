@@ -67,7 +67,7 @@ include APP_ROOT . "/components/page-shell.php";
 ?>
 <?php if ($redesignLayout): ?>
 <div class="rd rd-guide-detail rd-guide-photography">
-    <section class="guide-detail-hero">
+    <section class="guide-detail-hero managed-page-hero"<?= pageHeroAttributes('guides') ?>>
         <div class="wrap guide-detail-hero-grid">
             <div class="guide-detail-copy">
                 <nav class="guide-detail-crumb" aria-label="Breadcrumb">

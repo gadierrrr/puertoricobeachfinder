@@ -81,7 +81,7 @@ include APP_ROOT . '/components/header.php';
 
 <main id="main-content" class="min-h-screen bg-sand-50">
     <!-- Header -->
-    <section class="bg-white border-b border-warm-200 py-6 pt-24">
+    <section class="bg-white border-b border-warm-200 py-6 pt-24 managed-page-hero"<?= pageHeroAttributes('compare') ?>>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Breadcrumbs -->
             <div class="mb-4">

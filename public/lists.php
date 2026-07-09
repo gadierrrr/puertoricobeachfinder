@@ -112,7 +112,7 @@ include APP_ROOT . '/components/header.php';
         <?php include APP_ROOT . '/components/breadcrumbs.php'; ?>
     </div>
 
-    <div class="flex items-center justify-between mb-8 gap-4 flex-wrap">
+    <div class="flex items-center justify-between mb-8 gap-4 flex-wrap managed-page-hero page-heading-hero"<?= pageHeroAttributes('account') ?>>
         <div>
             <h1 class="text-3xl font-bold text-gray-900"><?= h($L['title']) ?></h1>
             <p class="text-gray-600 mt-1">

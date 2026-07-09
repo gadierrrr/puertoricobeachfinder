@@ -75,6 +75,7 @@ $config = [
         Changes preview live below and go public only when you hit
         <span class="font-semibold text-gray-700">Save &amp; publish</span>
         (and only on the redesign homepage).
+        A homepage photo published in <a href="/admin/page-heroes" class="font-semibold text-blue-600 hover:text-blue-800">Headers &amp; Heroes</a> takes priority over this background.
     </p>
     <div class="flex items-center gap-3">
         <span id="hpStatus" class="text-sm text-gray-500"></span>

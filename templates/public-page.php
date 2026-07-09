@@ -17,7 +17,7 @@ $pageShellMode = 'start';
 include __DIR__ . '/../components/page-shell.php';
 ?>
 
-<section class="ui-hero">
+<section class="ui-hero managed-page-hero"<?= pageHeroAttributes('general') ?>>
     <div class="max-w-5xl mx-auto">
         <h1 class="text-3xl md:text-5xl font-bold"><?= h($pageTitle) ?></h1>
         <p class="mt-4 text-lg text-white/85 max-w-3xl"><?= h($pageDescription) ?></p>

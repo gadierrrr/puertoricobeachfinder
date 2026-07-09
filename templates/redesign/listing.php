@@ -40,7 +40,7 @@ $listing = $listing ?? [];
 <div class="rd rd-listing">
 
 <!-- ===== HERO ===== -->
-<header class="lhero">
+<header class="lhero managed-page-hero"<?= pageHeroAttributes('listings') ?>>
   <div class="wrap">
     <?php if (!empty($listing['breadcrumbs'])): ?>
     <nav class="crumb" aria-label="Breadcrumb">

@@ -1486,3 +1486,11 @@ body.redesign.rd-error p{color:var(--ink-60)}
 body.redesign.rd-error a,body.redesign.rd-error button{background:var(--coral);color:#fff;border:0;border-radius:10px;font-family:var(--data);font-weight:700;letter-spacing:.06em}
 body.redesign.rd-error a:hover,body.redesign.rd-error button:hover{background:#d92d37;color:#fff}
 body.redesign.rd-error .bg-blue-50{background:var(--sea-pale)!important;color:var(--ink)!important}
+/* Admin-managed header photography (see inc/page_heroes.php). */
+.managed-page-hero[data-managed-page-hero]{position:relative;isolation:isolate;overflow:hidden;color:#fff;background-image:linear-gradient(rgb(9 22 32/var(--managed-hero-overlay,.46)),rgb(9 22 32/var(--managed-hero-overlay,.46))),var(--managed-hero-image)!important;background-position:var(--managed-hero-position,center)!important;background-repeat:no-repeat!important;background-size:cover!important}
+.managed-page-hero[data-managed-page-hero] :is(h1,h2){color:#fff}
+.managed-page-hero[data-managed-page-hero] :is(p,.lede){color:rgb(255 255 255/.84)}
+.managed-page-hero[data-managed-page-hero] a:not(.qres-btn):not(.guide-home-link){color:rgb(255 255 255/.88)}
+.managed-page-hero[data-managed-page-hero] :is(h1,h2,p,nav){text-shadow:0 1px 18px rgb(0 0 0/.34)}
+.managed-page-hero[data-managed-page-hero]>.hero-bg,.managed-page-hero[data-managed-page-hero]>.hero-scrim{display:none}
+.page-heading-hero[data-managed-page-hero]{padding:clamp(1.25rem,3vw,2.5rem);border-radius:18px;box-shadow:0 16px 42px rgb(9 22 32/.16)}

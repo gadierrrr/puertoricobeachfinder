@@ -239,7 +239,7 @@ if ($redesignLayout) {
 ?>
 
 <!-- Hero Section -->
-<section class="hero-gradient-dark text-white py-12 md:py-16">
+<section class="hero-gradient-dark managed-page-hero text-white py-12 md:py-16"<?= pageHeroAttributes('listings') ?>>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Breadcrumbs -->
         <nav class="text-white/70 text-sm mb-4" aria-label="Breadcrumb">

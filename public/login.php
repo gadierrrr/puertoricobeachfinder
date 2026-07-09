@@ -154,6 +154,7 @@ $skipMapCSS = true; // Auth pages don't need map
 $redesignLayout = useRedesign();
 $bodyClasses = trim(($bodyClasses ?? '') . ' rd-auth');
 include APP_ROOT . '/components/header.php';
+$loginManagedHero = pageHeroResolve('account');
 ?>
 
 <div class="min-h-screen flex pt-16">
@@ -161,7 +162,12 @@ include APP_ROOT . '/components/header.php';
     <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden">
         <!-- Background Image -->
         <div class="absolute inset-0">
-            <?php if ($featuredBeach && $featuredBeach['cover_image']): ?>
+            <?php if ($loginManagedHero !== null): ?>
+            <img src="<?= h($loginManagedHero['image']) ?>"
+                 alt="Puerto Rico coast"
+                 class="w-full h-full object-cover"
+                 style="object-position:<?= h($loginManagedHero['position']) ?>">
+            <?php elseif ($featuredBeach && $featuredBeach['cover_image']): ?>
             <img src="<?= h(getBeachImageUrl($featuredBeach, 'large')) ?>"
                  data-fallback-src="/images/beaches/placeholder-beach.webp"
                  alt="Beautiful Puerto Rico beach"
@@ -171,7 +177,7 @@ include APP_ROOT . '/components/header.php';
                  alt="Jobos Beach, Puerto Rico"
                  class="w-full h-full object-cover">
             <?php endif; ?>
-            <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40"<?= $loginManagedHero !== null ? ' style="opacity:' . h((string) ($loginManagedHero['overlay'] / 100)) . '"' : '' ?>></div>
         </div>
 
         <!-- Content Overlay -->

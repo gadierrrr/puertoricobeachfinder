@@ -145,7 +145,7 @@ include APP_ROOT . '/components/header.php';
         <?php include APP_ROOT . '/components/breadcrumbs.php'; ?>
     </div>
 
-    <div class="flex items-start justify-between gap-4 flex-wrap mb-8">
+    <div class="flex items-start justify-between gap-4 flex-wrap mb-8 managed-page-hero page-heading-hero"<?= pageHeroAttributes('account') ?>>
         <div class="min-w-0">
             <div class="flex items-center gap-3 mb-1">
                 <h1 class="text-3xl font-bold text-gray-900"><?= h($list['name']) ?></h1>

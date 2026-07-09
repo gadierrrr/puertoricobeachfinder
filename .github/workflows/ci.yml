@@ -72,7 +72,9 @@ jobs:
         run: npm run check:design
 
       - name: Validate locale routing
-        run: php scripts/test-locale-routing.php
+        run: |
+          php scripts/test-locale-routing.php
+          php scripts/test-page-heroes.php
 
       - name: Initialize base schema
         run: php scripts/init-db.php

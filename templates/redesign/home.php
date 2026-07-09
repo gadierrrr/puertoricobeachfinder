@@ -252,11 +252,13 @@ require_once APP_ROOT . '/inc/settings.php';
 require_once APP_ROOT . '/inc/homepage_fonts.php';
 $hpDesign = $rdDesign ?? getHomepageDesign();
 $hpEditor = $rdEditorMode ?? false;
+$managedHomeHero = pageHeroResolve('home');
+$managedHomeAttrs = pageHeroAttributes('home');
 $heroStyle = '';
-if ($hpDesign['bg_mode'] === 'color' && $hpDesign['bg_color'] !== 'default') {
+if ($managedHomeHero === null && $hpDesign['bg_mode'] === 'color' && $hpDesign['bg_color'] !== 'default') {
     $heroStyle = 'background:' . h($hpDesign['bg_color']);
 }
-$heroClasses = 'hero-band' . (homepageHeroIsLight($hpDesign) ? ' dark-hero' : '');
+$heroClasses = 'hero-band managed-page-hero' . ($managedHomeHero === null && homepageHeroIsLight($hpDesign) ? ' dark-hero' : '');
 // sticker text color mirrors the design-workbench palette rules
 $stickerInk = function (string $c): string {
     $light = ['#F7E14C', '#E9A81F', '#F5EFDF'];
@@ -272,7 +274,7 @@ $stickerSvg = [
 
 <?php if ($rdMapMode): ?>
 <!-- ===== MAP VIEW ===== -->
-<header class="mapview-hero">
+<header class="mapview-hero managed-page-hero"<?= $managedHomeAttrs ?>>
   <div class="wrap">
     <div class="mapview-head">
       <div>
@@ -339,7 +341,7 @@ $stickerSvg = [
 </header>
 <?php else: ?>
 <!-- ===== HERO BAND ===== -->
-<header class="<?= $heroClasses ?>"<?= $heroStyle ? ' style="' . $heroStyle . '"' : '' ?>>
+<header class="<?= $heroClasses ?>"<?= $managedHomeAttrs ?><?= $heroStyle ? ' style="' . $heroStyle . '"' : '' ?>>
   <?php if ($hpDesign['bg_mode'] === 'photo' && $hpDesign['bg_photo'] !== ''): ?>
   <div class="hero-bg" style="background-image:url('<?= h($hpDesign['bg_photo']) ?>');opacity:<?= $hpDesign['photo_opacity'] / 100 ?>"></div>
   <div class="hero-scrim" style="background:rgba(9,22,32,<?= $hpDesign['darken'] / 100 ?>)"></div>

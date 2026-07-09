@@ -46,7 +46,7 @@ include APP_ROOT . '/components/header.php';
 $price = ADVERTISE_PRICING['featured_monthly'];
 ?>
 
-<section class="hero-gradient-dark text-white py-12 md:py-16">
+<section class="hero-gradient-dark managed-page-hero text-white py-12 md:py-16"<?= pageHeroAttributes('general') ?>>
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 class="text-3xl md:text-5xl font-bold mb-4">
             <?= h($isEs ? 'Pon tu negocio frente a miles de beachgoers' : 'Put your business in front of thousands of beachgoers') ?>

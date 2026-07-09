@@ -32,6 +32,7 @@ git diff --exit-code -- \
 echo "[5/9] Design and route validation"
 npm run check:design
 php scripts/test-locale-routing.php
+php scripts/test-page-heroes.php
 
 echo "[6/9] Preview migrations"
 php scripts/migrate.php --dry-run

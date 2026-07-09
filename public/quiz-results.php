@@ -23,7 +23,7 @@ function renderQuizResultsRedesignState(string $heading, string $description): v
     $locale = getCurrentLanguage();
     ?>
     <div class="rd rd-qresults">
-        <div class="wrap qres-state">
+        <div class="wrap qres-state managed-page-hero"<?= pageHeroAttributes('quiz-results') ?>>
             <p class="eyebrow"><?= h($locale === 'es' ? 'Resultados del quiz' : 'Beach quiz results') ?></p>
             <h1><?= h($heading) ?><span class="dot">.</span></h1>
             <p><?= h($description) ?></p>
@@ -49,7 +49,7 @@ if ($token === '') {
         exit;
     }
     ?>
-    <section class="hero-gradient-dark text-white py-12 md:py-16">
+    <section class="hero-gradient-dark managed-page-hero text-white py-12 md:py-16"<?= pageHeroAttributes('quiz-results') ?>>
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 class="text-3xl md:text-5xl font-bold mb-4"><?= h(__('quiz_results.title')) ?></h1>
             <p class="text-lg md:text-xl opacity-90"><?= h(__('quiz_results.no_quiz_desc')) ?></p>
@@ -142,7 +142,7 @@ if ($redesignLayout) {
 }
 ?>
 
-<section class="hero-gradient-dark text-white py-12 md:py-16">
+<section class="hero-gradient-dark managed-page-hero text-white py-12 md:py-16"<?= pageHeroAttributes('quiz-results') ?>>
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 class="text-3xl md:text-5xl font-bold mb-4"><?= h(__('quiz_results.your_matches')) ?></h1>
         <p class="text-lg md:text-xl opacity-90"><?= h(__('quiz_results.save_link')) ?></p>

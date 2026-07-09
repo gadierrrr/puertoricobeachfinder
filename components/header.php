@@ -14,6 +14,7 @@ require_once __DIR__ . '/../inc/helpers.php';
 require_once __DIR__ . '/../inc/i18n.php';
 require_once __DIR__ . '/../inc/locale_routes.php';
 require_once __DIR__ . '/../inc/invite.php';
+require_once __DIR__ . '/../inc/page_heroes.php';
 
 // Capture an invite (?ref=CODE) into a cookie before any output, on EVERY page
 // (referral loop). No-op without ?ref; skips signed-in users. Lives here — not just
@@ -318,7 +319,7 @@ if ($bodyVariant === 'collection-light') {
     <script src="/assets/js/csp-bindings.js" <?= cspNonceAttr() ?>></script>
 
     <!-- Custom styles -->
-    <link rel="stylesheet" href="/assets/css/styles.css?v=4.9">
+    <link rel="stylesheet" href="/assets/css/styles.css?v=5.0">
 
     <?php if (!empty($redesignLayout)): ?>
     <!-- Redesign v2 (tropical) fonts + standalone stylesheet.
@@ -338,7 +339,7 @@ if ($bodyVariant === 'collection-light') {
     $rdBodyStyle = '--disp:' . $rdFont['stack'] . ';--rd-heading-weight:' . (int) $rdFont['weight'];
     ?>
     <link href="<?= h(redesignFontsUrl($rdDesign['font'], $rdEditorMode)) ?>" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/redesign.css?v=56">
+    <link rel="stylesheet" href="/assets/css/redesign.css?v=57">
     <?php endif; ?>
 
     <!-- Deferred scripts (non-blocking) -->

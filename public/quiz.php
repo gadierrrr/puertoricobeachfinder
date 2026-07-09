@@ -29,7 +29,7 @@ $breadcrumbs = [
 
 <?php if ($redesignLayout): ?>
 <div class="rd rd-quiz">
-    <section class="quiz-hero">
+    <section class="quiz-hero managed-page-hero"<?= pageHeroAttributes('quiz') ?>>
         <div class="wrap quiz-hero-grid">
             <div class="quiz-hero-copy">
                 <div class="quiz-crumb">
@@ -62,7 +62,7 @@ $breadcrumbs = [
     </section>
 <?php else: ?>
     <!-- Quiz Hero -->
-    <section class="hero-gradient-dark text-white py-12 md:py-16">
+    <section class="hero-gradient-dark managed-page-hero text-white py-12 md:py-16"<?= pageHeroAttributes('quiz') ?>>
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <!-- Breadcrumbs -->
             <div class="mb-6">

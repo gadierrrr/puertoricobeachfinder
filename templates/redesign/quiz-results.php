@@ -9,7 +9,7 @@ $resultCount = count($matches);
 $localizedQuizUrl = routeUrl('quiz', $qrLang);
 ?>
 <div class="rd rd-qresults">
-    <section class="qres-hero">
+    <section class="qres-hero managed-page-hero"<?= pageHeroAttributes('quiz-results') ?>>
         <div class="wrap qres-hero-inner">
             <p class="eyebrow"><?= h($qrIsEs ? 'Tu plan de playa personalizado' : 'Your personalized beach plan') ?></p>
             <h1><?= h(__('quiz_results.your_matches')) ?><span class="dot">.</span></h1>

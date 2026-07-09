@@ -101,7 +101,7 @@ include APP_ROOT . '/components/header.php';
 ?>
 
 <div class="onboarding-shell">
-    <div class="onboarding-hero">
+    <div class="onboarding-hero managed-page-hero"<?= pageHeroAttributes('account') ?>>
         <div>
             <p class="onboarding-kicker"><?= h(__('onboarding.setup_label')) ?></p>
             <h1>

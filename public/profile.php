@@ -129,7 +129,7 @@ include APP_ROOT . '/components/header.php';
         <?php include APP_ROOT . '/components/breadcrumbs.php'; ?>
     </div>
     <!-- Profile Header -->
-    <div class="profile-hero mb-8">
+    <div class="profile-hero managed-page-hero page-heading-hero mb-8"<?= pageHeroAttributes('account') ?>>
         <div class="profile-hero-main flex flex-col sm:flex-row items-center sm:items-start gap-6">
             <!-- Avatar -->
             <div class="flex-shrink-0">

@@ -256,7 +256,7 @@ function guideCmsRenderArticlePage(array $article, array $blocks, string $locale
 
     if ($redesignLayout) {
         echo '<div class="rd rd-guide-detail rd-guide-cms">';
-        echo '<section class="guide-detail-hero">';
+        echo '<section class="guide-detail-hero managed-page-hero"' . pageHeroAttributes('guides') . '>';
         echo '<div class="wrap guide-detail-hero-grid">';
         echo '<div class="guide-detail-copy">';
         echo '<nav class="guide-detail-crumb" aria-label="Breadcrumb">';
