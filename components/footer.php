@@ -680,6 +680,12 @@ if (!function_exists('isGoogleOAuthEnabled')) {
         }
         $bfReferrerName = inviteReferrerName();   // null = no/invalid referral; '' or name = valid
         $bfIsReferral = $bfReferrerName !== null;
+        $bfWelcomeDismissedAt = ctype_digit((string) ($_COOKIE['bf_welcome_popup_dismissed'] ?? ''))
+            ? (int) $_COOKIE['bf_welcome_popup_dismissed']
+            : 0;
+        $bfWelcomePopupDismissed = $bfWelcomeDismissedAt > 0
+            && $bfWelcomeDismissedAt <= time()
+            && time() - $bfWelcomeDismissedAt < 30 * 24 * 60 * 60;
     ?>
     <div id="welcome-popup-overlay" class="welcome-popup-overlay" role="dialog" aria-modal="true" aria-labelledby="welcome-popup-title" style="position:fixed;inset:0;opacity:0;visibility:hidden;">
         <div class="welcome-popup">
@@ -780,6 +786,8 @@ if (!function_exists('isGoogleOAuthEnabled')) {
         const REFERRER_NAME = <?= json_encode((string) ($bfReferrerName ?? ''), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
         const POPUP_DELAY = IS_REFERRAL ? 0 : 30000;  // referral: show immediately
         const DISMISS_DURATION = 30 * 24 * 60 * 60 * 1000;  // 30 days in ms
+        const DISMISS_COOKIE_MAX_AGE = 30 * 24 * 60 * 60;
+        const COOKIE_DISMISSED = <?= $bfWelcomePopupDismissed ? 'true' : 'false' ?>;
         const STORAGE_KEY = IS_REFERRAL ? 'referral_popup_dismissed' : 'welcome_popup_dismissed';
 
         let popupShown = false;
@@ -790,8 +798,18 @@ if (!function_exists('isGoogleOAuthEnabled')) {
             // Skip if already shown this session
             if (popupShown) return false;
 
+            // A first-party cookie backs up localStorage so dismissal survives
+            // storage restrictions, clearing, and navigation while the referral
+            // attribution cookie remains active.
+            if (COOKIE_DISMISSED) return false;
+
             // Skip if dismissed recently
-            const dismissed = localStorage.getItem(STORAGE_KEY);
+            let dismissed = null;
+            try {
+                dismissed = localStorage.getItem(STORAGE_KEY);
+            } catch (e) {
+                // Cookie fallback below/above keeps dismissal reliable when storage is blocked.
+            }
             if (dismissed) {
                 const dismissedAt = parseInt(dismissed, 10);
                 if (Date.now() - dismissedAt < DISMISS_DURATION) {
@@ -852,8 +870,18 @@ if (!function_exists('isGoogleOAuthEnabled')) {
                 overlay.style.visibility = 'hidden';
                 document.body.style.overflow = '';
             }
-            // Store dismissal timestamp
-            localStorage.setItem(STORAGE_KEY, Date.now().toString());
+            // Store dismissal in both browser storage and a server-readable cookie.
+            // The cookie suppresses both referral and generic variants on later pages.
+            const dismissedAt = Date.now();
+            const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+            document.cookie = 'bf_welcome_popup_dismissed=' + Math.floor(dismissedAt / 1000)
+                + '; Max-Age=' + DISMISS_COOKIE_MAX_AGE
+                + '; Path=/; SameSite=Lax' + secure;
+            try {
+                localStorage.setItem(STORAGE_KEY, dismissedAt.toString());
+            } catch (e) {
+                // The first-party cookie is the fallback when storage is unavailable.
+            }
         };
 
         function initWelcomePopup() {
