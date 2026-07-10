@@ -12,7 +12,7 @@ const ENV_SCHEMA = [
     'DB_PATH' => ['required' => true, 'type' => 'string'],
     'APP_URL' => ['required' => true, 'type' => 'url'],
     'APP_NAME' => ['required' => true, 'type' => 'string'],
-    'GOOGLE_MAPS_API_KEY' => ['required' => true, 'type' => 'string'],
+    'GOOGLE_MAPS_API_KEY' => ['required' => true, 'type' => 'google_api_key'],
     'GOOGLE_CLIENT_ID' => ['required' => false, 'type' => 'string'],
     'GOOGLE_CLIENT_SECRET' => ['required' => false, 'type' => 'string'],
     'RESEND_API_KEY' => ['required' => false, 'type' => 'string'],
@@ -198,6 +198,14 @@ function validateEnvironment(): void {
         }
 
         switch ($rules['type'] ?? 'string') {
+            case 'google_api_key':
+                $googleKeyPrefix = 'AI' . 'za';
+                if (preg_match('/^' . preg_quote($googleKeyPrefix, '/') . '[0-9A-Za-z_-]{30,}$/', $value) !== 1) {
+                    $errors[] = "{$key} must be a valid Google API key";
+                    continue 2;
+                }
+                break;
+
             case 'url':
                 if (filter_var($value, FILTER_VALIDATE_URL) === false) {
                     $errors[] = "{$key} must be a valid URL";

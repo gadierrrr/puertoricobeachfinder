@@ -14,7 +14,8 @@ Create three separate keys in Google Cloud Console:
 
 Allow only required APIs:
 
-- Places API (Text Search / Find Place / Place Details / Nearby Search / Place Photos)
+- Places API (New) (Text Search / Place Details / Nearby Search / Place Photos)
+- Geocoding API
 
 ## 3) Restrict by origin/network
 

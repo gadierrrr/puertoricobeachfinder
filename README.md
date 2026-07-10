@@ -49,7 +49,7 @@ Defined in `.env.example`:
 - `DB_PATH`
 - `APP_URL`
 - `APP_NAME`
-- `GOOGLE_MAPS_API_KEY`
+- `GOOGLE_MAPS_API_KEY` (an `AIza...` key with Places API (New) enabled)
 - `GOOGLE_CLIENT_ID`
 - `GOOGLE_CLIENT_SECRET`
 - `RESEND_API_KEY`
