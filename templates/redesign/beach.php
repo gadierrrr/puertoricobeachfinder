@@ -330,7 +330,7 @@ $subnav = array_values(array_filter([
       </div>
       <div class="glance">
         <?php foreach ($glance as $g): ?>
-        <div class="gtile"><span class="ic"><?= $g[0] ?></span><div><div class="k"><?= h($g[1]) ?></div><div class="v <?= $g[3] ?>"><?= h($g[2]) ?></div></div></div>
+        <div class="<?= h('gtile' . (mb_strlen((string) $g[2]) > 90 ? ' long' : '')) ?>"><span class="ic"><?= $g[0] ?></span><div><div class="k"><?= h($g[1]) ?></div><div class="v <?= $g[3] ?>"><?= h($g[2]) ?></div></div></div>
         <?php endforeach; ?>
       </div>
       <?php if (!empty($amenities)): ?>

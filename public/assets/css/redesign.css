@@ -360,6 +360,7 @@ body.redesign.rd-guide-page .chat-fab-container{display:none!important}
 .rd-beach .score-note span{color:var(--ink-60);font-size:.9rem;line-height:1.35}
 .rd-beach .glance{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:start}
 .rd-beach .gtile{background:#fff;border:1px solid var(--ink-14);border-radius:13px;padding:12px 13px;display:flex;gap:10px;align-items:flex-start;min-width:0}
+.rd-beach .gtile.long{grid-column:1/-1}
 .rd-beach .gtile .ic{font-size:1.35rem;line-height:1}
 .rd-beach .gtile .k{font-family:var(--data);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:.64rem;color:var(--ink-40)}
 .rd-beach .gtile .v{font-weight:700;font-size:.9rem;margin-top:2px;line-height:1.18}
