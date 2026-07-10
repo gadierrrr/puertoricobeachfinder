@@ -317,15 +317,15 @@ $subnav = array_values(array_filter([
       <div class="decision-summary" aria-label="<?= h($isEs ? 'Resumen rápido' : 'Quick snapshot') ?>">
         <div>
           <h3><?= h($isEs ? 'Ideal para' : 'Best for') ?></h3>
-          <ul><?php foreach ($bestForItems as $item): ?><li><?= h($item) ?></li><?php endforeach; ?></ul>
+          <ul><?php foreach ($bestForItems as $item): ?><li class="<?= mb_strlen($item) > 42 ? 'note' : '' ?>"><?= h($item) ?></li><?php endforeach; ?></ul>
         </div>
         <div>
           <h3><?= h($isEs ? 'Antes de ir' : 'Know before') ?></h3>
-          <ul><?php foreach ($knowBeforeItems as $item): ?><li><?= h($item) ?></li><?php endforeach; ?></ul>
+          <ul><?php foreach ($knowBeforeItems as $item): ?><li class="<?= mb_strlen($item) > 42 ? 'note' : '' ?>"><?= h($item) ?></li><?php endforeach; ?></ul>
         </div>
         <div>
           <h3><?= h($isEs ? 'Servicios' : 'Facilities') ?></h3>
-          <ul><?php foreach ($facilityItems as $item): ?><li><?= h($item) ?></li><?php endforeach; ?></ul>
+          <ul><?php foreach ($facilityItems as $item): ?><li class="<?= mb_strlen($item) > 42 ? 'note' : '' ?>"><?= h($item) ?></li><?php endforeach; ?></ul>
         </div>
       </div>
       <div class="glance">
