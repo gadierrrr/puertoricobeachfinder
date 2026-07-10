@@ -328,21 +328,21 @@ $subnav = array_values(array_filter([
           <ul><?php foreach ($facilityItems as $item): ?><li class="<?= mb_strlen($item) > 42 ? 'note' : '' ?>"><?= h($item) ?></li><?php endforeach; ?></ul>
         </div>
       </div>
+      <?php
+      $shortGlance = array_values(array_filter($glance, fn($g) => mb_strlen((string) $g[2]) <= 90));
+      $longGlance = array_values(array_filter($glance, fn($g) => mb_strlen((string) $g[2]) > 90));
+      ?>
       <div class="glance">
-        <?php foreach ($glance as $g): ?>
-        <div class="<?= h('gtile' . (mb_strlen((string) $g[2]) > 90 ? ' long' : '')) ?>"><span class="ic"><?= $g[0] ?></span><div><div class="k"><?= h($g[1]) ?></div><div class="v <?= $g[3] ?>"><?= h($g[2]) ?></div></div></div>
+        <?php foreach ($shortGlance as $g): ?>
+        <div class="gtile"><span class="ic"><?= $g[0] ?></span><div><div class="k"><?= h($g[1]) ?></div><div class="v <?= $g[3] ?>"><?= h($g[2]) ?></div></div></div>
+        <?php endforeach; ?>
+        <?php if (!empty($amenities)): ?>
+        <div class="gtile amenity-tile"><span class="ic">✓</span><div><div class="k"><?= h($isEs ? 'Servicios' : 'Amenities') ?></div><div class="amen"><?php foreach ($amenities as $amenity): ?><span>✓ <?= h(getAmenityLabel($amenity)) ?></span><?php endforeach; ?></div></div></div>
+        <?php endif; ?>
+        <?php foreach ($longGlance as $g): ?>
+        <div class="gtile long"><span class="ic"><?= $g[0] ?></span><div><div class="k"><?= h($g[1]) ?></div><div class="v <?= $g[3] ?>"><?= h($g[2]) ?></div></div></div>
         <?php endforeach; ?>
       </div>
-      <?php if (!empty($amenities)): ?>
-      <div class="glance-amenities">
-        <h3><?= h($isEs ? 'Servicios' : 'Amenities') ?></h3>
-        <div class="amen">
-          <?php foreach ($amenities as $amenity): ?>
-          <span>✓ <?= h(getAmenityLabel($amenity)) ?></span>
-          <?php endforeach; ?>
-        </div>
-      </div>
-      <?php endif; ?>
     </section>
 
     <section id="scores" class="block">
