@@ -9,6 +9,7 @@ require_once APP_ROOT . '/inc/db.php';
 require_once APP_ROOT . '/inc/session.php';
 require_once APP_ROOT . '/inc/admin.php';
 require_once APP_ROOT . '/inc/referrals.php';
+require_once APP_ROOT . '/inc/referral_reporting.php';
 require_once APP_ROOT . '/inc/guide_cms.php';
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -471,132 +472,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]
         );
 
-        $processed = 0;
-        $upserted = 0;
-        $skipped = 0;
-        $errors = [];
-
-        $fh = fopen((string) $_FILES['csv_file']['tmp_name'], 'r');
-        if (!$fh) {
+        try {
+            $result = referralImportCampaignCsv(
+                $providerId,
+                (string) $_FILES['csv_file']['tmp_name']
+            );
             execute(
                 'UPDATE referral_import_jobs
-                 SET status = :status, finished_at = CURRENT_TIMESTAMP, error_log = :error_log, updated_at = CURRENT_TIMESTAMP
+                 SET source_type = :source_type,
+                     status = :status,
+                     finished_at = CURRENT_TIMESTAMP,
+                     summary_json = :summary_json,
+                     error_log = :error_log,
+                     updated_at = CURRENT_TIMESTAMP
                  WHERE id = :id',
-                [':status' => 'failed', ':error_log' => 'Unable to open uploaded CSV.', ':id' => $jobId]
-            );
-            referralAdminRedirect('revenue', 'import_failed');
-        }
-
-        $header = fgetcsv($fh);
-        if (!is_array($header)) {
-            fclose($fh);
-            execute(
-                'UPDATE referral_import_jobs
-                 SET status = :status, finished_at = CURRENT_TIMESTAMP, error_log = :error_log, updated_at = CURRENT_TIMESTAMP
-                 WHERE id = :id',
-                [':status' => 'failed', ':error_log' => 'CSV header not found.', ':id' => $jobId]
-            );
-            referralAdminRedirect('revenue', 'import_failed');
-        }
-
-        $map = [];
-        foreach ($header as $idx => $column) {
-            $map[trim((string) $column)] = $idx;
-        }
-
-        while (($row = fgetcsv($fh)) !== false) {
-            $processed++;
-
-            $externalId = trim((string) ($row[$map['external_conversion_id'] ?? -1] ?? ''));
-            if ($externalId === '') {
-                $skipped++;
-                $errors[] = 'Row ' . $processed . ': missing external_conversion_id';
-                continue;
-            }
-
-            $campaignSlug = trim((string) ($row[$map['campaign_slug'] ?? -1] ?? ''));
-            $campaign = $campaignSlug !== '' ? queryOne('SELECT id FROM referral_campaigns WHERE slug = :slug', [':slug' => $campaignSlug]) : null;
-            $campaignId = trim((string) ($campaign['id'] ?? ''));
-
-            $bookingValue = (float) ($row[$map['booking_value'] ?? -1] ?? 0);
-            $commissionValue = (float) ($row[$map['commission_value'] ?? -1] ?? 0);
-            $currency = strtoupper(trim((string) ($row[$map['currency'] ?? -1] ?? 'USD')));
-            if ($currency === '') {
-                $currency = 'USD';
-            }
-
-            $bookedAt = trim((string) ($row[$map['booked_at'] ?? -1] ?? ''));
-            if ($bookedAt === '') {
-                $bookedAt = null;
-            }
-
-            $raw = [
-                'external_conversion_id' => $externalId,
-                'campaign_slug' => $campaignSlug,
-                'booking_value' => $bookingValue,
-                'commission_value' => $commissionValue,
-                'currency' => $currency,
-                'booked_at' => $bookedAt,
-            ];
-
-            $ok = execute(
-                'INSERT INTO referral_conversions
-                    (id, provider_id, campaign_id, external_conversion_id, click_id, booking_value, commission_value, currency, booked_at, imported_at, raw_json, created_at, updated_at)
-                 VALUES
-                    (:id, :provider_id, :campaign_id, :external_conversion_id, NULL, :booking_value, :commission_value, :currency, :booked_at, CURRENT_TIMESTAMP, :raw_json, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-                 ON CONFLICT(provider_id, external_conversion_id) DO UPDATE SET
-                    campaign_id = excluded.campaign_id,
-                    booking_value = excluded.booking_value,
-                    commission_value = excluded.commission_value,
-                    currency = excluded.currency,
-                    booked_at = excluded.booked_at,
-                    imported_at = CURRENT_TIMESTAMP,
-                    raw_json = excluded.raw_json,
-                    updated_at = CURRENT_TIMESTAMP',
                 [
-                    ':id' => uuid(),
-                    ':provider_id' => $providerId,
-                    ':campaign_id' => $campaignId !== '' ? $campaignId : null,
-                    ':external_conversion_id' => $externalId,
-                    ':booking_value' => $bookingValue,
-                    ':commission_value' => $commissionValue,
-                    ':currency' => $currency,
-                    ':booked_at' => $bookedAt,
-                    ':raw_json' => json_encode($raw, JSON_UNESCAPED_SLASHES),
+                    ':source_type' => $result['source_type'],
+                    ':status' => $result['status'],
+                    ':summary_json' => json_encode($result['summary'], JSON_UNESCAPED_SLASHES),
+                    ':error_log' => $result['error_log'],
+                    ':id' => $jobId,
                 ]
             );
-
-            if ($ok) {
-                $upserted++;
-            } else {
-                $errors[] = 'Row ' . $processed . ': insert/update failed for external_conversion_id=' . $externalId;
-            }
+        } catch (Throwable $e) {
+            execute(
+                'UPDATE referral_import_jobs
+                 SET status = :status, finished_at = CURRENT_TIMESTAMP, error_log = :error_log, updated_at = CURRENT_TIMESTAMP
+                 WHERE id = :id',
+                [':status' => 'failed', ':error_log' => $e->getMessage(), ':id' => $jobId]
+            );
+            referralAdminRedirect('revenue', 'import_failed');
         }
-
-        fclose($fh);
-
-        $summary = [
-            'processed' => $processed,
-            'upserted' => $upserted,
-            'skipped' => $skipped,
-            'errors' => count($errors),
-        ];
-
-        execute(
-            'UPDATE referral_import_jobs
-             SET status = :status,
-                 finished_at = CURRENT_TIMESTAMP,
-                 summary_json = :summary_json,
-                 error_log = :error_log,
-                 updated_at = CURRENT_TIMESTAMP
-             WHERE id = :id',
-            [
-                ':status' => count($errors) > 0 ? 'completed_with_errors' : 'completed',
-                ':summary_json' => json_encode($summary, JSON_UNESCAPED_SLASHES),
-                ':error_log' => $errors ? implode("\n", array_slice($errors, 0, 100)) : null,
-                ':id' => $jobId,
-            ]
-        );
 
         referralAdminRedirect('revenue', 'imported');
     }
@@ -658,17 +564,90 @@ $metrics = [
 $providerPerformance = query(
     'SELECT
         p.name AS provider_name,
-        COUNT(rc.id) AS clicks,
-        COALESCE(SUM(rv.commission_value), 0) AS commission,
-        COALESCE(SUM(rv.booking_value), 0) AS booking
+        COALESCE(rc.clicks, 0) AS clicks,
+        COALESCE(rv.commission, 0) AS commission,
+        COALESCE(rv.booking, 0) AS booking
      FROM referral_providers p
-     LEFT JOIN referral_campaigns c ON c.provider_id = p.id
-     LEFT JOIN referral_clicks rc ON rc.campaign_id = c.id
-     LEFT JOIN referral_conversions rv ON rv.campaign_id = c.id
-     GROUP BY p.id
+     LEFT JOIN (
+        SELECT c.provider_id, COUNT(r.id) AS clicks
+        FROM referral_campaigns c
+        LEFT JOIN referral_clicks r ON r.campaign_id = c.id
+        GROUP BY c.provider_id
+     ) rc ON rc.provider_id = p.id
+     LEFT JOIN (
+        SELECT c.provider_id,
+               COALESCE(SUM(r.commission_value), 0) AS commission,
+               COALESCE(SUM(r.booking_value), 0) AS booking
+        FROM referral_campaigns c
+        LEFT JOIN referral_conversions r ON r.campaign_id = c.id
+        GROUP BY c.provider_id
+     ) rv ON rv.provider_id = p.id
      ORDER BY p.name ASC'
 );
 $providerPerformance = is_array($providerPerformance) ? $providerPerformance : [];
+
+$viatorMatchPerformance = query(
+    'SELECT
+        match_group,
+        SUM(impressions) AS impressions,
+        SUM(clicks) AS clicks,
+        SUM(visitors) AS visitors,
+        SUM(bookings) AS bookings,
+        SUM(booking_value) AS booking_value,
+        SUM(commission) AS commission
+     FROM (
+        SELECT
+            c.id,
+            CASE WHEN c.link_type = "tour_product" THEN "exact" ELSE "regional" END AS match_group,
+            COALESCE((SELECT COUNT(*) FROM referral_impressions i
+                      WHERE i.campaign_id = c.id AND i.viewed_at >= datetime("now", "-30 day")), 0) AS impressions,
+            COALESCE((SELECT COUNT(*) FROM referral_clicks cl
+                      WHERE cl.campaign_id = c.id AND cl.clicked_at >= datetime("now", "-30 day")), 0) AS clicks,
+            COALESCE((SELECT SUM(d.visitors) FROM referral_campaign_daily d
+                      WHERE d.campaign_id = c.id AND d.report_date >= date("now", "-30 day")), 0) AS visitors,
+            COALESCE((SELECT SUM(d.bookings) FROM referral_campaign_daily d
+                      WHERE d.campaign_id = c.id AND d.report_date >= date("now", "-30 day")), 0) AS bookings,
+            COALESCE((SELECT SUM(d.booking_value) FROM referral_campaign_daily d
+                      WHERE d.campaign_id = c.id AND d.report_date >= date("now", "-30 day")), 0) AS booking_value,
+            COALESCE((SELECT SUM(d.commission_value) FROM referral_campaign_daily d
+                      WHERE d.campaign_id = c.id AND d.report_date >= date("now", "-30 day")), 0) AS commission
+        FROM referral_campaigns c
+        INNER JOIN referral_providers p ON p.id = c.provider_id
+        WHERE p.slug = "viator" AND c.link_type IN ("tour_product", "tour")
+     ) campaign_metrics
+     GROUP BY match_group
+     ORDER BY CASE match_group WHEN "exact" THEN 0 ELSE 1 END'
+);
+$viatorMatchPerformance = is_array($viatorMatchPerformance) ? $viatorMatchPerformance : [];
+$viatorProofRows = [];
+foreach ($viatorMatchPerformance as $row) {
+    $viatorProofRows[(string) ($row['match_group'] ?? '')] = $row;
+}
+$exactProof = $viatorProofRows['exact'] ?? [];
+$regionalProof = $viatorProofRows['regional'] ?? [];
+$exactImpressions = (int) ($exactProof['impressions'] ?? 0);
+$exactCtr = $exactImpressions > 0 ? (int) ($exactProof['clicks'] ?? 0) / $exactImpressions : 0;
+$regionalImpressions = (int) ($regionalProof['impressions'] ?? 0);
+$regionalCtr = $regionalImpressions > 0 ? (int) ($regionalProof['clicks'] ?? 0) / $regionalImpressions : 0;
+$exactRpm = $exactImpressions > 0 ? (float) ($exactProof['commission'] ?? 0) / $exactImpressions * 1000 : 0;
+$regionalRpm = $regionalImpressions > 0 ? (float) ($regionalProof['commission'] ?? 0) / $regionalImpressions * 1000 : 0;
+$viatorProofStatus = 'collecting';
+if ($exactImpressions >= 1000) {
+    $viatorProofStatus = (
+        (int) ($exactProof['bookings'] ?? 0) > 0
+        && $exactCtr > $regionalCtr
+        && $exactRpm > $regionalRpm
+    ) ? 'proven' : 'not_proven';
+}
+
+$viatorSync = queryOne('SELECT * FROM viator_sync_runs ORDER BY started_at DESC LIMIT 1');
+$viatorHydration = queryOne(
+    'SELECT
+        COUNT(DISTINCT product_code) AS products,
+        SUM(CASE WHEN status = "ACTIVE" THEN 1 ELSE 0 END) AS active_locales,
+        MAX(fetched_at) AS last_fetched_at
+     FROM viator_products'
+);
 
 $recentImports = query('SELECT * FROM referral_import_jobs ORDER BY started_at DESC LIMIT 20');
 $recentImports = is_array($recentImports) ? $recentImports : [];
@@ -722,6 +701,65 @@ $tabs = [
     <div class="bg-white rounded-xl shadow-sm p-4"><p class="text-sm text-gray-500">Conversions (30d)</p><p class="text-2xl font-bold text-gray-900"><?= number_format($metrics['conversions_30d']) ?></p></div>
     <div class="bg-white rounded-xl shadow-sm p-4"><p class="text-sm text-gray-500">Booking Value (30d)</p><p class="text-2xl font-bold text-gray-900">$<?= number_format($metrics['booking_30d'], 2) ?></p></div>
     <div class="bg-white rounded-xl shadow-sm p-4"><p class="text-sm text-gray-500">Commission (30d)</p><p class="text-2xl font-bold text-green-700">$<?= number_format($metrics['commission_30d'], 2) ?></p></div>
+</div>
+
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-4 mb-6">
+    <div class="bg-white rounded-xl shadow-sm p-4">
+        <p class="text-sm text-gray-500">Viator hydrated products</p>
+        <p class="text-2xl font-bold text-gray-900"><?= number_format((int) ($viatorHydration['products'] ?? 0)) ?> / 8</p>
+        <p class="text-xs text-gray-500 mt-1">Last fetch: <?= h((string) ($viatorHydration['last_fetched_at'] ?? 'never')) ?></p>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-4 xl:col-span-2">
+        <p class="text-sm text-gray-500">Latest Viator sync</p>
+        <p class="text-lg font-bold <?= (($viatorSync['status'] ?? '') === 'completed') ? 'text-green-700' : 'text-gray-900' ?>"><?= h((string) ($viatorSync['status'] ?? 'not run')) ?></p>
+        <p class="text-xs text-gray-500 mt-1"><?= h((string) ($viatorSync['started_at'] ?? '')) ?> · <?= number_format((int) ($viatorSync['products_updated'] ?? 0)) ?> updated · <?= number_format((int) ($viatorSync['errors_count'] ?? 0)) ?> errors</p>
+    </div>
+</div>
+
+<div class="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
+    <div class="px-4 py-3 border-b border-gray-100">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+            <h2 class="font-semibold text-gray-900">Viator exact match vs regional fallback — last 30 days</h2>
+            <?php if ($viatorProofStatus === 'proven'): ?>
+                <span class="rounded-full bg-green-100 px-2.5 py-1 text-xs font-bold text-green-800">Exact-match conversion proven</span>
+            <?php elseif ($viatorProofStatus === 'not_proven'): ?>
+                <span class="rounded-full bg-red-100 px-2.5 py-1 text-xs font-bold text-red-800">Exact match has not won</span>
+            <?php else: ?>
+                <span class="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-800">Collecting evidence: <?= number_format($exactImpressions) ?> / 1,000 exact impressions</span>
+            <?php endif; ?>
+        </div>
+        <p class="text-xs text-gray-500 mt-1">Impressions and clicks are first-party; visitors, bookings and commission come from imported Viator campaign reports.</p>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead class="bg-gray-50 text-gray-600"><tr><th class="text-left px-4 py-2">Match</th><th class="text-right px-4 py-2">Impressions</th><th class="text-right px-4 py-2">Clicks</th><th class="text-right px-4 py-2">CTR</th><th class="text-right px-4 py-2">Viator visitors</th><th class="text-right px-4 py-2">Bookings</th><th class="text-right px-4 py-2">CVR</th><th class="text-right px-4 py-2">Commission</th><th class="text-right px-4 py-2">RPM</th></tr></thead>
+            <tbody>
+            <?php foreach ($viatorMatchPerformance as $row):
+                $impressions = (int) ($row['impressions'] ?? 0);
+                $clicks = (int) ($row['clicks'] ?? 0);
+                $visitors = (int) ($row['visitors'] ?? 0);
+                $bookings = (int) ($row['bookings'] ?? 0);
+                $commission = (float) ($row['commission'] ?? 0);
+                $ctr = $impressions > 0 ? $clicks / $impressions * 100 : 0;
+                $cvr = $visitors > 0 ? $bookings / $visitors * 100 : 0;
+                $rpm = $impressions > 0 ? $commission / $impressions * 1000 : 0;
+            ?>
+                <tr class="border-t border-gray-100">
+                    <td class="px-4 py-2 font-semibold"><?= h(($row['match_group'] ?? '') === 'exact' ? 'Exact beach product' : 'Regional browse') ?></td>
+                    <td class="px-4 py-2 text-right"><?= number_format($impressions) ?></td>
+                    <td class="px-4 py-2 text-right"><?= number_format($clicks) ?></td>
+                    <td class="px-4 py-2 text-right"><?= number_format($ctr, 2) ?>%</td>
+                    <td class="px-4 py-2 text-right"><?= number_format($visitors) ?></td>
+                    <td class="px-4 py-2 text-right"><?= number_format($bookings) ?></td>
+                    <td class="px-4 py-2 text-right"><?= number_format($cvr, 2) ?>%</td>
+                    <td class="px-4 py-2 text-right text-green-700">$<?= number_format($commission, 2) ?></td>
+                    <td class="px-4 py-2 text-right">$<?= number_format($rpm, 2) ?></td>
+                </tr>
+            <?php endforeach; ?>
+            <?php if (empty($viatorMatchPerformance)): ?><tr><td colspan="9" class="px-4 py-4 text-center text-gray-500">No Viator campaign data yet.</td></tr><?php endif; ?>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
@@ -1057,7 +1095,7 @@ $tabs = [
 <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
     <div class="bg-white rounded-xl shadow-sm p-4">
         <h2 class="text-lg font-semibold text-gray-900 mb-3">Import Revenue CSV</h2>
-        <p class="text-sm text-gray-600 mb-3">Required headers: <code>external_conversion_id,campaign_slug,booking_value,commission_value,currency,booked_at</code></p>
+        <p class="text-sm text-gray-600 mb-3">Accepts Viator Performance Trends campaign exports (<code>campaign, date, visitors, bookings, gross booking value, gross commission</code>) and the existing normalized conversion format.</p>
         <form method="POST" enctype="multipart/form-data" class="space-y-3">
             <?= csrfField() ?>
             <input type="hidden" name="action" value="import_revenue_csv">

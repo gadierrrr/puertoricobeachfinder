@@ -243,6 +243,10 @@
     const pageSlug = container.getAttribute("data-bf-referral-page-slug") || "";
     const locale = container.getAttribute("data-bf-referral-locale") || "";
     const block = container.getAttribute("data-bf-referral-block") || "";
+    const productCode = container.getAttribute("data-bf-referral-product") || "";
+    const cardPosition = container.getAttribute("data-bf-referral-position") || "";
+    const matchType = container.getAttribute("data-bf-referral-match") || "";
+    const apiHydrated = container.getAttribute("data-bf-referral-hydrated") || "";
 
     if (provider) props.provider = provider;
     if (campaign) props.campaign = campaign;
@@ -251,6 +255,10 @@
     if (pageSlug) props.page_slug = pageSlug;
     if (locale) props.locale = locale;
     if (block) props.block = block;
+    if (productCode) props.product_code = productCode;
+    if (cardPosition) props.card_position = cardPosition;
+    if (matchType) props.match_type = matchType;
+    if (apiHydrated) props.api_hydrated = apiHydrated;
     return props;
   }
 
@@ -338,6 +346,7 @@
           observer.unobserve(el);
 
           const props = referralPropsFromEl(el);
+          sendReferralImpression(props);
           window.bfTrack("R1_referral_impression", props);
         });
       },
@@ -345,7 +354,7 @@
     );
 
     function observeCurrentNodes() {
-      const nodes = document.querySelectorAll('[data-bf-track="referral-impression"]');
+      const nodes = document.querySelectorAll('[data-bf-track="referral-impression"], [data-bf-referral-impression="1"]');
       nodes.forEach(function (node) {
         if (seen.has(node)) return;
         observer.observe(node);
@@ -354,6 +363,26 @@
 
     observeCurrentNodes();
     document.body.addEventListener("htmx:afterSwap", observeCurrentNodes);
+  }
+
+  function sendReferralImpression(props) {
+    const payload = Object.assign({ event_id: uuidLike() }, props || {});
+    const body = JSON.stringify(payload);
+    try {
+      if (navigator.sendBeacon) {
+        const blob = new Blob([body], { type: "application/json" });
+        if (navigator.sendBeacon("/api/referrals/impression.php", blob)) return;
+      }
+    } catch (e) {}
+    try {
+      fetch("/api/referrals/impression.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: body,
+        credentials: "same-origin",
+        keepalive: true,
+      }).catch(function () {});
+    } catch (e) {}
   }
 
   function initHtmxDrawerTracking() {

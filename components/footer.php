@@ -296,7 +296,7 @@ if (!function_exists('isGoogleOAuthEnabled')) {
     });
     </script>
     <script defer src="/assets/js/filters.js" <?= cspNonceAttr() ?>></script>
-    <script defer src="/assets/js/analytics.js?v=2.4" <?= cspNonceAttr() ?>></script>
+    <script defer src="/assets/js/analytics.js?v=2.5" <?= cspNonceAttr() ?>></script>
     <script defer src="/assets/js/share.js" <?= cspNonceAttr() ?>></script>
     <?php endif; ?>
 

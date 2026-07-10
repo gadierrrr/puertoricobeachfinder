@@ -268,7 +268,10 @@ function referralCreateGoUrl(string $campaignSlug, array $context = []): string
 {
     $query = ['c' => $campaignSlug];
 
-    $allowed = ['page_type', 'page_slug', 'placement', 'locale', 'block_slug'];
+    $allowed = [
+        'page_type', 'page_slug', 'placement', 'locale', 'block_slug',
+        'product_code', 'card_position', 'match_type', 'api_hydrated',
+    ];
     foreach ($allowed as $key) {
         if (!isset($context[$key])) {
             continue;
@@ -309,7 +312,10 @@ function referralCurrentUserId(): string
 function referralNormalizeContext(array $context): array
 {
     $normalized = [];
-    $allowed = ['page_type', 'page_slug', 'placement', 'locale', 'block_slug'];
+    $allowed = [
+        'page_type', 'page_slug', 'placement', 'locale', 'block_slug',
+        'product_code', 'card_position', 'match_type', 'api_hydrated',
+    ];
 
     foreach ($allowed as $key) {
         if (!array_key_exists($key, $context)) {
@@ -414,10 +420,32 @@ function referralResolveRedirect(string $campaignSlug, array $context = []): arr
     }
 
     $clickId = referralLogClick($campaign, $context);
-    $target = referralBuildTargetUrl($campaign, array_merge(
-        referralProviderTrackingParams($campaign),
-        ['bf_click_id' => $clickId]
-    ));
+    $target = '';
+    $attributionMode = 'manual_link';
+
+    // Viator API productUrl values already contain the account and campaign
+    // attribution parameters and must be used byte-for-byte. Keep our click ID
+    // in the local ledger; never append it to the API-generated URL.
+    $providerSlug = strtolower(trim((string) ($campaign['provider_slug'] ?? '')));
+    $productCode = trim((string) ($context['product_code'] ?? ''));
+    if ($providerSlug === 'viator' && $productCode !== '') {
+        require_once __DIR__ . '/viator.php';
+        $target = viatorExactProductUrl(
+            (string) ($campaign['id'] ?? ''),
+            $productCode,
+            referralNormalizeLocale($context['locale'] ?? 'en')
+        );
+        if ($target !== '') {
+            $attributionMode = 'api_product_url';
+        }
+    }
+
+    if ($target === '') {
+        $target = referralBuildTargetUrl($campaign, array_merge(
+            referralProviderTrackingParams($campaign),
+            ['bf_click_id' => $clickId]
+        ));
+    }
 
     if ($target === '') {
         return [
@@ -432,6 +460,7 @@ function referralResolveRedirect(string $campaignSlug, array $context = []): arr
         'status' => 302,
         'target_url' => $target,
         'click_id' => $clickId,
+        'attribution_mode' => $attributionMode,
         'campaign' => $campaign,
     ];
 }

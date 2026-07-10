@@ -26,6 +26,10 @@ $context = [
     'placement' => trim((string) ($_GET['placement'] ?? '')),
     'locale' => trim((string) ($_GET['locale'] ?? '')),
     'block_slug' => trim((string) ($_GET['block_slug'] ?? '')),
+    'product_code' => trim((string) ($_GET['product_code'] ?? '')),
+    'card_position' => trim((string) ($_GET['card_position'] ?? '')),
+    'match_type' => trim((string) ($_GET['match_type'] ?? '')),
+    'api_hydrated' => trim((string) ($_GET['api_hydrated'] ?? '')),
 ];
 
 $result = referralResolveRedirect($campaignSlug, $context);

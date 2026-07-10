@@ -59,6 +59,12 @@ Defined in `.env.example`:
 - `EMAIL_PROVIDER` (`resend`)
 - `ANTHROPIC_API_KEY`
 - `REFERRAL_ALLOWED_HOSTS`
+- Viator affiliate product hydration:
+  - `VIATOR_PID` — affiliate partner ID used by legacy/manual Viator links
+  - `VIATOR_API_KEY` — server-only Partner API key
+  - `VIATOR_API_BASE_URL` — defaults to `https://api.viator.com/partner`
+  - `VIATOR_API_ENABLED` (`0` or `1`)
+  - `VIATOR_SYNC_TTL_HOURS` — product cache freshness target (default `24`)
 - `BACKUP_DIR` (default: `./backups/db`)
 - `BACKUP_KEEP_DAYS` (default: `30`)
 - `APP_ENV` (`dev`, `staging`, `prod`)
