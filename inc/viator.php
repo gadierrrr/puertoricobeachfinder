@@ -52,9 +52,39 @@ function viatorTableExists(string $table): bool
 }
 
 /**
+ * Retries transient failures (HTTP 429 and 5xx) with exponential backoff,
+ * honoring Retry-After when Viator provides one.
+ *
  * @return array{data: array, status: int, headers: array}
  */
-function viatorApiRequest(string $method, string $path, string $locale = 'en', array $query = [], ?array $body = null): array
+function viatorApiRequest(string $method, string $path, string $locale = 'en', array $query = [], ?array $body = null, int $maxAttempts = 3): array
+{
+    $attempt = 0;
+    while (true) {
+        $attempt++;
+        try {
+            return viatorApiRequestOnce($method, $path, $locale, $query, $body);
+        } catch (ViatorRetryableException $e) {
+            if ($attempt >= $maxAttempts || PHP_SAPI !== 'cli') {
+                throw new RuntimeException($e->getMessage(), 0, $e);
+            }
+            $delay = $e->retryAfterSeconds > 0
+                ? min($e->retryAfterSeconds, 30)
+                : min(2 ** $attempt, 20);
+            sleep((int) $delay);
+        }
+    }
+}
+
+class ViatorRetryableException extends RuntimeException
+{
+    public int $retryAfterSeconds = 0;
+}
+
+/**
+ * @return array{data: array, status: int, headers: array}
+ */
+function viatorApiRequestOnce(string $method, string $path, string $locale = 'en', array $query = [], ?array $body = null): array
 {
     $apiKey = trim((string) env('VIATOR_API_KEY', ''));
     if ($apiKey === '') {
@@ -124,6 +154,11 @@ function viatorApiRequest(string $method, string $path, string $locale = 'en', a
     }
     if ($status < 200 || $status >= 300) {
         $message = trim((string) ($decoded['message'] ?? $decoded['code'] ?? 'request failed'));
+        if ($status === 429 || $status >= 500) {
+            $retryable = new ViatorRetryableException('Viator API HTTP ' . $status . ': ' . $message);
+            $retryable->retryAfterSeconds = max(0, (int) ($responseHeaders['retry-after'] ?? 0));
+            throw $retryable;
+        }
         throw new RuntimeException('Viator API HTTP ' . $status . ': ' . $message);
     }
 
@@ -264,11 +299,13 @@ function viatorUpsertProduct(array $campaign, string $productCode, string $local
         'INSERT INTO viator_products
             (product_code, locale, status, title, description, image_url, rating, review_count,
              duration_minutes_min, duration_minutes_max, departure_summary, free_cancellation,
-             price_from, currency, viator_last_updated_at, fetched_at, raw_json)
+             price_from, currency, viator_last_updated_at, fetched_at, raw_json,
+             product_url, campaign_value, tags_json, destination_ids_json, source)
          VALUES
             (:product_code, :locale, :status, :title, :description, :image_url, :rating, :review_count,
              :duration_min, :duration_max, :departure, :free_cancellation,
-             :price_from, :currency, :last_updated, CURRENT_TIMESTAMP, :raw_json)
+             :price_from, :currency, :last_updated, CURRENT_TIMESTAMP, :raw_json,
+             :product_url, :campaign_value, :tags_json, :destination_ids_json, "curated_sync")
          ON CONFLICT(product_code, locale) DO UPDATE SET
             status = excluded.status, title = excluded.title, description = excluded.description,
             image_url = excluded.image_url, rating = excluded.rating, review_count = excluded.review_count,
@@ -278,7 +315,10 @@ function viatorUpsertProduct(array $campaign, string $productCode, string $local
             free_cancellation = excluded.free_cancellation,
             price_from = excluded.price_from, currency = excluded.currency,
             viator_last_updated_at = excluded.viator_last_updated_at,
-            fetched_at = CURRENT_TIMESTAMP, raw_json = excluded.raw_json',
+            fetched_at = CURRENT_TIMESTAMP, raw_json = excluded.raw_json,
+            product_url = excluded.product_url, campaign_value = excluded.campaign_value,
+            tags_json = excluded.tags_json, destination_ids_json = excluded.destination_ids_json,
+            source = "curated_sync"',
         [
             ':product_code' => $productCode,
             ':locale' => $locale,
@@ -296,6 +336,10 @@ function viatorUpsertProduct(array $campaign, string $productCode, string $local
             ':currency' => $pricing['currency'],
             ':last_updated' => trim((string) ($product['lastUpdatedAt'] ?? '')),
             ':raw_json' => json_encode($product, JSON_UNESCAPED_SLASHES),
+            ':product_url' => viatorProductUrlIsValid($productUrl) ? $productUrl : '',
+            ':campaign_value' => (string) ($campaign['slug'] ?? ''),
+            ':tags_json' => json_encode(array_values(array_filter(array_map('intval', (array) ($product['tags'] ?? []))))),
+            ':destination_ids_json' => json_encode(viatorExtractDestinationIds($product)),
         ]
     );
 
@@ -423,6 +467,602 @@ function viatorExactProductUrl(string $campaignId, string $productCode, string $
             ':product_code' => $productCode,
             ':locale' => viatorNormalizeLocale($locale),
         ]
+    );
+    $url = trim((string) ($row['product_url'] ?? ''));
+    return viatorProductUrlIsValid($url) ? $url : '';
+}
+
+/** @return array<int> Destination IDs referenced by a product payload. */
+function viatorExtractDestinationIds(array $product): array
+{
+    $ids = [];
+    foreach ((array) ($product['destinations'] ?? []) as $destination) {
+        if (!is_array($destination)) {
+            continue;
+        }
+        $ref = (int) ($destination['ref'] ?? 0);
+        if ($ref > 0) {
+            $ids[] = $ref;
+        }
+    }
+    return array_values(array_unique($ids));
+}
+
+/* ---------------------------------------------------------------------------
+ * Catalog layer: destination/tag taxonomy, /products/search sweeps, and
+ * beach auto-matching. All API calls remain CLI-only; public pages read the
+ * local cache exactly like the curated flow.
+ * ------------------------------------------------------------------------ */
+
+const VIATOR_PUERTO_RICO_DESTINATION_ID = 36;
+
+/** Sync the Puerto Rico subtree of Viator's destination taxonomy. */
+function viatorSyncDestinations(): int
+{
+    $response = viatorApiRequest('GET', '/destinations');
+    $stored = 0;
+    foreach ((array) ($response['data']['destinations'] ?? []) as $destination) {
+        if (!is_array($destination)) {
+            continue;
+        }
+        $destId = (int) ($destination['destinationId'] ?? 0);
+        $lookupId = trim((string) ($destination['lookupId'] ?? ''));
+        $inPuertoRico = $destId === VIATOR_PUERTO_RICO_DESTINATION_ID
+            || preg_match('/(^|\.)' . VIATOR_PUERTO_RICO_DESTINATION_ID . '(\.|$)/', $lookupId) === 1;
+        if ($destId <= 0 || !$inPuertoRico) {
+            continue;
+        }
+
+        $center = is_array($destination['center'] ?? null) ? $destination['center'] : [];
+        execute(
+            'INSERT INTO viator_destinations
+                (destination_id, name, destination_type, parent_destination_id, lookup_id,
+                 latitude, longitude, raw_json, fetched_at)
+             VALUES (:id, :name, :type, :parent, :lookup, :lat, :lng, :raw, CURRENT_TIMESTAMP)
+             ON CONFLICT(destination_id) DO UPDATE SET
+                name = excluded.name, destination_type = excluded.destination_type,
+                parent_destination_id = excluded.parent_destination_id,
+                lookup_id = excluded.lookup_id, latitude = excluded.latitude,
+                longitude = excluded.longitude, raw_json = excluded.raw_json,
+                fetched_at = CURRENT_TIMESTAMP',
+            [
+                ':id' => $destId,
+                ':name' => trim((string) ($destination['name'] ?? '')),
+                ':type' => trim((string) ($destination['type'] ?? '')),
+                ':parent' => (int) ($destination['parentDestinationId'] ?? 0) ?: null,
+                ':lookup' => $lookupId,
+                ':lat' => is_numeric($center['latitude'] ?? null) ? (float) $center['latitude'] : null,
+                ':lng' => is_numeric($center['longitude'] ?? null) ? (float) $center['longitude'] : null,
+                ':raw' => json_encode($destination, JSON_UNESCAPED_SLASHES),
+            ]
+        );
+        $stored++;
+    }
+    return $stored;
+}
+
+/** Sync Viator's product tag taxonomy (names drive local matching). */
+function viatorSyncTags(): int
+{
+    $response = viatorApiRequest('GET', '/products/tags');
+    $stored = 0;
+    foreach ((array) ($response['data']['tags'] ?? []) as $tag) {
+        if (!is_array($tag)) {
+            continue;
+        }
+        $tagId = (int) ($tag['tagId'] ?? 0);
+        if ($tagId <= 0) {
+            continue;
+        }
+        $names = is_array($tag['allNamesByLocale'] ?? null) ? $tag['allNamesByLocale'] : [];
+        execute(
+            'INSERT INTO viator_tags (tag_id, name_en, name_es, parent_tag_ids_json, fetched_at)
+             VALUES (:id, :en, :es, :parents, CURRENT_TIMESTAMP)
+             ON CONFLICT(tag_id) DO UPDATE SET
+                name_en = excluded.name_en, name_es = excluded.name_es,
+                parent_tag_ids_json = excluded.parent_tag_ids_json,
+                fetched_at = CURRENT_TIMESTAMP',
+            [
+                ':id' => $tagId,
+                ':en' => trim((string) ($names['en'] ?? '')),
+                ':es' => trim((string) ($names['es'] ?? '')),
+                ':parents' => json_encode(array_values(array_map('intval', (array) ($tag['parentTagIds'] ?? [])))),
+            ]
+        );
+        $stored++;
+    }
+    return $stored;
+}
+
+/**
+ * Map beach municipalities to Viator destinations by normalized name.
+ * Seeded and manual mappings are preserved; only missing ones are added.
+ */
+function viatorRefreshMunicipalityDestinations(): int
+{
+    $destinations = query('SELECT destination_id, name FROM viator_destinations');
+    $byName = [];
+    foreach (is_array($destinations) ? $destinations : [] as $row) {
+        $slug = slugify((string) $row['name']);
+        if ($slug !== '') {
+            $byName[$slug] = (int) $row['destination_id'];
+        }
+    }
+
+    $added = 0;
+    $municipalities = query('SELECT DISTINCT municipality FROM beaches WHERE municipality != ""');
+    foreach (is_array($municipalities) ? $municipalities : [] as $row) {
+        $muniSlug = slugify((string) $row['municipality']);
+        if ($muniSlug === '' || !isset($byName[$muniSlug])) {
+            continue;
+        }
+        $existing = queryOne(
+            'SELECT municipality_slug FROM viator_municipality_destinations WHERE municipality_slug = :slug',
+            [':slug' => $muniSlug]
+        );
+        if (is_array($existing)) {
+            continue;
+        }
+        execute(
+            'INSERT INTO viator_municipality_destinations (municipality_slug, destination_id, source)
+             VALUES (:slug, :dest, "taxonomy_match")',
+            [':slug' => $muniSlug, ':dest' => $byName[$muniSlug]]
+        );
+        $added++;
+    }
+    return $added;
+}
+
+function viatorMunicipalityDestinationId(string $municipality): ?int
+{
+    static $cache = null;
+    if ($cache === null) {
+        $cache = [];
+        if (viatorTableExists('viator_municipality_destinations')) {
+            foreach (query('SELECT municipality_slug, destination_id FROM viator_municipality_destinations') as $row) {
+                $cache[(string) $row['municipality_slug']] = (int) $row['destination_id'];
+            }
+        }
+    }
+    return $cache[slugify($municipality)] ?? null;
+}
+
+/**
+ * Regional browse campaign used as the click/reporting bucket for
+ * auto-matched products (municipality > region > global, same precedence as
+ * toursCampaignsForBeach).
+ */
+function viatorBrowseCampaignForMunicipality(string $municipality): ?array
+{
+    require_once __DIR__ . '/island_chart.php';
+
+    $scopes = array_values(array_filter(array_unique([
+        slugify($municipality),
+        (string) (islandRegionForMunicipality($municipality) ?? ''),
+        'global',
+    ])));
+
+    foreach ($scopes as $scope) {
+        $row = queryOne(
+            'SELECT c.*, p.slug AS provider_slug, p.name AS provider_name,
+                    p.default_disclosure_en, p.default_disclosure_es
+             FROM referral_campaigns c
+             INNER JOIN referral_providers p ON p.id = c.provider_id
+             WHERE c.link_type = "tour" AND c.status = "active" AND p.status = "active"
+               AND c.destination_scope = :scope
+             ORDER BY c.priority ASC LIMIT 1',
+            [':scope' => $scope]
+        );
+        if (is_array($row)) {
+            return $row;
+        }
+    }
+    return null;
+}
+
+/** campaign-value used when sweeping a destination's products. */
+function viatorCampaignValueForDestination(int $destinationId): string
+{
+    if (viatorTableExists('viator_municipality_destinations')) {
+        $row = queryOne(
+            'SELECT municipality_slug FROM viator_municipality_destinations
+             WHERE destination_id = :dest ORDER BY municipality_slug ASC LIMIT 1',
+            [':dest' => $destinationId]
+        );
+        $municipality = str_replace('-', ' ', (string) ($row['municipality_slug'] ?? ''));
+        if ($municipality !== '') {
+            $campaign = viatorBrowseCampaignForMunicipality($municipality);
+            $slug = trim((string) ($campaign['slug'] ?? ''));
+            if ($slug !== '') {
+                return $slug;
+            }
+        }
+    }
+    $global = viatorBrowseCampaignForMunicipality('');
+    return trim((string) ($global['slug'] ?? 'viator-tours-pr'));
+}
+
+/**
+ * Top products for one destination via /products/search.
+ *
+ * @return array<int,array> product summaries as returned by the API
+ */
+function viatorSearchDestinationProducts(int $destinationId, string $locale, string $campaignValue, int $count = 40): array
+{
+    $response = viatorApiRequest(
+        'POST',
+        '/products/search',
+        $locale,
+        ['campaign-value' => $campaignValue],
+        [
+            'filtering' => ['destination' => (string) $destinationId],
+            'sorting' => ['sort' => 'TRAVELER_RATING', 'order' => 'DESCENDING'],
+            'pagination' => ['start' => 1, 'count' => max(1, min($count, 50))],
+            'currency' => 'USD',
+        ]
+    );
+    $products = $response['data']['products'] ?? [];
+    return is_array($products) ? array_values(array_filter($products, 'is_array')) : [];
+}
+
+/**
+ * Cache a /products/search summary. Curated rows keep their richer detail
+ * content; the sweep only backfills matching metadata on them.
+ */
+function viatorUpsertSearchProduct(array $product, string $locale, string $campaignValue): void
+{
+    $locale = viatorNormalizeLocale($locale);
+    $productCode = trim((string) ($product['productCode'] ?? ''));
+    if ($productCode === '') {
+        return;
+    }
+
+    $tagsJson = json_encode(array_values(array_filter(array_map('intval', (array) ($product['tags'] ?? [])))));
+    $destinationsJson = json_encode(viatorExtractDestinationIds($product));
+    $productUrl = trim((string) ($product['productUrl'] ?? ''));
+    $productUrl = viatorProductUrlIsValid($productUrl) ? $productUrl : '';
+
+    $existing = queryOne(
+        'SELECT source FROM viator_products WHERE product_code = :code AND locale = :locale LIMIT 1',
+        [':code' => $productCode, ':locale' => $locale]
+    );
+    if (is_array($existing) && (string) ($existing['source'] ?? '') === 'curated_sync') {
+        execute(
+            'UPDATE viator_products
+             SET tags_json = :tags, destination_ids_json = :destinations
+             WHERE product_code = :code AND locale = :locale',
+            [':tags' => $tagsJson, ':destinations' => $destinationsJson, ':code' => $productCode, ':locale' => $locale]
+        );
+        return;
+    }
+
+    [$durationMin, $durationMax] = viatorExtractDuration($product);
+    $pricing = viatorExtractPrice($product);
+    $reviews = is_array($product['reviews'] ?? null) ? $product['reviews'] : [];
+
+    execute(
+        'INSERT INTO viator_products
+            (product_code, locale, status, title, description, image_url, rating, review_count,
+             duration_minutes_min, duration_minutes_max, departure_summary, free_cancellation,
+             price_from, currency, viator_last_updated_at, fetched_at, raw_json,
+             product_url, campaign_value, tags_json, destination_ids_json, source)
+         VALUES
+            (:code, :locale, "ACTIVE", :title, :description, :image_url, :rating, :review_count,
+             :duration_min, :duration_max, "", :free_cancellation,
+             :price_from, :currency, "", CURRENT_TIMESTAMP, :raw_json,
+             :product_url, :campaign_value, :tags, :destinations, "catalog_search")
+         ON CONFLICT(product_code, locale) DO UPDATE SET
+            status = "ACTIVE", title = excluded.title, description = excluded.description,
+            image_url = excluded.image_url, rating = excluded.rating, review_count = excluded.review_count,
+            duration_minutes_min = excluded.duration_minutes_min,
+            duration_minutes_max = excluded.duration_minutes_max,
+            free_cancellation = excluded.free_cancellation,
+            price_from = excluded.price_from, currency = excluded.currency,
+            fetched_at = CURRENT_TIMESTAMP, raw_json = excluded.raw_json,
+            product_url = excluded.product_url, campaign_value = excluded.campaign_value,
+            tags_json = excluded.tags_json, destination_ids_json = excluded.destination_ids_json,
+            source = "catalog_search"',
+        [
+            ':code' => $productCode,
+            ':locale' => $locale,
+            ':title' => trim((string) ($product['title'] ?? '')),
+            ':description' => trim((string) ($product['description'] ?? '')),
+            ':image_url' => viatorExtractImageUrl($product),
+            ':rating' => is_numeric($reviews['combinedAverageRating'] ?? null) ? (float) $reviews['combinedAverageRating'] : null,
+            ':review_count' => max(0, (int) ($reviews['totalReviews'] ?? 0)),
+            ':duration_min' => $durationMin,
+            ':duration_max' => $durationMax,
+            ':free_cancellation' => viatorExtractFreeCancellation($product),
+            ':price_from' => $pricing['price'],
+            ':currency' => $pricing['currency'],
+            ':raw_json' => json_encode($product, JSON_UNESCAPED_SLASHES),
+            ':product_url' => $productUrl,
+            ':campaign_value' => $campaignValue,
+            ':tags' => $tagsJson,
+            ':destinations' => $destinationsJson,
+        ]
+    );
+}
+
+/* ---------------------------------------------------------------------------
+ * Beach auto-matching
+ * ------------------------------------------------------------------------ */
+
+/** beach_tags vocabulary -> keywords looked for in product titles/tag names */
+function viatorBeachTagKeywords(): array
+{
+    return [
+        'snorkeling' => ['snorkel'],
+        'surfing' => ['surf'],
+        'diving' => ['scuba', 'diving'],
+        'fishing' => ['fishing'],
+        'kayaking' => ['kayak'],
+    ];
+}
+
+/**
+ * Beach-name tokens too generic to identify a specific beach in a product
+ * title (common English/Spanish words that appear in unrelated tour names).
+ */
+function viatorGenericNameTokens(): array
+{
+    return [
+        'seven', 'sandy', 'steps', 'table', 'rock', 'rocks', 'stone', 'tower',
+        'light', 'house', 'shore', 'coast', 'costa', 'wilderness', 'middles',
+        'sunset', 'sunrise', 'coco', 'palm', 'palmas', 'shell', 'coral',
+        'turtle', 'pelican', 'angel', 'paradise', 'paraiso', 'escondida',
+        'escondido', 'hidden', 'secret', 'crash', 'jungle', 'river', 'mango',
+        // Generic Spanish coastal/geographic words that appear in unrelated
+        // tour titles ("Puerto Rico", cave tours, swimming holes).
+        'puerto', 'rico', 'cueva', 'cuevas', 'charco', 'charcos', 'poza',
+        'pozas', 'boca', 'caleta', 'ensenada', 'laguna', 'playas', 'beaches',
+        'arena', 'arenas',
+    ];
+}
+
+/** @return array{phrase: string, tokens: array<string>} */
+function viatorBeachNameSignature(array $beach): array
+{
+    $stopwords = [
+        'beach', 'playa', 'playita', 'balneario', 'bahia', 'bay', 'punta',
+        'point', 'cayo', 'cay', 'isla', 'island', 'the', 'and', 'del', 'de',
+        'la', 'el', 'los', 'las', 'san', 'santa', 'santo', 'norte', 'sur',
+        'este', 'oeste', 'east', 'west', 'north', 'south', 'grande', 'chica',
+        'chico', 'vieja', 'viejo', 'nueva', 'nuevo', 'negra', 'negro',
+        'blanca', 'blanco', 'verde', 'azul', 'mar', 'sea', 'entry', 'access',
+        'area', 'park', 'parque', 'reserva', 'reserve', 'natural', 'zone',
+    ];
+
+    $tokens = array_values(array_filter(
+        explode('-', slugify((string) ($beach['name'] ?? ''))),
+        static fn(string $token): bool => $token !== '' && !in_array($token, $stopwords, true)
+    ));
+
+    $phrase = count($tokens) >= 2 ? implode('-', $tokens) : '';
+    $generic = viatorGenericNameTokens();
+    $tokens = array_values(array_filter(
+        $tokens,
+        static fn(string $token): bool => strlen($token) >= 5 && !in_array($token, $generic, true)
+    ));
+
+    return ['phrase' => $phrase, 'tokens' => $tokens];
+}
+
+/** @return array{score: float, reasons: array<string>} */
+function viatorScoreProductForBeach(array $beach, array $productRow, array $tagNamesById, ?array $beachTags = null): array
+{
+    $score = 0.0;
+    $reasons = [];
+
+    $titleSlug = '-' . slugify((string) ($productRow['title'] ?? '')) . '-';
+    $signature = viatorBeachNameSignature($beach);
+
+    if ($signature['phrase'] !== '' && str_contains($titleSlug, '-' . $signature['phrase'] . '-')) {
+        $score += 60;
+        $reasons[] = 'name_phrase:' . $signature['phrase'];
+    } else {
+        foreach ($signature['tokens'] as $token) {
+            if (str_contains($titleSlug, '-' . $token . '-')) {
+                $score += 45;
+                $reasons[] = 'name_token:' . $token;
+                break;
+            }
+        }
+    }
+
+    $municipality = (string) ($beach['municipality'] ?? '');
+    $muniSlug = slugify($municipality);
+    $muniDestination = viatorMunicipalityDestinationId($municipality);
+    $productDestinations = array_map('intval', (array) json_decode((string) ($productRow['destination_ids_json'] ?? '[]'), true));
+    if ($muniDestination !== null && in_array($muniDestination, $productDestinations, true)) {
+        $score += 25;
+        $reasons[] = 'destination:' . $muniDestination;
+    }
+    if (strlen($muniSlug) >= 4 && str_contains($titleSlug, '-' . $muniSlug . '-')) {
+        $score += 20;
+        $reasons[] = 'municipality_in_title:' . $muniSlug;
+    }
+
+    if ($beachTags === null) {
+        $beachTags = array_map(
+            static fn(array $row): string => (string) $row['tag'],
+            query('SELECT tag FROM beach_tags WHERE beach_id = :id', [':id' => (string) ($beach['id'] ?? '')]) ?: []
+        );
+    }
+    $productTagNames = [];
+    foreach (array_map('intval', (array) json_decode((string) ($productRow['tags_json'] ?? '[]'), true)) as $tagId) {
+        if (isset($tagNamesById[$tagId])) {
+            $productTagNames[] = $tagNamesById[$tagId];
+        }
+    }
+    $haystack = strtolower((string) ($productRow['title'] ?? '')) . ' ' . implode(' ', $productTagNames);
+
+    $tagScore = 0.0;
+    foreach (viatorBeachTagKeywords() as $beachTag => $keywords) {
+        if (!in_array($beachTag, $beachTags, true)) {
+            continue;
+        }
+        foreach ($keywords as $keyword) {
+            if (str_contains($haystack, $keyword)) {
+                $tagScore += 10;
+                $reasons[] = 'tag:' . $beachTag;
+                break;
+            }
+        }
+    }
+    $score += min($tagScore, 30);
+
+    $rating = is_numeric($productRow['rating'] ?? null) ? (float) $productRow['rating'] : 0.0;
+    if ($rating >= 4.5 && (int) ($productRow['review_count'] ?? 0) >= 50) {
+        $score += 5;
+        $reasons[] = 'highly_rated';
+    }
+
+    return ['score' => $score, 'reasons' => $reasons];
+}
+
+/**
+ * Recompute viator_beach_products for every published beach from the cached
+ * catalog. Editor-blocked matches are preserved and never re-surfaced.
+ *
+ * @return array{beaches_matched: int, matches: int}
+ */
+function viatorRebuildBeachMatches(float $threshold = 35.0, int $maxPerBeach = 2): array
+{
+    $tagNamesById = [];
+    if (viatorTableExists('viator_tags')) {
+        foreach (query('SELECT tag_id, name_en FROM viator_tags WHERE name_en != ""') as $row) {
+            $tagNamesById[(int) $row['tag_id']] = strtolower((string) $row['name_en']);
+        }
+    }
+
+    $candidates = query(
+        'SELECT product_code, title, rating, review_count, tags_json, destination_ids_json
+         FROM viator_products
+         WHERE locale = "en" AND status = "ACTIVE" AND product_url != ""'
+    );
+    $candidates = is_array($candidates) ? $candidates : [];
+
+    $blocked = [];
+    foreach (query('SELECT beach_id, product_code FROM viator_beach_products WHERE status = "blocked"') as $row) {
+        $blocked[$row['beach_id'] . '|' . $row['product_code']] = true;
+    }
+
+    execute('DELETE FROM viator_beach_products WHERE status = "active"');
+
+    $beaches = query('SELECT id, name, municipality FROM beaches WHERE publish_status = "published"');
+    $beachesMatched = 0;
+    $totalMatches = 0;
+
+    $tagsByBeach = [];
+    foreach (query('SELECT beach_id, tag FROM beach_tags') as $row) {
+        $tagsByBeach[(string) $row['beach_id']][] = (string) $row['tag'];
+    }
+
+    foreach (is_array($beaches) ? $beaches : [] as $beach) {
+        $scored = [];
+        $beachTags = $tagsByBeach[(string) $beach['id']] ?? [];
+        foreach ($candidates as $candidate) {
+            if (isset($blocked[$beach['id'] . '|' . $candidate['product_code']])) {
+                continue;
+            }
+            $result = viatorScoreProductForBeach($beach, $candidate, $tagNamesById, $beachTags);
+            // Geography alone (destination / municipality-in-title) never
+            // qualifies: a match needs beach-name or activity-tag relevance,
+            // otherwise generic city tours would attach to every beach.
+            $relevant = (bool) array_filter(
+                $result['reasons'],
+                static fn(string $reason): bool => str_starts_with($reason, 'name_') || str_starts_with($reason, 'tag:')
+            );
+            if ($relevant && $result['score'] >= $threshold) {
+                $scored[] = [
+                    'product_code' => (string) $candidate['product_code'],
+                    'score' => $result['score'],
+                    'reasons' => $result['reasons'],
+                ];
+            }
+        }
+        if ($scored === []) {
+            continue;
+        }
+
+        usort($scored, static fn(array $a, array $b): int => $b['score'] <=> $a['score']);
+        $scored = array_slice($scored, 0, max(1, $maxPerBeach));
+
+        foreach ($scored as $order => $match) {
+            execute(
+                'INSERT INTO viator_beach_products
+                    (beach_id, product_code, score, match_reasons, status, display_order, matched_at, updated_at)
+                 VALUES (:beach_id, :code, :score, :reasons, "active", :order, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+                 ON CONFLICT(beach_id, product_code) DO UPDATE SET
+                    score = excluded.score, match_reasons = excluded.match_reasons,
+                    display_order = excluded.display_order, updated_at = CURRENT_TIMESTAMP',
+                [
+                    ':beach_id' => (string) $beach['id'],
+                    ':code' => $match['product_code'],
+                    ':score' => $match['score'],
+                    ':reasons' => json_encode($match['reasons'], JSON_UNESCAPED_SLASHES),
+                    ':order' => $order,
+                ]
+            );
+            $totalMatches++;
+        }
+        $beachesMatched++;
+    }
+
+    return ['beaches_matched' => $beachesMatched, 'matches' => $totalMatches];
+}
+
+/**
+ * Auto-matched, cache-hydrated products for a beach page.
+ *
+ * @return array<int,array> viator_products rows + score/display_order
+ */
+function viatorAutoMatchedProductsForBeach(string $beachId, string $locale, int $limit, array $excludeProductCodes = []): array
+{
+    if ($limit < 1 || !viatorTableExists('viator_beach_products') || !viatorTableExists('viator_products')) {
+        return [];
+    }
+
+    $rows = query(
+        'SELECT p.*, m.score, m.display_order AS match_order
+         FROM viator_beach_products m
+         INNER JOIN viator_products p ON p.product_code = m.product_code AND p.locale = :locale
+         WHERE m.beach_id = :beach_id
+           AND m.status = "active"
+           AND p.status = "ACTIVE"
+           AND p.product_url != ""
+         ORDER BY m.display_order ASC, m.score DESC',
+        [':beach_id' => $beachId, ':locale' => viatorNormalizeLocale($locale)]
+    );
+
+    $result = [];
+    foreach (is_array($rows) ? $rows : [] as $row) {
+        if (in_array((string) $row['product_code'], $excludeProductCodes, true)) {
+            continue;
+        }
+        $result[] = $row;
+        if (count($result) >= $limit) {
+            break;
+        }
+    }
+    return $result;
+}
+
+/**
+ * Product-level attributed URL fallback for /go when no campaign-scoped link
+ * exists (auto-matched and guide placements).
+ */
+function viatorProductLevelUrl(string $productCode, string $locale): string
+{
+    if (!viatorTableExists('viator_products')) {
+        return '';
+    }
+    $row = queryOne(
+        'SELECT product_url FROM viator_products
+         WHERE product_code = :code AND locale = :locale AND status = "ACTIVE"
+         LIMIT 1',
+        [':code' => $productCode, ':locale' => viatorNormalizeLocale($locale)]
     );
     $url = trim((string) ($row['product_url'] ?? ''));
     return viatorProductUrlIsValid($url) ? $url : '';

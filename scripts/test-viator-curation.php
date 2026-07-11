@@ -49,9 +49,12 @@ foreach ($curatedCases as [$beachSlugs, $campaignSlug]) {
     $assert(($offers[1]['link_type'] ?? '') === 'tour', "Expected regional browse fallback for {$beachSlug}");
 
     $meta = toursCuratedOfferMeta($campaignSlug, 'en');
+    $imageUrl = (string) ($meta['image_url'] ?? '');
+    $imageHost = strtolower((string) parse_url($imageUrl, PHP_URL_HOST));
     $assert(
-        str_starts_with((string) ($meta['image_url'] ?? ''), 'https://media.tacdn.com/'),
-        "Expected official Viator image for {$campaignSlug}"
+        str_starts_with($imageUrl, 'https://')
+            && ($imageHost === 'media.tacdn.com' || str_ends_with($imageHost, '.tripadvisor.com')),
+        "Expected official Viator/TripAdvisor CDN image for {$campaignSlug}"
     );
     $assert((string) ($meta['product_code'] ?? '') !== '', "Expected product code for {$campaignSlug}");
 }
@@ -80,7 +83,10 @@ $es = $icacos ? renderToursSection($icacos, 'es', 'redesign') : '';
 $assert(str_contains($en, 'Curated for this beach'), 'English curated treatment should render');
 $assert(str_contains($en, 'product_code=14939P2'), 'Product code should be included in click context');
 $assert(str_contains($en, 'match_type=curated_beach'), 'Match type should be included in click context');
-$assert(str_contains($en, 'media.tacdn.com/media/attractions-splice-spp-674x446/13/e0/e3/15.jpg'), 'Exact official Viator image should render for the curated product');
+$assert(
+    str_contains($en, 'media.tacdn.com/') || str_contains($en, '.tripadvisor.com/'),
+    'Official Viator/TripAdvisor CDN image should render for the curated product'
+);
 $assert(str_contains($en, 'Viator photo'), 'Official image source should be identified in English');
 $assert(str_contains($en, 'loading="lazy"'), 'Official product image should lazy load');
 $assert(str_contains($es, 'Elegido para esta playa'), 'Spanish curated treatment should render');

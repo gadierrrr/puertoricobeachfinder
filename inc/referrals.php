@@ -426,15 +426,21 @@ function referralResolveRedirect(string $campaignSlug, array $context = []): arr
     // Viator API productUrl values already contain the account and campaign
     // attribution parameters and must be used byte-for-byte. Keep our click ID
     // in the local ledger; never append it to the API-generated URL.
+    // Campaign-scoped links (curated placements) win; the product-level URL
+    // from the catalog cache covers auto-matched and guide placements.
     $providerSlug = strtolower(trim((string) ($campaign['provider_slug'] ?? '')));
     $productCode = trim((string) ($context['product_code'] ?? ''));
     if ($providerSlug === 'viator' && $productCode !== '') {
         require_once __DIR__ . '/viator.php';
+        $locale = referralNormalizeLocale($context['locale'] ?? 'en');
         $target = viatorExactProductUrl(
             (string) ($campaign['id'] ?? ''),
             $productCode,
-            referralNormalizeLocale($context['locale'] ?? 'en')
+            $locale
         );
+        if ($target === '') {
+            $target = viatorProductLevelUrl($productCode, $locale);
+        }
         if ($target !== '') {
             $attributionMode = 'api_product_url';
         }

@@ -561,6 +561,8 @@ include APP_ROOT . '/components/hero-guide.php';
 
             </div>
 
+            <?php $guideToursSlug = 'spring-break-beaches-puerto-rico'; include APP_ROOT . '/components/guide/tours.php'; ?>
+
             <div class="mt-12 pt-8 border-t border-gray-200">
                 <h3 class="text-xl font-bold text-gray-900 mb-4"><?= h(__('guide_common.related_heading')) ?></h3>
                 <div class="related-guides-grid">

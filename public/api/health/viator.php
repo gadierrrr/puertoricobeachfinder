@@ -29,6 +29,48 @@ if (viatorTableExists('viator_sync_runs')) {
     );
 }
 
+$catalog = [
+    'destinations' => 0,
+    'tags' => 0,
+    'search_products' => 0,
+    'matched_beaches' => 0,
+    'beach_product_matches' => 0,
+    'guide_placements' => 0,
+    'last_catalog_run' => null,
+];
+if (viatorTableExists('viator_destinations')) {
+    $catalog['destinations'] = (int) (queryOne('SELECT COUNT(*) AS n FROM viator_destinations')['n'] ?? 0);
+}
+if (viatorTableExists('viator_tags')) {
+    $catalog['tags'] = (int) (queryOne('SELECT COUNT(*) AS n FROM viator_tags')['n'] ?? 0);
+}
+if (viatorTableExists('viator_products')) {
+    $catalog['search_products'] = (int) (queryOne(
+        'SELECT COUNT(DISTINCT product_code) AS n FROM viator_products WHERE source = "catalog_search" AND status = "ACTIVE"'
+    )['n'] ?? 0);
+}
+if (viatorTableExists('viator_beach_products')) {
+    $matchStats = queryOne(
+        'SELECT COUNT(DISTINCT beach_id) AS beaches, COUNT(*) AS matches
+         FROM viator_beach_products WHERE status = "active"'
+    );
+    $catalog['matched_beaches'] = (int) ($matchStats['beaches'] ?? 0);
+    $catalog['beach_product_matches'] = (int) ($matchStats['matches'] ?? 0);
+}
+if (viatorTableExists('guide_tour_placements')) {
+    $catalog['guide_placements'] = (int) (queryOne(
+        'SELECT COUNT(*) AS n FROM guide_tour_placements WHERE enabled = 1'
+    )['n'] ?? 0);
+}
+if (viatorTableExists('viator_sync_runs')) {
+    $catalog['last_catalog_run'] = queryOne(
+        'SELECT status, started_at, finished_at, summary_json
+         FROM viator_sync_runs
+         WHERE summary_json LIKE \'%"kind":"catalog"%\'
+         ORDER BY started_at DESC LIMIT 1'
+    );
+}
+
 $lastFetch = trim((string) ($products['last_fetched_at'] ?? ''));
 $fresh = false;
 if ($lastFetch !== '') {
@@ -60,4 +102,5 @@ echo json_encode([
         'ttl_hours' => $ttlHours,
     ],
     'latest_sync' => $latest,
+    'catalog' => $catalog,
 ], JSON_UNESCAPED_SLASHES);

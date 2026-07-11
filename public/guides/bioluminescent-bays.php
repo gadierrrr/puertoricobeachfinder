@@ -83,6 +83,7 @@ include APP_ROOT . '/components/hero-guide.php';
 <p class="text-gray-700 mb-6"><?= h(__('guide_bio_bays.cta_desc')) ?></p>
 <a href="<?= h($homeUrl) ?>?municipality=Vieques" class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"><?= h(__('guide_bio_bays.cta_button')) ?></a>
 </div></div>
+<?php $guideToursSlug = 'bioluminescent-bays'; include APP_ROOT . '/components/guide/tours.php'; ?>
 <div class="mt-12 pt-8 border-t border-gray-200"><h3 class="text-xl font-bold text-gray-900 mb-4"><?= h(__('guide_common.related_heading')) ?></h3>
 <div class="related-guides-grid"><?php foreach($relatedGuides as $guide):?>
 <a href="<?= h($guide['url']) ?>" class="related-guide-card"><span class="related-guide-title"><?= h($guide['title']) ?></span></a>

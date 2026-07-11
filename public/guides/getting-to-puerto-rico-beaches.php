@@ -131,6 +131,7 @@ include APP_ROOT . '/components/hero-guide.php';
 <p class="text-gray-100 mb-6"><?= h(__('guide_transportation.cta_desc')) ?></p>
 <a href="<?= h($homeUrl) ?>" class="inline-block bg-yellow-400 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-500 transition-colors"><?= h(__('guide_transportation.cta_button')) ?></a>
 </div></div>
+<?php $guideToursSlug = 'getting-to-puerto-rico-beaches'; include APP_ROOT . '/components/guide/tours.php'; ?>
 <div class="mt-12 pt-8 border-t border-gray-200"><h3 class="text-xl font-bold text-gray-900 mb-4"><?= h(__('guide_common.related_heading')) ?></h3>
 <div class="related-guides-grid"><?php foreach($relatedGuides as $guide):?>
 <a href="<?= h($guide['url']) ?>" class="related-guide-card"><span class="related-guide-title"><?= h($guide['title']) ?></span></a>

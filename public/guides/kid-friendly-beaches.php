@@ -468,6 +468,7 @@ $guideMapButtonLabel = 'View Beach Map';
 $guideMapEmptyNotice = 'No kid-friendly beaches from this guide are available on the map right now.';
 include APP_ROOT . '/components/guide-map-panel.php';
 ?></div>
+<?php $guideToursSlug = 'kid-friendly-beaches'; include APP_ROOT . '/components/guide/tours.php'; ?>
 <div class="mt-12 pt-8 border-t border-gray-200"><h3 class="text-xl font-bold text-gray-900 mb-4">Related Guides</h3>
 <div class="related-guides-grid"><?php foreach ($relatedGuides as $guide): ?>
 <a href="/guides/<?= h($guide['slug']) ?>" class="related-guide-card"><span class="related-guide-title"><?= h($guide['title']) ?></span></a>

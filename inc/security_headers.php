@@ -65,7 +65,9 @@ header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
 // If a JS library requires eval, add a specific hash/nonce instead.
 $scriptSources = ["'self'", 't.puertoricobeachfinder.com', "'nonce-" . CSP_NONCE . "'", "'strict-dynamic'", 'cdn.tailwindcss.com', 'unpkg.com', 'cdn.jsdelivr.net'];
 $styleSources = ["'self'", "'unsafe-inline'", 'cdn.tailwindcss.com', 'unpkg.com', 'cdn.jsdelivr.net', 'fonts.googleapis.com'];
-$imgSources = ["'self'", 'data:', 'blob:', 'https://media.tacdn.com', 'https://*.basemaps.cartocdn.com', 'https://a.basemaps.cartocdn.com', 'https://b.basemaps.cartocdn.com', 'https://c.basemaps.cartocdn.com', 'https://d.basemaps.cartocdn.com'];
+// *.tripadvisor.com covers Viator API-hydrated product images, which move
+// between TripAdvisor CDN subdomains (media-cdn, hare-media-cdn, ...).
+$imgSources = ["'self'", 'data:', 'blob:', 'https://media.tacdn.com', 'https://*.tripadvisor.com', 'https://*.basemaps.cartocdn.com', 'https://a.basemaps.cartocdn.com', 'https://b.basemaps.cartocdn.com', 'https://c.basemaps.cartocdn.com', 'https://d.basemaps.cartocdn.com'];
 $fontSources = ["'self'", 'data:', 'fonts.gstatic.com'];
 $connectSources = ["'self'", 't.puertoricobeachfinder.com', 'https://basemaps.cartocdn.com', 'https://*.basemaps.cartocdn.com', 'unpkg.com', 'cdn.jsdelivr.net'];
 $workerSources = ["'self'", 'blob:'];
