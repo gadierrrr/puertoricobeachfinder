@@ -83,21 +83,6 @@ if ($access !== '') {
 
 $heroAccess = trim((string) ($beach['access_label'] ?? ''));
 $heroParking = trim((string) ($beach['parking_details'] ?? ''));
-$heroVibe = !empty($chipTags) ? getTagLabel($chipTags[0]) : ($isEs ? 'Explora con calma' : 'Scout conditions');
-$heroWater = trim((string) preg_replace('/^(Easy|Fácil|Moderado|Advanced|Avanzado)\s*[—-]\s*/u', '', $swimTile[0]));
-$heroWater = $heroWater !== '' ? mb_strtoupper(mb_substr($heroWater, 0, 1)) . mb_substr($heroWater, 1) : ($isEs ? 'Verifica condiciones' : 'Check conditions');
-$amenityCount = count($amenities);
-$amenityWord = $isEs
-    ? ($amenityCount === 1 ? 'servicio' : 'servicios')
-    : ($amenityCount === 1 ? 'amenity' : 'amenities');
-$heroSnapshot = [
-    ['value' => (string) $score['overall'], 'label' => $isEs ? 'Puntuación' : 'Score', 'tone' => 'score'],
-    ['value' => $heroWater, 'label' => $isEs ? 'Agua' : 'Water', 'tone' => $swimTile[1]],
-    ['value' => $heroAccess !== '' ? ucfirst($heroAccess) : ($isEs ? 'Verifica acceso' : 'Check access'), 'label' => $isEs ? 'Acceso' : 'Access', 'tone' => $isBoat ? 'r' : ''],
-    ['value' => $heroParking !== '' ? ($isEs ? 'Info disponible' : 'Info listed') : ($isEs ? 'Verifica antes' : 'Check ahead'), 'label' => $isEs ? 'Parking' : 'Parking', 'tone' => $heroParking !== '' ? 'g' : 'a'],
-    ['value' => $heroVibe, 'label' => $isEs ? 'Ambiente' : 'Vibe', 'tone' => ''],
-    ['value' => $amenityCount > 0 ? $amenityCount . ' ' . $amenityWord : ($isEs ? 'Sin lista' : 'Not listed'), 'label' => $isEs ? 'Servicios' : 'Amenities', 'tone' => $amenityCount > 0 ? 'g' : 'a'],
-];
 
 // AI at-a-glance summary (same generator as classic); falls back to nothing
 $aiSummary = trim((string) generateAtAGlanceSummary($beach, $lang));
@@ -277,13 +262,9 @@ $subnav = array_values(array_filter([
     </div>
     <?php endif; ?>
     <div class="h-command">
-      <div class="h-snapshot" aria-label="<?= h($isEs ? 'Resumen rápido de la playa' : 'Quick beach snapshot') ?>">
-        <?php foreach ($heroSnapshot as $item): ?>
-        <div class="h-snap <?= h($item['tone']) ?>">
-          <span class="v"><?= h($item['value']) ?></span>
-          <span class="k"><?= h($item['label']) ?></span>
-        </div>
-        <?php endforeach; ?>
+      <div class="h-snap score" aria-label="<?= h(($isEs ? 'Puntuación de playa: ' : 'Beach score: ') . $score['overall'] . ' / 100') ?>">
+        <span class="v"><?= $score['overall'] ?></span>
+        <span class="k"><?= h($isEs ? 'Puntuación' : 'Score') ?></span>
       </div>
       <div class="h-actions">
         <a class="btn coral" href="<?= h($dirUrl) ?>" target="_blank" rel="noopener" data-bf-track="directions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 3 21l9-4 9 4z"/></svg><?= h($isEs ? 'Cómo llegar' : 'Directions') ?></a>
