@@ -31,6 +31,13 @@ $regionLabel = [
 ][$region] ?? '';
 $access = strtolower((string) ($beach['access_label'] ?? ''));
 $isBoat = str_contains($access, 'boat') || str_contains($access, 'kayak');
+// Localized display values. $access above stays English — it drives logic
+// checks (boat/hike/walk), while these feed rendered text. Translated _es
+// columns fall back to English when the translation hasn't been backfilled.
+$accessLabel = $isEs ? getAccessLabelTranslated(trim((string) ($beach['access_label'] ?? ''))) : trim((string) ($beach['access_label'] ?? ''));
+$bestTime = ($isEs && !empty($beach['best_time_es'])) ? $beach['best_time_es'] : (string) ($beach['best_time'] ?? '');
+$safetyInfo = ($isEs && !empty($beach['safety_info_es'])) ? $beach['safety_info_es'] : (string) ($beach['safety_info'] ?? '');
+$parkingDetails = trim(($isEs && !empty($beach['parking_details_es'])) ? $beach['parking_details_es'] : (string) ($beach['parking_details'] ?? ''));
 $surf = strtolower((string) ($beach['surf'] ?? ''));
 $rating = $score['rating'];
 $reviewCountGoogle = (int) ($beach['google_review_count'] ?? 0);
@@ -78,11 +85,11 @@ $glanceFacts = [
     ['👨‍👩‍👧‍👦', $isEs ? 'Familia' : 'Family', !empty($beach['safe_for_children']) ? ($isEs ? 'Sí — segura para niños' : 'Yes — safe for kids') : ($isEs ? 'Verifica condiciones' : 'Check conditions'), !empty($beach['safe_for_children']) ? 'g' : 'a'],
 ];
 if ($access !== '') {
-    $glanceFacts[] = ['🧭', $isEs ? 'Acceso' : 'Access', ucfirst((string) $beach['access_label']), $isBoat ? 'r' : (str_contains($access, 'hike') || str_contains($access, 'walk') ? 'a' : 'g')];
+    $glanceFacts[] = ['🧭', $isEs ? 'Acceso' : 'Access', ucfirst($accessLabel), $isBoat ? 'r' : (str_contains($access, 'hike') || str_contains($access, 'walk') ? 'a' : 'g')];
 }
 
-$heroAccess = trim((string) ($beach['access_label'] ?? ''));
-$heroParking = trim((string) ($beach['parking_details'] ?? ''));
+$heroAccess = $accessLabel;
+$heroParking = $parkingDetails;
 
 // AI at-a-glance summary (same generator as classic); falls back to nothing
 $aiSummary = trim((string) generateAtAGlanceSummary($beach, $lang));
@@ -342,8 +349,8 @@ $subnav = array_values(array_filter([
         </div>
         <div class="glance-plan">
           <div class="gplan"><span class="ic"><?= $isBoat ? '🛥️' : '🧭' ?></span><div><h3><?= h($isEs ? 'Cómo llegar' : 'Getting there') ?></h3><p><?= h($gettingBody) ?></p></div></div>
-          <?php if (!empty($beach['best_time'])): ?>
-          <div class="gplan"><span class="ic">📅</span><div><h3><?= h($isEs ? 'Mejor época' : 'Best time') ?></h3><p><?= h($beach['best_time']) ?></p></div></div>
+          <?php if ($bestTime !== ''): ?>
+          <div class="gplan"><span class="ic">📅</span><div><h3><?= h($isEs ? 'Mejor época' : 'Best time') ?></h3><p><?= h($bestTime) ?></p></div></div>
           <?php endif; ?>
         </div>
       </div>
@@ -402,11 +409,11 @@ $subnav = array_values(array_filter([
     <section id="getting" class="block">
       <h2 class="h2"><?= h($isEs ? 'Cómo llegar y seguridad' : 'Getting there & safety') ?></h2>
       <div style="display:grid;gap:12px">
-        <?php if ($access !== '' || !empty($beach['parking_details'])): ?>
-        <div class="callout"><span class="ic"><?= $isBoat ? '🛥️' : '🧭' ?></span><div><h4><?= h($isEs ? 'Acceso' : 'Access') ?></h4><p><?= h(ucfirst((string) ($beach['access_label'] ?? ''))) ?><?= !empty($beach['parking_details']) ? '. ' . h($beach['parking_details']) : '' ?></p></div></div>
+        <?php if ($access !== '' || $parkingDetails !== ''): ?>
+        <div class="callout"><span class="ic"><?= $isBoat ? '🛥️' : '🧭' ?></span><div><h4><?= h($isEs ? 'Acceso' : 'Access') ?></h4><p><?= h(ucfirst($accessLabel)) ?><?= $parkingDetails !== '' ? '. ' . h($parkingDetails) : '' ?></p></div></div>
         <?php endif; ?>
-        <?php if (!empty($beach['safety_info'])): ?>
-        <div class="callout warn"><span class="ic">⚠️</span><div><h4><?= h($isEs ? 'Seguridad' : 'Swim smart') ?></h4><p><?= h($beach['safety_info']) ?></p></div></div>
+        <?php if ($safetyInfo !== ''): ?>
+        <div class="callout warn"><span class="ic">⚠️</span><div><h4><?= h($isEs ? 'Seguridad' : 'Swim smart') ?></h4><p><?= h($safetyInfo) ?></p></div></div>
         <?php endif; ?>
       </div>
     </section>

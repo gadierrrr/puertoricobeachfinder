@@ -2492,9 +2492,20 @@ function generateAtAGlanceSummary(array $beach, string $lang = 'en'): string {
         ? ($beach['description_es'] ?? $beach['description'] ?? '')
         : ($beach['description'] ?? '');
 
+    $isEs = ($lang === 'es');
+
     // Build primary characteristic from tags
     $tagLabels = [];
-    $tagMap = [
+    $tagMap = $isEs ? [
+        'calm-waters' => 'aguas tranquilas',
+        'swimming' => 'nadar',
+        'snorkeling' => 'esnórquel',
+        'surfing' => 'surf',
+        'family-friendly' => 'familias',
+        'secluded' => 'su ambiente apartado',
+        'popular' => 'su popularidad entre locales y visitantes',
+        'scenic' => 'vistas panorámicas',
+    ] : [
         'calm-waters' => 'calm waters',
         'swimming' => 'swimming',
         'snorkeling' => 'snorkeling',
@@ -2511,17 +2522,17 @@ function generateAtAGlanceSummary(array $beach, string $lang = 'en'): string {
     }
 
     $knownFor = !empty($tagLabels)
-        ? implode(' and ', $tagLabels)
-        : 'its natural beauty';
+        ? implode($isEs ? ' y ' : ' and ', $tagLabels)
+        : ($isEs ? 'su belleza natural' : 'its natural beauty');
 
     // Determine beach type
-    $type = 'beach';
+    $type = $isEs ? 'playa' : 'beach';
     if (in_array('secluded', $tags, true)) {
-        $type = 'secluded beach';
+        $type = $isEs ? 'playa apartada' : 'secluded beach';
     } elseif (in_array('popular', $tags, true)) {
-        $type = 'popular beach';
+        $type = $isEs ? 'playa popular' : 'popular beach';
     } elseif (in_array('family-friendly', $tags, true)) {
-        $type = 'family-friendly beach';
+        $type = $isEs ? 'playa familiar' : 'family-friendly beach';
     }
 
     // Build key differentiator from first sentence of description
@@ -2539,24 +2550,28 @@ function generateAtAGlanceSummary(array $beach, string $lang = 'en'): string {
     // Amenity highlights
     $amenityParts = [];
     if (in_array('food', $amenities, true)) {
-        $amenityParts[] = 'on-site dining';
+        $amenityParts[] = $isEs ? 'comida en el lugar' : 'on-site dining';
     }
     if (in_array('parking', $amenities, true) || in_array('free-parking', $amenities, true)) {
-        $amenityParts[] = 'parking';
+        $amenityParts[] = $isEs ? 'estacionamiento' : 'parking';
     }
     if (in_array('restrooms', $amenities, true)) {
-        $amenityParts[] = 'restrooms';
+        $amenityParts[] = $isEs ? 'baños' : 'restrooms';
     }
     $amenityStr = !empty($amenityParts)
-        ? ' Facilities include ' . implode(', ', $amenityParts) . '.'
+        ? ($isEs
+            ? ' Las instalaciones incluyen ' . implode(', ', $amenityParts) . '.'
+            : ' Facilities include ' . implode(', ', $amenityParts) . '.')
         : '';
 
     // Lifeguard note
     $lifeguardStr = !empty($beach['has_lifeguard'])
-        ? ' A lifeguard is on duty.'
+        ? ($isEs ? ' Hay salvavidas de turno.' : ' A lifeguard is on duty.')
         : '';
 
-    $summary = "{$name} is a {$type} in {$muni}, Puerto Rico, known for {$knownFor}.{$differentiator}{$amenityStr}{$lifeguardStr}";
+    $summary = $isEs
+        ? "{$name} es una {$type} en {$muni}, Puerto Rico, conocida por {$knownFor}.{$differentiator}{$amenityStr}{$lifeguardStr}"
+        : "{$name} is a {$type} in {$muni}, Puerto Rico, known for {$knownFor}.{$differentiator}{$amenityStr}{$lifeguardStr}";
 
     return trim($summary);
 }
