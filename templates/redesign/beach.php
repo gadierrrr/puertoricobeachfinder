@@ -201,6 +201,29 @@ $renderLocationCard = function (string $extraClass = '') use ($isEs, $lat, $lng,
     </div>
     <?php
 };
+$renderScoreCard = function (string $extraClass = '') use ($isEs, $score, $facilityScore): void {
+    ?>
+    <div class="scorecard <?= h($extraClass) ?>">
+      <h4 style="margin:0 0 13px"><?= h($isEs ? 'Puntuación' : 'Beach Score') ?></h4>
+      <div class="top"><div class="big"><?= $score['overall'] ?><small>/100</small></div><div style="font-family:var(--data);text-transform:uppercase;letter-spacing:.1em;font-size:.72rem;color:var(--ink-60);text-align:right"><?= $isEs ? 'Cómo puntúa esta playa<br>para pasar el día' : 'How this beach<br>rates for a day out' ?></div></div>
+      <div class="scores">
+        <?php
+          $bars = array_merge([[$isEs ? 'General' : 'Overall', $score['overall'], bsColor($score['overall'])]], $score['bars']);
+          $icons = ['Overall' => '⭐', 'General' => '⭐', 'Calm water' => '🌊', 'Snorkeling' => '🤿', 'Seclusion' => '🌾', 'Family' => '👨‍👩‍👧', 'Facilities' => '🚻'];
+          $barNames = $isEs ? ['Calm water' => 'Agua calmada', 'Snorkeling' => 'Snorkel', 'Seclusion' => 'Tranquilidad', 'Family' => 'Familia', 'Facilities' => 'Servicios'] : [];
+          foreach ($bars as $b): ?>
+        <div class="score"><span><?= ($icons[$b[0]] ?? '•') . ' ' . h($barNames[$b[0]] ?? $b[0]) ?></span><div class="bar"><i class="<?= $b[2] ?>" style="width:<?= $b[1] ?>%"></i></div><span class="pct"><?= $b[1] ?></span></div>
+        <?php endforeach; ?>
+      </div>
+      <?php if ($facilityScore !== null && $facilityScore < 50): ?>
+      <div class="score-note">
+        <b><?= h($isEs ? 'Servicios limitados' : 'Limited facilities') ?></b>
+        <span><?= h($isEs ? 'Lleva agua, sombra, comida y todo lo necesario para el día.' : 'Bring water, shade, food, and everything you need for the day.') ?></span>
+      </div>
+      <?php endif; ?>
+    </div>
+    <?php
+};
 
 // favorite state for the hero Save button (session is active here)
 $isFavorite = false;
@@ -213,7 +236,6 @@ if (isAuthenticated() && !empty($_SESSION['user_id'])) {
 
 $subnav = array_values(array_filter([
     ['overview', $isEs ? 'Vistazo' : 'Overview', true],
-    ['scores', $isEs ? 'Puntuación' : 'Scores', true],
     ['tours', 'Tours', true],
     ['about', $isEs ? 'Sobre' : 'About', !empty($aboutParas) || !empty($beach['features'])],
     ['tips', $isEs ? 'Consejos' : 'Tips', !empty($tipList)],
@@ -327,29 +349,8 @@ $subnav = array_values(array_filter([
       </div>
     </section>
 
-    <section id="scores" class="block">
-      <h2 class="h2"><?= h($isEs ? 'Puntuación' : 'Beach Score') ?></h2>
-      <div class="scorecard">
-        <div class="top"><div class="big"><?= $score['overall'] ?><small>/100</small></div><div style="font-family:var(--data);text-transform:uppercase;letter-spacing:.1em;font-size:.72rem;color:var(--ink-60);text-align:right"><?= $isEs ? 'Cómo puntúa esta playa<br>para pasar el día' : 'How this beach<br>rates for a day out' ?></div></div>
-        <div class="scores">
-          <?php
-            $bars = array_merge([[$isEs ? 'General' : 'Overall', $score['overall'], bsColor($score['overall'])]], $score['bars']);
-            $icons = ['Overall' => '⭐', 'General' => '⭐', 'Calm water' => '🌊', 'Snorkeling' => '🤿', 'Seclusion' => '🌾', 'Family' => '👨‍👩‍👧', 'Facilities' => '🚻'];
-            $barNames = $isEs ? ['Calm water' => 'Agua calmada', 'Snorkeling' => 'Snorkel', 'Seclusion' => 'Tranquilidad', 'Family' => 'Familia', 'Facilities' => 'Servicios'] : [];
-            foreach ($bars as $b): ?>
-          <div class="score"><span><?= ($icons[$b[0]] ?? '•') . ' ' . h($barNames[$b[0]] ?? $b[0]) ?></span><div class="bar"><i class="<?= $b[2] ?>" style="width:<?= $b[1] ?>%"></i></div><span class="pct"><?= $b[1] ?></span></div>
-          <?php endforeach; ?>
-        </div>
-        <?php if ($facilityScore !== null && $facilityScore < 50): ?>
-        <div class="score-note">
-          <b><?= h($isEs ? 'Servicios limitados' : 'Limited facilities') ?></b>
-          <span><?= h($isEs ? 'Lleva agua, sombra, comida y todo lo necesario para el día.' : 'Bring water, shade, food, and everything you need for the day.') ?></span>
-        </div>
-        <?php endif; ?>
-      </div>
-    </section>
-
     <section class="mobile-planning block" aria-label="<?= h($isEs ? 'Planificación rápida' : 'Quick planning') ?>">
+      <?php $renderScoreCard('mobile-card'); ?>
       <?php $renderConditionsCard('mobile-card'); ?>
       <?php $renderLocationCard('mobile-card'); ?>
     </section>
@@ -530,6 +531,7 @@ $subnav = array_values(array_filter([
   </main>
 
   <aside class="side">
+    <?php $renderScoreCard(); ?>
     <?php $renderConditionsCard(); ?>
     <?php $renderLocationCard(); ?>
 

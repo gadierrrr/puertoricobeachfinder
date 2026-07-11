@@ -367,6 +367,12 @@ body.redesign.rd-guide-page .chat-fab-container{display:none!important}
 .rd-beach .score-note{margin-top:16px;border:1px solid rgba(238,54,64,.18);background:#FFF4F0;border-radius:12px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start}
 .rd-beach .score-note b{font-family:var(--data);font-weight:900;text-transform:uppercase;letter-spacing:.09em;font-size:.68rem;color:#B72931;white-space:nowrap}
 .rd-beach .score-note span{color:var(--ink-60);font-size:.9rem;line-height:1.35}
+/* Beach Score as a sidebar card: single-column bars in the 340px rail */
+.rd-beach .side .scorecard{padding:17px 18px}
+.rd-beach .side .scorecard .scores{grid-template-columns:1fr;gap:9px}
+.rd-beach .side .scorecard .big{font-size:2.1rem}
+.rd-beach .side .scorecard .score-note{margin-top:13px;flex-direction:column;gap:4px}
+@media(max-width:900px){.rd-beach .mobile-planning .scorecard{grid-column:1/-1}}
 .rd-beach .tips{display:grid;gap:9px}
 .rd-beach .tip{display:flex;gap:11px;align-items:flex-start;background:#fff;border:1px solid var(--ink-14);border-radius:11px;padding:11px 14px}
 .rd-beach .tip .ck{color:var(--green);flex:0 0 auto;margin-top:1px}
