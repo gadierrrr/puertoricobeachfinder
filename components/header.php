@@ -246,6 +246,9 @@ if ($bodyVariant === 'collection-light') {
     $gaEnabled = (bool) preg_match('/^G-[A-Z0-9]+$/i', $gaMeasurementId);
     $gaContentGroup = function_exists('analyticsContentGroup') ? analyticsContentGroup() : 'other';
     $gaUserId = (is_array($user ?? null) && !empty($user['id'])) ? (string) $user['id'] : '';
+    if ($gaUserId === '' && session_status() === PHP_SESSION_ACTIVE && !empty($_SESSION['user_id'])) {
+        $gaUserId = (string) $_SESSION['user_id'];
+    }
     ?>
     <?php if ($gaEnabled): ?>
     <!-- Google Analytics 4 (gtag.js) -->
