@@ -817,6 +817,11 @@ function viatorGenericNameTokens(): array
         'puerto', 'rico', 'cueva', 'cuevas', 'charco', 'charcos', 'poza',
         'pozas', 'boca', 'caleta', 'ensenada', 'laguna', 'playas', 'beaches',
         'arena', 'arenas',
+        // Common words that produced audited false positives (hotel taxis,
+        // "tour in Spanish", Condado Lagoon on other lagoons, ...).
+        'public', 'private', 'hotel', 'resort', 'villa', 'paseo', 'spanish',
+        'tropical', 'lagoon', 'mosquito', 'fishing', 'harbor', 'harbour',
+        'oceanfront',
     ];
 }
 
@@ -848,6 +853,43 @@ function viatorBeachNameSignature(array $beach): array
     return ['phrase' => $phrase, 'tokens' => $tokens];
 }
 
+/**
+ * City-level destination coordinates for the geographic-consistency guard.
+ * Destinations with implausible (non-PR) coordinates are ignored.
+ *
+ * @return array<int,array{0:float,1:float}>
+ */
+function viatorCityDestinationCoords(): array
+{
+    static $coords = null;
+    if ($coords === null) {
+        $coords = [];
+        if (viatorTableExists('viator_destinations')) {
+            $rows = query(
+                'SELECT destination_id, latitude, longitude FROM viator_destinations
+                 WHERE destination_id != ' . VIATOR_PUERTO_RICO_DESTINATION_ID . '
+                   AND latitude IS NOT NULL AND longitude IS NOT NULL'
+            );
+            foreach (is_array($rows) ? $rows : [] as $row) {
+                $lat = (float) $row['latitude'];
+                $lng = (float) $row['longitude'];
+                if ($lat >= 17.4 && $lat <= 18.8 && $lng >= -68.0 && $lng <= -65.0) {
+                    $coords[(int) $row['destination_id']] = [$lat, $lng];
+                }
+            }
+        }
+    }
+    return $coords;
+}
+
+/** Approximate distance in km between two lat/lng points (PR-scale). */
+function viatorDistanceKm(float $lat1, float $lng1, float $lat2, float $lng2): float
+{
+    $x = ($lng2 - $lng1) * cos(deg2rad(($lat1 + $lat2) / 2));
+    $y = $lat2 - $lat1;
+    return sqrt($x * $x + $y * $y) * 111.32;
+}
+
 /** @return array{score: float, reasons: array<string>} */
 function viatorScoreProductForBeach(array $beach, array $productRow, array $tagNamesById, ?array $beachTags = null): array
 {
@@ -857,14 +899,16 @@ function viatorScoreProductForBeach(array $beach, array $productRow, array $tagN
     $titleSlug = '-' . slugify((string) ($productRow['title'] ?? '')) . '-';
     $signature = viatorBeachNameSignature($beach);
 
+    $nameScore = 0.0;
+    $nameReason = '';
     if ($signature['phrase'] !== '' && str_contains($titleSlug, '-' . $signature['phrase'] . '-')) {
-        $score += 60;
-        $reasons[] = 'name_phrase:' . $signature['phrase'];
+        $nameScore = 60;
+        $nameReason = 'name_phrase:' . $signature['phrase'];
     } else {
         foreach ($signature['tokens'] as $token) {
             if (str_contains($titleSlug, '-' . $token . '-')) {
-                $score += 45;
-                $reasons[] = 'name_token:' . $token;
+                $nameScore = 45;
+                $nameReason = 'name_token:' . $token;
                 break;
             }
         }
@@ -872,13 +916,48 @@ function viatorScoreProductForBeach(array $beach, array $productRow, array $tagN
 
     $municipality = (string) ($beach['municipality'] ?? '');
     $muniSlug = slugify($municipality);
+    $muniInTitle = strlen($muniSlug) >= 4 && str_contains($titleSlug, '-' . $muniSlug . '-');
     $muniDestination = viatorMunicipalityDestinationId($municipality);
     $productDestinations = array_map('intval', (array) json_decode((string) ($productRow['destination_ids_json'] ?? '[]'), true));
+
+    // Geographic-consistency guard: a shared name is not a match when the
+    // product operates around a distant destination (Playa Icacos in Yabucoa
+    // vs Cayo Icacos charters out of Fajardo). A same-municipality title
+    // vouches for the match even when the tour departs from farther away.
+    if ($nameScore > 0 && !$muniInTitle) {
+        $beachLat = (float) ($beach['lat'] ?? 0);
+        $beachLng = (float) ($beach['lng'] ?? 0);
+        $cityCoords = viatorCityDestinationCoords();
+        $checked = false;
+        $near = false;
+        if ($beachLat !== 0.0 && $beachLng !== 0.0) {
+            foreach ($productDestinations as $destId) {
+                if (!isset($cityCoords[$destId])) {
+                    continue;
+                }
+                $checked = true;
+                if (viatorDistanceKm($beachLat, $beachLng, $cityCoords[$destId][0], $cityCoords[$destId][1]) <= 20.0) {
+                    $near = true;
+                    break;
+                }
+            }
+        }
+        if ($checked && !$near) {
+            $nameScore = 0.0;
+            $nameReason = '';
+        }
+    }
+
+    if ($nameScore > 0) {
+        $score += $nameScore;
+        $reasons[] = $nameReason;
+    }
+
     if ($muniDestination !== null && in_array($muniDestination, $productDestinations, true)) {
         $score += 25;
         $reasons[] = 'destination:' . $muniDestination;
     }
-    if (strlen($muniSlug) >= 4 && str_contains($titleSlug, '-' . $muniSlug . '-')) {
+    if ($muniInTitle) {
         $score += 20;
         $reasons[] = 'municipality_in_title:' . $muniSlug;
     }
@@ -936,12 +1015,38 @@ function viatorRebuildBeachMatches(float $threshold = 35.0, int $maxPerBeach = 2
         }
     }
 
+    // Every recommended experience must carry an official product photo.
     $candidates = query(
         'SELECT product_code, title, rating, review_count, tags_json, destination_ids_json
          FROM viator_products
-         WHERE locale = "en" AND status = "ACTIVE" AND product_url != ""'
+         WHERE locale = "en" AND status = "ACTIVE" AND product_url != ""
+           AND image_url IS NOT NULL AND image_url != ""'
     );
     $candidates = is_array($candidates) ? $candidates : [];
+
+    // Transportation products (airport/hotel/port transfers, bus services,
+    // private drivers) are logistics, not experiences.
+    $transportTagIds = [];
+    if (viatorTableExists('viator_tags')) {
+        foreach (query(
+            'SELECT tag_id FROM viator_tags
+             WHERE name_en LIKE "%Transfer%" OR name_en LIKE "%Bus Service%"
+                OR name_en LIKE "%Private Driver%" OR name_en LIKE "%Rail Service%"'
+        ) as $row) {
+            $transportTagIds[(int) $row['tag_id']] = true;
+        }
+    }
+    $candidates = array_values(array_filter($candidates, static function (array $candidate) use ($transportTagIds): bool {
+        if (preg_match('/\b(airport|transfer|transfers)\b/i', (string) $candidate['title'])) {
+            return false;
+        }
+        foreach (array_map('intval', (array) json_decode((string) ($candidate['tags_json'] ?? '[]'), true)) as $tagId) {
+            if (isset($transportTagIds[$tagId])) {
+                return false;
+            }
+        }
+        return true;
+    }));
 
     $blocked = [];
     foreach (query('SELECT beach_id, product_code FROM viator_beach_products WHERE status = "blocked"') as $row) {
@@ -950,7 +1055,7 @@ function viatorRebuildBeachMatches(float $threshold = 35.0, int $maxPerBeach = 2
 
     execute('DELETE FROM viator_beach_products WHERE status = "active"');
 
-    $beaches = query('SELECT id, name, municipality FROM beaches WHERE publish_status = "published"');
+    $beaches = query('SELECT id, name, municipality, lat, lng FROM beaches WHERE publish_status = "published"');
     $beachesMatched = 0;
     $totalMatches = 0;
 
@@ -1032,6 +1137,7 @@ function viatorAutoMatchedProductsForBeach(string $beachId, string $locale, int 
            AND m.status = "active"
            AND p.status = "ACTIVE"
            AND p.product_url != ""
+           AND p.image_url IS NOT NULL AND p.image_url != ""
          ORDER BY m.display_order ASC, m.score DESC',
         [':beach_id' => $beachId, ':locale' => viatorNormalizeLocale($locale)]
     );

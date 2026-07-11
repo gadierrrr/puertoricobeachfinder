@@ -263,6 +263,33 @@ function toursCardCopy(string $slug, string $lang): array
     return $entry ?? ['', ''];
 }
 
+/**
+ * Strip supplier promo noise ("Weekly update: ... Book now!!") from API
+ * descriptions so cards read like editorial copy. Falls back to the original
+ * text when cleaning would leave nothing meaningful.
+ */
+function toursCleanDescription(string $text): string
+{
+    $text = trim($text);
+    if ($text === '') {
+        return '';
+    }
+
+    $sentences = preg_split('/(?<=[.!?])\s+/u', $text) ?: [$text];
+    $kept = array_filter($sentences, static function (string $sentence): bool {
+        if (str_starts_with(ltrim($sentence), '*')) {
+            return false;
+        }
+        return !preg_match(
+            '/\b(weekly update|book now|spaces available|accepting reservations|limited (spots|spaces|availability)|reserve (your|now)|follow us|dm us|whatsapp|instagram|venmo|paypal|cash app|zelle|leave a tip|gratuit)\b/iu',
+            $sentence
+        );
+    });
+
+    $cleaned = trim(implode(' ', $kept));
+    return mb_strlen($cleaned) >= 40 ? $cleaned : $text;
+}
+
 /** Word-boundary truncation for API descriptions used in card copy. */
 function toursTruncate(string $text, int $maxChars = 150): string
 {
@@ -286,7 +313,7 @@ function toursAutoProductCardMeta(array $row, string $lang): array
 {
     return [
         'title' => trim((string) ($row['title'] ?? '')),
-        'description' => toursTruncate((string) ($row['description'] ?? '')),
+        'description' => toursTruncate(toursCleanDescription((string) ($row['description'] ?? ''))),
         'route' => '',
         'duration' => viatorFormatDuration(
             isset($row['duration_minutes_min']) ? (int) $row['duration_minutes_min'] : null,

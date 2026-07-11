@@ -41,6 +41,10 @@ try {
         ['TEST300P3', 'San Juan Food Walking Tour', [903], 5.0, 900],
         // Name-token match for flamenco-beach; outranks TEST100P1.
         ['TEST400P4', 'Flamenco Beach Day Trip with Lunch', [36], 4.7, 120],
+        // Transport product: excluded even with perfect signals.
+        ['TEST500P5', 'Flamenco Beach Airport Transfer from Culebra', [34162], 5.0, 400],
+        // Snorkel product whose photo is missing: excluded (image stripped below).
+        ['TEST600P6', 'Flamenco Beach Reef Snorkel Culebra', [34162], 4.9, 300],
     ];
     foreach ($seedProducts as [$code, $title, $destinations, $rating, $reviews]) {
         foreach (['en', 'es'] as $locale) {
@@ -65,6 +69,8 @@ try {
             );
         }
     }
+
+    execute('UPDATE viator_products SET image_url = "" WHERE product_code = "TEST600P6"');
 
     $flamenco = queryOne('SELECT * FROM beaches WHERE slug = "flamenco-beach"');
     $assert(is_array($flamenco), 'Expected flamenco-beach to exist');
@@ -118,6 +124,48 @@ try {
         'SELECT COUNT(*) AS n FROM viator_beach_products WHERE product_code = "TEST300P3" AND status = "active"'
     );
     $assert((int) ($foodTourMatches['n'] ?? 0) === 0, 'Destination-only food tour should stay below the match threshold');
+
+    $transferMatches = queryOne(
+        'SELECT COUNT(*) AS n FROM viator_beach_products WHERE product_code = "TEST500P5" AND status = "active"'
+    );
+    $assert((int) ($transferMatches['n'] ?? 0) === 0, 'Airport transfer products must never match beaches');
+
+    $imagelessMatches = queryOne(
+        'SELECT COUNT(*) AS n FROM viator_beach_products WHERE product_code = "TEST600P6" AND status = "active"'
+    );
+    $assert((int) ($imagelessMatches['n'] ?? 0) === 0, 'Products without an official photo must never match beaches');
+
+    // Geographic-consistency guard: a Fajardo-destination Cayo Icacos charter
+    // must not attach to Yabucoa's Playa Icacos by shared name alone, while
+    // the real Icacos beach (10km from Fajardo) keeps its name signal.
+    $icacosCharter = [
+        'product_code' => 'GEOX', 'title' => 'Icacos Island Charter Adventure',
+        'rating' => 4.9, 'review_count' => 300, 'tags_json' => '[]', 'destination_ids_json' => '[23854]',
+    ];
+    $yabucoaIcacos = queryOne('SELECT * FROM beaches WHERE slug = "playa-icacos"');
+    if (is_array($yabucoaIcacos)) {
+        $geoScore = viatorScoreProductForBeach($yabucoaIcacos, $icacosCharter, []);
+        $assert(
+            $geoScore['score'] < 35.0,
+            'Distant name collision should stay below the threshold (got ' . $geoScore['score'] . ')'
+        );
+    }
+    $geoScore = viatorScoreProductForBeach($icacos, $icacosCharter, []);
+    $assert(
+        (bool) array_filter($geoScore['reasons'], static fn(string $r): bool => str_starts_with($r, 'name_token:icacos')),
+        'Nearby beach keeps its name signal under the geographic guard'
+    );
+
+    // Supplier promo noise is stripped from card descriptions.
+    $cleaned = toursCleanDescription('Weekly update: Great conditions this week, July 6th-10th. Book now!! A guided reef snorkel with all equipment included and a certified local guide.');
+    $assert(
+        $cleaned === 'A guided reef snorkel with all equipment included and a certified local guide.',
+        'Promo sentences should be stripped from descriptions'
+    );
+    $assert(
+        toursCleanDescription('Book now!! Great deal!') === 'Book now!! Great deal!',
+        'Cleaning falls back to the original when nothing meaningful remains'
+    );
 
     // ---- Product-level URL + redirect fallback ---------------------------
     $assert(
