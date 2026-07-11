@@ -1,15 +1,15 @@
 /**
- * Beach Finder analytics wrapper (Umami-compatible).
+ * Beach Finder analytics wrapper.
  *
  * Goals:
  * - Never break UX when analytics is blocked/disabled.
- * - Provide a single bfTrack() API for the app.
+ * - Provide a single bfTrack() API for the app (GA4 primary, PostHog dual-send).
  * - Provide delegated click/form tracking for key funnel events.
  */
 
 (function () {
   "use strict";
-  var umamiUnavailableWarned = false;
+  var gtagUnavailableWarned = false;
   var clientProbeSent = false;
 
   function getMeta() {
@@ -24,14 +24,14 @@
     return getConfig().appEnv === "prod";
   }
 
-  function postClientProbe(eventName, umamiAvailable) {
+  function postClientProbe(eventName, gtagAvailable) {
     if (clientProbeSent) return;
     clientProbeSent = true;
 
     var payload = {
       event_name: String(eventName || "unknown"),
       path: window.location.pathname,
-      umami_available: !!umamiAvailable,
+      gtag_available: !!gtagAvailable,
     };
 
     try {
@@ -53,14 +53,14 @@
     } catch (e) {}
   }
 
-  function warnUmamiUnavailable(eventName) {
-    if (!isProdRuntime() || umamiUnavailableWarned) return;
-    umamiUnavailableWarned = true;
+  function warnGtagUnavailable(eventName) {
+    if (!isProdRuntime() || gtagUnavailableWarned) return;
+    gtagUnavailableWarned = true;
     postClientProbe(eventName, false);
 
     try {
       if (typeof console !== "undefined" && typeof console.warn === "function") {
-        console.warn("[analytics] bfTrack called but window.umami is unavailable", {
+        console.warn("[analytics] bfTrack called but window.gtag is unavailable", {
           event_name: eventName || "",
           path: window.location.pathname,
         });
@@ -171,7 +171,7 @@
 
   /**
    * Public tracking API.
-   * Uses Umami when present; otherwise no-op.
+   * GA4 (gtag) is primary; PostHog is dual-sent. Both legs no-op when absent.
    */
   window.bfTrack = function bfTrack(eventName, props) {
     try {
@@ -182,11 +182,8 @@
       // when GA_MEASUREMENT_ID is configured; guarded so it no-ops when absent.
       if (typeof window.gtag === "function") {
         window.gtag("event", eventName, payload);
-      }
-      if (window.umami && typeof window.umami.track === "function") {
-        window.umami.track(eventName, payload);
       } else {
-        warnUmamiUnavailable(eventName);
+        warnGtagUnavailable(eventName);
       }
       // Dual-send to PostHog for funnels, session replay, and cohort analysis
       if (window.posthog && typeof window.posthog.capture === "function") {
@@ -470,8 +467,8 @@
     if (url.searchParams.get("bf_analytics_probe") !== "1") return;
 
     window.setTimeout(function () {
-      var umamiAvailable = !!(window.umami && typeof window.umami.track === "function");
-      postClientProbe("health_analytics_probe", umamiAvailable);
+      var gtagAvailable = typeof window.gtag === "function";
+      postClientProbe("health_analytics_probe", gtagAvailable);
       window.bfTrack("health_analytics_probe", {
         source: "synthetic_probe",
         path: window.location.pathname,
