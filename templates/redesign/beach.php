@@ -63,26 +63,22 @@ $uvLabel = function ($uv) use ($isEs) {
     return [$isEs ? 'Muy alto' : 'Very high', 'r'];
 };
 
-// at-a-glance tiles derived from fields (localized; data-conditional)
+// at-a-glance card derived from fields (localized; data-conditional).
+// One card, four zones; every fact renders exactly once: status facts →
+// best-for/amenity chips → getting-there/best-time prose rows.
 $swimTile = in_array($surf, ['calm', 'small'], true)
     ? [$isEs ? 'Fácil — agua calmada' : 'Easy — calm water', 'g']
     : ($surf === 'large'
         ? [$isEs ? 'Avanzado — oleaje fuerte' : 'Advanced — strong surf', 'r']
         : [$isEs ? 'Moderado — verifica condiciones' : 'Moderate — check conditions', 'a']);
 $snorkelGood = (bool) array_filter($tags, fn($t) => str_contains(strtolower($t), 'snorkel') || str_contains(strtolower($t), 'reef'));
-$glance = [
+$glanceFacts = [
     ['🏊', $isEs ? 'Nadar' : 'Swimming', $swimTile[0], $swimTile[1]],
     ['🤿', 'Snorkel', $snorkelGood ? ($isEs ? 'Bueno — arrecife cerca' : 'Great — reef access') : ($isEs ? 'Limitado' : 'Limited'), $snorkelGood ? 'g' : 'a'],
     ['👨‍👩‍👧‍👦', $isEs ? 'Familia' : 'Family', !empty($beach['safe_for_children']) ? ($isEs ? 'Sí — segura para niños' : 'Yes — safe for kids') : ($isEs ? 'Verifica condiciones' : 'Check conditions'), !empty($beach['safe_for_children']) ? 'g' : 'a'],
 ];
 if ($access !== '') {
-    $glance[] = ['🧭', $isEs ? 'Acceso' : 'Access', ucfirst((string) $beach['access_label']), $isBoat ? 'r' : (str_contains($access, 'hike') || str_contains($access, 'walk') ? 'a' : 'g')];
-}
-if (!empty($beach['best_time'])) {
-    $glance[] = ['📅', $isEs ? 'Mejor época' : 'Best time', $beach['best_time'], ''];
-}
-if (!empty($chipTags)) {
-    $glance[] = ['🌾', $isEs ? 'Ambiente' : 'Vibe', __('tags.' . $chipTags[0]), ''];
+    $glanceFacts[] = ['🧭', $isEs ? 'Acceso' : 'Access', ucfirst((string) $beach['access_label']), $isBoat ? 'r' : (str_contains($access, 'hike') || str_contains($access, 'walk') ? 'a' : 'g')];
 }
 
 $heroAccess = trim((string) ($beach['access_label'] ?? ''));
@@ -155,19 +151,24 @@ $photoLoginUrl = routeUrl('login', $lang) . '?redirect=' . urlencode($beachDetai
 $reviewLoginUrl = routeUrl('login', $lang) . '?redirect=' . urlencode($beachDetailUrl . '#reviews');
 $photoActionArgs = '["' . h($beach['id']) . '","' . h(addslashes($beach['name'])) . '"]';
 $reviewActionArgs = $photoActionArgs;
-$bestForItems = array_values(array_filter(array_unique(array_merge(
-    array_map(fn($t) => getTagLabel($t), array_slice($chipTags, 0, 3)),
-    [$snorkelGood ? 'Snorkeling' : null, in_array($surf, ['calm', 'small'], true) ? ($isEs ? 'Agua calmada' : 'Calm water') : null]
-))));
-$bestForItems = array_slice($bestForItems, 0, 4);
-$knowBeforeItems = array_values(array_filter([
-    $heroAccess !== '' ? ucfirst($heroAccess) : ($isEs ? 'Verifica acceso antes de ir' : 'Check access before you go'),
-    $heroParking !== '' ? ($isEs ? 'Parking: ' . $heroParking : 'Parking: ' . $heroParking) : ($isEs ? 'Verifica parking antes de ir' : 'Check parking before you go'),
-    $isBoat ? ($isEs ? 'Requiere bote o kayak' : 'Boat or kayak access') : null,
-]));
-$facilityItems = !empty($amenities)
-    ? array_slice(array_map(fn($a) => getAmenityLabel($a), $amenities), 0, 5)
-    : [$isEs ? 'Pocos servicios listados' : 'Limited listed facilities'];
+// best-for chips deduped against the status facts above — calm/snorkel/
+// family/swimming signals already render as tone-colored tiles
+$factCoveredTags = ['calm-waters', 'snorkeling', 'family-friendly', 'swimming'];
+$bestForChips = array_slice(array_map(fn($t) => getTagLabel($t), array_values(array_diff($tags, $factCoveredTags))), 0, 4);
+// getting-there row merges the access label with the parking prose; the lead
+// is dropped when the prose already states the access mode (e.g. "only
+// accessible by boat")
+$accessLead = $heroAccess !== '' ? ucfirst($heroAccess) : '';
+if ($accessLead !== '' && $heroParking !== '') {
+    $accessWord = strtolower(strtok($heroAccess, ' ') ?: '');
+    if ($accessWord !== '' && str_contains(strtolower($heroParking), $accessWord)) {
+        $accessLead = '';
+    }
+}
+$gettingBody = trim(($accessLead !== '' ? $accessLead . '. ' : '') . $heroParking);
+if ($gettingBody === '') {
+    $gettingBody = $isEs ? 'Verifica acceso y parking antes de ir.' : 'Check access and parking before you go.';
+}
 $facilityScore = null;
 foreach (($score['bars'] ?? []) as $scoreBar) {
     if (($scoreBar[0] ?? '') === 'Facilities') {
@@ -314,34 +315,34 @@ $subnav = array_values(array_filter([
       <span class="eyebrow"><?= h($isEs ? 'Vistazo' : 'At a glance') ?></span>
       <?php if ($aiSummary !== ''): ?><p class="lead" style="margin:8px 0 18px"><?= h($aiSummary) ?></p>
       <?php elseif (!empty($aboutParas)): ?><p class="lead" style="margin:8px 0 18px"><?= h(mb_strlen($aboutParas[0]) > 220 ? mb_substr($aboutParas[0], 0, 220) . '…' : $aboutParas[0]) ?></p><?php endif; ?>
-      <div class="decision-summary" aria-label="<?= h($isEs ? 'Resumen rápido' : 'Quick snapshot') ?>">
-        <div>
-          <h3><?= h($isEs ? 'Ideal para' : 'Best for') ?></h3>
-          <ul><?php foreach ($bestForItems as $item): ?><li class="<?= mb_strlen($item) > 42 ? 'note' : '' ?>"><?= h($item) ?></li><?php endforeach; ?></ul>
+      <div class="glance-card" aria-label="<?= h($isEs ? 'Resumen rápido' : 'Quick snapshot') ?>">
+        <div class="glance-facts">
+          <?php foreach ($glanceFacts as $g): ?>
+          <div class="gfact"><span class="ic"><?= $g[0] ?></span><div><div class="k"><?= h($g[1]) ?></div><div class="v <?= $g[3] ?>"><?= h($g[2]) ?></div></div></div>
+          <?php endforeach; ?>
         </div>
-        <div>
-          <h3><?= h($isEs ? 'Antes de ir' : 'Know before') ?></h3>
-          <ul><?php foreach ($knowBeforeItems as $item): ?><li class="<?= mb_strlen($item) > 42 ? 'note' : '' ?>"><?= h($item) ?></li><?php endforeach; ?></ul>
+        <div class="glance-chips">
+          <?php if (!empty($bestForChips)): ?>
+          <div class="chiprow">
+            <h3><?= h($isEs ? 'Ideal para' : 'Best for') ?></h3>
+            <ul><?php foreach ($bestForChips as $chip): ?><li><?= h($chip) ?></li><?php endforeach; ?></ul>
+          </div>
+          <?php endif; ?>
+          <div class="chiprow">
+            <h3><?= h($isEs ? 'Servicios' : 'Amenities') ?></h3>
+            <?php if (!empty($amenities)): ?>
+            <ul><?php foreach ($amenities as $amenity): ?><li>✓ <?= h(getAmenityLabel($amenity)) ?></li><?php endforeach; ?></ul>
+            <?php else: ?>
+            <p class="none"><?= h($isEs ? 'Pocos servicios listados — lleva lo necesario' : 'Limited listed — bring what you need') ?></p>
+            <?php endif; ?>
+          </div>
         </div>
-        <div>
-          <h3><?= h($isEs ? 'Servicios' : 'Facilities') ?></h3>
-          <ul><?php foreach ($facilityItems as $item): ?><li class="<?= mb_strlen($item) > 42 ? 'note' : '' ?>"><?= h($item) ?></li><?php endforeach; ?></ul>
+        <div class="glance-plan">
+          <div class="gplan"><span class="ic"><?= $isBoat ? '🛥️' : '🧭' ?></span><div><h3><?= h($isEs ? 'Cómo llegar' : 'Getting there') ?></h3><p><?= h($gettingBody) ?></p></div></div>
+          <?php if (!empty($beach['best_time'])): ?>
+          <div class="gplan"><span class="ic">📅</span><div><h3><?= h($isEs ? 'Mejor época' : 'Best time') ?></h3><p><?= h($beach['best_time']) ?></p></div></div>
+          <?php endif; ?>
         </div>
-      </div>
-      <?php
-      $shortGlance = array_values(array_filter($glance, fn($g) => mb_strlen((string) $g[2]) <= 90));
-      $longGlance = array_values(array_filter($glance, fn($g) => mb_strlen((string) $g[2]) > 90));
-      ?>
-      <div class="glance">
-        <?php foreach ($shortGlance as $g): ?>
-        <div class="gtile"><span class="ic"><?= $g[0] ?></span><div><div class="k"><?= h($g[1]) ?></div><div class="v <?= $g[3] ?>"><?= h($g[2]) ?></div></div></div>
-        <?php endforeach; ?>
-        <?php if (!empty($amenities)): ?>
-        <div class="gtile amenity-tile"><span class="ic">✓</span><div><div class="k"><?= h($isEs ? 'Servicios' : 'Amenities') ?></div><div class="amen"><?php foreach ($amenities as $amenity): ?><span>✓ <?= h(getAmenityLabel($amenity)) ?></span><?php endforeach; ?></div></div></div>
-        <?php endif; ?>
-        <?php foreach ($longGlance as $g): ?>
-        <div class="gtile long"><span class="ic"><?= $g[0] ?></span><div><div class="k"><?= h($g[1]) ?></div><div class="v <?= $g[3] ?>"><?= h($g[2]) ?></div></div></div>
-        <?php endforeach; ?>
       </div>
     </section>
 

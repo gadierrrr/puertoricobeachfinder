@@ -332,7 +332,7 @@ if ($bodyVariant === 'collection-light') {
     $rdBodyStyle = '--disp:' . $rdFont['stack'] . ';--rd-heading-weight:' . (int) $rdFont['weight'];
     ?>
     <link href="<?= h(redesignFontsUrl($rdDesign['font'], $rdEditorMode)) ?>" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/redesign.css?v=63">
+    <link rel="stylesheet" href="/assets/css/redesign.css?v=64">
     <?php endif; ?>
 
     <!-- Deferred scripts (non-blocking) -->
