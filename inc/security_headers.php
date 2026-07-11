@@ -69,6 +69,10 @@ $imgSources = ["'self'", 'data:', 'blob:', 'https://media.tacdn.com', 'https://*
 $fontSources = ["'self'", 'data:', 'fonts.gstatic.com'];
 $connectSources = ["'self'", 't.puertoricobeachfinder.com', 'https://basemaps.cartocdn.com', 'https://*.basemaps.cartocdn.com', 'unpkg.com', 'cdn.jsdelivr.net'];
 $workerSources = ["'self'", 'blob:'];
+// 'self' for the admin homepage-design editor preview iframe; Google hosts for
+// the beach-page satellite embed (maps.google.com redirects to www.google.com,
+// and CSP re-checks the post-redirect URL).
+$frameSources = ["'self'", 'https://maps.google.com', 'https://www.google.com'];
 
 // Google Analytics 4 (gtag.js) — only whitelist Google's hosts when a valid
 // GA4 Measurement ID (G-XXXXXXXXXX) is configured.
@@ -95,6 +99,7 @@ $imgSources = array_values(array_unique($imgSources));
 $fontSources = array_values(array_unique($fontSources));
 $connectSources = array_values(array_unique($connectSources));
 $workerSources = array_values(array_unique($workerSources));
+$frameSources = array_values(array_unique($frameSources));
 
 $csp = "default-src 'self'; "
     . 'script-src ' . implode(' ', $scriptSources) . '; '
@@ -103,6 +108,7 @@ $csp = "default-src 'self'; "
     . 'font-src ' . implode(' ', $fontSources) . '; '
     . 'connect-src ' . implode(' ', $connectSources) . '; '
     . 'worker-src ' . implode(' ', $workerSources) . '; '
+    . 'frame-src ' . implode(' ', $frameSources) . '; '
     . 'upgrade-insecure-requests;';
 
 header('Content-Security-Policy: ' . $csp);
