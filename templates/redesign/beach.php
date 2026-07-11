@@ -214,12 +214,12 @@ if (isAuthenticated() && !empty($_SESSION['user_id'])) {
 $subnav = array_values(array_filter([
     ['overview', $isEs ? 'Vistazo' : 'Overview', true],
     ['scores', $isEs ? 'Puntuación' : 'Scores', true],
+    ['tours', 'Tours', true],
     ['about', $isEs ? 'Sobre' : 'About', !empty($aboutParas) || !empty($beach['features'])],
     ['tips', $isEs ? 'Consejos' : 'Tips', !empty($tipList)],
     ['getting', $isEs ? 'Cómo llegar' : 'Getting there', true],
     ['photos', $isEs ? 'Fotos' : 'Photos', true],
     ['reviews', $isEs ? 'Reseñas' : 'Reviews', true],
-    ['tours', 'Tours', true],
     ['nearby', $isEs ? 'Cercanas' : 'Nearby', !empty($nearby)],
     ['faq', $isEs ? 'Preguntas' : 'FAQ', !empty($faqs)],
 ], fn($i) => $i[2]));
@@ -353,6 +353,8 @@ $subnav = array_values(array_filter([
       <?php $renderConditionsCard('mobile-card'); ?>
       <?php $renderLocationCard('mobile-card'); ?>
     </section>
+
+    <?= renderToursSection($beach, $lang, 'redesign') ?>
 
     <?php if (!empty($aboutParas) || !empty($beach['features'])): ?>
     <section id="about" class="block prose">
@@ -500,8 +502,6 @@ $subnav = array_values(array_filter([
         <?php endif; ?>
       </div>
     </section>
-
-    <?= renderToursSection($beach, $lang, 'redesign') ?>
 
     <?= renderLocalListingsSection($beach, $lang, 'redesign') ?>
 
