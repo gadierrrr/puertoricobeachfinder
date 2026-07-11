@@ -787,7 +787,7 @@ function initUnlockBlock() {
             // afterward (the old '/quiz?src=quiz' target restarted the SPA and lost the
             // token, so the post-login save silently never happened). /quiz-results?save=1
             // auto-saves on landing once the user is authenticated.
-            const saveReturn = '/quiz-results?token=' + encodeURIComponent(token) + '&save=1';
+            const saveReturn = '/quiz-results?token=' + encodeURIComponent(token) + '&save=1&src=quiz';
             if (typeof showSignupPrompt === 'function') {
                 showSignupPrompt('quiz', saveReturn);
             } else {

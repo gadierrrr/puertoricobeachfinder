@@ -132,7 +132,7 @@ $qrCsrf = $qrIsAuthed ? csrfToken() : '';
 $qrAutoSave = ($qrIsAuthed && ($_GET['save'] ?? '') === '1');
 $qrLang = getCurrentLanguage();
 $qrIsEs = ($qrLang === 'es');
-$qrLoginRedirect = '/quiz-results?token=' . rawurlencode($token) . '&save=1';
+$qrLoginRedirect = '/quiz-results?token=' . rawurlencode($token) . '&save=1&src=quiz';
 include APP_ROOT . '/components/header.php';
 
 if ($redesignLayout) {
