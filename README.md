@@ -122,7 +122,7 @@ curl -sS "https://www.puertoricobeachfinder.com/api/health/analytics.php?page_pr
 Guardrail check for rendered HTML:
 
 ```bash
-php scripts/check-analytics-umami.php --url=https://www.puertoricobeachfinder.com
+php scripts/check-analytics-ga.php --url=https://www.puertoricobeachfinder.com
 ```
 
 Synthetic browser probe (headless Chrome/Chromium required):

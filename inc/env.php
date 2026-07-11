@@ -33,6 +33,7 @@ const ENV_SCHEMA = [
     'APP_ENV' => ['required' => true, 'type' => 'enum', 'allowed' => ['dev', 'staging', 'prod']],
     'APP_DEBUG' => ['required' => true, 'type' => 'bool'],
     'HOMEPAGE_DESIGN' => ['required' => false, 'type' => 'enum', 'allowed' => ['classic', 'redesign']],
+    // Deprecated 2026-07 (Umami removed); tolerated so stale .env files still validate.
     'UMAMI_ENABLED' => ['required' => false, 'type' => 'bool'],
     'UMAMI_SCRIPT_URL' => ['required' => false, 'type' => 'url'],
     'UMAMI_WEBSITE_ID' => ['required' => false, 'type' => 'string'],
@@ -251,12 +252,6 @@ function validateEnvironment(): void {
     $googleClientSecret = env('GOOGLE_CLIENT_SECRET');
     if (($googleClientId === null) !== ($googleClientSecret === null)) {
         $errors[] = 'GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET must both be set to enable Google OAuth';
-    }
-
-    $umamiEnabled = envBool('UMAMI_ENABLED', false);
-    $umamiWebsiteId = trim((string) env('UMAMI_WEBSITE_ID', ''));
-    if ($umamiEnabled && $umamiWebsiteId === '') {
-        $errors[] = 'UMAMI_WEBSITE_ID must be set when UMAMI_ENABLED=1';
     }
 
     if (!empty($errors)) {

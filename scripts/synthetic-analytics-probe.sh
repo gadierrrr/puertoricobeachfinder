@@ -50,8 +50,8 @@ if (($data["ok"] ?? false) !== true) {
 }
 
 $page = $data["checks"]["page_probe"] ?? [];
-if (($page["umami_tag_present"] ?? false) !== true) {
-    $errors[] = "Umami script tag missing in page probe";
+if (($page["ga_tag_present"] ?? false) !== true) {
+    $errors[] = "GA4 gtag.js script tag missing in page probe";
 }
 if (($page["analytics_wrapper_present"] ?? false) !== true) {
     $errors[] = "analytics.js missing in page probe";
@@ -72,8 +72,8 @@ if (($probe["available"] ?? false) !== true) {
         }
     }
 
-    if (($probe["umami_available"] ?? false) !== true) {
-        $errors[] = "Client probe reported umami_available=false";
+    if (($probe["gtag_available"] ?? false) !== true) {
+        $errors[] = "Client probe reported gtag_available=false";
     }
 }
 

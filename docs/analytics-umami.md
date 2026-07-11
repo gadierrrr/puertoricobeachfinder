@@ -1,9 +1,12 @@
 # Analytics Integration (GA4 + client wrapper)
 
-> **Update (2026-07):** Google Analytics 4 (gtag) is now the primary analytics sink. The
-> `window.bfTrack()` wrapper routes every custom event to GA4 via `gtag('event', ...)`. The
-> legacy Umami path documented below is retained but disabled in production (`UMAMI_ENABLED=0`);
-> PostHog is also dual-sent when present. Enable GA4 by setting `GA_MEASUREMENT_ID` (see below).
+> **Update (2026-07):** Umami support has been removed. Google Analytics 4 (gtag) is the
+> primary analytics sink and `window.bfTrack()` routes every custom event to GA4 via
+> `gtag('event', ...)`, with PostHog dual-sent when present. The health probe endpoint
+> (`/api/health/analytics.php`), `scripts/check-analytics-ga.php`, and
+> `scripts/synthetic-analytics-probe.sh` now verify the GA4 tag instead of Umami.
+> Enable GA4 by setting `GA_MEASUREMENT_ID`. The `UMAMI_*` env vars are ignored and can be
+> deleted from production `.env`. Everything below is retained for historical reference only.
 
 This repo ships a thin client wrapper (`public/assets/js/analytics.js`) that is safe when
 analytics is disabled or blocked, and forwards events to whichever sinks are loaded.

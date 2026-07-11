@@ -1,6 +1,6 @@
 <?php
 /**
- * Analytics (Umami) health probe.
+ * Analytics (Google Analytics 4) health probe.
  *
  * GET  /api/health/analytics
  * GET  /api/health/analytics?page_probe=1&network_probe=1
@@ -64,13 +64,13 @@ function probeUrl(string $url, int $timeoutSeconds = 5, bool $includeBody = fals
 }
 
 /**
- * @return array{umami_tag_present:bool,umami_script_src:string,umami_website_id:string,analytics_wrapper_present:bool}
+ * @return array{ga_tag_present:bool,ga_script_src:string,ga_measurement_id:string,analytics_wrapper_present:bool}
  */
 function extractAnalyticsTags(string $html): array {
     $result = [
-        'umami_tag_present' => false,
-        'umami_script_src' => '',
-        'umami_website_id' => '',
+        'ga_tag_present' => false,
+        'ga_script_src' => '',
+        'ga_measurement_id' => '',
         'analytics_wrapper_present' => false,
     ];
 
@@ -91,18 +91,20 @@ function extractAnalyticsTags(string $html): array {
     $scripts = $dom->getElementsByTagName('script');
     foreach ($scripts as $script) {
         $src = trim((string) $script->getAttribute('src'));
-        if ($src !== '' && str_contains($src, '/assets/js/analytics.js')) {
-            $result['analytics_wrapper_present'] = true;
-        }
-
-        $websiteId = trim((string) $script->getAttribute('data-website-id'));
-        if ($websiteId === '') {
+        if ($src === '') {
             continue;
         }
 
-        $result['umami_tag_present'] = true;
-        $result['umami_website_id'] = $websiteId;
-        $result['umami_script_src'] = $src;
+        if (str_contains($src, '/assets/js/analytics.js')) {
+            $result['analytics_wrapper_present'] = true;
+        }
+
+        if (str_contains($src, 'googletagmanager.com/gtag/js')
+            && preg_match('/[?&]id=(G-[A-Z0-9]+)/i', $src, $matches) === 1) {
+            $result['ga_tag_present'] = true;
+            $result['ga_measurement_id'] = $matches[1];
+            $result['ga_script_src'] = $src;
+        }
     }
 
     return $result;
@@ -127,13 +129,13 @@ function handleClientProbe(string $probePath): void {
 
     $pathRaw = trim((string) ($payload['path'] ?? ''));
     $path = substr($pathRaw, 0, 200);
-    $umamiAvailable = (bool) ($payload['umami_available'] ?? false);
+    $gtagAvailable = (bool) ($payload['gtag_available'] ?? false);
 
     $record = [
         'last_seen_at' => gmdate('c'),
         'event_name' => $eventName !== '' ? $eventName : 'unknown',
         'path' => $path,
-        'umami_available' => $umamiAvailable,
+        'gtag_available' => $gtagAvailable,
         'app_env' => appEnv(),
         'remote_addr' => substr((string) ($_SERVER['REMOTE_ADDR'] ?? ''), 0, 64),
         'user_agent' => substr((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 200),
@@ -163,12 +165,11 @@ if ($requestMethod === 'POST' && truthyQueryParam('client_probe', false)) {
 }
 
 $appEnv = appEnv();
-$umamiEnabled = envBool('UMAMI_ENABLED', false);
-$umamiWebsiteId = trim((string) env('UMAMI_WEBSITE_ID', ''));
-$umamiScriptUrl = trim((string) env('UMAMI_SCRIPT_URL', 'https://cloud.umami.is/script.js'));
-$umamiDomainsRaw = trim((string) env('UMAMI_DOMAINS', ''));
-$umamiDomains = array_values(array_filter(array_map('trim', explode(',', $umamiDomainsRaw)), static fn($d) => $d !== ''));
-$umamiScriptHost = (string) (parse_url($umamiScriptUrl, PHP_URL_HOST) ?? '');
+$gaMeasurementId = trim((string) env('GA_MEASUREMENT_ID', ''));
+$gaEnabled = (bool) preg_match('/^G-[A-Z0-9]+$/i', $gaMeasurementId);
+$gaScriptUrl = $gaEnabled
+    ? 'https://www.googletagmanager.com/gtag/js?id=' . $gaMeasurementId
+    : 'https://www.googletagmanager.com/gtag/js';
 
 $healthy = true;
 $errors = [];
@@ -176,11 +177,9 @@ $errors = [];
 $checks = [
     'config' => [
         'app_env' => $appEnv,
-        'enabled' => $umamiEnabled,
-        'website_id_configured' => $umamiWebsiteId !== '',
-        'script_url' => $umamiScriptUrl,
-        'script_host' => $umamiScriptHost,
-        'domains' => $umamiDomains,
+        'enabled' => $gaEnabled,
+        'measurement_id_configured' => $gaMeasurementId !== '',
+        'measurement_id' => $gaMeasurementId,
     ],
     'page_probe' => [
         'ran' => false,
@@ -188,9 +187,9 @@ $checks = [
         'status_code' => 0,
         'latency_ms' => 0,
         'analytics_wrapper_present' => false,
-        'umami_tag_present' => false,
-        'umami_website_id_present' => false,
-        'umami_script_src' => '',
+        'ga_tag_present' => false,
+        'ga_measurement_id' => '',
+        'ga_script_src' => '',
         'error' => '',
     ],
     'network_probe' => [
@@ -205,23 +204,13 @@ $checks = [
         'last_seen_at' => null,
         'event_name' => null,
         'path' => null,
-        'umami_available' => null,
+        'gtag_available' => null,
     ],
 ];
 
-if ($appEnv === 'prod' && !$umamiEnabled) {
+if ($appEnv === 'prod' && !$gaEnabled) {
     $healthy = false;
-    $errors[] = 'UMAMI_ENABLED is off in production';
-}
-
-if ($umamiEnabled && $umamiWebsiteId === '') {
-    $healthy = false;
-    $errors[] = 'UMAMI_WEBSITE_ID is missing while Umami is enabled';
-}
-
-if ($umamiEnabled && $umamiScriptHost === '') {
-    $healthy = false;
-    $errors[] = 'UMAMI_SCRIPT_URL is invalid';
+    $errors[] = 'GA_MEASUREMENT_ID is missing or invalid in production';
 }
 
 $runPageProbe = truthyQueryParam('page_probe', false);
@@ -250,33 +239,33 @@ if ($runPageProbe) {
 
         $tags = extractAnalyticsTags($probe['body']);
         $checks['page_probe']['analytics_wrapper_present'] = $tags['analytics_wrapper_present'];
-        $checks['page_probe']['umami_tag_present'] = $tags['umami_tag_present'];
-        $checks['page_probe']['umami_website_id_present'] = $tags['umami_website_id'] !== '';
-        $checks['page_probe']['umami_script_src'] = $tags['umami_script_src'];
+        $checks['page_probe']['ga_tag_present'] = $tags['ga_tag_present'];
+        $checks['page_probe']['ga_measurement_id'] = $tags['ga_measurement_id'];
+        $checks['page_probe']['ga_script_src'] = $tags['ga_script_src'];
 
-        if ($umamiEnabled && !$tags['umami_tag_present']) {
+        if ($gaEnabled && !$tags['ga_tag_present']) {
             $healthy = false;
-            $errors[] = 'Umami script tag missing from probed page';
+            $errors[] = 'GA4 gtag.js script tag missing from probed page';
         }
 
-        if ($umamiEnabled && $tags['umami_website_id'] !== '' && $tags['umami_website_id'] !== $umamiWebsiteId) {
+        if ($gaEnabled && $tags['ga_measurement_id'] !== '' && strcasecmp($tags['ga_measurement_id'], $gaMeasurementId) !== 0) {
             $healthy = false;
-            $errors[] = 'Umami website ID mismatch between config and rendered page';
+            $errors[] = 'GA4 measurement ID mismatch between config and rendered page';
         }
     }
 }
 
 if ($runNetworkProbe) {
     $checks['network_probe']['ran'] = true;
-    $probe = probeUrl($umamiScriptUrl, 8, false);
+    $probe = probeUrl($gaScriptUrl, 8, false);
     $checks['network_probe']['script_url_reachable'] = $probe['ok'];
     $checks['network_probe']['status_code'] = $probe['status_code'];
     $checks['network_probe']['latency_ms'] = $probe['latency_ms'];
     $checks['network_probe']['error'] = $probe['error'];
 
-    if ($umamiEnabled && !$probe['ok']) {
+    if ($gaEnabled && !$probe['ok']) {
         $healthy = false;
-        $errors[] = 'Umami script URL is not reachable';
+        $errors[] = 'GA4 gtag.js script URL is not reachable';
     }
 }
 
@@ -287,7 +276,7 @@ if (is_file($clientProbePath)) {
         $checks['client_probe']['last_seen_at'] = $clientProbeData['last_seen_at'] ?? null;
         $checks['client_probe']['event_name'] = $clientProbeData['event_name'] ?? null;
         $checks['client_probe']['path'] = $clientProbeData['path'] ?? null;
-        $checks['client_probe']['umami_available'] = $clientProbeData['umami_available'] ?? null;
+        $checks['client_probe']['gtag_available'] = $clientProbeData['gtag_available'] ?? null;
     }
 }
 

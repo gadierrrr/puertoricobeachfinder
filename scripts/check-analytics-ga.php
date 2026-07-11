@@ -3,16 +3,16 @@
 declare(strict_types=1);
 
 /**
- * Guardrail check for Umami script injection in rendered HTML.
+ * Guardrail check for GA4 (gtag.js) script injection in rendered HTML.
  *
  * Usage examples:
- *   php scripts/check-analytics-umami.php --url=http://127.0.0.1:8082/
- *   php scripts/check-analytics-umami.php --urls=http://127.0.0.1:8082/,http://127.0.0.1:8082/best-beaches
- *   php scripts/check-analytics-umami.php --url=https://www.example.com --expect-website-id=abc123 --expect-script-host=cloud.umami.is
+ *   php scripts/check-analytics-ga.php --url=http://127.0.0.1:8082/
+ *   php scripts/check-analytics-ga.php --urls=http://127.0.0.1:8082/,http://127.0.0.1:8082/best-beaches
+ *   php scripts/check-analytics-ga.php --url=https://www.example.com --expect-measurement-id=G-XXXXXXXXXX
  */
 
 function usage(): void {
-    fwrite(STDOUT, "Usage: php scripts/check-analytics-umami.php [--url=<url>] [--urls=<comma-separated-urls>] [--expect-website-id=<id>] [--expect-script-host=<host>] [--timeout=<seconds>] [--require-analytics-wrapper] [--json]\n");
+    fwrite(STDOUT, "Usage: php scripts/check-analytics-ga.php [--url=<url>] [--urls=<comma-separated-urls>] [--expect-measurement-id=<G-...>] [--timeout=<seconds>] [--require-analytics-wrapper] [--json]\n");
 }
 
 function parseStatusCode(array $headers): int {
@@ -52,19 +52,17 @@ function fetchHtml(string $url, int $timeout): array {
 /**
  * @return array{
  *   analytics_wrapper_present:bool,
- *   umami_tag_present:bool,
- *   umami_script_src:string,
- *   umami_script_host:string,
- *   umami_website_id:string
+ *   ga_tag_present:bool,
+ *   ga_script_src:string,
+ *   ga_measurement_id:string
  * }
  */
 function inspectHtml(string $html): array {
     $result = [
         'analytics_wrapper_present' => false,
-        'umami_tag_present' => false,
-        'umami_script_src' => '',
-        'umami_script_host' => '',
-        'umami_website_id' => '',
+        'ga_tag_present' => false,
+        'ga_script_src' => '',
+        'ga_measurement_id' => '',
     ];
 
     if ($html === '') {
@@ -83,19 +81,20 @@ function inspectHtml(string $html): array {
 
     foreach ($dom->getElementsByTagName('script') as $script) {
         $src = trim((string) $script->getAttribute('src'));
-        if ($src !== '' && str_contains($src, '/assets/js/analytics.js')) {
-            $result['analytics_wrapper_present'] = true;
-        }
-
-        $websiteId = trim((string) $script->getAttribute('data-website-id'));
-        if ($websiteId === '') {
+        if ($src === '') {
             continue;
         }
 
-        $result['umami_tag_present'] = true;
-        $result['umami_script_src'] = $src;
-        $result['umami_website_id'] = $websiteId;
-        $result['umami_script_host'] = (string) (parse_url($src, PHP_URL_HOST) ?? '');
+        if (str_contains($src, '/assets/js/analytics.js')) {
+            $result['analytics_wrapper_present'] = true;
+        }
+
+        if (str_contains($src, 'googletagmanager.com/gtag/js')
+            && preg_match('/[?&]id=(G-[A-Z0-9]+)/i', $src, $matches) === 1) {
+            $result['ga_tag_present'] = true;
+            $result['ga_script_src'] = $src;
+            $result['ga_measurement_id'] = $matches[1];
+        }
     }
 
     return $result;
@@ -137,8 +136,7 @@ function normalizeUrlsFromOptions(array $options): array {
 $options = getopt('', [
     'url:',
     'urls:',
-    'expect-website-id::',
-    'expect-script-host::',
+    'expect-measurement-id::',
     'timeout::',
     'require-analytics-wrapper',
     'json',
@@ -155,8 +153,7 @@ if ($timeout < 1) {
     $timeout = 10;
 }
 
-$expectedWebsiteId = isset($options['expect-website-id']) ? trim((string) $options['expect-website-id']) : '';
-$expectedScriptHost = isset($options['expect-script-host']) ? trim((string) $options['expect-script-host']) : '';
+$expectedMeasurementId = isset($options['expect-measurement-id']) ? trim((string) $options['expect-measurement-id']) : '';
 $emitJson = isset($options['json']);
 $requireAnalyticsWrapper = isset($options['require-analytics-wrapper']);
 $urls = normalizeUrlsFromOptions($options);
@@ -171,10 +168,9 @@ foreach ($urls as $url) {
         'errors' => [],
         'status_code' => 0,
         'analytics_wrapper_present' => false,
-        'umami_tag_present' => false,
-        'umami_script_src' => '',
-        'umami_script_host' => '',
-        'umami_website_id' => '',
+        'ga_tag_present' => false,
+        'ga_script_src' => '',
+        'ga_measurement_id' => '',
     ];
 
     $fetch = fetchHtml($url, $timeout);
@@ -197,24 +193,14 @@ foreach ($urls as $url) {
         $entry['errors'][] = 'Missing /assets/js/analytics.js script';
     }
 
-    if (!$inspection['umami_tag_present']) {
+    if (!$inspection['ga_tag_present']) {
         $entry['ok'] = false;
-        $entry['errors'][] = 'Missing Umami script tag (data-website-id)';
+        $entry['errors'][] = 'Missing GA4 gtag.js script tag';
     }
 
-    if ($inspection['umami_website_id'] === '') {
+    if ($expectedMeasurementId !== '' && strcasecmp($inspection['ga_measurement_id'], $expectedMeasurementId) !== 0) {
         $entry['ok'] = false;
-        $entry['errors'][] = 'Empty data-website-id on Umami script';
-    }
-
-    if ($expectedWebsiteId !== '' && $inspection['umami_website_id'] !== $expectedWebsiteId) {
-        $entry['ok'] = false;
-        $entry['errors'][] = 'Umami website ID mismatch';
-    }
-
-    if ($expectedScriptHost !== '' && $inspection['umami_script_host'] !== $expectedScriptHost) {
-        $entry['ok'] = false;
-        $entry['errors'][] = 'Umami script host mismatch';
+        $entry['errors'][] = 'GA4 measurement ID mismatch';
     }
 
     if ($entry['ok'] !== true) {
@@ -235,10 +221,9 @@ if ($emitJson) {
 foreach ($results as $result) {
     $status = $result['ok'] ? 'PASS' : 'FAIL';
     fwrite(STDOUT, sprintf("[%s] %s (status=%d)\n", $status, $result['url'], $result['status_code']));
-    fwrite(STDOUT, sprintf("  analytics.js: %s\n", $result['analytics_wrapper_present'] ? 'present' : 'missing'));
-    fwrite(STDOUT, sprintf("  umami tag:   %s\n", $result['umami_tag_present'] ? 'present' : 'missing'));
-    fwrite(STDOUT, sprintf("  website id:  %s\n", $result['umami_website_id'] !== '' ? $result['umami_website_id'] : '<empty>'));
-    fwrite(STDOUT, sprintf("  script host: %s\n", $result['umami_script_host'] !== '' ? $result['umami_script_host'] : '<empty>'));
+    fwrite(STDOUT, sprintf("  analytics.js:   %s\n", $result['analytics_wrapper_present'] ? 'present' : 'missing'));
+    fwrite(STDOUT, sprintf("  gtag.js tag:    %s\n", $result['ga_tag_present'] ? 'present' : 'missing'));
+    fwrite(STDOUT, sprintf("  measurement id: %s\n", $result['ga_measurement_id'] !== '' ? $result['ga_measurement_id'] : '<empty>'));
 
     if (!$result['ok']) {
         foreach ($result['errors'] as $error) {

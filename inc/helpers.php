@@ -2560,3 +2560,29 @@ function generateAtAGlanceSummary(array $beach, string $lang = 'en'): string {
 
     return trim($summary);
 }
+
+/**
+ * GA4 content group for the current request, derived from the URL path.
+ * Keeps page-type buckets consistent between EN and ES routes so GA reports
+ * can slice by page type instead of URL pattern.
+ */
+function analyticsContentGroup(): string {
+    $path = strtok($_SERVER['REQUEST_URI'] ?? '/', '?') ?: '/';
+    $path = rtrim($path, '/') ?: '/';
+
+    if ($path === '/' || $path === '/es') return 'home';
+
+    $buckets = [
+        'beach'        => ['/beach/', '/es/playa/'],
+        'municipality' => ['/beaches-in-', '/es/playas-en-', '/municipality'],
+        'proximity'    => ['/beaches-near', '/es/playas-cerca'],
+        'collection'   => ['/best-', '/es/mejores-', '/hidden-beaches', '/es/playas-escondidas'],
+        'guide'        => ['/guides', '/es/guias'],
+    ];
+    foreach ($buckets as $group => $prefixes) {
+        foreach ($prefixes as $prefix) {
+            if (strpos($path, $prefix) === 0) return $group;
+        }
+    }
+    return 'other';
+}

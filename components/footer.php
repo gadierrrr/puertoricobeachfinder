@@ -247,24 +247,6 @@ if (!function_exists('isGoogleOAuthEnabled')) {
         'fav_add_aria' => __('js.fav_add_aria'),
     ], JSON_UNESCAPED_UNICODE) ?>;
     </script>
-    <script <?= cspNonceAttr() ?>>
-    window.BeachFinderMeta = {
-        authenticated: <?= isAuthenticated() ? '1' : '0' ?>,
-        user_id: <?= isAuthenticated() ? json_encode((string)($_SESSION['user_id'] ?? '')) : 'null' ?>
-    };
-    window.BF_CONFIG = Object.assign({}, window.BF_CONFIG || {}, {
-        appEnv: <?= json_encode((string) appEnv()) ?>
-    });
-    <?php if (isAuthenticated() && isset($_SESSION['user_id'])): ?>
-    // Link PostHog session to authenticated user for user-level analytics
-    if (window.posthog && typeof window.posthog.identify === 'function') {
-        window.posthog.identify(<?= json_encode((string)$_SESSION['user_id']) ?>, {
-            email: <?= json_encode((string)($_SESSION['user_email'] ?? '')) ?>,
-            name: <?= json_encode((string)($_SESSION['user_name'] ?? '')) ?>
-        });
-    }
-    <?php endif; ?>
-    </script>
     <!-- App JavaScript (defer for non-blocking load) -->
     <script defer src="/assets/js/app.min.js?v=2.0" <?= cspNonceAttr() ?>></script>
     <script defer src="/assets/js/geolocation.js?v=2.1" <?= cspNonceAttr() ?>></script>
@@ -296,9 +278,30 @@ if (!function_exists('isGoogleOAuthEnabled')) {
     });
     </script>
     <script defer src="/assets/js/filters.js" <?= cspNonceAttr() ?>></script>
-    <script defer src="/assets/js/analytics.js?v=2.5" <?= cspNonceAttr() ?>></script>
     <script defer src="/assets/js/share.js" <?= cspNonceAttr() ?>></script>
     <?php endif; ?>
+
+    <!-- Analytics wrapper + page meta: loaded on every page, even when the
+         heavy app bundle is skipped via $skipAppScripts. -->
+    <script <?= cspNonceAttr() ?>>
+    window.BeachFinderMeta = {
+        authenticated: <?= isAuthenticated() ? '1' : '0' ?>,
+        user_id: <?= isAuthenticated() ? json_encode((string)($_SESSION['user_id'] ?? '')) : 'null' ?>
+    };
+    window.BF_CONFIG = Object.assign({}, window.BF_CONFIG || {}, {
+        appEnv: <?= json_encode((string) appEnv()) ?>
+    });
+    <?php if (isAuthenticated() && isset($_SESSION['user_id'])): ?>
+    // Link PostHog session to authenticated user for user-level analytics
+    if (window.posthog && typeof window.posthog.identify === 'function') {
+        window.posthog.identify(<?= json_encode((string)$_SESSION['user_id']) ?>, {
+            email: <?= json_encode((string)($_SESSION['user_email'] ?? '')) ?>,
+            name: <?= json_encode((string)($_SESSION['user_name'] ?? '')) ?>
+        });
+    }
+    <?php endif; ?>
+    </script>
+    <script defer src="/assets/js/analytics.js?v=2.6" <?= cspNonceAttr() ?>></script>
 
     <!-- Initialize Lucide Icons -->
     <script <?= cspNonceAttr() ?>>

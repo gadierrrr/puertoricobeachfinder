@@ -59,29 +59,16 @@ header('X-XSS-Protection: 1; mode=block');
 header('Referrer-Policy: strict-origin-when-cross-origin');
 header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
 
-// Content Security Policy - includes optional Umami host from runtime config.
+// Content Security Policy.
 // Note: 'unsafe-inline' is still required for style-src (Tailwind + inline styles).
 // 'unsafe-eval' removed from script-src — no runtime eval() is used.
 // If a JS library requires eval, add a specific hash/nonce instead.
-$scriptSources = ["'self'", 't.puertoricobeachfinder.com', "'nonce-" . CSP_NONCE . "'", "'strict-dynamic'", 'cdn.tailwindcss.com', 'unpkg.com', 'cdn.jsdelivr.net', 'cloud.umami.is'];
+$scriptSources = ["'self'", 't.puertoricobeachfinder.com', "'nonce-" . CSP_NONCE . "'", "'strict-dynamic'", 'cdn.tailwindcss.com', 'unpkg.com', 'cdn.jsdelivr.net'];
 $styleSources = ["'self'", "'unsafe-inline'", 'cdn.tailwindcss.com', 'unpkg.com', 'cdn.jsdelivr.net', 'fonts.googleapis.com'];
 $imgSources = ["'self'", 'data:', 'blob:', 'https://media.tacdn.com', 'https://*.basemaps.cartocdn.com', 'https://a.basemaps.cartocdn.com', 'https://b.basemaps.cartocdn.com', 'https://c.basemaps.cartocdn.com', 'https://d.basemaps.cartocdn.com'];
 $fontSources = ["'self'", 'data:', 'fonts.gstatic.com'];
-$connectSources = ["'self'", 't.puertoricobeachfinder.com', 'https://basemaps.cartocdn.com', 'https://*.basemaps.cartocdn.com', 'unpkg.com', 'cdn.jsdelivr.net', 'cloud.umami.is', 'api-gateway.umami.dev', ];
+$connectSources = ["'self'", 't.puertoricobeachfinder.com', 'https://basemaps.cartocdn.com', 'https://*.basemaps.cartocdn.com', 'unpkg.com', 'cdn.jsdelivr.net'];
 $workerSources = ["'self'", 'blob:'];
-
-$umamiEnabled = function_exists('envBool') ? envBool('UMAMI_ENABLED', false) : false;
-$umamiScriptUrl = function_exists('env')
-    ? (string) (env('UMAMI_SCRIPT_URL', 'https://cloud.umami.is/script.js') ?? 'https://cloud.umami.is/script.js')
-    : 'https://cloud.umami.is/script.js';
-
-if ($umamiEnabled && $umamiScriptUrl !== '') {
-    $umamiScriptHost = cspHostSourceFromUrl($umamiScriptUrl);
-    if (is_string($umamiScriptHost) && $umamiScriptHost !== '') {
-        $scriptSources[] = $umamiScriptHost;
-        $connectSources[] = $umamiScriptHost;
-    }
-}
 
 // Google Analytics 4 (gtag.js) — only whitelist Google's hosts when a valid
 // GA4 Measurement ID (G-XXXXXXXXXX) is configured.
