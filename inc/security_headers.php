@@ -89,10 +89,19 @@ if ($gaEnabled) {
     $connectSources[] = 'www.google-analytics.com';
     $connectSources[] = '*.google-analytics.com';
     $connectSources[] = '*.analytics.google.com';
+    // With Google Signals enabled, gtag beacons the APEX analytics.google.com
+    // (a *.analytics.google.com wildcard does NOT match the apex) and pings
+    // www.google.com / stats.g.doubleclick.net for ads signals.
+    $connectSources[] = 'analytics.google.com';
+    $connectSources[] = 'https://www.google.com';
+    $connectSources[] = 'stats.g.doubleclick.net';
     // Legacy/pixel image beacons.
     $imgSources[] = 'www.googletagmanager.com';
     $imgSources[] = 'www.google-analytics.com';
     $imgSources[] = '*.google-analytics.com';
+    $imgSources[] = 'analytics.google.com';
+    $imgSources[] = 'https://www.google.com';
+    $imgSources[] = 'stats.g.doubleclick.net';
 }
 
 $scriptSources = array_values(array_unique($scriptSources));
