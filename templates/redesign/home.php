@@ -360,7 +360,7 @@ $stickerSvg = [
     <div class="hero-grid">
       <div class="hero-copy">
         <p class="eyebrow"><?= h(__('pages.home.hero_eyebrow')) ?></p>
-        <h1 class="headline"><?= h(__('pages.home.hero_headline_1')) ?><br><span class="em"><?= h(__('pages.home.hero_headline_2')) ?></span><span class="dot">.</span></h1>
+        <h1 class="headline"><?= h(__('pages.home.hero_headline_1')) ?><br><span class="em"><?= h(__('pages.home.hero_headline_2')) ?></span></h1>
         <p class="lede"><?= h(__('pages.home.hero_subtitle', ['count' => number_format($total)])) ?></p>
         <form class="search hero-search" role="search">
           <svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3" stroke-linecap="round"/></svg>
