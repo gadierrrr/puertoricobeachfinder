@@ -47,11 +47,12 @@ function imageObjectSchema($imageUrl, $caption = null) {
  * @return array|null AggregateRating schema or null
  */
 function getRatingSchema(array $beach) {
-    // Prefer user ratings if we have enough (>10 reviews)
+    // Prefer first-party user ratings once there are enough to be meaningful
+    // (>=3 reviews, matching the floor we require of Google counts below).
     $userReviewCount = $beach['user_review_count'] ?? 0;
     $avgUserRating = $beach['avg_user_rating'] ?? null;
 
-    if ($userReviewCount > 10 && $avgUserRating) {
+    if ($userReviewCount >= 3 && $avgUserRating) {
         return [
             '@type' => 'AggregateRating',
             'ratingValue' => round($avgUserRating, 1),
@@ -732,21 +733,48 @@ function articleSchema(string $title, string $description, string $url, ?string 
 }
 
 /**
+ * Generate a simple WebPage schema for interactive tool pages
+ * (quiz, compare) that have no richer type of their own.
+ */
+function webPageSchema(string $name, string $description, string $path): string {
+    $schema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'WebPage',
+        'name' => $name,
+        'description' => $description,
+        'url' => absoluteUrl($path),
+        'isPartOf' => [
+            '@type' => 'WebSite',
+            'name' => $_ENV['APP_NAME'] ?? 'Puerto Rico Beach Finder',
+            'url' => getPublicBaseUrl()
+        ],
+        'inLanguage' => (function_exists('getCurrentLanguage') && getCurrentLanguage() === 'es') ? 'es' : 'en'
+    ];
+
+    return '<script type="application/ld+json">' . json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . '</script>';
+}
+
+/**
  * Generate CollectionPage schema for list pages
  */
 function collectionPageSchema(string $title, string $description, array $beaches): string {
     $appUrl = getPublicBaseUrl();
+    $lang = function_exists('getCurrentLanguage') ? getCurrentLanguage() : 'en';
+    $beachPathPrefix = $lang === 'es' ? '/es/playa/' : '/beach/';
 
     $items = [];
     foreach (array_slice($beaches, 0, 20) as $index => $beach) {
+        $beachDescription = ($lang === 'es' && !empty($beach['description_es']))
+            ? $beach['description_es']
+            : ($beach['description'] ?? '');
         $items[] = [
             '@type' => 'ListItem',
             'position' => $index + 1,
             'item' => [
                 '@type' => 'Beach',
                 'name' => $beach['name'],
-                'url' => $appUrl . '/beach/' . $beach['slug'],
-                'description' => substr($beach['description'] ?? '', 0, 150)
+                'url' => $appUrl . $beachPathPrefix . $beach['slug'],
+                'description' => substr($beachDescription, 0, 150)
             ]
         ];
     }

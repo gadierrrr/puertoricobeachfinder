@@ -387,6 +387,18 @@ function localeRoutes(): array
             'changefreq' => 'monthly',
             'priority' => '0.8',
         ],
+        // English-only guide (self-contained page, no lang file yet). Same URL
+        // for both locales and localized=false so no hreflang alternates are
+        // advertised until a real Spanish translation exists.
+        'guide_kid_friendly' => [
+            'en' => '/guides/kid-friendly-beaches',
+            'es' => '/guides/kid-friendly-beaches',
+            'script' => '/guides/kid-friendly-beaches.php',
+            'indexable' => true,
+            'localized' => false,
+            'changefreq' => 'monthly',
+            'priority' => '0.8',
+        ],
         'offline' => [
             'en' => '/offline',
             'es' => '/es/sin-conexion',
@@ -901,6 +913,7 @@ function sitemapLocaleRoutes(): array
             'es' => normalizeLocalePath((string) $route['es']),
             'changefreq' => (string) $route['changefreq'],
             'priority' => (string) $route['priority'],
+            'localized' => (bool) ($route['localized'] ?? true),
         ];
     }
     return $rows;

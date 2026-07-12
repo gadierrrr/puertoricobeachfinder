@@ -73,7 +73,28 @@ if ($bodyVariant === 'collection-light') {
     <link rel="icon" href="/assets/icons/icon-96x96.png" sizes="96x96" type="image/png">
 
     <!-- Open Graph / Social -->
-    <meta property="og:type" content="website">
+    <?php
+    // og:type by page kind: beach detail pages are places, editorial landings
+    // (guides, collections, municipality, proximity) are articles. Pages may
+    // pre-set $ogType to override. The guides index stays 'website'.
+    if (!isset($ogType)) {
+        $ogContentGroup = function_exists('analyticsContentGroup') ? analyticsContentGroup() : 'other';
+        $ogPath = rtrim(strtok($_SERVER['REQUEST_URI'] ?? '/', '?') ?: '/', '/');
+        if ($ogContentGroup === 'beach') {
+            $ogType = 'place';
+        } elseif (in_array($ogContentGroup, ['guide', 'collection', 'municipality', 'proximity'], true)
+            && !in_array($ogPath, ['/guides', '/es/guias'], true)) {
+            $ogType = 'article';
+        } else {
+            $ogType = 'website';
+        }
+    }
+    ?>
+    <meta property="og:type" content="<?= h($ogType) ?>">
+    <?php if ($ogType === 'place' && isset($beach['lat'], $beach['lng'])): ?>
+    <meta property="place:location:latitude" content="<?= h((string) $beach['lat']) ?>">
+    <meta property="place:location:longitude" content="<?= h((string) $beach['lng']) ?>">
+    <?php endif; ?>
     <meta property="og:site_name" content="<?= h($appName) ?>">
     <meta property="og:title" content="<?= isset($pageTitle) ? h($pageTitle) : h($appName) ?>">
     <?php if (isset($pageDescription)): ?>
@@ -148,6 +169,7 @@ if ($bodyVariant === 'collection-light') {
             '/best-beaches-vieques.php',
             '/best-beaches-culebra.php',
             '/best-beaches-luquillo.php',
+            '/advertise.php',
             '/quiz.php',
             '/quiz-results.php',
             '/compare.php',
@@ -218,6 +240,7 @@ if ($bodyVariant === 'collection-light') {
     <meta property="og:url" content="<?= h($canonical) ?>">
     <?php if ($emitHreflang): ?>
     <link rel="alternate" hreflang="en" href="<?= h($canonicalEn) ?>">
+    <link rel="alternate" hreflang="es" href="<?= h($canonicalEs) ?>">
     <link rel="alternate" hreflang="es-PR" href="<?= h($canonicalEs) ?>">
     <link rel="alternate" hreflang="x-default" href="<?= h($canonicalEn) ?>">
     <?php endif; ?>
@@ -282,6 +305,27 @@ if ($bodyVariant === 'collection-light') {
     <link rel="dns-prefetch" href="https://basemaps.cartocdn.com">
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
+    <?php
+    // LCP: managed page heroes render as CSS backgrounds, so the browser only
+    // discovers the image after stylesheet parse. Preload it from the head.
+    // Beach profile pages resolve to null (they use their own <img> hero).
+    $managedHeroImage = null;
+    if (!empty($redesignLayout)) {
+        if (!function_exists('pageHeroResolve') && file_exists(APP_ROOT . '/inc/page_heroes.php')) {
+            require_once APP_ROOT . '/inc/page_heroes.php';
+        }
+        if (function_exists('pageHeroResolve')) {
+            $managedHeroEntry = pageHeroResolve();
+            if (is_array($managedHeroEntry) && !empty($managedHeroEntry['image'])) {
+                $managedHeroImage = (string) $managedHeroEntry['image'];
+            }
+        }
+    }
+    ?>
+    <?php if ($managedHeroImage !== null): ?>
+    <link rel="preload" as="image" href="<?= h($managedHeroImage) ?>" fetchpriority="high">
+    <?php endif; ?>
+
     <!-- Preload critical CSS -->
     <link rel="preload" href="/assets/css/tailwind.min.css?v=3.9" as="style">
     <link rel="preload" href="/assets/css/styles.css?v=4.9" as="style">
@@ -334,8 +378,9 @@ if ($bodyVariant === 'collection-light') {
     $rdFont = homepageFont($rdDesign['font']);
     $rdBodyStyle = '--disp:' . $rdFont['stack'] . ';--rd-heading-weight:' . (int) $rdFont['weight'];
     ?>
-    <link href="<?= h(redesignFontsUrl($rdDesign['font'], $rdEditorMode)) ?>" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/redesign.css?v=65">
+    <link rel="preload" href="<?= h(redesignFontsUrl($rdDesign['font'], $rdEditorMode)) ?>" as="style" data-lazy-style>
+    <noscript><link href="<?= h(redesignFontsUrl($rdDesign['font'], $rdEditorMode)) ?>" rel="stylesheet"></noscript>
+    <link rel="stylesheet" href="/assets/css/redesign.css?v=66">
     <?php endif; ?>
 
     <!-- Deferred scripts (non-blocking) -->

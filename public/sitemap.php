@@ -38,16 +38,57 @@ foreach ($muniRows ?: [] as $row) {
         : $fallbackDate;
 }
 
+// Lastmod for derived listing pages (near/tag) reflects when their underlying
+// beach data actually changed, never the generation date.
+$globalRow = query("SELECT MAX(updated_at) as last_update FROM beaches WHERE publish_status = 'published'");
+$globalBeachLastmod = ($globalRow && $globalRow[0]['last_update'])
+    ? date('Y-m-d', strtotime($globalRow[0]['last_update']))
+    : $fallbackDate;
+
+$tagLastmod = [];
+$tagRows = query("
+    SELECT bt.tag AS slug, MAX(b.updated_at) AS last_update
+    FROM beach_tags bt JOIN beaches b ON b.id = bt.beach_id
+    WHERE b.publish_status = 'published' GROUP BY bt.tag
+");
+foreach ($tagRows ?: [] as $row) {
+    $tagLastmod[$row['slug']] = $row['last_update'] ? date('Y-m-d', strtotime($row['last_update'])) : $fallbackDate;
+}
+$amenityRows = query("
+    SELECT ba.amenity AS slug, MAX(b.updated_at) AS last_update
+    FROM beach_amenities ba JOIN beaches b ON b.id = ba.beach_id
+    WHERE b.publish_status = 'published' GROUP BY ba.amenity
+");
+foreach ($amenityRows ?: [] as $row) {
+    $tagLastmod['with-' . $row['slug']] = $row['last_update'] ? date('Y-m-d', strtotime($row['last_update'])) : $fallbackDate;
+}
+
+// hreflang alternates for a bilingual URL pair, mirroring the on-page
+// <link rel="alternate"> set (en, es, es-PR, x-default) so both signals agree.
+$hreflangAlternates = static function (string $enPath, string $esPath) use ($appUrl): string {
+    $en = h($appUrl . $enPath);
+    $es = h($appUrl . $esPath);
+    return "        <xhtml:link rel=\"alternate\" hreflang=\"en\" href=\"{$en}\"/>\n"
+         . "        <xhtml:link rel=\"alternate\" hreflang=\"es\" href=\"{$es}\"/>\n"
+         . "        <xhtml:link rel=\"alternate\" hreflang=\"es-PR\" href=\"{$es}\"/>\n"
+         . "        <xhtml:link rel=\"alternate\" hreflang=\"x-default\" href=\"{$en}\"/>\n";
+};
+
 echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 ?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
 <?php
 foreach (sitemapLocaleRoutes() as $entry):
     // Single-URL bilingual routes (e.g. /advertise) list the same path for both
     // locales — emit it once.
     $localePaths = array_unique([$entry['en'], $entry['es']]);
+    // Alternates only for routes with a genuine translated counterpart.
+    $routeAlternates = ($entry['localized'] && count($localePaths) > 1)
+        ? $hreflangAlternates($entry['en'], $entry['es'])
+        : '';
     // Determine lastmod from script file
     $routeLastmod = $fallbackDate;
     foreach (localeRoutes() as $routeKey => $route) {
@@ -60,7 +101,7 @@ foreach (sitemapLocaleRoutes() as $entry):
 ?>
     <url>
         <loc><?= h($appUrl) ?><?= h($localePath) ?></loc>
-        <lastmod><?= $routeLastmod ?></lastmod>
+<?= $routeAlternates ?>        <lastmod><?= $routeLastmod ?></lastmod>
         <changefreq><?= h($entry['changefreq']) ?></changefreq>
         <priority><?= h($entry['priority']) ?></priority>
     </url>
@@ -84,10 +125,11 @@ foreach ($beaches as $beach):
     $imageUrl = strpos($resolvedImage, 'http') === 0
         ? $resolvedImage
         : $appUrl . $resolvedImage;
+    $beachAlternates = $hreflangAlternates('/beach/' . $beach['slug'], '/es/playa/' . $beach['slug']);
 ?>
     <url>
         <loc><?= h($appUrl) ?>/beach/<?= h($beach['slug']) ?></loc>
-        <lastmod><?= $lastmod ?></lastmod>
+<?= $beachAlternates ?>        <lastmod><?= $lastmod ?></lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
         <?php if (strpos($resolvedImage, 'placeholder') === false): ?>
@@ -99,7 +141,7 @@ foreach ($beaches as $beach):
     </url>
     <url>
         <loc><?= h($appUrl) ?>/es/playa/<?= h($beach['slug']) ?></loc>
-        <lastmod><?= $lastmod ?></lastmod>
+<?= $beachAlternates ?>        <lastmod><?= $lastmod ?></lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
         <?php if (strpos($resolvedImage, 'placeholder') === false): ?>
@@ -121,16 +163,17 @@ $municipalities = array_unique(array_column(
 foreach ($municipalities as $municipality):
     $slug = strtolower(str_replace(' ', '-', stripAccents($municipality)));
     $muniLastmod = $municipalityLastmod[$municipality] ?? $fallbackDate;
+    $muniAlternates = $hreflangAlternates('/beaches-in-' . $slug, '/es/playas-en-' . $slug);
 ?>
     <url>
         <loc><?= h($appUrl) ?>/beaches-in-<?= h($slug) ?></loc>
-        <lastmod><?= $muniLastmod ?></lastmod>
+<?= $muniAlternates ?>        <lastmod><?= $muniLastmod ?></lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc><?= h($appUrl) ?>/es/playas-en-<?= h($slug) ?></loc>
-        <lastmod><?= $muniLastmod ?></lastmod>
+<?= $muniAlternates ?>        <lastmod><?= $muniLastmod ?></lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
@@ -146,18 +189,18 @@ $nearLocations = [
     "arecibo" => "arecibo", "cabo-rojo" => "cabo-rojo", "vega-baja" => "vega-baja",
     "dorado" => "dorado",
 ];
-$nearDate = date("Y-m-d");
 foreach ($nearLocations as $enSlug => $esSlug):
+    $nearAlternates = $hreflangAlternates('/beaches-near-' . $enSlug, '/es/playas-cerca-de-' . $esSlug);
 ?>
     <url>
         <loc><?= h($appUrl) ?>/beaches-near-<?= h($enSlug) ?></loc>
-        <lastmod><?= $nearDate ?></lastmod>
+<?= $nearAlternates ?>        <lastmod><?= $globalBeachLastmod ?></lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc><?= h($appUrl) ?>/es/playas-cerca-de-<?= h($esSlug) ?></loc>
-        <lastmod><?= $nearDate ?></lastmod>
+<?= $nearAlternates ?>        <lastmod><?= $globalBeachLastmod ?></lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -185,18 +228,19 @@ $tagPages = [
     "with-picnic-areas" => "con-areas-picnic",
     "with-food" => "con-comida",
 ];
-$tagDate = date("Y-m-d");
 foreach ($tagPages as $enSlug => $esSlug):
+    $pageLastmod = $tagLastmod[$enSlug] ?? $globalBeachLastmod;
+    $tagAlternates = $hreflangAlternates('/beaches/' . $enSlug, '/es/playas/' . $esSlug);
 ?>
     <url>
         <loc><?= h($appUrl) ?>/beaches/<?= h($enSlug) ?></loc>
-        <lastmod><?= $tagDate ?></lastmod>
+<?= $tagAlternates ?>        <lastmod><?= $pageLastmod ?></lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc><?= h($appUrl) ?>/es/playas/<?= h($esSlug) ?></loc>
-        <lastmod><?= $tagDate ?></lastmod>
+<?= $tagAlternates ?>        <lastmod><?= $pageLastmod ?></lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>

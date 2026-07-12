@@ -16,6 +16,15 @@ require_once APP_ROOT . '/inc/i18n.php';
 $pageTitle = __('quiz.title');
 $pageDescription = __('quiz.description');
 
+require_once APP_ROOT . '/components/seo-schemas.php';
+$quizPath = localizePath('/quiz', getCurrentLanguage());
+$extraHead = ($extraHead ?? '')
+    . webPageSchema($pageTitle, $pageDescription, $quizPath)
+    . breadcrumbSchema([
+        ['name' => __('nav.home'), 'url' => routeUrl('home', getCurrentLanguage())],
+        ['name' => __('quiz.breadcrumb'), 'url' => $quizPath],
+    ]);
+
 $redesignLayout = useRedesign();
 $bodyClasses = trim(($bodyClasses ?? '') . ' rd-tool' . ($redesignLayout ? ' rd-quiz-page' : ''));
 include APP_ROOT . '/components/header.php';

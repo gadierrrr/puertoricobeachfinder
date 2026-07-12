@@ -60,7 +60,7 @@ if (str_starts_with($uriPath, '/uploads/')) {
 }
 
 // Canonical redirects: .php -> extensionless public URLs.
-if (preg_match('~^/(best-beaches|best-beaches-san-juan|best-snorkeling-beaches|best-surfing-beaches|best-family-beaches|beaches-near-san-juan|beaches-near-san-juan-airport|hidden-beaches-puerto-rico)\.php$~', $uriPath, $matches)) {
+if (preg_match('~^/(best-beaches|best-beaches-san-juan|best-snorkeling-beaches|best-surfing-beaches|best-family-beaches|best-diving-beaches|best-fishing-beaches|best-accessible-beaches|best-scenic-beaches|best-swimming-beaches|best-camping-beaches|best-calm-water-beaches|best-secluded-beaches|best-beaches-cabo-rojo|best-beaches-rincon|best-beaches-isabela|best-beaches-fajardo|best-beaches-vieques|best-beaches-culebra|best-beaches-luquillo|beaches-near-san-juan|beaches-near-san-juan-airport|hidden-beaches-puerto-rico|advertise)\.php$~', $uriPath, $matches)) {
     $target = '/' . $matches[1];
     if ($queryString !== '') {
         $target .= '?' . $queryString;

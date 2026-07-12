@@ -181,7 +181,7 @@ $extraHead = beachSchema($beach, $reviews);
 $extraHead .= touristAttractionSchema($beach);
 
 // Add breadcrumbs
-$municipalitySlug = strtolower(str_replace(' ', '-', $beach['municipality']));
+$municipalitySlug = strtolower(str_replace(' ', '-', stripAccents($beach['municipality'])));
 $extraHead .= breadcrumbSchema([
     ['name' => __('nav.home'), 'url' => routeUrl('home', $lang)],
     ['name' => $beach['municipality'], 'url' => routeUrl('municipality', $lang, ['municipality' => $municipalitySlug])],

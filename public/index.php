@@ -248,11 +248,29 @@ if (empty($userFavorites) && isAuthenticated() && !empty($_SESSION['user_id'])) 
 <header class="relative w-full min-h-[540px] sm:min-h-[600px] lg:min-h-[620px] flex items-center pt-20 overflow-hidden">
     <!-- Background with gradient overlays -->
     <div class="absolute inset-0 -z-10">
-        <img src="<?= h($classicHomeHero['image'] ?? '/images/beaches/jobos-beach-isabela-18513-67085.jpg') ?>"
+        <?php if ($classicHomeHero !== null): ?>
+        <img src="<?= h($classicHomeHero['image']) ?>"
              alt="Jobos Beach in Isabela, Puerto Rico - famous for surfing"
              class="w-full h-full object-cover scale-110"
-             <?= $classicHomeHero !== null ? 'style="object-position:' . h($classicHomeHero['position']) . '"' : '' ?>
-             loading="eager">
+             style="object-position:<?= h($classicHomeHero['position']) ?>"
+             loading="eager"
+             fetchpriority="high"
+             decoding="async">
+        <?php else: ?>
+        <picture>
+            <source type="image/webp"
+                    srcset="/images/thumbnails/jobos-beach-isabela-18513-67085-400w.webp 400w,
+                            /images/thumbnails/jobos-beach-isabela-18513-67085-800w.webp 800w,
+                            /images/thumbnails/jobos-beach-isabela-18513-67085-1200w.webp 1200w"
+                    sizes="100vw">
+            <img src="/images/beaches/jobos-beach-isabela-18513-67085.jpg"
+                 alt="Jobos Beach in Isabela, Puerto Rico - famous for surfing"
+                 class="w-full h-full object-cover scale-110"
+                 loading="eager"
+                 fetchpriority="high"
+                 decoding="async">
+        </picture>
+        <?php endif; ?>
         <!-- bottom-up brand gradient -->
         <div class="absolute inset-0 bg-hero-gradient"></div>
         <!-- left scrim keeps the consolidated text column legible wherever it sits -->

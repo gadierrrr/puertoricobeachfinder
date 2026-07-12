@@ -133,3 +133,75 @@ foreach (array_slice($qSorted,0,20) as $r) {
     printf("%-50s %10d %10d %7.2f%% %8.1f\n",
         substr($r['keys'][0],0,49), $r['clicks'], $r['impressions'], $r['ctr']*100, $r['position']);
 }
+echo "\n";
+
+// 11. Template buckets + week-over-week diff vs the previous snapshot
+//     (snapshots are written by gsc-snapshot.php into history/YYYY-MM-DD/).
+function gscTemplateBucket(string $url): string {
+    $path = parse_url($url, PHP_URL_PATH) ?: '/';
+    $buckets = [
+        'beach ES'   => ['#^/es/playa/#'],
+        'beach EN'   => ['#^/beach/#'],
+        'muni ES'    => ['#^/es/playas-en-#'],
+        'muni EN'    => ['#^/beaches-in-#'],
+        'near ES'    => ['#^/es/playas-cerca#'],
+        'near EN'    => ['#^/beaches-near#'],
+        'guides ES'  => ['#^/es/guias#'],
+        'guides EN'  => ['#^/guides#'],
+        'facet ES'   => ['#^/es/playas/#'],
+        'facet EN'   => ['#^/beaches/#'],
+        'collection' => ['#^/(best-|hidden-beaches)#', '#^/es/(mejores-|playas-escondidas)#'],
+        'home'       => ['#^/(es)?$#'],
+    ];
+    foreach ($buckets as $bucket => $patterns) {
+        foreach ($patterns as $p) {
+            if (preg_match($p, $path)) return $bucket;
+        }
+    }
+    return 'other';
+}
+
+function gscBucketTotals(array $pageRows): array {
+    $totals = [];
+    foreach ($pageRows as $r) {
+        $b = gscTemplateBucket($r['keys'][0]);
+        $totals[$b] ??= ['clicks' => 0, 'impressions' => 0, 'posW' => 0.0];
+        $totals[$b]['clicks'] += $r['clicks'];
+        $totals[$b]['impressions'] += $r['impressions'];
+        $totals[$b]['posW'] += $r['position'] * $r['impressions'];
+    }
+    return $totals;
+}
+
+$current = gscBucketTotals($pages);
+
+// Locate the most recent prior snapshot (skip today's, which mirrors current).
+$prev = null; $prevDate = null;
+$snapshots = glob("$dir/history/*", GLOB_ONLYDIR) ?: [];
+rsort($snapshots);
+foreach ($snapshots as $snap) {
+    if (basename($snap) === date('Y-m-d')) continue;
+    $file = $snap . '/by-page.json';
+    if (is_file($file)) {
+        $prev = gscBucketTotals(load($file));
+        $prevDate = basename($snap);
+        break;
+    }
+}
+
+echo "=== TEMPLATE BUCKETS (28-day window" . ($prevDate ? ", diff vs snapshot $prevDate" : ', no prior snapshot yet') . ") ===\n";
+printf("%-12s %8s %9s %10s %11s %7s %8s\n", 'Bucket','Clicks','ΔClicks','Impr','ΔImpr','Pos','ΔPos');
+uasort($current, fn($a,$b) => $b['clicks'] <=> $a['clicks']);
+foreach ($current as $bucket => $c) {
+    $pos = $c['impressions'] ? $c['posW'] / $c['impressions'] : 0;
+    $dClicks = $dImpr = $dPos = '';
+    if ($prev !== null) {
+        $p = $prev[$bucket] ?? ['clicks' => 0, 'impressions' => 0, 'posW' => 0.0];
+        $pPos = $p['impressions'] ? $p['posW'] / $p['impressions'] : 0;
+        $dClicks = sprintf('%+d', $c['clicks'] - $p['clicks']);
+        $dImpr = sprintf('%+d', $c['impressions'] - $p['impressions']);
+        $dPos = ($pPos && $pos) ? sprintf('%+.1f', $pos - $pPos) : '';
+    }
+    printf("%-12s %8d %9s %10d %11s %7.1f %8s\n",
+        $bucket, $c['clicks'], $dClicks, $c['impressions'], $dImpr, $pos, $dPos);
+}

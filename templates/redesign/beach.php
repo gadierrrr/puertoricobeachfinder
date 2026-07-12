@@ -271,7 +271,6 @@ $subnav = array_values(array_filter([
   <div class="wrap" style="width:100%">
     <div class="crumb">
       <a href="<?= h(routeUrl('home', $lang)) ?>"><?= h($isEs ? 'Inicio' : 'Home') ?></a> /
-      <a href="<?= h(routeUrl('home', $lang)) ?>#beaches"><?= h($isEs ? 'Playas' : 'Beaches') ?></a> /
       <a href="<?= h(routeUrl('municipality', $lang, ['municipality' => strtolower(str_replace(' ', '-', stripAccents($beach['municipality'])))])) ?>"><?= h($beach['municipality']) ?></a> /
       <?= h($beach['name']) ?>
     </div>
@@ -558,7 +557,7 @@ $subnav = array_values(array_filter([
         <?php foreach ($nearby as $nb):
           $nbImg = $cardImageUrl($nb, 'medium');
           $nbUrl = routeUrl('beach_detail', $lang, ['slug' => $nb['slug']]); ?>
-        <a class="btile" href="<?= h($nbUrl) ?>"><div class="ph" style="background-image:url('<?= h($nbImg) ?>')"></div><div class="gr"></div><span class="di"><?= h($nb['distance_formatted'] ?? '') ?></span><div class="info"><div class="nm"><?= h($nb['name']) ?></div><div class="mu"><?= h($nb['municipality']) ?></div></div></a>
+        <a class="btile" href="<?= h($nbUrl) ?>"><div class="ph"><img src="<?= h($nbImg) ?>" alt="<?= h($nb['name'] . ', ' . $nb['municipality']) ?>" loading="lazy" decoding="async"></div><div class="gr"></div><span class="di"><?= h($nb['distance_formatted'] ?? '') ?></span><div class="info"><div class="nm"><?= h($nb['name']) ?></div><div class="mu"><?= h($nb['municipality']) ?></div></div></a>
         <?php endforeach; ?>
       </div>
     </section>
@@ -570,7 +569,7 @@ $subnav = array_values(array_filter([
       <div class="ngrid similar-grid">
         <?php foreach ($similarBeaches as $sb):
           $sbImg = $cardImageUrl($sb, 'thumb'); ?>
-        <a class="btile" href="<?= h(routeUrl('beach_detail', $lang, ['slug' => $sb['slug']])) ?>"><div class="ph" style="background-image:url('<?= h($sbImg) ?>')"></div><div class="gr"></div><?php if (!empty($sb['google_rating'])): ?><span class="di">★ <?= number_format($sb['google_rating'], 1) ?></span><?php endif; ?><div class="info"><div class="nm"><?= h($sb['name']) ?></div><div class="mu"><?= h($sb['municipality']) ?></div><div class="why"><?= h($similarReason($sb)) ?></div></div></a>
+        <a class="btile" href="<?= h(routeUrl('beach_detail', $lang, ['slug' => $sb['slug']])) ?>"><div class="ph"><img src="<?= h($sbImg) ?>" alt="<?= h($sb['name'] . ', ' . $sb['municipality']) ?>" loading="lazy" decoding="async"></div><div class="gr"></div><?php if (!empty($sb['google_rating'])): ?><span class="di">★ <?= number_format($sb['google_rating'], 1) ?></span><?php endif; ?><div class="info"><div class="nm"><?= h($sb['name']) ?></div><div class="mu"><?= h($sb['municipality']) ?></div><div class="why"><?= h($similarReason($sb)) ?></div></div></a>
         <?php endforeach; ?>
       </div>
     </section>

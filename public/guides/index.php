@@ -105,10 +105,22 @@ $guides = [
     [
         'title' => 'Kid-Friendly Beaches',
         'slug' => 'kid-friendly-beaches',
+        'route' => 'guide_kid_friendly',
         'description' => 'The best beaches in Puerto Rico for kids — calm water, facilities, and tips for safe beach days with toddlers and children.',
         'icon' => '👶',
         'kicker' => $lang === 'es' ? 'Ninos' : 'Kids',
         'readTime' => '18 min read'
+    ],
+    [
+        'title' => $lang === 'es' ? 'Playas para Spring Break' : 'Spring Break Beaches',
+        'slug' => 'spring-break-beaches-puerto-rico',
+        'route' => 'guide_spring_break',
+        'description' => $lang === 'es'
+            ? 'Las mejores playas de Puerto Rico para spring break: ambiente, música, y dónde quedarte cerca de la acción.'
+            : 'The best Puerto Rico beaches for spring break — vibes, nightlife proximity, and where to stay near the action.',
+        'icon' => '🎉',
+        'kicker' => $lang === 'es' ? 'Temporada' : 'Season',
+        'readTime' => $lang === 'es' ? '15 min de lectura' : '15 min read'
     ]
 ];
 

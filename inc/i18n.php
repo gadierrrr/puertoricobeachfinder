@@ -91,22 +91,18 @@ function loadTranslations(): array {
  * @return string Translated string or key if not found
  */
 function __($key, array $params = []): string {
-    $translations = loadTranslations();
-
     // Support dot notation for nested keys
     $keys = explode('.', $key);
-    $value = $translations;
+    $value = translationLookup(loadTranslations(), $keys);
 
-    foreach ($keys as $k) {
-        if (is_array($value) && isset($value[$k])) {
-            $value = $value[$k];
-        } else {
-            return $key; // Return key if translation not found
-        }
+    // Missing keys in a non-English locale fall back to the English string so
+    // pages never leak raw keys like "pages.x.title" into titles/meta/schema.
+    if ($value === null && getCurrentLanguage() !== 'en') {
+        $value = translationLookup(loadEnglishTranslations(), $keys);
     }
 
-    if (!is_string($value)) {
-        return $key;
+    if ($value === null) {
+        return $key; // Return key if translation not found in any locale
     }
 
     // Replace parameters
@@ -115,6 +111,33 @@ function __($key, array $params = []): string {
     }
 
     return $value;
+}
+
+/**
+ * Walk a nested translations array by pre-split dot-notation keys.
+ * Returns the string value, or null when absent or not a leaf string.
+ */
+function translationLookup(array $translations, array $keys): ?string {
+    $value = $translations;
+    foreach ($keys as $k) {
+        if (is_array($value) && isset($value[$k])) {
+            $value = $value[$k];
+        } else {
+            return null;
+        }
+    }
+    return is_string($value) ? $value : null;
+}
+
+/**
+ * English translations, loaded once, used as the fallback locale.
+ */
+function loadEnglishTranslations(): array {
+    static $en = null;
+    if ($en === null) {
+        $en = include __DIR__ . '/lang/en.php';
+    }
+    return $en;
 }
 
 /**

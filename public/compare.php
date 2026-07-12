@@ -74,6 +74,16 @@ $breadcrumbs = [
     ['name' => __('compare.title')]
 ];
 
+require_once APP_ROOT . '/inc/locale_routes.php';
+require_once APP_ROOT . '/components/seo-schemas.php';
+$comparePath = localizePath('/compare', getCurrentLanguage());
+$extraHead = ($extraHead ?? '')
+    . webPageSchema($pageTitle, $pageDescription, $comparePath)
+    . breadcrumbSchema([
+        ['name' => __('nav.home'), 'url' => routeUrl('home', getCurrentLanguage())],
+        ['name' => __('compare.title'), 'url' => $comparePath],
+    ]);
+
 $redesignLayout = useRedesign();
 $bodyClasses = trim(($bodyClasses ?? '') . ' rd-tool');
 include APP_ROOT . '/components/header.php';
