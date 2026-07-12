@@ -172,7 +172,7 @@ $similarReason = function (array $row) use ($tags, $isEs): string {
     $shared = array_values(array_intersect($tags, $row['tags'] ?? []));
     if (!empty($shared)) {
         $labels = array_map(fn($t) => getTagLabel($t), array_slice($shared, 0, 2));
-        return ($isEs ? 'Similar: ' : 'Similar: ') . implode(' · ', $labels);
+        return ($isEs ? 'Similares: ' : 'Similar: ') . implode(' · ', $labels);
     }
     return $isEs ? 'Ambiente parecido' : 'Similar beach feel';
 };

@@ -938,21 +938,21 @@ document.addEventListener('keydown', (e) => {
 
             <div>
                 <label for="upload-caption" class="block text-sm font-medium text-gray-700 mb-1">
-                    Caption <span class="text-gray-400">(optional)</span>
+                    <?= __('beach.upload_caption_label') ?> <span class="text-gray-400"><?= __('beach.optional') ?></span>
                 </label>
                 <input type="text" name="caption" id="upload-caption" maxlength="200"
-                       placeholder="Add a caption to your photo..."
+                       placeholder="<?= h(__('beach.upload_caption_placeholder')) ?>"
                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
             </div>
 
             <div class="flex gap-3 pt-2">
                 <button type="submit" id="upload-submit-btn"
                         class="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-2.5 rounded-lg font-medium transition-colors">
-                    Upload Photo
+                    <?= __('beach.upload_submit') ?>
                 </button>
                 <button type="button" data-action="closePhotoUploadModal"
                         class="px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">
-                    Cancel
+                    <?= __('common.cancel') ?>
                 </button>
             </div>
 
@@ -1139,7 +1139,7 @@ async function submitPhotoUpload(event) {
     const messageDiv = document.getElementById('upload-message');
 
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Uploading...';
+    submitBtn.textContent = '<?= __('beach.upload_uploading') ?>';
     messageDiv.classList.add('hidden');
 
     try {
@@ -1152,12 +1152,12 @@ async function submitPhotoUpload(event) {
         const data = await response.json();
 
         if (data.success) {
-            messageDiv.textContent = data.message || 'Photo uploaded!';
+            messageDiv.textContent = data.message || '<?= __('beach.upload_success') ?>';
             messageDiv.className = 'bg-ocean-50 border border-ocean-200 text-palm-700 text-sm px-4 py-3 rounded-lg';
             messageDiv.classList.remove('hidden');
 
             if (typeof showToast === 'function') {
-                showToast('Photo uploaded!', 'success', 3000);
+                showToast('<?= __('beach.upload_success') ?>', 'success', 3000);
             }
             // Queue any earned badges to celebrate after the reload below.
             if (typeof window.bfQueueBadgeToasts === 'function') {
@@ -1169,19 +1169,19 @@ async function submitPhotoUpload(event) {
                 location.reload();
             }, 1500);
         } else {
-            messageDiv.textContent = data.error || 'Failed to upload photo';
+            messageDiv.textContent = data.error || '<?= __('beach.upload_failed') ?>';
             messageDiv.className = 'bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg';
             messageDiv.classList.remove('hidden');
             submitBtn.disabled = false;
-            submitBtn.textContent = 'Upload Photo';
+            submitBtn.textContent = '<?= __('beach.upload_submit') ?>';
         }
     } catch (error) {
         console.error('Upload error:', error);
-        messageDiv.textContent = 'Network error. Please try again.';
+        messageDiv.textContent = '<?= __('beach.upload_network_error') ?>';
         messageDiv.className = 'bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg';
         messageDiv.classList.remove('hidden');
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Upload Photo';
+        submitBtn.textContent = '<?= __('beach.upload_submit') ?>';
     }
 }
 
