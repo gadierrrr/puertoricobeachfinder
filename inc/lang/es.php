@@ -2510,8 +2510,8 @@ return [
         'cta_button' => 'Explorar Playas de Surf',
     ],
     'guide_safety' => [
-        'title' => 'Consejos de Seguridad en la Playa para Puerto Rico: Guia Esencial',
-        'description' => 'Mantente seguro en las playas de Puerto Rico con consejos expertos sobre corrientes de resaca, proteccion solar, vida marina, calidad del agua y contactos de emergencia.',
+        'title' => 'Consejos de Seguridad en la Playa para Puerto Rico: Guía Esencial',
+        'description' => 'Mantente seguro en las playas de Puerto Rico con consejos expertos sobre corrientes de resaca, protección solar, vida marina, calidad del agua y contactos de emergencia.',
         'breadcrumb' => 'Seguridad en la Playa',
         'toc_rip_currents' => 'Corrientes de Resaca',
         'toc_sun_protection' => 'Proteccion Solar',

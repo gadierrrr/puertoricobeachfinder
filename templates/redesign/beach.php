@@ -415,7 +415,11 @@ $subnav = array_values(array_filter([
         <div class="callout warn"><span class="ic">⚠️</span><div><h4><?= h($isEs ? 'Seguridad' : 'Swim smart') ?></h4><p><?= h($safetyInfo) ?></p></div></div>
         <?php endif; ?>
       </div>
-      <p style="margin:12px 0 0;font-size:.92rem"><a href="<?= h(routeUrl('guide_transportation', $lang)) ?>" style="color:var(--sea-deep);font-weight:600"><?= h($isEs ? 'Guía completa: cómo llegar a las playas de Puerto Rico en carro, ferry o Uber →' : 'Full guide: getting to Puerto Rico beaches by car, ferry, or Uber →') ?></a></p>
+      <div style="margin:12px 0 0;font-size:.92rem;display:flex;flex-direction:column;gap:6px">
+        <a href="<?= h(routeUrl('guide_transportation', $lang)) ?>" style="color:var(--sea-deep);font-weight:600"><?= h($isEs ? 'Guía completa: cómo llegar a las playas de Puerto Rico en carro, ferry o Uber →' : 'Full guide: getting to Puerto Rico beaches by car, ferry, or Uber →') ?></a>
+        <a href="<?= h(routeUrl('guide_safety', $lang)) ?>" style="color:var(--sea-deep);font-weight:600"><?= h($isEs ? 'Guía completa: consejos de seguridad para playas de Puerto Rico →' : 'Full guide: beach safety tips for Puerto Rico →') ?></a>
+        <a href="<?= h(routeUrl('guide_best_time', $lang)) ?>" style="color:var(--sea-deep);font-weight:600"><?= h($isEs ? 'Guía completa: mejor época para visitar las playas de Puerto Rico →' : 'Full guide: best time to visit Puerto Rico beaches →') ?></a>
+      </div>
     </section>
 
     <section class="contrib-band block" aria-labelledby="contrib-heading">
