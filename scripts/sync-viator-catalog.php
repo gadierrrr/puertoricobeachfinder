@@ -119,7 +119,9 @@ try {
     $matchStats = viatorRebuildBeachMatches();
     $summary['beaches_matched'] = $matchStats['beaches_matched'];
     $summary['beach_product_matches'] = $matchStats['matches'];
-    echo "[ok] auto-matching: {$matchStats['matches']} matches across {$matchStats['beaches_matched']} beaches\n";
+    $summary['beach_fallback_fills'] = $matchStats['fallback_filled'];
+    echo "[ok] auto-matching: {$matchStats['matches']} matches across {$matchStats['beaches_matched']} beaches"
+        . ", {$matchStats['fallback_filled']} fallback fills\n";
 } catch (Throwable $e) {
     $errors[] = $e->getMessage();
     fwrite(STDERR, '[fatal] ' . $e->getMessage() . "\n");

@@ -86,6 +86,29 @@ try {
     $stats = viatorRebuildBeachMatches();
     $assert($stats['matches'] > 0, 'Rebuild should produce matches from the seeded catalog');
 
+    // Coverage invariant: with any eligible catalog present, no published
+    // beach may be left without a direct product (relevant or fallback).
+    $uncoveredAfterRebuild = queryOne(
+        'SELECT COUNT(*) AS n FROM beaches b
+         WHERE b.publish_status = "published"
+           AND NOT EXISTS (
+               SELECT 1 FROM viator_beach_products m
+               WHERE m.beach_id = b.id AND m.status = "active"
+           )'
+    );
+    $assert(
+        (int) ($uncoveredAfterRebuild['n'] ?? -1) === 0,
+        'Every published beach should have at least one active product match after rebuild'
+    );
+    $fallbackRows = queryOne(
+        'SELECT COUNT(*) AS n FROM viator_beach_products
+         WHERE status = "active" AND match_reasons LIKE "%nearby_fallback%"'
+    );
+    $assert(
+        (int) ($fallbackRows['n'] ?? 0) === $stats['fallback_filled'],
+        'Reported fallback fill count should equal the stored fallback rows'
+    );
+
     $flamencoMatches = query(
         'SELECT product_code, score FROM viator_beach_products
          WHERE beach_id = :id AND status = "active" ORDER BY display_order ASC',
@@ -103,8 +126,16 @@ try {
     $assert(((string) ($blockedRow['status'] ?? '')) === 'blocked', 'Blocked row should be preserved across rebuilds');
 
     // Score directly (membership in the top-2 depends on the live catalog).
-    $icacos = queryOne('SELECT * FROM beaches WHERE slug = "icacos-beach"');
-    $assert(is_array($icacos), 'Expected icacos-beach to exist');
+    // The Fajardo Icacos beach is slugged icacos-beach on dev seeds and
+    // cayo-icacos-la-cordillera in production data.
+    $icacos = queryOne(
+        'SELECT * FROM beaches WHERE slug IN ("icacos-beach", "cayo-icacos-la-cordillera")
+         ORDER BY slug = "icacos-beach" DESC LIMIT 1'
+    );
+    $assert(is_array($icacos), 'Expected the Fajardo Icacos beach to exist');
+    if (!is_array($icacos)) {
+        throw new RuntimeException('Cannot continue without the Fajardo Icacos beach.');
+    }
     $fajardoProduct = queryOne(
         'SELECT product_code, title, rating, review_count, tags_json, destination_ids_json
          FROM viator_products WHERE product_code = "TEST200P2" AND locale = "en"'
@@ -199,6 +230,50 @@ try {
 
     $es = renderToursSection($icacos, 'es', 'redesign');
     $assert(str_contains($es, 'Popular cerca de esta playa'), 'Spanish auto kicker should render');
+
+    // ---- Fallback fill: distance helper + honest labeling -----------------
+    $kmToFajardo = viatorNearestDestinationKm($icacos, ['destination_ids_json' => '[23854]']);
+    $assert(
+        $kmToFajardo !== null && $kmToFajardo < 30.0,
+        'Icacos should sit within 30 km of the Fajardo destination'
+    );
+    $assert(
+        viatorNearestDestinationKm($icacos, ['destination_ids_json' => '[36]']) === null,
+        'Island-wide products should have no city-level distance'
+    );
+
+    // Force a far fallback row on a beach without curated placements and
+    // check the labeling end-to-end in both locales.
+    $plainBeach = queryOne(
+        'SELECT * FROM beaches
+         WHERE publish_status = "published"
+           AND id NOT IN (SELECT beach_id FROM beach_referral_placements WHERE anchor_key = "tours_curated")
+         ORDER BY slug ASC LIMIT 1'
+    );
+    $assert(is_array($plainBeach), 'Expected a published beach without curated placements');
+    execute(
+        'DELETE FROM viator_beach_products WHERE beach_id = :id AND status = "active"',
+        [':id' => (string) $plainBeach['id']]
+    );
+    execute(
+        'INSERT INTO viator_beach_products (beach_id, product_code, score, match_reasons, status, display_order)
+         VALUES (:id, "TEST200P2", 0, :reasons, "active", 0)',
+        [':id' => (string) $plainBeach['id'], ':reasons' => json_encode(['nearby_fallback', 'distance_km:88.4'])]
+    );
+    $fallbackEn = renderToursSection($plainBeach, 'en', 'redesign');
+    $assert(str_contains($fallbackEn, 'match_type=nearby_fallback'), 'Fallback card should report the nearby_fallback match type');
+    $assert(str_contains($fallbackEn, 'Popular Puerto Rico experience'), 'Far fallback card should use the island-wide kicker');
+    $assert(str_contains($fallbackEn, 'match_type=regional_browse'), 'Fallback beach keeps its browse card');
+
+    $fallbackEs = renderToursSection($plainBeach, 'es', 'redesign');
+    $assert(str_contains($fallbackEs, 'Experiencia popular en Puerto Rico'), 'Spanish island-wide fallback kicker should render');
+
+    execute(
+        'UPDATE viator_beach_products SET match_reasons = :reasons WHERE beach_id = :id AND product_code = "TEST200P2"',
+        [':id' => (string) $plainBeach['id'], ':reasons' => json_encode(['nearby_fallback', 'distance_km:12.0'])]
+    );
+    $fallbackNear = renderToursSection($plainBeach, 'en', 'redesign');
+    $assert(str_contains($fallbackNear, 'Popular near this beach'), 'Near fallback card should keep the local kicker');
 
     // ---- Guide tours section ----------------------------------------------
     $guideEn = renderGuideToursSection('snorkeling-guide', 'en');

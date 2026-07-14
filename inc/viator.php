@@ -1001,21 +1001,15 @@ function viatorScoreProductForBeach(array $beach, array $productRow, array $tagN
 }
 
 /**
- * Recompute viator_beach_products for every published beach from the cached
- * catalog. Editor-blocked matches are preserved and never re-surfaced.
+ * Catalog rows eligible to appear on a beach page: ACTIVE, carrying the
+ * exact attributed product URL and an official product photo, and not a
+ * transportation product (airport/hotel/port transfers, bus services,
+ * private drivers are logistics, not experiences).
  *
- * @return array{beaches_matched: int, matches: int}
+ * @return array<int,array>
  */
-function viatorRebuildBeachMatches(float $threshold = 35.0, int $maxPerBeach = 2): array
+function viatorEligibleCatalogProducts(): array
 {
-    $tagNamesById = [];
-    if (viatorTableExists('viator_tags')) {
-        foreach (query('SELECT tag_id, name_en FROM viator_tags WHERE name_en != ""') as $row) {
-            $tagNamesById[(int) $row['tag_id']] = strtolower((string) $row['name_en']);
-        }
-    }
-
-    // Every recommended experience must carry an official product photo.
     $candidates = query(
         'SELECT product_code, title, rating, review_count, tags_json, destination_ids_json
          FROM viator_products
@@ -1024,8 +1018,6 @@ function viatorRebuildBeachMatches(float $threshold = 35.0, int $maxPerBeach = 2
     );
     $candidates = is_array($candidates) ? $candidates : [];
 
-    // Transportation products (airport/hotel/port transfers, bus services,
-    // private drivers) are logistics, not experiences.
     $transportTagIds = [];
     if (viatorTableExists('viator_tags')) {
         foreach (query(
@@ -1036,7 +1028,7 @@ function viatorRebuildBeachMatches(float $threshold = 35.0, int $maxPerBeach = 2
             $transportTagIds[(int) $row['tag_id']] = true;
         }
     }
-    $candidates = array_values(array_filter($candidates, static function (array $candidate) use ($transportTagIds): bool {
+    return array_values(array_filter($candidates, static function (array $candidate) use ($transportTagIds): bool {
         if (preg_match('/\b(airport|transfer|transfers)\b/i', (string) $candidate['title'])) {
             return false;
         }
@@ -1047,6 +1039,68 @@ function viatorRebuildBeachMatches(float $threshold = 35.0, int $maxPerBeach = 2
         }
         return true;
     }));
+}
+
+/**
+ * Whether a product title reads like a water/beach experience. Used only to
+ * break ties in the fallback fill so a snorkeling trip outranks an
+ * equally-near city tasting or bus tour on a beach page.
+ */
+function viatorProductTitleIsBeachy(string $title): bool
+{
+    return (bool) preg_match(
+        '/\b(beach|snorkel\w*|catamaran|sail\w*|boat|kayak\w*|paddle\w*|surf\w*|dive|diving|island|cays?|bio\s?bay|bioluminescent|reef|turtle|whale|coastal|cliff|waterfall|river|cave)\b/i',
+        $title
+    );
+}
+
+/**
+ * Distance from a beach to the closest city-level destination a product
+ * operates around, or null when none of the product's destinations carry
+ * usable coordinates (island-wide products).
+ */
+function viatorNearestDestinationKm(array $beach, array $productRow): ?float
+{
+    $beachLat = (float) ($beach['lat'] ?? 0);
+    $beachLng = (float) ($beach['lng'] ?? 0);
+    if ($beachLat === 0.0 && $beachLng === 0.0) {
+        return null;
+    }
+
+    $cityCoords = viatorCityDestinationCoords();
+    $nearest = null;
+    foreach (array_map('intval', (array) json_decode((string) ($productRow['destination_ids_json'] ?? '[]'), true)) as $destId) {
+        if (!isset($cityCoords[$destId])) {
+            continue;
+        }
+        $km = viatorDistanceKm($beachLat, $beachLng, $cityCoords[$destId][0], $cityCoords[$destId][1]);
+        if ($nearest === null || $km < $nearest) {
+            $nearest = $km;
+        }
+    }
+    return $nearest;
+}
+
+/**
+ * Recompute viator_beach_products for every published beach from the cached
+ * catalog. Editor-blocked matches are preserved and never re-surfaced.
+ *
+ * Beaches where nothing clears the relevance threshold receive one
+ * distance-ranked fallback product so every beach page can show a direct,
+ * bookable experience instead of only the regional browse link.
+ *
+ * @return array{beaches_matched: int, matches: int, fallback_filled: int}
+ */
+function viatorRebuildBeachMatches(float $threshold = 35.0, int $maxPerBeach = 2): array
+{
+    $tagNamesById = [];
+    if (viatorTableExists('viator_tags')) {
+        foreach (query('SELECT tag_id, name_en FROM viator_tags WHERE name_en != ""') as $row) {
+            $tagNamesById[(int) $row['tag_id']] = strtolower((string) $row['name_en']);
+        }
+    }
+
+    $candidates = viatorEligibleCatalogProducts();
 
     $blocked = [];
     foreach (query('SELECT beach_id, product_code FROM viator_beach_products WHERE status = "blocked"') as $row) {
@@ -1058,6 +1112,7 @@ function viatorRebuildBeachMatches(float $threshold = 35.0, int $maxPerBeach = 2
     $beaches = query('SELECT id, name, municipality, lat, lng FROM beaches WHERE publish_status = "published"');
     $beachesMatched = 0;
     $totalMatches = 0;
+    $uncovered = [];
 
     $tagsByBeach = [];
     foreach (query('SELECT beach_id, tag FROM beach_tags') as $row) {
@@ -1088,6 +1143,7 @@ function viatorRebuildBeachMatches(float $threshold = 35.0, int $maxPerBeach = 2
             }
         }
         if ($scored === []) {
+            $uncovered[] = $beach;
             continue;
         }
 
@@ -1115,7 +1171,71 @@ function viatorRebuildBeachMatches(float $threshold = 35.0, int $maxPerBeach = 2
         $beachesMatched++;
     }
 
-    return ['beaches_matched' => $beachesMatched, 'matches' => $totalMatches];
+    // Fallback fill: beaches with no relevant match get the closest, best
+    // reviewed product so their page still offers a direct experience.
+    // Distance to the product's nearest city-level destination ranks
+    // candidates in 10 km bands; island-wide products without city
+    // coordinates sit between genuinely nearby and far-away ones. Within a
+    // band: social proof (25+ reviews), water/beach fit, rating, reviews.
+    $pool = [];
+    foreach ($candidates as $candidate) {
+        $pool[] = [
+            'candidate' => $candidate,
+            'beachy' => viatorProductTitleIsBeachy((string) ($candidate['title'] ?? '')),
+            'rating' => is_numeric($candidate['rating'] ?? null) ? (float) $candidate['rating'] : 0.0,
+            'reviews' => max(0, (int) ($candidate['review_count'] ?? 0)),
+        ];
+    }
+
+    $fallbackFilled = 0;
+    foreach ($uncovered as $beach) {
+        $best = null;
+        $bestRank = null;
+        $bestKm = null;
+        foreach ($pool as $entry) {
+            $candidate = $entry['candidate'];
+            if (isset($blocked[$beach['id'] . '|' . $candidate['product_code']])) {
+                continue;
+            }
+            $km = viatorNearestDestinationKm($beach, $candidate);
+            $rank = [
+                (int) floor(($km ?? 75.0) / 10.0),
+                $entry['reviews'] >= 25 ? 0 : 1,
+                $entry['beachy'] ? 0 : 1,
+                -$entry['rating'],
+                -$entry['reviews'],
+            ];
+            if ($bestRank === null || ($rank <=> $bestRank) < 0) {
+                $bestRank = $rank;
+                $best = $candidate;
+                $bestKm = $km;
+            }
+        }
+        if ($best === null) {
+            continue;
+        }
+
+        $reasons = [
+            'nearby_fallback',
+            $bestKm !== null ? 'distance_km:' . round($bestKm, 1) : 'distance:unknown',
+        ];
+        execute(
+            'INSERT INTO viator_beach_products
+                (beach_id, product_code, score, match_reasons, status, display_order, matched_at, updated_at)
+             VALUES (:beach_id, :code, 0, :reasons, "active", 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+             ON CONFLICT(beach_id, product_code) DO UPDATE SET
+                score = excluded.score, match_reasons = excluded.match_reasons,
+                display_order = excluded.display_order, updated_at = CURRENT_TIMESTAMP',
+            [
+                ':beach_id' => (string) $beach['id'],
+                ':code' => (string) $best['product_code'],
+                ':reasons' => json_encode($reasons, JSON_UNESCAPED_SLASHES),
+            ]
+        );
+        $fallbackFilled++;
+    }
+
+    return ['beaches_matched' => $beachesMatched, 'matches' => $totalMatches, 'fallback_filled' => $fallbackFilled];
 }
 
 /**
@@ -1130,7 +1250,7 @@ function viatorAutoMatchedProductsForBeach(string $beachId, string $locale, int 
     }
 
     $rows = query(
-        'SELECT p.*, m.score, m.display_order AS match_order
+        'SELECT p.*, m.score, m.display_order AS match_order, m.match_reasons
          FROM viator_beach_products m
          INNER JOIN viator_products p ON p.product_code = m.product_code AND p.locale = :locale
          WHERE m.beach_id = :beach_id

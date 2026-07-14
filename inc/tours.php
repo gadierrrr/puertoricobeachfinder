@@ -332,6 +332,41 @@ function toursAutoProductCardMeta(array $row, string $lang): array
     ];
 }
 
+/** Match reasons recorded for an auto-matched viator_beach_products row. */
+function toursAutoMatchReasons(array $row): array
+{
+    $reasons = json_decode((string) ($row['match_reasons'] ?? '[]'), true);
+    return is_array($reasons) ? array_map('strval', $reasons) : [];
+}
+
+/** True when the row came from the distance-ranked fallback fill. */
+function toursAutoMatchIsFallback(array $row): bool
+{
+    return in_array('nearby_fallback', toursAutoMatchReasons($row), true);
+}
+
+/**
+ * Kicker for auto product cards. Relevance matches and fallback products
+ * within ~25 km read as local; farther or island-wide fallbacks say Puerto
+ * Rico so the card never overstates proximity.
+ */
+function toursAutoProductKicker(array $row, bool $isEs): string
+{
+    if (toursAutoMatchIsFallback($row)) {
+        $km = null;
+        foreach (toursAutoMatchReasons($row) as $reason) {
+            if (str_starts_with($reason, 'distance_km:')) {
+                $km = (float) substr($reason, strlen('distance_km:'));
+                break;
+            }
+        }
+        if ($km === null || $km > 25.0) {
+            return $isEs ? 'Experiencia popular en Puerto Rico' : 'Popular Puerto Rico experience';
+        }
+    }
+    return $isEs ? 'Popular cerca de esta playa' : 'Popular near this beach';
+}
+
 /**
  * Render one tour card (product or browse) in either visual variant.
  *
@@ -540,9 +575,9 @@ function renderToursSection(array $beach, string $lang, string $variant = 'class
             'lang' => $lang,
             'variant' => $variant,
             'position' => $position,
-            'match_type' => 'auto_product',
+            'match_type' => toursAutoMatchIsFallback($row) ? 'nearby_fallback' : 'auto_product',
             'context' => $context,
-            'kicker' => $isEs ? 'Popular cerca de esta playa' : 'Popular near this beach',
+            'kicker' => toursAutoProductKicker($row, $isEs),
         ]);
     }
 
