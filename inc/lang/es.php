@@ -2079,8 +2079,8 @@ return [
         'breadcrumb_guides' => 'Guias',
     ],
     'guide_transportation' => [
-        'title' => 'Como Llegar a las Playas de Puerto Rico: Guia Completa de Transporte',
-        'description' => 'Aprende como llegar a las playas de Puerto Rico en carro, ferry, transporte publico y mas. Incluye costos, consejos y direcciones detalladas para playas del continente y las islas.',
+        'title' => 'Cómo Llegar a las Playas de Puerto Rico: Carro, Ferry y Uber',
+        'description' => '¿Necesitas carro para las playas de Puerto Rico? Compara alquiler, cobertura de Uber, ferry a Culebra/Vieques y tiempos de manejo desde San Juan.',
         'breadcrumb' => 'Como Llegar a las Playas',
         'toc_car_rental' => 'Alquiler de Carros',
         'toc_driving' => 'Consejos de Manejo',

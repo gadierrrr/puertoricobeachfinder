@@ -2580,8 +2580,8 @@ return [
         'breadcrumb_guides' => 'Guides',
     ],
     'guide_transportation' => [
-        'title' => 'Getting to Puerto Rico Beaches: Complete Transportation Guide',
-        'description' => 'Learn how to reach Puerto Rico beaches by car, ferry, public transit, and more. Includes costs, tips, and detailed directions for mainland and island beaches.',
+        'title' => 'Getting to Puerto Rico Beaches: Car, Ferry & Uber Guide',
+        'description' => 'Do you need a car for Puerto Rico beaches? Compare rental costs, Uber coverage, ferry times to Culebra & Vieques, and driving distances from San Juan.',
         'breadcrumb' => 'Getting to Beaches',
         'toc_car_rental' => 'Car Rentals',
         'toc_driving' => 'Driving Tips',

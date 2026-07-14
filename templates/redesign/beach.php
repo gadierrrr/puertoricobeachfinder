@@ -415,6 +415,7 @@ $subnav = array_values(array_filter([
         <div class="callout warn"><span class="ic">⚠️</span><div><h4><?= h($isEs ? 'Seguridad' : 'Swim smart') ?></h4><p><?= h($safetyInfo) ?></p></div></div>
         <?php endif; ?>
       </div>
+      <p style="margin:12px 0 0;font-size:.92rem"><a href="<?= h(routeUrl('guide_transportation', $lang)) ?>" style="color:var(--sea-deep);font-weight:600"><?= h($isEs ? 'Guía completa: cómo llegar a las playas de Puerto Rico en carro, ferry o Uber →' : 'Full guide: getting to Puerto Rico beaches by car, ferry, or Uber →') ?></a></p>
     </section>
 
     <section class="contrib-band block" aria-labelledby="contrib-heading">
