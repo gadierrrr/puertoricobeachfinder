@@ -1,7 +1,7 @@
 <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <header class="managed-page-hero page-heading-hero mb-8"<?= pageHeroAttributes('legal') ?>>
         <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Terms of Service</h1>
-        <p class="text-sm text-gray-500">Last updated: February 12, 2026</p>
+        <p class="text-sm text-gray-500">Last updated: July 9, 2026</p>
     </header>
 
     <div class="prose prose-slate max-w-none">
@@ -16,6 +16,28 @@
             <li>You agree not to misuse the Service, interfere with its operation, or attempt unauthorized access.</li>
             <li>You are responsible for maintaining the confidentiality of your account session.</li>
         </ul>
+
+        <h2>Advertising Services</h2>
+        <p>
+            Advertising inventory is sold as clearly labeled paid placement and does not influence editorial beach rankings,
+            scores, recommendations, or organic search results. Creative, claims, links, business licensing, and imagery are
+            subject to review and may be rejected or removed for legal, safety, trust, or policy reasons.
+        </p>
+        <ul>
+            <li>Single-beach and nearby-cluster packages are month-to-month with a 30-day minimum. Regional, guide, and collection packages have a three-month minimum unless an order states otherwise.</li>
+            <li>The first month is due before launch. Fees are not prorated after a placement launches except for an approved delivery make-good.</li>
+            <li>Guide and collection sponsorships are exclusive for the agreed page and dates. Beach pages may contain no more than two paid business cards in one clearly separated block.</li>
+            <li>We report aggregate valid viewable impressions and clicks but do not guarantee traffic, leads, conversions, or sales.</li>
+            <li>For site-caused unavailability, the placement is extended one day for each missed day. If more than 20% of a paid month is unavailable, the advertiser may choose a prorated credit or refund for the affected period.</li>
+            <li>Advertiser-caused delays, unavailable creative, inaccurate business information, and events outside our reasonable control do not qualify as underdelivery.</li>
+        </ul>
+
+        <h2>Advertising Content Policy</h2>
+        <p>
+            We do not accept illegal, adult, tobacco/nicotine/cannabis, weapons, gambling, political, discriminatory, deceptive,
+            unsafe, or environmentally harmful advertising. Alcohol, health or medical claims, financial services, real estate,
+            transportation, marine activities, and adventure operators require additional review.
+        </p>
 
         <h2>User Content</h2>
         <p>

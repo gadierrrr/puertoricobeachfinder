@@ -36,6 +36,9 @@
 
 $isEs = ($lang ?? 'en') === 'es';
 $listing = $listing ?? [];
+require_once APP_ROOT . '/inc/advertising.php';
+$collectionPageKey = normalizeLocalePath((string) (parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/'));
+$collectionSponsorHtml = advertisingRenderSlot('collection.lead-sponsor', 'collection', $collectionPageKey, $lang ?? 'en');
 ?>
 <div class="rd rd-listing">
 
@@ -92,6 +95,10 @@ $listing = $listing ?? [];
   <p><?= $introHtmlPara /* pre-escaped by caller */ ?></p>
   <?php endforeach; ?>
 </div></div>
+<?php endif; ?>
+
+<?php if ($collectionSponsorHtml !== ''): ?>
+<div class="wrap"><?= $collectionSponsorHtml ?></div>
 <?php endif; ?>
 
 <?php if (!empty($listing['beaches'])):

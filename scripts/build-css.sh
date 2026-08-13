@@ -28,6 +28,7 @@ cat "$PARTIALS_DIR/_variables.css" \
     "$PARTIALS_DIR/_collections.css" \
     "$PARTIALS_DIR/_beach.css" \
     "$PARTIALS_DIR/_forms.css" \
+    "$PARTIALS_DIR/_advertising.css" \
     "$PARTIALS_DIR/_chat.css" \
     "$PARTIALS_DIR/_accessibility.css" \
     "$PARTIALS_DIR/_dark-mode.css" \

@@ -15,6 +15,7 @@ define('LISTINGS_INCLUDED', true);
 
 require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/helpers.php';
+require_once __DIR__ . '/advertising.php';
 
 const LOCAL_LISTING_CATEGORIES = [
     'food'     => ['en' => 'Food & Drinks', 'es' => 'Comida y Bebidas', 'icon' => '🍽️'],
@@ -109,15 +110,27 @@ function renderLocalListingsSection(array $beach, string $lang, string $variant 
     }
 
     $isEs = $lang === 'es';
-    $listings = listingsForBeach($beachId, 3);
+    $modern = advertisingRenderSlot(
+        'beach.local-partners',
+        'beach',
+        $beachSlug,
+        $lang,
+        ['municipality' => (string) ($beach['municipality'] ?? '')]
+    );
+    if ($modern !== '') {
+        return $modern;
+    }
 
-    $heading = $isEs ? 'Favoritos locales' : 'Local favorites';
-    $sponsored = $isEs ? 'Patrocinado' : 'Sponsored';
+    $listings = listingsForBeach($beachId, 2);
+
+    $heading = $isEs ? 'Negocios cercanos' : 'Nearby businesses';
+    $sponsored = $isEs ? 'Anuncio pagado' : 'Paid advertisement';
     $teaserText = $isEs
         ? '¿Tienes un negocio cerca de esta playa? Destácalo aquí.'
         : 'Run a business near this beach? Feature it here.';
     $teaserCta = $isEs ? 'Anúnciate' : 'Advertise';
-    $advertiseUrl = '/advertise?beach=' . urlencode($beachSlug);
+    $advertiseBase = function_exists('routeUrl') ? routeUrl('advertise', $lang) : ($isEs ? '/es/anunciate' : '/advertise');
+    $advertiseUrl = $advertiseBase . '?beach=' . urlencode($beachSlug);
 
     // No listings: compact teaser only (never an empty "section").
     if ($listings === []) {

@@ -11,6 +11,7 @@ define('GUIDE_CMS_INCLUDED', true);
 require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/helpers.php';
 require_once __DIR__ . '/referrals.php';
+require_once __DIR__ . '/advertising.php';
 require_once APP_ROOT . '/components/seo-schemas.php';
 
 function guideCmsLoadArticleBySlug(string $slug, bool $publishedOnly = true): ?array
@@ -237,6 +238,15 @@ function guideCmsRenderArticlePage(array $article, array $blocks, string $locale
     $extraHead = ($extraHead ?? '') . guideCmsBuildHead($article, $locale);
 
     $articleBlocksHtml = '';
+    $sponsorHtml = advertisingRenderSlot(
+        'guide.inline-sponsor',
+        'guide',
+        (string) ($article['slug'] ?? ''),
+        $locale
+    );
+    $guideSponsorRendered = $sponsorHtml !== '';
+    $sponsorInserted = false;
+    $renderedBlockCount = 0;
     if (!empty($blocks)) {
         foreach ($blocks as $block) {
             $html = guideCmsRenderBlock($block, $article, $locale);
@@ -244,7 +254,15 @@ function guideCmsRenderArticlePage(array $article, array $blocks, string $locale
                 continue;
             }
             $articleBlocksHtml .= $html;
+            $renderedBlockCount++;
+            if (!$sponsorInserted && $sponsorHtml !== '' && $renderedBlockCount >= 2) {
+                $articleBlocksHtml .= $sponsorHtml;
+                $sponsorInserted = true;
+            }
         }
+    }
+    if (!$sponsorInserted && $sponsorHtml !== '') {
+        $articleBlocksHtml .= $sponsorHtml;
     }
 
     $pageTheme = 'guide';
@@ -256,7 +274,7 @@ function guideCmsRenderArticlePage(array $article, array $blocks, string $locale
 
     if ($redesignLayout) {
         echo '<div class="rd rd-guide-detail rd-guide-cms">';
-        echo '<section class="guide-detail-hero managed-page-hero"' . pageHeroAttributes('guides') . '>';
+        echo '<section class="guide-detail-hero">';
         echo '<div class="wrap guide-detail-hero-grid">';
         echo '<div class="guide-detail-copy">';
         echo '<nav class="guide-detail-crumb" aria-label="Breadcrumb">';
