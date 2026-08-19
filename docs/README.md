@@ -11,6 +11,10 @@ This directory separates maintained operating guidance from historical analysis.
 
 `../CLAUDE.md` is a compatibility entry point for tools that discover that filename. `AGENTS.md` is the authoritative repository instruction file.
 
+## Active plans
+
+- `seo-plan-2026-08.md` — search traffic plan (analysis 2026-08-19). Supersedes the July 2026 "SEO 2x" plan. P0 (edge caching) shipped; P1–P4 open. Retire or move to `reports/` once its workstreams close.
+
 ## Maintained runbooks
 
 - `analytics-umami.md` — GA4-first client tracking with optional Umami/PostHog delivery
