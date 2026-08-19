@@ -92,7 +92,15 @@ if ($redesignLayout) {
 
     // Sibling proximity areas — same hardcoded list as classic, but hrefs are
     // localized via routeUrl (classic emits EN URLs on ES pages).
-    $rdSiblings = [];
+    // Lead with the "near me" page. These city pages currently absorb the
+    // location-less "beaches near me" / "playas cerca de mi" queries at ~0.2-0.8%
+    // CTR, so the visitor who wanted their own location gets a route to it, and
+    // the new page gets inbound links from exactly the pages ranking for it.
+    $rdSiblings = [[
+        $isEs ? 'Playas cerca de mí' : 'Beaches near me',
+        routeUrl('beaches_near_me', $lang),
+        $isEs ? 'tu ubicación' : 'your location',
+    ]];
     foreach ($locations as $slug => $l) {
         if ($slug === $locSlug) continue;
         $rdSiblings[] = [$l['name'], routeUrl('beaches_near', $lang, ['location' => $slug]), $l['region']];
