@@ -292,6 +292,74 @@
         window.bfTrack("M1_local_listing_click", Object.assign({}, props, listingPropsFromEl(target)));
         return;
       }
+
+      if (kind === "ad-click") {
+        // The billable click is recorded server-side by /ad-out (the href).
+        // This only mirrors it into GA4/PostHog for parity with other surfaces.
+        window.bfTrack("AD2_ad_click", Object.assign({}, props, adPropsFromEl(target)));
+        return;
+      }
+    });
+  }
+
+  function adPropsFromEl(el) {
+    const props = {};
+    const campaign = el.getAttribute("data-ad-campaign-id");
+    const creative = el.getAttribute("data-ad-creative-id");
+    const slot = el.getAttribute("data-ad-slot");
+    const action = el.getAttribute("data-ad-action");
+    if (campaign) props.ad_campaign_id = campaign;
+    if (creative) props.ad_creative_id = creative;
+    if (slot) props.ad_slot = slot;
+    if (action) props.ad_action = action;
+    return props;
+  }
+
+  function sendAdImpression(token) {
+    if (!token) return;
+    const body = JSON.stringify({ token: token });
+    try {
+      if (navigator.sendBeacon) {
+        const blob = new Blob([body], { type: "application/json" });
+        if (navigator.sendBeacon("/api/ads/impression.php", blob)) return;
+      }
+    } catch (e) {}
+    try {
+      fetch("/api/ads/impression.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: body,
+        credentials: "same-origin",
+        keepalive: true,
+      }).catch(function () {});
+    } catch (e) {}
+  }
+
+  // Paid placements have no server-side impression path — /ad-out only fires on a
+  // click — so without this observer ad_events never receives an impression row and
+  // the delivery reporting promised to advertisers is permanently zero.
+  function initAdImpressionTracking() {
+    if (typeof window.IntersectionObserver !== "function") return;
+
+    const seen = new WeakSet();
+    const observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          if (seen.has(el)) return;
+          seen.add(el);
+          observer.unobserve(el);
+
+          sendAdImpression(el.getAttribute("data-ad-impression-token"));
+          window.bfTrack("AD1_ad_impression", adPropsFromEl(el));
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    document.querySelectorAll('[data-bf-track="ad-impression"]').forEach(function (node) {
+      observer.observe(node);
     });
   }
 
@@ -672,6 +740,7 @@
     initDelegatedClickTracking();
     initReferralImpressionTracking();
     initListingImpressionTracking();
+    initAdImpressionTracking();
     initHtmxDrawerTracking();
     initFavoriteTrackingFromHtmx();
     initSendListForms();

@@ -38,6 +38,8 @@ Disallow: /terms.php
 Disallow: /privacy.php
 Disallow: /profile.php
 Disallow: /go
+Disallow: /ad-out
+Disallow: /local-out
 Disallow: /guides/cms-router.php
 
 # Allow specific API for rich results

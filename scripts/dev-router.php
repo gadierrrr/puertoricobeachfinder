@@ -96,7 +96,7 @@ if ($uriPath === '/admin/index.php') {
     return true;
 }
 
-if (preg_match('~^/admin/(beaches|reviews|users|emails|place-id-audit|referrals)\.php$~', $uriPath, $matches)) {
+if (preg_match('~^/admin/(beaches|reviews|users|emails|place-id-audit|referrals|advertising)\.php$~', $uriPath, $matches)) {
     $target = '/admin/' . $matches[1];
     if ($queryString !== '') {
         $target .= '?' . $queryString;

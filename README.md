@@ -1,6 +1,15 @@
 # Puerto Rico Beach Finder
 
-A PHP + SQLite web application for exploring beaches in Puerto Rico. Features beach search with filters, interactive maps, a beach quiz, guide articles, and community chat.
+A framework-free PHP + SQLite application for exploring Puerto Rico's beaches. It includes localized public pages, search and map discovery, collections, quizzes, guides, accounts, reviews and check-ins, custom lists, referrals, advertising, community chat, and an admin area.
+
+Production must serve only `public/` as the document root. The database, configuration, uploads, logs, backups, source assets, and CLI tools intentionally live outside the public web root.
+
+## Requirements
+
+- PHP 8.3 or 8.4 with SQLite support
+- Node.js 22 and npm (`.nvmrc` pins the expected major version)
+- A valid Google Maps API key for application bootstrap
+- Chrome or Chromium only for the optional synthetic browser probes
 
 ## Local setup
 
@@ -42,97 +51,108 @@ Run with the built-in PHP server using the `public/` docroot:
 php -S localhost:8082 -t public scripts/dev-router.php
 ```
 
-## Required environment variables
+The current public rendering mode comes from `HOMEPAGE_DESIGN`. For a one-request local preview, append `?design=classic` or `?design=redesign`.
 
-Defined in `.env.example`:
+## Validation
+
+Run the checks that match your change before opening a pull request:
+
+```bash
+# PHP syntax
+find . -type f -name '*.php' \
+  -not -path './.git/*' \
+  -not -path './node_modules/*' \
+  -print0 | xargs -0 -n1 php -l
+
+# Frontend build and design-system rules
+npm run build
+npm run check:design
+
+# Routing and shared page configuration
+php scripts/test-locale-routing.php
+php scripts/test-page-heroes.php
+
+# Database state
+php scripts/migrate.php --dry-run
+php scripts/migrate.php --check
+```
+
+CI runs PHP 8.3 and 8.4, rebuilds committed assets, validates routing and design rules, initializes and migrates a temporary database, checks published images, performs backup/restore and HTTP smoke tests, and runs secret scanning.
+
+## Environment configuration
+
+Copy `.env.example`; it is the canonical inventory of supported local settings. Required bootstrap values are:
 
 - `DB_PATH`
 - `APP_URL`
 - `APP_NAME`
-- `GOOGLE_MAPS_API_KEY` (an `AIza...` key with Places API (New) enabled)
-- `GOOGLE_CLIENT_ID`
-- `GOOGLE_CLIENT_SECRET`
-- `RESEND_API_KEY`
+- `GOOGLE_MAPS_API_KEY` — a valid `AIza...` key with Places API (New) enabled
+- `APP_ENV` — `dev`, `staging`, or `prod`
+- `APP_DEBUG` — `0` or `1`
 
+Feature-specific groups are optional until that feature is enabled:
 
-- `RESEND_WEBHOOK_SECRET` (optional)
-- `EMAIL_PROVIDER` (`resend`)
-- `ANTHROPIC_API_KEY`
-- `REFERRAL_ALLOWED_HOSTS`
-- Viator affiliate product hydration:
-  - `VIATOR_PID` — affiliate partner ID used by legacy/manual Viator links
-  - `VIATOR_API_KEY` — server-only Partner API key
-  - `VIATOR_API_BASE_URL` — defaults to `https://api.viator.com/partner`
-  - `VIATOR_API_ENABLED` (`0` or `1`)
-  - `VIATOR_SYNC_TTL_HOURS` — product cache freshness target (default `24`)
-- `BACKUP_DIR` (default: `./backups/db`)
-- `BACKUP_KEEP_DAYS` (default: `30`)
-- `APP_ENV` (`dev`, `staging`, `prod`)
-- `APP_DEBUG` (`0` or `1`)
-- Google Analytics 4 (primary):
-  - `GA_MEASUREMENT_ID` (e.g. `G-XXXXXXXXXX`; empty disables the tag)
-- Umami analytics (legacy, optional):
-  - `UMAMI_ENABLED` (`0` or `1`)
-  - `UMAMI_SCRIPT_URL` (default: `https://cloud.umami.is/script.js`)
-  - `UMAMI_WEBSITE_ID`
-  - `UMAMI_DOMAINS` (optional)
+- Rendering: `HOMEPAGE_DESIGN` (`classic` or `redesign`)
+- Google OAuth: `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` must be configured together
+- Email: `EMAIL_PROVIDER`, `RESEND_API_KEY`, `RESEND_WEBHOOK_SECRET`
+- Analytics: `GA_MEASUREMENT_ID`; legacy Umami settings use `UMAMI_ENABLED`, `UMAMI_SCRIPT_URL`, `UMAMI_WEBSITE_ID`, and `UMAMI_DOMAINS`
+- AI moderation/content helpers: `ANTHROPIC_API_KEY`
+- Retention and push: `APP_SECRET`, `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`
+- Referrals: `REFERRAL_ALLOWED_HOSTS`
+- Viator product hydration: `VIATOR_PID`, `VIATOR_API_KEY`, `VIATOR_API_BASE_URL`, `VIATOR_API_ENABLED`, `VIATOR_SYNC_TTL_HOURS`
+- Backups: `BACKUP_DIR`, `BACKUP_KEEP_DAYS`
 
-## Funnel + analytics notes
+Never commit `.env`, API keys, OAuth secrets, webhook secrets, or production database files.
 
-This codebase includes a lightweight funnel implementation with a client tracking wrapper that
-routes events to Google Analytics 4 (primary), plus legacy Umami / PostHog when loaded:
+## Funnel and analytics
 
-- Quiz:
-  - `/quiz` returns a `results_token` from `public/api/quiz/match.php` and can generate a shareable URL.
-  - `/quiz-results?token=...` renders stored quiz matches (tokenized pages are `noindex`).
-- Lead capture:
-  - List pages can post to `public/api/send-list.php` ("Send me this list").
-  - Quiz results can post to `public/api/send-quiz-results.php` ("Send my matches").
-  - Email delivery uses Resend API.
-  - Webhook receiver: `public/api/webhooks/resend.php`
-  - Email health probe: `public/api/health/email.php`
-- Tracking:
-  - `public/assets/js/analytics.js` defines `window.bfTrack()`, which routes events to GA4 via `gtag('event', ...)` (and to Umami/PostHog when present).
-  - Event naming follows the funnel schema (A1/A2/A3, L1/L2, S1/S2, U1...), plus referral events `referral_prompt_shown` / `referral_cta_click`.
-  - See `docs/analytics-umami.md` for the event map and implementation details.
+The client tracking wrapper routes events to Google Analytics 4 (primary), plus legacy Umami and PostHog when loaded:
 
-## Email health check
+- `/quiz` returns a `results_token` from `public/api/quiz/match.php` and can generate a shareable URL.
+- `/quiz-results?token=...` renders stored quiz matches; tokenized pages are `noindex`.
+- List pages post to `public/api/send-list.php`; quiz results post to `public/api/send-quiz-results.php`.
+- Resend webhooks arrive at `public/api/webhooks/resend.php`.
+- `public/assets/js/analytics.js` defines `window.bfTrack()`.
+- Event naming and provider behavior are documented in `docs/analytics-umami.md`.
 
-Use the email provider probe endpoint to validate Resend config/connectivity:
+## Health checks
+
+Email:
 
 ```bash
 curl -sS -i https://www.puertoricobeachfinder.com/api/health/email
 ```
 
-Expected:
-- `200` when keys are configured and Resend is reachable/authenticated
-- `503` when config/auth/connectivity is unhealthy
+The endpoint returns `200` when Resend is configured and reachable, and `503` when configuration, authentication, or connectivity is unhealthy. See `docs/email-resend.md`.
 
-Operational runbook:
-- `docs/email-resend.md`
-
-## Analytics health checks
-
-Use the analytics probe endpoint to validate Umami config and rendered script injection:
+Analytics:
 
 ```bash
 curl -sS "https://www.puertoricobeachfinder.com/api/health/analytics.php?page_probe=1&network_probe=1"
-```
-
-Guardrail check for rendered HTML:
-
-```bash
 php scripts/check-analytics-ga.php --url=https://www.puertoricobeachfinder.com
-```
-
-Synthetic browser probe (headless Chrome/Chromium required):
-
-```bash
 scripts/synthetic-analytics-probe.sh https://www.puertoricobeachfinder.com
 ```
 
-Operational runbook:
-- `docs/analytics-umami.md`
+See `docs/analytics-umami.md`.
+
+Viator, when API hydration is enabled:
+
+```bash
+curl -sS https://www.puertoricobeachfinder.com/api/health/viator.php
+```
+
+See `docs/viator-api.md`.
+
+## Documentation
+
+- `docs/README.md` — documentation index and source-of-truth rules
+- `AGENTS.md` — repository conventions and change guardrails
+- `docs/codebase-map.md` — request paths, subsystems, and change playbooks
+- `docs/design-system.md` — public UI contract and design lint rules
+- `docs/analytics-umami.md` — GA4/Umami event instrumentation
+- `docs/email-resend.md` — email operations
+- `docs/viator-api.md` — Viator hydration, attribution, and reporting
+- `scripts/SYSTEM-ARCHITECTURE.md` — content-generation subsystem
 
 ## Migration commands
 
@@ -149,7 +169,7 @@ php scripts/migrate.php --check
 # One-time baseline for existing DBs
 php scripts/migrate.php --baseline
 
-# Include manual/data migrations (default excludes manual set)
+# Include manual/data migrations (default excludes the manual set)
 php scripts/migrate.php --include-manual
 ```
 
@@ -161,57 +181,29 @@ Use the unified deploy script:
 ./deploy.sh
 ```
 
-It runs:
+It runs PHP syntax lint, installs Node dependencies, builds frontend assets, verifies committed generated assets, applies migrations, and performs migration and secret-scan smoke checks.
 
-1. PHP syntax lint
-2. `npm ci`
-3. `npm run build`
-4. generated asset consistency check
-5. migrations (`php scripts/migrate.php`)
-6. smoke checks (migration check + secret grep)
+## Rollback and backups
 
-## Rollback notes
-
-1. Back up DB before deploy:
+Create and verify a backup before deploying risky application or schema changes:
 
 ```bash
 php scripts/backup-db.php
-```
-
-2. If deploy fails after migration:
-
-- Roll back application code to previous commit.
-- Restore DB backup.
-- Re-run `php scripts/migrate.php --check`.
-
-3. If migration runner was newly adopted on an existing DB:
-
-- Use `php scripts/migrate.php --baseline` once to mark already-applied migrations.
-
-## Backup automation
-
-Create a verified SQLite backup:
-
-```bash
-php scripts/backup-db.php
-```
-
-Run a restore smoke test against the latest backup:
-
-```bash
 php scripts/restore-smoke-test.php
 ```
 
+If a deploy fails after a migration, roll application code back to the previous commit, restore the matching database backup, and run `php scripts/migrate.php --check`.
+
 Suggested daily automation:
 
-```bash
+```cron
 0 3 * * * cd /var/www/beach-finder && php scripts/backup-db.php >> logs/backup-db.log 2>&1
 20 3 * * * cd /var/www/beach-finder && php scripts/restore-smoke-test.php >> logs/restore-smoke.log 2>&1
 ```
 
 ## Security operations
 
-- Secret scanning is enforced in CI and pre-commit (`gitleaks`).
-- Google key rotation checklist is documented in `docs/google-key-rotation.md`.
-- See `docs/secret-history-cleanup.md` for history rewrite runbook if secrets were previously committed.
-- Nginx hardening template lives at `deploy/nginx/beach-finder.conf`.
+- Secret scanning is enforced in CI and pre-commit with gitleaks.
+- `docs/google-key-rotation.md` is the Google key rotation checklist.
+- `docs/secret-history-cleanup.md` covers history rewriting after secret rotation.
+- `deploy/nginx/beach-finder.conf` is the Nginx hardening template.

@@ -15,6 +15,9 @@ require_once APP_ROOT . '/inc/helpers.php';
 require_once APP_ROOT . '/inc/listings.php';
 require_once APP_ROOT . '/inc/i18n.php';
 
+header('X-Robots-Tag: noindex, nofollow', true);
+header('Cache-Control: no-store, private');
+
 $listingId = trim((string) ($_GET['l'] ?? ''));
 $beachId = trim((string) ($_GET['b'] ?? ''));
 $action = trim((string) ($_GET['a'] ?? 'website'));

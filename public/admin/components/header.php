@@ -164,6 +164,16 @@ $currentPage = basename($_SERVER['PHP_SELF'], '.php');
                     Headers &amp; Heroes
                 </a>
 
+                <a href="/admin/advertising"
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg <?= $currentPage === 'advertising' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800' ?>">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v10a2 2 0 002 2h11a2 2 0 002-2v-5m4-7a2.121 2.121 0 00-3-3L9 11v3h3l9-9z"/>
+                    </svg>
+                    Advertising
+                    <?php try { $newAdLeads = (int) (queryOne('SELECT COUNT(*) c FROM ad_leads WHERE status="new"')['c'] ?? 0); } catch (Throwable $e) { $newAdLeads = 0; } ?>
+                    <?php if ($newAdLeads > 0): ?><span class="ml-auto bg-cyan-500 text-xs px-2 py-0.5 rounded-full"><?= $newAdLeads ?></span><?php endif; ?>
+                </a>
+
                 <a href="/admin/listings"
                    class="flex items-center gap-3 px-3 py-2 rounded-lg <?= $currentPage === 'listings' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800' ?>">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
