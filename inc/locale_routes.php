@@ -267,6 +267,14 @@ function localeRoutes(): array
             'changefreq' => 'weekly',
             'priority' => '0.9',
         ],
+        'beaches_near_me' => [
+            'en' => '/beaches-near-me',
+            'es' => '/es/playas-cerca-de-mi',
+            'script' => '/beaches-near-me.php',
+            'indexable' => true,
+            'changefreq' => 'weekly',
+            'priority' => '0.9',
+        ],
         'beaches_near_san_juan' => [
             'en' => '/beaches-near-san-juan',
             'es' => '/es/playas-cerca-de-san-juan',

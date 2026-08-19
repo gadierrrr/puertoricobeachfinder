@@ -1530,3 +1530,21 @@ body.redesign.rd-error .bg-blue-50{background:var(--sea-pale)!important;color:va
 .managed-page-hero[data-managed-page-hero] :is(h1,h2,p,nav){text-shadow:0 1px 18px rgb(0 0 0/.34)}
 .managed-page-hero[data-managed-page-hero]>.hero-bg,.managed-page-hero[data-managed-page-hero]>.hero-scrim{display:none}
 .page-heading-hero[data-managed-page-hero]{padding:clamp(1.25rem,3vw,2.5rem);border-radius:18px;box-shadow:0 16px 42px rgb(9 22 32/.16)}
+
+/* ===== Near-me geolocation block (/beaches-near-me, /es/playas-cerca-de-mi) =====
+   The button is rendered hidden in PHP and revealed by near-me.js, so a visitor
+   without JS never sees a control that cannot work. */
+.rd-nearme{margin:22px 0 6px}
+.rd-nearme__btn{display:inline-flex;align-items:center;gap:8px;background:var(--sea-deep);color:var(--paper);border:0;border-radius:999px;padding:12px 22px;font-family:var(--data);font-size:.92rem;font-weight:700;letter-spacing:.02em;cursor:pointer;transition:opacity .15s ease,transform .15s ease}
+.rd-nearme__btn:hover{opacity:.9}
+.rd-nearme__btn:active{transform:translateY(1px)}
+.rd-nearme__btn:disabled{opacity:.55;cursor:progress}
+.rd-nearme__btn:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.rd-nearme__help{margin:10px 0 0;font-size:.82rem;color:var(--ink-60)}
+.rd-nearme__status{margin-top:10px;font-size:.9rem;color:var(--ink-60);min-height:1.2em}
+.rd-nearme__heading{margin:26px 0 12px;font-family:var(--disp);font-weight:var(--rd-heading-weight);font-size:clamp(1.25rem,2.4vw,1.6rem)}
+.rd-nearme__list{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.rd-nearme__item{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;padding:12px 2px;border-bottom:1px solid var(--ink-14)}
+.rd-nearme__link{font-weight:650;color:var(--ink);text-decoration:none}
+.rd-nearme__link:hover{color:var(--sea-deep);text-decoration:underline}
+.rd-nearme__meta{font-family:var(--data);font-size:.82rem;color:var(--ink-60)}
