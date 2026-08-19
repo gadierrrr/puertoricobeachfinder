@@ -33,7 +33,12 @@ jobs:
           DB_PATH=/tmp/beach-finder-ci.db
           APP_URL=http://localhost:8082
           APP_NAME=Beach Finder CI
-          GOOGLE_MAPS_API_KEY=test-google-key
+          # inc/env.php validates this as AI""za + 30 or more [0-9A-Za-z_-].
+          # A placeholder like "test-google-key" fails validation, which aborted
+          # every CI run at "Validate locale routing" before any test ran. This
+          # value is syntactically valid and obviously fake; the key-scanner step
+          # below excludes .env, which is gitignored and generated here.
+          GOOGLE_MAPS_API_KEY=AIzaSyCI_TEST_KEY_NOT_REAL_0000000000
           GOOGLE_CLIENT_ID=test-google-client-id
           GOOGLE_CLIENT_SECRET=test-google-client-secret
           RESEND_API_KEY=test-resend-key
@@ -115,7 +120,7 @@ jobs:
       - name: Ensure no hardcoded Google keys in active code
         run: |
           GOOGLE_KEY_PREFIX="AI""za"
-          if grep -R "$GOOGLE_KEY_PREFIX" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=audit-results --exclude-dir=data --exclude='*.md'; then
+          if grep -R "$GOOGLE_KEY_PREFIX" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=audit-results --exclude-dir=data --exclude='*.md' --exclude='.env'; then
             echo "Found hardcoded Google API key pattern in active code"
             exit 1
           fi
