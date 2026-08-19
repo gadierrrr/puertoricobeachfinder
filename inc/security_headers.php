@@ -127,7 +127,69 @@ header('Content-Security-Policy: ' . $csp);
 // Performance Headers
 header('X-DNS-Prefetch-Control: on');
 
-// Cache HTML pages for 5 minutes (browser) with stale-while-revalidate
+/**
+ * Decide whether this HTML response may be stored in a shared (edge) cache.
+ *
+ * Cacheable means: the exact bytes we are about to emit are correct for every
+ * anonymous visitor asking for this URL. Anything visitor-specific — a session,
+ * a cookie we are about to set, a language the URL does not pin down — must
+ * fail this check, because Cloudflare keys on the URL alone.
+ */
+function pageIsEdgeCacheable(): bool
+{
+    // Only idempotent reads. POSTs mutate and must never be replayed from cache.
+    if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'GET') {
+        return false;
+    }
+
+    // Signed-in visitors get personalized HTML (favorites, review/check-in state).
+    // Anonymous visitors never receive this cookie — sessions only start when it
+    // is already present (components/header.php) — so its absence is a reliable
+    // "this response is not personalized" signal.
+    if (isset($_COOKIE['BEACH_FINDER_SESSION'])) {
+        return false;
+    }
+
+    // Only 200s. quiz-results.php sets its 404 before including the header, and
+    // this guard keeps that (and anything like it) out of the shared cache.
+    if (http_response_code() !== 200) {
+        return false;
+    }
+
+    // ?ref= captures an invite into a Set-Cookie; ?rdedit=1 is the admin preview.
+    // Neither may be stored and replayed for other visitors.
+    if (isset($_GET['ref']) || isset($_GET['rdedit'])) {
+        return false;
+    }
+
+    $path = (string) (parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/');
+
+    // Account, auth and admin surfaces are per-visitor by definition. Several of
+    // these also call session_start() unconditionally, which emits a Set-Cookie.
+    $privatePrefixes = [
+        '/admin', '/api/', '/auth/', '/login', '/logout', '/profile',
+        '/favorites', '/lists', '/list', '/onboarding', '/verify',
+        '/quiz-results', '/go', '/ad-out', '/local-out',
+    ];
+    foreach ($privatePrefixes as $prefix) {
+        if ($path === $prefix || str_starts_with($path, $prefix . '/')) {
+            return false;
+        }
+    }
+
+    // The rendered language must be decidable from the URL alone. getCurrentLanguage()
+    // falls back to the session/`lang` cookie when the path does not pin a locale, so
+    // caching such a URL could serve one visitor's language to everyone. Registered
+    // routes (including the unprefixed English ones) resolve here; anything else
+    // stays uncached rather than risk it.
+    require_once __DIR__ . '/locale_routes.php';
+    if (resolveLocaleFromPath($path) === null) {
+        return false;
+    }
+
+    return true;
+}
+
 if (!headers_sent()) {
     $isApiRequest = strpos($_SERVER['REQUEST_URI'] ?? '', '/api/') !== false;
     $isAuthPage = strpos($_SERVER['REQUEST_URI'] ?? '', '/login') !== false ||
@@ -142,8 +204,25 @@ if (!headers_sent()) {
         header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
         header('Pragma: no-cache');
         header('Vary: Cookie, Accept-Language');
+    } elseif (pageIsEdgeCacheable()) {
+        // Anonymous, locale-pinned HTML: let Cloudflare serve it from the edge.
+        //
+        // Browsers still revalidate every navigation (max-age=0, must-revalidate),
+        // so a signed-in user never sees a stale shell; the win is that the
+        // revalidation terminates at the edge instead of at PHP on a 2-core box.
+        // CDN-Cache-Control governs Cloudflare specifically and takes precedence
+        // there; s-maxage is the fallback for any shared cache that ignores it.
+        //
+        // NOTE: the CSP nonce below is per-response, so a cached page pins one
+        // nonce for the life of the entry. That is a deliberate, bounded tradeoff
+        // taken when edge caching was enabled — keep the TTL short.
+        header('Cache-Control: public, max-age=0, s-maxage=300, must-revalidate');
+        header('CDN-Cache-Control: public, s-maxage=300, stale-while-revalidate=86400');
+        // Locale comes from the path and Accept-Language changes nothing, so the
+        // only dimension worth varying on is the encoding.
+        header('Vary: Accept-Encoding');
     } else {
-        // Locale-aware HTML should not be cached publicly.
+        // Personalized, non-GET, or a URL whose language the path does not pin.
         header('Cache-Control: private, no-cache, max-age=0, must-revalidate');
         header('Vary: Cookie, Accept-Language');
     }
