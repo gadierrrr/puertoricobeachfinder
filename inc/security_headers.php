@@ -166,10 +166,15 @@ function pageIsEdgeCacheable(): bool
 
     // Account, auth and admin surfaces are per-visitor by definition. Several of
     // these also call session_start() unconditionally, which emits a Set-Cookie.
+    // `/advertise` mints a per-render, time-limited lead-form token
+    // (advertisingLeadFormToken). A shared cache would hand the same token to
+    // everyone and, once the entry went stale, keep serving one that had already
+    // expired — silently failing every lead submission. Any page that embeds a
+    // per-render token belongs on this list.
     $privatePrefixes = [
         '/admin', '/api/', '/auth/', '/login', '/logout', '/profile',
         '/favorites', '/lists', '/list', '/onboarding', '/verify',
-        '/quiz-results', '/go', '/ad-out', '/local-out',
+        '/quiz-results', '/go', '/ad-out', '/local-out', '/advertise',
     ];
     foreach ($privatePrefixes as $prefix) {
         if ($path === $prefix || str_starts_with($path, $prefix . '/')) {

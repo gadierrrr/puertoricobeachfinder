@@ -396,7 +396,15 @@ function advertisingRecordEvent(array $payload, string $eventType): array
     if ($pageType === '' || $pageKey === '' || $nonce === '') {
         return ['ok' => false, 'status' => 400];
     }
-    $dedupeKey = hash_hmac('sha256', implode('|', [$eventType, $assignment['assignment_id'], $pageType, $pageKey, $nonce, $action]), advertisingSecret());
+    // The nonce alone is NOT enough to scope a duplicate. It is minted per render
+    // (advertisingRenderSlot), and beach/guide/collection pages are edge-cached for
+    // anonymous visitors (inc/security_headers.php), so one cached copy — and therefore
+    // one nonce — is served to every visitor for the life of the cache entry. Keying
+    // only on it would collapse every visitor's click into a single billable event.
+    // The visitor hash is a daily-rotating HMAC of IP+UA, so including it dedupes per
+    // visitor per day, which is the intent, and stays correct under caching.
+    $visitorHash = advertisingVisitorHash();
+    $dedupeKey = hash_hmac('sha256', implode('|', [$eventType, $assignment['assignment_id'], $pageType, $pageKey, $nonce, $action, $visitorHash]), advertisingSecret());
     $id = uuid();
     $inserted = execute(
         'INSERT OR IGNORE INTO ad_events
@@ -409,7 +417,7 @@ function advertisingRecordEvent(array $payload, string $eventType): array
             ':assignment_id' => $assignment['assignment_id'], ':campaign_id' => $assignment['campaign_id'],
             ':creative_id' => $assignment['creative_id'], ':slot_key' => $assignment['slot_key'],
             ':page_type' => $pageType, ':page_key' => $pageKey, ':locale' => $locale,
-            ':action' => $action, ':visitor_hash' => advertisingVisitorHash(), ':dedupe_key' => $dedupeKey,
+            ':action' => $action, ':visitor_hash' => $visitorHash, ':dedupe_key' => $dedupeKey,
         ]
     );
     if (!$inserted || getDb()->changes() === 0) {

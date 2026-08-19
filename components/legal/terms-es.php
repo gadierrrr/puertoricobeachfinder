@@ -1,7 +1,7 @@
 <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <header class="managed-page-hero page-heading-hero mb-8"<?= pageHeroAttributes('legal') ?>>
         <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Términos de Servicio</h1>
-        <p class="text-sm text-gray-500">Última actualización: 9 de julio de 2026</p>
+        <p class="text-sm text-gray-500">Última actualización: 19 de agosto de 2026</p>
     </header>
 
     <div class="prose prose-slate max-w-none">
