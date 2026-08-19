@@ -442,6 +442,27 @@ function advertisingRecordEvent(array $payload, string $eventType): array
     return ['ok' => true, 'duplicate' => false, 'event_id' => $id, 'assignment' => $assignment];
 }
 
+/**
+ * Could two targets ever select the same page?
+ *
+ * Mirrors advertisingAssignmentMatchesTarget(). Deliberately conservative: when
+ * two different non-global target types are involved we cannot prove they are
+ * disjoint without resolving every page (a municipality target and a beach
+ * target collide on any beach in that municipality), so we report an overlap.
+ * On an exclusive slot a false positive costs an admin one extra decision; a
+ * false negative sells the same exclusive inventory twice.
+ */
+function advertisingTargetsOverlap(string $typeA, string $keyA, string $typeB, string $keyB): bool
+{
+    if ($typeA === 'global' || $typeB === 'global') {
+        return true;
+    }
+    if ($typeA === $typeB) {
+        return hash_equals($keyA, $keyB);
+    }
+    return true;
+}
+
 function advertisingAssignmentConflict(string $slotId, string $targetType, string $targetKey, string $locale, ?string $startsAt, ?string $endsAt, string $excludeId = ''): ?array
 {
     try {
@@ -449,17 +470,32 @@ function advertisingAssignmentConflict(string $slotId, string $targetType, strin
         if (!$slot || empty($slot['exclusive'])) {
             return null;
         }
+        // Do NOT filter on target_type/target_key in SQL. Two assignments can
+        // collide on an exclusive slot without sharing a target tuple —
+        // advertisingAssignmentMatchesTarget() treats target_type="global" as
+        // matching every page, so a global assignment silently coexisted with a
+        // guide-scoped one. Both then matched the same page, the exclusive slot
+        // capped rendering at one, and whichever lost on priority was billed for
+        // an exclusive placement that never appeared. Pull every candidate on the
+        // slot and decide overlap in PHP instead.
+        //
+        // "paused" is included because a paused assignment can be resumed, which
+        // would resurrect the same collision.
         $rows = query(
-            'SELECT a.id,c.name FROM ad_assignments a INNER JOIN ad_campaigns c ON c.id=a.campaign_id
-             WHERE a.slot_id=:slot AND a.target_type=:type AND a.target_key=:key
+            'SELECT a.id,a.target_type,a.target_key,c.name FROM ad_assignments a
+             INNER JOIN ad_campaigns c ON c.id=a.campaign_id
+             WHERE a.slot_id=:slot
                AND (a.locale="all" OR :locale="all" OR a.locale=:locale)
-               AND a.status IN ("active","draft") AND a.id<>:exclude',
-            [':slot' => $slotId, ':type' => $targetType, ':key' => $targetKey, ':locale' => $locale, ':exclude' => $excludeId]
+               AND a.status IN ("active","draft","paused") AND a.id<>:exclude',
+            [':slot' => $slotId, ':locale' => $locale, ':exclude' => $excludeId]
         );
     } catch (Throwable $e) {
         return null;
     }
     foreach ($rows ?: [] as $row) {
+        if (!advertisingTargetsOverlap($targetType, $targetKey, (string) $row['target_type'], (string) $row['target_key'])) {
+            continue;
+        }
         $existing = queryOne('SELECT starts_at,ends_at FROM ad_assignments WHERE id=:id', [':id' => $row['id']]);
         $existingStart = trim((string) ($existing['starts_at'] ?? '')) ?: '0000-01-01 00:00:00';
         $existingEnd = trim((string) ($existing['ends_at'] ?? '')) ?: '9999-12-31 23:59:59';
