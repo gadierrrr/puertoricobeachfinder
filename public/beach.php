@@ -190,8 +190,23 @@ $extraHead .= breadcrumbSchema([
     ['name' => $beach['name'], 'url' => routeUrl('beach_detail', $lang, ['slug' => $beach['slug']])]
 ]);
 
-// Generate dynamic FAQ schema
-$faqs = generateBeachFAQs($beach);
+// Generate dynamic FAQ schema. Filter out entries that restate page facts
+// BEFORE the schema is built so JSON-LD always matches the visible FAQ:
+// parking questions on boat/kayak-only beaches (there is no parking on a
+// cay), and best-time questions the glance card already answers.
+$faqAccess = strtolower((string) ($beach['access_label'] ?? ''));
+$faqIsBoat = str_contains($faqAccess, 'boat') || str_contains($faqAccess, 'kayak');
+$faqBestTime = trim((string) ($beach['best_time'] ?? ''));
+$faqs = array_values(array_filter(generateBeachFAQs($beach), function ($f) use ($faqIsBoat, $faqBestTime) {
+    $q = strtolower((string) ($f['question'] ?? ''));
+    if ($faqIsBoat && preg_match('/parking|estacionamiento/', $q)) {
+        return false;
+    }
+    if ($faqBestTime !== '' && preg_match('/best time|mejor (época|epoca|momento|fecha)/', $q)) {
+        return false;
+    }
+    return true;
+}));
 $extraHead .= faqSchema($faqs);
 
 // Add speakable schema for voice assistants

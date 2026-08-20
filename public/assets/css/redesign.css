@@ -372,6 +372,12 @@ body.redesign.rd-guide-page .chat-fab-container{display:none!important}
 .rd-beach .advise p{margin:3px 0 0;color:var(--ink-60);font-size:.88rem;line-height:1.42}
 .rd-beach .advise a{font-family:var(--data);font-weight:700;font-size:.8rem;color:var(--sea-deep)}
 .rd-beach .advise a:hover{text-decoration:underline;text-underline-offset:3px}
+.rd-beach .grev{display:flex;align-items:center;gap:9px;margin:0 0 14px;background:#fff;border:1px solid var(--ink-14);border-radius:12px;padding:12px 15px;font-size:.92rem;color:var(--ink)}
+.rd-beach .grev .st{color:var(--gold);font-size:1.05rem;line-height:1}
+.rd-beach .grev b{font-weight:800}
+.rd-beach .grev .go{margin-left:auto;font-family:var(--data);font-weight:700;font-size:.78rem;letter-spacing:.04em;color:var(--sea-deep);white-space:nowrap}
+.rd-beach a.grev:hover{border-color:var(--sea)}
+.rd-beach a.grev:hover .go{text-decoration:underline;text-underline-offset:3px}
 .rd-beach .gplan .more{font-family:var(--data);font-weight:700;font-size:.8rem;color:var(--sea-deep);white-space:nowrap}
 .rd-beach .gplan .more:hover{text-decoration:underline;text-underline-offset:3px}
 @media(max-width:900px){.rd-beach .mobile-planning .side-sec:has(.advise-card){grid-column:1/-1}}

@@ -141,14 +141,31 @@ foreach (($beach['tips'] ?? []) as $t) {
 if (!$tipList && !empty($beach['local_tips'])) {
     $tipList = array_values(array_filter(array_map('trim', preg_split('/\n|•|\r/', (string) $beach['local_tips']))));
 }
+// Generated tips need the same boat-beach scrub as the prose: no parking
+// advice on a cay. Also collapse duplicate "bring snorkel gear" tips,
+// keeping the most detailed one.
+if ($isBoat) {
+    $tipList = array_values(array_filter($tipList, fn($t) => !preg_match('/parking|estacionamiento/i', $t)));
+}
+$gearTips = array_values(array_filter($tipList, fn($t) => preg_match('/snorkel\S*\s+gear|gear\S*\s+de\s+esn[oó]rquel|equipo\s+de\s+esn[oó]rquel/iu', $t)));
+if (count($gearTips) > 1) {
+    usort($gearTips, fn($a, $b) => mb_strlen($b) <=> mb_strlen($a));
+    $tipList = array_values(array_diff($tipList, array_slice($gearTips, 1)));
+}
 $tipList = array_slice($tipList, 0, 6);
 
+// $faqs arrive pre-filtered from beach.php (parking on boat beaches,
+// best-time dupes) so the FAQ JSON-LD schema always matches this section.
+
 // extended CMS sections — same grouping/order as classic extended-sections.php
-$xPlanTypes = ['best_time', 'what_to_bring'];
-$xAboutTypes = ['history', 'nearby', 'local_tips'];
+$xPlanTypes = ['what_to_bring'];
+$xAboutTypes = ['history', 'nearby'];
 $xPlan = []; $xAbout = []; $xOther = [];
 foreach (($extendedSections ?? []) as $s) {
-    if ($s['section_type'] === 'getting_there') continue;
+    // getting_there feeds the Getting there section; best_time is the glance
+    // card's row; local_tips duplicates the Local tips section. None of them
+    // earn a second rendering as an accordion.
+    if (in_array($s['section_type'], ['getting_there', 'best_time', 'local_tips'], true)) continue;
     if (in_array($s['section_type'], $xPlanTypes, true)) $xPlan[] = $s;
     elseif (in_array($s['section_type'], $xAboutTypes, true)) $xAbout[] = $s;
     else $xOther[] = $s;
@@ -307,9 +324,9 @@ if (isAuthenticated() && !empty($_SESSION['user_id'])) {
 $subnav = array_values(array_filter([
     ['overview', $isEs ? 'Vistazo' : 'Overview', true],
     ['tours', 'Tours', true],
-    ['about', $isEs ? 'Sobre' : 'About', !empty($aboutParas) || !empty($beach['features'])],
+    ['about', $isEs ? 'Sobre' : 'About', !empty($aboutParas)],
     ['tips', $isEs ? 'Consejos' : 'Tips', !empty($tipList)],
-    ['getting', $isEs ? 'Cómo llegar' : 'Getting there', true],
+    ['getting', $isBoat ? ($isEs ? 'Seguridad' : 'Safety') : ($isEs ? 'Cómo llegar' : 'Getting there'), true],
     ['photos', $isEs ? 'Fotos' : 'Photos', true],
     ['reviews', $isEs ? 'Reseñas' : 'Reviews', true],
     ['nearby', $isEs ? 'Cercanas' : 'Nearby', !empty($nearby)],
@@ -411,7 +428,7 @@ $subnav = array_values(array_filter([
         </div>
         <?php endif; ?>
         <div class="glance-plan">
-          <div class="gplan"><h3><span class="ic" aria-hidden="true"><?= $isBoat ? '🛥️' : '🧭' ?></span><?= h($isEs ? 'Cómo llegar' : 'Getting there') ?></h3><p><?= h($firstSentence($gettingBody)) ?> <a class="more" href="#getting"><?= h($isEs ? 'Detalles →' : 'Details →') ?></a></p></div>
+          <div class="gplan"><h3><span class="ic" aria-hidden="true"><?= $isBoat ? '🛥️' : '🧭' ?></span><?= h($isEs ? 'Cómo llegar' : 'Getting there') ?></h3><p><?= h($firstSentence($gettingBody)) ?> <a class="more" href="<?= $isBoat ? '#tours' : '#getting' ?>"><?= h($isEs ? 'Detalles →' : 'Details →') ?></a></p></div>
           <?php if ($bestTime !== ''): ?>
           <div class="gplan"><h3><span class="ic" aria-hidden="true">📅</span><?= h($isEs ? 'Mejor época' : 'Best time') ?></h3><p><?= h($firstSentence($bestTime)) ?></p></div>
           <?php endif; ?>
@@ -427,17 +444,12 @@ $subnav = array_values(array_filter([
 
     <?= renderToursSection($beach, $lang, 'redesign') ?>
 
-    <?php if (!empty($aboutParas) || !empty($beach['features'])): ?>
+    <?php if (!empty($aboutParas)): ?>
     <section id="about" class="block prose">
-      <h2 class="h2"><?= h($isEs ? 'Sobre ' : 'About ') . h($beach['name']) ?></h2>
+      <h2 class="h2"><?= h(($isEs ? 'Sobre ' : 'About ') . $nameMain) ?></h2>
+      <?php // Feature chips dropped: a third chip vocabulary that restated the
+            // hero tags and the prose above. ?>
       <?php foreach ($aboutParas as $p): ?><p><?= h($p) ?></p><?php endforeach; ?>
-      <?php if (!empty($beach['features'])): ?>
-      <div class="feats">
-        <?php foreach ($beach['features'] as $feature): ?>
-        <span class="feat">✦ <?= h(($isEs && !empty($feature['title_es'])) ? $feature['title_es'] : $feature['title']) ?></span>
-        <?php endforeach; ?>
-      </div>
-      <?php endif; ?>
     </section>
     <?php endif; ?>
 
@@ -469,20 +481,25 @@ $subnav = array_values(array_filter([
     </section>
     <?php endif; ?>
 
+    <?php // Boat beaches: the access story lives in the tours section (the
+          // glance card links there), so this section is pure safety. The
+          // best-time guide link was the 4th best-time instance — gone; the
+          // remaining links stay on this section's actual topics. ?>
     <section id="getting" class="block">
-      <h2 class="h2"><?= h($isEs ? 'Cómo llegar y seguridad' : 'Getting there & safety') ?></h2>
+      <h2 class="h2"><?= h($isBoat ? ($isEs ? 'Seguridad' : 'Safety') : ($isEs ? 'Cómo llegar y seguridad' : 'Getting there & safety')) ?></h2>
       <div style="display:grid;gap:12px">
-        <?php if ($access !== '' || $heroParking !== ''): ?>
-        <div class="callout"><span class="ic"><?= $isBoat ? '🛥️' : '🧭' ?></span><div><h4><?= h($isEs ? 'Acceso' : 'Access') ?></h4><p><?= $isBoat ? h($gettingBody) : h(ucfirst($accessLabel)) . ($heroParking !== '' ? '. ' . h($heroParking) : '') ?></p></div></div>
+        <?php if (!$isBoat && ($access !== '' || $heroParking !== '')): ?>
+        <div class="callout"><span class="ic">🧭</span><div><h4><?= h($isEs ? 'Acceso' : 'Access') ?></h4><p><?= h(ucfirst($accessLabel)) . ($heroParking !== '' ? '. ' . h($heroParking) : '') ?></p></div></div>
         <?php endif; ?>
         <?php if ($safetyInfo !== ''): ?>
         <div class="callout warn"><span class="ic">⚠️</span><div><h4><?= h($isEs ? 'Seguridad' : 'Swim smart') ?></h4><p><?= h($safetyInfo) ?></p></div></div>
         <?php endif; ?>
       </div>
       <div style="margin:12px 0 0;font-size:.92rem;display:flex;flex-direction:column;gap:6px">
-        <a href="<?= h(routeUrl('guide_transportation', $lang)) ?>" style="color:var(--sea-deep);font-weight:600"><?= h($isEs ? 'Guía completa: cómo llegar a las playas de Puerto Rico en carro, ferry o Uber →' : 'Full guide: getting to Puerto Rico beaches by car, ferry, or Uber →') ?></a>
         <a href="<?= h(routeUrl('guide_safety', $lang)) ?>" style="color:var(--sea-deep);font-weight:600"><?= h($isEs ? 'Guía completa: consejos de seguridad para playas de Puerto Rico →' : 'Full guide: beach safety tips for Puerto Rico →') ?></a>
-        <a href="<?= h(routeUrl('guide_best_time', $lang)) ?>" style="color:var(--sea-deep);font-weight:600"><?= h($isEs ? 'Guía completa: mejor época para visitar las playas de Puerto Rico →' : 'Full guide: best time to visit Puerto Rico beaches →') ?></a>
+        <?php if (!$isBoat): ?>
+        <a href="<?= h(routeUrl('guide_transportation', $lang)) ?>" style="color:var(--sea-deep);font-weight:600"><?= h($isEs ? 'Guía completa: cómo llegar a las playas de Puerto Rico en carro, ferry o Uber →' : 'Full guide: getting to Puerto Rico beaches by car, ferry, or Uber →') ?></a>
+        <?php endif; ?>
       </div>
     </section>
 
@@ -507,15 +524,10 @@ $subnav = array_values(array_filter([
     <section id="photos" class="block">
       <div class="secrow">
         <h2 class="h2"><?= h($isEs ? 'Fotos' : 'Photos') ?><?php if ($totalUserPhotos > 0): ?> <small>(<?= $totalUserPhotos ?>)</small><?php endif; ?></h2>
+        <?php // Contribution CTAs live in the contrib band above — this row
+              // keeps only the Google photos viewer. ?>
         <?php if (!empty($beach['place_id'])): ?>
         <button class="btn" type="button" data-action="openGooglePhotos" data-action-args='["<?= h($beach['slug']) ?>"]'>📷 <?= h($isEs ? 'Fotos de Google Maps' : 'Photos from Google Maps') ?></button>
-        <?php endif; ?>
-        <?php if ($hasPhotosContent): ?>
-        <?php if (isAuthenticated()): ?>
-        <button class="btn" type="button" data-action="openPhotoUploadModal" data-action-args='<?= $photoActionArgs ?>'>+ <?= h($isEs ? 'Añadir foto' : 'Add photo') ?></button>
-        <?php else: ?>
-        <a class="minor" href="<?= h($photoLoginUrl) ?>"><?= h($isEs ? 'Inicia sesión para añadir fotos' : 'Sign in to add photos') ?></a>
-        <?php endif; ?>
         <?php endif; ?>
       </div>
       <?php if ($hasGallery): ?>
@@ -554,15 +566,17 @@ $subnav = array_values(array_filter([
 
     <section id="reviews" class="block">
       <div class="secrow">
-        <h2 class="h2"><?= h($isEs ? 'Reseñas de la comunidad' : 'Community reviews') ?><?php if ($avgUserRating): ?> <small>★ <?= number_format($avgUserRating, 1) ?> (<?= $userReviewCount ?>)</small><?php endif; ?></h2>
-        <?php if ($hasReviewsContent): ?>
-        <?php if (isAuthenticated()): ?>
-        <button class="btn" type="button" data-action="openReviewForm" data-action-args='<?= $reviewActionArgs ?>'><?= h($isEs ? 'Escribir reseña' : 'Write a review') ?></button>
-        <?php else: ?>
-        <a class="minor" href="<?= h($reviewLoginUrl) ?>"><?= h($isEs ? 'Inicia sesión para reseñar' : 'Sign in to review') ?></a>
-        <?php endif; ?>
-        <?php endif; ?>
+        <h2 class="h2"><?= h($isEs ? 'Reseñas' : 'Reviews') ?><?php if ($avgUserRating): ?> <small>★ <?= number_format($avgUserRating, 1) ?> (<?= $userReviewCount ?>)</small><?php endif; ?></h2>
       </div>
+      <?php // The hero's rating links here — honor it: lead with the real
+            // Google signal before the native-review invite. ?>
+      <?php if ($rating > 0 && $reviewCountGoogle > 0): ?>
+      <a class="grev" <?php if (!empty($beach['place_id'])): ?>href="https://www.google.com/maps/place/?q=place_id:<?= rawurlencode($beach['place_id']) ?>" target="_blank" rel="noopener nofollow"<?php endif; ?>>
+        <span class="st" aria-hidden="true">★</span>
+        <span><b><?= number_format($rating, 1) ?></b> <?= h($isEs ? 'en Google' : 'on Google') ?> · <?= number_format($reviewCountGoogle) ?> <?= h($isEs ? 'reseñas' : 'reviews') ?></span>
+        <?php if (!empty($beach['place_id'])): ?><span class="go"><?= h($isEs ? 'Leer en Google →' : 'Read on Google →') ?></span><?php endif; ?>
+      </a>
+      <?php endif; ?>
       <div class="revlist">
         <?php if (!empty($reviews)): ?>
         <?php foreach ($reviews as $review): ?>
@@ -585,8 +599,6 @@ $subnav = array_values(array_filter([
       </div>
     </section>
 
-    <?= renderLocalListingsSection($beach, $lang, 'redesign') ?>
-
     <?php if (!empty($relatedGuides)): ?>
     <section class="block">
       <h2 class="h2"><?= h($isEs ? 'Planifica tu visita' : 'Planning your visit') ?></h2>
@@ -597,6 +609,8 @@ $subnav = array_values(array_filter([
       </div>
     </section>
     <?php endif; ?>
+
+    <?= renderLocalListingsSection($beach, $lang, 'redesign') ?>
 
     <section class="block">
       <h2 class="h2"><?= h($isEs ? 'Explorar por actividad' : 'Explore by activity') ?></h2>
@@ -625,7 +639,6 @@ $subnav = array_values(array_filter([
     <section id="nearby" class="block nearby-block">
       <div class="secrow">
         <h2 class="h2"><?= h($isEs ? 'Playas cercanas' : 'Nearby beaches') ?></h2>
-        <a class="minor" href="#getting"><?= h($isEs ? 'Ver ubicación' : 'View location') ?></a>
       </div>
       <div class="ngrid nearby-grid">
         <?php foreach ($nearby as $nb):
@@ -634,6 +647,15 @@ $subnav = array_values(array_filter([
         <a class="btile" href="<?= h($nbUrl) ?>"><div class="ph"><img src="<?= h($nbImg) ?>" alt="<?= h($nb['name'] . ', ' . $nb['municipality']) ?>" loading="lazy" decoding="async"></div><div class="gr"></div><span class="di"><?= h($nb['distance_formatted'] ?? '') ?></span><div class="info"><div class="nm"><?= h($nb['name']) ?></div><div class="mu"><?= h($nb['municipality']) ?></div></div></a>
         <?php endforeach; ?>
       </div>
+    </section>
+    <?php endif; ?>
+
+    <?php if (!empty($faqs)): ?>
+    <section id="faq" class="block faq">
+      <h2 class="h2"><?= h($isEs ? 'Preguntas' : 'Questions') ?></h2>
+      <?php foreach (array_slice($faqs, 0, 6) as $i => $f): ?>
+      <details<?= $i === 0 ? ' open' : '' ?>><summary><?= h($f['question']) ?></summary><p><?= h($f['answer']) ?></p></details>
+      <?php endforeach; ?>
     </section>
     <?php endif; ?>
 
@@ -646,15 +668,6 @@ $subnav = array_values(array_filter([
         <a class="btile" href="<?= h(routeUrl('beach_detail', $lang, ['slug' => $sb['slug']])) ?>"><div class="ph"><img src="<?= h($sbImg) ?>" alt="<?= h($sb['name'] . ', ' . $sb['municipality']) ?>" loading="lazy" decoding="async"></div><div class="gr"></div><?php if (!empty($sb['google_rating'])): ?><span class="di">★ <?= number_format($sb['google_rating'], 1) ?></span><?php endif; ?><div class="info"><div class="nm"><?= h($sb['name']) ?></div><div class="mu"><?= h($sb['municipality']) ?></div><div class="why"><?= h($similarReason($sb)) ?></div></div></a>
         <?php endforeach; ?>
       </div>
-    </section>
-    <?php endif; ?>
-
-    <?php if (!empty($faqs)): ?>
-    <section id="faq" class="block faq">
-      <h2 class="h2"><?= h($isEs ? 'Preguntas' : 'Questions') ?></h2>
-      <?php foreach (array_slice($faqs, 0, 6) as $i => $f): ?>
-      <details<?= $i === 0 ? ' open' : '' ?>><summary><?= h($f['question']) ?></summary><p><?= h($f['answer']) ?></p></details>
-      <?php endforeach; ?>
     </section>
     <?php endif; ?>
 
