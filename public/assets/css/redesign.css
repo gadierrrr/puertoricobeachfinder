@@ -304,12 +304,16 @@ body.redesign.rd-guide-page .chat-fab-container{display:none!important}
 .rd-beach .h-tag{font-family:var(--data);font-weight:600;letter-spacing:.05em;font-size:.78rem;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:5px 13px}
 .rd-beach .h-tag.boat{background:var(--coral);border-color:var(--coral)}
 .rd-beach .h-title{font-family:var(--disp);font-size:clamp(2.45rem,5.6vw,4.35rem);line-height:.95;letter-spacing:-.01em;text-shadow:0 3px 18px rgba(0,0,0,.4);max-width:11.5em}
+.rd-beach .h-title-alt{display:block;font-size:.42em;letter-spacing:.01em;opacity:.86;margin-top:7px}
 .rd-beach .h-sub{font-family:var(--data);font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:.95rem;margin-top:8px;color:var(--sun)}
 .rd-beach .h-sub .coord{color:rgba(255,255,255,.7)}
 .rd-beach .h-rating{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-top:10px;font-family:var(--data);font-size:.82rem;letter-spacing:.04em;color:rgba(255,255,255,.88)}
+.rd-beach a.h-rating:hover span:last-child{text-decoration:underline;text-underline-offset:3px}
 .rd-beach .stars{color:var(--sun);letter-spacing:2px}
 .rd-beach .h-command{display:inline-flex;align-items:stretch;gap:10px;margin-top:16px;padding:10px;background:rgba(8,22,32,.56);border:1px solid rgba(255,255,255,.2);border-radius:14px;box-shadow:0 22px 42px -30px rgba(0,0,0,.65);backdrop-filter:blur(10px)}
 .rd-beach .h-snap{min-width:0;border-radius:9px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.13);padding:7px 9px}
+.rd-beach button.h-snap{appearance:none;-webkit-appearance:none;font:inherit;text-align:left;cursor:pointer}
+.rd-beach button.h-snap.score:hover{filter:brightness(1.06)}
 .rd-beach .h-snap .v{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--data);font-weight:800;letter-spacing:.035em;font-size:.78rem;color:#fff}
 .rd-beach .h-snap .k{display:block;margin-top:1px;font-family:var(--data);font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:.54rem;color:rgba(255,255,255,.58)}
 .rd-beach .h-snap.score{background:var(--sun);border-color:var(--sun);color:var(--ink);display:flex;flex-direction:column;justify-content:center;padding:7px 14px}
@@ -324,6 +328,13 @@ body.redesign.rd-guide-page .chat-fab-container{display:none!important}
 .rd-beach .subnav .wrap{display:flex;gap:24px;overflow-x:auto}
 .rd-beach .subnav a{font-family:var(--data);font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:.8rem;color:var(--ink-60);padding:15px 0;white-space:nowrap;border-bottom:2px solid transparent}
 .rd-beach .subnav a:hover{color:var(--ink)}.rd-beach .subnav a.on{color:var(--coral);border-color:var(--coral)}
+@media(max-width:900px){.rd-beach .subnav .wrap{-webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 34px),transparent);mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 34px),transparent)}}
+.rd-beach .mob-actionbar{display:none}
+@media(max-width:640px){
+  .rd-beach .mob-actionbar.show{position:fixed;left:0;right:0;bottom:0;z-index:45;display:flex;gap:9px;padding:10px max(12px,env(safe-area-inset-left)) calc(10px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-right));background:rgba(245,239,223,.96);backdrop-filter:blur(8px);border-top:1px solid var(--ink-14);box-shadow:0 -14px 34px -28px rgba(21,34,43,.7)}
+  .rd-beach .mob-actionbar .btn{flex:1;justify-content:center}
+  .rd-beach .mob-actionbar .btn.save{flex:0 0 auto;min-width:54px;font-size:1.05rem}
+}
 .rd-beach .contrib-band{margin-top:18px;background:#fff;border:1px solid var(--ink-14);border-radius:16px;padding:18px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;box-shadow:0 14px 34px -28px rgba(20,40,55,.65)}
 .rd-beach .contrib-band h2{font-family:var(--disp);font-size:clamp(1.35rem,2.6vw,2rem);line-height:1.05;margin:4px 0 6px;color:var(--ink)}
 .rd-beach .contrib-band p{color:var(--ink-60);font-size:.95rem;max-width:58ch}
@@ -344,6 +355,8 @@ body.redesign.rd-guide-page .chat-fab-container{display:none!important}
 .rd-beach .gfact .k{font-family:var(--data);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:.64rem;color:var(--ink-40)}
 .rd-beach .gfact .v{font-weight:700;font-size:.9rem;margin-top:2px;line-height:1.18}
 .rd-beach .gfact .v.g{color:var(--green)}.rd-beach .gfact .v.a{color:#B7860B}.rd-beach .gfact .v.r{color:var(--coral)}
+.rd-beach .gfact .vlink{display:inline-block;font-family:var(--data);font-weight:700;font-size:.78rem;letter-spacing:.03em;color:var(--sea-deep);margin-top:2px}
+.rd-beach .gfact .vlink:hover{text-decoration:underline;text-underline-offset:3px}
 .rd-beach .glance-chips{display:grid;gap:9px;padding:13px 0;border-bottom:1px solid var(--ink-14)}
 .rd-beach .chiprow{display:flex;gap:12px;align-items:baseline;min-width:0}
 .rd-beach .chiprow h3{font-family:var(--data);font-weight:900;text-transform:uppercase;letter-spacing:.12em;font-size:.64rem;color:var(--green);margin:0;flex:0 0 84px}
@@ -560,7 +573,7 @@ body.redesign.rd-guide-page .chat-fab-container{display:none!important}
 @media(hover:none){.rd-home .btile:hover .btile-photo{transform:none;filter:none}.rd-home .btile:hover .btile-rest{opacity:1}.rd-home .btile:hover .btile-hover{opacity:0;pointer-events:none}}
 
 @media(max-width:640px){
-  .rd-beach .hero{min-height:calc(74svh - 54px)}
+  .rd-beach .hero{min-height:calc(62svh - 54px)}
   .rd-beach img.hero-photo{object-position:center 76%}
   .rd-beach .hero-body{padding-top:34px;padding-bottom:14px}
   .rd-beach .h-tags{margin-bottom:8px}
