@@ -660,6 +660,24 @@ include APP_ROOT . '/components/header.php';
     </div>
 </section>
 
+<?php
+// Tours & experiences (Viator) — short San Juan water tours that fit a layover.
+require_once APP_ROOT . '/inc/tours.php';
+$lang = $lang ?? getCurrentLanguage();
+$sanJuanToursHtml = renderGuideToursSection('beaches-near-san-juan-airport', $lang, [
+    'sub' => $lang === 'es'
+        ? 'Tours cortos en el agua que caben en una escala. Reservas en Viator.'
+        : 'Short water tours that fit a layover. Booking happens on Viator.',
+    'section_class' => '',
+]);
+if ($sanJuanToursHtml !== ''): ?>
+<section class="py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <?= $sanJuanToursHtml ?>
+    </div>
+</section>
+<?php endif; ?>
+
 <!-- Cross-Links Section -->
 <section class="py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

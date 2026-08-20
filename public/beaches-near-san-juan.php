@@ -186,6 +186,23 @@ include APP_ROOT . '/components/header.php';
     </div>
 </section>
 
+<?php
+// Tours & experiences (Viator) — the three San Juan products with proven bookings.
+require_once APP_ROOT . '/inc/tours.php';
+$sanJuanToursHtml = renderGuideToursSection('beaches-near-san-juan', $lang, [
+    'sub' => $lang === 'es'
+        ? 'Experiencias en el agua mejor valoradas en San Juan. Reservas en Viator.'
+        : 'Top-rated San Juan water experiences. Booking happens on Viator.',
+    'section_class' => '',
+]);
+if ($sanJuanToursHtml !== ''): ?>
+<section class="py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <?= $sanJuanToursHtml ?>
+    </div>
+</section>
+<?php endif; ?>
+
 <?php $currentCollectionKey = $collectionKey; include APP_ROOT . '/components/collection/related-collections.php'; ?>
 
 <!-- FAQ Section -->

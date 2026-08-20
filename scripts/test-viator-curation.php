@@ -24,9 +24,13 @@ $curatedCases = [
     [['mosquito-bay-beach'], 'viator-product-vieques-biobay-kayak'],
     [['steps-beach-tres-palmas'], 'viator-product-rincon-snorkel'],
     [['domes-beach'], 'viator-product-rincon-surf-lesson'],
-    [['escambron-beach', 'balneario-el-escambron'], 'viator-product-escambron-snorkel'],
+    // Migration 053: the turtle snorkel (45107P2) outranks the original
+    // Escambrón offer after the Jul–Aug 2026 booking data.
+    [['escambron-beach', 'balneario-el-escambron'], 'viator-product-san-juan-turtle-snorkel'],
     [['cueva-del-indio-shore'], 'viator-product-cueva-del-indio'],
     [['la-parguera-bioluminescent-bay-entry'], 'viator-product-la-parguera-biobay'],
+    [['condado-beach'], 'viator-product-san-juan-jet-ski'],
+    [['isla-verde-beach'], 'viator-product-san-juan-turtle-snorkel'],
 ];
 
 foreach ($curatedCases as [$beachSlugs, $campaignSlug]) {

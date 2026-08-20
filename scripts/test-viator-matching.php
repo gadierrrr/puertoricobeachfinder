@@ -281,12 +281,12 @@ try {
     $assert(str_contains($guideEn, 'page_slug=snorkeling-guide'), 'Guide cards should carry the guide slug');
     $assert(str_contains($guideEn, 'placement=guide_tours'), 'Guide cards should carry the guide placement key');
     $assert(str_contains($guideEn, 'match_type=curated_guide'), 'Guide product cards should use curated_guide match type');
-    $assert(substr_count($guideEn, 'View on Viator') === 3, 'Snorkeling guide should render its three curated products');
+    $assert(substr_count($guideEn, 'View on Viator') === 4, 'Snorkeling guide should render its four curated products');
     $assert(str_contains($guideEn, 'Book these experiences'), 'Guide section heading should render');
 
     $guideEs = renderGuideToursSection('snorkeling-guide', 'es');
     $assert(str_contains($guideEs, 'Reserva estas experiencias'), 'Spanish guide heading should render');
-    $assert(substr_count($guideEs, 'Ver en Viator') === 3, 'Spanish guide should render its three curated products');
+    $assert(substr_count($guideEs, 'Ver en Viator') === 4, 'Spanish guide should render its four curated products');
 
     $guideNone = renderGuideToursSection('beach-safety-tips', 'en');
     $assert($guideNone === '', 'Guides without placements should render nothing');
