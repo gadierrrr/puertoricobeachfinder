@@ -563,7 +563,7 @@ window.RD_CFG = <?= json_encode([
     'regionNames' => $regionNames,
 ], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?>;
 </script>
-<script <?= cspNonceAttr() ?> src="/assets/js/redesign-home.js?v=18"></script>
+<script <?= cspNonceAttr() ?> src="/assets/js/redesign-home.js?v=19"></script>
 <?php if ($hpEditor): ?>
 <!-- Admin homepage-design editor preview (loaded only inside /admin/homepage-design iframe) -->
 <script <?= cspNonceAttr() ?> src="/assets/js/redesign-editor-preview.js?v=1"></script>

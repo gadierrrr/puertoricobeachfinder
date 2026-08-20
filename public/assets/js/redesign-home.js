@@ -11,22 +11,6 @@
   var grid = document.getElementById("rdGrid");
   if (!grid) return;
   var RN = CFG.regionNames || { north: "North Coast", metro: "Metro · San Juan", west: "Porta del Sol", south: "South Coast", east: "East · Fajardo", cays: "The Cays" };
-  var CLUSTER_POS = {
-    north: { x: 30, y: 16 },
-    metro: { x: 70, y: 16 },
-    west: { x: 18, y: 42 },
-    east: { x: 72, y: 43 },
-    south: { x: 31, y: 76 },
-    cays: { x: 72, y: 76 }
-  };
-  var CLUSTER_POS_MOBILE = {
-    north: { x: 30, y: 16 },
-    metro: { x: 58, y: 16 },
-    west: { x: 22, y: 43 },
-    east: { x: 58, y: 43 },
-    south: { x: 32, y: 76 },
-    cays: { x: 58, y: 76 }
-  };
   var URL_PREFIX = CFG.urlPrefix || "/beach/";
   var favs = (CFG.favs || []).slice();
   var PAGE_SIZE = 12;
@@ -163,23 +147,70 @@
   }
 
   function renderMapClusters(beaches) {
+    // Each pill sits at the centroid of its region's (correctly projected)
+    // beaches, pushed outward from the island's center so it floats just
+    // offshore, callout-style, still pointing at its coast. Works at any
+    // canvas size — no hardcoded positions.
     var groups = {};
     beaches.forEach(function (b) {
       var rg = b.rg || "unknown";
       var p = mapPoint(b);
       if (!p || rg === "unknown") return;
-      if (!groups[rg]) groups[rg] = { count: 0, x: 0, y: 0, best: 0 };
+      if (!groups[rg]) groups[rg] = { count: 0, x: 0, y: 0 };
       groups[rg].count += 1;
       groups[rg].x += p.x;
       groups[rg].y += p.y;
-      groups[rg].best = Math.max(groups[rg].best, Number(b.sc) || 0);
     });
-    return Object.keys(groups).map(function (rg) {
+    var ccx = 50, ccy = 50;
+    if (chartBox) {
+      // the island artwork's visual center in the viewBox is ~(248, 198)
+      ccx = (chartBox.ox + 248 * chartBox.sc) / chartBox.cw * 100;
+      ccy = (chartBox.oy + 198 * chartBox.sc) / chartBox.ch * 100;
+    }
+    var placed = Object.keys(groups).map(function (rg) {
       var g = groups[rg];
-      var isMobileMap = window.matchMedia && window.matchMedia("(max-width: 640px)").matches;
-      var pos = (isMobileMap ? CLUSTER_POS_MOBILE[rg] : CLUSTER_POS[rg]) || { x: g.x / g.count, y: g.y / g.count };
-      return '<button type="button" class="map-cluster" style="left:' + pos.x.toFixed(2) + '%;top:' + pos.y.toFixed(2) + '%" data-region="' + esc(rg) + '" aria-label="' + esc((RN[rg] || rg) + ", " + g.count + " " + word("beaches", "beaches")) + '">' +
-        '<b>' + g.count + '</b><span>' + esc(RN[rg] || rg) + '</span></button>';
+      var x = g.x / g.count, y = g.y / g.count;
+      var dx = x - ccx, dy = y - ccy;
+      var len = Math.sqrt(dx * dx + dy * dy) || 1;
+      return { rg: rg, count: g.count, x: x + (dx / len) * 6, y: y + (dy / len) * 13 };
+    });
+    // Separate overlapping pills (East·Fajardo and The Cays share the
+    // northeast corner): a couple of relaxation passes pushing pairs apart
+    // by roughly a pill's footprint.
+    // spacing + clamps derived from the real pill footprint vs live canvas,
+    // so mobile (tiny canvas, ~94px pills) separates and never clips
+    var isMobileMap = window.matchMedia && window.matchMedia("(max-width: 640px)").matches;
+    var pillW = isMobileMap ? 96 : 134, pillH = isMobileMap ? 56 : 64;
+    var cw = chartBox ? chartBox.cw : 700, ch = chartBox ? chartBox.ch : 500;
+    var minDx = pillW / cw * 100 + 2, minDy = pillH / ch * 100 + 3;
+    var xPad = pillW / 2 / cw * 100 + 1, yPad = pillH / 2 / ch * 100 + 1;
+    var clampX = function (v) { return Math.max(xPad, Math.min(100 - xPad, v)); };
+    var clampY = function (v) { return Math.max(yPad, Math.min(100 - yPad, v)); };
+    placed.forEach(function (c) { c.x = clampX(c.x); c.y = clampY(c.y); });
+    // clamping inside the loop lets a pill pinned at the canvas edge hand
+    // its share of the separation to its neighbor on later passes
+    for (var pass = 0; pass < 5; pass++) {
+      for (var i = 0; i < placed.length; i++) {
+        for (var j = i + 1; j < placed.length; j++) {
+          var a = placed[i], z = placed[j];
+          var ox = minDx - Math.abs(a.x - z.x), oy = minDy - Math.abs(a.y - z.y);
+          if (ox > 0 && oy > 0) {
+            if (ox / minDx < oy / minDy) {
+              var sx = a.x < z.x ? -1 : 1;
+              a.x = clampX(a.x + sx * ox / 2); z.x = clampX(z.x - sx * ox / 2);
+            } else {
+              var sy = a.y < z.y ? -1 : 1;
+              a.y = clampY(a.y + sy * oy / 2); z.y = clampY(z.y - sy * oy / 2);
+            }
+          }
+        }
+      }
+    }
+    return placed.map(function (c) {
+      var x = c.x;
+      var y = c.y;
+      return '<button type="button" class="map-cluster" style="left:' + x.toFixed(2) + '%;top:' + y.toFixed(2) + '%" data-region="' + esc(c.rg) + '" aria-label="' + esc((RN[c.rg] || c.rg) + ", " + c.count + " " + word("beaches", "beaches")) + '">' +
+        '<b>' + c.count + '</b><span>' + esc(RN[c.rg] || c.rg) + '</span></button>';
     }).join("");
   }
 
