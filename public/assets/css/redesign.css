@@ -250,9 +250,9 @@ body.redesign.rd-guide-page .chat-fab-container{display:none!important}
 .rd-home .resource-card h3{font-family:var(--disp);font-weight:400;font-size:1.28rem;line-height:1.08;margin:0 0 8px;color:var(--ink)}
 .rd-home .resource-card p{color:var(--ink-60);font-size:.9rem;line-height:1.45;margin:0;flex:1}
 .rd-home .resource-read{margin-top:16px;font-family:var(--data);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:.7rem;color:var(--coral)}
-.rd-home .mapview-hero{background:linear-gradient(180deg,#4FA8DE 0%,#2E86C4 100%);color:#fff;padding:clamp(30px,5vw,58px) 0 clamp(30px,4.6vw,54px);overflow:hidden}
-.rd-home .mapview-head{display:flex;align-items:flex-end;justify-content:space-between;gap:22px;margin-bottom:22px}
-.rd-home .mapview-head h1{font-family:var(--disp);font-weight:400;font-size:clamp(2.4rem,5.4vw,4.8rem);line-height:.95;color:var(--paper);max-width:9em;margin:0}
+.rd-home .mapview-hero{background:linear-gradient(180deg,#4FA8DE 0%,#2E86C4 100%);color:#fff;padding:clamp(18px,2.6vw,30px) 0 clamp(22px,3vw,36px);overflow:hidden}
+.rd-home .mapview-head{display:flex;align-items:flex-end;justify-content:space-between;gap:22px;margin-bottom:16px}
+.rd-home .mapview-head h1{font-family:var(--disp);font-weight:400;font-size:clamp(1.9rem,3.4vw,2.8rem);line-height:1;color:var(--paper);max-width:14em;margin:0}
 .rd-home .mapview-head p:not(.eyebrow){max-width:56ch;margin:14px 0 0;color:rgba(255,255,255,.86);font-size:1.05rem;line-height:1.52}
 .rd-home .mapview-back{display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.38);background:rgba(255,255,255,.12);color:var(--paper);border-radius:999px;padding:10px 16px;font-family:var(--data);font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:.74rem;white-space:nowrap}
 .rd-home .mapview-back:hover{background:var(--paper);border-color:var(--paper);color:var(--sea-deep)}
@@ -290,16 +290,15 @@ body.redesign.rd-guide-page .chat-fab-container{display:none!important}
 .rd-home .mapview-list-head span{font-family:var(--disp);font-size:1.35rem;line-height:1;color:var(--ink)}
 .rd-home .mapview-list-head small{font-family:var(--data);font-weight:800;letter-spacing:.09em;text-transform:uppercase;font-size:.66rem;color:var(--green);text-align:right}
 .rd-home .mapview-results{display:grid;gap:0;overflow:auto;max-height:655px;padding:6px}
-.rd-home .map-result{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px;border-radius:11px;color:var(--ink);border:1px solid transparent}
+.rd-home .map-result{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:center;padding:10px;border-radius:11px;color:var(--ink);border:1px solid transparent}
 .rd-home .map-result:hover,.rd-home .map-result.is-active{background:var(--sea-pale);border-color:rgba(46,134,196,.25)}
 .rd-home .map-result-rank{width:28px;height:28px;border-radius:999px;background:var(--sun);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;font-family:var(--data);font-weight:900}
 .rd-home .map-result-copy{display:grid;gap:2px;min-width:0}
 .rd-home .map-result-copy b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--disp);font-weight:400;font-size:1.05rem;line-height:1.05}
 .rd-home .map-result-copy small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--data);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.64rem;color:var(--ink-60)}
-.rd-home .map-result-open{font-family:var(--data);font-weight:900;text-transform:uppercase;letter-spacing:.07em;font-size:.62rem;color:var(--coral);white-space:nowrap}
 .rd-home .map-empty{padding:24px;color:var(--ink-60);font-family:var(--data);font-weight:700}
 @media(max-width:980px){.rd-home .mapview-shell{grid-template-columns:1fr}.rd-home .mapview-list{max-height:none}.rd-home .mapview-results{max-height:360px}.rd-home .mapcanvas{min-height:440px}}
-@media(max-width:640px){.rd-home .mapview-head{display:block}.rd-home .mapview-back{margin-top:16px}.rd-home .mapview-shell{width:100%;max-width:100%;overflow:hidden}.rd-home .mapview-toolbar{grid-template-columns:1fr}.rd-home .mapcanvas{min-height:390px}.rd-home .map-pin{width:14px;height:14px;font-size:.56rem}.rd-home .map-pin:hover,.rd-home .map-pin.is-active{width:28px;height:28px}.rd-home .map-cluster{width:clamp(82px,23vw,98px);padding:8px 8px}.rd-home .map-cluster b{font-size:1.35rem}.rd-home .map-cluster span{font-size:.55rem;letter-spacing:.06em}.rd-home .map-cluster small{font-size:.52rem;letter-spacing:.06em}.rd-home .mapview-map{padding:10px;overflow:hidden}.rd-home .map-result{grid-template-columns:30px minmax(0,1fr)}.rd-home .map-result-open{display:none}}
+@media(max-width:640px){.rd-home .mapview-head{display:block}.rd-home .mapview-back{margin-top:16px}.rd-home .mapview-shell{width:100%;max-width:100%;overflow:hidden}.rd-home .mapview-toolbar{grid-template-columns:1fr}.rd-home .mapcanvas{min-height:390px}.rd-home .map-pin{width:14px;height:14px;font-size:.56rem}.rd-home .map-pin:hover,.rd-home .map-pin.is-active{width:28px;height:28px}.rd-home .map-cluster{width:clamp(82px,23vw,98px);padding:8px 8px}.rd-home .map-cluster b{font-size:1.35rem}.rd-home .map-cluster span{font-size:.55rem;letter-spacing:.06em}.rd-home .map-cluster small{font-size:.52rem;letter-spacing:.06em}.rd-home .mapview-map{padding:10px;overflow:hidden}.rd-home .map-result{grid-template-columns:30px minmax(0,1fr)}}
 
 /* ===================== BEACH PAGE ===================== */
 .rd-beach .hero{position:relative;min-height:54vh;display:flex;flex-direction:column;color:#fff;overflow:hidden}
@@ -1568,6 +1567,11 @@ body.redesign.rd-error .bg-blue-50{background:var(--sea-pale)!important;color:va
 .managed-page-hero[data-managed-page-hero] :is(p,.lede){color:rgb(255 255 255/.84)}
 .managed-page-hero[data-managed-page-hero] a:not(.qres-btn):not(.guide-home-link){color:rgb(255 255 255/.88)}
 .managed-page-hero[data-managed-page-hero] :is(h1,h2,p,nav){text-shadow:0 1px 18px rgb(0 0 0/.34)}
+/* the map tool sits inside the managed hero but on light cards — the hero's
+   white-text theming must not bleed into it */
+.managed-page-hero[data-managed-page-hero] .mapview-shell a{color:var(--ink);text-shadow:none}
+.managed-page-hero[data-managed-page-hero] .mapview-shell p{color:var(--ink-60);text-shadow:none}
+.managed-page-hero[data-managed-page-hero] .mapview-shell .map-result small{color:var(--ink-60)}
 .managed-page-hero[data-managed-page-hero]>.hero-bg,.managed-page-hero[data-managed-page-hero]>.hero-scrim{display:none}
 .page-heading-hero[data-managed-page-hero]{padding:clamp(1.25rem,3vw,2.5rem);border-radius:18px;box-shadow:0 16px 42px rgb(9 22 32/.16)}
 

@@ -31,7 +31,7 @@
   var favs = (CFG.favs || []).slice();
   var PAGE_SIZE = 12;
   var FIRST_PAGE = 9;
-  var st = { region: null, q: "", sort: "score", shown: FIRST_PAGE, tags: [], near: null, mapActive: null };
+  var st = { region: null, q: "", sort: "rating", shown: FIRST_PAGE, tags: [], near: null, mapActive: null };
   var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
   var barVal = function (b, label) { for (var i = 0; i < b.bars.length; i++) { if (b.bars[i][0] === label) return b.bars[i][1]; } return 0; };
   var word = function (key, fallback) { return I[key] || fallback; };
@@ -110,13 +110,27 @@
     }).catch(function () {});
   }
 
+  // Project lat/lng through the SAME transform the island SVG uses
+  // (inc/island_chart.php constants, viewBox 560x360), then account for the
+  // xMidYMid-meet letterboxing of the SVG inside the canvas element.
+  var CHART = { lonMin: -67.271350, latMax: 18.515757, kx: 0.949895, scale: 220.8437, x0: 70.0, y0: 131.3791, vw: 560, vh: 360 };
+  var chartBox = null;
+  function measureChart() {
+    var el = document.querySelector(".mapcanvas");
+    if (!el) { chartBox = null; return; }
+    var cw = el.clientWidth, ch = el.clientHeight;
+    if (!cw || !ch) { chartBox = null; return; }
+    var sc = Math.min(cw / CHART.vw, ch / CHART.vh);
+    chartBox = { cw: cw, ch: ch, sc: sc, ox: (cw - CHART.vw * sc) / 2, oy: (ch - CHART.vh * sc) / 2 };
+  }
   function mapPoint(b) {
     var lat = Number(b.lat), lng = Number(b.lng);
-    if (!lat || !lng) return null;
-    var minLng = -67.35, maxLng = -65.15, minLat = 17.86, maxLat = 18.56;
-    var x = ((lng - minLng) / (maxLng - minLng)) * 100;
-    var y = (1 - ((lat - minLat) / (maxLat - minLat))) * 100;
-    if (x < -8 || x > 108 || y < -8 || y > 108) return null;
+    if (!lat || !lng || !chartBox) return null;
+    var vx = CHART.x0 + (lng - CHART.lonMin) * CHART.scale * CHART.kx;
+    var vy = CHART.y0 + (CHART.latMax - lat) * CHART.scale;
+    var x = (chartBox.ox + vx * chartBox.sc) / chartBox.cw * 100;
+    var y = (chartBox.oy + vy * chartBox.sc) / chartBox.ch * 100;
+    if (x < 0 || x > 100 || y < 0 || y > 100) return null;
     return { x: Math.max(1.5, Math.min(98.5, x)), y: Math.max(3, Math.min(97, y)) };
   }
 
@@ -124,8 +138,7 @@
     var pins = document.getElementById("rdMapPins");
     var listEl = document.getElementById("rdMapList");
     if (!pins || !listEl) return;
-    var scoreLabel = word("beachScore", "Score");
-    var openLabel = word("mapOpen", "Open beach");
+    measureChart();
     var shown = a.filter(mapPoint);
     var clusterMode = !st.region && !st.q && !st.near && shown.length > 80;
     if (clusterMode) {
@@ -135,7 +148,7 @@
       pins.innerHTML = shown.slice(0, 64).map(function (b) {
         var p = mapPoint(b);
         var active = String(st.mapActive || "") === String(b.id);
-        return '<button type="button" class="map-pin' + (active ? " is-active" : "") + '" style="left:' + p.x.toFixed(2) + '%;top:' + p.y.toFixed(2) + '%" data-id="' + esc(b.id) + '" aria-label="' + esc(b.n + ", " + b.m + ", " + scoreLabel + " " + b.sc) + '"><span>' + Math.round(b.sc) + '</span></button>';
+        return '<button type="button" class="map-pin' + (active ? " is-active" : "") + '" style="left:' + p.x.toFixed(2) + '%;top:' + p.y.toFixed(2) + '%" data-id="' + esc(b.id) + '" aria-label="' + esc(b.n + ", " + b.m) + '"></button>';
       }).join("");
       set("rdMapModeNote", word("mapPinHint", "Showing individual beaches on the map."));
     }
@@ -143,8 +156,7 @@
       var active = String(st.mapActive || "") === String(b.id);
       return '<a class="map-result' + (active ? " is-active" : "") + '" href="' + URL_PREFIX + esc(b.slug) + '" data-id="' + esc(b.id) + '">' +
         '<span class="map-result-rank">' + (i + 1) + '</span>' +
-        '<span class="map-result-copy"><b>' + esc(b.n) + '</b><small>' + esc(b.m) + " · " + esc(scoreLabel) + " " + b.sc + '</small></span>' +
-        '<span class="map-result-open">' + esc(openLabel) + '</span></a>';
+        '<span class="map-result-copy"><b>' + esc(b.n) + '</b><small>' + esc(b.m) + (b.rt ? " · ★ " + b.rt.toFixed(1) : "") + '</small></span></a>';
     }).join("") || '<div class="map-empty">' + esc(word("noMatch", "No beaches match — try another coast or search.")) + '</div>';
     set("rdMapCount", a.length.toLocaleString() + " " + (a.length === 1 ? word("beach", "beach") : word("beaches", "beaches")));
     set("rdMapSummary", st.region ? RN[st.region] : word("wholeIsland", "The whole island"));
@@ -167,7 +179,7 @@
       var isMobileMap = window.matchMedia && window.matchMedia("(max-width: 640px)").matches;
       var pos = (isMobileMap ? CLUSTER_POS_MOBILE[rg] : CLUSTER_POS[rg]) || { x: g.x / g.count, y: g.y / g.count };
       return '<button type="button" class="map-cluster" style="left:' + pos.x.toFixed(2) + '%;top:' + pos.y.toFixed(2) + '%" data-region="' + esc(rg) + '" aria-label="' + esc((RN[rg] || rg) + ", " + g.count + " " + word("beaches", "beaches")) + '">' +
-        '<b>' + g.count + '</b><span>' + esc(RN[rg] || rg) + '</span><small>' + esc(word("mapBest", "best")) + " " + Math.round(g.best) + '</small></button>';
+        '<b>' + g.count + '</b><span>' + esc(RN[rg] || rg) + '</span></button>';
     }).join("");
   }
 
@@ -329,6 +341,12 @@
     draw();
   }
   var sort = document.getElementById("rdSort"); if (sort) sort.addEventListener("change", function (e) { onSort(e.target.value); });
+  var mapResizeTimer = null;
+  window.addEventListener("resize", function () {
+    if (!document.getElementById("rdMapPins")) return;
+    clearTimeout(mapResizeTimer);
+    mapResizeTimer = setTimeout(function () { renderMap(list()); }, 250);
+  });
   var rdMapSort = document.getElementById("rdMapSort"); if (rdMapSort) rdMapSort.addEventListener("change", function (e) { onSort(e.target.value); });
   var more = document.getElementById("rdMore"); if (more) more.addEventListener("click", function () { st.shown += PAGE_SIZE; draw(); });
 

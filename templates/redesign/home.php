@@ -289,7 +289,6 @@ $stickerSvg = [
             <input id="rdMapSearch" placeholder="<?= h($rdI18n['mapSearch']) ?>" aria-label="<?= h($rdI18n['mapSearch']) ?>">
           </div>
           <select class="dir-select" id="rdMapSort" aria-label="<?= h($isEs ? 'Ordenar mapa' : 'Sort map') ?>">
-            <option value="score"><?= h($isEs ? 'Puntuación' : 'Beach Score') ?></option>
             <option value="rating"><?= h($isEs ? 'Mejor calificadas' : 'Top rated') ?></option>
             <option value="calm"><?= h($isEs ? 'Agua calmada' : 'Calmest water') ?></option>
             <option value="crowd"><?= h($isEs ? 'Menos gentío' : 'Least crowded') ?></option>
@@ -328,7 +327,7 @@ $stickerSvg = [
           <?php foreach (array_slice($rd, 0, 8) as $i => $b): ?>
           <a class="map-result" href="<?= h($beachUrlPrefix . $b['slug']) ?>" data-id="<?= h($b['id']) ?>">
             <span class="map-result-rank"><?= $i + 1 ?></span>
-            <span class="map-result-copy"><b><?= h($b['n']) ?></b><small><?= h($b['m']) ?> · <?= h($rdI18n['beachScore']) ?> <?= (int) $b['sc'] ?></small></span>
+            <span class="map-result-copy"><b><?= h($b['n']) ?></b><small><?= h($b['m']) ?><?= !empty($b['rt']) ? ' · ★ ' . number_format($b['rt'], 1) : '' ?></small></span>
           </a>
           <?php endforeach; ?>
         </div>
@@ -564,7 +563,7 @@ window.RD_CFG = <?= json_encode([
     'regionNames' => $regionNames,
 ], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?>;
 </script>
-<script <?= cspNonceAttr() ?> src="/assets/js/redesign-home.js?v=17"></script>
+<script <?= cspNonceAttr() ?> src="/assets/js/redesign-home.js?v=18"></script>
 <?php if ($hpEditor): ?>
 <!-- Admin homepage-design editor preview (loaded only inside /admin/homepage-design iframe) -->
 <script <?= cspNonceAttr() ?> src="/assets/js/redesign-editor-preview.js?v=1"></script>
