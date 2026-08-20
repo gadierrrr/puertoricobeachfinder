@@ -3,7 +3,8 @@
  * Snorkeling Guide — Spanish body content sections.
  */
 return [
-    'intro' => '<p class="lead text-xl text-gray-700 mb-8">Puerto Rico ofrece snorkeling de clase mundial con arrecifes de coral pristinos, abundante vida marina y aguas cristalinas del Caribe. Desde los arrecifes protegidos de Culebra hasta los paisajes submarinos de Vieques, el snorkeling aqui revela un vibrante mundo submarino accesible tanto para principiantes como para expertos. Esta guia cubre todo lo que necesitas para experiencias de snorkeling inolvidables.</p>',
+    'intro' => '<p class="lead text-xl text-gray-700 mb-8">Puerto Rico ofrece snorkeling de clase mundial con arrecifes de coral pristinos, abundante vida marina y aguas cristalinas del Caribe. Desde los arrecifes protegidos de Culebra hasta los paisajes submarinos de Vieques, el snorkeling aqui revela un vibrante mundo submarino accesible tanto para principiantes como para expertos. Esta guia cubre todo lo que necesitas para experiencias de snorkeling inolvidables.</p>
+<p class="mb-8">¿Decidiendo a dónde ir? Mira la lista de las <a href="/es/mejores-playas-para-snorkel">mejores playas para snorkel en Puerto Rico</a> — esta guía cubre el equipo, la técnica y la seguridad para cuando llegues.</p>',
 
     'why' => '
 <h2 id="why" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Por Que Puerto Rico para Snorkeling?</h2>

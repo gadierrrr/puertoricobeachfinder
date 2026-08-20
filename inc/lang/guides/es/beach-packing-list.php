@@ -26,7 +26,7 @@ return [
 
     'sun_protection' => '
 <h2 id="sun-protection" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Arsenal de Proteccion Solar</h2>
-<p class="mb-4">El sol caribeno es implacable, capaz de causar quemaduras severas en solo 15 minutos para pieles claras. <strong>La proteccion solar completa es critica</strong>, no opcional. La ley de Puerto Rico ahora prohibe protectores solares que contengan oxibenzona y octinoxato, asi que verifica que tus productos sean seguros para arrecifes antes de empacar.</p>
+<p class="mb-4">El sol caribeno es implacable, capaz de causar quemaduras severas en solo 15 minutos para pieles claras. <strong>La proteccion solar completa es critica</strong>, no opcional. No existe una prohibición general de protectores solares en Puerto Rico, pero muchos operadores de tours y reservas marinas exigen productos seguros para arrecifes — consulta las <a href="/es/guias/reglas-protector-solar-puerto-rico">reglas de protector solar en Puerto Rico</a> antes de empacar.</p>
 <div class="bg-gray-50 rounded-lg p-6 my-6">
 <h3 class="text-xl font-bold text-gray-900 mb-4">Kit Completo de Proteccion Solar</h3>
 <div class="space-y-3">

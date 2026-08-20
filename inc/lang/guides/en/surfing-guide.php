@@ -4,7 +4,8 @@
  * Returns an associative array of HTML fragments keyed by section name.
  */
 return [
-    'intro' => '<p class="lead text-xl text-gray-700 mb-8">Puerto Rico ranks among the Caribbean\'s premier surf destinations, offering world-class waves that attract international competitions and professional surfers. From the legendary breaks of Rincon to the consistent reef breaks of Isabela, the island delivers year-round surf with winter swells producing some of the best waves in the Atlantic. This comprehensive guide covers everything surfers need to know.</p>',
+    'intro' => '<p class="lead text-xl text-gray-700 mb-8">Puerto Rico ranks among the Caribbean\'s premier surf destinations, offering world-class waves that attract international competitions and professional surfers. From the legendary breaks of Rincon to the consistent reef breaks of Isabela, the island delivers year-round surf with winter swells producing some of the best waves in the Atlantic. This comprehensive guide covers everything surfers need to know.</p>
+<p class="mb-8">Hunting for a break? Compare the ranked list of the <a href="/best-surfing-beaches">best surfing beaches in Puerto Rico</a> — this guide covers the seasons, schools, rentals, and etiquette.</p>',
 
     'why' => '
 <h2 id="why" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Why Surf Puerto Rico?</h2>

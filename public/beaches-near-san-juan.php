@@ -100,6 +100,8 @@ include APP_ROOT . '/components/header.php';
             <p><?= __('pages.beaches_near_san_juan.intro_p1') ?></p>
 
             <p><?= __('pages.beaches_near_san_juan.intro_p2') ?></p>
+
+            <p><?= __('pages.beaches_near_san_juan.intro_p3') ?></p>
         </div>
     </div>
 </section>

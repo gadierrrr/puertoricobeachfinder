@@ -49,6 +49,15 @@ $guides = [
         'readTime' => __('guides_index.guide_packing_time')
     ],
     [
+        'title' => __('guides_index.guide_sunscreen_title'),
+        'slug' => 'puerto-rico-sunscreen-rules',
+        'route' => 'guide_sunscreen',
+        'description' => __('guides_index.guide_sunscreen_desc'),
+        'icon' => '🧴',
+        'kicker' => $lang === 'es' ? 'Preparacion' : 'Prep',
+        'readTime' => __('guides_index.guide_sunscreen_time')
+    ],
+    [
         'title' => __('guides_index.guide_islands_title'),
         'slug' => 'culebra-vs-vieques',
         'route' => 'guide_culebra_vieques',

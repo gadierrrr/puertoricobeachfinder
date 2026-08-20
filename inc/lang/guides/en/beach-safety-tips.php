@@ -4,7 +4,8 @@
  * Returns an associative array of HTML fragments keyed by section name.
  */
 return [
-    'intro' => '<p class="lead text-xl text-gray-700 mb-8">Puerto Rico\'s beaches are stunning, but ocean environments demand respect and awareness. Every year, preventable accidents occur when visitors underestimate water conditions, sun exposure, or marine hazards. This comprehensive safety guide covers everything you need to know to protect yourself, your family, and the environment while enjoying Puerto Rico\'s incredible coastline.</p>',
+    'intro' => '<p class="lead text-xl text-gray-700 mb-8">Puerto Rico\'s beaches are stunning, but ocean environments demand respect and awareness. Every year, preventable accidents occur when visitors underestimate water conditions, sun exposure, or marine hazards. This comprehensive safety guide covers everything you need to know to protect yourself, your family, and the environment while enjoying Puerto Rico\'s incredible coastline.</p>
+<p class="mb-8">Looking for <em>where</em> to go rather than how to stay safe? Start with our ranked list of the <a href="/best-beaches">best beaches in Puerto Rico</a>, or — for those staying in the capital — the <a href="/best-beaches-san-juan">best beaches in San Juan</a>. This guide is about making whichever beach you pick a safe one.</p>',
 
     'rip_currents' => '
 <h2 id="rip-currents" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Understanding and Surviving Rip Currents</h2>
@@ -37,9 +38,9 @@ return [
 <h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Sunscreen Best Practices</h3>
 <p class="mb-4">Use <strong>SPF 30 or higher broad-spectrum sunscreen</strong> that protects against both UVA and UVB rays. Apply generously 15-30 minutes before sun exposure—most people use only 25-50% of the recommended amount. One ounce (a shot glass full) should cover your entire body.</p>
 <p class="mb-4"><strong>Reapply every 2 hours</strong> and immediately after swimming, sweating, or toweling off, even if labeled "waterproof" or "water-resistant." No sunscreen is truly waterproof; these products only resist washing off for 40-80 minutes.</p>
-<h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Reef-Safe Sunscreen Requirements</h3>
-<p class="mb-4">Puerto Rico law now <strong>prohibits sunscreens containing oxybenzone and octinoxate</strong>, chemicals that damage coral reefs and marine ecosystems. Look for mineral-based sunscreens with zinc oxide or titanium dioxide as active ingredients. These are labeled "reef-safe" or "reef-friendly."</p>
-<p class="mb-4">Enforcement is particularly strict at marine reserves and protected areas. Bringing prohibited sunscreen to beaches near coral reefs may result in confiscation. Popular reef-safe brands include Stream2Sea, ThinkSport, and Blue Lizard.</p>
+<h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Reef-Safe Sunscreen: What Is Actually Required</h3>
+<p class="mb-4">Despite what many travel sites claim, <strong>Puerto Rico has no island-wide law banning oxybenzone or octinoxate sunscreens</strong> — bills have been proposed but none has been enacted. Reef-safe mineral sunscreen (zinc oxide or titanium dioxide) is still the right choice: many snorkeling and bio bay tour operators require it, marine reserves such as Tres Palmas and Canal Luis Peña ask visitors to use it, and the neighboring U.S. Virgin Islands do ban those chemicals. Popular reef-safe brands include Stream2Sea, ThinkSport, and Blue Lizard.</p>
+<p class="mb-4">For the full picture — what is law, what is operator policy, and what to buy — see our guide to <a href="/guides/puerto-rico-sunscreen-rules">Puerto Rico sunscreen rules</a>.</p>
 <h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Heat Exhaustion and Dehydration</h3>
 <p class="mb-4">High temperatures combined with humidity, sun exposure, and physical activity create serious heat illness risk. <strong>Drink water consistently throughout the day</strong>—waiting until you feel thirsty means you\'re already mildly dehydrated.</p>
 <p class="mb-4">Bring at least one gallon of water per person for a full beach day. Avoid alcohol during peak sun hours, as it accelerates dehydration. Watch for warning signs of heat exhaustion: excessive sweating, weakness, nausea, dizziness, headache, or muscle cramps. Move to shade, drink water, and cool down immediately if symptoms appear.</p>

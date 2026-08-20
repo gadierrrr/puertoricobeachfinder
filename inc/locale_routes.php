@@ -339,6 +339,14 @@ function localeRoutes(): array
             'changefreq' => 'monthly',
             'priority' => '0.8',
         ],
+        'guide_sunscreen' => [
+            'en' => '/guides/puerto-rico-sunscreen-rules',
+            'es' => '/es/guias/reglas-protector-solar-puerto-rico',
+            'script' => '/guides/puerto-rico-sunscreen-rules.php',
+            'indexable' => true,
+            'changefreq' => 'monthly',
+            'priority' => '0.8',
+        ],
         'guide_culebra_vieques' => [
             'en' => '/guides/culebra-vs-vieques',
             'es' => '/es/guias/culebra-vs-vieques',

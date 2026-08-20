@@ -528,16 +528,15 @@ $subnav = array_values(array_filter([
     </section>
     <?php endif; ?>
 
-    <?php if (!empty($tags)): ?>
     <section class="block">
       <h2 class="h2"><?= h($isEs ? 'Explorar por actividad' : 'Explore by activity') ?></h2>
       <div class="tagrow">
         <?php foreach ($tags as $tag): ?>
         <a href="<?= h(getLocalizedTagPageUrl($tag, $lang)) ?>"><?= h(__('tags.' . $tag)) ?> →</a>
         <?php endforeach; ?>
+        <a href="<?= h(routeUrl('best_beaches', $lang)) ?>"><?= h($isEs ? 'Las 15 mejores playas de Puerto Rico' : '15 best beaches in Puerto Rico') ?> →</a>
       </div>
     </section>
-    <?php endif; ?>
 
   </main>
 

@@ -3,7 +3,8 @@
  * Surfing Guide — Spanish body content sections.
  */
 return [
-    'intro' => '<p class="lead text-xl text-gray-700 mb-8">Puerto Rico se posiciona entre los principales destinos de surfing del Caribe, ofreciendo olas de clase mundial que atraen competencias internacionales y surfistas profesionales. Desde los legendarios breaks de Rincon hasta los consistentes arrecifes de Isabela, la isla ofrece surfing todo el ano con oleajes de invierno que producen algunas de las mejores olas del Atlantico. Esta guia completa cubre todo lo que los surfistas necesitan saber.</p>',
+    'intro' => '<p class="lead text-xl text-gray-700 mb-8">Puerto Rico se posiciona entre los principales destinos de surfing del Caribe, ofreciendo olas de clase mundial que atraen competencias internacionales y surfistas profesionales. Desde los legendarios breaks de Rincon hasta los consistentes arrecifes de Isabela, la isla ofrece surfing todo el ano con oleajes de invierno que producen algunas de las mejores olas del Atlantico. Esta guia completa cubre todo lo que los surfistas necesitan saber.</p>
+<p class="mb-8">¿Buscando rompiente? Compara la lista de las <a href="/es/mejores-playas-para-surf">mejores playas para surf en Puerto Rico</a> — esta guía cubre temporadas, escuelas, alquileres y etiqueta.</p>',
 
     'why' => '
 <h2 id="why" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Por que Surfear en Puerto Rico?</h2>

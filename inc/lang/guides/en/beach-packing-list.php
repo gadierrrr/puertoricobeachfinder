@@ -27,7 +27,7 @@ return [
 
     'sun_protection' => '
 <h2 id="sun-protection" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Sun Protection Arsenal</h2>
-<p class="mb-4">The Caribbean sun is relentless, capable of causing severe sunburn in just 15 minutes for fair skin. <strong>Comprehensive sun protection is critical</strong>, not optional. Puerto Rico law now prohibits sunscreens containing oxybenzone and octinoxate, so verify your products are reef-safe before packing.</p>
+<p class="mb-4">The Caribbean sun is relentless, capable of causing severe sunburn in just 15 minutes for fair skin. <strong>Comprehensive sun protection is critical</strong>, not optional. There is no island-wide sunscreen ban in Puerto Rico, but many tour operators and marine reserves require reef-safe products — see the <a href="/guides/puerto-rico-sunscreen-rules">Puerto Rico sunscreen rules</a> before packing.</p>
 <div class="bg-gray-50 rounded-lg p-6 my-6">
 <h3 class="text-xl font-bold text-gray-900 mb-4">Complete Sun Protection Kit</h3>
 <div class="space-y-3">

@@ -24,7 +24,10 @@ return [
 <p class="text-sm text-amber-700 mb-2">Junio-Octubre</p>
 <p class="text-gray-700">Cálido, algo de lluvia, menos multitudes, mejores ofertas. Temporada de huracanes pero bajo riesgo.</p>
 </div>
-</div>',
+</div>
+<h2 id="hurricane-season" class="text-3xl font-bold text-gray-900 mt-12 mb-6">¿Cuándo Es la Temporada de Huracanes en Puerto Rico?</h2>
+<p class="mb-4"><strong>La temporada de huracanes en Puerto Rico va del 1 de junio al 30 de noviembre, con el mayor riesgo en agosto, septiembre y octubre.</strong> Los impactos directos son raros — la mayoría de las temporadas pasan sin que una tormenta afecte la isla — pero septiembre tiene el mayor riesgo de clima y los precios más bajos del año.</p>
+<p class="mb-4">¿Reservas en temporada de huracanes? Compra seguro de viaje al reservar, prefiere tarifas reembolsables y revisa el pronóstico del Centro Nacional de Huracanes la semana antes de volar. Fuera de una vigilancia activa de tormenta, espera clima tropical normal: sol con aguaceros breves en la tarde.</p>',
 
     'winter' => '
 <h2 id="winter" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Invierno: Diciembre - Febrero</h2>
