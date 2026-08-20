@@ -1569,7 +1569,7 @@ body.redesign.rd-error .bg-blue-50{background:var(--sea-pale)!important;color:va
 .managed-page-hero[data-managed-page-hero] :is(h1,h2,p,nav){text-shadow:0 1px 18px rgb(0 0 0/.34)}
 /* the map tool sits inside the managed hero but on light cards — the hero's
    white-text theming must not bleed into it */
-.managed-page-hero[data-managed-page-hero] .mapview-shell a{color:var(--ink);text-shadow:none}
+.managed-page-hero[data-managed-page-hero] .mapview-shell a:not(.qres-btn):not(.guide-home-link){color:var(--ink);text-shadow:none}
 .managed-page-hero[data-managed-page-hero] .mapview-shell p{color:var(--ink-60);text-shadow:none}
 .managed-page-hero[data-managed-page-hero] .mapview-shell .map-result small{color:var(--ink-60)}
 .managed-page-hero[data-managed-page-hero]>.hero-bg,.managed-page-hero[data-managed-page-hero]>.hero-scrim{display:none}
