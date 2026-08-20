@@ -300,7 +300,10 @@ body.redesign.rd-guide-page .chat-fab-container{display:none!important}
 .rd-beach .hero>*:not(.hero-photo):not(.hero-scrim):not(.h-sticker):not(.hero-photos-pill){position:relative;z-index:3}
 .rd-beach .hero-photos-pill{position:absolute;z-index:4;right:max(20px,5%);bottom:22px;display:inline-flex;align-items:center;gap:7px;background:rgba(8,22,32,.6);border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(8px);color:#fff;border-radius:999px;padding:9px 14px;font-family:var(--data);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.68rem;cursor:pointer}
 .rd-beach .hero-photos-pill:hover{background:rgba(8,22,32,.82)}
-@media(max-width:640px){.rd-beach .hero-photos-pill{bottom:14px;right:14px}}
+/* <=900px the h-command bar spans the hero's full width, so the bottom-right
+   corner would cover the Share button — anchor the pill top-right instead
+   (breadcrumb is hidden there; sticker sits at 30% height, no overlap) */
+@media(max-width:900px){.rd-beach .hero-photos-pill{bottom:auto;top:14px;right:14px}}
 .rd-beach .crumb{font-family:var(--data);letter-spacing:.06em;text-transform:uppercase;font-size:.72rem;opacity:.82;margin:18px 0 0}
 .rd-beach .hero-body{margin-top:auto;padding-bottom:24px}
 .rd-beach .h-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}

@@ -380,7 +380,7 @@ if ($bodyVariant === 'collection-light') {
     ?>
     <link rel="preload" href="<?= h(redesignFontsUrl($rdDesign['font'], $rdEditorMode)) ?>" as="style" data-lazy-style>
     <noscript><link href="<?= h(redesignFontsUrl($rdDesign['font'], $rdEditorMode)) ?>" rel="stylesheet"></noscript>
-    <link rel="stylesheet" href="/assets/css/redesign.css?v=70">
+    <link rel="stylesheet" href="/assets/css/redesign.css?v=71">
     <?php endif; ?>
 
     <!-- Deferred scripts (non-blocking) -->
