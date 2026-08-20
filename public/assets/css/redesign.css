@@ -621,27 +621,35 @@ body.redesign.rd-guide-page .chat-fab-container{display:none!important}
 .rd-beach .tour-card .tx b{display:block;font-size:.97rem;line-height:1.25}
 .rd-beach .tour-card .tx small{display:block;color:var(--ink-60);font-size:.82rem;line-height:1.42;margin-top:3px}
 .rd-beach .tour-card .go{font-family:var(--data);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:.69rem;color:var(--sea-deep);flex:0 0 auto}
-.rd-beach .tour-card.is-featured{display:grid;grid-template-columns:minmax(148px,.62fr) minmax(0,1.65fr) auto;gap:20px;padding:0;overflow:hidden;border-color:rgba(46,134,196,.32);background:linear-gradient(115deg,#EAF6FC 0%,#fff 46%)}
+.rd-beach .tour-card.is-featured{display:grid;grid-template-columns:minmax(148px,.62fr) minmax(0,1.65fr);gap:20px;padding:0;overflow:hidden;border-color:rgba(46,134,196,.32);background:linear-gradient(115deg,#EAF6FC 0%,#fff 46%)}
 .rd-beach .tour-card.is-featured:hover{border-color:var(--sea-deep)}
 .rd-beach .tour-route{position:relative;align-self:stretch;min-height:156px;display:flex;align-items:flex-end;justify-content:center;padding:16px;background:linear-gradient(155deg,var(--sea-deep),#1E6FA7);color:#fff;overflow:hidden}
 .rd-beach .tour-route:after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(8,22,32,.03) 34%,rgba(8,22,32,.76) 100%);pointer-events:none}
 .rd-beach .tour-route>img{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover}
 .rd-beach .tour-route-label{position:relative;z-index:2;display:inline-block;background:rgba(8,22,32,.72);border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:6px 9px;font-family:var(--data);font-weight:800;letter-spacing:.05em;text-transform:uppercase;font-size:.63rem;text-align:center;line-height:1.2}
-.rd-beach .tour-photo-source{position:absolute;z-index:2;top:9px;left:9px;display:inline-block;background:rgba(255,255,255,.9);border:1px solid rgba(255,255,255,.6);border-radius:999px;padding:4px 7px;color:var(--ink);font-family:var(--data);font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:.52rem;line-height:1}
-.rd-beach .tour-card.is-featured .tx{padding:21px 0}
+.rd-beach .tour-photo-source{position:absolute;z-index:2;bottom:9px;right:9px;display:inline-block;background:rgba(8,22,32,.55);border-radius:999px;padding:4px 7px;color:rgba(255,255,255,.85);font-family:var(--data);font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:.52rem;line-height:1}
+.rd-beach .tour-card.is-featured .tx{padding:18px 20px 18px 0}
+.rd-beach .tour-rating{display:block;margin-top:5px;font-family:var(--data);font-weight:700;font-size:.8rem;color:var(--ink-60)}
+.rd-beach .tour-rating .st{color:var(--gold)}
 .rd-beach .tour-kicker{display:block;margin-bottom:5px;color:var(--green);font-family:var(--data);font-weight:900;letter-spacing:.12em;text-transform:uppercase;font-size:.62rem}
 .rd-beach .tour-card.is-featured .tx b{font-family:var(--disp);font-weight:400;font-size:1.24rem;line-height:1.1}
 .rd-beach .tour-facts{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
 .rd-beach .tour-facts span{border:1px solid var(--ink-14);background:#fff;border-radius:999px;padding:5px 8px;color:var(--ink-60);font-family:var(--data);font-weight:700;letter-spacing:.02em;font-size:.65rem;line-height:1.2}
-.rd-beach .tour-card.is-featured .go{align-self:center;margin-right:18px;border-radius:999px;background:var(--coral);color:#fff;padding:10px 13px;text-align:center;white-space:nowrap}
+.rd-beach .tour-card.is-featured .go{border-radius:999px;background:var(--coral);color:#fff;padding:10px 14px;text-align:center;white-space:nowrap}
 .rd-beach .tour-card.is-featured:hover .go{background:#D92D37}
+.rd-beach .tour-action{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:13px;padding-top:12px;border-top:1px solid var(--ink-14)}
+.rd-beach .tour-price{font-family:var(--disp);font-size:1.3rem;line-height:1;color:var(--ink)}
+.rd-beach .tour-price small{font-family:var(--data);font-weight:700;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-60);margin-right:3px}
+.rd-beach .tour-browse-link{display:inline-flex;align-items:center;gap:6px;justify-self:start;margin-top:2px;font-family:var(--data);font-weight:800;letter-spacing:.07em;text-transform:uppercase;font-size:.7rem;color:var(--sea-deep)}
+.rd-beach .tour-browse-link:hover{text-decoration:underline;text-underline-offset:3px}
 .rd-beach .tour-disclosure{font-size:.72rem;color:var(--ink-60);font-style:italic;margin:10px 0 0}
 @media(max-width:700px){
   .rd-beach .tour-head{display:block}.rd-beach .tour-provider{display:inline-flex;margin-top:9px}
   .rd-beach .tour-card.is-featured{grid-template-columns:1fr;gap:0;background:#fff}
   .rd-beach .tour-route{min-height:150px;padding:14px 16px}
-  .rd-beach .tour-card.is-featured .tx{padding:16px 16px 8px}
-  .rd-beach .tour-card.is-featured .go{display:block;margin:6px 16px 16px;padding:12px 14px}
+  .rd-beach .tour-card.is-featured .tx{padding:16px 16px 16px}
+  .rd-beach .tour-action{flex-wrap:wrap}
+  .rd-beach .tour-action .go{flex:1 1 auto;padding:12px 14px}
   .rd-beach .tour-card.is-browse{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 12px;padding:14px}
   .rd-beach .tour-card.is-browse .go{grid-column:2;white-space:normal}
 }

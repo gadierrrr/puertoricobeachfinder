@@ -212,6 +212,7 @@ function toursCuratedOfferMeta(string $slug, string $lang): array
         'rating' => null,
         'review_count' => 0,
         'free_cancellation' => null,
+        'inclusion_chips' => [],
     ];
 
     $hydrated = viatorHydratedProduct((string) ($offer['product_code'] ?? ''), $lang);
@@ -232,6 +233,7 @@ function toursCuratedOfferMeta(string $slug, string $lang): array
         $result['free_cancellation'] = isset($hydrated['free_cancellation'])
             ? (int) $hydrated['free_cancellation']
             : null;
+        $result['inclusion_chips'] = viatorInclusionChips($hydrated, $lang);
     }
 
     return $result;
@@ -347,6 +349,7 @@ function toursAutoProductCardMeta(array $row, string $lang): array
         'rating' => is_numeric($row['rating'] ?? null) ? (float) $row['rating'] : null,
         'review_count' => max(0, (int) ($row['review_count'] ?? 0)),
         'free_cancellation' => isset($row['free_cancellation']) ? (int) $row['free_cancellation'] : null,
+        'inclusion_chips' => viatorInclusionChips($row, $lang),
     ];
 }
 
@@ -452,14 +455,34 @@ function toursRenderCard(array $campaign, array $meta, array $opts): string
 
     if ($variant === 'redesign') {
         if ($isProduct) {
+            // Facts row carries decision data only: duration, cancellation,
+            // inclusions. Rating moves beside the title; price anchors the
+            // action row with the CTA.
+            $ratingLine = '';
+            if (is_numeric($meta['rating'] ?? null) && (int) ($meta['review_count'] ?? 0) > 0) {
+                $ratingLine = '<span class="tour-rating"><span class="st" aria-hidden="true">★</span> '
+                    . h(number_format((float) $meta['rating'], 1))
+                    . ' · ' . h(number_format((int) $meta['review_count'])) . ' ' . h($isEs ? 'reseñas' : 'reviews')
+                    . '</span>';
+            }
             $facts = '';
             if ($duration !== '') {
                 $facts .= '<span>◷ ' . h($duration) . '</span>';
             }
-            if ($bestFor !== '') {
-                $facts .= '<span>✓ ' . h($bestFor) . '</span>';
+            if (!empty($meta['free_cancellation'])) {
+                $facts .= '<span>✓ ' . h($isEs ? 'Cancelación gratis' : 'Free cancellation') . '</span>';
             }
-            $facts .= $commerceFacts;
+            foreach (is_array($meta['inclusion_chips'] ?? null) ? $meta['inclusion_chips'] : [] as $chip) {
+                $facts .= '<span>✓ ' . h((string) $chip) . '</span>';
+            }
+            $priceHtml = '';
+            if (is_numeric($meta['price_from'] ?? null)) {
+                $currency = strtoupper((string) ($meta['currency'] ?? 'USD'));
+                $priceLabel = $currency === 'USD'
+                    ? '$' . number_format((float) $meta['price_from'], 0)
+                    : $currency . ' ' . number_format((float) $meta['price_from'], 0);
+                $priceHtml = '<span class="tour-price"><small>' . h($isEs ? 'Desde' : 'From') . '</small> ' . h($priceLabel) . '</span>';
+            }
 
             return '<a class="tour-card is-featured" href="' . h($goUrl) . '" target="_blank" rel="nofollow sponsored noopener"' . $track . '>'
                 . '<span class="tour-route">'
@@ -471,11 +494,21 @@ function toursRenderCard(array $campaign, array $meta, array $opts): string
                 . '</span>'
                 . '<span class="tx">'
                 . ($kicker !== '' ? '<span class="tour-kicker">' . h($kicker) . '</span>' : '')
-                . '<b>' . h($title) . '</b><small>' . h($desc) . '</small>'
+                . '<b>' . h($title) . '</b>'
+                . $ratingLine
+                . '<small>' . h($desc) . '</small>'
                 . ($facts !== '' ? '<span class="tour-facts">' . $facts . '</span>' : '')
+                . '<span class="tour-action">' . $priceHtml
+                . '<span class="go">' . h($isEs ? 'Ver disponibilidad' : 'Check availability') . ' ↗</span></span>'
                 . '</span>'
-                . '<span class="go">' . h($isEs ? 'Ver en Viator' : 'View on Viator') . ' ↗</span>'
                 . '</a>';
+        }
+
+        if (($opts['display'] ?? '') === 'link') {
+            // Demoted browse fallback: a text link below the product cards
+            // instead of an equal-weight card (browse landings convert at 0%).
+            return '<a class="tour-browse-link" href="' . h($goUrl) . '" target="_blank" rel="nofollow sponsored noopener"' . $track . '>'
+                . h($isEs ? 'Explora más tours en Viator' : 'Browse more tours on Viator') . ' ↗</a>';
         }
 
         return '<a class="tour-card is-browse" href="' . h($goUrl) . '" target="_blank" rel="nofollow sponsored noopener"' . $track . '>'
@@ -499,7 +532,7 @@ function toursRenderCard(array $campaign, array $meta, array $opts): string
         . ($commerceFacts !== '' ? '<span class="flex flex-wrap gap-3 text-xs font-semibold text-blue-700 mt-1">' . $commerceFacts . '</span>' : '')
         . '</span>'
         . '<span class="shrink-0 text-sm font-semibold text-sunset-600">'
-        . h($isProduct ? ($isEs ? 'Ver en Viator' : 'View on Viator') : ($isEs ? 'Explorar tours' : 'Browse tours'))
+        . h($isProduct ? ($isEs ? 'Ver disponibilidad' : 'Check availability') : ($isEs ? 'Explorar tours' : 'Browse tours'))
         . ' &rarr;</span>'
         . '</a>';
 }
@@ -558,16 +591,31 @@ function renderToursSection(array $beach, string $lang, string $variant = 'class
 
     $hasProduct = $curated !== [] || $autoRows !== [];
     $beachName = trim((string) ($beach['name'] ?? ''));
-    $heading = $hasProduct
-        ? ($isEs ? 'Cómo disfrutar ' . $beachName : 'Ways to experience ' . $beachName)
-        : ($isEs ? 'Experiencias cerca' : 'Experiences nearby');
-    $sub = $hasProduct
-        ? ($isEs
-            ? 'Recomendaciones seleccionadas por su acceso, ubicación y actividades.'
-            : 'Handpicked recommendations based on access, location and activities.')
-        : ($isEs
+    // Short display name — "(La Cordillera)"-style parentheticals make the
+    // heading wrap; the hero handles the alt name.
+    $nameShort = preg_match('/^(.*\S)\s*\(.+\)$/', $beachName, $nameParts) ? $nameParts[1] : $beachName;
+    $accessLabel = strtolower((string) ($beach['access_label'] ?? ''));
+    $isBoatBeach = str_contains($accessLabel, 'boat') || str_contains($accessLabel, 'kayak');
+    $municipality = trim((string) ($beach['municipality'] ?? ''));
+    if ($hasProduct && $isBoatBeach && $curated !== []) {
+        // Curated products on a boat-only beach ARE the access method — the
+        // heading pays off the hero's "See tours" click. Auto-only matches
+        // stay generic because they may not actually sail to this beach.
+        $heading = $isEs ? 'Tours a ' . $nameShort : 'Tours to ' . $nameShort;
+        $sub = $isEs
+            ? 'La única forma de llegar a esta playa — los tours salen desde ' . ($municipality !== '' ? $municipality : 'la costa') . '.'
+            : 'The only way to reach this beach — tours depart from ' . ($municipality !== '' ? $municipality : 'the coast') . '.';
+    } elseif ($hasProduct) {
+        $heading = $isEs ? 'Cómo disfrutar ' . $nameShort : 'Ways to experience ' . $nameShort;
+        $sub = $isEs
+            ? 'Tours y actividades reservables en esta playa y sus alrededores.'
+            : 'Bookable tours and activities at and around this beach.';
+    } else {
+        $heading = $isEs ? 'Experiencias cerca' : 'Experiences nearby';
+        $sub = $isEs
             ? 'Explora actividades reservables en esta zona.'
-            : 'Explore bookable activities around this part of the island.');
+            : 'Explore bookable activities around this part of the island.';
+    }
     $disclosure = referralDisclosureText($isEs ? 'es' : 'en', $campaigns[0]);
 
     $cards = '';
@@ -582,7 +630,7 @@ function renderToursSection(array $beach, string $lang, string $variant = 'class
             'position' => $position,
             'match_type' => 'curated_beach',
             'context' => $context,
-            'kicker' => $isEs ? 'Elegido para esta playa' : 'Curated for this beach',
+            'kicker' => $isEs ? 'Recomendado para esta playa' : 'Top pick for this beach',
         ]);
     }
 
@@ -612,6 +660,9 @@ function renderToursSection(array $beach, string $lang, string $variant = 'class
             'position' => $position,
             'match_type' => 'regional_browse',
             'context' => $context,
+            // With product cards present, the browse fallback demotes to a
+            // text link — browse landings convert at 0% next to products.
+            'display' => ($variant === 'redesign' && $hasProduct) ? 'link' : 'card',
         ]);
     }
 

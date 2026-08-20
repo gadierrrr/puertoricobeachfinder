@@ -269,6 +269,16 @@ function viatorExtractPrice(array $schedule): array
 
 function viatorExtractFreeCancellation(array $product): ?int
 {
+    // Product-details responses carry the policy object, not the search
+    // response's FREE_CANCELLATION flag. STANDARD = full refund up to 24h
+    // before departure.
+    $policyType = strtoupper(trim((string) ($product['cancellationPolicy']['type'] ?? '')));
+    if ($policyType === 'STANDARD') {
+        return 1;
+    }
+    if ($policyType === 'ALL_SALES_FINAL') {
+        return 0;
+    }
     $encoded = json_encode($product, JSON_UNESCAPED_SLASHES);
     if (!is_string($encoded)) {
         return null;
@@ -277,6 +287,62 @@ function viatorExtractFreeCancellation(array $product): ?int
         return 1;
     }
     return null;
+}
+
+/**
+ * Compact inclusion highlights ("Lunch & drinks", "Gear included") derived
+ * from a cached viator_products row's raw payload. Conservative keyword
+ * matching — plain bottled water does not count as drinks. Returns at most
+ * two localized chip labels.
+ */
+function viatorInclusionChips(array $row, string $lang): array
+{
+    $raw = json_decode((string) ($row['raw_json'] ?? ''), true);
+    if (!is_array($raw) || empty($raw['inclusions']) || !is_array($raw['inclusions'])) {
+        return [];
+    }
+    $lunch = $drinks = $gear = false;
+    foreach ($raw['inclusions'] as $inc) {
+        if (!is_array($inc)) {
+            continue;
+        }
+        $text = strtolower(trim((string) ($inc['typeDescription'] ?? '') . ' ' . (string) ($inc['otherDescription'] ?? '')));
+        if ($text === '') {
+            continue;
+        }
+        foreach (['lunch', 'almuerzo', 'breakfast', 'desayuno', 'dinner', 'cena'] as $kw) {
+            if (str_contains($text, $kw)) {
+                $lunch = true;
+            }
+        }
+        foreach (['alcoholic', 'alcohólica', 'alcoholica', 'carbonated', 'carbonatada', 'open bar', 'barra libre', 'soft drink', 'refresco'] as $kw) {
+            if (str_contains($text, $kw)) {
+                $drinks = true;
+            }
+        }
+        $mentionsEquipment = str_contains($text, 'equipment') || str_contains($text, 'gear') || str_contains($text, 'equipo');
+        if ((str_contains($text, 'snorkel') || str_contains($text, 'esnórquel')) && $mentionsEquipment) {
+            $gear = true;
+        }
+        foreach (['all gear', 'todo el equipo', 'use of equipment', 'uso del equipo'] as $kw) {
+            if (str_contains($text, $kw)) {
+                $gear = true;
+            }
+        }
+    }
+    $isEs = $lang === 'es';
+    $chips = [];
+    if ($lunch && $drinks) {
+        $chips[] = $isEs ? 'Almuerzo y bebidas' : 'Lunch & drinks';
+    } elseif ($lunch) {
+        $chips[] = $isEs ? 'Almuerzo incluido' : 'Lunch included';
+    } elseif ($drinks) {
+        $chips[] = $isEs ? 'Bebidas incluidas' : 'Drinks included';
+    }
+    if ($gear) {
+        $chips[] = $isEs ? 'Equipo incluido' : 'Gear included';
+    }
+    return array_slice($chips, 0, 2);
 }
 
 function viatorProductUrlIsValid(string $url): bool
