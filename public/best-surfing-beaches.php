@@ -35,14 +35,7 @@ if (isAuthenticated()) {
 }
 
 // Generate structured data
-$extraHead = articleSchema(
-    $pageTitle,
-    $pageDescription,
-    '/best-surfing-beaches',
-    $surfingBeaches[0]['cover_image'] ?? null,
-    '2026-01-01'
-);
-$extraHead .= collectionPageSchema($pageTitle, $pageDescription, $surfingBeaches);
+$extraHead = collectionPageSchema($pageTitle, $pageDescription, $surfingBeaches);
 $extraHead .= websiteSchema();
 
 // FAQ data
@@ -107,6 +100,8 @@ include APP_ROOT . '/components/header.php';
             <p><?= __('pages.best_surfing_beaches.intro_p1') ?></p>
 
             <p><?= __('pages.best_surfing_beaches.intro_p2') ?></p>
+
+            <p><?= __('pages.best_surfing_beaches.intro_p3') ?></p>
         </div>
     </div>
 </section>

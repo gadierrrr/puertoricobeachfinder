@@ -34,15 +34,9 @@ if (isAuthenticated()) {
     $userFavorites = array_column($favorites, 'beach_id');
 }
 
-// Generate structured data
-$extraHead = articleSchema(
-    $pageTitle,
-    $pageDescription,
-    '/best-beaches',
-    $topBeaches[0]['cover_image'] ?? null,
-    '2026-01-01'
-);
-$extraHead .= collectionPageSchema($pageTitle, $pageDescription, $topBeaches);
+// Generate structured data. CollectionPage (with its ItemList) is the page's
+// single top-level type — no competing Article schema.
+$extraHead = collectionPageSchema($pageTitle, $pageDescription, $topBeaches);
 $extraHead .= websiteSchema();
 
 // FAQ data
@@ -90,6 +84,8 @@ include APP_ROOT . '/components/header.php';
             <span class="text-warm-500"><?= h(__('pages.best_beaches.jump_to')) ?></span>
             <a href="#top-beaches" class="text-ocean-500 hover:underline"><?= h(__('pages.best_beaches.jump_top_list')) ?></a>
             <span class="text-warm-300">|</span>
+            <a href="#why-picks" class="text-ocean-500 hover:underline"><?= h(__('pages.best_beaches.jump_why')) ?></a>
+            <span class="text-warm-300">|</span>
             <a href="#by-activity" class="text-ocean-500 hover:underline"><?= h(__('pages.best_beaches.jump_by_activity')) ?></a>
             <span class="text-warm-300">|</span>
             <a href="#faq" class="text-ocean-500 hover:underline"><?= h(__('pages.best_beaches.jump_faq')) ?></a>
@@ -106,6 +102,48 @@ include APP_ROOT . '/components/header.php';
             <p><?= __('pages.best_beaches.intro_p1') ?></p>
 
             <p><?= __('pages.best_beaches.intro_p2') ?></p>
+        </div>
+    </div>
+</section>
+
+<!-- Why These Beaches Made the List -->
+<section id="why-picks" class="py-12">
+    <div class="max-w-4xl mx-auto px-4">
+        <h2 class="text-2xl md:text-3xl font-bold text-warm-900 mb-4 text-center">
+            <?= h(__('pages.best_beaches.why_title')) ?>
+        </h2>
+        <div class="prose prose-lg max-w-none prose-brand">
+            <p><?= h(__('pages.best_beaches.why_intro')) ?></p>
+        </div>
+        <div class="mt-8 space-y-8">
+            <?php $whyRank = 0; foreach ($topBeaches as $whyBeach):
+                $whyKey = 'pages.best_beaches.why.' . $whyBeach['slug'];
+                $whyText = __($whyKey);
+                if ($whyText === $whyKey) { continue; }
+                $whyRank++;
+            ?>
+            <div class="border-l-4 border-ocean-200 pl-5">
+                <h3 class="text-xl font-bold text-warm-900 mb-2">
+                    <span class="text-ocean-500"><?= $whyRank ?>.</span>
+                    <a href="<?= h(routeUrl('beach_detail', $lang, ['slug' => $whyBeach['slug']])) ?>" class="hover:text-ocean-500"><?= h($whyBeach['name']) ?></a>
+                    <span class="text-warm-500 font-normal text-base">· <?= h($whyBeach['municipality']) ?></span>
+                </h3>
+                <p class="text-warm-700"><?= h($whyText) ?></p>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+
+<!-- Planning Resources -->
+<section class="py-12 bg-white border-y border-warm-200">
+    <div class="max-w-4xl mx-auto px-4">
+        <h2 class="text-2xl md:text-3xl font-bold text-warm-900 mb-6 text-center">
+            <?= h(__('pages.best_beaches.planning_title')) ?>
+        </h2>
+        <div class="prose prose-lg max-w-none prose-brand">
+            <p><?= __('pages.best_beaches.planning_p1') ?></p>
+            <p><?= __('pages.best_beaches.planning_p2') ?></p>
         </div>
     </div>
 </section>

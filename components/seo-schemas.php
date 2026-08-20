@@ -316,12 +316,16 @@ function breadcrumbSchema(array $items): string {
 
     $listItems = [];
     foreach ($items as $index => $item) {
-        $listItems[] = [
+        $listItem = [
             '@type' => 'ListItem',
             'position' => $index + 1,
             'name' => $item['name'],
-            'item' => strpos($item['url'], 'http') === 0 ? $item['url'] : $appUrl . $item['url']
         ];
+        // The final crumb may omit its URL (schema.org allows ListItem without "item").
+        if (!empty($item['url'])) {
+            $listItem['item'] = strpos($item['url'], 'http') === 0 ? $item['url'] : $appUrl . $item['url'];
+        }
+        $listItems[] = $listItem;
     }
 
     $schema = [
@@ -690,7 +694,7 @@ function speakableSchema(): string {
 /**
  * Generate Article schema for landing pages
  */
-function articleSchema(string $title, string $description, string $url, ?string $image = null, ?string $datePublished = null): string {
+function articleSchema(string $title, string $description, string $url, ?string $image = null, ?string $datePublished = null, ?string $dateModified = null): string {
     $appUrl = getPublicBaseUrl();
     $appName = $_ENV['APP_NAME'] ?? 'Puerto Rico Beach Finder';
 
@@ -721,8 +725,13 @@ function articleSchema(string $title, string $description, string $url, ?string 
             ]
         ],
         'datePublished' => $datePublished ?? date('Y-m-d'),
-        'dateModified' => date('Y-m-d')
     ];
+
+    // Only claim a modification date when the caller knows one; a hardcoded
+    // "today" on every render is a false freshness signal.
+    if ($dateModified !== null) {
+        $schema['dateModified'] = $dateModified;
+    }
 
     if ($image) {
         // Use ImageObject wrapper for proper schema structure

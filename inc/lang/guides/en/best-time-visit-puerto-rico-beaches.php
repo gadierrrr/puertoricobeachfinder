@@ -25,7 +25,10 @@ return [
 <p class="text-sm text-amber-700 mb-2">June-October</p>
 <p class="text-gray-700">Warm, some rain, smallest crowds, best deals. Hurricane season but low risk.</p>
 </div>
-</div>',
+</div>
+<h2 id="hurricane-season" class="text-3xl font-bold text-gray-900 mt-12 mb-6">When Is Hurricane Season in Puerto Rico?</h2>
+<p class="mb-4"><strong>Hurricane season in Puerto Rico runs June 1 through November 30, and the highest risk is in August, September, and October.</strong> Direct hits are rare — most seasons pass without a storm affecting the island — but September carries the most weather risk and the lowest prices of the year.</p>
+<p class="mb-4">Booking during hurricane season? Buy travel insurance at booking time, favor refundable rates, and check the National Hurricane Center outlook the week before you fly. Outside an active storm watch, expect normal tropical weather: sun with brief afternoon showers.</p>',
 
     'winter' => '
 <h2 id="winter" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Winter: December - February</h2>

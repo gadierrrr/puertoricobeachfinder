@@ -4,7 +4,8 @@
  * Returns an associative array of HTML fragments keyed by section name.
  */
 return [
-    'intro' => '<p class="lead text-xl text-gray-700 mb-8">Puerto Rico offers world-class snorkeling with pristine coral reefs, abundant marine life, and crystal-clear Caribbean waters. From the protected reefs of Culebra to the underwater landscapes of Vieques, snorkeling here reveals a vibrant underwater world accessible to beginners and experts alike. This guide covers everything you need for unforgettable snorkeling experiences.</p>',
+    'intro' => '<p class="lead text-xl text-gray-700 mb-8">Puerto Rico offers world-class snorkeling with pristine coral reefs, abundant marine life, and crystal-clear Caribbean waters. From the protected reefs of Culebra to the underwater landscapes of Vieques, snorkeling here reveals a vibrant underwater world accessible to beginners and experts alike. This guide covers everything you need for unforgettable snorkeling experiences.</p>
+<p class="mb-8">Deciding where to go? See the ranked list of the <a href="/best-snorkeling-beaches">best snorkeling beaches in Puerto Rico</a> — this guide covers gear, technique, and safety for once you get there.</p>',
 
     'why' => '
 <h2 id="why" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Why Puerto Rico for Snorkeling?</h2>

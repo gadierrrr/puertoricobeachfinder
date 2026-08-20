@@ -19,6 +19,7 @@ $pageTitle = __('guide_packing.title');
 $pageDescription = __('guide_packing.description');
 
 $relatedGuides = [
+    ['title' => __('related_guides.sunscreen'),   'url' => routeUrl('guide_sunscreen', $lang)],
     ['title' => __('related_guides.safety'),     'url' => routeUrl('guide_safety', $lang)],
     ['title' => __('related_guides.best_time'),   'url' => routeUrl('guide_best_time', $lang)],
     ['title' => __('related_guides.snorkeling'),  'url' => routeUrl('guide_snorkeling', $lang)],

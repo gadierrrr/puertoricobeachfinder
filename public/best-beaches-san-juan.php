@@ -36,14 +36,7 @@ if (isAuthenticated()) {
 }
 
 // Generate structured data
-$extraHead = articleSchema(
-    $pageTitle,
-    $pageDescription,
-    '/best-beaches-san-juan',
-    $topBeaches[0]['cover_image'] ?? null,
-    '2026-01-15'
-);
-$extraHead .= collectionPageSchema($pageTitle, $pageDescription, $topBeaches);
+$extraHead = collectionPageSchema($pageTitle, $pageDescription, $topBeaches);
 $extraHead .= websiteSchema();
 
 // FAQ data
@@ -124,6 +117,8 @@ include APP_ROOT . '/components/header.php';
             <p><?= __('pages.best_beaches_san_juan.intro_p3') ?></p>
 
             <p><?= __('pages.best_beaches_san_juan.intro_p4') ?></p>
+
+            <p><?= __('pages.best_beaches_san_juan.intro_p5') ?></p>
         </div>
     </div>
 </section>
