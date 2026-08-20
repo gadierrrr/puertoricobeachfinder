@@ -118,7 +118,7 @@ function toursCampaignsForBeach(array $beach, int $limit = 2): array
 }
 
 /**
- * Localized details for the product pages curated in migration 047.
+ * Localized details for the product pages curated in migrations 047 and 053.
  * Prices and review totals are intentionally omitted because they change live.
  */
 function toursCuratedOfferMeta(string $slug, string $lang): array
@@ -159,6 +159,24 @@ function toursCuratedOfferMeta(string $slug, string $lang): array
             'image_url' => 'https://media.tacdn.com/media/attractions-splice-spp-674x446/15/55/0e/70.jpg',
             'en' => ['Escambrón snorkeling & turtle spotting', 'A guided small-group snorkeling session that meets right at Escambrón Beach.', 'Meet at Escambrón → Reef', 'About 2 hours', 'Snorkeling without leaving San Juan'],
             'es' => ['Snorkel y tortugas en Escambrón', 'Sesión guiada en grupo pequeño con punto de encuentro en Playa Escambrón.', 'Encuentro en Escambrón → Arrecife', 'Aprox. 2 horas', 'Hacer snorkel sin salir de San Juan'],
+        ],
+        'viator-product-san-juan-turtle-snorkel' => [
+            'product_code' => '45107P2',
+            'image_url' => 'https://media-cdn.tripadvisor.com/media/attractions-splice-spp-674x446/0f/46/15/8e.jpg',
+            'en' => ['Guided turtle snorkel with free videos', 'Swim the Escambrón reef with sea turtles on a guided small-group tour; gear and video clips included.', 'Meet at Escambrón → Reef', 'About 1 hr 30 min', 'First-time snorkelers and turtle spotting'],
+            'es' => ['Snorkel guiado con tortugas y videos', 'Nada en el arrecife de Escambrón con tortugas marinas en grupo pequeño; equipo y videos incluidos.', 'Encuentro en Escambrón → Arrecife', 'Aprox. 1 h 30 min', 'Primer snorkel y ver tortugas'],
+        ],
+        'viator-product-san-juan-vip-snorkel' => [
+            'product_code' => '486634P2',
+            'image_url' => 'https://media-cdn.tripadvisor.com/media/attractions-splice-spp-674x446/r/33/02/6b/98/caption.jpg',
+            'en' => ['VIP turtle snorkel in a small group', 'A premium guided snorkel at Escambrón with extra attention, turtles, and complimentary videos.', 'Meet at Escambrón → Reef', 'About 1 hr 30 min', 'Couples and small groups wanting a guide close by'],
+            'es' => ['Snorkel VIP con tortugas', 'Snorkel guiado premium en Escambrón con atención personalizada, tortugas y videos de cortesía.', 'Encuentro en Escambrón → Arrecife', 'Aprox. 1 h 30 min', 'Parejas y grupos pequeños con guía cercano'],
+        ],
+        'viator-product-san-juan-jet-ski' => [
+            'product_code' => '395618P1',
+            'image_url' => 'https://media-cdn.tripadvisor.com/media/attractions-splice-spp-674x446/10/49/6f/fe.jpg',
+            'en' => ['San Juan Bay jet ski tour', 'A guided jet ski loop across San Juan Bay with skyline and fort views. Renters must be 21+.', 'Pier 10, San Juan Bay → Bay loop', 'About 1 hr 20 min', 'A quick adrenaline hit without leaving the city'],
+            'es' => ['Jet ski por la Bahía de San Juan', 'Recorrido guiado en jet ski por la bahía con vistas al Viejo San Juan. Conductores mayores de 21.', 'Muelle 10 → Bahía de San Juan', 'Aprox. 1 h 20 min', 'Adrenalina rápida sin salir de la ciudad'],
         ],
         'viator-product-cueva-del-indio' => [
             'product_code' => '322734P3',
@@ -656,8 +674,12 @@ function toursPlacementsForGuide(string $guideSlug): array
 /**
  * Tours section for guide pages (Tailwind layout, matches the guide theme).
  * Renders nothing when the guide has no active placements.
+ *
+ * Landing pages reuse this with their own slug in guide_tour_placements;
+ * $opts lets them swap the guide-specific sub copy ('sub') and the section
+ * classes ('section_class') to fit their layout.
  */
-function renderGuideToursSection(string $guideSlug, string $lang): string
+function renderGuideToursSection(string $guideSlug, string $lang, array $opts = []): string
 {
     $placements = toursPlacementsForGuide($guideSlug);
     if ($placements === []) {
@@ -694,13 +716,19 @@ function renderGuideToursSection(string $guideSlug, string $lang): string
         ]);
     }
 
-    $heading = $isEs ? 'Reserva estas experiencias' : 'Book these experiences';
-    $sub = $isEs
-        ? 'Tours seleccionados que combinan con esta guía. Reservas en Viator.'
-        : 'Handpicked tours that pair with this guide. Booking happens on Viator.';
+    $heading = trim((string) ($opts['heading'] ?? '')) ?: ($isEs ? 'Reserva estas experiencias' : 'Book these experiences');
+    $sub = trim((string) ($opts['sub'] ?? ''));
+    if ($sub === '') {
+        $sub = $isEs
+            ? 'Tours seleccionados que combinan con esta guía. Reservas en Viator.'
+            : 'Handpicked tours that pair with this guide. Booking happens on Viator.';
+    }
+    $sectionClass = array_key_exists('section_class', $opts)
+        ? trim((string) $opts['section_class'])
+        : 'mt-12 pt-8 border-t border-gray-200';
     $disclosure = referralDisclosureText($isEs ? 'es' : 'en', $placements[0]);
 
-    return '<section id="guide-tours" class="mt-12 pt-8 border-t border-gray-200">'
+    return '<section id="guide-tours" class="' . h($sectionClass) . '">'
         . '<h2 class="text-xl font-bold text-gray-900 mb-1">' . h($heading) . '</h2>'
         . '<p class="text-sm text-gray-600 mb-4">' . h($sub) . '</p>'
         . '<div class="space-y-3">' . $cards . '</div>'
