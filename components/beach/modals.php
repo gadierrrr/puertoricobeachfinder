@@ -488,7 +488,12 @@ document.addEventListener('keydown', (e) => {
                 </div>
             </div>
 
-            <!-- Parking Status -->
+            <!-- Parking Status — meaningless on boat/kayak-only beaches (no
+                 lot on a cay), so the question is skipped there; the checkin
+                 API stores parking_status as null when the field is absent. -->
+            <?php $checkinAccess = strtolower((string) ($beach['access_label'] ?? ''));
+                  $checkinIsBoat = str_contains($checkinAccess, 'boat') || str_contains($checkinAccess, 'kayak'); ?>
+            <?php if (!$checkinIsBoat): ?>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2"><?= __('beach.checkin_parking') ?></label>
                 <div class="grid grid-cols-4 gap-2">
@@ -522,6 +527,7 @@ document.addEventListener('keydown', (e) => {
                     </label>
                 </div>
             </div>
+            <?php endif; ?>
 
             <!-- Water Conditions -->
             <div>
