@@ -86,10 +86,12 @@ $beach['amenities'] = array_column(
     query('SELECT amenity FROM beach_amenities WHERE beach_id = :id', [':id' => $beach['id']]),
     'amenity'
 );
-$beach['gallery'] = array_column(
-    query('SELECT image_url FROM beach_gallery WHERE beach_id = :id ORDER BY position', [':id' => $beach['id']]),
-    'image_url'
-);
+$galleryRows = query(
+    'SELECT image_url, credit, credit_url, alt_text FROM beach_gallery WHERE beach_id = :id ORDER BY position',
+    [':id' => $beach['id']]
+) ?: [];
+$beach['gallery'] = array_column($galleryRows, 'image_url');
+$beach['gallery_meta'] = $galleryRows;
 $beach['features'] = query(
     'SELECT title, title_es, description, description_es FROM beach_features WHERE beach_id = :id ORDER BY position',
     [':id' => $beach['id']]

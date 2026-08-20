@@ -509,8 +509,11 @@ $subnav = array_values(array_filter([
       </div>
       <?php if ($hasGallery): ?>
       <div class="gal">
-        <?php foreach ($beach['gallery'] as $idx => $image): ?>
-        <img src="<?= h($image) ?>" alt="<?= h($beach['name']) ?> — <?= h($isEs ? 'foto' : 'photo') ?> <?= $idx + 1 ?>" loading="lazy" data-gallery-index="<?= $idx ?>" data-action="openLightbox" data-action-args='[<?= $idx ?>]'>
+        <?php foreach (($beach['gallery_meta'] ?? []) as $idx => $g): ?>
+        <figure class="gal-item">
+          <img src="<?= h($g['image_url']) ?>" alt="<?= h(($g['alt_text'] ?? '') !== '' ? $g['alt_text'] : $beach['name'] . ' — ' . ($isEs ? 'foto' : 'photo') . ' ' . ($idx + 1)) ?>" loading="lazy" data-gallery-index="<?= $idx ?>" data-action="openLightbox" data-action-args='[<?= $idx ?>]'>
+          <?php if (($g['credit'] ?? '') !== ''): ?><figcaption><?= h($g['credit']) ?></figcaption><?php endif; ?>
+        </figure>
         <?php endforeach; ?>
       </div>
       <?php endif; ?>

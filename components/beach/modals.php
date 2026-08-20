@@ -189,6 +189,8 @@ async function toggleStickyFavorite() {
         <div class="lightbox-content">
             <img id="lightbox-image" alt="" class="lightbox-image">
             <div id="lightbox-counter" class="lightbox-counter"></div>
+            <a id="lightbox-credit" target="_blank" rel="noopener nofollow"
+               style="display:none;color:rgba(255,255,255,.75);font-size:.78rem;text-align:center;margin-top:6px;text-decoration:none"></a>
         </div>
 
         <!-- Next button -->
@@ -201,6 +203,10 @@ async function toggleStickyFavorite() {
 <script <?= cspNonceAttr() ?>>
 // Gallery Lightbox
 const galleryImages = <?= json_encode($beach['gallery']) ?>;
+const galleryCredits = <?= json_encode(array_map(
+    static fn($g) => ['credit' => (string) ($g['credit'] ?? ''), 'url' => (string) ($g['credit_url'] ?? '')],
+    $beach['gallery_meta'] ?? []
+)) ?>;
 let currentImageIndex = 0;
 
 function openLightbox(index) {
@@ -234,6 +240,17 @@ function updateLightboxImage() {
     img.src = galleryImages[currentImageIndex];
     img.alt = '<?= h($beach['name']) ?> - <?= h(__('beach.photo_label')) ?> ' + (currentImageIndex + 1);
     counter.textContent = (currentImageIndex + 1) + ' / ' + galleryImages.length;
+    const creditEl = document.getElementById('lightbox-credit');
+    const meta = galleryCredits[currentImageIndex];
+    if (creditEl) {
+        if (meta && meta.credit) {
+            creditEl.textContent = '📷 ' + meta.credit;
+            if (meta.url) { creditEl.href = meta.url; } else { creditEl.removeAttribute('href'); }
+            creditEl.style.display = 'block';
+        } else {
+            creditEl.style.display = 'none';
+        }
+    }
 }
 
 // Keyboard navigation
