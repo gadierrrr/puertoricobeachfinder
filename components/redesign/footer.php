@@ -50,7 +50,7 @@ $rdFootMoreGuides = [
                         <span><?= h($_ENV['APP_NAME'] ?? 'Beach Finder') ?></span>
                     </div>
                     <p class="about"><?= h(__('footer.about', ['count' => '300+'])) ?></p>
-                    <h5><?= h(__('footer.tools')) ?></h5>
+                    <div class="colhead"><?= h(__('footer.tools')) ?></div>
                     <ul>
                         <li><a href="<?= h(routeUrl('quiz', $currentLang)) ?>"><?= h(__('footer.beach_match_quiz')) ?></a></li>
                         <li><a href="<?= h(routeUrl('compare', $currentLang)) ?>"><?= h(__('footer.compare_beaches')) ?></a></li>
@@ -67,12 +67,12 @@ $rdFootMoreGuides = [
                         <li><a href="<?= h(routeUrl($routeKey, $currentLang)) ?>"><?= h($label) ?></a></li>
                         <?php endforeach; ?>
                     </ul>
-                    <h5><?= h(__('footer.by_location')) ?></h5>
+                    <div class="colhead"><?= h(__('footer.by_location')) ?></div>
                     <ul>
                         <li><a href="<?= h(routeUrl('beaches_near_san_juan', $currentLang)) ?>"><?= h(__('footer.near_san_juan')) ?></a></li>
                         <li><a href="<?= h(routeUrl('beaches_near_airport', $currentLang)) ?>"><?= h(__('footer.near_airport')) ?></a></li>
                     </ul>
-                    <h5><?= h(__('footer.popular_municipalities')) ?></h5>
+                    <div class="colhead"><?= h(__('footer.popular_municipalities')) ?></div>
                     <ul class="two-col">
                         <?php foreach ($rdFootMunicipalities as $muni):
                             $muniSlug = strtolower(str_replace(' ', '-', stripAccents($muni)));
@@ -102,7 +102,7 @@ $rdFootMoreGuides = [
                         <?php endforeach; ?>
                     </ul>
                     <?php if (isAuthenticated()): ?>
-                    <h5><?= h(__('footer.your_account')) ?></h5>
+                    <div class="colhead"><?= h(__('footer.your_account')) ?></div>
                     <ul>
                         <li><a href="<?= h(routeUrl('favorites', $currentLang)) ?>"><?= h(__('footer.my_favorites')) ?></a></li>
                         <li><a href="<?= h(routeUrl('profile', $currentLang)) ?>"><?= h(__('nav.profile')) ?></a></li>

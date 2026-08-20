@@ -267,7 +267,7 @@ $renderConditionsCard = function (string $extraClass = '') use ($cur, $uvLabel, 
             $windMph = (int) round(((float) ($cur['wind_speed'] ?? 0)) * 0.621371); ?>
       <div class="cond-now"><span class="t"><?= round((float) ($cur['temperature'] ?? 0)) ?>°</span><span class="d"><?= h($cur['description'] ?? '') ?> · <?= h($isEs ? 'se siente' : 'feels like') ?> <?= round((float) ($cur['feels_like'] ?? ($cur['temperature'] ?? 0))) ?>°</span></div>
       <div class="cond-row">
-        <span style="color:<?= $uv[1] === 'r' ? 'var(--coral)' : ($uv[1] === 'a' ? '#B7860B' : 'var(--green)') ?>">☀ UV <?= h($uv[0]) ?></span>
+        <span style="color:<?= $uv[1] === 'r' ? 'var(--coral)' : ($uv[1] === 'a' ? '#8A6508' : 'var(--green)') ?>">☀ UV <?= h($uv[0]) ?></span>
         <span>💨 <?= h($isEs ? 'Viento' : 'Wind') ?> <?= $windMph ?> mph</span>
       </div>
       <?php // Editorial sargassum status (232 beaches have it) — "reported"
@@ -275,7 +275,7 @@ $renderConditionsCard = function (string $extraClass = '') use ($cur, $uvLabel, 
             $sarg = strtolower(trim((string) ($beach['sargassum'] ?? '')));
             if ($sarg !== ''): ?>
       <div class="cond-row" style="margin-top:8px">
-        <span style="color:<?= $sarg === 'none' ? 'var(--green)' : '#B7860B' ?>">🌿 <?= h($isEs
+        <span style="color:<?= $sarg === 'none' ? 'var(--green)' : '#8A6508' ?>">🌿 <?= h($isEs
             ? 'Sargazo: ' . ($sarg === 'none' ? 'ninguno reportado' : ($sarg === 'light' ? 'ligero reportado' : $sarg . ' reportado'))
             : 'Sargassum: ' . ($sarg === 'none' ? 'none reported' : $sarg . ' reported')) ?></span>
       </div>

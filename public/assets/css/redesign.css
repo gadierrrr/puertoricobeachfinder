@@ -75,7 +75,7 @@ body.redesign{background:var(--paper);background-image:radial-gradient(circle at
 .rd-sitefoot .brand{color:var(--paper)}
 .rd-sitefoot .about{font-size:.88rem;line-height:1.55;margin:14px 0 8px;max-width:32ch}
 .rd-sitefoot h4{font-family:var(--data);font-weight:700;text-transform:uppercase;letter-spacing:.13em;font-size:.78rem;color:var(--paper);margin:0 0 15px;padding-bottom:10px;border-bottom:1px solid rgba(245,239,223,.16)}
-.rd-sitefoot h5{font-family:var(--data);font-weight:700;text-transform:uppercase;letter-spacing:.13em;font-size:.65rem;color:rgba(245,239,223,.5);margin:22px 0 10px}
+.rd-sitefoot .colhead{font-family:var(--data);font-weight:700;text-transform:uppercase;letter-spacing:.13em;font-size:.65rem;color:rgba(245,239,223,.5);margin:22px 0 10px}
 .rd-sitefoot ul{list-style:none;margin:0;padding:0;display:grid;gap:9px;font-size:.88rem;line-height:1.35}
 .rd-sitefoot ul.two-col{grid-template-columns:1fr 1fr;column-gap:14px}
 .rd-sitefoot a{display:inline-block;text-underline-offset:4px}
@@ -362,8 +362,8 @@ body.redesign.rd-guide-page .chat-fab-container{display:none!important}
 .rd-beach .gfact .ic,.rd-beach .gplan .ic{font-size:.95rem;line-height:1}
 .rd-beach .gfact .k,.rd-beach .chiprow .k,.rd-beach .gplan .k{display:flex;align-items:center;gap:6px;font-family:var(--data);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:.62rem;color:rgba(21,34,43,.72);margin:0}
 .rd-beach .gfact .v{font-weight:700;font-size:.9rem;margin-top:5px;line-height:1.3}
-.rd-beach .gfact .v.g{color:var(--green)}.rd-beach .gfact .v.a{color:#B7860B}.rd-beach .gfact .v.r{color:var(--coral)}
-.rd-beach .gfact .vlink{font-family:var(--data);font-weight:700;font-size:.78rem;letter-spacing:.03em;color:var(--sea-deep)}
+.rd-beach .gfact .v.g{color:var(--green)}.rd-beach .gfact .v.a{color:#8A6508}.rd-beach .gfact .v.r{color:var(--coral)}
+.rd-beach .gfact .vlink{font-family:var(--data);font-weight:700;font-size:.78rem;letter-spacing:.03em;color:#1E6FA7}
 .rd-beach .gfact .vlink:hover{text-decoration:underline;text-underline-offset:3px}
 .rd-beach .glance-chips{padding:14px 0;border-bottom:1px solid var(--ink-14)}
 .rd-beach .chiprow{min-width:0}
@@ -378,17 +378,17 @@ body.redesign.rd-guide-page .chat-fab-container{display:none!important}
 .rd-beach .advise{display:flex;gap:10px;align-items:flex-start;padding:11px 0 0;margin-top:11px;border-top:1px solid var(--ink-14)}
 .rd-beach .advise:first-of-type{border-top:0;margin-top:0;padding-top:0}
 .rd-beach .advise .ic{font-size:1.15rem;line-height:1.2}
-.rd-beach .advise b{display:block;font-family:var(--data);font-weight:900;text-transform:uppercase;letter-spacing:.08em;font-size:.66rem;color:#B7860B}
+.rd-beach .advise b{display:block;font-family:var(--data);font-weight:900;text-transform:uppercase;letter-spacing:.08em;font-size:.66rem;color:#8A6508}
 .rd-beach .advise p{margin:3px 0 0;color:var(--ink-60);font-size:.88rem;line-height:1.42}
-.rd-beach .advise a{font-family:var(--data);font-weight:700;font-size:.8rem;color:var(--sea-deep)}
+.rd-beach .advise a{font-family:var(--data);font-weight:700;font-size:.8rem;color:#1E6FA7}
 .rd-beach .advise a:hover{text-decoration:underline;text-underline-offset:3px}
 .rd-beach .grev{display:flex;align-items:center;gap:9px;margin:0 0 14px;background:#fff;border:1px solid var(--ink-14);border-radius:12px;padding:12px 15px;font-size:.92rem;color:var(--ink)}
 .rd-beach .grev .st{color:var(--gold);font-size:1.05rem;line-height:1}
 .rd-beach .grev b{font-weight:800}
-.rd-beach .grev .go{margin-left:auto;font-family:var(--data);font-weight:700;font-size:.78rem;letter-spacing:.04em;color:var(--sea-deep);white-space:nowrap}
+.rd-beach .grev .go{margin-left:auto;font-family:var(--data);font-weight:700;font-size:.78rem;letter-spacing:.04em;color:#1E6FA7;white-space:nowrap}
 .rd-beach a.grev:hover{border-color:var(--sea)}
 .rd-beach a.grev:hover .go{text-decoration:underline;text-underline-offset:3px}
-.rd-beach .gplan .more{font-family:var(--data);font-weight:700;font-size:.8rem;color:var(--sea-deep);white-space:nowrap}
+.rd-beach .gplan .more{font-family:var(--data);font-weight:700;font-size:.8rem;color:#1E6FA7;white-space:nowrap}
 .rd-beach .gplan .more:hover{text-decoration:underline;text-underline-offset:3px}
 @media(max-width:900px){.rd-beach .mobile-planning .side-sec:has(.advise-card){grid-column:1/-1}}
 .rd-beach .tips{display:grid;gap:9px}
@@ -646,7 +646,7 @@ body.redesign.rd-guide-page .chat-fab-container{display:none!important}
 .rd-beach .tour-action{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:13px;padding-top:12px;border-top:1px solid var(--ink-14)}
 .rd-beach .tour-price{font-family:var(--disp);font-size:1.3rem;line-height:1;color:var(--ink)}
 .rd-beach .tour-price small{font-family:var(--data);font-weight:700;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-60);margin-right:3px}
-.rd-beach .tour-browse-link{display:inline-flex;align-items:center;gap:6px;justify-self:start;margin-top:2px;font-family:var(--data);font-weight:800;letter-spacing:.07em;text-transform:uppercase;font-size:.7rem;color:var(--sea-deep)}
+.rd-beach .tour-browse-link{display:inline-flex;align-items:center;gap:6px;justify-self:start;margin-top:2px;font-family:var(--data);font-weight:800;letter-spacing:.07em;text-transform:uppercase;font-size:.7rem;color:#1E6FA7}
 .rd-beach .tour-browse-link:hover{text-decoration:underline;text-underline-offset:3px}
 .rd-beach .tour-disclosure{font-size:.72rem;color:var(--ink-60);font-style:italic;margin:10px 0 0}
 .gp-viewer{position:fixed;inset:0;z-index:100;background:rgba(9,22,32,.95);display:flex;flex-direction:column}
@@ -773,7 +773,7 @@ body.redesign.rd-guide-page .chat-fab-container{display:none!important}
 .rd-listing .crow .ctx{min-width:0;flex:1}
 .rd-listing .crow .cn{display:block;font-family:var(--data);font-weight:600;font-size:.92rem;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rd-listing .crow .cm{display:block;font-family:var(--data);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-60);margin-top:1px}
-.rd-listing .crow .cr{font-family:var(--data);font-weight:700;font-size:.78rem;color:#B7860B;flex:0 0 auto}
+.rd-listing .crow .cr{font-family:var(--data);font-weight:700;font-size:.78rem;color:#8A6508;flex:0 0 auto}
 .rd-listing .mcards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .rd-listing .mcard{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#fff;border:1px solid var(--ink-14);border-radius:12px;padding:15px 17px;transition:.15s}
 .rd-listing .mcard:hover{border-color:var(--sea)}
@@ -1083,7 +1083,7 @@ body.redesign.collection-dark .guide-article p.text-green-400,
 body.redesign.collection-dark .guide-article td.text-green-400,
 body.redesign.collection-dark .guide-article span.text-green-400{color:var(--green)}
 body.redesign.collection-dark .guide-article td.text-yellow-400,
-body.redesign.collection-dark .guide-article span.text-yellow-400{color:#B7860B}
+body.redesign.collection-dark .guide-article span.text-yellow-400{color:#8A6508}
 body.redesign.collection-dark .guide-article p.text-red-400,
 body.redesign.collection-dark .guide-article td.text-red-400,
 body.redesign.collection-dark .guide-article span.text-red-400{color:var(--coral)}
