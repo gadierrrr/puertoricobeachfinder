@@ -177,6 +177,19 @@ $xGroups = array_filter([
 
 // related content
 $relatedGuides = getRelatedGuides($tags, 3);
+// The safety + transportation guides used to live under Getting there &
+// safety — they join the guide list here (deduped by URL, capped at 5).
+$fixedGuides = [['url' => routeUrl('guide_safety', $lang), 'title' => $isEs ? 'Consejos de seguridad para playas de Puerto Rico' : 'Beach safety tips for Puerto Rico']];
+if (!$isBoat) {
+    $fixedGuides[] = ['url' => routeUrl('guide_transportation', $lang), 'title' => $isEs ? 'Cómo llegar a las playas: carro, ferry o Uber' : 'Getting to Puerto Rico beaches by car, ferry, or Uber'];
+}
+$seenGuideUrls = [];
+$relatedGuides = array_values(array_filter(array_merge($relatedGuides, $fixedGuides), function ($g) use (&$seenGuideUrls) {
+    if (in_array($g['url'], $seenGuideUrls, true)) return false;
+    $seenGuideUrls[] = $g['url'];
+    return true;
+}));
+$relatedGuides = array_slice($relatedGuides, 0, 5);
 $similarBeaches = getSimilarBeaches($beach['id'], $tags, 4);
 $nearby = array_slice(getNearbyBeaches((string) $beach['id'], $lat, $lng, 4) ?: [], 0, 4);
 $cardImageUrl = function (array $row, string $size = 'medium'): string {
@@ -198,25 +211,14 @@ $reviewActionArgs = $photoActionArgs;
 // family/swimming signals already render as tone-colored tiles
 $factCoveredTags = ['calm-waters', 'snorkeling', 'family-friendly', 'swimming'];
 $bestForChips = array_slice(array_map(fn($t) => getTagLabel($t), array_values(array_diff($tags, $factCoveredTags))), 0, 4);
-// getting-there row merges the access label with the parking prose; the lead
-// is dropped when the prose already states the access mode (e.g. "only
-// accessible by boat")
-$accessLead = $heroAccess !== '' ? ucfirst($heroAccess) : '';
-if ($accessLead !== '' && $heroParking !== '') {
-    $accessWord = strtolower(strtok($heroAccess, ' ') ?: '');
-    if ($accessWord !== '' && str_contains(strtolower($heroParking), $accessWord)) {
-        $accessLead = '';
-    }
-}
-$gettingBody = trim(($accessLead !== '' ? $accessLead . '. ' : '') . $heroParking);
-if ($isBoat && $heroParking === '') {
-    // "Check access and parking" reads absurd for a cay — answer the real
-    // question instead: from where, and how most people do it.
+// glance getting-there row carries the access mode only — parking, lifeguard,
+// and safety facts live in the Know-before-you-go card on the right
+if ($isBoat) {
     $gettingBody = $isEs
         ? 'Bote o taxi acuático desde ' . $beach['municipality'] . '. La mayoría de los visitantes reserva un tour.'
         : 'Boat or water taxi from ' . $beach['municipality'] . '. Most visitors book a tour.';
-} elseif ($gettingBody === '') {
-    $gettingBody = $isEs ? 'Verifica acceso y parking antes de ir.' : 'Check access and parking before you go.';
+} else {
+    $gettingBody = $heroAccess !== '' ? ucfirst($heroAccess) . '.' : '';
 }
 // First sentence (or ~110 chars) for the glance card's one-line prose rows;
 // full detail lives in the sections the subnav already links to.
@@ -233,17 +235,43 @@ $firstSentence = function (string $s, int $max = 110): string {
 
 // Honest, data-conditional advisories — this replaces the invented Beach
 // Score. Only real caution-worthy facts render; no advisories, no card.
+// Item shape: [icon, title, body, href|null, linkLabel|null, isDanger].
+// Amber = logistics/planning; red (isDanger) = genuine hazards.
 $adviseItems = [];
 if ($isBoat) {
     $adviseItems[] = ['🛥️', $isEs ? 'Solo en bote' : 'Boat access only',
         ($isEs ? 'Tours y taxis acuáticos salen desde ' : 'Tours and water taxis depart from ') . $beach['municipality'] . '.',
-        '#tours', $isEs ? 'Ver tours →' : 'See tours →'];
+        '#tours', $isEs ? 'Ver tours →' : 'See tours →', false];
 } elseif (str_contains($access, 'hike') || str_contains($access, 'walk')) {
-    $adviseItems[] = ['🥾', $isEs ? 'Se llega a pie' : 'Reached on foot', ucfirst($accessLabel) . '.', null, null];
+    $adviseItems[] = ['🥾', $isEs ? 'Se llega a pie' : 'Reached on foot', ucfirst($accessLabel) . '.', null, null, false];
+}
+// Surf hazard from the structured surf column — dangerous beaches get a real
+// warning even where the generated safety prose is pure boilerplate.
+$surfWarn = ($surf === 'large');
+if ($surfWarn) {
+    $adviseItems[] = ['🌊', $isEs ? 'Oleaje fuerte' : 'Powerful surf',
+        $isEs ? 'Olas y corrientes fuertes — evalúa las condiciones antes de entrar al agua.' : 'Strong waves and currents — judge conditions before entering the water.', null, null, true];
+}
+// Beach-specific safety lead: whatever the safety prose says BEFORE the
+// generated boilerplate block ("No lifeguards are present…" onward).
+$safetyLead = trim((string) preg_replace('/\s*(No lifeguards?\b|No hay salvavidas\b).*$/su', '', $safetyInfo));
+if ($safetyLead !== '' && !($surfWarn && preg_match('/surf|oleaje/i', $safetyLead))) {
+    if (mb_strlen($safetyLead) > 200) {
+        $safetyLead = $firstSentence($safetyLead, 180);
+    }
+    $adviseItems[] = ['⚠️', $isEs ? 'Atención' : 'Heads up', $safetyLead, null, null, true];
+}
+// No lifeguard — from the structured column, not prose (411 of 434 beaches).
+if (empty($beach['has_lifeguard'])) {
+    $adviseItems[] = ['🛟', $isEs ? 'Sin salvavidas' : 'No lifeguard',
+        $isEs ? 'Nada acompañado y conoce tus límites.' : 'Swim with a buddy and know your limits.', null, null, false];
+}
+if (!$isBoat && $heroParking !== '') {
+    $adviseItems[] = ['🅿️', $isEs ? 'Estacionamiento' : 'Parking', $heroParking, null, null, false];
 }
 if (count($amenities) < 2) {
     $adviseItems[] = ['🚻', $isEs ? 'Servicios limitados' : 'Limited facilities',
-        $isEs ? 'Lleva agua, sombra y comida para el día.' : 'Bring water, shade, and food for the day.', null, null];
+        $isEs ? 'Lleva agua, sombra y comida para el día.' : 'Bring water, shade, and food for the day.', null, null, false];
 }
 $similarReason = function (array $row) use ($tags, $isEs): string {
     $shared = array_values(array_intersect($tags, $row['tags'] ?? []));
@@ -284,6 +312,7 @@ $renderConditionsCard = function (string $extraClass = '') use ($cur, $uvLabel, 
       <?php else: ?>
       <p style="font-size:.85rem;color:var(--ink-60)"><?= h($isEs ? 'Clima no disponible ahora.' : 'Live conditions unavailable right now.') ?></p>
       <?php endif; ?>
+      <button class="checkin-link" type="button" data-action="openCheckinModal" data-action-args='<?= h(json_encode([$beach['id'], $beach['name']])) ?>'>✔ <?= h($isEs ? '¿Estás aquí hoy? Haz check in' : 'Been here today? Check in') ?></button>
     </div>
     </section>
     <?php
@@ -311,8 +340,8 @@ $renderAdvisoryCard = function (string $extraClass = '') use ($isEs, $adviseItem
     <section class="side-sec <?= h($extraClass) ?>">
     <div class="side-head"><span class="eyebrow"><?= h($isEs ? 'Antes de ir' : 'Know before you go') ?></span></div>
     <div class="card advise-card">
-      <?php foreach ($adviseItems as [$aIcon, $aTitle, $aBody, $aHref, $aLabel]): ?>
-      <div class="advise"><span class="ic" aria-hidden="true"><?= $aIcon ?></span><div>
+      <?php foreach ($adviseItems as [$aIcon, $aTitle, $aBody, $aHref, $aLabel, $aDanger]): ?>
+      <div class="advise<?= $aDanger ? ' warn' : '' ?>"><span class="ic" aria-hidden="true"><?= $aIcon ?></span><div>
         <b><?= h($aTitle) ?></b>
         <p><?= h($aBody) ?><?php if ($aHref !== null): ?> <a href="<?= h($aHref) ?>"><?= h($aLabel) ?></a><?php endif; ?></p>
       </div></div>
@@ -336,7 +365,6 @@ $subnav = array_values(array_filter([
     ['tours', 'Tours', true],
     ['about', $isEs ? 'Sobre' : 'About', !empty($aboutParas)],
     ['tips', $isEs ? 'Consejos' : 'Tips', !empty($tipList)],
-    ['getting', $isBoat ? ($isEs ? 'Seguridad' : 'Safety') : ($isEs ? 'Cómo llegar' : 'Getting there'), true],
     ['photos', $isEs ? 'Fotos' : 'Photos', true],
     ['reviews', $isEs ? 'Reseñas' : 'Reviews', true],
     ['nearby', $isEs ? 'Cercanas' : 'Nearby', !empty($nearby)],
@@ -437,7 +465,9 @@ $subnav = array_values(array_filter([
         </div>
         <?php endif; ?>
         <div class="glance-plan">
-          <div class="gplan"><div class="k"><span class="ic" aria-hidden="true"><?= $isBoat ? '🛥️' : '🧭' ?></span><?= h($isEs ? 'Cómo llegar' : 'Getting there') ?></div><p><?= h($firstSentence($gettingBody)) ?> <a class="more" href="<?= $isBoat ? '#tours' : '#getting' ?>"><?= h($isEs ? 'Detalles →' : 'Details →') ?></a></p></div>
+          <?php if ($gettingBody !== ''): ?>
+          <div class="gplan"><div class="k"><span class="ic" aria-hidden="true"><?= $isBoat ? '🛥️' : '🧭' ?></span><?= h($isEs ? 'Cómo llegar' : 'Getting there') ?></div><p><?= h($gettingBody) ?><?php if ($isBoat): ?> <a class="more" href="#tours"><?= h($isEs ? 'Ver tours →' : 'See tours →') ?></a><?php endif; ?></p></div>
+          <?php endif; ?>
           <?php if ($bestTime !== ''): ?>
           <div class="gplan"><div class="k"><span class="ic" aria-hidden="true">📅</span><?= h($isEs ? 'Mejor época' : 'Best time') ?></div><p><?= h($firstSentence($bestTime)) ?></p></div>
           <?php endif; ?>
@@ -494,42 +524,6 @@ $subnav = array_values(array_filter([
           // glance card links there), so this section is pure safety. The
           // best-time guide link was the 4th best-time instance — gone; the
           // remaining links stay on this section's actual topics. ?>
-    <section id="getting" class="block">
-      <h2 class="h2"><?= h($isBoat ? ($isEs ? 'Seguridad' : 'Safety') : ($isEs ? 'Cómo llegar y seguridad' : 'Getting there & safety')) ?></h2>
-      <div style="display:grid;gap:12px">
-        <?php if (!$isBoat && ($access !== '' || $heroParking !== '')): ?>
-        <div class="callout"><span class="ic">🧭</span><div><div class="ct"><?= h($isEs ? 'Acceso' : 'Access') ?></div><p><?= h(ucfirst($accessLabel)) . ($heroParking !== '' ? '. ' . h($heroParking) : '') ?></p></div></div>
-        <?php endif; ?>
-        <?php if ($safetyInfo !== ''): ?>
-        <div class="callout warn"><span class="ic">⚠️</span><div><div class="ct"><?= h($isEs ? 'Seguridad' : 'Swim smart') ?></div><p><?= h($safetyInfo) ?></p></div></div>
-        <?php endif; ?>
-      </div>
-      <div style="margin:12px 0 0;font-size:.92rem;display:flex;flex-direction:column;gap:6px">
-        <a href="<?= h(routeUrl('guide_safety', $lang)) ?>" style="color:var(--sea-deep);font-weight:600"><?= h($isEs ? 'Guía completa: consejos de seguridad para playas de Puerto Rico →' : 'Full guide: beach safety tips for Puerto Rico →') ?></a>
-        <?php if (!$isBoat): ?>
-        <a href="<?= h(routeUrl('guide_transportation', $lang)) ?>" style="color:var(--sea-deep);font-weight:600"><?= h($isEs ? 'Guía completa: cómo llegar a las playas de Puerto Rico en carro, ferry o Uber →' : 'Full guide: getting to Puerto Rico beaches by car, ferry, or Uber →') ?></a>
-        <?php endif; ?>
-      </div>
-    </section>
-
-    <section class="contrib-band block" aria-labelledby="contrib-heading">
-      <div>
-        <span class="eyebrow"><?= h($isEs ? 'Comparte lo que viste' : 'Share what you saw') ?></span>
-        <h2 id="contrib-heading"><?= h($isEs ? 'Ayuda a la próxima persona que visite esta playa' : 'Help the next person plan this beach') ?></h2>
-        <p><?= h($isEs ? 'Sube fotos recientes, deja una reseña o reporta las condiciones de hoy.' : "Add recent photos, leave a review, or report today's conditions.") ?></p>
-      </div>
-      <div class="contrib-actions">
-        <?php if (isAuthenticated()): ?>
-        <button class="btn coral" type="button" data-action="openPhotoUploadModal" data-action-args='<?= $photoActionArgs ?>'>+ <?= h($isEs ? 'Añadir foto' : 'Add photo') ?></button>
-        <button class="btn" type="button" data-action="openReviewForm" data-action-args='<?= $reviewActionArgs ?>'><?= h($isEs ? 'Escribir reseña' : 'Write review') ?></button>
-        <?php else: ?>
-        <a class="btn coral" href="<?= h($photoLoginUrl) ?>">+ <?= h($isEs ? 'Añadir foto' : 'Add photo') ?></a>
-        <a class="btn" href="<?= h($reviewLoginUrl) ?>"><?= h($isEs ? 'Escribir reseña' : 'Write review') ?></a>
-        <?php endif; ?>
-        <button class="btn sea" type="button" data-action="openCheckinModal" data-action-args='<?= h(json_encode([$beach['id'], $beach['name']])) ?>'>✔ <?= h($isEs ? 'Check in' : 'Check in') ?></button>
-      </div>
-    </section>
-
     <section id="photos" class="block">
       <div class="secrow">
         <h2 class="h2"><?= h($isEs ? 'Fotos' : 'Photos') ?><?php if ($totalUserPhotos > 0): ?> <small>(<?= $totalUserPhotos ?>)</small><?php endif; ?></h2>
@@ -565,9 +559,9 @@ $subnav = array_values(array_filter([
           <p><?= h($isEs ? 'Las fotos recientes ayudan a otros a reconocer el acceso, el agua y el espacio para estacionar.' : 'Recent photos help others recognize the access point, water, and parking setup.') ?></p>
         </div>
         <?php if (isAuthenticated()): ?>
-        <button class="btn coral" type="button" data-action="openPhotoUploadModal" data-action-args='<?= $photoActionArgs ?>'><?= h($isEs ? 'Añadir foto' : 'Add photo') ?></button>
+        <button class="btn" type="button" data-action="openPhotoUploadModal" data-action-args='<?= $photoActionArgs ?>'>+ <?= h($isEs ? 'Añadir foto' : 'Add photo') ?></button>
         <?php else: ?>
-        <a class="btn coral" href="<?= h($photoLoginUrl) ?>"><?= h($isEs ? 'Iniciar sesión' : 'Sign in') ?></a>
+        <a class="btn" href="<?= h($photoLoginUrl) ?>"><?= h($isEs ? 'Inicia sesión para añadir fotos' : 'Sign in to add photos') ?></a>
         <?php endif; ?>
       </div>
       <?php endif; ?>
@@ -599,9 +593,9 @@ $subnav = array_values(array_filter([
             <p><?= h($isEs ? 'Comparte si el acceso fue fácil, cómo estaba el agua y qué debería saber la próxima persona.' : 'Share whether access was easy, how the water felt, and what the next person should know.') ?></p>
           </div>
           <?php if (isAuthenticated()): ?>
-          <button class="btn coral" type="button" data-action="openReviewForm" data-action-args='<?= $reviewActionArgs ?>'><?= h($isEs ? 'Escribir reseña' : 'Write review') ?></button>
+          <button class="btn" type="button" data-action="openReviewForm" data-action-args='<?= $reviewActionArgs ?>'><?= h($isEs ? 'Escribir reseña' : 'Write review') ?></button>
           <?php else: ?>
-          <a class="btn coral" href="<?= h($reviewLoginUrl) ?>"><?= h($isEs ? 'Iniciar sesión' : 'Sign in') ?></a>
+          <a class="btn" href="<?= h($reviewLoginUrl) ?>"><?= h($isEs ? 'Inicia sesión para reseñar' : 'Sign in to review') ?></a>
           <?php endif; ?>
         </div>
         <?php endif; ?>
