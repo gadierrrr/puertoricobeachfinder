@@ -83,7 +83,7 @@ $rdI18n = [
     'closestBeaches' => $isEs ? 'Playas cercanas' : 'Closest beaches',
     'sortedByLocation' => $isEs ? 'Ordenadas por tu ubicación' : 'Sorted by your location',
     'mapTitle' => $isEs ? 'Mapa de Playas de Puerto Rico' : 'Puerto Rico Beach Map',
-    'mapIntro' => $isEs ? 'Explora playas por costa, pueblo, ambiente y puntuación sin salir del mapa.' : 'Explore beaches by coast, town, vibe, and score without leaving the map.',
+    'mapIntro' => $isEs ? 'Explora playas por costa, pueblo y ambiente sin salir del mapa.' : 'Explore beaches by coast, town, and vibe without leaving the map.',
     'mapSearch' => $isEs ? 'Buscar en el mapa...' : 'Search the map...',
     'mapAllCoasts' => $isEs ? 'Todas las costas' : 'All coasts',
     'mapSelected' => $isEs ? 'Seleccionada' : 'Selected',
@@ -127,22 +127,19 @@ $beachUrlPrefix = $isEs ? '/es/playa/' : '/beach/';
 /** Server-rendered beach tile — MUST mirror tile() in redesign-home.js. */
 $rdTile = function (array $b, int $rank) use ($rdI18n, $beachUrlPrefix, &$favIds): string {
     $url = $beachUrlPrefix . $b['slug'];
-    $barColor = $b['sc'] >= 67 ? 'g' : ($b['sc'] >= 40 ? 'a' : 'r');
-    $bars = '<div class="score"><span>' . h($rdI18n['overall']) . '</span><div class="bar"><i class="' . $barColor . '" style="width:' . $b['sc'] . '%"></i></div></div>';
-    foreach ($b['bars'] as $bar) {
-        $label = $rdI18n['barLabels'][$bar[0]] ?? $bar[0];
-        $bars .= '<div class="score"><span>' . h($label) . '</span><div class="bar"><i class="' . h($bar[2]) . '" style="width:' . (int) $bar[1] . '%"></i></div></div>';
-    }
+    // Honest signals only: the corner badge and hover show the real Google
+    // rating (never the internal heuristic score, which stays ranking-only).
+    $rt = !empty($b['rt']) ? number_format($b['rt'], 1) : '';
     $fav = in_array($b['id'], $favIds, true);
     return '<div class="btile">'
         . '<a class="btile-link" href="' . h($url) . '">'
         . '<div class="btile-photo" style="background-image:url(\'' . h($b['img']) . '\')"></div><div class="btile-grad"></div>'
         . '<div class="btile-rest"><div class="bt-top"><span class="bt-rank">' . $rank . '</span>'
-        . '<span class="bt-score-mini">' . h($rdI18n['beachScore']) . ' ' . (int) $b['sc'] . '</span></div>'
+        . ($rt !== '' ? '<span class="bt-score-mini">⭐ ' . $rt . '</span>' : '')
+        . '</div>'
         . '<div class="bt-name">' . h($b['n']) . '</div><div class="bt-muni">' . h($b['m']) . '</div>'
-        . '<div class="bt-rest-stats"><span>🌊 ' . h($rdI18n['water'][$b['water']] ?? $b['water']) . '</span><span>👥 ' . h($rdI18n['crowd'][$b['crowd']] ?? $b['crowd']) . '</span>' . ($b['rt'] ? '<span>⭐ ' . number_format($b['rt'], 1) . '</span>' : '') . '</div></div>'
-        . '<div class="btile-hover"><div class="bt-hovtop"><span>' . h($rdI18n['beachScore']) . ' ' . (int) $b['sc'] . '</span></div>'
-        . '<div class="scores">' . $bars . '</div>'
+        . '<div class="bt-rest-stats"><span>🌊 ' . h($rdI18n['water'][$b['water']] ?? $b['water']) . '</span><span>👥 ' . h($rdI18n['crowd'][$b['crowd']] ?? $b['crowd']) . '</span></div></div>'
+        . '<div class="btile-hover"><div class="bt-hovtop"><span>' . ($rt !== '' ? '⭐ ' . $rt . ' Google' : h($b['m'])) . '</span></div>'
         . '<span class="bt-view">' . h($rdI18n['viewBeach']) . '</span></div></a>'
         . '<button class="bt-fav' . ($fav ? ' on' : '') . '" type="button" data-id="' . h($b['id']) . '" title="' . h($rdI18n['save']) . '">' . ($fav ? '♥' : '♡') . '</button></div>';
 };
@@ -567,7 +564,7 @@ window.RD_CFG = <?= json_encode([
     'regionNames' => $regionNames,
 ], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?>;
 </script>
-<script <?= cspNonceAttr() ?> src="/assets/js/redesign-home.js?v=16"></script>
+<script <?= cspNonceAttr() ?> src="/assets/js/redesign-home.js?v=17"></script>
 <?php if ($hpEditor): ?>
 <!-- Admin homepage-design editor preview (loaded only inside /admin/homepage-design iframe) -->
 <script <?= cspNonceAttr() ?> src="/assets/js/redesign-editor-preview.js?v=1"></script>

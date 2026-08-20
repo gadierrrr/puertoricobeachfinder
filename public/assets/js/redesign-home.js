@@ -61,22 +61,21 @@
 
   function tile(b, rank) {
     var url = URL_PREFIX + b.slug;
-    var barsHtml = bar(word("overall", "⭐ Overall"), b.sc, b.sc >= 67 ? "g" : b.sc >= 40 ? "a" : "r");
-    var barLabels = I.barLabels || { "Calm water": "🌊 Calm", "Snorkeling": "🤿 Snorkel", "Seclusion": "🌾 Quiet", "Family": "👨‍👩‍👧 Family", "Facilities": "🚻 Facilities" };
-    for (var i = 0; i < b.bars.length; i++) { barsHtml += bar(barLabels[b.bars[i][0]] || b.bars[i][0], b.bars[i][1], b.bars[i][2]); }
+    // Honest signals only: real Google rating; the heuristic score stays
+    // ranking-only. MUST mirror $rdTile() in templates/redesign/home.php.
     var waterWord = (I.water && I.water[b.water]) || b.water;
     var crowdWord = (I.crowd && I.crowd[b.crowd]) || b.crowd;
     var isFav = favs.indexOf(String(b.id)) > -1;
-    var scoreLabel = word("beachScore", "Score");
+    var rt = b.rt ? b.rt.toFixed(1) : "";
     return '<div class="btile">' +
       '<a class="btile-link" href="' + url + '">' +
       '<div class="btile-photo" style="background-image:url(\'' + esc(b.img) + '\')"></div><div class="btile-grad"></div>' +
       '<div class="btile-rest"><div class="bt-top"><span class="bt-rank">' + rank + '</span>' +
-      '<span class="bt-score-mini">' + esc(scoreLabel) + " " + b.sc + '</span></div>' +
+      (rt ? '<span class="bt-score-mini">⭐ ' + rt + '</span>' : '') +
+      '</div>' +
       '<div class="bt-name">' + esc(b.n) + '</div><div class="bt-muni">' + esc(b.m) + '</div>' +
-      '<div class="bt-rest-stats"><span>🌊 ' + esc(waterWord) + '</span><span>👥 ' + esc(crowdWord) + '</span>' + (b.rt ? '<span>⭐ ' + b.rt.toFixed(1) + '</span>' : '') + '</div></div>' +
-      '<div class="btile-hover"><div class="bt-hovtop"><span>' + esc(scoreLabel) + " " + b.sc + '</span></div>' +
-      '<div class="scores">' + barsHtml + '</div>' +
+      '<div class="bt-rest-stats"><span>🌊 ' + esc(waterWord) + '</span><span>👥 ' + esc(crowdWord) + '</span></div></div>' +
+      '<div class="btile-hover"><div class="bt-hovtop"><span>' + (rt ? '⭐ ' + rt + ' Google' : esc(b.m)) + '</span></div>' +
       '<span class="bt-view">' + esc(word("viewBeach", "View beach →")) + '</span></div></a>' +
       '<button class="bt-fav' + (isFav ? " on" : "") + '" type="button" data-id="' + esc(b.id) + '" title="' + esc(word("save", "Save")) + '">' + (isFav ? "♥" : "♡") + '</button></div>';
   }

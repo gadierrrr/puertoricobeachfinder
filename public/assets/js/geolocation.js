@@ -194,10 +194,12 @@ function toRad(deg) {
 }
 
 function formatDistance(meters) {
-    if (meters < 1000) {
-        return Math.round(meters) + "m";
+    // US territory: miles/feet, not metric
+    var miles = meters / 1609.34;
+    if (miles < 0.2) {
+        return Math.round(meters * 3.28084 / 50) * 50 + " ft";
     }
-    return (meters / 1000).toFixed(1) + "km";
+    return miles.toFixed(1) + " mi";
 }
 
 function sortByDistance(beaches) {

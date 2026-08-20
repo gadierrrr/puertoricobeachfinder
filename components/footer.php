@@ -40,7 +40,7 @@ if (!function_exists('isGoogleOAuthEnabled')) {
                     </p>
                     <!-- Tools -->
                     <div class="space-y-2 mt-6">
-                        <h5 class="text-xs font-semibold text-gray-400 uppercase tracking-wider"><?= h(__('footer.tools')) ?></h5>
+                        <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider"><?= h(__('footer.tools')) ?></div>
                         <ul class="space-y-2 text-sm">
                             <li><a href="<?= h(routeUrl('quiz', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors flex items-center gap-2">
                                 <i data-lucide="compass" class="w-4 h-4"></i>
@@ -78,7 +78,7 @@ if (!function_exists('isGoogleOAuthEnabled')) {
                     </ul>
                     <!-- Beaches by Location -->
                     <div class="mt-6">
-                        <h5 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3"><?= h(__('footer.by_location')) ?></h5>
+                        <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3"><?= h(__('footer.by_location')) ?></div>
                         <ul class="space-y-2 text-sm">
                             <li><a href="<?= h(routeUrl('beaches_near_san_juan', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors"><?= h(__('footer.near_san_juan')) ?></a></li>
                             <li><a href="<?= h(routeUrl('beaches_near_airport', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors"><?= h(__('footer.near_airport')) ?></a></li>
@@ -86,7 +86,7 @@ if (!function_exists('isGoogleOAuthEnabled')) {
                     </div>
                     <!-- Popular Municipalities -->
                     <div class="mt-6">
-                        <h5 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3"><?= h(__('footer.popular_municipalities')) ?></h5>
+                        <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3"><?= h(__('footer.popular_municipalities')) ?></div>
                         <ul class="grid grid-cols-2 gap-2 text-sm">
                             <?php
                             $topMunicipalities = [
@@ -136,7 +136,7 @@ if (!function_exists('isGoogleOAuthEnabled')) {
                     <?php if (isAuthenticated()): ?>
                     <!-- Authenticated User -->
                     <div class="mt-6">
-                        <h5 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3"><?= h(__('footer.your_account')) ?></h5>
+                        <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3"><?= h(__('footer.your_account')) ?></div>
                         <ul class="space-y-2 text-sm">
                             <li><a href="<?= h(routeUrl('favorites', $currentLang)) ?>" class="text-gray-400 hover:text-sunset-400 transition-colors flex items-center gap-2">
                                 <i data-lucide="heart" class="w-4 h-4"></i>
@@ -248,8 +248,8 @@ if (!function_exists('isGoogleOAuthEnabled')) {
     ], JSON_UNESCAPED_UNICODE) ?>;
     </script>
     <!-- App JavaScript (defer for non-blocking load) -->
-    <script defer src="/assets/js/app.min.js?v=2.0" <?= cspNonceAttr() ?>></script>
-    <script defer src="/assets/js/geolocation.js?v=2.1" <?= cspNonceAttr() ?>></script>
+    <script defer src="/assets/js/app.min.js?v=2.1" <?= cspNonceAttr() ?>></script>
+    <script defer src="/assets/js/geolocation.js?v=2.2" <?= cspNonceAttr() ?>></script>
     <script <?= cspNonceAttr() ?>>
     // Achievement badge celebration (shared across favorite/review/photo/check-in flows).
     window.BF_BADGE_PREFIX = <?= json_encode(($currentLang ?? 'en') === 'es' ? 'Insignia desbloqueada: ' : 'Badge unlocked: ') ?>;

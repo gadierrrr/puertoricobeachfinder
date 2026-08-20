@@ -36,9 +36,14 @@ $rdNavTags = [
 <a href="#main-content" class="skip-link sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-cyan-500 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg focus:outline-none">
     <?= h(__('nav.skip_main')) ?>
 </a>
+<?php // this target only exists on the beach-grid pages — a skip link
+      // to a missing anchor fails accessibility audits ?>
+<?php $skipPath = (string) parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH); ?>
+<?php if (in_array(rtrim($skipPath, '/'), ['', '/es'], true)): ?>
 <a href="#beach-grid" class="skip-link sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-48 focus:z-50 focus:bg-cyan-500 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg focus:outline-none">
     <?= h(__('nav.skip_beaches')) ?>
 </a>
+<?php endif; ?>
 
 <nav id="main-nav" class="rd rd-topnav" role="navigation" aria-label="<?= h(__('nav.main_navigation')) ?>">
     <div class="wrap bar">
@@ -69,6 +74,15 @@ $rdNavTags = [
             <a href="<?= h(routeUrl('guides_index', $currentLang)) ?>" role="menuitem"><?= h(__('nav.guides')) ?></a>
             <a href="<?= h($localizedQuiz) ?>" role="menuitem"><?= h(__('nav.quiz')) ?></a>
             <a href="<?= h($navMapHref) ?>" role="menuitem" data-context-map-link><?= h(__('nav.map')) ?></a>
+        </div>
+
+        <!-- Beach search (typeahead over 434 beaches) -->
+        <div class="nav-search" id="nav-search">
+            <svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5" stroke-linecap="round"/></svg>
+            <input type="search" id="nav-search-input" autocomplete="off" spellcheck="false"
+                   placeholder="<?= h($currentLang === 'es' ? 'Buscar playa…' : 'Find a beach…') ?>"
+                   aria-label="<?= h($currentLang === 'es' ? 'Buscar una playa' : 'Search for a beach') ?>">
+            <div class="nav-search-results" id="nav-search-results" hidden></div>
         </div>
 
         <!-- Right Side - Language & Auth -->
@@ -153,5 +167,52 @@ $rdNavTags = [
         </div>
     </div>
 </nav>
+
+<script <?= cspNonceAttr() ?>>
+// Nav beach-search typeahead: debounced fetch, Enter opens the top result,
+// Escape or outside-click closes.
+(function () {
+    var input = document.getElementById('nav-search-input');
+    var box = document.getElementById('nav-search-results');
+    if (!input || !box) return;
+    var lang = (document.documentElement.lang || 'en').indexOf('es') === 0 ? 'es' : 'en';
+    var timer = null, lastQ = '';
+    function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+    function close() { box.hidden = true; box.innerHTML = ''; }
+    function render(results) {
+        if (!results.length) { close(); return; }
+        box.innerHTML = results.map(function (r) {
+            return '<a href="' + esc(r.u) + '"><b>' + esc(r.n) + '</b><span>' + esc(r.m) + '</span></a>';
+        }).join('');
+        box.hidden = false;
+    }
+    function run(q) {
+        fetch('/api/beach-search.php?q=' + encodeURIComponent(q) + '&lang=' + lang)
+            .then(function (r) { return r.json(); })
+            .then(function (d) { if (q === lastQ) render((d && d.results) || []); })
+            .catch(close);
+    }
+    input.addEventListener('input', function () {
+        var q = input.value.trim();
+        lastQ = q;
+        clearTimeout(timer);
+        if (q.length < 2) { close(); return; }
+        timer = setTimeout(function () { run(q); }, 220);
+    });
+    input.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { close(); input.blur(); }
+        if (e.key === 'Enter') {
+            var first = box.querySelector('a');
+            if (first) { e.preventDefault(); window.location.href = first.href; }
+        }
+    });
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('#nav-search')) close();
+    });
+    input.addEventListener('focus', function () {
+        if (typeof window.bfTrack === 'function') window.bfTrack('nav_search_focus', {});
+    });
+})();
+</script>
 
 <?php include __DIR__ . '/../nav-scripts.php'; ?>

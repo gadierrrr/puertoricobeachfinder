@@ -561,10 +561,12 @@ function getSwimDifficultyClassDark($level) {
 }
 
 function formatDistance($meters) {
-    if ($meters < 1000) {
-        return round($meters) . 'm';
+    // US territory: miles/feet, not metric
+    $miles = $meters / 1609.34;
+    if ($miles < 0.2) {
+        return round($meters * 3.28084 / 50) * 50 . ' ft';
     }
-    return round($meters / 1000, 1) . 'km';
+    return round($miles, 1) . ' mi';
 }
 
 function timeAgo($datetime) {
@@ -864,12 +866,14 @@ function getScoreBadgeClass($rating) {
  */
 function formatDistanceDisplay($meters) {
     if ($meters === null) return null;
-    if ($meters < 1000) {
-        return round($meters) . 'm';
-    } elseif ($meters < 10000) {
-        return number_format($meters / 1000, 1) . 'km';
+    // US territory: miles/feet, not metric
+    $miles = $meters / 1609.34;
+    if ($miles < 0.2) {
+        return round($meters * 3.28084 / 50) * 50 . ' ft';
+    } elseif ($miles < 10) {
+        return number_format($miles, 1) . ' mi';
     }
-    return round($meters / 1000) . 'km';
+    return round($miles) . ' mi';
 }
 
 // ========================================

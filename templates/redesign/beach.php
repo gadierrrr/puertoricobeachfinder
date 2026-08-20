@@ -256,7 +256,7 @@ $similarReason = function (array $row) use ($tags, $isEs): string {
 // Each right-rail section shares the left column's grammar: an .eyebrow label
 // on the page background, then a plain card. Labels on both columns sit on
 // the same baseline at the top of the grid.
-$renderConditionsCard = function (string $extraClass = '') use ($cur, $uvLabel, $weather, $fmtTime, $isEs): void {
+$renderConditionsCard = function (string $extraClass = '') use ($cur, $uvLabel, $weather, $fmtTime, $isEs, $beach): void {
     ?>
     <section class="side-sec <?= h($extraClass) ?>">
     <div class="side-head"><span class="eyebrow"><?= h($isEs ? 'Condiciones hoy' : 'Conditions today') ?></span></div>
@@ -270,6 +270,16 @@ $renderConditionsCard = function (string $extraClass = '') use ($cur, $uvLabel, 
         <span style="color:<?= $uv[1] === 'r' ? 'var(--coral)' : ($uv[1] === 'a' ? '#B7860B' : 'var(--green)') ?>">☀ UV <?= h($uv[0]) ?></span>
         <span>💨 <?= h($isEs ? 'Viento' : 'Wind') ?> <?= $windMph ?> mph</span>
       </div>
+      <?php // Editorial sargassum status (232 beaches have it) — "reported"
+            // carries the honest hedge that it's not a live measurement.
+            $sarg = strtolower(trim((string) ($beach['sargassum'] ?? '')));
+            if ($sarg !== ''): ?>
+      <div class="cond-row" style="margin-top:8px">
+        <span style="color:<?= $sarg === 'none' ? 'var(--green)' : '#B7860B' ?>">🌿 <?= h($isEs
+            ? 'Sargazo: ' . ($sarg === 'none' ? 'ninguno reportado' : ($sarg === 'light' ? 'ligero reportado' : $sarg . ' reportado'))
+            : 'Sargassum: ' . ($sarg === 'none' ? 'none reported' : $sarg . ' reported')) ?></span>
+      </div>
+      <?php endif; ?>
       <div class="suntimes"><span>☀ <?= h($isEs ? 'Amanecer' : 'Sunrise') ?> <b><?= $fmtTime($weather['sunrise'] ?? null) ?></b></span><span>🌙 <?= h($isEs ? 'Atardecer' : 'Sunset') ?> <b><?= $fmtTime($weather['sunset'] ?? null) ?></b></span></div>
       <?php else: ?>
       <p style="font-size:.85rem;color:var(--ink-60)"><?= h($isEs ? 'Clima no disponible ahora.' : 'Live conditions unavailable right now.') ?></p>
@@ -380,8 +390,7 @@ $subnav = array_values(array_filter([
         <?php endif; ?>
         <button class="btn" type="button" id="sticky-favorite-btn"
                 data-action="toggleStickyFavorite"
-                aria-pressed="<?= $isFavorite ? 'true' : 'false' ?>"
-                aria-label="<?= $isFavorite ? 'Remove from favorites' : 'Add to favorites' ?>">
+                aria-pressed="<?= $isFavorite ? 'true' : 'false' ?>">
           <span id="sticky-favorite-icon" aria-hidden="true"><?= $isFavorite ? '❤️' : '🤍' ?></span> <?= h($isEs ? 'Guardar' : 'Save') ?>
         </button>
         <button class="btn" type="button" data-action="shareBeach" data-action-args='["<?= h($beach['slug']) ?>","<?= h(addslashes($beach['name'])) ?>"]'>↗ <?= h($isEs ? 'Compartir' : 'Share') ?></button>
@@ -419,7 +428,7 @@ $subnav = array_values(array_filter([
         <?php if (!empty($bestForChips) || !empty($amenities)): ?>
         <div class="glance-chips">
           <div class="chiprow">
-            <h3><?= h($isEs ? 'Ideal para' : 'Best for') ?></h3>
+            <div class="k"><?= h($isEs ? 'Ideal para' : 'Best for') ?></div>
             <ul>
               <?php foreach ($bestForChips as $chip): ?><li><?= h($chip) ?></li><?php endforeach; ?>
               <?php foreach ($amenities as $amenity): ?><li>✓ <?= h(getAmenityLabel($amenity)) ?></li><?php endforeach; ?>
@@ -428,9 +437,9 @@ $subnav = array_values(array_filter([
         </div>
         <?php endif; ?>
         <div class="glance-plan">
-          <div class="gplan"><h3><span class="ic" aria-hidden="true"><?= $isBoat ? '🛥️' : '🧭' ?></span><?= h($isEs ? 'Cómo llegar' : 'Getting there') ?></h3><p><?= h($firstSentence($gettingBody)) ?> <a class="more" href="<?= $isBoat ? '#tours' : '#getting' ?>"><?= h($isEs ? 'Detalles →' : 'Details →') ?></a></p></div>
+          <div class="gplan"><div class="k"><span class="ic" aria-hidden="true"><?= $isBoat ? '🛥️' : '🧭' ?></span><?= h($isEs ? 'Cómo llegar' : 'Getting there') ?></div><p><?= h($firstSentence($gettingBody)) ?> <a class="more" href="<?= $isBoat ? '#tours' : '#getting' ?>"><?= h($isEs ? 'Detalles →' : 'Details →') ?></a></p></div>
           <?php if ($bestTime !== ''): ?>
-          <div class="gplan"><h3><span class="ic" aria-hidden="true">📅</span><?= h($isEs ? 'Mejor época' : 'Best time') ?></h3><p><?= h($firstSentence($bestTime)) ?></p></div>
+          <div class="gplan"><div class="k"><span class="ic" aria-hidden="true">📅</span><?= h($isEs ? 'Mejor época' : 'Best time') ?></div><p><?= h($firstSentence($bestTime)) ?></p></div>
           <?php endif; ?>
         </div>
       </div>
@@ -489,10 +498,10 @@ $subnav = array_values(array_filter([
       <h2 class="h2"><?= h($isBoat ? ($isEs ? 'Seguridad' : 'Safety') : ($isEs ? 'Cómo llegar y seguridad' : 'Getting there & safety')) ?></h2>
       <div style="display:grid;gap:12px">
         <?php if (!$isBoat && ($access !== '' || $heroParking !== '')): ?>
-        <div class="callout"><span class="ic">🧭</span><div><h4><?= h($isEs ? 'Acceso' : 'Access') ?></h4><p><?= h(ucfirst($accessLabel)) . ($heroParking !== '' ? '. ' . h($heroParking) : '') ?></p></div></div>
+        <div class="callout"><span class="ic">🧭</span><div><div class="ct"><?= h($isEs ? 'Acceso' : 'Access') ?></div><p><?= h(ucfirst($accessLabel)) . ($heroParking !== '' ? '. ' . h($heroParking) : '') ?></p></div></div>
         <?php endif; ?>
         <?php if ($safetyInfo !== ''): ?>
-        <div class="callout warn"><span class="ic">⚠️</span><div><h4><?= h($isEs ? 'Seguridad' : 'Swim smart') ?></h4><p><?= h($safetyInfo) ?></p></div></div>
+        <div class="callout warn"><span class="ic">⚠️</span><div><div class="ct"><?= h($isEs ? 'Seguridad' : 'Swim smart') ?></div><p><?= h($safetyInfo) ?></p></div></div>
         <?php endif; ?>
       </div>
       <div style="margin:12px 0 0;font-size:.92rem;display:flex;flex-direction:column;gap:6px">
@@ -688,7 +697,7 @@ $subnav = array_values(array_filter([
   <?php endif; ?>
   <button class="btn save" type="button" id="mob-fav-btn"
           aria-pressed="<?= $isFavorite ? 'true' : 'false' ?>"
-          aria-label="<?= $isFavorite ? 'Remove from favorites' : 'Add to favorites' ?>">
+          aria-label="<?= h($isEs ? 'Guardar' : 'Save') ?>">
     <span id="mob-fav-icon" aria-hidden="true"><?= $isFavorite ? '❤️' : '🤍' ?></span>
   </button>
 </div>
@@ -740,7 +749,6 @@ include APP_ROOT . '/components/beach/scripts.php';
       Promise.resolve(typeof toggleStickyFavorite==='function'?toggleStickyFavorite():null).then(function(){
         if(heroIcon&&favIcon){favIcon.textContent=heroIcon.textContent;}
         favBtn.setAttribute('aria-pressed',heroBtn.getAttribute('aria-pressed')||'false');
-        favBtn.setAttribute('aria-label',heroBtn.getAttribute('aria-label')||'Save');
       });
     });}
   }

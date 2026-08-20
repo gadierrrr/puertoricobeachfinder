@@ -126,11 +126,33 @@ async function toggleStickyFavorite() {
     if (!btn || !icon) return;
 
     <?php if (!isAuthenticated()): ?>
-    if (typeof showSignupPrompt === 'function') {
-        showSignupPrompt('favorites', '/beach/<?= h($beach['slug']) ?>');
-    } else {
-        window.location.href = '/login?redirect=' + encodeURIComponent('/beach/<?= h($beach['slug']) ?>');
-    }
+    // Anonymous saves live in localStorage and sync to the account on the
+    // next signed-in beach-page visit (see bfSyncAnonFavorites below) —
+    // no sign-in wall at the moment of highest intent.
+    (function () {
+        const KEY = 'bf_anon_favs';
+        let favs = [];
+        try { favs = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) {}
+        const id = <?= json_encode((string) $beach['id']) ?>;
+        const idx = favs.indexOf(id);
+        const isFav = idx < 0;
+        if (isFav) { favs.push(id); } else { favs.splice(idx, 1); }
+        try { localStorage.setItem(KEY, JSON.stringify(favs)); } catch (e) {}
+        btn.setAttribute('aria-pressed', isFav ? 'true' : 'false');
+        icon.textContent = isFav ? '❤️' : '🤍';
+        const mIcon = document.getElementById('mob-fav-icon');
+        const mBtn = document.getElementById('mob-fav-btn');
+        if (mIcon) mIcon.textContent = isFav ? '❤️' : '🤍';
+        if (mBtn) mBtn.setAttribute('aria-pressed', isFav ? 'true' : 'false');
+        if (typeof showToast === 'function') {
+            showToast(isFav
+                ? <?= json_encode(($lang ?? 'en') === 'es' ? 'Guardada en este dispositivo — inicia sesión para sincronizar' : 'Saved on this device — sign in to sync') ?>
+                : <?= json_encode(($lang ?? 'en') === 'es' ? 'Eliminada de guardadas' : 'Removed from saved') ?>, isFav ? 'success' : 'info', 2600);
+        }
+        if (typeof window.bfTrack === 'function') {
+            window.bfTrack(isFav ? 'favorite_add' : 'favorite_remove', { source: 'beach_page_anon', beach_slug: <?= json_encode($beach['slug']) ?> });
+        }
+    })();
     return;
     <?php endif; ?>
 
@@ -151,7 +173,6 @@ async function toggleStickyFavorite() {
 
         const isFav = payload.is_favorite === true;
         btn.setAttribute('aria-pressed', isFav ? 'true' : 'false');
-        btn.setAttribute('aria-label', isFav ? 'Remove from favorites' : 'Add to favorites');
         icon.textContent = isFav ? '❤️' : '🤍';
         if (typeof showToast === 'function') {
             showToast(isFav ? '<?= __('beach.saved_toast') ?>' : '<?= __('beach.removed_toast') ?>', isFav ? 'success' : 'info', 2500);
@@ -169,6 +190,50 @@ async function toggleStickyFavorite() {
         delete btn.dataset.loading;
     }
 }
+
+// Anonymous-save bootstrapping: reflect device-saved state on load, and once
+// the visitor signs in, sync pending saves into their account.
+(function () {
+    const KEY = 'bf_anon_favs';
+    <?php if (!isAuthenticated()): ?>
+    try {
+        const favs = JSON.parse(localStorage.getItem(KEY) || '[]');
+        if (favs.indexOf(<?= json_encode((string) $beach['id']) ?>) > -1) {
+            ['sticky-favorite', 'mob-fav'].forEach(function (p) {
+                const b = document.getElementById(p + '-btn');
+                const i = document.getElementById(p + '-icon');
+                if (b) b.setAttribute('aria-pressed', 'true');
+                if (i) i.textContent = '❤️';
+            });
+        }
+    } catch (e) {}
+    <?php else: ?>
+    (async function () {
+        let pending = [];
+        try { pending = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) {}
+        if (!pending.length) return;
+        try { localStorage.removeItem(KEY); } catch (e) {}
+        let synced = 0;
+        for (const id of pending.slice(0, 30)) {
+            try {
+                const body = new URLSearchParams();
+                body.set('beach_id', id);
+                body.set('csrf_token', <?= json_encode(csrfToken()) ?>);
+                const res = await fetch('/api/toggle-favorite.php?format=json', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: body.toString()
+                });
+                const p = await res.json();
+                if (p && p.success && p.is_favorite) synced++;
+            } catch (e) {}
+        }
+        if (synced && typeof showToast === 'function') {
+            showToast(<?= json_encode(($lang ?? 'en') === 'es' ? 'Sincronizamos tus playas guardadas a tu cuenta' : 'Synced your saved beaches to your account') ?>, 'success', 3500);
+        }
+    })();
+    <?php endif; ?>
+})();
 </script>
 
 <?php if (!empty($beach['gallery'])): ?>
@@ -643,6 +708,13 @@ function openCheckinModal(beachId, beachName) {
     if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
+function checkinAddPhoto() {
+    closeCheckinModal();
+    if (typeof openPhotoUploadModal === 'function') {
+        openPhotoUploadModal(<?= json_encode((string) $beach['id']) ?>, <?= json_encode((string) $beach['name']) ?>);
+    }
+}
+
 function closeCheckinModal() {
     document.getElementById('checkin-modal').classList.add('hidden');
     document.getElementById('checkin-modal').classList.remove('flex');
@@ -700,6 +772,13 @@ async function submitCheckin(event) {
             if (typeof window.bfTrack === 'function') {
                 window.bfTrack('U1_checkin_submitted', { source: 'beach_page', beach_slug: <?= json_encode($beach['slug']) ?> });
             }
+
+            <?php if (isAuthenticated()): ?>
+            // Highest-intent moment for the photo flywheel: they are AT the
+            // beach right now — invite a photo of today's conditions.
+            messageDiv.insertAdjacentHTML('beforeend',
+                '<button type="button" class="mt-3 w-full bg-sunset-500 hover:bg-sunset-600 text-white text-sm font-semibold px-4 py-2.5 rounded-lg" data-action="checkinAddPhoto">📷 <?= h(($lang ?? 'en') === 'es' ? 'Añade una foto de hoy' : 'Add a photo from today') ?></button>');
+            <?php endif; ?>
 
             // Explorer level-up celebration (levels are recomputed server-side on each check-in)
             if (data.leveled_up) {
