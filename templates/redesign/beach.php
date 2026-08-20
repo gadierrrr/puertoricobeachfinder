@@ -12,7 +12,6 @@
  * render here too. Interactive dialogs are the shared components/beach/
  * modals.php, wired via the same data-action hooks as classic.
  */
-require_once APP_ROOT . '/inc/beach_score.php';
 require_once APP_ROOT . '/inc/island_chart.php';
 require_once APP_ROOT . '/inc/weather.php';
 require_once APP_ROOT . '/inc/tours.php';
@@ -21,7 +20,6 @@ require_once APP_ROOT . '/inc/listings.php';
 $isEs = ($lang ?? 'en') === 'es';
 $tags = $beach['tags'] ?? [];
 $amenities = $beach['amenities'] ?? [];
-$score = computeBeachScore($beach, $tags, $amenities);
 $lat = (float) ($beach['lat'] ?? 0);
 $lng = (float) ($beach['lng'] ?? 0);
 $region = islandRegionForMunicipality($beach['municipality'] ?? '');
@@ -53,7 +51,11 @@ $bestTime = ($isEs && !empty($beach['best_time_es'])) ? $beach['best_time_es'] :
 $safetyInfo = ($isEs && !empty($beach['safety_info_es'])) ? $beach['safety_info_es'] : (string) ($beach['safety_info'] ?? '');
 $parkingDetails = trim(($isEs && !empty($beach['parking_details_es'])) ? $beach['parking_details_es'] : (string) ($beach['parking_details'] ?? ''));
 $surf = strtolower((string) ($beach['surf'] ?? ''));
-$rating = $score['rating'];
+// The only rating shown is a real one: user average, else Google.
+$rating = (float) ($beach['avg_user_rating'] ?? 0);
+if ($rating <= 0) {
+    $rating = (float) ($beach['google_rating'] ?? 0);
+}
 $reviewCountGoogle = (int) ($beach['google_review_count'] ?? 0);
 $dirUrl = 'https://www.google.com/maps/dir/?api=1&destination=' . $lat . ',' . $lng;
 
@@ -90,13 +92,14 @@ $uvLabel = function ($uv) use ($isEs) {
 $swimTile = in_array($surf, ['calm', 'small'], true)
     ? [$isEs ? 'Fácil — agua calmada' : 'Easy — calm water', 'g']
     : ($surf === 'large'
-        ? [$isEs ? 'Avanzado — oleaje fuerte' : 'Advanced — strong surf', 'r']
-        : [$isEs ? 'Moderado — verifica condiciones' : 'Moderate — check conditions', 'a']);
+        ? [$isEs ? 'Oleaje fuerte' : 'Strong surf', 'r']
+        : [$isEs ? 'Verifica condiciones' : 'Check conditions', 'a']);
 $snorkelGood = (bool) array_filter($tags, fn($t) => str_contains(strtolower($t), 'snorkel') || str_contains(strtolower($t), 'reef'));
+// Values kept to one short line so the four fact columns stay aligned.
 $glanceFacts = [
     ['🏊', $isEs ? 'Nadar' : 'Swimming', $swimTile[0], $swimTile[1]],
-    ['🤿', 'Snorkel', $snorkelGood ? ($isEs ? 'Bueno — arrecife cerca' : 'Great — reef access') : ($isEs ? 'Limitado' : 'Limited'), $snorkelGood ? 'g' : 'a'],
-    ['👨‍👩‍👧‍👦', $isEs ? 'Familia' : 'Family', !empty($beach['safe_for_children']) ? ($isEs ? 'Sí — segura para niños' : 'Yes — safe for kids') : ($isEs ? 'Verifica condiciones' : 'Check conditions'), !empty($beach['safe_for_children']) ? 'g' : 'a'],
+    ['🤿', 'Snorkel', $snorkelGood ? ($isEs ? 'Bueno — arrecife' : 'Great — reef') : ($isEs ? 'Limitado' : 'Limited'), $snorkelGood ? 'g' : 'a'],
+    ['👨‍👩‍👧‍👦', $isEs ? 'Familia' : 'Family', !empty($beach['safe_for_children']) ? ($isEs ? 'Segura para niños' : 'Safe for kids') : ($isEs ? 'Con precaución' : 'Use caution'), !empty($beach['safe_for_children']) ? 'g' : 'a'],
 ];
 if ($access !== '') {
     // Boat access is logistics, not danger — amber, not red. The optional 5th
@@ -104,14 +107,16 @@ if ($access !== '') {
     $glanceFacts[] = [
         $isBoat ? '🛥️' : '🧭',
         $isEs ? 'Acceso' : 'Access',
-        ucfirst($accessLabel),
+        $isBoat ? ($isEs ? 'Solo en bote' : 'Boat only') : ucfirst($accessLabel),
         ($isBoat || str_contains($access, 'hike') || str_contains($access, 'walk')) ? 'a' : 'g',
         $isBoat ? ['#tours', $isEs ? 'Ver tours →' : 'See tours →'] : null,
     ];
 }
 
 $heroAccess = $accessLabel;
-$heroParking = $parkingDetails;
+// A boat-only cay has no parking lot: the parking prose is meaningless there
+// ("parking is limited due to the remote location") — suppress it everywhere.
+$heroParking = $isBoat ? '' : $parkingDetails;
 
 // AI at-a-glance summary (same generator as classic); falls back to nothing.
 // Boat-only beaches lead with the fact that changes the visitor's plan
@@ -196,12 +201,32 @@ if ($isBoat && $heroParking === '') {
 } elseif ($gettingBody === '') {
     $gettingBody = $isEs ? 'Verifica acceso y parking antes de ir.' : 'Check access and parking before you go.';
 }
-$facilityScore = null;
-foreach (($score['bars'] ?? []) as $scoreBar) {
-    if (($scoreBar[0] ?? '') === 'Facilities') {
-        $facilityScore = (int) ($scoreBar[1] ?? 0);
-        break;
+// First sentence (or ~110 chars) for the glance card's one-line prose rows;
+// full detail lives in the sections the subnav already links to.
+$firstSentence = function (string $s, int $max = 110): string {
+    $s = trim($s);
+    if ($s === '') {
+        return '';
     }
+    if (preg_match('/^(.{10,' . $max . '}?[.!?])\s/u', $s . ' ', $m)) {
+        return $m[1];
+    }
+    return mb_strlen($s) > $max ? rtrim(mb_substr($s, 0, $max), ' ,;') . '…' : $s;
+};
+
+// Honest, data-conditional advisories — this replaces the invented Beach
+// Score. Only real caution-worthy facts render; no advisories, no card.
+$adviseItems = [];
+if ($isBoat) {
+    $adviseItems[] = ['🛥️', $isEs ? 'Solo en bote' : 'Boat access only',
+        ($isEs ? 'Tours y taxis acuáticos salen desde ' : 'Tours and water taxis depart from ') . $beach['municipality'] . '.',
+        '#tours', $isEs ? 'Ver tours →' : 'See tours →'];
+} elseif (str_contains($access, 'hike') || str_contains($access, 'walk')) {
+    $adviseItems[] = ['🥾', $isEs ? 'Se llega a pie' : 'Reached on foot', ucfirst($accessLabel) . '.', null, null];
+}
+if (count($amenities) < 2) {
+    $adviseItems[] = ['🚻', $isEs ? 'Servicios limitados' : 'Limited facilities',
+        $isEs ? 'Lleva agua, sombra y comida para el día.' : 'Bring water, shade, and food for the day.', null, null];
 }
 $similarReason = function (array $row) use ($tags, $isEs): string {
     $shared = array_values(array_intersect($tags, $row['tags'] ?? []));
@@ -215,13 +240,14 @@ $renderConditionsCard = function (string $extraClass = '') use ($cur, $uvLabel, 
     ?>
     <div class="card conditions-card <?= h($extraClass) ?>">
       <h4><?= h($isEs ? 'Condiciones hoy' : 'Conditions today') ?></h4>
-      <?php if ($cur): $uv = $uvLabel($cur['uv_index'] ?? 0); ?>
-      <div class="cond-now"><span class="t"><?= round((float) ($cur['temperature'] ?? 0)) ?>°</span><span class="d"><?= h($cur['description'] ?? '') ?></span></div>
-      <div class="cond-grid">
-        <div><div class="k"><?= h($isEs ? 'Viento' : 'Wind') ?></div><div class="v"><?= round((float) ($cur['wind_speed'] ?? 0)) ?> <span style="font-size:.7rem;color:var(--ink-60)">km/h</span></div></div>
-        <div><div class="k"><?= h($isEs ? 'Índice UV' : 'UV index') ?></div><div class="v" style="color:<?= $uv[1] === 'r' ? 'var(--coral)' : ($uv[1] === 'a' ? '#B7860B' : 'var(--green)') ?>"><?= h($uv[0]) ?></div></div>
-        <div><div class="k"><?= h($isEs ? 'Humedad' : 'Humidity') ?></div><div class="v"><?= round((float) ($cur['humidity'] ?? 0)) ?>%</div></div>
-        <div><div class="k"><?= h($isEs ? 'Se siente' : 'Feels like') ?></div><div class="v"><?= round((float) ($cur['feels_like'] ?? ($cur['temperature'] ?? 0))) ?>°</div></div>
+      <?php if ($cur): $uv = $uvLabel($cur['uv_index'] ?? 0);
+            // US territory: wind in mph (API reports km/h). Humidity dropped —
+            // feels-like already carries it.
+            $windMph = (int) round(((float) ($cur['wind_speed'] ?? 0)) * 0.621371); ?>
+      <div class="cond-now"><span class="t"><?= round((float) ($cur['temperature'] ?? 0)) ?>°</span><span class="d"><?= h($cur['description'] ?? '') ?> · <?= h($isEs ? 'se siente' : 'feels like') ?> <?= round((float) ($cur['feels_like'] ?? ($cur['temperature'] ?? 0))) ?>°</span></div>
+      <div class="cond-row">
+        <span style="color:<?= $uv[1] === 'r' ? 'var(--coral)' : ($uv[1] === 'a' ? '#B7860B' : 'var(--green)') ?>">☀ UV <?= h($uv[0]) ?></span>
+        <span>💨 <?= h($isEs ? 'Viento' : 'Wind') ?> <?= $windMph ?> mph</span>
       </div>
       <div class="suntimes"><span>☀ <?= h($isEs ? 'Amanecer' : 'Sunrise') ?> <b><?= $fmtTime($weather['sunrise'] ?? null) ?></b></span><span>🌙 <?= h($isEs ? 'Atardecer' : 'Sunset') ?> <b><?= $fmtTime($weather['sunset'] ?? null) ?></b></span></div>
       <?php else: ?>
@@ -243,37 +269,19 @@ $renderLocationCard = function (string $extraClass = '') use ($isEs, $lat, $lng,
     </div>
     <?php
 };
-$renderScoreCard = function (string $extraClass = '') use ($isEs, $score, $facilityScore): void {
+$renderAdvisoryCard = function (string $extraClass = '') use ($isEs, $adviseItems): void {
+    if ($adviseItems === []) {
+        return;
+    }
     ?>
-    <div class="scorecard <?= h($extraClass) ?>">
-      <h4 style="margin:0 0 13px"><?= h($isEs ? 'Puntuación' : 'Beach Score') ?></h4>
-      <div class="top"><div class="big"><?= $score['overall'] ?><small>/100</small></div><div style="font-family:var(--data);text-transform:uppercase;letter-spacing:.1em;font-size:.72rem;color:var(--ink-60);text-align:right"><?= $isEs ? 'Cómo puntúa esta playa<br>para pasar el día' : 'How this beach<br>rates for a day out' ?></div></div>
-      <div class="scores">
-        <?php
-          // The big number already states the overall; bar rows earn their
-          // place only by differing from it. Keep bars deviating >= 6 points,
-          // with a floor of the 2 largest deviations so the card never
-          // collapses to the number alone.
-          $overall = (int) $score['overall'];
-          $bars = array_values(array_filter($score['bars'], fn($b) => abs((int) $b[1] - $overall) >= 6));
-          if (count($bars) < 2) {
-              $byDeviation = $score['bars'];
-              usort($byDeviation, fn($x, $y) => abs((int) $y[1] - $overall) <=> abs((int) $x[1] - $overall));
-              $keepNames = array_column(array_slice($byDeviation, 0, 2), 0);
-              $bars = array_values(array_filter($score['bars'], fn($b) => in_array($b[0], $keepNames, true)));
-          }
-          $icons = ['Calm water' => '🌊', 'Snorkeling' => '🤿', 'Seclusion' => '🌾', 'Family' => '👨‍👩‍👧', 'Facilities' => '🚻'];
-          $barNames = $isEs ? ['Calm water' => 'Agua calmada', 'Snorkeling' => 'Snorkel', 'Seclusion' => 'Tranquilidad', 'Family' => 'Familia', 'Facilities' => 'Servicios'] : [];
-          foreach ($bars as $b): ?>
-        <div class="score"><span><span aria-hidden="true"><?= $icons[$b[0]] ?? '•' ?></span> <?= h($barNames[$b[0]] ?? $b[0]) ?></span><div class="bar"><i class="<?= $b[2] ?>" style="width:<?= $b[1] ?>%"></i></div><span class="pct"><?= $b[1] ?></span></div>
-        <?php endforeach; ?>
-      </div>
-      <?php if ($facilityScore !== null && $facilityScore < 50): ?>
-      <div class="score-note">
-        <b><?= h($isEs ? 'Servicios limitados' : 'Limited facilities') ?></b>
-        <span><?= h($isEs ? 'Lleva agua, sombra, comida y todo lo necesario para el día.' : 'Bring water, shade, food, and everything you need for the day.') ?></span>
-      </div>
-      <?php endif; ?>
+    <div class="card advise-card <?= h($extraClass) ?>">
+      <h4><?= h($isEs ? 'Antes de ir' : 'Know before you go') ?></h4>
+      <?php foreach ($adviseItems as [$aIcon, $aTitle, $aBody, $aHref, $aLabel]): ?>
+      <div class="advise"><span class="ic" aria-hidden="true"><?= $aIcon ?></span><div>
+        <b><?= h($aTitle) ?></b>
+        <p><?= h($aBody) ?><?php if ($aHref !== null): ?> <a href="<?= h($aHref) ?>"><?= h($aLabel) ?></a><?php endif; ?></p>
+      </div></div>
+      <?php endforeach; ?>
     </div>
     <?php
 };
@@ -330,7 +338,7 @@ $subnav = array_values(array_filter([
       <?php foreach ($chipTags as $t): ?><span class="h-tag"><?= h(getTagLabel($t)) ?></span><?php endforeach; ?>
     </div>
     <h1 class="h-title"><?= h($nameMain) ?><?php if ($nameAlt !== ''): ?> <span class="h-title-alt"><?= h($nameAlt) ?></span><?php endif; ?></h1>
-    <div class="h-sub"><?= h($beach['municipality']) ?><?= $regionLabel ? ' · ' . h($regionLabel) : '' ?> <span class="coord">· <?= number_format($lat, 2) ?>°N <?= number_format(abs($lng), 2) ?>°W</span></div>
+    <div class="h-sub"><?= h($beach['municipality']) ?><?= $regionLabel ? ' · ' . h($regionLabel) : '' ?></div>
     <?php if ($rating > 0): ?>
     <a class="h-rating" href="#reviews">
       <span class="stars" aria-hidden="true"><?= str_repeat('★', (int) round($rating)) . str_repeat('☆', 5 - (int) round($rating)) ?></span>
@@ -338,11 +346,6 @@ $subnav = array_values(array_filter([
     </a>
     <?php endif; ?>
     <div class="h-command">
-      <button class="h-snap score" type="button" data-scorecard-jump
-              aria-label="<?= h(($isEs ? 'Puntuación de playa: ' : 'Beach score: ') . $score['overall'] . ' / 100') ?>">
-        <span class="v"><?= $score['overall'] ?></span>
-        <span class="k"><?= h($isEs ? 'Puntuación' : 'Score') ?></span>
-      </button>
       <div class="h-actions">
         <?php if ($isBoat): ?>
         <a class="btn coral" href="#tours" data-bf-track="hero-tours">⛵ <?= h($isEs ? 'Ver tours' : 'See tours') ?></a>
@@ -383,33 +386,30 @@ $subnav = array_values(array_filter([
           <div class="gfact"><span class="ic" aria-hidden="true"><?= $g[0] ?></span><div><div class="k"><?= h($g[1]) ?></div><div class="v <?= $g[3] ?>"><?= h($g[2]) ?><?php if (!empty($g[4])): ?> <a class="vlink" href="<?= h($g[4][0]) ?>"><?= h($g[4][1]) ?></a><?php endif; ?></div></div></div>
           <?php endforeach; ?>
         </div>
+        <?php // One merged chip row: activity tags + checked amenities. The
+              // "limited amenities" case now lives in the advisory card. ?>
+        <?php if (!empty($bestForChips) || !empty($amenities)): ?>
         <div class="glance-chips">
-          <?php if (!empty($bestForChips)): ?>
           <div class="chiprow">
             <h3><?= h($isEs ? 'Ideal para' : 'Best for') ?></h3>
-            <ul><?php foreach ($bestForChips as $chip): ?><li><?= h($chip) ?></li><?php endforeach; ?></ul>
-          </div>
-          <?php endif; ?>
-          <div class="chiprow">
-            <h3><?= h($isEs ? 'Servicios' : 'Amenities') ?></h3>
-            <?php if (!empty($amenities)): ?>
-            <ul><?php foreach ($amenities as $amenity): ?><li>✓ <?= h(getAmenityLabel($amenity)) ?></li><?php endforeach; ?></ul>
-            <?php else: ?>
-            <p class="none"><?= h($isEs ? 'Pocos servicios listados — lleva lo necesario' : 'Limited listed — bring what you need') ?></p>
-            <?php endif; ?>
+            <ul>
+              <?php foreach ($bestForChips as $chip): ?><li><?= h($chip) ?></li><?php endforeach; ?>
+              <?php foreach ($amenities as $amenity): ?><li>✓ <?= h(getAmenityLabel($amenity)) ?></li><?php endforeach; ?>
+            </ul>
           </div>
         </div>
+        <?php endif; ?>
         <div class="glance-plan">
-          <div class="gplan"><span class="ic"><?= $isBoat ? '🛥️' : '🧭' ?></span><div><h3><?= h($isEs ? 'Cómo llegar' : 'Getting there') ?></h3><p><?= h($gettingBody) ?></p></div></div>
+          <div class="gplan"><span class="ic" aria-hidden="true"><?= $isBoat ? '🛥️' : '🧭' ?></span><div><h3><?= h($isEs ? 'Cómo llegar' : 'Getting there') ?></h3><p><?= h($firstSentence($gettingBody)) ?> <a class="more" href="#getting"><?= h($isEs ? 'Detalles →' : 'Details →') ?></a></p></div></div>
           <?php if ($bestTime !== ''): ?>
-          <div class="gplan"><span class="ic">📅</span><div><h3><?= h($isEs ? 'Mejor época' : 'Best time') ?></h3><p><?= h($bestTime) ?></p></div></div>
+          <div class="gplan"><span class="ic" aria-hidden="true">📅</span><div><h3><?= h($isEs ? 'Mejor época' : 'Best time') ?></h3><p><?= h($firstSentence($bestTime)) ?></p></div></div>
           <?php endif; ?>
         </div>
       </div>
     </section>
 
     <section class="mobile-planning block" aria-label="<?= h($isEs ? 'Planificación rápida' : 'Quick planning') ?>">
-      <?php $renderScoreCard('mobile-card'); ?>
+      <?php $renderAdvisoryCard('mobile-card'); ?>
       <?php $renderConditionsCard('mobile-card'); ?>
       <?php $renderLocationCard('mobile-card'); ?>
     </section>
@@ -461,8 +461,8 @@ $subnav = array_values(array_filter([
     <section id="getting" class="block">
       <h2 class="h2"><?= h($isEs ? 'Cómo llegar y seguridad' : 'Getting there & safety') ?></h2>
       <div style="display:grid;gap:12px">
-        <?php if ($access !== '' || $parkingDetails !== ''): ?>
-        <div class="callout"><span class="ic"><?= $isBoat ? '🛥️' : '🧭' ?></span><div><h4><?= h($isEs ? 'Acceso' : 'Access') ?></h4><p><?= h(ucfirst($accessLabel)) ?><?= $parkingDetails !== '' ? '. ' . h($parkingDetails) : '' ?></p></div></div>
+        <?php if ($access !== '' || $heroParking !== ''): ?>
+        <div class="callout"><span class="ic"><?= $isBoat ? '🛥️' : '🧭' ?></span><div><h4><?= h($isEs ? 'Acceso' : 'Access') ?></h4><p><?= $isBoat ? h($gettingBody) : h(ucfirst($accessLabel)) . ($heroParking !== '' ? '. ' . h($heroParking) : '') ?></p></div></div>
         <?php endif; ?>
         <?php if ($safetyInfo !== ''): ?>
         <div class="callout warn"><span class="ic">⚠️</span><div><h4><?= h($isEs ? 'Seguridad' : 'Swim smart') ?></h4><p><?= h($safetyInfo) ?></p></div></div>
@@ -600,7 +600,7 @@ $subnav = array_values(array_filter([
   </main>
 
   <aside class="side">
-    <?php $renderScoreCard(); ?>
+    <?php $renderAdvisoryCard(); ?>
     <?php $renderConditionsCard(); ?>
     <?php $renderLocationCard(); ?>
 
@@ -701,13 +701,6 @@ include APP_ROOT . '/components/beach/scripts.php';
       });
     });
   });
-  // hero score chip → scroll to whichever score card is visible (sidebar on
-  // desktop, mobile-planning copy on mobile)
-  var chip=document.querySelector('.rd-beach [data-scorecard-jump]');
-  if(chip){chip.addEventListener('click',function(){
-    var card=[].slice.call(document.querySelectorAll('.rd-beach .scorecard')).filter(function(el){return el.offsetParent!==null;})[0];
-    if(card){card.scrollIntoView({behavior:'smooth',block:'center'});}
-  });}
   // mobile sticky action bar — show once the hero actions scroll off-screen.
   // Window scroll events don't fire on this page (root scroll container), so
   // observe the hero like the subnav scroll-spy does.
