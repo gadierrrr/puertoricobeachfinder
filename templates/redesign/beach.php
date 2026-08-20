@@ -236,10 +236,14 @@ $similarReason = function (array $row) use ($tags, $isEs): string {
     }
     return $isEs ? 'Ambiente parecido' : 'Similar beach feel';
 };
+// Each right-rail section shares the left column's grammar: an .eyebrow label
+// on the page background, then a plain card. Labels on both columns sit on
+// the same baseline at the top of the grid.
 $renderConditionsCard = function (string $extraClass = '') use ($cur, $uvLabel, $weather, $fmtTime, $isEs): void {
     ?>
-    <div class="card conditions-card <?= h($extraClass) ?>">
-      <h4><?= h($isEs ? 'Condiciones hoy' : 'Conditions today') ?></h4>
+    <section class="side-sec <?= h($extraClass) ?>">
+    <div class="side-head"><span class="eyebrow"><?= h($isEs ? 'Condiciones hoy' : 'Conditions today') ?></span></div>
+    <div class="card conditions-card">
       <?php if ($cur): $uv = $uvLabel($cur['uv_index'] ?? 0);
             // US territory: wind in mph (API reports km/h). Humidity dropped —
             // feels-like already carries it.
@@ -254,19 +258,22 @@ $renderConditionsCard = function (string $extraClass = '') use ($cur, $uvLabel, 
       <p style="font-size:.85rem;color:var(--ink-60)"><?= h($isEs ? 'Clima no disponible ahora.' : 'Live conditions unavailable right now.') ?></p>
       <?php endif; ?>
     </div>
+    </section>
     <?php
 };
 $renderLocationCard = function (string $extraClass = '') use ($isEs, $lat, $lng, $beach, $regionLabel): void {
     ?>
-    <div class="card loc-card <?= h($extraClass) ?>">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:13px">
-        <h4 style="margin:0"><?= h($isEs ? 'Dónde queda' : 'Where it is') ?></h4>
-        <div class="locseg"><button class="on" data-loc="chart" type="button"><?= h($isEs ? 'Mapa' : 'Chart') ?></button><button data-loc="sat" type="button"><?= h($isEs ? 'Satélite' : 'Satellite') ?></button></div>
-      </div>
+    <section class="side-sec loc-sec <?= h($extraClass) ?>">
+    <div class="side-head">
+      <span class="eyebrow"><?= h($isEs ? 'Dónde queda' : 'Where it is') ?></span>
+      <div class="locseg"><button class="on" data-loc="chart" type="button"><?= h($isEs ? 'Mapa' : 'Chart') ?></button><button data-loc="sat" type="button"><?= h($isEs ? 'Satélite' : 'Satellite') ?></button></div>
+    </div>
+    <div class="card loc-card">
       <div class="loc-chart"><?= renderIslandLocator($lat, $lng) ?></div>
       <div class="loc-sat" style="display:none"></div>
       <div class="loc-note"><span><?= h($beach['municipality']) ?><?= $regionLabel ? ' · ' . h($regionLabel) : '' ?></span><b><?= number_format($lat, 2) ?>°N <?= number_format(abs($lng), 2) ?>°W</b></div>
     </div>
+    </section>
     <?php
 };
 $renderAdvisoryCard = function (string $extraClass = '') use ($isEs, $adviseItems): void {
@@ -274,8 +281,9 @@ $renderAdvisoryCard = function (string $extraClass = '') use ($isEs, $adviseItem
         return;
     }
     ?>
-    <div class="card advise-card <?= h($extraClass) ?>">
-      <h4><?= h($isEs ? 'Antes de ir' : 'Know before you go') ?></h4>
+    <section class="side-sec <?= h($extraClass) ?>">
+    <div class="side-head"><span class="eyebrow"><?= h($isEs ? 'Antes de ir' : 'Know before you go') ?></span></div>
+    <div class="card advise-card">
       <?php foreach ($adviseItems as [$aIcon, $aTitle, $aBody, $aHref, $aLabel]): ?>
       <div class="advise"><span class="ic" aria-hidden="true"><?= $aIcon ?></span><div>
         <b><?= h($aTitle) ?></b>
@@ -283,6 +291,7 @@ $renderAdvisoryCard = function (string $extraClass = '') use ($isEs, $adviseItem
       </div></div>
       <?php endforeach; ?>
     </div>
+    </section>
     <?php
 };
 
@@ -689,7 +698,7 @@ include APP_ROOT . '/components/beach/scripts.php';
     secs.forEach(function(s){io.observe(s);});
   }
   // Chart / Satellite (Google Maps embed, lazy)
-  [].slice.call(document.querySelectorAll('.loc-card')).forEach(function(card){
+  [].slice.call(document.querySelectorAll('.loc-sec')).forEach(function(card){
     var chart=card.querySelector('.loc-chart'), sat=card.querySelector('.loc-sat'), loaded=false;
     [].slice.call(card.querySelectorAll('.locseg [data-loc]')).forEach(function(b){
       b.addEventListener('click',function(){
