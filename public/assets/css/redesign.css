@@ -347,25 +347,24 @@ body.redesign.rd-guide-page .chat-fab-container{display:none!important}
 .rd-beach .lead{font-size:1.08rem;max-width:60ch}
 .rd-beach .prose p{margin-bottom:12px;max-width:62ch}
 .rd-beach .glance-card{background:#fff;border:1px solid var(--ink-14);border-radius:15px;padding:16px 18px;box-shadow:0 10px 28px -24px rgba(20,40,55,.45)}
-.rd-beach .glance-facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding-bottom:14px;border-bottom:1px solid var(--ink-14)}
-.rd-beach .gfact{display:flex;gap:10px;align-items:flex-start;min-width:0}
-.rd-beach .gfact .ic{font-size:1.35rem;line-height:1}
-.rd-beach .gfact .k{font-family:var(--data);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:.64rem;color:var(--ink-40)}
-.rd-beach .gfact .v{font-weight:700;font-size:.9rem;margin-top:2px;line-height:1.18}
+.rd-beach .glance-facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;padding-bottom:15px;border-bottom:1px solid var(--ink-14)}
+.rd-beach .gfact{min-width:0}
+.rd-beach .gfact .ic,.rd-beach .gplan .ic{font-size:.95rem;line-height:1}
+.rd-beach .gfact .k,.rd-beach .chiprow h3,.rd-beach .gplan h3{display:flex;align-items:center;gap:6px;font-family:var(--data);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:.62rem;color:var(--ink-40);margin:0}
+.rd-beach .gfact .v{font-weight:700;font-size:.9rem;margin-top:5px;line-height:1.3}
 .rd-beach .gfact .v.g{color:var(--green)}.rd-beach .gfact .v.a{color:#B7860B}.rd-beach .gfact .v.r{color:var(--coral)}
-.rd-beach .gfact .vlink{display:inline-block;font-family:var(--data);font-weight:700;font-size:.78rem;letter-spacing:.03em;color:var(--sea-deep);margin-top:2px}
+.rd-beach .gfact .vlink{font-family:var(--data);font-weight:700;font-size:.78rem;letter-spacing:.03em;color:var(--sea-deep)}
 .rd-beach .gfact .vlink:hover{text-decoration:underline;text-underline-offset:3px}
-.rd-beach .glance-chips{display:grid;gap:9px;padding:13px 0;border-bottom:1px solid var(--ink-14)}
-.rd-beach .chiprow{display:flex;gap:12px;align-items:baseline;min-width:0}
-.rd-beach .chiprow h3{font-family:var(--data);font-weight:900;text-transform:uppercase;letter-spacing:.12em;font-size:.64rem;color:var(--green);margin:0;flex:0 0 84px}
-.rd-beach .chiprow ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.rd-beach .glance-chips{padding:14px 0;border-bottom:1px solid var(--ink-14)}
+.rd-beach .chiprow{min-width:0}
+
+.rd-beach .chiprow ul{list-style:none;margin:7px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
 .rd-beach .chiprow li{color:var(--ink);font-weight:700;font-size:.82rem;line-height:1.15;background:var(--paper);border:1px solid rgba(21,34,43,.1);border-radius:999px;padding:5px 9px}
 .rd-beach .chiprow .none{margin:0;font-size:.82rem;color:var(--ink-60)}
-.rd-beach .glance-plan{display:grid;gap:11px;padding-top:13px}
-.rd-beach .gplan{display:flex;gap:10px;align-items:flex-start}
-.rd-beach .gplan .ic{font-size:1.15rem;line-height:1.2}
-.rd-beach .gplan h3{font-family:var(--data);font-weight:900;text-transform:uppercase;letter-spacing:.12em;font-size:.64rem;color:var(--ink-40);margin:0 0 3px}
-.rd-beach .gplan p{margin:0;font-size:.88rem;line-height:1.45;max-width:72ch}
+.rd-beach .glance-plan{display:grid;gap:13px;padding-top:14px}
+.rd-beach .gplan{display:block;min-width:0}
+
+.rd-beach .gplan p{margin:5px 0 0;font-size:.88rem;line-height:1.45;max-width:72ch}
 .rd-beach .advise{display:flex;gap:10px;align-items:flex-start;padding:11px 0 0;margin-top:11px;border-top:1px solid var(--ink-14)}
 .rd-beach .advise:first-of-type{border-top:0;margin-top:0;padding-top:0}
 .rd-beach .advise .ic{font-size:1.15rem;line-height:1.2}
@@ -562,7 +561,7 @@ body.redesign.rd-guide-page .chat-fab-container{display:none!important}
   .rd-home .bt-rest-stats{font-size:.68rem;gap:6px}
   .rd-home .bt-score-mini{font-size:.62rem;padding:4px 7px}
 }
-@media(max-width:520px){.rd-home .dir-grid{grid-template-columns:1fr}.rd-home .decision-actions{grid-template-columns:1fr}.rd-home .weather-pill{max-width:118px}.rd-home .rank-row{grid-template-columns:1fr auto}.rd-beach .glance-facts{grid-template-columns:1fr 1fr;gap:13px 10px}.rd-beach .gfact{display:block}.rd-beach .gfact .ic{display:block;font-size:1.18rem;margin-bottom:6px}.rd-beach .chiprow{flex-direction:column;gap:6px}.rd-beach .chiprow h3{flex:none}.rd-beach .mobile-planning{grid-template-columns:1fr}.rd-beach .h-sticker{display:none}.rd-beach .contrib-band{padding:15px}.rd-beach .contrib-actions{display:grid;grid-template-columns:1fr;width:100%}.rd-beach .contrib-actions .btn{justify-content:center}.rd-beach .empty-contrib{grid-template-columns:1fr;align-items:start}.rd-beach .empty-contrib .btn{justify-content:center;width:100%}}
+@media(max-width:520px){.rd-home .dir-grid{grid-template-columns:1fr}.rd-home .decision-actions{grid-template-columns:1fr}.rd-home .weather-pill{max-width:118px}.rd-home .rank-row{grid-template-columns:1fr auto}.rd-beach .glance-facts{grid-template-columns:1fr 1fr;gap:13px 10px}.rd-beach .mobile-planning{grid-template-columns:1fr}.rd-beach .h-sticker{display:none}.rd-beach .contrib-band{padding:15px}.rd-beach .contrib-actions{display:grid;grid-template-columns:1fr;width:100%}.rd-beach .contrib-actions .btn{justify-content:center}.rd-beach .empty-contrib{grid-template-columns:1fr;align-items:start}.rd-beach .empty-contrib .btn{justify-content:center;width:100%}}
 @media(hover:none){.rd-home .btile:hover .btile-photo{transform:none;filter:none}.rd-home .btile:hover .btile-rest{opacity:1}.rd-home .btile:hover .btile-hover{opacity:0;pointer-events:none}}
 
 @media(max-width:640px){

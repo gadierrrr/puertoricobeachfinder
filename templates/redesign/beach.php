@@ -390,9 +390,11 @@ $subnav = array_values(array_filter([
       <?php if ($aiSummary !== ''): ?><p class="lead" style="margin:8px 0 18px"><?= h($aiSummary) ?></p>
       <?php elseif (!empty($aboutParas)): ?><p class="lead" style="margin:8px 0 18px"><?= h(mb_strlen($aboutParas[0]) > 220 ? mb_substr($aboutParas[0], 0, 220) . '…' : $aboutParas[0]) ?></p><?php endif; ?>
       <div class="glance-card" aria-label="<?= h($isEs ? 'Resumen rápido' : 'Quick snapshot') ?>">
+        <?php // Every row shares one anatomy: caps label line (small inline
+              // icon + text) over a content line, all on the card's left grid. ?>
         <div class="glance-facts">
           <?php foreach ($glanceFacts as $g): ?>
-          <div class="gfact"><span class="ic" aria-hidden="true"><?= $g[0] ?></span><div><div class="k"><?= h($g[1]) ?></div><div class="v <?= $g[3] ?>"><?= h($g[2]) ?><?php if (!empty($g[4])): ?> <a class="vlink" href="<?= h($g[4][0]) ?>"><?= h($g[4][1]) ?></a><?php endif; ?></div></div></div>
+          <div class="gfact"><div class="k"><span class="ic" aria-hidden="true"><?= $g[0] ?></span><?= h($g[1]) ?></div><div class="v <?= $g[3] ?>"><?= h($g[2]) ?><?php if (!empty($g[4])): ?> · <a class="vlink" href="<?= h($g[4][0]) ?>"><?= h($g[4][1]) ?></a><?php endif; ?></div></div>
           <?php endforeach; ?>
         </div>
         <?php // One merged chip row: activity tags + checked amenities. The
@@ -409,9 +411,9 @@ $subnav = array_values(array_filter([
         </div>
         <?php endif; ?>
         <div class="glance-plan">
-          <div class="gplan"><span class="ic" aria-hidden="true"><?= $isBoat ? '🛥️' : '🧭' ?></span><div><h3><?= h($isEs ? 'Cómo llegar' : 'Getting there') ?></h3><p><?= h($firstSentence($gettingBody)) ?> <a class="more" href="#getting"><?= h($isEs ? 'Detalles →' : 'Details →') ?></a></p></div></div>
+          <div class="gplan"><h3><span class="ic" aria-hidden="true"><?= $isBoat ? '🛥️' : '🧭' ?></span><?= h($isEs ? 'Cómo llegar' : 'Getting there') ?></h3><p><?= h($firstSentence($gettingBody)) ?> <a class="more" href="#getting"><?= h($isEs ? 'Detalles →' : 'Details →') ?></a></p></div>
           <?php if ($bestTime !== ''): ?>
-          <div class="gplan"><span class="ic" aria-hidden="true">📅</span><div><h3><?= h($isEs ? 'Mejor época' : 'Best time') ?></h3><p><?= h($firstSentence($bestTime)) ?></p></div></div>
+          <div class="gplan"><h3><span class="ic" aria-hidden="true">📅</span><?= h($isEs ? 'Mejor época' : 'Best time') ?></h3><p><?= h($firstSentence($bestTime)) ?></p></div>
           <?php endif; ?>
         </div>
       </div>
