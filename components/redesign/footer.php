@@ -61,7 +61,7 @@ $rdFootMoreGuides = [
 
                 <!-- Beaches by Activity / Location / Municipality -->
                 <div>
-                    <h4><?= h(__('footer.beaches_by_activity')) ?></h4>
+                    <div class="colhead-main"><?= h(__('footer.beaches_by_activity')) ?></div>
                     <ul>
                         <?php foreach ($rdFootCollections as [$routeKey, $label]): ?>
                         <li><a href="<?= h(routeUrl($routeKey, $currentLang)) ?>"><?= h($label) ?></a></li>
@@ -84,7 +84,7 @@ $rdFootMoreGuides = [
 
                 <!-- Planning Resources -->
                 <div>
-                    <h4><?= h(__('footer.planning_resources')) ?></h4>
+                    <div class="colhead-main"><?= h(__('footer.planning_resources')) ?></div>
                     <ul>
                         <li><a class="all" href="<?= h(routeUrl('guides_index', $currentLang)) ?>"><?= h(__('footer.all_guides')) ?> →</a></li>
                         <?php foreach ($rdFootGuides as [$routeKey, $label]): ?>
@@ -95,7 +95,7 @@ $rdFootMoreGuides = [
 
                 <!-- More Guides & Account -->
                 <div>
-                    <h4><?= h(__('footer.more_guides')) ?></h4>
+                    <div class="colhead-main"><?= h(__('footer.more_guides')) ?></div>
                     <ul>
                         <?php foreach ($rdFootMoreGuides as [$routeKey, $label]): ?>
                         <li><a href="<?= h(routeUrl($routeKey, $currentLang)) ?>"><?= h($label) ?></a></li>

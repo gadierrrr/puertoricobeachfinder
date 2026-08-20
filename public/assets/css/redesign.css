@@ -5,7 +5,7 @@
    Relies on Tailwind preflight (already loaded) for the base reset.
    ============================================================================ */
 .rd{
-  --paper:#F5EFDF;--paper-2:#EBE2CC;--ink:#15222B;--ink-60:rgba(21,34,43,.6);--ink-40:rgba(21,34,43,.4);--ink-14:rgba(21,34,43,.14);
+  --paper:#F5EFDF;--paper-2:#EBE2CC;--ink:#15222B;--ink-60:rgba(21,34,43,.68);--ink-40:rgba(21,34,43,.4);--ink-14:rgba(21,34,43,.14);
   --sea:#45A3D9;--sea-deep:#2E86C4;--sea-pale:#E0F0FB;--gold:#E9B948;--green:#0B7D2C;--sun:#F8D838;--coral:#EE3640;
   --disp:"Alfa Slab One",Georgia,serif;--data:"Saira Semi Condensed",system-ui,sans-serif;--body:"Hanken Grotesk",system-ui,sans-serif;--script:"Kaushan Script",cursive;--rd-heading-weight:400;
   font-family:var(--body);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased;
@@ -74,7 +74,7 @@ body.redesign{background:var(--paper);background-image:radial-gradient(circle at
 .rd-sitefoot .cols{display:grid;grid-template-columns:1.18fr 1.15fr 1fr .9fr;gap:44px;padding:56px 0 38px}
 .rd-sitefoot .brand{color:var(--paper)}
 .rd-sitefoot .about{font-size:.88rem;line-height:1.55;margin:14px 0 8px;max-width:32ch}
-.rd-sitefoot h4{font-family:var(--data);font-weight:700;text-transform:uppercase;letter-spacing:.13em;font-size:.78rem;color:var(--paper);margin:0 0 15px;padding-bottom:10px;border-bottom:1px solid rgba(245,239,223,.16)}
+.rd-sitefoot .colhead-main{font-family:var(--data);font-weight:700;text-transform:uppercase;letter-spacing:.13em;font-size:.78rem;color:var(--paper);margin:0 0 15px;padding-bottom:10px;border-bottom:1px solid rgba(245,239,223,.16)}
 .rd-sitefoot .colhead{font-family:var(--data);font-weight:700;text-transform:uppercase;letter-spacing:.13em;font-size:.65rem;color:rgba(245,239,223,.5);margin:22px 0 10px}
 .rd-sitefoot ul{list-style:none;margin:0;padding:0;display:grid;gap:9px;font-size:.88rem;line-height:1.35}
 .rd-sitefoot ul.two-col{grid-template-columns:1fr 1fr;column-gap:14px}
@@ -807,7 +807,7 @@ body.redesign.rd-guide-page .chat-fab-container{display:none!important}
    display-font inline <style> in header.php comes later in the document and
    re-declares --disp at equal specificity, so the picker still wins. */
 body.redesign{
-  --paper:#F5EFDF;--paper-2:#EBE2CC;--ink:#15222B;--ink-60:rgba(21,34,43,.6);--ink-40:rgba(21,34,43,.4);--ink-14:rgba(21,34,43,.14);
+  --paper:#F5EFDF;--paper-2:#EBE2CC;--ink:#15222B;--ink-60:rgba(21,34,43,.68);--ink-40:rgba(21,34,43,.4);--ink-14:rgba(21,34,43,.14);
   --sea:#45A3D9;--sea-deep:#2E86C4;--sea-pale:#E0F0FB;--gold:#E9B948;--green:#0B7D2C;--sun:#F8D838;--coral:#EE3640;
   --disp:"Alfa Slab One",Georgia,serif;--data:"Saira Semi Condensed",system-ui,sans-serif;--body:"Hanken Grotesk",system-ui,sans-serif;
 }
@@ -1558,7 +1558,7 @@ body.redesign.rd-legal .bg-green-50{background:rgba(11,125,44,.1)!important;bord
 body.redesign.rd-legal .bg-red-50{background:rgba(238,54,64,.1)!important;border-color:rgba(238,54,64,.22)!important;color:var(--coral)!important}
 
 /* Self-contained error and offline pages */
-body.redesign.rd-error{--paper:#F5EFDF;--paper-2:#EBE2CC;--ink:#15222B;--ink-60:rgba(21,34,43,.6);--ink-40:rgba(21,34,43,.4);--ink-14:rgba(21,34,43,.14);--sea:#45A3D9;--sea-deep:#2E86C4;--sea-pale:#E0F0FB;--gold:#E9B948;--green:#0B7D2C;--sun:#F8D838;--coral:#EE3640;--disp:"Alfa Slab One",Georgia,serif;--data:"Saira Semi Condensed",system-ui,sans-serif;--body:"Hanken Grotesk",system-ui,sans-serif;background:var(--paper);background-image:radial-gradient(circle at 1px 1px,rgba(21,34,43,.045) 1px,transparent 0);background-size:4px 4px;color:var(--ink);font-family:var(--body)}
+body.redesign.rd-error{--paper:#F5EFDF;--paper-2:#EBE2CC;--ink:#15222B;--ink-60:rgba(21,34,43,.68);--ink-40:rgba(21,34,43,.4);--ink-14:rgba(21,34,43,.14);--sea:#45A3D9;--sea-deep:#2E86C4;--sea-pale:#E0F0FB;--gold:#E9B948;--green:#0B7D2C;--sun:#F8D838;--coral:#EE3640;--disp:"Alfa Slab One",Georgia,serif;--data:"Saira Semi Condensed",system-ui,sans-serif;--body:"Hanken Grotesk",system-ui,sans-serif;background:var(--paper);background-image:radial-gradient(circle at 1px 1px,rgba(21,34,43,.045) 1px,transparent 0);background-size:4px 4px;color:var(--ink);font-family:var(--body)}
 body.redesign.rd-error .card,body.redesign.rd-error>div{background:#fff;border:1px solid var(--ink-14);border-radius:16px;box-shadow:0 18px 50px -34px rgba(21,34,43,.45);color:var(--ink)}
 body.redesign.rd-error h1{font-family:var(--disp);font-weight:400;color:var(--ink);letter-spacing:0}
 body.redesign.rd-error p{color:var(--ink-60)}
