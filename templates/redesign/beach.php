@@ -313,6 +313,9 @@ $subnav = array_values(array_filter([
   <?php endif; ?>
   <div class="hero-scrim"></div>
   <?php if ($isBoat): ?><div class="h-sticker">solo en bote<small>boat access only</small></div><?php endif; ?>
+  <?php if (!empty($beach['place_id'])): ?>
+  <button type="button" class="hero-photos-pill" data-action="openGooglePhotos" data-action-args='["<?= h($beach['slug']) ?>"]'>📷 <?= h($isEs ? 'Ver fotos' : 'View photos') ?></button>
+  <?php endif; ?>
 
   <div class="wrap" style="width:100%">
     <div class="crumb">
@@ -493,6 +496,9 @@ $subnav = array_values(array_filter([
     <section id="photos" class="block">
       <div class="secrow">
         <h2 class="h2"><?= h($isEs ? 'Fotos' : 'Photos') ?><?php if ($totalUserPhotos > 0): ?> <small>(<?= $totalUserPhotos ?>)</small><?php endif; ?></h2>
+        <?php if (!empty($beach['place_id'])): ?>
+        <button class="btn" type="button" data-action="openGooglePhotos" data-action-args='["<?= h($beach['slug']) ?>"]'>📷 <?= h($isEs ? 'Fotos de Google Maps' : 'Photos from Google Maps') ?></button>
+        <?php endif; ?>
         <?php if ($hasPhotosContent): ?>
         <?php if (isAuthenticated()): ?>
         <button class="btn" type="button" data-action="openPhotoUploadModal" data-action-args='<?= $photoActionArgs ?>'>+ <?= h($isEs ? 'Añadir foto' : 'Add photo') ?></button>

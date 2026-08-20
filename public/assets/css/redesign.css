@@ -297,7 +297,10 @@ body.redesign.rd-guide-page .chat-fab-container{display:none!important}
 .rd-beach img.hero-photo{width:100%;height:100%;object-fit:cover;object-position:center 70%}
 .rd-beach .hero-photo-fallback{background:linear-gradient(135deg,#2E86C4 0%,#15222B 100%)}
 .rd-beach .hero-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(10,24,34,.48) 0%,rgba(10,24,34,.08) 24%,rgba(10,24,34,.12) 44%,rgba(9,22,32,.84) 100%)}
-.rd-beach .hero>*:not(.hero-photo):not(.hero-scrim):not(.h-sticker){position:relative;z-index:3}
+.rd-beach .hero>*:not(.hero-photo):not(.hero-scrim):not(.h-sticker):not(.hero-photos-pill){position:relative;z-index:3}
+.rd-beach .hero-photos-pill{position:absolute;z-index:3;right:max(20px,5%);bottom:22px;display:inline-flex;align-items:center;gap:7px;background:rgba(8,22,32,.6);border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(8px);color:#fff;border-radius:999px;padding:9px 14px;font-family:var(--data);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.68rem;cursor:pointer}
+.rd-beach .hero-photos-pill:hover{background:rgba(8,22,32,.82)}
+@media(max-width:640px){.rd-beach .hero-photos-pill{bottom:14px;right:14px}}
 .rd-beach .crumb{font-family:var(--data);letter-spacing:.06em;text-transform:uppercase;font-size:.72rem;opacity:.82;margin:18px 0 0}
 .rd-beach .hero-body{margin-top:auto;padding-bottom:24px}
 .rd-beach .h-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
@@ -643,6 +646,22 @@ body.redesign.rd-guide-page .chat-fab-container{display:none!important}
 .rd-beach .tour-browse-link{display:inline-flex;align-items:center;gap:6px;justify-self:start;margin-top:2px;font-family:var(--data);font-weight:800;letter-spacing:.07em;text-transform:uppercase;font-size:.7rem;color:var(--sea-deep)}
 .rd-beach .tour-browse-link:hover{text-decoration:underline;text-underline-offset:3px}
 .rd-beach .tour-disclosure{font-size:.72rem;color:var(--ink-60);font-style:italic;margin:10px 0 0}
+.gp-viewer{position:fixed;inset:0;z-index:100;background:rgba(9,22,32,.95);display:flex;flex-direction:column}
+.gp-viewer[hidden]{display:none}
+.gp-head{display:flex;align-items:center;gap:14px;padding:14px 18px;color:#fff}
+.gp-src{font-family:var(--data);font-weight:700;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.72)}
+.gp-src b{color:#fff}
+.gp-count{font-family:var(--data);font-size:.78rem;color:rgba(255,255,255,.6)}
+.gp-close{margin-left:auto;background:rgba(255,255,255,.12);border:0;color:#fff;width:38px;height:38px;border-radius:999px;font-size:1rem;cursor:pointer}
+.gp-close:hover{background:rgba(255,255,255,.24)}
+.gp-stage{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;position:relative;padding:0 8px}
+.gp-stage img{max-width:min(100%,1100px);max-height:100%;object-fit:contain;border-radius:6px}
+.gp-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.14);border:0;color:#fff;width:46px;height:46px;border-radius:999px;font-size:1.6rem;line-height:1;cursor:pointer;z-index:2}
+.gp-prev{left:14px}.gp-next{right:14px}
+.gp-nav:hover{background:rgba(255,255,255,.3)}
+.gp-foot{padding:12px 18px;text-align:center;min-height:44px}
+.gp-foot a{color:rgba(255,255,255,.72);font-size:.8rem;font-family:var(--data)}
+.gp-foot a[href]:hover{text-decoration:underline}
 @media(max-width:700px){
   .rd-beach .tour-head{display:block}.rd-beach .tour-provider{display:inline-flex;margin-top:9px}
   .rd-beach .tour-card.is-featured{grid-template-columns:1fr;gap:0;background:#fff}

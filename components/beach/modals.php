@@ -1316,5 +1316,114 @@ document.addEventListener('keydown', (e) => {
 });
 </script>
 
+<?php $gpEs = ($lang ?? 'en') === 'es'; ?>
+<div id="gp-viewer" class="gp-viewer" hidden role="dialog" aria-modal="true" aria-label="<?= h($gpEs ? 'Fotos de la playa' : 'Beach photos') ?>">
+    <div class="gp-head">
+        <span class="gp-src"><?= h($gpEs ? 'Fotos de' : 'Photos from') ?> <b>Google Maps</b></span>
+        <span class="gp-count" id="gp-count"></span>
+        <button type="button" class="gp-close" data-action="closeGooglePhotos" aria-label="<?= h($gpEs ? 'Cerrar' : 'Close') ?>">✕</button>
+    </div>
+    <div class="gp-stage">
+        <button type="button" class="gp-nav gp-prev" data-action="gpPrev" aria-label="<?= h($gpEs ? 'Foto anterior' : 'Previous photo') ?>">‹</button>
+        <img id="gp-img" alt="">
+        <button type="button" class="gp-nav gp-next" data-action="gpNext" aria-label="<?= h($gpEs ? 'Foto siguiente' : 'Next photo') ?>">›</button>
+    </div>
+    <div class="gp-foot"><a id="gp-author" target="_blank" rel="noopener nofollow"></a></div>
+</div>
+
+<script <?= cspNonceAttr() ?>>
+// Google Places photo viewer. Photos are fetched live per Google's ToS (no
+// caching) and only on explicit user action, so the budget-capped proxy
+// endpoints are never hit by pageviews or crawlers.
+(function() {
+    const MSG_UNAVAILABLE = <?= json_encode($gpEs ? 'Fotos no disponibles en este momento' : 'Photos unavailable right now') ?>;
+    const state = { photos: [], i: 0, slug: '' };
+    const el = (id) => document.getElementById(id);
+
+    function show(i) {
+        if (!state.photos.length) return;
+        state.i = (i + state.photos.length) % state.photos.length;
+        const p = state.photos[state.i];
+        const img = el('gp-img');
+        img.src = p.src;
+        img.alt = p.alt || '';
+        el('gp-count').textContent = (state.i + 1) + ' / ' + state.photos.length;
+        const author = el('gp-author');
+        if (p.author) {
+            author.textContent = (document.documentElement.lang === 'es' ? 'Foto: ' : 'Photo: ') + p.author;
+            if (p.author_url) { author.href = p.author_url; } else { author.removeAttribute('href'); }
+            author.style.display = '';
+        } else {
+            author.style.display = 'none';
+        }
+        // Prefetch only the next photo — each image load is a billable event.
+        const next = state.photos[(state.i + 1) % state.photos.length];
+        if (next && !next._pre) { next._pre = true; (new Image()).src = next.src; }
+    }
+
+    function fail() {
+        if (typeof showToast === 'function') showToast(MSG_UNAVAILABLE, 'info', 2500);
+    }
+
+    window.openGooglePhotos = async function(slug) {
+        const viewer = el('gp-viewer');
+        if (!viewer) return;
+        if (state.slug === slug && state.photos.length) {
+            viewer.hidden = false;
+            document.body.style.overflow = 'hidden';
+            show(state.i);
+            return;
+        }
+        try {
+            const res = await fetch('/api/beach-photos.php?beach=' + encodeURIComponent(slug));
+            const data = await res.json();
+            if (!res.ok || !Array.isArray(data.photos) || !data.photos.length) { fail(); return; }
+            state.photos = data.photos;
+            state.slug = slug;
+            state.i = 0;
+            viewer.hidden = false;
+            document.body.style.overflow = 'hidden';
+            show(0);
+            if (typeof window.bfTrack === 'function') {
+                window.bfTrack('google_photos_open', { beach_slug: slug, photo_count: data.photos.length });
+            }
+        } catch (e) { fail(); }
+    };
+    window.closeGooglePhotos = function() {
+        const viewer = el('gp-viewer');
+        if (viewer) { viewer.hidden = true; document.body.style.overflow = ''; }
+    };
+    window.gpPrev = function() { show(state.i - 1); };
+    window.gpNext = function() { show(state.i + 1); };
+
+    el('gp-img') && el('gp-img').addEventListener('error', function() {
+        // Drop a photo whose short-lived URI expired and move on.
+        if (!state.photos.length) return;
+        state.photos.splice(state.i, 1);
+        if (!state.photos.length) { closeGooglePhotos(); fail(); return; }
+        show(state.i);
+    });
+    document.addEventListener('keydown', function(e) {
+        const viewer = el('gp-viewer');
+        if (!viewer || viewer.hidden) return;
+        if (e.key === 'Escape') closeGooglePhotos();
+        if (e.key === 'ArrowLeft') gpPrev();
+        if (e.key === 'ArrowRight') gpNext();
+    });
+    let touchX = null;
+    document.addEventListener('touchstart', function(e) {
+        const viewer = el('gp-viewer');
+        if (viewer && !viewer.hidden) touchX = e.touches[0].clientX;
+    }, { passive: true });
+    document.addEventListener('touchend', function(e) {
+        if (touchX === null) return;
+        const dx = e.changedTouches[0].clientX - touchX;
+        touchX = null;
+        const viewer = el('gp-viewer');
+        if (viewer && !viewer.hidden && Math.abs(dx) > 40) { dx > 0 ? gpPrev() : gpNext(); }
+    }, { passive: true });
+})();
+</script>
+
 <script <?= cspNonceAttr() ?>>
 // Load weather data client-side (avoids blocking TTFB with external API call)
