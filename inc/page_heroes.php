@@ -136,10 +136,42 @@ function sanitizePageHeroEntry(array $entry): ?array
         $position = 'center center';
     }
 
-    return [
+    $clean = [
         'image' => $image,
         'position' => $position,
         'overlay' => max(0, min(80, (int) ($entry['overlay'] ?? 46))),
+    ];
+
+    // Optional photographer attribution (required for CC-licensed photos).
+    // The admin form doesn't expose these yet, so re-saving an entry there
+    // drops them; the seeder (scripts/seed-guide-page-heroes.php) restores.
+    $credit = trim(strip_tags((string) ($entry['credit'] ?? '')));
+    if ($credit !== '') {
+        $clean['credit'] = mb_substr($credit, 0, 200);
+    }
+    $creditUrl = trim((string) ($entry['credit_url'] ?? ''));
+    if ($creditUrl !== '' && preg_match('#^https?://#i', $creditUrl)) {
+        $clean['credit_url'] = mb_substr($creditUrl, 0, 300);
+    }
+
+    return $clean;
+}
+
+/**
+ * Photographer credit for the resolved managed hero, or null when the page
+ * has no managed photo or the photo carries no attribution.
+ *
+ * @return array{credit: string, credit_url: string}|null
+ */
+function pageHeroCredit(?string $family = null, ?string $path = null): ?array
+{
+    $entry = pageHeroResolve($family, $path);
+    if ($entry === null || empty($entry['credit'])) {
+        return null;
+    }
+    return [
+        'credit' => (string) $entry['credit'],
+        'credit_url' => (string) ($entry['credit_url'] ?? ''),
     ];
 }
 

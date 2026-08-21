@@ -328,7 +328,7 @@ if ($bodyVariant === 'collection-light') {
 
     <!-- Preload critical CSS -->
     <link rel="preload" href="/assets/css/tailwind.min.css?v=4.1" as="style">
-    <link rel="preload" href="/assets/css/styles.css?v=5.3" as="style">
+    <link rel="preload" href="/assets/css/styles.css?v=5.4" as="style">
 
     <!-- DM Sans + DM Serif Display Fonts - loaded asynchronously to avoid render blocking -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" as="style" data-lazy-style>
@@ -359,7 +359,7 @@ if ($bodyVariant === 'collection-light') {
     <script src="/assets/js/csp-bindings.js" <?= cspNonceAttr() ?>></script>
 
     <!-- Custom styles -->
-    <link rel="stylesheet" href="/assets/css/styles.css?v=5.3">
+    <link rel="stylesheet" href="/assets/css/styles.css?v=5.4">
 
     <?php if (!empty($redesignLayout)): ?>
     <!-- Redesign v2 (tropical) fonts + standalone stylesheet.

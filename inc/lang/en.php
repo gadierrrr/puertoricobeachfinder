@@ -801,6 +801,7 @@ return [
         'search_placeholder' => 'Search beaches by name or location...',
         'search_label' => 'Search beaches by name or location',
         'map_view' => 'Map View',
+        'photo_credit' => 'Photo',
         'sort_curated' => 'Sort: Editors\' Ranking',
         'sort_top_rated' => 'Sort: Top Rated',
         'sort_most_reviewed' => 'Sort: Most Reviewed',

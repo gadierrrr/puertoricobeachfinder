@@ -37,5 +37,16 @@ if ($bgStyle === '' && !empty($heroImage)) {
         <?= $heroCtas ?>
         <?php endif; ?>
     </div>
+    <?php $guideHeroCredit = function_exists('pageHeroCredit') ? pageHeroCredit('guides') : null; ?>
+    <?php if ($guideHeroCredit !== null): ?>
+    <p class="page-hero-credit">
+        <?php $guideCreditLabel = (function_exists('__') ? __('collection.photo_credit') : 'Photo') . ': ' . $guideHeroCredit['credit']; ?>
+        <?php if ($guideHeroCredit['credit_url'] !== ''): ?>
+        <a href="<?= h($guideHeroCredit['credit_url']) ?>" target="_blank" rel="noopener"><?= h($guideCreditLabel) ?></a>
+        <?php else: ?>
+        <?= h($guideCreditLabel) ?>
+        <?php endif; ?>
+    </p>
+    <?php endif; ?>
 </section>
 <?php unset($heroCtas); ?>

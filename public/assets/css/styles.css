@@ -3816,6 +3816,48 @@ body.collection-dark {
 .guide-pool__facilities {
     margin-bottom: 0.7rem;
 }
+
+/* When a managed photo is published behind the collection hero, the dark
+   breadcrumb colors above must flip to the light-on-photo treatment. */
+.collection-hero[data-managed-page-hero] nav[aria-label="Breadcrumb"] {
+    color: rgb(255 255 255 / 0.75);
+}
+
+.collection-hero[data-managed-page-hero] nav[aria-label="Breadcrumb"] a {
+    color: rgb(255 255 255 / 0.92);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.collection-hero[data-managed-page-hero] nav[aria-label="Breadcrumb"] a:hover {
+    color: #fff;
+}
+
+.collection-hero[data-managed-page-hero] nav[aria-label="Breadcrumb"] span[aria-current] {
+    color: rgb(255 255 255 / 0.85);
+}
+
+/* Photographer attribution chip for managed hero photos (CC licenses) */
+.page-hero-credit {
+    position: absolute;
+    right: 0.75rem;
+    bottom: 0.55rem;
+    z-index: 2;
+    margin: 0;
+    font-size: 0.68rem;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+    color: rgb(255 255 255 / 0.75);
+    background: rgb(9 22 32 / 0.45);
+    border-radius: 9999px;
+    padding: 0.2rem 0.7rem;
+}
+
+.page-hero-credit a {
+    color: rgb(255 255 255 / 0.88);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
 /* ==========================================================
    _beach.css — Beach detail page: hero gradient, quick facts, highlights
    Used by: beach.php, components/beach/*.php

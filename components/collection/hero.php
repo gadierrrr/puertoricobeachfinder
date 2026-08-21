@@ -49,4 +49,15 @@ if ($pageKey !== '' && function_exists('__')) {
         <p class="collection-hero__meta"><?= h($heroMeta) ?></p>
         <?php endif; ?>
     </div>
+    <?php $heroCredit = function_exists('pageHeroCredit') ? pageHeroCredit('listings') : null; ?>
+    <?php if ($heroCredit !== null): ?>
+    <p class="page-hero-credit">
+        <?php $creditLabel = (function_exists('__') ? __('collection.photo_credit') : 'Photo') . ': ' . $heroCredit['credit']; ?>
+        <?php if ($heroCredit['credit_url'] !== ''): ?>
+        <a href="<?= h($heroCredit['credit_url']) ?>" target="_blank" rel="noopener"><?= h($creditLabel) ?></a>
+        <?php else: ?>
+        <?= h($creditLabel) ?>
+        <?php endif; ?>
+    </p>
+    <?php endif; ?>
 </section>

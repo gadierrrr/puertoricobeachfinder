@@ -801,6 +801,7 @@ return [
         'search_placeholder' => 'Buscar playas por nombre o ubicación...',
         'search_label' => 'Buscar playas por nombre o ubicación',
         'map_view' => 'Vista de Mapa',
+        'photo_credit' => 'Foto',
         'sort_curated' => 'Ordenar: Selección Editorial',
         'sort_top_rated' => 'Ordenar: Mejor Puntuadas',
         'sort_most_reviewed' => 'Ordenar: Más Reseñas',
