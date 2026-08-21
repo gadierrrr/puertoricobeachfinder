@@ -96,7 +96,7 @@ if (!empty($cardEditorialNs) && is_string($cardEditorialNs) && $slug !== '' && $
 <article class="collection-card collection-card--<?= h($cardViewMode) ?><?= $guideFields !== null ? ' collection-card--guide' : '' ?>">
     <div class="collection-card__media">
         <a class="collection-card__media-link" href="<?= h($beachUrl) ?>" aria-label="<?= h($_t ? __('collection.open_details', ['name' => $name]) : 'Open ' . $name . ' details') ?>">
-            <img src="<?= h($imageUrl) ?>" alt="<?= h($name) ?>" loading="lazy" decoding="async">
+            <img src="<?= h($imageUrl) ?>" alt="<?= h($name) ?>" loading="<?= intval($rank) <= 2 ? 'eager' : 'lazy' ?>" decoding="async">
         </a>
         <div class="collection-card__badge">
             <?php if ($rank === 1): ?>
