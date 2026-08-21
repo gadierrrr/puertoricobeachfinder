@@ -1192,3 +1192,68 @@ body.collection-dark {
         grid-template-columns: 1fr;
     }
 }
+
+/* Guide cards: the photo column stretches to the full card height instead of
+   stopping at the 4/3 crop and leaving a void under the image. */
+.collection-card--cards.collection-card--guide .collection-card__media {
+    aspect-ratio: auto;
+    align-self: stretch;
+    height: 100%;
+    min-height: 260px;
+}
+
+/* Collection hero is a light panel (title/subtitle use dark text tokens), so
+   the breadcrumb trail must not use the light-on-dark utility colors. */
+.collection-hero nav[aria-label="Breadcrumb"] {
+    color: var(--color-text-muted);
+}
+
+.collection-hero nav[aria-label="Breadcrumb"] a {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.collection-hero nav[aria-label="Breadcrumb"] a:hover {
+    color: var(--color-primary-darker);
+}
+
+.collection-hero nav[aria-label="Breadcrumb"] span[aria-current] {
+    color: var(--color-text-secondary);
+}
+
+/* Fractional star ratings: a clipped overlay fills the exact percentage of
+   the row instead of always painting five full stars. */
+.collection-card__stars {
+    position: relative;
+    display: inline-block;
+}
+
+.collection-card__stars-bg {
+    color: var(--color-border);
+}
+
+.collection-card__stars-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    overflow: hidden;
+    white-space: nowrap;
+    color: var(--color-accent);
+}
+
+/* Pool cards: pin the watch-for strip to the bottom so the three cards keep
+   an even baseline regardless of body length. */
+.guide-pool {
+    display: flex;
+    flex-direction: column;
+}
+
+.guide-pool__watch {
+    margin-top: auto;
+    padding-top: 0.6rem;
+}
+
+.guide-pool__body,
+.guide-pool__facilities {
+    margin-bottom: 0.7rem;
+}

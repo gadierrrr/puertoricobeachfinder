@@ -93,7 +93,7 @@ if (!empty($cardEditorialNs) && is_string($cardEditorialNs) && $slug !== '' && $
 }
 ?>
 
-<article class="collection-card collection-card--<?= h($cardViewMode) ?>">
+<article class="collection-card collection-card--<?= h($cardViewMode) ?><?= $guideFields !== null ? ' collection-card--guide' : '' ?>">
     <div class="collection-card__media">
         <a class="collection-card__media-link" href="<?= h($beachUrl) ?>" aria-label="<?= h($_t ? __('collection.open_details', ['name' => $name]) : 'Open ' . $name . ' details') ?>">
             <img src="<?= h($imageUrl) ?>" alt="<?= h($name) ?>" loading="lazy" decoding="async">
@@ -129,8 +129,12 @@ if (!empty($cardEditorialNs) && is_string($cardEditorialNs) && $slug !== '' && $
                 <?php endif; ?>
             </div>
             <?php if ($rating): ?>
+            <?php $ratingPct = max(0, min(100, ((float)$rating / 5) * 100)); ?>
             <div class="collection-card__rating" aria-label="<?= h($_t ? __('collection.rated_stars', ['rating' => (string)$rating]) : 'Rated ' . (string)$rating . ' stars') ?>">
-                <div class="collection-card__stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+                <div class="collection-card__stars" aria-hidden="true">
+                    <span class="collection-card__stars-bg">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</span>
+                    <span class="collection-card__stars-fill" style="width: <?= number_format($ratingPct, 0) ?>%">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</span>
+                </div>
                 <div class="collection-card__score"><?= number_format((float)$rating, 1) ?></div>
                 <?php if ($reviewCount > 0): ?>
                 <div class="collection-card__reviews"><?= h($_t ? __('collection.reviews_count', ['count' => number_format($reviewCount)]) : number_format($reviewCount) . ' reviews') ?></div>

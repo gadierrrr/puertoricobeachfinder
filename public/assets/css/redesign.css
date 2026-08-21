@@ -10,7 +10,7 @@
   --disp:"Alfa Slab One",Georgia,serif;--data:"Saira Semi Condensed",system-ui,sans-serif;--body:"Hanken Grotesk",system-ui,sans-serif;--script:"Kaushan Script",cursive;--rd-heading-weight:400;
   font-family:var(--body);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased;
 }
-body.redesign{background:var(--paper);background-image:radial-gradient(circle at 1px 1px,rgba(21,34,43,.045) 1px,transparent 0);background-size:4px 4px;overflow-x:hidden}
+body.redesign{background:var(--paper);background-image:radial-gradient(circle at 1px 1px,rgba(21,34,43,.045) 1px,transparent 0);background-size:4px 4px;overflow-x:hidden;overflow-x:clip}
 .rd a{color:inherit;text-decoration:none}
 .rd .wrap{max-width:1200px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
 .rd .eyebrow{font-family:var(--data);font-weight:700;letter-spacing:.2em;text-transform:uppercase;font-size:.72rem;color:var(--green)}

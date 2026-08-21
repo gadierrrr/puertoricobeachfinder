@@ -8,13 +8,18 @@
    GLOBAL MOBILE OVERFLOW PROTECTION
    ======================================== */
 
+/* overflow-x: clip keeps the horizontal cut without turning html/body into
+   scroll containers, so position: sticky descendants keep working (hidden
+   remains as the fallback for engines without clip support). */
 html {
     overflow-x: hidden;
+    overflow-x: clip;
     scroll-behavior: smooth;
 }
 
 body {
     overflow-x: hidden;
+    overflow-x: clip;
     max-width: 100vw;
 }
 
