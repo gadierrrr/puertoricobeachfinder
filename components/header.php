@@ -327,7 +327,7 @@ if ($bodyVariant === 'collection-light') {
     <?php endif; ?>
 
     <!-- Preload critical CSS -->
-    <link rel="preload" href="/assets/css/tailwind.min.css?v=3.9" as="style">
+    <link rel="preload" href="/assets/css/tailwind.min.css?v=4.0" as="style">
     <link rel="preload" href="/assets/css/styles.css?v=5.1" as="style">
 
     <!-- DM Sans + DM Serif Display Fonts - loaded asynchronously to avoid render blocking -->
@@ -335,7 +335,7 @@ if ($bodyVariant === 'collection-light') {
     <noscript><link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"></noscript>
 
     <!-- Tailwind CSS (local build - no render-blocking JS) -->
-    <link rel="stylesheet" href="/assets/css/tailwind.min.css?v=3.9">
+    <link rel="stylesheet" href="/assets/css/tailwind.min.css?v=4.0">
 
     <?php if (!isset($skipMapCSS) || !$skipMapCSS): ?>
     <!-- MapLibre GL CSS - loaded asynchronously to avoid render blocking -->
