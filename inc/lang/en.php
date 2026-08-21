@@ -1035,6 +1035,16 @@ return [
                     'facilities' => 'Restrooms, showers, picnic areas, paid parking',
                     'watch' => 'Stay inside the protected swim area — currents strengthen beyond the reef line. The lot fills on sunny weekends.',
                 ],
+                // Same beach as escambron-beach; canonical slug on databases
+                // where the duplicate records were merged.
+                'balneario-el-escambron' => [
+                    'label' => 'Balneario El Escambrón',
+                    'region' => 'San Juan metro · between Old San Juan and Condado',
+                    'body' => 'The capital\'s best proper swim beach: a reef-sheltered cove with calm water inside the rocks, decent snorkeling along the reef, lifeguards, and shaded picnic areas — ten minutes from Old San Juan\'s forts. A longtime Blue Flag site and the smart choice for a half-day swim between sightseeing stops.',
+                    'lifeguards' => 'Yes',
+                    'facilities' => 'Restrooms, showers, picnic areas, paid parking',
+                    'watch' => 'Stay inside the protected swim area — currents strengthen beyond the reef line. The lot fills on sunny weekends.',
+                ],
                 'buye-beach' => [
                     'label' => 'Playa Buyé',
                     'region' => 'Southwest coast · about 2.5 hours from San Juan',

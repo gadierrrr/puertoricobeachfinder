@@ -1035,6 +1035,16 @@ return [
                     'facilities' => 'Baños, duchas, áreas de picnic, estacionamiento pago',
                     'watch' => 'Quédate dentro del área protegida de nado — las corrientes se intensifican más allá de la línea del arrecife. El estacionamiento se llena los fines de semana soleados.',
                 ],
+                // Misma playa que escambron-beach; slug canónico en bases de
+                // datos donde los registros duplicados fueron consolidados.
+                'balneario-el-escambron' => [
+                    'label' => 'Balneario El Escambrón',
+                    'region' => 'Área metro de San Juan · entre el Viejo San Juan y Condado',
+                    'body' => 'La mejor playa para nadar de la capital: una ensenada protegida por arrecife con agua tranquila dentro de las rocas, buen snorkel a lo largo del arrecife, salvavidas y áreas de picnic con sombra — a diez minutos de los fuertes del Viejo San Juan. Un sitio con larga trayectoria de Bandera Azul y la opción inteligente para medio día de nado entre paradas turísticas.',
+                    'lifeguards' => 'Sí',
+                    'facilities' => 'Baños, duchas, áreas de picnic, estacionamiento pago',
+                    'watch' => 'Quédate dentro del área protegida de nado — las corrientes se intensifican más allá de la línea del arrecife. El estacionamiento se llena los fines de semana soleados.',
+                ],
                 'buye-beach' => [
                     'label' => 'Playa Buyé',
                     'region' => 'Costa suroeste · a unas 2.5 horas de San Juan',
