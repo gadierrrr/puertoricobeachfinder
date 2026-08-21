@@ -307,7 +307,13 @@ function collectionBuildWhereClause(array $context, array $filters, array &$para
 function collectionOrderByClause(string $sort, bool $hasDistance, array $context = []): string {
     switch ($sort) {
         case 'rating':
-            return 'COALESCE(b.google_rating, 0) DESC, COALESCE(b.google_review_count, 0) DESC, b.name ASC';
+            // Bayesian weighted score: a 5.0 average from 3 reviews must not
+            // outrank a 4.8 from 3,000. m=25 review prior pulled toward the
+            // site-wide mean rating (~4.6). Unrated beaches stay last.
+            return 'CASE WHEN b.google_rating IS NULL THEN 0
+                         ELSE (COALESCE(b.google_review_count, 0) * b.google_rating + 25 * 4.6)
+                              / (COALESCE(b.google_review_count, 0) + 25.0)
+                    END DESC, COALESCE(b.google_review_count, 0) DESC, b.name ASC';
         case 'reviews':
             return 'COALESCE(b.google_review_count, 0) DESC, COALESCE(b.google_rating, 0) DESC, b.name ASC';
         case 'distance':

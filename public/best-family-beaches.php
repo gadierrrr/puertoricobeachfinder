@@ -2,6 +2,10 @@
 /**
  * Best Family Beaches in Puerto Rico - SEO Landing Page
  * Target keywords: family beaches puerto rico, kid-friendly beaches puerto rico
+ *
+ * Editorially ranked top 10 (collection_curated) plus natural pools, local
+ * picks, and safety guidance. Prices/hours in the copy drift — re-verify
+ * quarterly (parking fees, balneario hours, ferry logistics).
  */
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/../bootstrap.php';
@@ -28,46 +32,65 @@ $collectionContext = $collectionData['collection'];
 $collectionState = $collectionData['effective_filters'];
 $familyBeaches = $collectionData['beaches'];
 
+// The editorial top 10 ignores user filters so the ranked write-ups stay stable.
+$editorialBeaches = $collectionData['beaches'];
+if (collectionHasUserFilters($collectionState) || !empty($collectionState['include_all'])) {
+    $editorialData = fetchCollectionBeaches($collectionKey, []);
+    $editorialBeaches = $editorialData['beaches'];
+}
+
 $userFavorites = [];
 if (isAuthenticated()) {
     $favorites = query('SELECT beach_id FROM user_favorites WHERE user_id = :user_id', [':user_id' => $_SESSION['user_id']]) ?: [];
     $userFavorites = array_column($favorites, 'beach_id');
 }
 
+// Natural pools and local picks referenced below; link only slugs that exist.
+$poolSlugs = ['montones-beach', 'pozo-teodoro', 'poza-del-obispo'];
+$moreSlugs = [
+    'combate-beach', 'caracas-beach', 'balneario-cerro-gordo', 'playa-dona-lala-beach',
+    'la-posita-pinones', 'vacia-talega', 'playa-punta-caracoles', 'isla-verde-beach', 'ojo-de-agua-beach',
+];
+$linkableSlugs = [];
+$slugPlaceholders = [];
+$slugParams = [];
+foreach (array_merge($poolSlugs, $moreSlugs) as $idx => $slug) {
+    $slugPlaceholders[] = ':slug_' . $idx;
+    $slugParams[':slug_' . $idx] = $slug;
+}
+$linkableRows = query(
+    'SELECT slug FROM beaches WHERE publish_status = "published" AND slug IN (' . implode(', ', $slugPlaceholders) . ')',
+    $slugParams
+) ?: [];
+$linkableSlugs = array_column($linkableRows, 'slug');
+
+$guideEntryUrl = function (string $slug) use ($lang, $linkableSlugs): ?string {
+    if (!in_array($slug, $linkableSlugs, true)) {
+        return null;
+    }
+    return routeUrl('beach_detail', $lang, ['slug' => $slug]);
+};
+
 // Generate structured data
 $extraHead = articleSchema(
     $pageTitle,
     $pageDescription,
     '/best-family-beaches',
-    $familyBeaches[0]['cover_image'] ?? null,
-    '2026-01-01'
+    $editorialBeaches[0]['cover_image'] ?? null,
+    '2026-01-01',
+    '2026-08-21'
 );
-$extraHead .= collectionPageSchema($pageTitle, $pageDescription, $familyBeaches);
+$extraHead .= collectionPageSchema($pageTitle, $pageDescription, $editorialBeaches);
 $extraHead .= websiteSchema();
 
 // FAQ data
-$pageFaqs = [
-    [
-        'question' => __('pages.best_family_beaches.faq_1_q'),
-        'answer' => __('pages.best_family_beaches.faq_1_a')
-    ],
-    [
-        'question' => __('pages.best_family_beaches.faq_2_q'),
-        'answer' => __('pages.best_family_beaches.faq_2_a')
-    ],
-    [
-        'question' => __('pages.best_family_beaches.faq_3_q'),
-        'answer' => __('pages.best_family_beaches.faq_3_a')
-    ],
-    [
-        'question' => __('pages.best_family_beaches.faq_4_q'),
-        'answer' => __('pages.best_family_beaches.faq_4_a')
-    ],
-    [
-        'question' => __('pages.best_family_beaches.faq_5_q'),
-        'answer' => __('pages.best_family_beaches.faq_5_a')
-    ]
-];
+$pageFaqs = [];
+for ($i = 1; $i <= 8; $i++) {
+    $pageFaqs[] = [
+        'question' => __('pages.best_family_beaches.faq_' . $i . '_q'),
+        'answer' => __('pages.best_family_beaches.faq_' . $i . '_a')
+    ];
+}
 $extraHead .= faqSchema($pageFaqs);
 
 // Breadcrumbs
@@ -89,9 +112,13 @@ include APP_ROOT . '/components/header.php';
     <div class="max-w-7xl mx-auto px-4 py-4">
         <div class="flex flex-wrap gap-2 justify-center text-sm">
             <span class="text-warm-500"><?= h(__('pages.best_family_beaches.jump_to')) ?></span>
-            <a href="#top-beaches" class="text-ocean-500 hover:underline"><?= h(__('pages.best_family_beaches.jump_top_beaches')) ?></a>
+            <a href="#top-10" class="text-ocean-500 hover:underline"><?= h(__('pages.best_family_beaches.jump_top_beaches')) ?></a>
             <span class="text-warm-300">|</span>
-            <a href="#tips" class="text-ocean-500 hover:underline"><?= h(__('pages.best_family_beaches.jump_tips')) ?></a>
+            <a href="#natural-pools" class="text-ocean-500 hover:underline"><?= h(__('pages.best_family_beaches.jump_pools')) ?></a>
+            <span class="text-warm-300">|</span>
+            <a href="#more-spots" class="text-ocean-500 hover:underline"><?= h(__('pages.best_family_beaches.jump_more')) ?></a>
+            <span class="text-warm-300">|</span>
+            <a href="#safety" class="text-ocean-500 hover:underline"><?= h(__('pages.best_family_beaches.jump_safety')) ?></a>
             <span class="text-warm-300">|</span>
             <a href="#faq" class="text-ocean-500 hover:underline"><?= h(__('pages.best_family_beaches.jump_faq')) ?></a>
             <span class="text-warm-300">|</span>
@@ -107,108 +134,152 @@ include APP_ROOT . '/components/header.php';
             <p><?= __('pages.best_family_beaches.intro_p1') ?></p>
 
             <p><?= __('pages.best_family_beaches.intro_p2') ?></p>
+
+            <p><?= __('pages.best_family_beaches.intro_p3') ?></p>
         </div>
     </div>
 </section>
 
-<!-- Family Beach Tips -->
-<section id="tips" class="py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-warm-900 mb-8 text-center">
-            <?= h(__('pages.best_family_beaches.tips_title')) ?>
+<!-- How We Rank -->
+<section class="py-12 bg-white border-y border-warm-200">
+    <div class="max-w-4xl mx-auto px-4">
+        <h2 class="text-2xl md:text-3xl font-bold text-warm-900 mb-4 text-center">
+            <?= h(__('pages.best_family_beaches.ranking_title')) ?>
         </h2>
-
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="bg-white border border-warm-200 rounded-xl p-6 shadow-card">
-                <div class="text-3xl mb-4">🕘</div>
-                <h3 class="text-lg font-bold text-warm-900 mb-2"><?= h(__('pages.best_family_beaches.tip_1_title')) ?></h3>
-                <p class="text-warm-500 text-sm"><?= h(__('pages.best_family_beaches.tip_1_desc')) ?></p>
-            </div>
-
-            <div class="bg-white border border-warm-200 rounded-xl p-6 shadow-card">
-                <div class="text-3xl mb-4">🧴</div>
-                <h3 class="text-lg font-bold text-warm-900 mb-2"><?= h(__('pages.best_family_beaches.tip_2_title')) ?></h3>
-                <p class="text-warm-500 text-sm"><?= h(__('pages.best_family_beaches.tip_2_desc')) ?></p>
-            </div>
-
-            <div class="bg-white border border-warm-200 rounded-xl p-6 shadow-card">
-                <div class="text-3xl mb-4">👟</div>
-                <h3 class="text-lg font-bold text-warm-900 mb-2"><?= h(__('pages.best_family_beaches.tip_3_title')) ?></h3>
-                <p class="text-warm-500 text-sm"><?= h(__('pages.best_family_beaches.tip_3_desc')) ?></p>
-            </div>
-
-            <div class="bg-white border border-warm-200 rounded-xl p-6 shadow-card">
-                <div class="text-3xl mb-4">⛱️</div>
-                <h3 class="text-lg font-bold text-warm-900 mb-2"><?= h(__('pages.best_family_beaches.tip_4_title')) ?></h3>
-                <p class="text-warm-500 text-sm"><?= h(__('pages.best_family_beaches.tip_4_desc')) ?></p>
-            </div>
-
-            <div class="bg-white border border-warm-200 rounded-xl p-6 shadow-card">
-                <div class="text-3xl mb-4">🥤</div>
-                <h3 class="text-lg font-bold text-warm-900 mb-2"><?= h(__('pages.best_family_beaches.tip_5_title')) ?></h3>
-                <p class="text-warm-500 text-sm"><?= h(__('pages.best_family_beaches.tip_5_desc')) ?></p>
-            </div>
-
-            <div class="bg-white border border-warm-200 rounded-xl p-6 shadow-card">
-                <div class="text-3xl mb-4">🏊</div>
-                <h3 class="text-lg font-bold text-warm-900 mb-2"><?= h(__('pages.best_family_beaches.tip_6_title')) ?></h3>
-                <p class="text-warm-500 text-sm"><?= h(__('pages.best_family_beaches.tip_6_desc')) ?></p>
-            </div>
+        <div class="prose prose-lg max-w-none prose-brand">
+            <p><?= __('pages.best_family_beaches.ranking_body') ?></p>
         </div>
     </div>
 </section>
 
-<!-- What to Look For -->
-<section class="py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<!-- Top 10 Editorial List -->
+<section id="top-10" class="py-12 scroll-mt-24">
+    <div class="max-w-4xl mx-auto px-4">
         <h2 class="text-2xl md:text-3xl font-bold text-warm-900 mb-8 text-center">
-            <?= h(__('pages.best_family_beaches.features_title')) ?>
+            <?= h(__('pages.best_family_beaches.top_title')) ?>
         </h2>
-
-        <div class="grid md:grid-cols-2 gap-8">
-            <div class="bg-slate-50 rounded-xl p-6">
-                <h3 class="text-xl font-bold text-warm-900 mb-4"><?= h(__('pages.best_family_beaches.must_have_title')) ?></h3>
-                <ul class="text-warm-700 space-y-3">
-                    <li class="flex items-start gap-2">
-                        <span class="text-amber-600">✓</span>
-                        <span><?= __('pages.best_family_beaches.must_have_1') ?></span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <span class="text-amber-600">✓</span>
-                        <span><?= __('pages.best_family_beaches.must_have_2') ?></span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <span class="text-amber-600">✓</span>
-                        <span><?= __('pages.best_family_beaches.must_have_3') ?></span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <span class="text-amber-600">✓</span>
-                        <span><?= __('pages.best_family_beaches.must_have_4') ?></span>
-                    </li>
-                </ul>
+        <div class="space-y-10">
+            <?php $topRank = 0; foreach ($editorialBeaches as $topBeach):
+                $topKey = 'pages.best_family_beaches.top.' . $topBeach['slug'];
+                $topBody = __($topKey . '.body');
+                if ($topBody === $topKey . '.body') { continue; }
+                $topRank++;
+                $topLabel = __($topKey . '.label');
+                if ($topLabel === $topKey . '.label') { $topLabel = $topBeach['name']; }
+                $topRegion = __($topKey . '.region');
+                $topLifeguards = __($topKey . '.lifeguards');
+                $topFacilities = __($topKey . '.facilities');
+                $topWatch = __($topKey . '.watch');
+            ?>
+            <div class="border-l-4 border-ocean-200 pl-5">
+                <h3 class="text-xl font-bold text-warm-900 mb-1">
+                    <span class="text-ocean-500"><?= $topRank ?>.</span>
+                    <a href="<?= h(routeUrl('beach_detail', $lang, ['slug' => $topBeach['slug']])) ?>" class="hover:text-ocean-500"><?= h($topLabel) ?></a>
+                    <span class="text-warm-500 font-normal text-base">· <?= h($topBeach['municipality']) ?></span>
+                </h3>
+                <?php if ($topRegion !== $topKey . '.region'): ?>
+                <p class="text-sm text-warm-500 mb-3"><?= h($topRegion) ?></p>
+                <?php endif; ?>
+                <p class="text-warm-700"><?= $topBody ?></p>
+                <p class="text-sm text-warm-700 mt-3">
+                    <strong><?= h(__('pages.best_family_beaches.label_lifeguards')) ?>:</strong> <?= $topLifeguards ?>
+                    <span class="text-warm-300 mx-1">·</span>
+                    <strong><?= h(__('pages.best_family_beaches.label_facilities')) ?>:</strong> <?= $topFacilities ?>
+                </p>
+                <p class="text-sm text-amber-700 mt-1">
+                    <strong><?= h(__('pages.best_family_beaches.label_watch')) ?>:</strong> <?= $topWatch ?>
+                </p>
             </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
 
-            <div class="bg-slate-50 rounded-xl p-6">
-                <h3 class="text-xl font-bold text-warm-900 mb-4"><?= h(__('pages.best_family_beaches.nice_to_have_title')) ?></h3>
-                <ul class="text-warm-700 space-y-3">
-                    <li class="flex items-start gap-2">
-                        <span class="text-amber-600">★</span>
-                        <span><?= __('pages.best_family_beaches.nice_to_have_1') ?></span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <span class="text-amber-600">★</span>
-                        <span><?= __('pages.best_family_beaches.nice_to_have_2') ?></span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <span class="text-amber-600">★</span>
-                        <span><?= __('pages.best_family_beaches.nice_to_have_3') ?></span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <span class="text-amber-600">★</span>
-                        <span><?= __('pages.best_family_beaches.nice_to_have_4') ?></span>
-                    </li>
-                </ul>
+<!-- Natural Pools -->
+<section id="natural-pools" class="py-12 bg-white border-y border-warm-200 scroll-mt-24">
+    <div class="max-w-4xl mx-auto px-4">
+        <h2 class="text-2xl md:text-3xl font-bold text-warm-900 mb-4 text-center">
+            <?= h(__('pages.best_family_beaches.pools_title')) ?>
+        </h2>
+        <div class="prose prose-lg max-w-none prose-brand mb-8">
+            <p><?= __('pages.best_family_beaches.pools_intro') ?></p>
+        </div>
+        <div class="space-y-8">
+            <?php foreach ($poolSlugs as $poolSlug):
+                $poolKey = 'pages.best_family_beaches.pools.' . $poolSlug;
+                $poolBody = __($poolKey . '.body');
+                if ($poolBody === $poolKey . '.body') { continue; }
+                $poolUrl = $guideEntryUrl($poolSlug);
+                $poolFacilities = __($poolKey . '.facilities');
+            ?>
+            <div class="border-l-4 border-ocean-200 pl-5">
+                <h3 class="text-xl font-bold text-warm-900 mb-1">
+                    <?php if ($poolUrl !== null): ?>
+                    <a href="<?= h($poolUrl) ?>" class="hover:text-ocean-500"><?= h(__($poolKey . '.label')) ?></a>
+                    <?php else: ?>
+                    <?= h(__($poolKey . '.label')) ?>
+                    <?php endif; ?>
+                    <span class="text-warm-500 font-normal text-base">· <?= h(__($poolKey . '.region')) ?></span>
+                </h3>
+                <p class="text-warm-700"><?= $poolBody ?></p>
+                <p class="text-sm text-warm-700 mt-3">
+                    <strong><?= h(__('pages.best_family_beaches.label_lifeguards')) ?>:</strong> <?= __($poolKey . '.lifeguards') ?>
+                    <?php if ($poolFacilities !== $poolKey . '.facilities'): ?>
+                    <span class="text-warm-300 mx-1">·</span>
+                    <strong><?= h(__('pages.best_family_beaches.label_facilities')) ?>:</strong> <?= $poolFacilities ?>
+                    <?php endif; ?>
+                </p>
+                <p class="text-sm text-amber-700 mt-1">
+                    <strong><?= h(__('pages.best_family_beaches.label_watch')) ?>:</strong> <?= __($poolKey . '.watch') ?>
+                </p>
             </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+
+<!-- More Local Spots -->
+<section id="more-spots" class="py-12 scroll-mt-24">
+    <div class="max-w-4xl mx-auto px-4">
+        <h2 class="text-2xl md:text-3xl font-bold text-warm-900 mb-8 text-center">
+            <?= h(__('pages.best_family_beaches.more_title')) ?>
+        </h2>
+        <div class="space-y-6">
+            <?php foreach ($moreSlugs as $moreSlug):
+                $moreKey = 'pages.best_family_beaches.more.' . $moreSlug;
+                $moreBody = __($moreKey . '.body');
+                if ($moreBody === $moreKey . '.body') { continue; }
+                $moreUrl = $guideEntryUrl($moreSlug);
+            ?>
+            <div class="bg-white border border-warm-200 rounded-xl p-6 shadow-card">
+                <h3 class="text-lg font-bold text-warm-900 mb-2">
+                    <?php if ($moreUrl !== null): ?>
+                    <a href="<?= h($moreUrl) ?>" class="hover:text-ocean-500"><?= h(__($moreKey . '.label')) ?></a>
+                    <?php else: ?>
+                    <?= h(__($moreKey . '.label')) ?>
+                    <?php endif; ?>
+                    <span class="text-warm-500 font-normal text-base">· <?= h(__($moreKey . '.region')) ?></span>
+                </h3>
+                <p class="text-warm-700 text-sm"><?= $moreBody ?></p>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+
+<!-- Safety Rules -->
+<section id="safety" class="py-12 bg-white border-y border-warm-200 scroll-mt-24">
+    <div class="max-w-4xl mx-auto px-4">
+        <h2 class="text-2xl md:text-3xl font-bold text-warm-900 mb-8 text-center">
+            <?= h(__('pages.best_family_beaches.safety_title')) ?>
+        </h2>
+        <div class="space-y-6">
+            <?php for ($i = 1; $i <= 7; $i++): ?>
+            <div>
+                <h3 class="text-lg font-bold text-warm-900 mb-1"><?= h(__('pages.best_family_beaches.safety_' . $i . '_title')) ?></h3>
+                <p class="text-warm-700"><?= __('pages.best_family_beaches.safety_' . $i . '_body') ?></p>
+            </div>
+            <?php endfor; ?>
         </div>
     </div>
 </section>
@@ -216,7 +287,7 @@ include APP_ROOT . '/components/header.php';
 <?php $currentCollectionKey = $collectionKey; include APP_ROOT . '/components/collection/related-collections.php'; ?>
 
 <!-- FAQ Section -->
-<section id="faq" class="py-12">
+<section id="faq" class="py-12 scroll-mt-24">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 class="text-2xl md:text-3xl font-bold text-warm-900 mb-8 text-center">
             <?= h(__('pages.best_family_beaches.faq_title')) ?>
@@ -239,7 +310,7 @@ include APP_ROOT . '/components/header.php';
 </section>
 
 <!-- Map Section -->
-<section id="map" class="py-12">
+<section id="map" class="py-12 scroll-mt-24">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 class="text-2xl md:text-3xl font-bold text-warm-900 mb-8 text-center">
             <?= h(__('pages.best_family_beaches.map_title')) ?>

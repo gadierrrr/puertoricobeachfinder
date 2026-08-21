@@ -50,9 +50,8 @@ function collectionContextRegistry(): array {
             'key' => 'best-family-beaches',
             'slug' => 'best-family-beaches',
             'page_key' => 'best_family_beaches',
-            'mode' => 'tag',
-            'context_tag' => 'family-friendly',
-            'default_sort' => 'rating',
+            'mode' => 'curated',
+            'default_sort' => 'curated',
             'default_limit' => 15,
             'hero' => [
                 'title' => __('pages.best_family_beaches.hero_title'),

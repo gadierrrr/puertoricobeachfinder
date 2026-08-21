@@ -49,7 +49,7 @@ $rdFootMoreGuides = [
                         <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke-linecap="round"/></svg>
                         <span><?= h($_ENV['APP_NAME'] ?? 'Beach Finder') ?></span>
                     </div>
-                    <p class="about"><?= h(__('footer.about', ['count' => '300+'])) ?></p>
+                    <p class="about"><?= h(__('footer.about', ['count' => $footerBeachCountLabel ?? '400+'])) ?></p>
                     <div class="colhead"><?= h(__('footer.tools')) ?></div>
                     <ul>
                         <li><a href="<?= h(routeUrl('quiz', $currentLang)) ?>"><?= h(__('footer.beach_match_quiz')) ?></a></li>

@@ -1,6 +1,15 @@
 <?php
 $currentLang = $currentLang ?? getCurrentLanguage();
 $homePath = routeUrl('home', $currentLang);
+// Published-beach count for the brand blurb, floored to a stable "N+" figure
+// so the footer can't contradict on-page listing totals as the catalog grows.
+$footerBeachCountLabel = '400+';
+if (function_exists('queryOne')) {
+    $footerBeachCountRow = queryOne('SELECT COUNT(*) AS c FROM beaches WHERE publish_status = "published" AND (location_type = "beach" OR location_type IS NULL)');
+    if (!empty($footerBeachCountRow['c']) && (int)$footerBeachCountRow['c'] >= 50) {
+        $footerBeachCountLabel = (int)(floor(((int)$footerBeachCountRow['c']) / 50) * 50) . '+';
+    }
+}
 $homeAnchorHref = static function (string $anchor) use ($homePath): string {
     return $homePath . '#' . ltrim($anchor, '#');
 };
@@ -36,7 +45,7 @@ if (!function_exists('isGoogleOAuthEnabled')) {
                         <span class="text-xl font-bold text-white"><?= h($_ENV['APP_NAME'] ?? 'Beach Finder') ?></span>
                     </div>
                     <p class="text-gray-400 text-sm mb-4">
-                        <?= h(__('footer.about', ['count' => '300+'])) ?>
+                        <?= h(__('footer.about', ['count' => $footerBeachCountLabel])) ?>
                     </p>
                     <!-- Tools -->
                     <div class="space-y-2 mt-6">
