@@ -299,3 +299,26 @@
     color: var(--color-accent-light);
 }
 
+
+/* Collection pages keep the light "Tropical Daytime" surfaces even in dark
+   mode, so the guide-page prose remaps above must not flip their strong
+   text and headings to white on those light panels. */
+[data-theme="dark"] .collection-dark .prose-brand strong,
+[data-theme="dark"] .collection-dark .prose-brand h2,
+[data-theme="dark"] .collection-dark .prose-brand h3 {
+    color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .collection-dark .prose-brand p,
+[data-theme="dark"] .collection-dark .prose-brand ul,
+[data-theme="dark"] .collection-dark .prose-brand ol {
+    color: var(--color-gray-700);
+}
+
+[data-theme="dark"] .collection-dark .prose-brand a {
+    color: var(--color-guide-link);
+}
+
+[data-theme="dark"] .collection-dark .prose-brand a:hover {
+    color: var(--color-primary-darker);
+}

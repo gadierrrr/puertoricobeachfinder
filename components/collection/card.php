@@ -56,6 +56,41 @@ if (!empty($beach['safe_for_children'])) {
     $traits[] = $_t ? __('collection.family_friendly') : 'Family-friendly';
 }
 $traits = array_slice(array_values(array_unique($traits)), 0, 3);
+
+// Editorial guide fields (results.php sets $cardEditorialNs for curated guide
+// collections). When the i18n entry exists for this slug, the card renders the
+// guide variant: region line, editorial body, and the lifeguards/facilities/
+// watch-for fact rows in place of the excerpt, chips, and traits.
+$guideFields = null;
+if (!empty($cardEditorialNs) && is_string($cardEditorialNs) && $slug !== '' && $cardViewMode === 'cards' && $_t) {
+    $guideKey = $cardEditorialNs . '.' . $slug;
+    $guideBody = __($guideKey . '.body');
+    if ($guideBody !== $guideKey . '.body') {
+        $guideLookup = function (string $field) use ($guideKey): string {
+            $value = __($guideKey . '.' . $field);
+            return $value === $guideKey . '.' . $field ? '' : $value;
+        };
+        $pageNs = (string) preg_replace('/\.top$/', '', $cardEditorialNs);
+        $guideFieldLabel = function (string $key, string $fallback) use ($pageNs): string {
+            $value = __($pageNs . '.' . $key);
+            return $value === $pageNs . '.' . $key ? $fallback : $value;
+        };
+        $guideFields = [
+            'label' => $guideLookup('label'),
+            'region' => $guideLookup('region'),
+            'body' => $guideBody,
+            'lifeguards' => $guideLookup('lifeguards'),
+            'facilities' => $guideLookup('facilities'),
+            'watch' => $guideLookup('watch'),
+            'label_lifeguards' => $guideFieldLabel('label_lifeguards', 'Lifeguards'),
+            'label_facilities' => $guideFieldLabel('label_facilities', 'Facilities'),
+            'label_watch' => $guideFieldLabel('label_watch', 'Watch for'),
+        ];
+        if ($guideFields['label'] !== '') {
+            $name = $guideFields['label'];
+        }
+    }
+}
 ?>
 
 <article class="collection-card collection-card--<?= h($cardViewMode) ?>">
@@ -89,6 +124,9 @@ $traits = array_slice(array_values(array_unique($traits)), 0, 3);
                     <a class="collection-card__title-link" href="<?= h($beachUrl) ?>"><?= h($name) ?></a>
                 </h3>
                 <p class="collection-card__location">&#x1F4CD; <?= h($municipality) ?>, Puerto Rico</p>
+                <?php if ($guideFields !== null && $guideFields['region'] !== ''): ?>
+                <p class="collection-card__region"><?= h($guideFields['region']) ?></p>
+                <?php endif; ?>
             </div>
             <?php if ($rating): ?>
             <div class="collection-card__rating" aria-label="<?= h($_t ? __('collection.rated_stars', ['rating' => (string)$rating]) : 'Rated ' . (string)$rating . ' stars') ?>">
@@ -101,6 +139,29 @@ $traits = array_slice(array_values(array_unique($traits)), 0, 3);
             <?php endif; ?>
         </div>
 
+        <?php if ($guideFields !== null): ?>
+        <p class="collection-card__editorial"><?= $guideFields['body'] ?></p>
+        <dl class="collection-card__facts">
+            <?php if ($guideFields['lifeguards'] !== ''): ?>
+            <div class="collection-card__fact--lifeguards">
+                <dt>&#x2713; <?= h($guideFields['label_lifeguards']) ?></dt>
+                <dd><?= $guideFields['lifeguards'] ?></dd>
+            </div>
+            <?php endif; ?>
+            <?php if ($guideFields['facilities'] !== ''): ?>
+            <div>
+                <dt><?= h($guideFields['label_facilities']) ?></dt>
+                <dd><?= $guideFields['facilities'] ?></dd>
+            </div>
+            <?php endif; ?>
+            <?php if ($guideFields['watch'] !== ''): ?>
+            <div class="collection-card__fact--watch">
+                <dt>&#x26A0; <?= h($guideFields['label_watch']) ?></dt>
+                <dd><?= $guideFields['watch'] ?></dd>
+            </div>
+            <?php endif; ?>
+        </dl>
+        <?php else: ?>
         <?php if ($cardViewMode !== 'list'): ?>
         <p class="collection-card__excerpt"><?= h($excerpt) ?></p>
         <?php endif; ?>
@@ -119,6 +180,7 @@ $traits = array_slice(array_values(array_unique($traits)), 0, 3);
             <span><?= h($trait) ?></span>
             <?php endforeach; ?>
         </div>
+        <?php endif; ?>
         <?php endif; ?>
 
         <div class="collection-card__actions">

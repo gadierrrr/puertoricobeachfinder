@@ -74,6 +74,9 @@ $activeCountTpl = $_t ? __('collection.active_count', ['count' => '__COUNT__']) 
 
         <label class="sr-only" for="ce-sort"><?= h($_t ? __('collection.sort_label') : 'Sort beaches') ?></label>
         <select id="ce-sort" class="collection-toolbar__sort" aria-label="<?= h($_t ? __('collection.sort_label') : 'Sort beaches') ?>">
+            <?php if (($collectionContext['default_sort'] ?? '') === 'curated'): ?>
+            <option value="curated" <?= $selectedSort === 'curated' ? 'selected' : '' ?>><?= h($_t ? __('collection.sort_curated') : 'Sort: Editors\' Ranking') ?></option>
+            <?php endif; ?>
             <option value="rating" <?= $selectedSort === 'rating' ? 'selected' : '' ?>><?= h($_t ? __('collection.sort_top_rated') : 'Sort: Top Rated') ?></option>
             <option value="reviews" <?= $selectedSort === 'reviews' ? 'selected' : '' ?>><?= h($_t ? __('collection.sort_most_reviewed') : 'Sort: Most Reviewed') ?></option>
             <option value="name" <?= $selectedSort === 'name' ? 'selected' : '' ?>><?= h($_t ? __('collection.sort_name_az') : 'Sort: Name A-Z') ?></option>

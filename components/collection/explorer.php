@@ -28,6 +28,7 @@ $_lang = function_exists('getCurrentLanguage') ? getCurrentLanguage() : 'en';
          data-authenticated="<?= isAuthenticated() ? '1' : '0' ?>"
          data-csrf="<?= h(csrfToken()) ?>">
         <?php include __DIR__ . '/hero.php'; ?>
+        <?php if (!empty($collectionLeadInclude) && is_file($collectionLeadInclude)) { include $collectionLeadInclude; } ?>
         <?php include __DIR__ . '/toolbar.php'; ?>
         <div class="collection-page__flow">
             <div class="collection-page__capture">

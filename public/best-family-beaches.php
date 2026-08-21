@@ -3,9 +3,10 @@
  * Best Family Beaches in Puerto Rico - SEO Landing Page
  * Target keywords: family beaches puerto rico, kid-friendly beaches puerto rico
  *
- * Editorially ranked top 10 (collection_curated) plus natural pools, local
- * picks, and safety guidance. Prices/hours in the copy drift — re-verify
- * quarterly (parking fees, balneario hours, ferry logistics).
+ * Guide template: the curated top 10 renders as editorial guide cards inside
+ * the collection explorer (see collection/card.php + lead-best-family-beaches),
+ * followed by natural pools, local picks, and safety guidance. Prices/hours in
+ * the copy drift — re-verify quarterly (parking fees, balneario hours, ferry).
  */
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/../bootstrap.php';
@@ -32,7 +33,7 @@ $collectionContext = $collectionData['collection'];
 $collectionState = $collectionData['effective_filters'];
 $familyBeaches = $collectionData['beaches'];
 
-// The editorial top 10 ignores user filters so the ranked write-ups stay stable.
+// Structured data reflects the editorial top 10 regardless of user filters.
 $editorialBeaches = $collectionData['beaches'];
 if (collectionHasUserFilters($collectionState) || !empty($collectionState['include_all'])) {
     $editorialData = fetchCollectionBeaches($collectionKey, []);
@@ -45,31 +46,42 @@ if (isAuthenticated()) {
     $userFavorites = array_column($favorites, 'beach_id');
 }
 
-// Natural pools and local picks referenced below; link only slugs that exist.
+// Resolve a beach slug to its canonical published slug, following merge
+// redirects (e.g. escambron-beach -> balneario-el-escambron on merged DBs).
+$resolveGuideSlug = function (string $slug): ?string {
+    $row = queryOne('SELECT slug FROM beaches WHERE slug = :slug AND publish_status = "published"', [':slug' => $slug]);
+    if ($row) {
+        return (string) $row['slug'];
+    }
+    $row = queryOne(
+        'SELECT b.slug FROM beach_slug_redirects r
+         JOIN beaches b ON b.id = r.beach_id
+         WHERE r.old_slug = :slug AND b.publish_status = "published"',
+        [':slug' => $slug]
+    );
+    return $row ? (string) $row['slug'] : null;
+};
+$guideEntryUrl = function (string $slug) use ($lang, $resolveGuideSlug): ?string {
+    $canonical = $resolveGuideSlug($slug);
+    return $canonical === null ? null : routeUrl('beach_detail', $lang, ['slug' => $canonical]);
+};
+
+// Natural pools and local picks (i18n entries keyed by these slugs)
 $poolSlugs = ['montones-beach', 'pozo-teodoro', 'poza-del-obispo'];
 $moreSlugs = [
     'combate-beach', 'caracas-beach', 'balneario-cerro-gordo', 'playa-dona-lala-beach',
     'la-posita-pinones', 'vacia-talega', 'playa-punta-caracoles', 'isla-verde-beach', 'ojo-de-agua-beach',
 ];
-$linkableSlugs = [];
-$slugPlaceholders = [];
-$slugParams = [];
-foreach (array_merge($poolSlugs, $moreSlugs) as $idx => $slug) {
-    $slugPlaceholders[] = ':slug_' . $idx;
-    $slugParams[':slug_' . $idx] = $slug;
-}
-$linkableRows = query(
-    'SELECT slug FROM beaches WHERE publish_status = "published" AND slug IN (' . implode(', ', $slugPlaceholders) . ')',
-    $slugParams
-) ?: [];
-$linkableSlugs = array_column($linkableRows, 'slug');
 
-$guideEntryUrl = function (string $slug) use ($lang, $linkableSlugs): ?string {
-    if (!in_array($slug, $linkableSlugs, true)) {
-        return null;
-    }
-    return routeUrl('beach_detail', $lang, ['slug' => $slug]);
-};
+// Condado-warning alternatives (proper names, same in EN/ES)
+$condadoAlternatives = [
+    'playita-del-condado' => 'Playita del Condado',
+    'escambron-beach' => 'Balneario El Escambrón',
+    'balneario-de-carolina' => 'Balneario de Carolina',
+];
+
+// Safety rules: the Condado warning (5) renders as the callout; the rest as cards.
+$safetyRuleEmojis = [1 => '🚩', 2 => '🌊', 3 => '📅', 4 => '🛟', 6 => '🕘', 7 => '🎒'];
 
 // Generate structured data
 $extraHead = articleSchema(
@@ -104,107 +116,22 @@ $bodyVariant = 'collection-dark';
 $redesignLayout = useRedesign();
 include APP_ROOT . '/components/header.php';
 ?>
-<?php include APP_ROOT . '/components/collection/explorer.php'; ?>
+<?php
+$collectionLeadInclude = APP_ROOT . '/components/collection/lead-best-family-beaches.php';
+include APP_ROOT . '/components/collection/explorer.php';
+?>
 
-
-<!-- Quick Navigation -->
-<section class="collection-content-nav bg-white border border-warm-200">
-    <div class="max-w-7xl mx-auto px-4 py-4">
-        <div class="flex flex-wrap gap-2 justify-center text-sm">
-            <span class="text-warm-500"><?= h(__('pages.best_family_beaches.jump_to')) ?></span>
-            <a href="#top-10" class="text-ocean-500 hover:underline"><?= h(__('pages.best_family_beaches.jump_top_beaches')) ?></a>
-            <span class="text-warm-300">|</span>
-            <a href="#natural-pools" class="text-ocean-500 hover:underline"><?= h(__('pages.best_family_beaches.jump_pools')) ?></a>
-            <span class="text-warm-300">|</span>
-            <a href="#more-spots" class="text-ocean-500 hover:underline"><?= h(__('pages.best_family_beaches.jump_more')) ?></a>
-            <span class="text-warm-300">|</span>
-            <a href="#safety" class="text-ocean-500 hover:underline"><?= h(__('pages.best_family_beaches.jump_safety')) ?></a>
-            <span class="text-warm-300">|</span>
-            <a href="#faq" class="text-ocean-500 hover:underline"><?= h(__('pages.best_family_beaches.jump_faq')) ?></a>
-            <span class="text-warm-300">|</span>
-            <a href="#map" class="text-ocean-500 hover:underline"><?= h(__('pages.best_family_beaches.jump_map')) ?></a>
-        </div>
-    </div>
-</section>
-
-<!-- Introduction -->
-<section class="py-12">
-    <div class="max-w-4xl mx-auto px-4">
-        <div class="prose prose-lg max-w-none prose-brand">
-            <p><?= __('pages.best_family_beaches.intro_p1') ?></p>
-
-            <p><?= __('pages.best_family_beaches.intro_p2') ?></p>
-
-            <p><?= __('pages.best_family_beaches.intro_p3') ?></p>
-        </div>
-    </div>
-</section>
-
-<!-- How We Rank -->
-<section class="py-12 bg-white border-y border-warm-200">
-    <div class="max-w-4xl mx-auto px-4">
-        <h2 class="text-2xl md:text-3xl font-bold text-warm-900 mb-4 text-center">
-            <?= h(__('pages.best_family_beaches.ranking_title')) ?>
-        </h2>
-        <div class="prose prose-lg max-w-none prose-brand">
-            <p><?= __('pages.best_family_beaches.ranking_body') ?></p>
-        </div>
-    </div>
-</section>
-
-<!-- Top 10 Editorial List -->
-<section id="top-10" class="py-12 scroll-mt-24">
-    <div class="max-w-4xl mx-auto px-4">
-        <h2 class="text-2xl md:text-3xl font-bold text-warm-900 mb-8 text-center">
-            <?= h(__('pages.best_family_beaches.top_title')) ?>
-        </h2>
-        <div class="space-y-10">
-            <?php $topRank = 0; foreach ($editorialBeaches as $topBeach):
-                $topKey = 'pages.best_family_beaches.top.' . $topBeach['slug'];
-                $topBody = __($topKey . '.body');
-                if ($topBody === $topKey . '.body') { continue; }
-                $topRank++;
-                $topLabel = __($topKey . '.label');
-                if ($topLabel === $topKey . '.label') { $topLabel = $topBeach['name']; }
-                $topRegion = __($topKey . '.region');
-                $topLifeguards = __($topKey . '.lifeguards');
-                $topFacilities = __($topKey . '.facilities');
-                $topWatch = __($topKey . '.watch');
-            ?>
-            <div class="border-l-4 border-ocean-200 pl-5">
-                <h3 class="text-xl font-bold text-warm-900 mb-1">
-                    <span class="text-ocean-500"><?= $topRank ?>.</span>
-                    <a href="<?= h(routeUrl('beach_detail', $lang, ['slug' => $topBeach['slug']])) ?>" class="hover:text-ocean-500"><?= h($topLabel) ?></a>
-                    <span class="text-warm-500 font-normal text-base">· <?= h($topBeach['municipality']) ?></span>
-                </h3>
-                <?php if ($topRegion !== $topKey . '.region'): ?>
-                <p class="text-sm text-warm-500 mb-3"><?= h($topRegion) ?></p>
-                <?php endif; ?>
-                <p class="text-warm-700"><?= $topBody ?></p>
-                <p class="text-sm text-warm-700 mt-3">
-                    <strong><?= h(__('pages.best_family_beaches.label_lifeguards')) ?>:</strong> <?= $topLifeguards ?>
-                    <span class="text-warm-300 mx-1">·</span>
-                    <strong><?= h(__('pages.best_family_beaches.label_facilities')) ?>:</strong> <?= $topFacilities ?>
-                </p>
-                <p class="text-sm text-amber-700 mt-1">
-                    <strong><?= h(__('pages.best_family_beaches.label_watch')) ?>:</strong> <?= $topWatch ?>
-                </p>
-            </div>
-            <?php endforeach; ?>
-        </div>
-    </div>
-</section>
 
 <!-- Natural Pools -->
 <section id="natural-pools" class="py-12 bg-white border-y border-warm-200 scroll-mt-24">
-    <div class="max-w-4xl mx-auto px-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 class="text-2xl md:text-3xl font-bold text-warm-900 mb-4 text-center">
             <?= h(__('pages.best_family_beaches.pools_title')) ?>
         </h2>
-        <div class="prose prose-lg max-w-none prose-brand mb-8">
+        <div class="prose prose-lg max-w-3xl mx-auto prose-brand mb-8">
             <p><?= __('pages.best_family_beaches.pools_intro') ?></p>
         </div>
-        <div class="space-y-8">
+        <div class="guide-pool-grid">
             <?php foreach ($poolSlugs as $poolSlug):
                 $poolKey = 'pages.best_family_beaches.pools.' . $poolSlug;
                 $poolBody = __($poolKey . '.body');
@@ -212,26 +139,20 @@ include APP_ROOT . '/components/header.php';
                 $poolUrl = $guideEntryUrl($poolSlug);
                 $poolFacilities = __($poolKey . '.facilities');
             ?>
-            <div class="border-l-4 border-ocean-200 pl-5">
-                <h3 class="text-xl font-bold text-warm-900 mb-1">
+            <div class="guide-pool">
+                <h3>
                     <?php if ($poolUrl !== null): ?>
-                    <a href="<?= h($poolUrl) ?>" class="hover:text-ocean-500"><?= h(__($poolKey . '.label')) ?></a>
+                    <a href="<?= h($poolUrl) ?>"><?= h(__($poolKey . '.label')) ?></a>
                     <?php else: ?>
                     <?= h(__($poolKey . '.label')) ?>
                     <?php endif; ?>
-                    <span class="text-warm-500 font-normal text-base">· <?= h(__($poolKey . '.region')) ?></span>
                 </h3>
-                <p class="text-warm-700"><?= $poolBody ?></p>
-                <p class="text-sm text-warm-700 mt-3">
-                    <strong><?= h(__('pages.best_family_beaches.label_lifeguards')) ?>:</strong> <?= __($poolKey . '.lifeguards') ?>
-                    <?php if ($poolFacilities !== $poolKey . '.facilities'): ?>
-                    <span class="text-warm-300 mx-1">·</span>
-                    <strong><?= h(__('pages.best_family_beaches.label_facilities')) ?>:</strong> <?= $poolFacilities ?>
-                    <?php endif; ?>
-                </p>
-                <p class="text-sm text-amber-700 mt-1">
-                    <strong><?= h(__('pages.best_family_beaches.label_watch')) ?>:</strong> <?= __($poolKey . '.watch') ?>
-                </p>
+                <p class="guide-pool__muni"><?= h(__($poolKey . '.region')) ?></p>
+                <p class="guide-pool__body"><?= $poolBody ?></p>
+                <?php if ($poolFacilities !== $poolKey . '.facilities'): ?>
+                <p class="guide-pool__facilities"><strong><?= h(__('pages.best_family_beaches.label_facilities')) ?>:</strong> <?= $poolFacilities ?></p>
+                <?php endif; ?>
+                <p class="guide-pool__watch"><strong>⚠ <?= h(__('pages.best_family_beaches.label_watch')) ?>:</strong> <?= __($poolKey . '.watch') ?></p>
             </div>
             <?php endforeach; ?>
         </div>
@@ -240,27 +161,27 @@ include APP_ROOT . '/components/header.php';
 
 <!-- More Local Spots -->
 <section id="more-spots" class="py-12 scroll-mt-24">
-    <div class="max-w-4xl mx-auto px-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 class="text-2xl md:text-3xl font-bold text-warm-900 mb-8 text-center">
             <?= h(__('pages.best_family_beaches.more_title')) ?>
         </h2>
-        <div class="space-y-6">
+        <div class="guide-spot-grid">
             <?php foreach ($moreSlugs as $moreSlug):
                 $moreKey = 'pages.best_family_beaches.more.' . $moreSlug;
                 $moreBody = __($moreKey . '.body');
                 if ($moreBody === $moreKey . '.body') { continue; }
                 $moreUrl = $guideEntryUrl($moreSlug);
             ?>
-            <div class="bg-white border border-warm-200 rounded-xl p-6 shadow-card">
-                <h3 class="text-lg font-bold text-warm-900 mb-2">
+            <div class="guide-spot<?= $moreSlug === 'ojo-de-agua-beach' ? ' guide-spot--fresh' : '' ?>">
+                <h3>
                     <?php if ($moreUrl !== null): ?>
-                    <a href="<?= h($moreUrl) ?>" class="hover:text-ocean-500"><?= h(__($moreKey . '.label')) ?></a>
+                    <a href="<?= h($moreUrl) ?>"><?= h(__($moreKey . '.label')) ?></a>
                     <?php else: ?>
                     <?= h(__($moreKey . '.label')) ?>
                     <?php endif; ?>
-                    <span class="text-warm-500 font-normal text-base">· <?= h(__($moreKey . '.region')) ?></span>
+                    <span class="guide-spot__muni">· <?= h(__($moreKey . '.region')) ?></span>
                 </h3>
-                <p class="text-warm-700 text-sm"><?= $moreBody ?></p>
+                <p><?= $moreBody ?></p>
             </div>
             <?php endforeach; ?>
         </div>
@@ -269,17 +190,32 @@ include APP_ROOT . '/components/header.php';
 
 <!-- Safety Rules -->
 <section id="safety" class="py-12 bg-white border-y border-warm-200 scroll-mt-24">
-    <div class="max-w-4xl mx-auto px-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 class="text-2xl md:text-3xl font-bold text-warm-900 mb-8 text-center">
             <?= h(__('pages.best_family_beaches.safety_title')) ?>
         </h2>
-        <div class="space-y-6">
-            <?php for ($i = 1; $i <= 7; $i++): ?>
-            <div>
-                <h3 class="text-lg font-bold text-warm-900 mb-1"><?= h(__('pages.best_family_beaches.safety_' . $i . '_title')) ?></h3>
-                <p class="text-warm-700"><?= __('pages.best_family_beaches.safety_' . $i . '_body') ?></p>
+        <div class="guide-safety-grid">
+            <div class="guide-callout">
+                <h3>⚠️ <?= h(__('pages.best_family_beaches.safety_5_title')) ?></h3>
+                <p><?= __('pages.best_family_beaches.safety_5_body') ?></p>
+                <p class="guide-callout__alts">
+                    <?= h(__('pages.best_family_beaches.safety_swim_instead')) ?>
+                    <?php $altLinks = [];
+                    foreach ($condadoAlternatives as $altSlug => $altName) {
+                        $altUrl = $guideEntryUrl($altSlug);
+                        $altLinks[] = $altUrl !== null
+                            ? '<a href="' . h($altUrl) . '">' . h($altName) . '</a>'
+                            : h($altName);
+                    }
+                    echo implode(' · ', $altLinks); ?>
+                </p>
             </div>
-            <?php endfor; ?>
+            <?php foreach ($safetyRuleEmojis as $ruleIndex => $ruleEmoji): ?>
+            <div class="guide-rule">
+                <h3><?= $ruleEmoji ?> <?= h(__('pages.best_family_beaches.safety_' . $ruleIndex . '_title')) ?></h3>
+                <p><?= __('pages.best_family_beaches.safety_' . $ruleIndex . '_body') ?></p>
+            </div>
+            <?php endforeach; ?>
         </div>
     </div>
 </section>

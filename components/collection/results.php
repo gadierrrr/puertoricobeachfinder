@@ -57,6 +57,14 @@ $activeFiltersText = !empty($activeFilterParts)
     ? implode(' | ', $activeFilterParts)
     : ($_t ? __('collection.no_active_filters') : 'No active filters');
 $collectionKey = (string)($collectionData['collection']['key'] ?? ($collectionState['collection'] ?? ''));
+
+// Editorial guide namespace for cards: card.php renders the guide variant for
+// beaches with a pages.<page_key>.top.<slug> i18n entry (see best-family-beaches).
+$cardEditorialNs = '';
+$ctxPageKey = (string)($collectionData['collection']['page_key'] ?? '');
+if ($ctxPageKey !== '') {
+    $cardEditorialNs = 'pages.' . $ctxPageKey . '.top';
+}
 $viewHrefs = [];
 foreach (['cards', 'list', 'grid', 'map'] as $mode) {
     $params = [
