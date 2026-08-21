@@ -24,6 +24,7 @@ $targetDir = APP_ROOT . '/uploads/admin/page-heroes';
 $heroes = [
     [
         'file' => 'balneario-la-monserrate-luquillo_f4ceb66f_1787248460_1200.webp',
+        'position' => 'center bottom',
         'credit' => 'Ricardo Manual · CC BY 2.0',
         'credit_url' => 'https://commons.wikimedia.org/wiki/File:Luquillo_Beach,_Luquillo,_Puerto_Rico.jpg',
         'overlay' => 42,
@@ -60,6 +61,7 @@ $heroes = [
     ],
     [
         'file' => 'crash-boat-beach_f3f1618a_1787248447_1200.webp',
+        'position' => 'center bottom',
         'credit' => 'Tom Vazquez · Public domain',
         'credit_url' => 'https://commons.wikimedia.org/wiki/File:Crash_Boat_01.jpg',
         'overlay' => 42,
@@ -67,6 +69,7 @@ $heroes = [
     ],
     [
         'file' => 'balneario-de-boqueron_f4614505_1787248454_1200.webp',
+        'position' => 'center bottom',
         'credit' => 'Ligocsicnarf89 · CC BY 4.0',
         'credit_url' => 'https://commons.wikimedia.org/wiki/File:Boquer%C3%B3n_Beach_(2026)-2.jpg',
         'overlay' => 40,
@@ -81,6 +84,7 @@ $heroes = [
     ],
     [
         'file' => 'la-playuela-playa-sucia_f40b8c2e_1787248448_1200.webp',
+        'position' => 'center bottom',
         'credit' => 'LeanneMarie1215 · CC BY 2.0',
         'credit_url' => 'https://commons.wikimedia.org/wiki/File:Playa_Sucia-_Cabo_Rojo,_Puerto_Rico.jpg',
         'overlay' => 40,
@@ -112,6 +116,7 @@ $heroes = [
     ],
     [
         'file' => 'balneario-la-monserrate-luquillo_f4c1b82a_1787248460_1200.webp',
+        'position' => 'center bottom',
         'credit' => 'Güldem Üstün · CC BY 2.0',
         'credit_url' => 'https://commons.wikimedia.org/wiki/File:Luquillo_Beach_in_Puerto_Rico.jpg',
         'overlay' => 44,
@@ -148,7 +153,7 @@ foreach ($heroes as $hero) {
     foreach ($hero['pages'] as $path) {
         pageHeroSetEntry('page', $path, [
             'image' => '/uploads/admin/page-heroes/' . $hero['file'],
-            'position' => 'center center',
+            'position' => $hero['position'] ?? 'center center',
             'overlay' => $hero['overlay'],
             'credit' => $hero['credit'],
             'credit_url' => $hero['credit_url'],

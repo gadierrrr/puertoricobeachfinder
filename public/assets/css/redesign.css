@@ -1149,7 +1149,7 @@ body.redesign.collection-dark a.shadow-card .text-gray-400{color:var(--ink-40);f
 /* Guide detail pages still on the shared legacy guide DOM get the same v2
    field-guide treatment as the new photography template. */
 body.redesign.rd-guide-page .hero-gradient-dark{background:linear-gradient(180deg,#4FA8DE 0%,#2E86C4 100%);color:#fff;overflow:hidden}
-body.redesign.rd-guide-page .hero-gradient-dark[style]{background-image:linear-gradient(180deg,#4FA8DE 0%,#2E86C4 100%)!important}
+body.redesign.rd-guide-page .hero-gradient-dark[style]:not([data-managed-page-hero]){background-image:linear-gradient(180deg,#4FA8DE 0%,#2E86C4 100%)!important}
 body.redesign.rd-guide-page .hero-gradient-dark .container{max-width:1200px;padding-left:clamp(16px,4vw,40px);padding-right:clamp(16px,4vw,40px)}
 body.redesign.rd-guide-page .hero-gradient-dark h1{font-family:var(--disp);font-weight:400;font-size:clamp(2.4rem,5vw,4.35rem);line-height:.98;letter-spacing:0;color:var(--paper);max-width:12em}
 body.redesign.rd-guide-page .hero-gradient-dark p{font-size:clamp(1rem,1.35vw,1.13rem);line-height:1.58;color:rgba(255,255,255,.86);max-width:62ch}
