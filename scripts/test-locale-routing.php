@@ -203,6 +203,11 @@ $assertSame(
     '/beach/flamenco'
 );
 
+$assertSame('Legacy Spanish tag redirects', legacySpanishLandingRedirect('/es/beaches/secluded') ?? '', '/es/playas/aisladas');
+$assertSame('Legacy Spanish proximity redirects', legacySpanishLandingRedirect('/es/beaches-near-mayaguez') ?? '', '/es/playas-cerca-de-mayaguez');
+$assertSame('Canonical Spanish path has no legacy redirect', legacySpanishLandingRedirect('/es/playas/aisladas') ?? '', '');
+$assertSame('OAuth POST target keeps directory slash', normalizeLocalePath('/auth/google/'), '/auth/google/');
+
 if ($failures !== []) {
     fwrite(STDERR, "Locale routing regression checks failed:\n");
     foreach ($failures as $failure) {

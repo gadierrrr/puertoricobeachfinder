@@ -22,7 +22,7 @@ if ($uriPath === '' || $uriPath[0] !== '/') {
     $uriPath = '/' . ltrim($uriPath, '/');
 }
 
-$canonicalPath = normalizeLocalePath($uriPath);
+$canonicalPath = legacySpanishLandingRedirect($uriPath) ?? normalizeLocalePath($uriPath);
 if ($canonicalPath !== $uriPath) {
     $target = $canonicalPath;
     if ($queryString !== '') {

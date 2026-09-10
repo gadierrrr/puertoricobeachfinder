@@ -310,7 +310,7 @@ if (!function_exists('isGoogleOAuthEnabled')) {
     }
     <?php endif; ?>
     </script>
-    <script defer src="/assets/js/analytics.js?v=2.7" <?= cspNonceAttr() ?>></script>
+    <script defer src="/assets/js/analytics.js?v=2.8" <?= cspNonceAttr() ?>></script>
 
     <!-- Initialize Lucide Icons -->
     <script <?= cspNonceAttr() ?>>
@@ -473,11 +473,11 @@ if (!function_exists('isGoogleOAuthEnabled')) {
 
                 <!-- Actions -->
                 <div class="flex flex-col gap-3">
-                    <a href="<?= h(routeUrl('login', $currentLang)) ?>" id="signup-prompt-cta" class="flex items-center justify-center gap-2 bg-sunset-400 hover:bg-sunset-300 text-ocean-900 py-3 rounded-lg font-semibold transition-colors">
+                    <a href="<?= h(routeUrl('login', $currentLang)) ?>" rel="nofollow" id="signup-prompt-cta" class="flex items-center justify-center gap-2 bg-sunset-400 hover:bg-sunset-300 text-ocean-900 py-3 rounded-lg font-semibold transition-colors">
                         <i data-lucide="log-in" class="w-5 h-5"></i>
                         <?= h(__('footer.signup_cta')) ?>
                     </a>
-                    <a href="<?= h(routeUrl('login', $currentLang)) ?>" id="signup-prompt-alt" class="hidden text-center text-gray-400 hover:text-white py-1 text-sm transition-colors">
+                    <a href="<?= h(routeUrl('login', $currentLang)) ?>" rel="nofollow" id="signup-prompt-alt" class="hidden text-center text-gray-400 hover:text-white py-1 text-sm transition-colors">
                         <?= h(__('footer.signup_more_options')) ?>
                     </a>
                     <button type="button" data-action="closeSignupPrompt" class="text-gray-400 hover:text-white py-2 text-sm font-medium transition-colors">
@@ -539,12 +539,9 @@ if (!function_exists('isGoogleOAuthEnabled')) {
         const googleEnabled = <?= isGoogleOAuthEnabled() ? 'true' : 'false' ?>;
         const altLink = document.getElementById('signup-prompt-alt');
 
-        // Primary CTA goes straight to Google OAuth (skips the /login interstitial) when
-        // available, then returns to this page. The "more options" link still routes to
-        // /login for the email/magic-link channel.
-        cta.href = googleEnabled
-            ? `/auth/google/?redirect=${encodeURIComponent(returnUrl)}`
-            : `${loginBasePath}?redirect=${encodeURIComponent(returnUrl)}`;
+        // The stable sign-in page starts OAuth by POST; links never mint OAuth
+        // sessions just because a crawler or preview follows them.
+        cta.href = `${loginBasePath}?redirect=${encodeURIComponent(returnUrl)}`;
         if (altLink) {
             altLink.href = `${loginBasePath}?redirect=${encodeURIComponent(returnUrl)}`;
             altLink.classList.toggle('hidden', !googleEnabled);
@@ -757,7 +754,7 @@ if (!function_exists('isGoogleOAuthEnabled')) {
                 <!-- Actions -->
                 <div class="welcome-popup-actions">
                     <?php if (isGoogleOAuthEnabled()): ?>
-                    <a href="/auth/google/" class="welcome-popup-btn-google">
+                    <a href="<?= h(routeUrl('login', $currentLang)) ?>" rel="nofollow" class="welcome-popup-btn-google">
                         <svg viewBox="0 0 24 24">
                             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                             <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>

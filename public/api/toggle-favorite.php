@@ -107,6 +107,8 @@ if ($existing) {
     $newBadges = awardAchievements($userId);
 }
 
+header('X-Beach-Favorite: ' . ($isFavorite ? 'added' : 'removed'));
+
 if ($wantsJson) {
     $resp = [
         'success' => true,

@@ -3858,6 +3858,13 @@ body.collection-dark {
     text-decoration: underline;
     text-underline-offset: 2px;
 }
+
+/* Practical access information shared by search landing pages. */
+.visit-planner { margin: 1.5rem auto; padding: 1.25rem; max-width: 75rem; border: 1px solid var(--color-ocean-200); border-radius: 1rem; background: var(--color-sand-50); color: var(--color-ocean-900); }
+.visit-planner h2 { font-size: 1.2rem; font-weight: 700; margin: 0 0 .6rem; }
+.visit-planner p { line-height: 1.65; max-width: 75ch; }
+.visit-planner nav { display: flex; flex-wrap: wrap; gap: .5rem 1rem; margin-top: .8rem; }
+.visit-planner a { display: inline-flex; align-items: center; min-height: 44px; color: var(--color-ocean-800); text-decoration: underline; font-weight: 600; }
 /* ==========================================================
    _beach.css — Beach detail page: hero gradient, quick facts, highlights
    Used by: beach.php, components/beach/*.php
@@ -3956,6 +3963,18 @@ body.collection-dark {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: 0.75rem;
+}
+
+/* Keep all three visit actions visible on narrow phones, including Spanish. */
+@media (max-width: 767px) {
+    .rd-beach #mob-actionbar .btn {
+        flex: 1 1 0;
+        min-width: 0;
+        padding: 10px 6px;
+        font-size: .7rem;
+        letter-spacing: .04em;
+        gap: 4px;
+    }
 }
 /* ==========================================================
    _forms.css — Compare bar, range sliders, login animations, Tom Select

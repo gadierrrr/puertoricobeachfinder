@@ -2570,7 +2570,7 @@ function generateAtAGlanceSummary(array $beach, string $lang = 'en'): string {
 
     // Lifeguard note
     $lifeguardStr = !empty($beach['has_lifeguard'])
-        ? ($isEs ? ' Hay salvavidas de turno.' : ' A lifeguard is on duty.')
+        ? ($isEs ? ' Se indica servicio de salvavidas; confirma si está disponible al llegar.' : ' Lifeguard service is listed; confirm availability when you arrive.')
         : '';
 
     $summary = $isEs
@@ -2591,12 +2591,16 @@ function analyticsContentGroup(): string {
 
     if ($path === '/' || $path === '/es') return 'home';
 
+    if (preg_match('#^/(auth(?:/|$)|login(?:\\.php)?$|verify(?:\\.php)?$|es/(iniciar-sesion|verificar)$)#', $path)) return 'auth';
+    if ($path === '/advertise') return 'advertise';
+
     $buckets = [
         'beach'        => ['/beach/', '/es/playa/'],
         'municipality' => ['/beaches-in-', '/es/playas-en-', '/municipality'],
         'proximity'    => ['/beaches-near', '/es/playas-cerca'],
         'collection'   => ['/best-', '/es/mejores-', '/hidden-beaches', '/es/playas-escondidas'],
         'guide'        => ['/guides', '/es/guias'],
+        'tag'          => ['/beaches/', '/es/playas/'],
     ];
     foreach ($buckets as $group => $prefixes) {
         foreach ($prefixes as $prefix) {

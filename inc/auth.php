@@ -160,6 +160,11 @@ function verifyMagicLink($token) {
     $_SESSION['SESSION_FINGERPRINT'] = hash('sha256', $_SESSION['CLIENT_IP'] . $_SESSION['CLIENT_UA']);
     $_SESSION['LAST_ACTIVITY'] = time();
 
+    if (!empty($isNewUser)) {
+        require_once __DIR__ . '/analytics.php';
+        queueAnalyticsOutcome('sign_up', ['method' => 'email']);
+    }
+
     return ['success' => true, 'user' => $user];
 }
 

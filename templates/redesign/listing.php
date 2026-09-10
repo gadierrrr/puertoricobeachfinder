@@ -101,6 +101,8 @@ $collectionSponsorHtml = advertisingRenderSlot('collection.lead-sponsor', 'colle
 <div class="wrap"><?= $collectionSponsorHtml ?></div>
 <?php endif; ?>
 
+<div class="wrap"><?php include APP_ROOT . '/components/visit-planner.php'; ?></div>
+
 <?php if (!empty($listing['beaches'])):
     $lstBeaches = array_values($listing['beaches']);
     $lstTiles = array_slice($lstBeaches, 0, 30);

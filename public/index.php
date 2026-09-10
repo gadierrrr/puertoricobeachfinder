@@ -34,6 +34,13 @@ if ($requestPath === '/index.php') {
 // handle trailing-slash redirects, or 404 unknown paths.
 // Real directory paths like /guides/ are served by Nginx's directory index
 // and never reach this code.
+$legacySpanishTarget = legacySpanishLandingRedirect($requestPath);
+if ($legacySpanishTarget !== null) {
+    $qs = $_SERVER['QUERY_STRING'] ?? '';
+    header('Location: ' . $legacySpanishTarget . ($qs !== '' ? '?' . $qs : ''), true, 301);
+    exit;
+}
+
 if ($requestPath !== '/') {
     // Check locale route match first (before trailing-slash redirect).
     $routeMatch = localeRouteMatch($requestPath);

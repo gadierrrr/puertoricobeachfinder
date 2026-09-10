@@ -90,7 +90,7 @@ $uvLabel = function ($uv) use ($isEs) {
 // One card, four zones; every fact renders exactly once: status facts →
 // best-for/amenity chips → getting-there/best-time prose rows.
 $swimTile = in_array($surf, ['calm', 'small'], true)
-    ? [$isEs ? 'Fácil — agua calmada' : 'Easy — calm water', 'g']
+    ? [$isEs ? 'Revisa el oleaje' : 'Check the surf', 'g']
     : ($surf === 'large'
         ? [$isEs ? 'Oleaje fuerte' : 'Strong surf', 'r']
         : [$isEs ? 'Verifica condiciones' : 'Check conditions', 'a']);
@@ -99,7 +99,7 @@ $snorkelGood = (bool) array_filter($tags, fn($t) => str_contains(strtolower($t),
 $glanceFacts = [
     ['🏊', $isEs ? 'Nadar' : 'Swimming', $swimTile[0], $swimTile[1]],
     ['🤿', 'Snorkel', $snorkelGood ? ($isEs ? 'Bueno — arrecife' : 'Great — reef') : ($isEs ? 'Limitado' : 'Limited'), $snorkelGood ? 'g' : 'a'],
-    ['👨‍👩‍👧‍👦', $isEs ? 'Familia' : 'Family', !empty($beach['safe_for_children']) ? ($isEs ? 'Segura para niños' : 'Safe for kids') : ($isEs ? 'Con precaución' : 'Use caution'), !empty($beach['safe_for_children']) ? 'g' : 'a'],
+    ['👨‍👩‍👧‍👦', $isEs ? 'Familia' : 'Family', !empty($beach['safe_for_children']) ? ($isEs ? 'Apta para familias' : 'Family-friendly') : ($isEs ? 'Con precaución' : 'Use caution'), !empty($beach['safe_for_children']) ? 'g' : 'a'],
 ];
 if ($access !== '') {
     // Boat access is logistics, not danger — amber, not red. The optional 5th
@@ -371,7 +371,9 @@ $subnav = array_values(array_filter([
     ['faq', $isEs ? 'Preguntas' : 'FAQ', !empty($faqs)],
 ], fn($i) => $i[2]));
 ?>
-<div class="rd rd-beach">
+<div class="rd rd-beach" data-bf-beach-id="<?= h($beach['id']) ?>"
+     data-bf-beach-slug="<?= h($beach['slug']) ?>"
+     data-bf-municipality="<?= h($beach['municipality']) ?>" data-bf-source="beach_detail">
 
 <header class="hero">
   <?php if (!empty($beach['cover_image'])): ?>
@@ -437,6 +439,7 @@ $subnav = array_values(array_filter([
 <div class="wrap" style="margin-top:18px"><?= $beachReferralHero ?></div>
 <?php endif; ?>
 
+<div class="wrap"><?php include APP_ROOT . "/components/visit-planner.php"; ?></div>
 <div class="wrap"><div class="body">
   <main>
     <section id="overview" class="block">
@@ -683,7 +686,8 @@ $subnav = array_values(array_filter([
 </div></div>
 
 <?php // Mobile-only sticky action bar — appears once the hero actions scroll away ?>
-<div class="mob-actionbar" id="mob-actionbar">
+<div class="mob-actionbar" id="mob-actionbar" data-bf-beach-id="<?= h($beach['id']) ?>"
+     data-bf-beach-slug="<?= h($beach['slug']) ?>" data-bf-source="beach_mobile_actions">
   <?php if ($isBoat): ?>
   <a class="btn coral" href="#tours" data-bf-track="sticky-tours">⛵ <?= h($isEs ? 'Ver tours' : 'See tours') ?></a>
   <?php else: ?>
@@ -693,7 +697,11 @@ $subnav = array_values(array_filter([
           aria-pressed="<?= $isFavorite ? 'true' : 'false' ?>"
           aria-label="<?= h($isEs ? 'Guardar' : 'Save') ?>">
     <span id="mob-fav-icon" aria-hidden="true"><?= $isFavorite ? '❤️' : '🤍' ?></span>
+    <?= h($isEs ? 'Guardar' : 'Save') ?>
   </button>
+  <?php if ($nearby): ?>
+  <a class="btn" href="#nearby" data-bf-track="nearby"><?= h($isEs ? 'Cercanas' : 'Nearby') ?></a>
+  <?php endif; ?>
 </div>
 
 </div>
