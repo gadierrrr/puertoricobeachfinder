@@ -6,6 +6,7 @@
  * Expects: $beach, $lang
  */
 ?>
+            <?php include APP_ROOT . '/components/visit-planner.php'; ?>
             <!-- About + Highlights (collapsible) -->
             <?php
             $_aboutDesc = ($lang === 'es' && !empty($beach['description_es']))

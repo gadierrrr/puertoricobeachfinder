@@ -1,123 +1,44 @@
-# Analytics Integration (GA4 + client wrapper)
+# Analytics integration (GA4)
 
-> **Update (2026-07):** Umami support has been removed. Google Analytics 4 (gtag) is the
-> primary analytics sink and `window.bfTrack()` routes every custom event to GA4 via
-> `gtag('event', ...)`, with PostHog dual-sent when present. The health probe endpoint
-> (`/api/health/analytics.php`), `scripts/check-analytics-ga.php`, and
-> `scripts/synthetic-analytics-probe.sh` now verify the GA4 tag instead of Umami.
-> Enable GA4 by setting `GA_MEASUREMENT_ID`. The `UMAMI_*` env vars are ignored and can be
-> deleted from production `.env`. Everything below is retained for historical reference only.
+Updated 2026-09-10. The filename is retained for existing links; Umami is no longer configured. `GA_MEASUREMENT_ID` enables the GA4 tag in the shared header. `window.bfTrack(name, props)` sends custom events to GA4 and also PostHog when present. Blocking analytics must never prevent site actions.
 
-This repo ships a thin client wrapper (`public/assets/js/analytics.js`) that is safe when
-analytics is disabled or blocked, and forwards events to whichever sinks are loaded.
+## Outcomes and supporting actions
 
+| Event | Trigger | Interpretation |
+| --- | --- | --- |
+| `sign_up` | Successful verification creates a new email or Google user | New verified account, not a returning login |
+| `generate_lead` | Advertising inquiry successfully stored | Inquiry, not a sale or revenue |
+| `A3_directions_click` | Visitor opens beach directions | Intent to visit, not a confirmed arrival |
+| `favorite_add` / `favorite_remove` | Successful favorite persistence | Saved/removed beach |
+| `nearby_beaches_click` | Sticky mobile Nearby link | Navigation to alternatives |
+| `visit_planner_click` | Practical planning links | Navigation to planning resources |
 
-## Configuration
+The first four positive events (`sign_up`, `generate_lead`, `A3_directions_click`, `favorite_add`) are marked as key events in GA property 543500092. Signups and inquiries have no default monetary value and count once per event. Existing unrelated key events were preserved. Old `S1_signup_from_quiz` / `S2_signup_from_checkin` settings remain historical; the URL-based implementation is removed because it counted returning users as signups.
 
-**GA4 (primary):**
+`inc/analytics.php` queues verified signups/inquiries in the session. The next shared-header page consumes them; the client additionally deduplicates the event ID within the tab. Reloads, duplicate inquiries, failed verification and honeypot responses do not create another outcome. IDs are used locally for deduplication and are not analytics properties. Only method/source/package/category context is permitted. Delivery remains subject to consent, blockers and browser/network availability; this is not a replacement for the database as the outcome system of record.
 
-- `GA_MEASUREMENT_ID=G-XXXXXXXXXX` — enables the gtag.js tag (injected in `components/header.php`)
-  and activates the `bfTrack() → gtag('event', ...)` routing. Leave empty to disable.
+Favorite HTMX responses expose `X-Beach-Favorite: added|removed`. Only successful responses count; tracking does not inspect heart emoji. Other fetch-based favorite paths keep their existing success tracking. Both full and minimal footers load the wrapper.
 
-**Umami (legacy, optional):** set these in `.env` (see `.env.example`):
+## Traffic quality
 
-- `UMAMI_ENABLED=1`
-- `UMAMI_SCRIPT_URL=https://cloud.umami.is/script.js`
-- `UMAMI_WEBSITE_ID=...`
-- `UMAMI_DOMAINS=puertoricobeachfinder.com,www.puertoricobeachfinder.com` (optional)
+- Nonproduction pages, webdriver sessions and explicit `bf_analytics_probe` / `design` test URLs set `traffic_type=internal` and `debug_mode=true` before GA config.
+- GA already has an **active** Internal Traffic exclusion for `traffic_type` exactly `internal`; verified September 10. This existing filter excludes matching incoming events. It does not repair historical reports.
+- Saved comparison **Organic Search baseline** matches Session default channel group exactly `Organic Search`. Apply it when evaluating search recovery separately from the Direct traffic anomaly. Existing Mobile and Direct comparisons remain available.
+- No country-wide or blanket Direct-traffic exclusion was created. Server logs and GA geography alone do not prove that every such visitor is a bot.
+- The configured GA page location removes token, code, state, redirect, email and ref query parameters and URL fragments. Campaign parameters remain available for attribution.
+- Auth and advertising pages have their own content groups. Landing-page visits are not conversions.
 
-The script tag is injected in `components/header.php` only when `UMAMI_ENABLED=1` and `UMAMI_WEBSITE_ID` is non-empty.
-`inc/security_headers.php` also extends CSP allowlists using `UMAMI_SCRIPT_URL` host when Umami is enabled.
-
-## Client wrapper
-
-- `public/assets/js/analytics.js` defines `window.bfTrack(eventName, props)`.
-- Events are routed to **GA4** via `window.gtag('event', eventName, props)` whenever the gtag tag is loaded (primary sink).
-- If Umami is available, events are also forwarded via `window.umami.track(eventName, props)` (legacy path).
-- If PostHog is present, events are dual-sent via `window.posthog.capture(eventName, props)`.
-- A persistent anonymous id cookie `BF_ANON_ID` is created (180 days) and included in event props, plus `authenticated` and `user_id` when available.
-- In `prod`, `bfTrack()` logs a one-time console warning when Umami is unavailable.
-- Add `?bf_analytics_probe=1` to any page URL to fire `health_analytics_probe` and send a client probe beacon to `/api/health/analytics.php`.
-
-## Funnel event map (minimal schema)
-
-Activation:
-
-- `A1_list_to_detail_click`: fired when the beach drawer swaps in (HTMX) after a list "Details" click.
-- `A2_quiz_complete`: fired after quiz match results are returned/rendered.
-- `A3_directions_click`: fired from directions links marked with `data-bf-track="directions"`.
-
-Lead capture:
-
-- `L1_results_sent`: fired when quiz results are sent (email/SMS/WhatsApp flow).
-- `L2_list_sent`: fired when a list page capture form is submitted.
-
-Signup attribution:
-
-- `S1_signup_from_quiz`: fired on first authenticated page view when URL contains `?src=quiz`.
-- `S2_signup_from_checkin`: fired on first authenticated page view when URL contains `?src=checkin`.
-
-UGC:
-
-- `U1_checkin_submitted`: fired after a check-in is successfully submitted.
-
-Referral (user-to-user invite loop — see `inc/invite.php`):
-
-- `referral_prompt_shown`: fired when a referred guest (arrived via `/?ref=CODE`, `bf_ref` cookie set) is shown the invite-aware signup popup in `components/footer.php`. Param: `referrer` (referrer's first name).
-- `referral_cta_click`: fired when that guest clicks the popup's "Continue with Google" CTA. Param: `referrer`.
-
-Other utility events (implementation-specific):
-
-- `share_click`, `share_copy_link` from `public/assets/js/share.js`
-- `favorite_add`, `favorite_remove` (favorites toggles)
-
-## Implementation references
-
-- Umami script injection: `components/header.php`
-- Dynamic CSP host allowlist: `inc/security_headers.php`
-- Global user meta for analytics: `components/footer.php`
-- Tracking wrapper + delegated listeners: `public/assets/js/analytics.js`
-- Share tracking: `public/assets/js/share.js`
-- Quiz results landing + tokenized page: `public/quiz-results.php`
-- Analytics health endpoint: `public/api/health/analytics.php`
-- CI/deploy tag check: `scripts/check-analytics-umami.php`
-- Synthetic browser smoke script: `scripts/synthetic-analytics-probe.sh`
-
-## Operational checks
-
-> These probes target the **legacy Umami** tag. With Umami disabled in prod they will report
-> `umami_tag_present: false` — that is expected, not an outage. GA4 delivery is verified in the
-> GA4 DebugView / Realtime reports instead. (Migrating these probes to GA4 is a tracked follow-up.)
-
-Configuration + page probe:
+## Validation
 
 ```bash
-curl -sS "https://www.puertoricobeachfinder.com/api/health/analytics.php?page_probe=1&network_probe=1"
+node --test scripts/test-analytics-events.js
+# Disposable dev database only; creates and removes temporary verification fixtures:
+php scripts/test-analytics-outcomes.php
+php scripts/check-analytics-ga.php --urls=http://127.0.0.1:8083/,http://127.0.0.1:8083/login
 ```
 
-Expected in production:
-- `ok: true`
-- `checks.config.enabled: true`
-- `checks.page_probe.umami_tag_present: true`
-- `checks.page_probe.umami_website_id_present: true`
+The local inquiry flow was also checked end to end: successful persistence produces one event, reload/duplicate/honeypot produce none. Test submissions must use a disposable local DB with no admin recipients or live email delivery.
 
-Rendered HTML guardrail:
+The GA health endpoint and HTML checks verify configuration/tag presence, not guaranteed ingestion. Do not create fake production signups or inquiries to inflate key-event counts. Internal filtering can prevent labelled probes from appearing in normal reports.
 
-```bash
-php scripts/check-analytics-umami.php \
-  --urls=https://www.puertoricobeachfinder.com/,https://www.puertoricobeachfinder.com/best-beaches \
-  --expect-script-host=cloud.umami.is
-```
-
-Synthetic browser probe (headless):
-
-```bash
-scripts/synthetic-analytics-probe.sh https://www.puertoricobeachfinder.com
-```
-
-This loads a page with `?bf_analytics_probe=1`, then verifies `/api/health/analytics.php?page_probe=1` reports a fresh client probe and Umami availability.
-
-## Notes
-
-- Tokenized quiz results pages (`/quiz-results?token=...`) are `noindex` to avoid indexing user-specific pages.
-- The canonical `/quiz-results` route exists as a landing URL and is included in `public/sitemap.php`.
+For server-side traffic triage, `scripts/traffic-log-summary.py` reads nginx combined logs and prints aggregate counts without client addresses or query strings. Non-asset requests include API calls and are not equivalent to GA sessions.

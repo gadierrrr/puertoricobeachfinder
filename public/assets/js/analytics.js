@@ -194,25 +194,18 @@
     }
   };
 
-  function trackSignupAttribution() {
-    const meta = getMeta();
-    const authed = meta && (meta.authenticated === 1 || meta.authenticated === "1");
-    if (!authed) return;
-
-    const url = new URL(window.location.href);
-    const src = (url.searchParams.get("src") || "").trim().toLowerCase();
-    if (!src) return;
-
-    if (src === "quiz") {
-      window.bfTrack("S1_signup_from_quiz", { source: "quiz" });
-    } else if (src === "checkin") {
-      window.bfTrack("S2_signup_from_checkin", { source: "checkin" });
-    } else {
-      return;
-    }
-
-    url.searchParams.delete("src");
-    window.history.replaceState({}, "", url.toString());
+  function trackVerifiedOutcomes() {
+    var events = window.BF_OUTCOME_EVENTS || [];
+    window.BF_OUTCOME_EVENTS = [];
+    events.forEach(function (event) {
+      if (!event || !event.id || ["sign_up", "generate_lead"].indexOf(event.name) === -1) return;
+      try {
+        var key = "bf_outcome_" + event.id;
+        if (sessionStorage.getItem(key)) return;
+        sessionStorage.setItem(key, "1");
+      } catch (e) {}
+      window.bfTrack(event.name, event.props || {});
+    });
   }
 
   function beachPropsFromEl(el) {
@@ -269,6 +262,11 @@
 
       if (kind === "directions") {
         window.bfTrack("A3_directions_click", props);
+        return;
+      }
+
+      if (kind === "nearby" || kind === "planner") {
+        window.bfTrack(kind === "nearby" ? "nearby_beaches_click" : "visit_planner_click", props);
         return;
       }
 
@@ -469,12 +467,13 @@
       const resp = event.detail && event.detail.xhr && event.detail.xhr.response;
       if (typeof resp !== "string") return;
 
-      // Heuristic: the response HTML includes either ❤️ or 🤍.
-      if (resp.indexOf("❤️") !== -1) {
-        window.bfTrack("favorite_add", { source: "htmx" });
-      } else if (resp.indexOf("🤍") !== -1) {
-        window.bfTrack("favorite_remove", { source: "htmx" });
-      }
+      if (event.detail.successful !== true) return;
+      // Explicit server result works with both classic and redesigned buttons.
+      var result = event.detail.xhr.getResponseHeader("X-Beach-Favorite");
+      if (result !== "added" && result !== "removed") return;
+      var props = beachPropsFromEl(event.detail.elt || document.body);
+      window.bfTrack(result === "added" ? "favorite_add" : "favorite_remove",
+        Object.assign({ source: "htmx" }, props));
     });
   }
 
@@ -736,7 +735,7 @@
   document.addEventListener("DOMContentLoaded", function () {
     ensureAnonId();
     initPostHogPageContext();
-    trackSignupAttribution();
+    trackVerifiedOutcomes();
     initDelegatedClickTracking();
     initReferralImpressionTracking();
     initListingImpressionTracking();

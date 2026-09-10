@@ -45,6 +45,12 @@ function normalizeLocalePath(string $path): string
         return '/es/guias/';
     }
 
+    // A real directory endpoint. Preserve the form POST rather than redirecting
+    // it to an extensionless path (which changes a POST to a GET).
+    if ($path === '/auth/google' || $path === '/auth/google/') {
+        return '/auth/google/';
+    }
+
     if ($path !== '/') {
         $path = rtrim($path, '/');
     }
@@ -933,4 +939,18 @@ function sitemapLocaleRoutes(): array
         ];
     }
     return $rows;
+}
+
+/** Retired mixed-language URLs observed in Search Console's 404 examples. */
+function legacySpanishLandingRedirect(string $path): ?string
+{
+    $path = normalizeLocalePath($path);
+    if (preg_match('#^/es/(beaches/[a-z0-9-]+|beaches-near-[a-z0-9-]+)$#', $path, $match)) {
+        $englishPath = '/' . $match[1];
+        $route = localeRouteMatch($englishPath);
+        if ($route !== null) {
+            return routeUrl($route['route_key'], 'es', $route['params']);
+        }
+    }
+    return null;
 }

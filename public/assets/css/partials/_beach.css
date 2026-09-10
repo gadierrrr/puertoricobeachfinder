@@ -97,3 +97,15 @@
     border: 1px solid var(--color-border);
     border-radius: 0.75rem;
 }
+
+/* Keep all three visit actions visible on narrow phones, including Spanish. */
+@media (max-width: 767px) {
+    .rd-beach #mob-actionbar .btn {
+        flex: 1 1 0;
+        min-width: 0;
+        padding: 10px 6px;
+        font-size: .7rem;
+        letter-spacing: .04em;
+        gap: 4px;
+    }
+}

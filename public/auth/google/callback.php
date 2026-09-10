@@ -80,6 +80,10 @@ if (!$user) {
 
 // Login the user
 loginUser($user);
+if (!empty($user['_is_new_user'])) {
+    require_once APP_ROOT . '/inc/analytics.php';
+    queueAnalyticsOutcome('sign_up', ['method' => 'google']);
+}
 
 // Get redirect URL from session or default to home
 $redirectUrl = $_SESSION['google_oauth_redirect'] ?? '/';

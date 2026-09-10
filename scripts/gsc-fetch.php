@@ -80,7 +80,7 @@ function gscQuery(string $accessToken, string $siteUrl, array $body): array {
 
 // 3. Date range: last 28 days, with 3-day data lag.
 $endDate   = date('Y-m-d', strtotime('-3 days'));
-$startDate = date('Y-m-d', strtotime('-31 days'));
+$startDate = date('Y-m-d', strtotime('-30 days'));
 fwrite(STDERR, "Date range: $startDate -> $endDate\n");
 
 $slices = [

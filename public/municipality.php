@@ -335,6 +335,7 @@ if ($redesignLayout) {
         </div>
 
         <!-- Beach Grid -->
+        <?php include APP_ROOT . '/components/visit-planner.php'; ?>
         <div id="beach-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <?php
             $favoriteBeachIds = [];

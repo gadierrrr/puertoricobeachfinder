@@ -92,6 +92,11 @@ jobs:
       - name: Seed beach data (headless, no Google API)
         run: php migrations/010-import-beach-json.php --skip-api
 
+      - name: Verify analytics outcomes
+        run: |
+          node --test scripts/test-analytics-events.js
+          php scripts/test-analytics-outcomes.php
+
       - name: Verify published beach images
         run: php scripts/test-beach-images.php
 

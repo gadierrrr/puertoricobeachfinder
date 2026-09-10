@@ -6,6 +6,13 @@ Allow: /
 # Disallow admin and private areas
 Disallow: /admin/
 Disallow: /auth/
+# Let Google read noindex on historical OAuth initiation URL variations.
+# The callback and all other auth endpoints remain blocked.
+Allow: /auth/google/$
+Allow: /auth/google$
+Allow: /auth/google?
+Allow: /auth/google/?
+Allow: /auth/google/index.php
 Disallow: /api/
 Disallow: /inc/
 Disallow: /data/
