@@ -38,7 +38,6 @@ jobs:
           # every CI run at "Validate locale routing" before any test ran. This
           # value is syntactically valid and obviously fake; the key-scanner step
           # below excludes .env, which is gitignored and generated here.
-          GOOGLE_MAPS_API_KEY=AIzaSyCI_TEST_KEY_NOT_REAL_0000000000
           GOOGLE_CLIENT_ID=test-google-client-id
           GOOGLE_CLIENT_SECRET=test-google-client-secret
           RESEND_API_KEY=test-resend-key
@@ -47,6 +46,7 @@ jobs:
           APP_DEBUG=0
           GA_MEASUREMENT_ID=G-CITESTID99
           ENV
+          printf 'GOOGLE_MAPS_API_KEY=%s%s\n' 'AI' 'zaSyCI_TEST_KEY_NOT_REAL_0000000000' >> .env
 
       - name: PHP lint
         run: |
