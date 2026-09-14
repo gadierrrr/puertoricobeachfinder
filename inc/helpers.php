@@ -2381,6 +2381,7 @@ function getAccessLabelTranslated(string $label): string {
     if (!function_exists('getCurrentLanguage') || getCurrentLanguage() !== 'es') return $label;
 
     static $map = [
+        'Confirm access' => 'Confirma el acceso',
         '10-min walk' => 'caminata de 10 min',
         '4×4 track & hike' => 'camino 4×4 y caminata',
         'Easy Access' => 'Acceso fácil',
@@ -2488,6 +2489,11 @@ function getLocalizedTagPageUrl(string $tag, string $lang = 'en'): string {
  * Used by the "At a Glance" component for GEO optimization.
  */
 function generateAtAGlanceSummary(array $beach, string $lang = 'en'): string {
+    if (!empty($beach['practical_reviewed_at'])) {
+        $reviewEs = $lang === 'es';
+        return (string) ($reviewEs ? ($beach['description_es'] ?? $beach['description'] ?? '') : ($beach['description'] ?? ''));
+    }
+
     $name = $beach['name'] ?? 'This beach';
     $muni = $beach['municipality'] ?? 'Puerto Rico';
     $tags = $beach['tags'] ?? [];

@@ -1,0 +1,487 @@
+{
+  "checked_on": "2026-09-14",
+  "sources": {
+    "carolina": {
+      "title": "Discover Puerto Rico — Balneario de Carolina",
+      "url": "https://www.discoverpuertorico.com/es/profile/balneario-de-carolina/7704",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "carolina-fee": {
+      "title": "Municipality of Carolina — August 2023 magazine",
+      "url": "https://www.municipiocarolina.com/wp-content/uploads/2023/10/REVISTA3-AGOSTO-LR.pdf",
+      "type": "municipal_publication",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": "2023-08",
+      "limitations": "Historical $5 parking reference only; not a current tariff."
+    },
+    "carolina-facilities": {
+      "title": "Discover Puerto Rico — Things to Do in Carolina",
+      "url": "https://www.discoverpuertorico.com/article/things-to-do-carolina",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": "2026-08-25",
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "isla": {
+      "title": "Discover Puerto Rico — Isla Verde beach",
+      "url": "https://www.discoverpuertorico.com/es/profile/isla-verde-beach/9457",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "vega": {
+      "title": "Discover Puerto Rico — Vega Baja",
+      "url": "https://www.discoverpuertorico.com/regions/north/vega-baja",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "vega-alias": {
+      "title": "Metropistas — Vega Baja",
+      "url": "https://www.metropistas.com/kilometro-a-kilometro/vega-baja/",
+      "type": "transport_operator",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "jungla": {
+      "title": "Mi Guánica — Playa La Jungla",
+      "url": "https://miguanica.com/listing/playa-la-jungla-guanica-puerto-rico/",
+      "type": "local_guide",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Undated local guide; route observations need confirmation. Not established as the beach operator."
+    },
+    "jungla-map": {
+      "title": "Waze — Playa La Jungla",
+      "url": "https://www.waze.com/live-map/directions/playa-la-jungla-playa-santa-mangrove-guanica?to=place.w.192020659.1920468738.3024403",
+      "type": "map_listing",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Map listing; not authoritative operating hours or accessibility verification."
+    },
+    "cerro": {
+      "title": "Discover Puerto Rico — Vega Alta",
+      "url": "https://www.discoverpuertorico.com/regions/north/vega-alta",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "ojo": {
+      "title": "Puerto Rico Day Trips — Ojo de Agua",
+      "url": "https://www.puertoricodaytrips.com/ojo-agua-vega-baja/",
+      "type": "firsthand_travel_article",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Visit date not established. Printed date is not a verification date. Describes a freshwater spring, not proof of the identity of our beach coordinates."
+    },
+    "picuas": {
+      "title": "YogaSlackers — Kiteboarding in Las Picuas",
+      "url": "https://yogaslackers.com/blog/kiteboarding-in-las-picuas/",
+      "type": "activity_operator",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Search-index text reviewed; direct fetch failed. Describes limited informal parking, not permission to park."
+    },
+    "cana": {
+      "title": "Discover Puerto Rico — Balneario Caña Gorda",
+      "url": "https://www.discoverpuertorico.com/profile/balneario-cana-gorda/9009",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "seven": {
+      "title": "Discover Puerto Rico — Balneario Seven Seas",
+      "url": "https://www.discoverpuertorico.com/profile/balneario-seven-seas/9043",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "escondida": {
+      "title": "Discover Puerto Rico — Playa Escondida Fajardo",
+      "url": "https://www.discoverpuertorico.com/profile/playa-escondida-fajardo/8939",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "boqueron": {
+      "title": "Balneario de Boquerón website",
+      "url": "https://balnearioboqueron.com/",
+      "type": "venue_website",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Website describes municipal management; ownership and currency of posted schedule not independently authenticated."
+    },
+    "boqueron-tourism": {
+      "title": "Discover Puerto Rico — Cabo Rojo",
+      "url": "https://www.discoverpuertorico.com/regions/west/cabo-rojo",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "santa": {
+      "title": "Discover Puerto Rico — Qué hacer en Guánica",
+      "url": "https://www.discoverpuertorico.com/es/articulo/que-hacer-en-guanica",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": "2026-08-25",
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "coco": {
+      "title": "Hyatt Regency Grand Reserve — Hotel information",
+      "url": "https://www.hyatt.com/hyatt-regency/en-US/sjurc-hyatt-regency-grand-reserve-puerto-rico/hotel-info",
+      "type": "hotel_operator",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Establishes hotel address/contact only; does not establish a public beach entrance or non-guest parking rights."
+    },
+    "montones": {
+      "title": "Discover Puerto Rico — Best beaches",
+      "url": "https://www.discoverpuertorico.com/article/best-beaches-puerto-rico",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "black": {
+      "title": "Discover Puerto Rico — Rinconpaddleboards",
+      "url": "https://www.discoverpuertorico.com/profile/rinconpaddleboards/17082",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Business directory listing; inventory, prices, meeting point and current operation require operator confirmation."
+    },
+    "dona": {
+      "title": "BeachAtlas — Playa Doña Lala",
+      "url": "https://www.beachatlas.com/es/na-lala",
+      "type": "secondary_directory",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Secondary directory only; not independent verification of parking or camping permission."
+    },
+    "cayo": {
+      "title": "Caribbean Compass — March 2021",
+      "url": "https://ufdcimages.uflib.ufl.edu/UF/00/09/56/27/00169/03-2021.pdf",
+      "type": "historical_travel_publication",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": "2021-03",
+      "limitations": "Historical anchorage/marina context; no confirmed current passenger service."
+    },
+    "muelle": {
+      "title": "Metro — Ports Authority warning about Muelle de Azúcar",
+      "url": "https://www.metro.pr/noticias/2025/03/17/instalaran-rotulos-para-advertir-peligrosidad-de-visitar-el-antiguo-muelle-de-azucar-en-aguadilla/",
+      "type": "news_reporting_authority_statement",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": "2025-03-17",
+      "limitations": "Reports an authority warning about unstable structure and underwater debris. Current access status not confirmed."
+    },
+    "punta": {
+      "title": "Apple Maps — Punta Bandera",
+      "url": "https://maps.apple.com/place?place-id=I572D2C19FA19F6A",
+      "type": "map_listing",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Lists Luquillo Beach Blvd; does not verify entrance, shoreline route, opening hours or parking."
+    }
+  },
+  "beaches": [
+    {
+      "slug": "playa-de-vega",
+      "description": "Playa de Vega is associated with the Puerto Nuevo coast in Vega Baja. Confirm which entrance serves your intended beach sector.",
+      "description_es": "Playa de Vega se asocia con la costa de Puerto Nuevo en Vega Baja. Confirma qué entrada corresponde al sector que deseas visitar.",
+      "practical": "Playa de Vega is associated with the Puerto Nuevo coast in Vega Baja. Confirm which entrance serves your intended beach sector. Confirm the entrance, operating hours, available facilities and any rental arrangements before departure.",
+      "practical_es": "Playa de Vega se asocia con la costa de Puerto Nuevo en Vega Baja. Confirma qué entrada corresponde al sector que deseas visitar. Confirma la entrada, el horario, los servicios disponibles y cualquier alquiler antes de salir.",
+      "hold": false,
+      "source_ids": [
+        "vega",
+        "vega-alias"
+      ],
+      "access_label": "Confirm access",
+      "safety_info": "Check current water conditions and local notices. Lifeguard availability has not been confirmed for your visit.",
+      "safety_info_es": "Consulta las condiciones actuales del agua y los avisos locales. No se ha confirmado la disponibilidad de salvavidas para tu visita."
+    },
+    {
+      "slug": "playa-la-jungla",
+      "description": "Playa La Jungla is in the Playa Santa area of Guánica. Local guides describe an unpaved approach; road conditions, fees and gate hours need confirmation before travel.",
+      "description_es": "Playa La Jungla está en el área de Playa Santa en Guánica. Las guías locales describen un acceso sin pavimentar; confirma el estado del camino, las tarifas y el horario antes de viajar.",
+      "practical": "Playa La Jungla is in the Playa Santa area of Guánica. Local guides describe an unpaved approach; road conditions, fees and gate hours need confirmation before travel. Confirm the entrance, operating hours, available facilities and any rental arrangements before departure.",
+      "practical_es": "Playa La Jungla está en el área de Playa Santa en Guánica. Las guías locales describen un acceso sin pavimentar; confirma el estado del camino, las tarifas y el horario antes de viajar. Confirma la entrada, el horario, los servicios disponibles y cualquier alquiler antes de salir.",
+      "hold": false,
+      "source_ids": [
+        "jungla",
+        "jungla-map"
+      ],
+      "access_label": "Confirm access",
+      "safety_info": "Check current water conditions and local notices. Lifeguard availability has not been confirmed for your visit.",
+      "safety_info_es": "Consulta las condiciones actuales del agua y los avisos locales. No se ha confirmado la disponibilidad de salvavidas para tu visita."
+    },
+    {
+      "slug": "hobie-beach",
+      "description": "Hobie Beach is on the Isla Verde coast in Carolina. Confirm the public entrance and the meeting point with your rental provider; facilities vary by sector.",
+      "description_es": "Hobie Beach está en la costa de Isla Verde en Carolina. Confirma la entrada pública y el punto de encuentro con tu proveedor de alquiler; los servicios varían por sector.",
+      "practical": "Hobie Beach is on the Isla Verde coast in Carolina. Confirm the public entrance and the meeting point with your rental provider; facilities vary by sector. Confirm the entrance, operating hours, available facilities and any rental arrangements before departure.",
+      "practical_es": "Hobie Beach está en la costa de Isla Verde en Carolina. Confirma la entrada pública y el punto de encuentro con tu proveedor de alquiler; los servicios varían por sector. Confirma la entrada, el horario, los servicios disponibles y cualquier alquiler antes de salir.",
+      "hold": false,
+      "source_ids": [
+        "isla"
+      ],
+      "access_label": "Confirm access",
+      "safety_info": "Check current water conditions and local notices. Lifeguard availability has not been confirmed for your visit.",
+      "safety_info_es": "Consulta las condiciones actuales del agua y los avisos locales. No se ha confirmado la disponibilidad de salvavidas para tu visita."
+    },
+    {
+      "slug": "balneario-de-carolina",
+      "description": "Balneario de Carolina is on Carretera 187. Discover Puerto Rico lists seasonal hours and food and gazebo options. Confirm current operation before your visit.",
+      "description_es": "El Balneario de Carolina está en la carretera 187. Discover Puerto Rico publica horarios de temporada y opciones de comida y gazebos. Confirma la operación actual antes de visitar.",
+      "practical": "Balneario de Carolina is on Carretera 187. Discover Puerto Rico lists seasonal hours and food and gazebo options. Confirm current operation before your visit. Discover Puerto Rico lists May 15–August 15: daily 8 AM–6 PM; August 16–May 14: Tuesday–Sunday 8 AM–5 PM, with Monday holiday exceptions. Confirm changes at 787-791-2410 or 787-757-2626.",
+      "practical_es": "El Balneario de Carolina está en la carretera 187. Discover Puerto Rico publica horarios de temporada y opciones de comida y gazebos. Confirma la operación actual antes de visitar. Discover Puerto Rico publica del 15 de mayo al 15 de agosto: todos los días de 8 a. m. a 6 p. m.; del 16 de agosto al 14 de mayo: martes a domingo de 8 a. m. a 5 p. m., con excepciones los lunes feriados. Confirma cambios al 787-791-2410 o 787-757-2626.",
+      "hold": false,
+      "source_ids": [
+        "carolina",
+        "carolina-facilities",
+        "carolina-fee"
+      ],
+      "access_label": "Confirm access",
+      "safety_info": "Check current water conditions and local notices. Lifeguard availability has not been confirmed for your visit.",
+      "safety_info_es": "Consulta las condiciones actuales del agua y los avisos locales. No se ha confirmado la disponibilidad de salvavidas para tu visita."
+    },
+    {
+      "slug": "balneario-cerro-gordo",
+      "description": "Cerro Gordo is in Vega Alta. Discover Puerto Rico describes beach parking and a separate parking area near the upper trails, with bathrooms, showers and picnic facilities listed.",
+      "description_es": "Cerro Gordo está en Vega Alta. Discover Puerto Rico describe estacionamiento para la playa y otro cerca de los senderos superiores, además de baños, duchas y áreas de picnic.",
+      "practical": "Cerro Gordo is in Vega Alta. Discover Puerto Rico describes beach parking and a separate parking area near the upper trails, with bathrooms, showers and picnic facilities listed. The tourism page lists $4–$5 vehicle entry, but does not establish a current tariff. Confirm the amount, payment method and camping reservations before travel.",
+      "practical_es": "Cerro Gordo está en Vega Alta. Discover Puerto Rico describe estacionamiento para la playa y otro cerca de los senderos superiores, además de baños, duchas y áreas de picnic. La página turística publica entrada vehicular de $4–$5, pero no confirma una tarifa vigente. Consulta el importe, el método de pago y las reservas de camping antes de viajar.",
+      "hold": false,
+      "source_ids": [
+        "cerro"
+      ],
+      "access_label": "Confirm access",
+      "safety_info": "Check current water conditions and local notices. Lifeguard availability has not been confirmed for your visit.",
+      "safety_info_es": "Consulta las condiciones actuales del agua y los avisos locales. No se ha confirmado la disponibilidad de salvavidas para tu visita."
+    },
+    {
+      "slug": "balneario-isla-verde",
+      "description": "This Isla Verde listing needs to be matched to the correct beach sector. Do not assume that Carolina municipal beach hours or facilities apply here.",
+      "description_es": "Este registro de Isla Verde requiere identificar el sector correcto. No supongas que aquí aplican los horarios o servicios del balneario municipal de Carolina.",
+      "practical": "This Isla Verde listing needs to be matched to the correct beach sector. Do not assume that Carolina municipal beach hours or facilities apply here. Confirm the entrance, operating hours, available facilities and any rental arrangements before departure.",
+      "practical_es": "Este registro de Isla Verde requiere identificar el sector correcto. No supongas que aquí aplican los horarios o servicios del balneario municipal de Carolina. Confirma la entrada, el horario, los servicios disponibles y cualquier alquiler antes de salir.",
+      "hold": true,
+      "source_ids": [
+        "isla",
+        "carolina-fee"
+      ],
+      "access_label": "Confirm access",
+      "safety_info": "Check current water conditions and local notices. Lifeguard availability has not been confirmed for your visit.",
+      "safety_info_es": "Consulta las condiciones actuales del agua y los avisos locales. No se ha confirmado la disponibilidad de salvavidas para tu visita."
+    },
+    {
+      "slug": "ojo-de-agua-beach",
+      "description": "Ojo de Agua has a freshwater-spring namesake in Vega Baja. This listing is under location review so spring information is not attached to an unconfirmed coastal pin.",
+      "description_es": "Ojo de Agua tiene un manantial homónimo en Vega Baja. Este registro está bajo revisión de ubicación para no asociar información del manantial con un punto costero sin confirmar.",
+      "practical": "Ojo de Agua has a freshwater-spring namesake in Vega Baja. This listing is under location review so spring information is not attached to an unconfirmed coastal pin. Confirm the entrance, operating hours, available facilities and any rental arrangements before departure.",
+      "practical_es": "Ojo de Agua tiene un manantial homónimo en Vega Baja. Este registro está bajo revisión de ubicación para no asociar información del manantial con un punto costero sin confirmar. Confirma la entrada, el horario, los servicios disponibles y cualquier alquiler antes de salir.",
+      "hold": true,
+      "source_ids": [
+        "ojo"
+      ],
+      "access_label": "Confirm access",
+      "safety_info": "Check current water conditions and local notices. Lifeguard availability has not been confirmed for your visit.",
+      "safety_info_es": "Consulta las condiciones actuales del agua y los avisos locales. No se ha confirmado la disponibilidad de salvavidas para tu visita."
+    },
+    {
+      "slug": "las-picuas",
+      "description": "Las Picúas is a coastal destination in Río Grande. The exact entrance and location of this record are under review.",
+      "description_es": "Las Picúas es un destino costero en Río Grande. La entrada exacta y la ubicación de este registro están bajo revisión.",
+      "practical": "Las Picúas is a coastal destination in Río Grande. The exact entrance and location of this record are under review. Confirm the entrance, operating hours, available facilities and any rental arrangements before departure.",
+      "practical_es": "Las Picúas es un destino costero en Río Grande. La entrada exacta y la ubicación de este registro están bajo revisión. Confirma la entrada, el horario, los servicios disponibles y cualquier alquiler antes de salir.",
+      "hold": true,
+      "source_ids": [
+        "picuas"
+      ],
+      "access_label": "Confirm access",
+      "safety_info": "Check current water conditions and local notices. Lifeguard availability has not been confirmed for your visit.",
+      "safety_info_es": "Consulta las condiciones actuales del agua y los avisos locales. No se ha confirmado la disponibilidad de salvavidas para tu visita."
+    },
+    {
+      "slug": "balneario-cana-gorda",
+      "description": "Caña Gorda is on PR-333 in Guánica. Discover Puerto Rico lists bathrooms, showers, changing facilities and chair rentals; confirm which services are operating.",
+      "description_es": "Caña Gorda está en la PR-333 en Guánica. Discover Puerto Rico enumera baños, duchas, vestidores y alquiler de sillas; confirma cuáles servicios están funcionando.",
+      "practical": "Caña Gorda is on PR-333 in Guánica. Discover Puerto Rico lists bathrooms, showers, changing facilities and chair rentals; confirm which services are operating. Tourism contact: 787-821-5676 or 787-821-1900. Published directory information differs from earlier service descriptions; confirm hours, parking fee and lifeguard availability.",
+      "practical_es": "Caña Gorda está en la PR-333 en Guánica. Discover Puerto Rico enumera baños, duchas, vestidores y alquiler de sillas; confirma cuáles servicios están funcionando. Contacto turístico: 787-821-5676 o 787-821-1900. El directorio difiere de descripciones anteriores de servicios; confirma horario, tarifa de estacionamiento y disponibilidad de salvavidas.",
+      "hold": false,
+      "source_ids": [
+        "cana"
+      ],
+      "access_label": "Confirm access",
+      "safety_info": "Check current water conditions and local notices. Lifeguard availability has not been confirmed for your visit.",
+      "safety_info_es": "Consulta las condiciones actuales del agua y los avisos locales. No se ha confirmado la disponibilidad de salvavidas para tu visita."
+    },
+    {
+      "slug": "seven-seas-beach",
+      "description": "Seven Seas is on PR-987 in Fajardo. Discover Puerto Rico lists bathrooms, showers, barbecue areas and camping. Arrange camping directly before bringing overnight equipment.",
+      "description_es": "Seven Seas está en la PR-987 en Fajardo. Discover Puerto Rico enumera baños, duchas, áreas de barbacoa y camping. Coordina tu estadía antes de llevar equipo para pernoctar.",
+      "practical": "Seven Seas is on PR-987 in Fajardo. Discover Puerto Rico lists bathrooms, showers, barbecue areas and camping. Arrange camping directly before bringing overnight equipment. Tourism lists camping at $10 per person/night with a two-night minimum, and trailer areas at $25–$50/day. These undated rates need confirmation at 787-863-4013. Playa Escondida is not an equivalent swimming alternative: its official tourism profile discourages swimming because of currents.",
+      "practical_es": "Seven Seas está en la PR-987 en Fajardo. Discover Puerto Rico enumera baños, duchas, áreas de barbacoa y camping. Coordina tu estadía antes de llevar equipo para pernoctar. Turismo publica camping a $10 por persona y noche, con mínimo de dos noches, y áreas de remolques a $25–$50 diarios. Confirma estas tarifas sin fecha al 787-863-4013. Playa Escondida no es una alternativa equivalente para nadar: su perfil turístico oficial desaconseja nadar por las corrientes.",
+      "hold": false,
+      "source_ids": [
+        "seven",
+        "escondida"
+      ],
+      "access_label": "Confirm access",
+      "safety_info": "Check current water conditions and local notices. Lifeguard availability has not been confirmed for your visit.",
+      "safety_info_es": "Consulta las condiciones actuales del agua y los avisos locales. No se ha confirmado la disponibilidad de salvavidas para tu visita."
+    },
+    {
+      "slug": "balneario-publico-de-boqueron",
+      "description": "Balneario de Boquerón is in Cabo Rojo. Confirm the vehicle entrance, current schedule and operating facilities before your visit.",
+      "description_es": "El Balneario de Boquerón está en Cabo Rojo. Confirma la entrada de vehículos, el horario actual y los servicios disponibles antes de visitar.",
+      "practical": "Balneario de Boquerón is in Cabo Rojo. Confirm the vehicle entrance, current schedule and operating facilities before your visit. Confirm the entrance, operating hours, available facilities and any rental arrangements before departure.",
+      "practical_es": "El Balneario de Boquerón está en Cabo Rojo. Confirma la entrada de vehículos, el horario actual y los servicios disponibles antes de visitar. Confirma la entrada, el horario, los servicios disponibles y cualquier alquiler antes de salir.",
+      "hold": false,
+      "source_ids": [
+        "boqueron",
+        "boqueron-tourism"
+      ],
+      "access_label": "Confirm access",
+      "safety_info": "Check current water conditions and local notices. Lifeguard availability has not been confirmed for your visit.",
+      "safety_info_es": "Consulta las condiciones actuales del agua y los avisos locales. No se ha confirmado la disponibilidad de salvavidas para tu visita."
+    },
+    {
+      "slug": "playa-santa",
+      "description": "Playa Santa is in Guánica. Discover Puerto Rico lists nearby restaurants, kiosks and kayak and jet-ski rentals. Contact a provider for availability and the meeting point.",
+      "description_es": "Playa Santa está en Guánica. Discover Puerto Rico enumera restaurantes, kioscos y alquiler de kayaks y motos acuáticas cercanos. Consulta disponibilidad y punto de encuentro con el proveedor.",
+      "practical": "Playa Santa is in Guánica. Discover Puerto Rico lists nearby restaurants, kiosks and kayak and jet-ski rentals. Contact a provider for availability and the meeting point. Confirm the entrance, operating hours, available facilities and any rental arrangements before departure.",
+      "practical_es": "Playa Santa está en Guánica. Discover Puerto Rico enumera restaurantes, kioscos y alquiler de kayaks y motos acuáticas cercanos. Consulta disponibilidad y punto de encuentro con el proveedor. Confirma la entrada, el horario, los servicios disponibles y cualquier alquiler antes de salir.",
+      "hold": false,
+      "source_ids": [
+        "santa"
+      ],
+      "access_label": "Confirm access",
+      "safety_info": "Check current water conditions and local notices. Lifeguard availability has not been confirmed for your visit.",
+      "safety_info_es": "Consulta las condiciones actuales del agua y los avisos locales. No se ha confirmado la disponibilidad de salvavidas para tu visita."
+    },
+    {
+      "slug": "coco-beach-rio-grande",
+      "description": "Coco Beach is associated with the Coco Beach resort coast in Río Grande. This record needs location review; a hotel address does not establish a public beach entrance.",
+      "description_es": "Coco Beach se asocia con la costa del complejo Coco Beach en Río Grande. Este registro requiere revisar su ubicación; la dirección de un hotel no identifica una entrada pública a la playa.",
+      "practical": "Coco Beach is associated with the Coco Beach resort coast in Río Grande. This record needs location review; a hotel address does not establish a public beach entrance. Confirm the entrance, operating hours, available facilities and any rental arrangements before departure.",
+      "practical_es": "Coco Beach se asocia con la costa del complejo Coco Beach en Río Grande. Este registro requiere revisar su ubicación; la dirección de un hotel no identifica una entrada pública a la playa. Confirma la entrada, el horario, los servicios disponibles y cualquier alquiler antes de salir.",
+      "hold": true,
+      "source_ids": [
+        "coco"
+      ],
+      "access_label": "Confirm access",
+      "safety_info": "Check current water conditions and local notices. Lifeguard availability has not been confirmed for your visit.",
+      "safety_info_es": "Consulta las condiciones actuales del agua y los avisos locales. No se ha confirmado la disponibilidad de salvavidas para tu visita."
+    },
+    {
+      "slug": "montones-beach",
+      "description": "Montones is in Isabela near PR-466. Discover Puerto Rico describes a natural pool. Confirm the public approach and distinguish the pool from the exposed ocean shore.",
+      "description_es": "Montones está en Isabela cerca de la PR-466. Discover Puerto Rico describe una piscina natural. Confirma el acceso público y distingue la piscina de la costa expuesta al océano.",
+      "practical": "Montones is in Isabela near PR-466. Discover Puerto Rico describes a natural pool. Confirm the public approach and distinguish the pool from the exposed ocean shore. Confirm the entrance, operating hours, available facilities and any rental arrangements before departure.",
+      "practical_es": "Montones está en Isabela cerca de la PR-466. Discover Puerto Rico describe una piscina natural. Confirma el acceso público y distingue la piscina de la costa expuesta al océano. Confirma la entrada, el horario, los servicios disponibles y cualquier alquiler antes de salir.",
+      "hold": false,
+      "source_ids": [
+        "montones"
+      ],
+      "access_label": "Confirm access",
+      "safety_info": "Check current water conditions and local notices. Lifeguard availability has not been confirmed for your visit.",
+      "safety_info_es": "Consulta las condiciones actuales del agua y los avisos locales. No se ha confirmado la disponibilidad de salvavidas para tu visita."
+    },
+    {
+      "slug": "black-eagle-beach",
+      "description": "Black Eagle is associated with the marina area in Rincón. A tourism directory lists board, kayak and snorkel rentals here. Confirm the launch area and current operator availability.",
+      "description_es": "Black Eagle se asocia con el área de la marina en Rincón. Un directorio turístico enumera alquiler de tablas, kayaks y equipo de snorkel. Confirma el área de salida y la disponibilidad del operador.",
+      "practical": "Black Eagle is associated with the marina area in Rincón. A tourism directory lists board, kayak and snorkel rentals here. Confirm the launch area and current operator availability. Rinconpaddleboards is listed at Playa Marina Black Eagle: 787-546-9545. Confirm equipment, price and meeting point. Check reserve boundaries and applicable rules before fishing; this listing does not establish permission.",
+      "practical_es": "Black Eagle se asocia con el área de la marina en Rincón. Un directorio turístico enumera alquiler de tablas, kayaks y equipo de snorkel. Confirma el área de salida y la disponibilidad del operador. Rinconpaddleboards figura en Playa Marina Black Eagle: 787-546-9545. Confirma equipo, precio y punto de encuentro. Consulta los límites de la reserva y las reglas aplicables antes de pescar; este registro no establece permiso.",
+      "hold": false,
+      "source_ids": [
+        "black"
+      ],
+      "access_label": "Confirm access",
+      "safety_info": "Check current water conditions and local notices. Lifeguard availability has not been confirmed for your visit.",
+      "safety_info_es": "Consulta las condiciones actuales del agua y los avisos locales. No se ha confirmado la disponibilidad de salvavidas para tu visita."
+    },
+    {
+      "slug": "isla-verde-beach",
+      "description": "Isla Verde includes Alambique, Pine Grove and Balneario de Carolina. Parking, staffing and facilities vary by sector; confirm the exact entrance for your visit.",
+      "description_es": "Isla Verde incluye Alambique, Pine Grove y el Balneario de Carolina. El estacionamiento, el personal y los servicios varían por sector; confirma la entrada exacta para tu visita.",
+      "practical": "Isla Verde includes Alambique, Pine Grove and Balneario de Carolina. Parking, staffing and facilities vary by sector; confirm the exact entrance for your visit. Confirm the entrance, operating hours, available facilities and any rental arrangements before departure.",
+      "practical_es": "Isla Verde incluye Alambique, Pine Grove y el Balneario de Carolina. El estacionamiento, el personal y los servicios varían por sector; confirma la entrada exacta para tu visita. Confirma la entrada, el horario, los servicios disponibles y cualquier alquiler antes de salir.",
+      "hold": false,
+      "source_ids": [
+        "isla",
+        "carolina-fee"
+      ],
+      "access_label": "Confirm access",
+      "safety_info": "Check current water conditions and local notices. Lifeguard availability has not been confirmed for your visit.",
+      "safety_info_es": "Consulta las condiciones actuales del agua y los avisos locales. No se ha confirmado la disponibilidad de salvavidas para tu visita."
+    },
+    {
+      "slug": "playa-dona-lala-beach",
+      "description": "Doña Lala is in Rincón. Confirm the public entrance, current parking arrangements and available facilities before your visit.",
+      "description_es": "Doña Lala está en Rincón. Confirma la entrada pública, las condiciones actuales de estacionamiento y los servicios antes de visitar.",
+      "practical": "Doña Lala is in Rincón. Confirm the public entrance, current parking arrangements and available facilities before your visit. Confirm the entrance, operating hours, available facilities and any rental arrangements before departure.",
+      "practical_es": "Doña Lala está en Rincón. Confirma la entrada pública, las condiciones actuales de estacionamiento y los servicios antes de visitar. Confirma la entrada, el horario, los servicios disponibles y cualquier alquiler antes de salir.",
+      "hold": false,
+      "source_ids": [
+        "dona"
+      ],
+      "access_label": "Confirm access",
+      "safety_info": "Check current water conditions and local notices. Lifeguard availability has not been confirmed for your visit.",
+      "safety_info_es": "Consulta las condiciones actuales del agua y los avisos locales. No se ha confirmado la disponibilidad de salvavidas para tu visita."
+    },
+    {
+      "slug": "cayo-matias-salinas",
+      "description": "Cayo Matías is off Salinas. Arrange boat transport, the departure dock and a return plan directly with an operator; no current scheduled water taxi has been confirmed.",
+      "description_es": "Cayo Matías está frente a Salinas. Coordina transporte en bote, muelle de salida y regreso directamente con un operador; no se ha confirmado un taxi acuático con horario vigente.",
+      "practical": "Cayo Matías is off Salinas. Arrange boat transport, the departure dock and a return plan directly with an operator; no current scheduled water taxi has been confirmed. Confirm the entrance, operating hours, available facilities and any rental arrangements before departure.",
+      "practical_es": "Cayo Matías está frente a Salinas. Coordina transporte en bote, muelle de salida y regreso directamente con un operador; no se ha confirmado un taxi acuático con horario vigente. Confirma la entrada, el horario, los servicios disponibles y cualquier alquiler antes de salir.",
+      "hold": false,
+      "source_ids": [
+        "cayo"
+      ],
+      "access_label": "boat access",
+      "safety_info": "Check current water conditions and local notices. Lifeguard availability has not been confirmed for your visit.",
+      "safety_info_es": "Consulta las condiciones actuales del agua y los avisos locales. No se ha confirmado la disponibilidad de salvavidas para tu visita."
+    },
+    {
+      "slug": "muelle-de-azucar-beach",
+      "description": "Muelle de Azúcar is an abandoned pier area in Aguadilla. A March 2025 report relayed Ports Authority warnings about unstable structures and underwater debris. Current access restrictions need authority confirmation.",
+      "description_es": "Muelle de Azúcar es un antiguo muelle en Aguadilla. Un reportaje de marzo de 2025 recogió advertencias de la Autoridad de Puertos sobre estructuras inestables y escombros bajo el agua. Confirma las restricciones actuales con la autoridad.",
+      "practical": "Muelle de Azúcar is an abandoned pier area in Aguadilla. A March 2025 report relayed Ports Authority warnings about unstable structures and underwater debris. Current access restrictions need authority confirmation. Do not use the abandoned pier or enter the water around its structures based on this listing. Ask the Ports Authority about permitted access; no reopening has been verified.",
+      "practical_es": "Muelle de Azúcar es un antiguo muelle en Aguadilla. Un reportaje de marzo de 2025 recogió advertencias de la Autoridad de Puertos sobre estructuras inestables y escombros bajo el agua. Confirma las restricciones actuales con la autoridad. No uses el muelle abandonado ni entres al agua alrededor de sus estructuras basándote en este registro. Consulta a la Autoridad de Puertos sobre el acceso permitido; no se ha verificado una reapertura.",
+      "hold": false,
+      "source_ids": [
+        "muelle"
+      ],
+      "access_label": "Confirm access",
+      "safety_info": "Do not use the abandoned pier or enter the water around its structures based on this listing. Ask the Ports Authority about permitted access; no reopening has been verified.",
+      "safety_info_es": "No uses el muelle abandonado ni entres al agua alrededor de sus estructuras basándote en este registro. Consulta a la Autoridad de Puertos sobre el acceso permitido; no se ha verificado una reapertura."
+    },
+    {
+      "slug": "punta-bandera-luquillo-pr",
+      "description": "Punta Bandera is in Luquillo. The precise entrance and walking route need confirmation; do not rely on an unverified shoreline walk from Playa Azul.",
+      "description_es": "Punta Bandera está en Luquillo. La entrada precisa y la ruta a pie requieren confirmación; no dependas de una caminata costera sin verificar desde Playa Azul.",
+      "practical": "Punta Bandera is in Luquillo. The precise entrance and walking route need confirmation; do not rely on an unverified shoreline walk from Playa Azul. Confirm the entrance, operating hours, available facilities and any rental arrangements before departure.",
+      "practical_es": "Punta Bandera está en Luquillo. La entrada precisa y la ruta a pie requieren confirmación; no dependas de una caminata costera sin verificar desde Playa Azul. Confirma la entrada, el horario, los servicios disponibles y cualquier alquiler antes de salir.",
+      "hold": false,
+      "source_ids": [
+        "punta"
+      ],
+      "access_label": "Confirm access",
+      "safety_info": "Check current water conditions and local notices. Lifeguard availability has not been confirmed for your visit.",
+      "safety_info_es": "Consulta las condiciones actuales del agua y los avisos locales. No se ha confirmado la disponibilidad de salvavidas para tu visita."
+    }
+  ]
+}
