@@ -18,8 +18,8 @@ $content = loadGuideContent('culebra-vs-vieques');
 $pageTitle = __('guide_culebra_vieques.title');
 $pageDescription = __('guide_culebra_vieques.description');
 
-$culebra_beaches = query("SELECT id, name, slug FROM beaches WHERE municipality = 'Culebra' LIMIT 3");
-$vieques_beaches = query("SELECT id, name, slug FROM beaches WHERE municipality = 'Vieques' LIMIT 3");
+$culebra_beaches = query("SELECT id, name, slug FROM beaches WHERE municipality = 'Culebra' AND publish_status = 'published' LIMIT 3");
+$vieques_beaches = query("SELECT id, name, slug FROM beaches WHERE municipality = 'Vieques' AND publish_status = 'published' LIMIT 3");
 
 $relatedGuides = [
     ['title' => __('related_guides.transport'),  'url' => routeUrl('guide_transportation', $lang)],

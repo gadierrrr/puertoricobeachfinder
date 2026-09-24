@@ -8,7 +8,7 @@
 function track_visit_in_known_agents() {
     // Skip in CLI (init-db, migrate, cron jobs): there is no HTTP request to
     // track, and getallheaders() is unavailable outside web SAPIs.
-    if (PHP_SAPI === 'cli' || !function_exists('curl_init')) {
+    if (PHP_SAPI === 'cli' || appEnv() !== 'prod' || !function_exists('curl_init')) {
         return;
     }
 

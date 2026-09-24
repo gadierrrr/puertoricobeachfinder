@@ -30,7 +30,7 @@ $kid_beaches = query(
     "SELECT id, slug, name, municipality, lat, lng, cover_image,
         description, google_rating, google_review_count,
         access_label, has_lifeguard, safe_for_children
-        FROM beaches WHERE slug IN ($placeholders) ORDER BY name ASC",
+        FROM beaches WHERE publish_status = 'published' AND slug IN ($placeholders) ORDER BY name ASC",
     $kidBeachSlugs
 );
 

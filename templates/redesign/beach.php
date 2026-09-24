@@ -32,6 +32,7 @@ $regionLabel = [
 ][$region] ?? '';
 $access = strtolower((string) ($beach['access_label'] ?? ''));
 $isBoat = str_contains($access, 'boat') || str_contains($access, 'kayak');
+$accessBookingUnconfirmed = !empty($beach['practical_reviewed_at']) && in_array($beach['slug'] ?? '', ['cayo-matias-salinas', 'muelle-de-azucar-beach'], true);
 $byBoatPhrase = str_contains($access, 'kayak')
     ? ($isEs ? 'en bote o kayak' : 'by boat or kayak')
     : ($isEs ? 'en bote' : 'by boat');
@@ -57,7 +58,7 @@ if ($rating <= 0) {
     $rating = (float) ($beach['google_rating'] ?? 0);
 }
 $reviewCountGoogle = (int) ($beach['google_review_count'] ?? 0);
-$dirUrl = 'https://www.google.com/maps/dir/?api=1&destination=' . $lat . ',' . $lng;
+$dirUrl = $accessBookingUnconfirmed ? '#extended-tips' : 'https://www.google.com/maps/dir/?api=1&destination=' . $lat . ',' . $lng;
 
 // hero image (real <img> with srcset for LCP + image search, like classic)
 $heroSrcset = getBeachImageSrcset($beach);
@@ -90,7 +91,7 @@ $uvLabel = function ($uv) use ($isEs) {
 // One card, four zones; every fact renders exactly once: status facts →
 // best-for/amenity chips → getting-there/best-time prose rows.
 $swimTile = in_array($surf, ['calm', 'small'], true)
-    ? [$isEs ? 'Fácil — agua calmada' : 'Easy — calm water', 'g']
+    ? [$isEs ? 'Revisa el oleaje' : 'Check the surf', 'g']
     : ($surf === 'large'
         ? [$isEs ? 'Oleaje fuerte' : 'Strong surf', 'r']
         : [$isEs ? 'Verifica condiciones' : 'Check conditions', 'a']);
@@ -99,7 +100,7 @@ $snorkelGood = (bool) array_filter($tags, fn($t) => str_contains(strtolower($t),
 $glanceFacts = [
     ['🏊', $isEs ? 'Nadar' : 'Swimming', $swimTile[0], $swimTile[1]],
     ['🤿', 'Snorkel', $snorkelGood ? ($isEs ? 'Bueno — arrecife' : 'Great — reef') : ($isEs ? 'Limitado' : 'Limited'), $snorkelGood ? 'g' : 'a'],
-    ['👨‍👩‍👧‍👦', $isEs ? 'Familia' : 'Family', !empty($beach['safe_for_children']) ? ($isEs ? 'Segura para niños' : 'Safe for kids') : ($isEs ? 'Con precaución' : 'Use caution'), !empty($beach['safe_for_children']) ? 'g' : 'a'],
+    ['👨‍👩‍👧‍👦', $isEs ? 'Familia' : 'Family', !empty($beach['safe_for_children']) ? ($isEs ? 'Apta para familias' : 'Family-friendly') : ($isEs ? 'Con precaución' : 'Use caution'), !empty($beach['safe_for_children']) ? 'g' : 'a'],
 ];
 if ($access !== '') {
     // Boat access is logistics, not danger — amber, not red. The optional 5th
@@ -109,7 +110,7 @@ if ($access !== '') {
         $isEs ? 'Acceso' : 'Access',
         $isBoat ? ($isEs ? 'Solo en bote' : 'Boat only') : ucfirst($accessLabel),
         ($isBoat || str_contains($access, 'hike') || str_contains($access, 'walk')) ? 'a' : 'g',
-        $isBoat ? ['#tours', $isEs ? 'Ver tours →' : 'See tours →'] : null,
+        ($isBoat && !$accessBookingUnconfirmed) ? ['#tours', $isEs ? 'Ver tours →' : 'See tours →'] : null,
     ];
 }
 
@@ -122,7 +123,7 @@ $heroParking = $isBoat ? '' : $parkingDetails;
 // Boat-only beaches lead with the fact that changes the visitor's plan
 // instead of the generic tag restatement.
 $aiSummary = trim((string) generateAtAGlanceSummary($beach, $lang));
-if ($isBoat) {
+if ($isBoat && empty($beach['practical_reviewed_at'])) {
     $aiSummary = $isEs
         ? 'A ' . $nameMain . ' solo se llega ' . $byBoatPhrase . ' — la mayoría de los visitantes reserva un tour o taxi acuático desde ' . $beach['municipality'] . '.'
         : 'You can only reach ' . $nameMain . ' ' . $byBoatPhrase . ' — most visitors book a tour or water taxi from ' . $beach['municipality'] . '.';
@@ -138,8 +139,8 @@ foreach (($beach['tips'] ?? []) as $t) {
     $txt = $isEs && !empty($t['tip_es']) ? $t['tip_es'] : ($t['tip'] ?? '');
     if ($txt) { $tipList[] = $txt; }
 }
-if (!$tipList && !empty($beach['local_tips'])) {
-    $tipList = array_values(array_filter(array_map('trim', preg_split('/\n|•|\r/', (string) $beach['local_tips']))));
+if (!$tipList && !empty($beach['local_tips']) && empty($beach['practical_reviewed_at'])) {
+    $tipList = array_values(array_filter(array_map('trim', preg_split('/\n|•|\r/', (string) ($isEs ? ($beach['local_tips_es'] ?? $beach['local_tips']) : $beach['local_tips'])))));
 }
 // Generated tips need the same boat-beach scrub as the prose: no parking
 // advice on a cay. Also collapse duplicate "bring snorkel gear" tips,
@@ -165,6 +166,7 @@ foreach (($extendedSections ?? []) as $s) {
     // getting_there feeds the Getting there section; best_time is the glance
     // card's row; local_tips duplicates the Local tips section. None of them
     // earn a second rendering as an accordion.
+    if ($s['section_type'] === 'local_tips' && !empty($beach['practical_reviewed_at'])) { $xPlan[] = $s; continue; }
     if (in_array($s['section_type'], ['getting_there', 'best_time', 'local_tips'], true)) continue;
     if (in_array($s['section_type'], $xPlanTypes, true)) $xPlan[] = $s;
     elseif (in_array($s['section_type'], $xAboutTypes, true)) $xAbout[] = $s;
@@ -213,7 +215,9 @@ $factCoveredTags = ['calm-waters', 'snorkeling', 'family-friendly', 'swimming'];
 $bestForChips = array_slice(array_map(fn($t) => getTagLabel($t), array_values(array_diff($tags, $factCoveredTags))), 0, 4);
 // glance getting-there row carries the access mode only — parking, lifeguard,
 // and safety facts live in the Know-before-you-go card on the right
-if ($isBoat) {
+if ($accessBookingUnconfirmed) {
+    $gettingBody = $isEs ? 'Confirma el acceso antes de viajar; consulta las notas de planificación.' : 'Confirm access before travel; see the planning notes.';
+} elseif ($isBoat) {
     $gettingBody = $isEs
         ? 'Bote o taxi acuático desde ' . $beach['municipality'] . '. La mayoría de los visitantes reserva un tour.'
         : 'Boat or water taxi from ' . $beach['municipality'] . '. Most visitors book a tour.';
@@ -238,7 +242,7 @@ $firstSentence = function (string $s, int $max = 110): string {
 // Item shape: [icon, title, body, href|null, linkLabel|null, isDanger].
 // Amber = logistics/planning; red (isDanger) = genuine hazards.
 $adviseItems = [];
-if ($isBoat) {
+if ($isBoat && !$accessBookingUnconfirmed) {
     $adviseItems[] = ['🛥️', $isEs ? 'Solo en bote' : 'Boat access only',
         ($isEs ? 'Tours y taxis acuáticos salen desde ' : 'Tours and water taxis depart from ') . $beach['municipality'] . '.',
         '#tours', $isEs ? 'Ver tours →' : 'See tours →', false];
@@ -262,7 +266,7 @@ if ($safetyLead !== '' && !($surfWarn && preg_match('/surf|oleaje/i', $safetyLea
     $adviseItems[] = ['⚠️', $isEs ? 'Atención' : 'Heads up', $safetyLead, null, null, true];
 }
 // No lifeguard — from the structured column, not prose (411 of 434 beaches).
-if (empty($beach['has_lifeguard'])) {
+if (empty($beach['has_lifeguard']) && empty($beach['practical_reviewed_at'])) {
     $adviseItems[] = ['🛟', $isEs ? 'Sin salvavidas' : 'No lifeguard',
         $isEs ? 'Nada acompañado y conoce tus límites.' : 'Swim with a buddy and know your limits.', null, null, false];
 }
@@ -362,7 +366,7 @@ if (isAuthenticated() && !empty($_SESSION['user_id'])) {
 
 $subnav = array_values(array_filter([
     ['overview', $isEs ? 'Vistazo' : 'Overview', true],
-    ['tours', 'Tours', true],
+    ['tours', 'Tours', !$accessBookingUnconfirmed],
     ['about', $isEs ? 'Sobre' : 'About', !empty($aboutParas)],
     ['tips', $isEs ? 'Consejos' : 'Tips', !empty($tipList)],
     ['photos', $isEs ? 'Fotos' : 'Photos', true],
@@ -371,7 +375,9 @@ $subnav = array_values(array_filter([
     ['faq', $isEs ? 'Preguntas' : 'FAQ', !empty($faqs)],
 ], fn($i) => $i[2]));
 ?>
-<div class="rd rd-beach">
+<div class="rd rd-beach" data-bf-beach-id="<?= h($beach['id']) ?>"
+     data-bf-beach-slug="<?= h($beach['slug']) ?>"
+     data-bf-municipality="<?= h($beach['municipality']) ?>" data-bf-source="beach_detail">
 
 <header class="hero">
   <?php if (!empty($beach['cover_image'])): ?>
@@ -384,7 +390,7 @@ $subnav = array_values(array_filter([
   <div class="hero-photo hero-photo-fallback"></div>
   <?php endif; ?>
   <div class="hero-scrim"></div>
-  <?php if ($isBoat): ?><div class="h-sticker">solo en bote<small>boat access only</small></div><?php endif; ?>
+  <?php if ($isBoat && !$accessBookingUnconfirmed): ?><div class="h-sticker">solo en bote<small>boat access only</small></div><?php endif; ?>
   <?php if (!empty($beach['place_id'])): ?>
   <button type="button" class="hero-photos-pill" data-action="openGooglePhotos" data-action-args='["<?= h($beach['slug']) ?>"]'>📷 <?= h($isEs ? 'Ver fotos' : 'View photos') ?></button>
   <?php endif; ?>
@@ -411,10 +417,10 @@ $subnav = array_values(array_filter([
     <?php endif; ?>
     <div class="h-command">
       <div class="h-actions">
-        <?php if ($isBoat): ?>
+        <?php if ($isBoat && !$accessBookingUnconfirmed): ?>
         <a class="btn coral" href="#tours" data-bf-track="hero-tours">⛵ <?= h($isEs ? 'Ver tours' : 'See tours') ?></a>
         <?php else: ?>
-        <a class="btn coral" href="<?= h($dirUrl) ?>" target="_blank" rel="noopener" data-bf-track="directions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 3 21l9-4 9 4z"/></svg><?= h($isEs ? 'Cómo llegar' : 'Directions') ?></a>
+        <a class="btn coral" href="<?= h($dirUrl) ?>" target="_blank" rel="noopener" data-bf-track="directions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 3 21l9-4 9 4z"/></svg><?= h($accessBookingUnconfirmed ? ($isEs ? 'Planifica tu visita' : 'Plan your visit') : ($isEs ? 'Cómo llegar' : 'Directions')) ?></a>
         <?php endif; ?>
         <button class="btn" type="button" id="sticky-favorite-btn"
                 data-action="toggleStickyFavorite"
@@ -437,6 +443,7 @@ $subnav = array_values(array_filter([
 <div class="wrap" style="margin-top:18px"><?= $beachReferralHero ?></div>
 <?php endif; ?>
 
+<div class="wrap"><?php if (is_file(APP_ROOT . "/components/visit-planner.php")) include APP_ROOT . "/components/visit-planner.php"; ?></div>
 <div class="wrap"><div class="body">
   <main>
     <section id="overview" class="block">
@@ -466,7 +473,7 @@ $subnav = array_values(array_filter([
         <?php endif; ?>
         <div class="glance-plan">
           <?php if ($gettingBody !== ''): ?>
-          <div class="gplan"><div class="k"><span class="ic" aria-hidden="true"><?= $isBoat ? '🛥️' : '🧭' ?></span><?= h($isEs ? 'Cómo llegar' : 'Getting there') ?></div><p><?= h($gettingBody) ?><?php if ($isBoat): ?> <a class="more" href="#tours"><?= h($isEs ? 'Ver tours →' : 'See tours →') ?></a><?php endif; ?></p></div>
+          <div class="gplan"><div class="k"><span class="ic" aria-hidden="true"><?= $isBoat ? '🛥️' : '🧭' ?></span><?= h($isEs ? 'Cómo llegar' : 'Getting there') ?></div><p><?= h($gettingBody) ?><?php if ($isBoat && !$accessBookingUnconfirmed): ?> <a class="more" href="#tours"><?= h($isEs ? 'Ver tours →' : 'See tours →') ?></a><?php endif; ?></p></div>
           <?php endif; ?>
           <?php if ($bestTime !== ''): ?>
           <div class="gplan"><div class="k"><span class="ic" aria-hidden="true">📅</span><?= h($isEs ? 'Mejor época' : 'Best time') ?></div><p><?= h($firstSentence($bestTime)) ?></p></div>
@@ -683,17 +690,22 @@ $subnav = array_values(array_filter([
 </div></div>
 
 <?php // Mobile-only sticky action bar — appears once the hero actions scroll away ?>
-<div class="mob-actionbar" id="mob-actionbar">
-  <?php if ($isBoat): ?>
+<div class="mob-actionbar" id="mob-actionbar" data-bf-beach-id="<?= h($beach['id']) ?>"
+     data-bf-beach-slug="<?= h($beach['slug']) ?>" data-bf-source="beach_mobile_actions">
+  <?php if ($isBoat && !$accessBookingUnconfirmed): ?>
   <a class="btn coral" href="#tours" data-bf-track="sticky-tours">⛵ <?= h($isEs ? 'Ver tours' : 'See tours') ?></a>
   <?php else: ?>
-  <a class="btn coral" href="<?= h($dirUrl) ?>" target="_blank" rel="noopener" data-bf-track="directions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 3 21l9-4 9 4z"/></svg><?= h($isEs ? 'Cómo llegar' : 'Directions') ?></a>
+  <a class="btn coral" href="<?= h($dirUrl) ?>" target="_blank" rel="noopener" data-bf-track="directions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 3 21l9-4 9 4z"/></svg><?= h($accessBookingUnconfirmed ? ($isEs ? 'Planifica tu visita' : 'Plan your visit') : ($isEs ? 'Cómo llegar' : 'Directions')) ?></a>
   <?php endif; ?>
   <button class="btn save" type="button" id="mob-fav-btn"
           aria-pressed="<?= $isFavorite ? 'true' : 'false' ?>"
           aria-label="<?= h($isEs ? 'Guardar' : 'Save') ?>">
     <span id="mob-fav-icon" aria-hidden="true"><?= $isFavorite ? '❤️' : '🤍' ?></span>
+    <?= h($isEs ? 'Guardar' : 'Save') ?>
   </button>
+  <?php if ($nearby): ?>
+  <a class="btn" href="#nearby" data-bf-track="nearby"><?= h($isEs ? 'Cercanas' : 'Nearby') ?></a>
+  <?php endif; ?>
 </div>
 
 </div>

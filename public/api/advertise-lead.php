@@ -105,6 +105,11 @@ if (!$stored) {
     advertisingLeadRedirect($back, 'error=server');
 }
 
+require_once APP_ROOT . '/inc/analytics.php';
+queueAnalyticsOutcome('generate_lead', [
+    'source' => 'advertise', 'package_slug' => $packageSlug, 'category' => $category,
+]);
+
 advertisingAudit('lead', $leadId, 'created', null, [
     'package_slug' => $packageSlug,
     'category' => $category,

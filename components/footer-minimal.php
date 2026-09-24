@@ -16,6 +16,11 @@
     </footer>
     <?php endif; ?>
 
+    <script <?= cspNonceAttr() ?>>
+    window.BeachFinderMeta = { authenticated: <?= isAuthenticated() ? '1' : '0' ?> };
+    window.BF_CONFIG = Object.assign({}, window.BF_CONFIG || {}, { appEnv: <?= json_encode(appEnv()) ?> });
+    </script>
+    <script defer src="/assets/js/analytics.js?v=2.8" <?= cspNonceAttr() ?>></script>
     <!-- Minimal JS - only what's needed for auth pages -->
     <script <?= cspNonceAttr() ?>>
     // Toast notifications

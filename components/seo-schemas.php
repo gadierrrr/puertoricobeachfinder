@@ -143,6 +143,10 @@ function beachSchema(array $beach, $reviews = null): string {
         'publicAccess' => true
     ];
 
+    if (!empty($beach['practical_reviewed_at'])) {
+        unset($schema['isAccessibleForFree'], $schema['publicAccess']);
+    }
+
     // Add image with ImageObject wrapper (includes dimensions)
     if (!empty($beach['cover_image'])) {
         $schema['image'] = imageObjectSchema(getBeachImageUrl($beach, 'large'), $beach['name']);
@@ -524,6 +528,10 @@ function touristAttractionSchema(array $beach): string {
         'publicAccess' => true
     ];
 
+    if (!empty($beach['practical_reviewed_at'])) {
+        unset($schema['isAccessibleForFree'], $schema['publicAccess']);
+    }
+
     // Add image with ImageObject wrapper
     if (!empty($beach['cover_image'])) {
         $schema['image'] = imageObjectSchema(getBeachImageUrl($beach, 'large'), $beach['name']);
@@ -546,6 +554,24 @@ function generateBeachFAQs(array $beach): array {
     $amenities = $beach['amenities'] ?? [];
     $lang = function_exists('getCurrentLanguage') ? getCurrentLanguage() : 'en';
     $isEs = ($lang === 'es');
+
+    if (!empty($beach['practical_reviewed_at'])) {
+        $suffix = $isEs ? '_es' : '';
+        $value = static fn(string $key): string => trim((string) ($beach[$key . $suffix] ?? $beach[$key] ?? ''));
+        return [
+            ['question' => $isEs ? "¿Cómo planifico una visita a {$name}?" : "How do I plan a visit to {$name}?",
+             'answer' => $value('description')],
+            ['question' => $isEs ? '¿Qué debo comprobar antes de nadar?' : 'What should I check before swimming?',
+             'answer' => $value('safety_info')],
+            ['question' => $isEs ? '¿Qué servicios están disponibles?' : 'What facilities are available?',
+             'answer' => $value('local_tips')],
+            ['question' => $isEs ? '¿Se han confirmado las tarifas de estacionamiento?' : 'Are parking fees confirmed?',
+             'answer' => $value('parking_details')],
+            ['question' => $isEs ? '¿Cuándo se revisó esta información?' : 'When was this information reviewed?',
+             'answer' => ($isEs ? 'Fuentes en línea consultadas el ' : 'Online sources checked on ') . $beach['practical_reviewed_at'] .
+                ($isEs ? '. No es una inspección presencial. Confirma horarios y servicios actuales.' : '. This is not an on-site inspection. Confirm current hours and services.')],
+        ];
+    }
 
     // Location FAQ
     $faqs[] = [

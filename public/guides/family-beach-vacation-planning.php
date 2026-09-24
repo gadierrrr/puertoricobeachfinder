@@ -18,7 +18,7 @@ $content = loadGuideContent('family-beach-vacation-planning');
 $pageTitle = __('guide_family.title');
 $pageDescription = __('guide_family.description');
 
-$family_beaches = query("SELECT id, name, municipality, slug FROM beaches WHERE id IN (SELECT beach_id FROM beach_amenities WHERE amenity IN ('lifeguards','restrooms','showers')) LIMIT 5");
+$family_beaches = query("SELECT id, name, municipality, slug FROM beaches WHERE publish_status = 'published' AND id IN (SELECT beach_id FROM beach_amenities WHERE amenity IN ('lifeguard','restrooms','showers')) LIMIT 5");
 $familyMapBeachIds = array_values(array_filter(array_map(static function ($id): string {
     if (!is_scalar($id)) {
         return '';

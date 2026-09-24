@@ -63,7 +63,7 @@ function _faqTagUrl(string $enSlug, string $lang, array $esMap): string {
                 </summary>
                 <div class="px-5 pb-4 text-sm text-warm-700 leading-relaxed">
                     <?= h($faq['answer']) ?>
-                    <?php if ($i === 0): // Location FAQ — link to municipality page ?>
+                    <?php if ($i === 0 && empty($beach['practical_reviewed_at'])): // Location FAQ — link to municipality page ?>
                     <p class="mt-2 text-xs">
                         <a href="<?= h($municipalityUrl) ?>" class="text-ocean-600 hover:text-ocean-700 underline">
                             <?= $isEs
@@ -71,7 +71,7 @@ function _faqTagUrl(string $enSlug, string $lang, array $esMap): string {
                                 : 'See all beaches in ' . h($beach['municipality']) ?>
                         </a>
                     </p>
-                    <?php elseif ($i === 1): // Swimming FAQ — link to swimming/calm-waters page
+                    <?php elseif ($i === 1 && empty($beach['practical_reviewed_at'])): // Swimming FAQ — link to swimming/calm-waters page
                         $swimTag = in_array('calm-waters', $tags) ? 'calm-waters' : 'swimming';
                         if (isset($tagPageSlugs[$swimTag])):
                             $swimUrl = _faqTagUrl($tagPageSlugs[$swimTag], $lang, $tagPageSlugsEs);
@@ -84,7 +84,7 @@ function _faqTagUrl(string $enSlug, string $lang, array $esMap): string {
                         </a>
                     </p>
                     <?php endif;
-                    elseif ($i === 2): // Facilities FAQ — link to amenity pages
+                    elseif ($i === 2 && empty($beach['practical_reviewed_at'])): // Facilities FAQ — link to amenity pages
                         $facilityLinks = [];
                         foreach ($amenities as $a) {
                             if (isset($amenityPageSlugs[$a]) && count($facilityLinks) < 2) {

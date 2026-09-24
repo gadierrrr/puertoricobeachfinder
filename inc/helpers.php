@@ -2258,53 +2258,56 @@ function buildSameAsLinks(array $beach) {
  * @return array Array of guide objects with 'title', 'url', 'icon'
  */
 function getRelatedGuides($beachTags = [], $limit = 3) {
+    require_once __DIR__ . '/locale_routes.php';
+    $lang = function_exists('getCurrentLanguage') ? getCurrentLanguage() : 'en';
+
     // Guide mapping: tag => guide data
     $guideMap = [
         'surfing' => [
             'title' => function_exists('__') ? __('related_guides.surfing') : 'Puerto Rico Surfing Guide',
-            'url' => '/guides/surfing-guide',
+            'url' => routeUrl('guide_surfing', $lang),
             'icon' => 'waves',
             'priority' => 10
         ],
         'snorkeling' => [
             'title' => function_exists('__') ? __('related_guides.snorkeling') : 'Snorkeling in Puerto Rico',
-            'url' => '/guides/snorkeling-guide',
+            'url' => routeUrl('guide_snorkeling', $lang),
             'icon' => 'fish',
             'priority' => 10
         ],
-        'family' => [
+        'family-friendly' => [
             'title' => function_exists('__') ? __('related_guides.family') : 'Family Beach Vacation Planning',
-            'url' => '/guides/family-beach-vacation-planning',
+            'url' => routeUrl('guide_family_planning', $lang),
             'icon' => 'users',
             'priority' => 9
         ],
-        'photography' => [
+        'scenic' => [
             'title' => function_exists('__') ? __('related_guides.photography') : 'Beach Photography Tips',
-            'url' => '/guides/beach-photography-tips',
+            'url' => routeUrl('guide_photography', $lang),
             'icon' => 'camera',
             'priority' => 8
         ],
         'secluded' => [
             'title' => function_exists('__') ? __('related_guides.transport') : 'Getting to Puerto Rico Beaches',
-            'url' => '/guides/getting-to-puerto-rico-beaches',
+            'url' => routeUrl('guide_transportation', $lang),
             'icon' => 'map-pin',
             'priority' => 7
         ],
         'remote' => [
             'title' => function_exists('__') ? __('related_guides.transport') : 'Getting to Puerto Rico Beaches',
-            'url' => '/guides/getting-to-puerto-rico-beaches',
+            'url' => routeUrl('guide_transportation', $lang),
             'icon' => 'map-pin',
             'priority' => 7
         ],
         'wild' => [
             'title' => function_exists('__') ? __('related_guides.safety') : 'Beach Safety Tips',
-            'url' => '/guides/beach-safety-tips',
+            'url' => routeUrl('guide_safety', $lang),
             'icon' => 'shield',
             'priority' => 8
         ],
         'camping' => [
             'title' => function_exists('__') ? __('related_guides.packing') : 'Beach Packing List',
-            'url' => '/guides/beach-packing-list',
+            'url' => routeUrl('guide_packing', $lang),
             'icon' => 'backpack',
             'priority' => 6
         ]
@@ -2314,19 +2317,19 @@ function getRelatedGuides($beachTags = [], $limit = 3) {
     $universalGuides = [
         [
             'title' => function_exists('__') ? __('related_guides.best_time') : 'Best Time to Visit Puerto Rico Beaches',
-            'url' => '/guides/best-time-visit-puerto-rico-beaches',
+            'url' => routeUrl('guide_best_time', $lang),
             'icon' => 'calendar',
             'priority' => 5
         ],
         [
             'title' => function_exists('__') ? __('related_guides.packing') : 'Beach Packing List',
-            'url' => '/guides/beach-packing-list',
+            'url' => routeUrl('guide_packing', $lang),
             'icon' => 'backpack',
             'priority' => 4
         ],
         [
             'title' => function_exists('__') ? __('related_guides.safety') : 'Beach Safety Tips',
-            'url' => '/guides/beach-safety-tips',
+            'url' => routeUrl('guide_safety', $lang),
             'icon' => 'shield',
             'priority' => 3
         ]
@@ -2335,8 +2338,12 @@ function getRelatedGuides($beachTags = [], $limit = 3) {
     $relatedGuides = [];
     $usedUrls = []; // Track to avoid duplicates
 
+    // Keep older tag aliases working while matching the current vocabulary.
+    $tagAliases = ['family' => 'family-friendly', 'photography' => 'scenic'];
+
     // Match tag-specific guides
     foreach ($beachTags as $tag) {
+        $tag = $tagAliases[$tag] ?? $tag;
         if (isset($guideMap[$tag])) {
             $guide = $guideMap[$tag];
             if (!in_array($guide['url'], $usedUrls)) {
@@ -2381,6 +2388,7 @@ function getAccessLabelTranslated(string $label): string {
     if (!function_exists('getCurrentLanguage') || getCurrentLanguage() !== 'es') return $label;
 
     static $map = [
+        'Confirm access' => 'Confirma el acceso',
         '10-min walk' => 'caminata de 10 min',
         '4×4 track & hike' => 'camino 4×4 y caminata',
         'Easy Access' => 'Acceso fácil',
@@ -2488,6 +2496,11 @@ function getLocalizedTagPageUrl(string $tag, string $lang = 'en'): string {
  * Used by the "At a Glance" component for GEO optimization.
  */
 function generateAtAGlanceSummary(array $beach, string $lang = 'en'): string {
+    if (!empty($beach['practical_reviewed_at'])) {
+        $reviewEs = $lang === 'es';
+        return (string) ($reviewEs ? ($beach['description_es'] ?? $beach['description'] ?? '') : ($beach['description'] ?? ''));
+    }
+
     $name = $beach['name'] ?? 'This beach';
     $muni = $beach['municipality'] ?? 'Puerto Rico';
     $tags = $beach['tags'] ?? [];
@@ -2570,7 +2583,7 @@ function generateAtAGlanceSummary(array $beach, string $lang = 'en'): string {
 
     // Lifeguard note
     $lifeguardStr = !empty($beach['has_lifeguard'])
-        ? ($isEs ? ' Hay salvavidas de turno.' : ' A lifeguard is on duty.')
+        ? ($isEs ? ' Se indica servicio de salvavidas; confirma si está disponible al llegar.' : ' Lifeguard service is listed; confirm availability when you arrive.')
         : '';
 
     $summary = $isEs
@@ -2591,12 +2604,16 @@ function analyticsContentGroup(): string {
 
     if ($path === '/' || $path === '/es') return 'home';
 
+    if (preg_match('#^/(auth(?:/|$)|login(?:\\.php)?$|verify(?:\\.php)?$|es/(iniciar-sesion|verificar)$)#', $path)) return 'auth';
+    if ($path === '/advertise') return 'advertise';
+
     $buckets = [
         'beach'        => ['/beach/', '/es/playa/'],
         'municipality' => ['/beaches-in-', '/es/playas-en-', '/municipality'],
         'proximity'    => ['/beaches-near', '/es/playas-cerca'],
         'collection'   => ['/best-', '/es/mejores-', '/hidden-beaches', '/es/playas-escondidas'],
         'guide'        => ['/guides', '/es/guias'],
+        'tag'          => ['/beaches/', '/es/playas/'],
     ];
     foreach ($buckets as $group => $prefixes) {
         foreach ($prefixes as $prefix) {

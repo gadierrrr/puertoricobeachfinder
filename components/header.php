@@ -25,6 +25,8 @@ $user = currentUser();
 $appName = $_ENV['APP_NAME'] ?? 'Beach Finder';
 $appUrl = getPublicBaseUrl();
 $currentLang = getCurrentLanguage();
+require_once APP_ROOT . '/inc/analytics.php';
+$analyticsOutcomes = takeAnalyticsOutcomes();
 $allowedBodyVariants = ['default', 'collection-light', 'collection-dark'];
 $requestedBodyVariant = isset($bodyVariant) ? (string) $bodyVariant : 'default';
 $bodyVariant = in_array($requestedBodyVariant, $allowedBodyVariants, true) ? $requestedBodyVariant : 'default';
@@ -46,6 +48,9 @@ if ($bodyVariant === 'collection-light') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script <?= cspNonceAttr() ?>>
+        window.BF_OUTCOME_EVENTS = <?= json_encode($analyticsOutcomes, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
+    </script>
     <title><?php
         if (isset($pageTitle)) {
             // A hand-written SEO title override is rendered verbatim; otherwise
@@ -280,9 +285,25 @@ if ($bodyVariant === 'collection-light') {
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
+        // Label explicit tests without deleting historical traffic or guessing
+        // that every visitor from a particular country is automated.
+        window.BF_ANALYTICS_INTERNAL = <?= appEnv() !== 'prod' ? 'true' : 'false' ?>
+            || navigator.webdriver === true
+            || new URLSearchParams(location.search).has('bf_analytics_probe')
+            || new URLSearchParams(location.search).has('design');
+        if (window.BF_ANALYTICS_INTERNAL) {
+            gtag('set', { traffic_type: 'internal', debug_mode: true });
+        }
         gtag('set', 'user_properties', { auth_status: '<?= $gaUserId !== '' ? 'authenticated' : 'anonymous' ?>' });
         gtag('config', '<?= h($gaMeasurementId) ?>', {
-            content_group: '<?= h($gaContentGroup) ?>'<?php if ($gaUserId !== ''): ?>,
+            content_group: '<?= h($gaContentGroup) ?>',
+            // Auth return URLs and verification tokens must not reach GA.
+            page_location: (function () {
+                var url = new URL(location.href);
+                ['token', 'code', 'state', 'redirect', 'email', 'ref'].forEach(function (key) { url.searchParams.delete(key); });
+                url.hash = '';
+                return url.toString();
+            })()<?php if ($gaUserId !== ''): ?>,
             user_id: '<?= h($gaUserId) ?>'<?php endif; ?>
         });
     </script>
