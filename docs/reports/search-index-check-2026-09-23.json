@@ -1,0 +1,727 @@
+{
+  "checked_at_utc": "2026-09-24T00:44:23.475593+00:00",
+  "scope": "26 URLs listed as submitted URL marked noindex in Google Search Console; supplied last crawls were March/April and report date September 20. Live unauthenticated HTTP check only; does not confirm Google indexing.",
+  "method": {
+    "http_method": "GET",
+    "client": "curl",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+    "max_concurrency": 3,
+    "note": "Default Python urllib user-agent returned 403 for initial robots/sitemap/diving probes. Browser user-agent curl results are recorded below; no authenticated cookies or challenges used."
+  },
+  "robots_txt": {
+    "url": "https://www.puertoricobeachfinder.com/robots.txt",
+    "status": 200,
+    "effective_url": "https://www.puertoricobeachfinder.com/robots.txt",
+    "redirect_count": 0,
+    "chain": [
+      {
+        "status": 200,
+        "location": []
+      }
+    ],
+    "x_robots_tag": []
+  },
+  "sitemaps": [
+    {
+      "url": "https://www.puertoricobeachfinder.com/sitemap.xml",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/sitemap.xml",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "type": "urlset",
+      "url_count": 1940
+    }
+  ],
+  "sitemap_url_count": 1511,
+  "summary": {
+    "checked": 26,
+    "status_200": 26,
+    "noindex_present": 0,
+    "in_sitemap": 26,
+    "currently_indexable_by_checked_signals": 26
+  },
+  "urls": [
+    {
+      "url": "https://www.puertoricobeachfinder.com/beaches/diving",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/beaches/diving",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Best Diving Beaches in Puerto Rico | 18+ Dive Sites | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/beaches/diving"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/es/playas/snorkel",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/es/playas/snorkel",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Mejores Playas para Hacer Snorkel en Puerto Rico | 95+ Spots | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/es/playas/snorkel"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/es/playas/con-comida",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/es/playas/con-comida",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Playas con Comida y Restaurantes en Puerto Rico | 90+ Playas | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/es/playas/con-comida"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/beaches/camping",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/beaches/camping",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Camping Beaches in Puerto Rico | Beach Camping Guide | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/beaches/camping"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/es/playas/pesca",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/es/playas/pesca",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Mejores Playas de Pesca en Puerto Rico | 67+ Lugares | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/es/playas/pesca"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/es/playas/aguas-tranquilas",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/es/playas/aguas-tranquilas",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Playas de Aguas Tranquilas en Puerto Rico | 105+ Playas | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/es/playas/aguas-tranquilas"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/beaches/with-picnic-areas",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/beaches/with-picnic-areas",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Beaches with Picnic Areas in Puerto Rico | 42+ Beaches | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/beaches/with-picnic-areas"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/beaches/with-restrooms",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/beaches/with-restrooms",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Beaches with Restrooms in Puerto Rico | 62+ Beaches | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/beaches/with-restrooms"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/es/playas/con-banos",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/es/playas/con-banos",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Playas con Ba\u00f1os en Puerto Rico | 62+ Playas | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/es/playas/con-banos"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/es/playas/con-areas-picnic",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/es/playas/con-areas-picnic",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Playas con \u00c1reas de Picnic en Puerto Rico | 42+ Playas | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/es/playas/con-areas-picnic"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/es/playas/familiares",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/es/playas/familiares",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Playas Familiares en Puerto Rico | 155+ Playas para Ni\u00f1os | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/es/playas/familiares"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/es/playas/aisladas",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/es/playas/aisladas",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Playas Aisladas en Puerto Rico | 121+ Playas Escondidas | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/es/playas/aisladas"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/es/playas/accesibles",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/es/playas/accesibles",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Playas Accesibles en Puerto Rico | Sillas de Ruedas y Movilidad | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/es/playas/accesibles"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/beaches-near-mayaguez",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/beaches-near-mayaguez",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Beaches Near Mayag\u00fcez, Puerto Rico | 65 Beaches Within 25km | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/beaches-near-mayaguez"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/es/playas-cerca-de-mayaguez",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/es/playas-cerca-de-mayaguez",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Playas Cerca de Mayag\u00fcez, Puerto Rico | 65 Playas | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/es/playas-cerca-de-mayaguez"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/beaches-near-cabo-rojo",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/beaches-near-cabo-rojo",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Beaches Near Cabo Rojo, Puerto Rico | 46 Beaches Within 20km | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/beaches-near-cabo-rojo"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/beaches-near-ponce",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/beaches-near-ponce",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Beaches Near Ponce, Puerto Rico | 22 Beaches Within 25km | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/beaches-near-ponce"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/beaches-near-fajardo",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/beaches-near-fajardo",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Beaches Near Fajardo, Puerto Rico | 32 Beaches Within 20km | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/beaches-near-fajardo"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/es/playas-cerca-de-fajardo",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/es/playas-cerca-de-fajardo",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Playas Cerca de Fajardo, Puerto Rico | 32 Playas | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/es/playas-cerca-de-fajardo"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/beaches-near-aguadilla",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/beaches-near-aguadilla",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Beaches Near Aguadilla, Puerto Rico | 82 Beaches Within 20km | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/beaches-near-aguadilla"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/es/playas-cerca-de-vega-baja",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/es/playas-cerca-de-vega-baja",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Playas Cerca de Vega Baja, Puerto Rico | 59 Playas | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/es/playas-cerca-de-vega-baja"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/es/playas-cerca-de-aguadilla",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/es/playas-cerca-de-aguadilla",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Playas Cerca de Aguadilla, Puerto Rico | 82 Playas | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/es/playas-cerca-de-aguadilla"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/es/playas-cerca-de-cabo-rojo",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/es/playas-cerca-de-cabo-rojo",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Playas Cerca de Cabo Rojo, Puerto Rico | 46 Playas | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/es/playas-cerca-de-cabo-rojo"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/beaches/with-showers",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/beaches/with-showers",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Beaches with Showers in Puerto Rico | 32+ Beaches | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/beaches/with-showers"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/es/playas-cerca-de-ponce",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/es/playas-cerca-de-ponce",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Playas Cerca de Ponce, Puerto Rico | 22 Playas | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/es/playas-cerca-de-ponce"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    },
+    {
+      "url": "https://www.puertoricobeachfinder.com/beaches-near-vega-baja",
+      "status": 200,
+      "effective_url": "https://www.puertoricobeachfinder.com/beaches-near-vega-baja",
+      "redirect_count": 0,
+      "chain": [
+        {
+          "status": 200,
+          "location": []
+        }
+      ],
+      "x_robots_tag": [],
+      "title": "Beaches Near Vega Baja, Puerto Rico | 59 Beaches Within 20km | Puerto Rico Beach Finder",
+      "meta_robots": {
+        "robots": [
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        ]
+      },
+      "canonicals": [
+        "https://www.puertoricobeachfinder.com/beaches-near-vega-baja"
+      ],
+      "in_sitemap": true,
+      "robots_txt_allows_googlebot": true,
+      "noindex_present": false,
+      "currently_indexable_by_checked_signals": true
+    }
+  ]
+}

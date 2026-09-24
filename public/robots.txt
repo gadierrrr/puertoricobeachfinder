@@ -49,34 +49,59 @@ Disallow: /ad-out
 Disallow: /local-out
 Disallow: /guides/cms-router.php
 
-# Allow specific API for rich results
+# Keep the beach-list API available when crawlers render the directory.
+# The query exception also wins over the public-page facet rules below.
 Allow: /api/beaches.php
+Allow: /api/beaches.php?*=
 
-# Allow landing pages
-Allow: /best-beaches
-Allow: /best-snorkeling-beaches
-Allow: /best-surfing-beaches
-Allow: /best-family-beaches
-Allow: /beaches-near-san-juan
-Allow: /beaches-in-*
-
-# Allow AI crawlers info files
-Allow: /llms.txt
-Allow: /llms-full.txt
-
-# Block parameter URLs from crawl budget
+# Public pages, assets, sitemap, feed, and AI info files are allowed by /.
+# Avoid longer public-path Allow rules: they override shorter facet blocks.
+# Match each filter as either the first parameter or a later parameter.
+# Delimiters prevent accidental matches on unrelated names such as otherq=.
 Disallow: /*?municipality=
-Disallow: /*?tags[]=
+Disallow: /*?*&municipality=
 Disallow: /*?sort=
-Disallow: /*?page=
-# Design-variant preview override (canonical already strips it)
+Disallow: /*?*&sort=
+Disallow: /*?q=
+Disallow: /*?*&q=
+Disallow: /*?view=
+Disallow: /*?*&view=
+Disallow: /*?collection=
+Disallow: /*?*&collection=
+Disallow: /*?include_all=
+Disallow: /*?*&include_all=
+Disallow: /*?activity=
+Disallow: /*?*&activity=
+Disallow: /*?has_lifeguard=
+Disallow: /*?*&has_lifeguard=
+Disallow: /*?limit=
+Disallow: /*?*&limit=
 Disallow: /*?design=
+Disallow: /*?*&design=
+
+# PHP and URLSearchParams emit array filters in several equivalent forms.
+# A bracket prefix covers both empty [] and numbered [0] array keys.
+Disallow: /*?tags=
+Disallow: /*?*&tags=
+Disallow: /*?tags[
+Disallow: /*?*&tags[
+Disallow: /*?tags%5B
+Disallow: /*?*&tags%5B
+Disallow: /*?tags%5b
+Disallow: /*?*&tags%5b
+Disallow: /*?amenities=
+Disallow: /*?*&amenities=
+Disallow: /*?amenities[
+Disallow: /*?*&amenities[
+Disallow: /*?amenities%5B
+Disallow: /*?*&amenities%5B
+Disallow: /*?amenities%5b
+Disallow: /*?*&amenities%5b
+
+# Unfiltered pagination remains crawlable. Removing the longer public Allows
+# would otherwise make the old page= block apply to previously allowed pages.
+# Pagination combined with a filter is still blocked by that filter's rule.
+# Invalid-page responses and pagination canonicals need a separate review.
 
 # Sitemap location
 Sitemap: https://www.puertoricobeachfinder.com/sitemap.xml
-
-# Tag/amenity landing pages
-Allow: /beaches/
-
-# RSS Feed
-Allow: /feed.xml

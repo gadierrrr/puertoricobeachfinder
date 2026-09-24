@@ -1,0 +1,1567 @@
+{
+  "audit_date": "2026-09-14",
+  "scope": "Audit and desk research only; no production content or database changes.",
+  "selection": {
+    "method": "Historical Search Console priority cohort from migration 035",
+    "source": "migrations/035-seo-content-top20.php",
+    "limitation": "20 highest-impression/low-CTR targets according to migration commentary; underlying export and date range unavailable. Not a verified current top-20 traffic ranking. List order is not traffic rank.",
+    "current_traffic_available": false
+  },
+  "status_definitions": {
+    "source_listed": "Source supports the statement; not firsthand or current operational confirmation.",
+    "lead_only": "Useful lead with insufficient corroboration or authority.",
+    "identity_review": "Place or sector matching unresolved.",
+    "conflicting": "Sources or site sections disagree; no settled fact.",
+    "historical_only": "Dated context; cannot establish current service/price.",
+    "historical_warning": "Dated warning requiring current authority follow-up.",
+    "not_confirmed": "Not established by this research; does not mean absent."
+  },
+  "sources": {
+    "carolina": {
+      "title": "Discover Puerto Rico — Balneario de Carolina",
+      "url": "https://www.discoverpuertorico.com/es/profile/balneario-de-carolina/7704",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "carolina-fee": {
+      "title": "Municipality of Carolina — August 2023 magazine",
+      "url": "https://www.municipiocarolina.com/wp-content/uploads/2023/10/REVISTA3-AGOSTO-LR.pdf",
+      "type": "municipal_publication",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": "2023-08",
+      "limitations": "Historical $5 parking reference only; not a current tariff."
+    },
+    "carolina-facilities": {
+      "title": "Discover Puerto Rico — Things to Do in Carolina",
+      "url": "https://www.discoverpuertorico.com/article/things-to-do-carolina",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": "2026-08-25",
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "isla": {
+      "title": "Discover Puerto Rico — Isla Verde beach",
+      "url": "https://www.discoverpuertorico.com/es/profile/isla-verde-beach/9457",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "vega": {
+      "title": "Discover Puerto Rico — Vega Baja",
+      "url": "https://www.discoverpuertorico.com/regions/north/vega-baja",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "vega-alias": {
+      "title": "Metropistas — Vega Baja",
+      "url": "https://www.metropistas.com/kilometro-a-kilometro/vega-baja/",
+      "type": "transport_operator",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "jungla": {
+      "title": "Mi Guánica — Playa La Jungla",
+      "url": "https://miguanica.com/listing/playa-la-jungla-guanica-puerto-rico/",
+      "type": "local_guide",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Undated local guide; route observations need confirmation. Not established as the beach operator."
+    },
+    "jungla-map": {
+      "title": "Waze — Playa La Jungla",
+      "url": "https://www.waze.com/live-map/directions/playa-la-jungla-playa-santa-mangrove-guanica?to=place.w.192020659.1920468738.3024403",
+      "type": "map_listing",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Map listing; not authoritative operating hours or accessibility verification."
+    },
+    "cerro": {
+      "title": "Discover Puerto Rico — Vega Alta",
+      "url": "https://www.discoverpuertorico.com/regions/north/vega-alta",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "ojo": {
+      "title": "Puerto Rico Day Trips — Ojo de Agua",
+      "url": "https://www.puertoricodaytrips.com/ojo-agua-vega-baja/",
+      "type": "firsthand_travel_article",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Visit date not established. Printed date is not a verification date. Describes a freshwater spring, not proof of the identity of our beach coordinates."
+    },
+    "picuas": {
+      "title": "YogaSlackers — Kiteboarding in Las Picuas",
+      "url": "https://yogaslackers.com/blog/kiteboarding-in-las-picuas/",
+      "type": "activity_operator",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Search-index text reviewed; direct fetch failed. Describes limited informal parking, not permission to park."
+    },
+    "cana": {
+      "title": "Discover Puerto Rico — Balneario Caña Gorda",
+      "url": "https://www.discoverpuertorico.com/profile/balneario-cana-gorda/9009",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "seven": {
+      "title": "Discover Puerto Rico — Balneario Seven Seas",
+      "url": "https://www.discoverpuertorico.com/profile/balneario-seven-seas/9043",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "escondida": {
+      "title": "Discover Puerto Rico — Playa Escondida Fajardo",
+      "url": "https://www.discoverpuertorico.com/profile/playa-escondida-fajardo/8939",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "boqueron": {
+      "title": "Balneario de Boquerón website",
+      "url": "https://balnearioboqueron.com/",
+      "type": "venue_website",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Website describes municipal management; ownership and currency of posted schedule not independently authenticated."
+    },
+    "boqueron-tourism": {
+      "title": "Discover Puerto Rico — Cabo Rojo",
+      "url": "https://www.discoverpuertorico.com/regions/west/cabo-rojo",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "santa": {
+      "title": "Discover Puerto Rico — Qué hacer en Guánica",
+      "url": "https://www.discoverpuertorico.com/es/articulo/que-hacer-en-guanica",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": "2026-08-25",
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "coco": {
+      "title": "Hyatt Regency Grand Reserve — Hotel information",
+      "url": "https://www.hyatt.com/hyatt-regency/en-US/sjurc-hyatt-regency-grand-reserve-puerto-rico/hotel-info",
+      "type": "hotel_operator",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Establishes hotel address/contact only; does not establish a public beach entrance or non-guest parking rights."
+    },
+    "montones": {
+      "title": "Discover Puerto Rico — Best beaches",
+      "url": "https://www.discoverpuertorico.com/article/best-beaches-puerto-rico",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Publication/update date not established; checked online, not in person."
+    },
+    "black": {
+      "title": "Discover Puerto Rico — Rinconpaddleboards",
+      "url": "https://www.discoverpuertorico.com/profile/rinconpaddleboards/17082",
+      "type": "official_tourism",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Business directory listing; inventory, prices, meeting point and current operation require operator confirmation."
+    },
+    "dona": {
+      "title": "BeachAtlas — Playa Doña Lala",
+      "url": "https://www.beachatlas.com/es/na-lala",
+      "type": "secondary_directory",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Secondary directory only; not independent verification of parking or camping permission."
+    },
+    "cayo": {
+      "title": "Caribbean Compass — March 2021",
+      "url": "https://ufdcimages.uflib.ufl.edu/UF/00/09/56/27/00169/03-2021.pdf",
+      "type": "historical_travel_publication",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": "2021-03",
+      "limitations": "Historical anchorage/marina context; no confirmed current passenger service."
+    },
+    "muelle": {
+      "title": "Metro — Ports Authority warning about Muelle de Azúcar",
+      "url": "https://www.metro.pr/noticias/2025/03/17/instalaran-rotulos-para-advertir-peligrosidad-de-visitar-el-antiguo-muelle-de-azucar-en-aguadilla/",
+      "type": "news_reporting_authority_statement",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": "2025-03-17",
+      "limitations": "Reports an authority warning about unstable structure and underwater debris. Current access status not confirmed."
+    },
+    "punta": {
+      "title": "Apple Maps — Punta Bandera",
+      "url": "https://maps.apple.com/place?place-id=I572D2C19FA19F6A",
+      "type": "map_listing",
+      "checked_on": "2026-09-14",
+      "published_or_updated_on": null,
+      "limitations": "Lists Luquillo Beach Blvd; does not verify entrance, shoreline route, opening hours or parking."
+    }
+  },
+  "beaches": [
+    {
+      "slug": "playa-de-vega",
+      "name": "Playa de Vega / Puerto Nuevo",
+      "priority": "P0",
+      "page_url": "https://www.puertoricobeachfinder.com/beach/playa-de-vega",
+      "audit_date": "2026-09-14",
+      "audit_basis": "Public page text retrieved through web reader/search index; crawler age varies. Not a fresh browser session.",
+      "finding": "Parking section says free on most days; local tips say $5. History identifies Puerto Nuevo while nearby recommendations include Puerto Nuevo as a different beach. Capacity, adaptive equipment and lifeguard claims lack dated evidence.",
+      "checklist": [
+        "Resolve identity against Puerto Nuevo record and map pin.",
+        "Replace contradictory parking claims with one sourced tariff; confirm payment methods.",
+        "Confirm adaptive equipment reservation process, lifeguard schedule and entrance route."
+      ],
+      "researched_facts": [
+        {
+          "field": "identity",
+          "value": "Tourism sources identify Puerto Nuevo in Vega Baja; Metropistas explicitly pairs Balneario Puerto Nuevo with Playa Vega Baja.",
+          "status": "identity_review",
+          "source_ids": [
+            "vega",
+            "vega-alias"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Supports alias review, not an automatic merge of beach sectors."
+        }
+      ],
+      "research_query": "Playa Vega Baja Puerto Nuevo parking official",
+      "backup_candidate": {
+        "name": "Cerro Gordo",
+        "status": "editorial_candidate_not_verified",
+        "note": "Check route, opening and suitability before recommending; not a same-day safety substitute."
+      },
+      "coverage": {
+        "entrance_pin": "not_confirmed",
+        "parking_pin": "not_confirmed",
+        "parking_price": "not_confirmed",
+        "payment_methods": "not_confirmed",
+        "hours": "not_confirmed",
+        "walking_distance_surface": "not_confirmed",
+        "facilities": "not_confirmed",
+        "rentals": "not_confirmed",
+        "packing": "not_confirmed",
+        "backup": "candidate_only"
+      },
+      "packing_recommendation": {
+        "status": "editorial_advice",
+        "text": "Bring drinking water, sun protection and a rubbish bag. Confirm facilities and rentals before relying on them. This is packing advice, not evidence of absent services."
+      },
+      "unresolved_checks": [
+        "Exact entrance and parking coordinates/photos: not confirmed.",
+        "Payment methods and present-day prices: not confirmed.",
+        "Measured walking distance, stairs, ramps and usable restroom route: not confirmed.",
+        "Same-day staffing, closures, water quality and sea conditions: not verified."
+      ],
+      "field_verified": false,
+      "traffic_rank": null
+    },
+    {
+      "slug": "playa-la-jungla",
+      "name": "Playa La Jungla",
+      "priority": "P1",
+      "page_url": "https://www.puertoricobeachfinder.com/beach/playa-la-jungla",
+      "audit_date": "2026-09-14",
+      "audit_basis": "Public page text retrieved through web reader/search index; crawler age varies. Not a fresh browser session.",
+      "finding": "Page claims $2 per person and 7 AM–5 PM daily, while access is summarized as a short path. External route and hours accounts differ. Parking capacity of 20 vehicles is unsupported.",
+      "checklist": [
+        "Confirm gate operator, admission basis and last-entry time.",
+        "Verify unpaved approach and vehicle suitability after rain.",
+        "Measure walking alternative; confirm restrooms and rental providers."
+      ],
+      "researched_facts": [
+        {
+          "field": "approach",
+          "value": "Local guide describes an unpaved turn near the Punta Sombrero development after Playa Santa.",
+          "status": "lead_only",
+          "source_ids": [
+            "jungla"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Route and road condition need firsthand confirmation."
+        },
+        {
+          "field": "hours",
+          "value": "Guide lists weekday 9 AM–5 PM; Waze lists 7 AM–4:30 PM daily; our page lists 7 AM–5 PM.",
+          "status": "conflicting",
+          "source_ids": [
+            "jungla",
+            "jungla-map"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Do not publish any of these as verified hours."
+        }
+      ],
+      "research_query": "Playa La Jungla Guanica DRNA horario",
+      "backup_candidate": {
+        "name": "Playa Santa",
+        "status": "editorial_candidate_not_verified",
+        "note": "Check route, opening and suitability before recommending; not a same-day safety substitute."
+      },
+      "coverage": {
+        "entrance_pin": "not_confirmed",
+        "parking_pin": "not_confirmed",
+        "parking_price": "not_confirmed",
+        "payment_methods": "not_confirmed",
+        "hours": "see_researched_facts",
+        "walking_distance_surface": "not_confirmed",
+        "facilities": "not_confirmed",
+        "rentals": "not_confirmed",
+        "packing": "not_confirmed",
+        "backup": "candidate_only"
+      },
+      "packing_recommendation": {
+        "status": "editorial_advice",
+        "text": "Bring drinking water, sun protection and a rubbish bag. Confirm facilities and rentals before relying on them. This is packing advice, not evidence of absent services."
+      },
+      "unresolved_checks": [
+        "Exact entrance and parking coordinates/photos: not confirmed.",
+        "Payment methods and present-day prices: not confirmed.",
+        "Measured walking distance, stairs, ramps and usable restroom route: not confirmed.",
+        "Same-day staffing, closures, water quality and sea conditions: not verified."
+      ],
+      "field_verified": false,
+      "traffic_rank": null
+    },
+    {
+      "slug": "hobie-beach",
+      "name": "Hobie Beach",
+      "priority": "P1",
+      "page_url": "https://www.puertoricobeachfinder.com/beach/hobie-beach",
+      "audit_date": "2026-09-14",
+      "audit_basis": "Public page text retrieved through web reader/search index; crawler age varies. Not a fresh browser session.",
+      "finding": "Metered parking and $15–25 hotel garage rates are given without named lots. Rental activities have no named provider or booking conditions. Short path does not identify the entrance.",
+      "checklist": [
+        "Identify the precise Hobie/Alambique sector and public entrance.",
+        "Name the parking operator and verify fee/payment.",
+        "Confirm rental meeting point, minimum ages and equipment."
+      ],
+      "researched_facts": [
+        {
+          "field": "sector_context",
+          "value": "Official tourism distinguishes Alambique, Pine Grove and Balneario de Carolina within Isla Verde.",
+          "status": "source_listed",
+          "source_ids": [
+            "isla"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Does not establish Hobie alias or shared facilities."
+        }
+      ],
+      "research_query": "Hobie Beach Isla Verde official rentals parking",
+      "backup_candidate": {
+        "name": "Balneario de Carolina",
+        "status": "editorial_candidate_not_verified",
+        "note": "Check route, opening and suitability before recommending; not a same-day safety substitute."
+      },
+      "coverage": {
+        "entrance_pin": "not_confirmed",
+        "parking_pin": "not_confirmed",
+        "parking_price": "not_confirmed",
+        "payment_methods": "not_confirmed",
+        "hours": "not_confirmed",
+        "walking_distance_surface": "not_confirmed",
+        "facilities": "not_confirmed",
+        "rentals": "not_confirmed",
+        "packing": "not_confirmed",
+        "backup": "candidate_only"
+      },
+      "packing_recommendation": {
+        "status": "editorial_advice",
+        "text": "Bring drinking water, sun protection and a rubbish bag. Confirm facilities and rentals before relying on them. This is packing advice, not evidence of absent services."
+      },
+      "unresolved_checks": [
+        "Exact entrance and parking coordinates/photos: not confirmed.",
+        "Payment methods and present-day prices: not confirmed.",
+        "Measured walking distance, stairs, ramps and usable restroom route: not confirmed.",
+        "Same-day staffing, closures, water quality and sea conditions: not verified."
+      ],
+      "field_verified": false,
+      "traffic_rank": null
+    },
+    {
+      "slug": "balneario-de-carolina",
+      "name": "Balneario de Carolina",
+      "priority": "P1",
+      "page_url": "https://www.puertoricobeachfinder.com/beach/balneario-de-carolina",
+      "audit_date": "2026-09-14",
+      "audit_basis": "Public page text retrieved through web reader/search index; crawler age varies. Not a fresh browser session.",
+      "finding": "Parking and access are placeholders. Seasonal schedule is missing. FAQ promises lifeguards while overview asks visitors to confirm availability.",
+      "checklist": [
+        "Add attributed seasonal schedule and contact.",
+        "Confirm current parking price and payment.",
+        "Record gate pin, path length and facility operating hours."
+      ],
+      "researched_facts": [
+        {
+          "field": "hours",
+          "value": "May 15–August 15: daily 8 AM–6 PM. August 16–May 14: Tuesday–Sunday 8 AM–5 PM; Mondays closed except holidays.",
+          "status": "source_listed",
+          "source_ids": [
+            "carolina"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Current on-site operation not verified."
+        },
+        {
+          "field": "address",
+          "value": "Carretera 187, Carolina.",
+          "status": "source_listed",
+          "source_ids": [
+            "carolina"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Current on-site operation not verified."
+        },
+        {
+          "field": "contact",
+          "value": "787-791-2410; 787-757-2626.",
+          "status": "source_listed",
+          "source_ids": [
+            "carolina"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Current on-site operation not verified."
+        },
+        {
+          "field": "facilities",
+          "value": "Tourism article lists public bathrooms and parking; profile lists gazebo rental and food options.",
+          "status": "source_listed",
+          "source_ids": [
+            "carolina-facilities",
+            "carolina"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Current on-site operation not verified."
+        },
+        {
+          "field": "parking_price",
+          "value": "Municipal magazine listed $5 parking in 2023.",
+          "status": "historical_only",
+          "source_ids": [
+            "carolina-fee"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Current price and payment methods not confirmed."
+        }
+      ],
+      "research_query": "Balneario Carolina estacionamiento tarifa horario municipio",
+      "backup_candidate": {
+        "name": "Isla Verde Alambique sector",
+        "status": "editorial_candidate_not_verified",
+        "note": "Check route, opening and suitability before recommending; not a same-day safety substitute."
+      },
+      "coverage": {
+        "entrance_pin": "not_confirmed",
+        "parking_pin": "not_confirmed",
+        "parking_price": "see_researched_facts",
+        "payment_methods": "not_confirmed",
+        "hours": "see_researched_facts",
+        "walking_distance_surface": "not_confirmed",
+        "facilities": "see_researched_facts",
+        "rentals": "not_confirmed",
+        "packing": "not_confirmed",
+        "backup": "candidate_only"
+      },
+      "packing_recommendation": {
+        "status": "editorial_advice",
+        "text": "Bring drinking water, sun protection and a rubbish bag. Confirm facilities and rentals before relying on them. This is packing advice, not evidence of absent services."
+      },
+      "unresolved_checks": [
+        "Exact entrance and parking coordinates/photos: not confirmed.",
+        "Payment methods and present-day prices: not confirmed.",
+        "Measured walking distance, stairs, ramps and usable restroom route: not confirmed.",
+        "Same-day staffing, closures, water quality and sea conditions: not verified."
+      ],
+      "field_verified": false,
+      "traffic_rank": null
+    },
+    {
+      "slug": "balneario-cerro-gordo",
+      "name": "Balneario Cerro Gordo",
+      "priority": "P0",
+      "page_url": "https://www.puertoricobeachfinder.com/beach/balneario-cerro-gordo",
+      "audit_date": "2026-09-14",
+      "audit_basis": "Public page text retrieved through web reader/search index; crawler age varies. Not a fresh browser session.",
+      "finding": "Overview lists lifeguard service but packing section says no lifeguards. Access and parking are placeholders. Camping promoted without reservation details.",
+      "checklist": [
+        "Resolve lifeguard conflict in all sections.",
+        "Separate beach parking from upper trail parking.",
+        "Confirm vehicle fee, hours, camping availability and reservations."
+      ],
+      "researched_facts": [
+        {
+          "field": "parking",
+          "value": "Tourism page describes government parking and a second lot near upper trails.",
+          "status": "source_listed",
+          "source_ids": [
+            "cerro"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Current on-site operation not verified."
+        },
+        {
+          "field": "parking_price",
+          "value": "Tourism page lists vehicle entry at $4–$5 by vehicle size.",
+          "status": "source_listed",
+          "source_ids": [
+            "cerro"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Undated tariff; confirm before presenting as current."
+        },
+        {
+          "field": "facilities",
+          "value": "Bathrooms, showers, picnic tables, gazebos and food concessions are listed.",
+          "status": "source_listed",
+          "source_ids": [
+            "cerro"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Current on-site operation not verified."
+        }
+      ],
+      "research_query": "Cerro Gordo Vega Alta parking facilities official",
+      "backup_candidate": {
+        "name": "Puerto Nuevo, Vega Baja",
+        "status": "editorial_candidate_not_verified",
+        "note": "Check route, opening and suitability before recommending; not a same-day safety substitute."
+      },
+      "coverage": {
+        "entrance_pin": "not_confirmed",
+        "parking_pin": "not_confirmed",
+        "parking_price": "see_researched_facts",
+        "payment_methods": "not_confirmed",
+        "hours": "not_confirmed",
+        "walking_distance_surface": "not_confirmed",
+        "facilities": "see_researched_facts",
+        "rentals": "not_confirmed",
+        "packing": "not_confirmed",
+        "backup": "candidate_only"
+      },
+      "packing_recommendation": {
+        "status": "editorial_advice",
+        "text": "Bring drinking water, sun protection and a rubbish bag. Confirm facilities and rentals before relying on them. This is packing advice, not evidence of absent services."
+      },
+      "unresolved_checks": [
+        "Exact entrance and parking coordinates/photos: not confirmed.",
+        "Payment methods and present-day prices: not confirmed.",
+        "Measured walking distance, stairs, ramps and usable restroom route: not confirmed.",
+        "Same-day staffing, closures, water quality and sea conditions: not verified."
+      ],
+      "field_verified": false,
+      "traffic_rank": null
+    },
+    {
+      "slug": "balneario-isla-verde",
+      "name": "Balneario Isla Verde",
+      "priority": "P0",
+      "page_url": "https://www.puertoricobeachfinder.com/beach/balneario-isla-verde",
+      "audit_date": "2026-09-14",
+      "audit_basis": "Public page text retrieved through web reader/search index; crawler age varies. Not a fresh browser session.",
+      "finding": "Claims free parking, 200 spaces and 8:30 AM opening. Possible overlap with Balneario de Carolina, whose official tourism schedule begins at 8 AM. Identity must be resolved before copying operating information.",
+      "checklist": [
+        "Verify whether this is the same facility or a separate sector.",
+        "Reconcile free parking and opening claims across related pages.",
+        "Confirm lifeguard coverage rather than promising all-hours staffing."
+      ],
+      "researched_facts": [
+        {
+          "field": "identity",
+          "value": "Official tourism treats Balneario de Carolina as a section of Isla Verde.",
+          "status": "identity_review",
+          "source_ids": [
+            "isla"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Does not independently establish what our separate Balneario Isla Verde record represents."
+        },
+        {
+          "field": "parking_price",
+          "value": "Historical municipal source lists paid Carolina parking, conflicting with free-parking claims if these records refer to that facility.",
+          "status": "conflicting",
+          "source_ids": [
+            "carolina-fee"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Identity and current tariff both remain unresolved."
+        }
+      ],
+      "research_query": "Balneario Isla Verde Balneario Carolina official",
+      "backup_candidate": {
+        "name": "Isla Verde Alambique sector",
+        "status": "editorial_candidate_not_verified",
+        "note": "Check route, opening and suitability before recommending; not a same-day safety substitute."
+      },
+      "coverage": {
+        "entrance_pin": "not_confirmed",
+        "parking_pin": "not_confirmed",
+        "parking_price": "see_researched_facts",
+        "payment_methods": "not_confirmed",
+        "hours": "not_confirmed",
+        "walking_distance_surface": "not_confirmed",
+        "facilities": "not_confirmed",
+        "rentals": "not_confirmed",
+        "packing": "not_confirmed",
+        "backup": "candidate_only"
+      },
+      "packing_recommendation": {
+        "status": "editorial_advice",
+        "text": "Bring drinking water, sun protection and a rubbish bag. Confirm facilities and rentals before relying on them. This is packing advice, not evidence of absent services."
+      },
+      "unresolved_checks": [
+        "Exact entrance and parking coordinates/photos: not confirmed.",
+        "Payment methods and present-day prices: not confirmed.",
+        "Measured walking distance, stairs, ramps and usable restroom route: not confirmed.",
+        "Same-day staffing, closures, water quality and sea conditions: not verified."
+      ],
+      "field_verified": false,
+      "traffic_rank": null
+    },
+    {
+      "slug": "ojo-de-agua-beach",
+      "name": "Ojo de Agua Beach",
+      "priority": "P0",
+      "page_url": "https://www.puertoricobeachfinder.com/beach/ojo-de-agua-beach",
+      "audit_date": "2026-09-14",
+      "audit_basis": "Public page text retrieved through web reader/search index; crawler age varies. Not a fresh browser session.",
+      "finding": "Title and FAQ describe an ocean beach; body and tips describe a neighborhood freshwater spring. Do not attach spring hours, facilities or water conditions to this coordinate without resolving identity.",
+      "checklist": [
+        "Compare coordinate, Google place ID and photos with spring and coastal namesakes.",
+        "Separate or correct records based on evidence.",
+        "Re-research fees, hours, parking and facilities for the resolved place."
+      ],
+      "researched_facts": [
+        {
+          "field": "identity",
+          "value": "A firsthand travel article describes Manantial Ojo de Agua as a freshwater spring in a Vega Baja neighborhood.",
+          "status": "identity_review",
+          "source_ids": [
+            "ojo"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Does not confirm our beach pin is the spring."
+        }
+      ],
+      "research_query": "Ojo de Agua Vega Baja playa manantial",
+      "backup_candidate": {
+        "name": "Puerto Nuevo, Vega Baja",
+        "status": "editorial_candidate_not_verified",
+        "note": "Check route, opening and suitability before recommending; not a same-day safety substitute."
+      },
+      "coverage": {
+        "entrance_pin": "not_confirmed",
+        "parking_pin": "not_confirmed",
+        "parking_price": "not_confirmed",
+        "payment_methods": "not_confirmed",
+        "hours": "not_confirmed",
+        "walking_distance_surface": "not_confirmed",
+        "facilities": "not_confirmed",
+        "rentals": "not_confirmed",
+        "packing": "not_confirmed",
+        "backup": "candidate_only"
+      },
+      "packing_recommendation": {
+        "status": "editorial_advice",
+        "text": "Bring drinking water, sun protection and a rubbish bag. Confirm facilities and rentals before relying on them. This is packing advice, not evidence of absent services."
+      },
+      "unresolved_checks": [
+        "Exact entrance and parking coordinates/photos: not confirmed.",
+        "Payment methods and present-day prices: not confirmed.",
+        "Measured walking distance, stairs, ramps and usable restroom route: not confirmed.",
+        "Same-day staffing, closures, water quality and sea conditions: not verified."
+      ],
+      "field_verified": false,
+      "traffic_rank": null
+    },
+    {
+      "slug": "las-picuas",
+      "name": "Las Picúas",
+      "priority": "P0",
+      "page_url": "https://www.puertoricobeachfinder.com/beach/las-picuas",
+      "audit_date": "2026-09-14",
+      "audit_basis": "Public page text retrieved through web reader/search index; crawler age varies. Not a fresh browser session.",
+      "finding": "Page locates beach east of Río Mar and gives roadside access without a named entrance. Location and approach need checking; parking checkbox does not identify a usable lot.",
+      "checklist": [
+        "Verify beach coordinate and relationship to Río Mar.",
+        "Identify public entrance and legal parking without relying on historical access documents.",
+        "Confirm path surface, facilities and operator meeting point."
+      ],
+      "researched_facts": [
+        {
+          "field": "parking",
+          "value": "Kiteboarding operator describes extremely limited informal parking around a sandy approach.",
+          "status": "lead_only",
+          "source_ids": [
+            "picuas"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Search-index evidence only; no exact spaces, fees or parking permission verified."
+        }
+      ],
+      "research_query": "Las Picuas beach access parking YogaSlackers",
+      "backup_candidate": {
+        "name": "Balneario La Monserrate",
+        "status": "editorial_candidate_not_verified",
+        "note": "Check route, opening and suitability before recommending; not a same-day safety substitute."
+      },
+      "coverage": {
+        "entrance_pin": "not_confirmed",
+        "parking_pin": "not_confirmed",
+        "parking_price": "not_confirmed",
+        "payment_methods": "not_confirmed",
+        "hours": "not_confirmed",
+        "walking_distance_surface": "not_confirmed",
+        "facilities": "not_confirmed",
+        "rentals": "not_confirmed",
+        "packing": "not_confirmed",
+        "backup": "candidate_only"
+      },
+      "packing_recommendation": {
+        "status": "editorial_advice",
+        "text": "Bring drinking water, sun protection and a rubbish bag. Confirm facilities and rentals before relying on them. This is packing advice, not evidence of absent services."
+      },
+      "unresolved_checks": [
+        "Exact entrance and parking coordinates/photos: not confirmed.",
+        "Payment methods and present-day prices: not confirmed.",
+        "Measured walking distance, stairs, ramps and usable restroom route: not confirmed.",
+        "Same-day staffing, closures, water quality and sea conditions: not verified."
+      ],
+      "field_verified": false,
+      "traffic_rank": null
+    },
+    {
+      "slug": "balneario-cana-gorda",
+      "name": "Balneario Caña Gorda",
+      "priority": "P1",
+      "page_url": "https://www.puertoricobeachfinder.com/beach/balneario-cana-gorda",
+      "audit_date": "2026-09-14",
+      "audit_basis": "Public page text retrieved through web reader/search index; crawler age varies. Not a fresh browser session.",
+      "finding": "Page states no lifeguards and no nearby food vendors; official tourism lists both. Parking is placeholder text. Operational status could explain the disagreement and needs confirmation.",
+      "checklist": [
+        "Resolve staffing and food-service conflicts.",
+        "Confirm current fees, opening days and functioning facilities.",
+        "Record correct entrance off PR-333."
+      ],
+      "researched_facts": [
+        {
+          "field": "address",
+          "value": "Carr. 333 Km. 2 Hm. 6, sector Caña Gorda, Guánica.",
+          "status": "source_listed",
+          "source_ids": [
+            "cana"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Current on-site operation not verified."
+        },
+        {
+          "field": "contact",
+          "value": "787-821-5676; 787-821-1900.",
+          "status": "source_listed",
+          "source_ids": [
+            "cana"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Current on-site operation not verified."
+        },
+        {
+          "field": "facilities",
+          "value": "Tourism lists restrooms, changing facilities, showers, picnic tables, shade, vendors and chair rentals.",
+          "status": "conflicting",
+          "source_ids": [
+            "cana"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Directory disagrees with some site claims; does not prove facilities operate today."
+        },
+        {
+          "field": "parking_price",
+          "value": "Tourism directory lists free parking.",
+          "status": "source_listed",
+          "source_ids": [
+            "cana"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Undated claim; current fee not confirmed."
+        }
+      ],
+      "research_query": "Balneario Cana Gorda Discover Puerto Rico",
+      "backup_candidate": {
+        "name": "Playa Santa",
+        "status": "editorial_candidate_not_verified",
+        "note": "Check route, opening and suitability before recommending; not a same-day safety substitute."
+      },
+      "coverage": {
+        "entrance_pin": "not_confirmed",
+        "parking_pin": "not_confirmed",
+        "parking_price": "see_researched_facts",
+        "payment_methods": "not_confirmed",
+        "hours": "not_confirmed",
+        "walking_distance_surface": "not_confirmed",
+        "facilities": "see_researched_facts",
+        "rentals": "not_confirmed",
+        "packing": "not_confirmed",
+        "backup": "candidate_only"
+      },
+      "packing_recommendation": {
+        "status": "editorial_advice",
+        "text": "Bring drinking water, sun protection and a rubbish bag. Confirm facilities and rentals before relying on them. This is packing advice, not evidence of absent services."
+      },
+      "unresolved_checks": [
+        "Exact entrance and parking coordinates/photos: not confirmed.",
+        "Payment methods and present-day prices: not confirmed.",
+        "Measured walking distance, stairs, ramps and usable restroom route: not confirmed.",
+        "Same-day staffing, closures, water quality and sea conditions: not verified."
+      ],
+      "field_verified": false,
+      "traffic_rank": null
+    },
+    {
+      "slug": "seven-seas-beach",
+      "name": "Seven Seas",
+      "priority": "P1",
+      "page_url": "https://www.puertoricobeachfinder.com/beach/seven-seas-beach",
+      "audit_date": "2026-09-14",
+      "audit_basis": "Public page text retrieved through web reader/search index; crawler age varies. Not a fresh browser session.",
+      "finding": "Parking is placeholder text; camping packing list has no reservation terms. Overview qualifies lifeguard service but FAQ promises it. Nearby Escondida must not be treated as an equivalent swimming backup.",
+      "checklist": [
+        "Add camping contact and attributed terms.",
+        "Verify parking fee, payment, gate hours and camping reservations.",
+        "Resolve lifeguard conflict and distinguish walking excursions from swimming alternatives."
+      ],
+      "researched_facts": [
+        {
+          "field": "address",
+          "value": "PR-987, Las Croabas / Cabezas de San Juan, Fajardo.",
+          "status": "source_listed",
+          "source_ids": [
+            "seven"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Current on-site operation not verified."
+        },
+        {
+          "field": "contact",
+          "value": "787-863-4013.",
+          "status": "source_listed",
+          "source_ids": [
+            "seven"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Current on-site operation not verified."
+        },
+        {
+          "field": "facilities",
+          "value": "Bathrooms, showers and barbecue areas are listed.",
+          "status": "source_listed",
+          "source_ids": [
+            "seven"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Current on-site operation not verified."
+        },
+        {
+          "field": "camping",
+          "value": "Tourism listing: $10 per person per night, minimum two nights; trailer areas $25–$50 per day.",
+          "status": "source_listed",
+          "source_ids": [
+            "seven"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Undated prices; availability and booking process need operator confirmation."
+        },
+        {
+          "field": "backup_exclusion",
+          "value": "Official Escondida profile discourages swimming due to strong currents.",
+          "status": "source_listed",
+          "source_ids": [
+            "escondida"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Use for excursion classification; not a live conditions report."
+        }
+      ],
+      "research_query": "Seven Seas Fajardo camping official",
+      "backup_candidate": {
+        "name": "Balneario La Monserrate",
+        "status": "editorial_candidate_not_verified",
+        "note": "Check route, opening and suitability before recommending; not a same-day safety substitute."
+      },
+      "coverage": {
+        "entrance_pin": "not_confirmed",
+        "parking_pin": "not_confirmed",
+        "parking_price": "not_confirmed",
+        "payment_methods": "not_confirmed",
+        "hours": "not_confirmed",
+        "walking_distance_surface": "not_confirmed",
+        "facilities": "see_researched_facts",
+        "rentals": "not_confirmed",
+        "packing": "not_confirmed",
+        "backup": "candidate_only"
+      },
+      "packing_recommendation": {
+        "status": "editorial_advice",
+        "text": "Bring drinking water, sun protection and a rubbish bag. Confirm facilities and rentals before relying on them. This is packing advice, not evidence of absent services."
+      },
+      "unresolved_checks": [
+        "Exact entrance and parking coordinates/photos: not confirmed.",
+        "Payment methods and present-day prices: not confirmed.",
+        "Measured walking distance, stairs, ramps and usable restroom route: not confirmed.",
+        "Same-day staffing, closures, water quality and sea conditions: not verified."
+      ],
+      "field_verified": false,
+      "traffic_rank": null
+    },
+    {
+      "slug": "balneario-publico-de-boqueron",
+      "name": "Balneario Público de Boquerón",
+      "priority": "P1",
+      "page_url": "https://www.puertoricobeachfinder.com/beach/balneario-publico-de-boqueron",
+      "audit_date": "2026-09-14",
+      "audit_basis": "Public page text retrieved through web reader/search index; crawler age varies. Not a fresh browser session.",
+      "finding": "Small vehicle fee has no amount; lot capacity and fill times are unsupported. Facilities and lifeguard availability need dated confirmation.",
+      "checklist": [
+        "Confirm municipal operator and current fee/payment.",
+        "Verify venue schedule before publishing as current.",
+        "Check bathrooms, showers, accessible route and staffing."
+      ],
+      "researched_facts": [
+        {
+          "field": "hours",
+          "value": "Venue website lists daily 7:30 AM–4 PM and holidays 6 AM–6 PM.",
+          "status": "lead_only",
+          "source_ids": [
+            "boqueron"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Undated schedule; venue ownership and currency need confirmation."
+        },
+        {
+          "field": "location_context",
+          "value": "Official tourism identifies Balneario de Boquerón in Cabo Rojo.",
+          "status": "source_listed",
+          "source_ids": [
+            "boqueron-tourism"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Current on-site operation not verified."
+        }
+      ],
+      "research_query": "Balneario Boqueron horario tarifa banos",
+      "backup_candidate": {
+        "name": "Buyé Beach",
+        "status": "editorial_candidate_not_verified",
+        "note": "Check route, opening and suitability before recommending; not a same-day safety substitute."
+      },
+      "coverage": {
+        "entrance_pin": "not_confirmed",
+        "parking_pin": "not_confirmed",
+        "parking_price": "not_confirmed",
+        "payment_methods": "not_confirmed",
+        "hours": "see_researched_facts",
+        "walking_distance_surface": "not_confirmed",
+        "facilities": "not_confirmed",
+        "rentals": "not_confirmed",
+        "packing": "not_confirmed",
+        "backup": "candidate_only"
+      },
+      "packing_recommendation": {
+        "status": "editorial_advice",
+        "text": "Bring drinking water, sun protection and a rubbish bag. Confirm facilities and rentals before relying on them. This is packing advice, not evidence of absent services."
+      },
+      "unresolved_checks": [
+        "Exact entrance and parking coordinates/photos: not confirmed.",
+        "Payment methods and present-day prices: not confirmed.",
+        "Measured walking distance, stairs, ramps and usable restroom route: not confirmed.",
+        "Same-day staffing, closures, water quality and sea conditions: not verified."
+      ],
+      "field_verified": false,
+      "traffic_rank": null
+    },
+    {
+      "slug": "playa-santa",
+      "name": "Playa Santa",
+      "priority": "P1",
+      "page_url": "https://www.puertoricobeachfinder.com/beach/playa-santa",
+      "audit_date": "2026-09-14",
+      "audit_basis": "Public page text retrieved through web reader/search index; crawler age varies. Not a fresh browser session.",
+      "finding": "Free parking and 30–40 spaces lack dated sources. Page promotes rentals and cheaper weekday pricing without naming operators. Access is only a short path.",
+      "checklist": [
+        "Confirm lot boundaries, tariff and entrance pin.",
+        "Name active rental operators and verify prices/meeting points.",
+        "Confirm restroom access and vendor hours."
+      ],
+      "researched_facts": [
+        {
+          "field": "rentals_food",
+          "value": "Official tourism article describes nearby restaurants/kiosks and kayak and jet-ski rentals.",
+          "status": "source_listed",
+          "source_ids": [
+            "santa"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "No current inventory, prices or named rental operator established."
+        }
+      ],
+      "research_query": "Playa Santa Guanica official rentals",
+      "backup_candidate": {
+        "name": "Caña Gorda",
+        "status": "editorial_candidate_not_verified",
+        "note": "Check route, opening and suitability before recommending; not a same-day safety substitute."
+      },
+      "coverage": {
+        "entrance_pin": "not_confirmed",
+        "parking_pin": "not_confirmed",
+        "parking_price": "not_confirmed",
+        "payment_methods": "not_confirmed",
+        "hours": "not_confirmed",
+        "walking_distance_surface": "not_confirmed",
+        "facilities": "not_confirmed",
+        "rentals": "not_confirmed",
+        "packing": "not_confirmed",
+        "backup": "candidate_only"
+      },
+      "packing_recommendation": {
+        "status": "editorial_advice",
+        "text": "Bring drinking water, sun protection and a rubbish bag. Confirm facilities and rentals before relying on them. This is packing advice, not evidence of absent services."
+      },
+      "unresolved_checks": [
+        "Exact entrance and parking coordinates/photos: not confirmed.",
+        "Payment methods and present-day prices: not confirmed.",
+        "Measured walking distance, stairs, ramps and usable restroom route: not confirmed.",
+        "Same-day staffing, closures, water quality and sea conditions: not verified."
+      ],
+      "field_verified": false,
+      "traffic_rank": null
+    },
+    {
+      "slug": "coco-beach-rio-grande",
+      "name": "Coco Beach, Río Grande",
+      "priority": "P0",
+      "page_url": "https://www.puertoricobeachfinder.com/beach/coco-beach-rio-grande",
+      "audit_date": "2026-09-14",
+      "audit_basis": "Public page text retrieved through web reader/search index; crawler age varies. Not a fresh browser session.",
+      "finding": "Page reports Playa Río Mar at zero distance and claims signed public access through a resort. Possible wrong coordinate; resort access route is unsupported.",
+      "checklist": [
+        "Resolve map pin against Coco Beach resort coast and Río Mar.",
+        "Verify non-guest public entrance independently of hotel driveway.",
+        "Confirm parking, gate rules and usable public facilities."
+      ],
+      "researched_facts": [
+        {
+          "field": "address_context",
+          "value": "Hyatt Grand Reserve lists 200 Coco Beach Blvd, Highway 955-I, Río Grande.",
+          "status": "identity_review",
+          "source_ids": [
+            "coco"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Hotel address is a research anchor, not a verified public beach entrance."
+        },
+        {
+          "field": "contact",
+          "value": "Hotel information contact: 787-657-1234.",
+          "status": "source_listed",
+          "source_ids": [
+            "coco"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Contact lead only; no call made."
+        }
+      ],
+      "research_query": "Coco Beach Rio Grande Hyatt public entrance",
+      "backup_candidate": {
+        "name": "Balneario La Monserrate",
+        "status": "editorial_candidate_not_verified",
+        "note": "Check route, opening and suitability before recommending; not a same-day safety substitute."
+      },
+      "coverage": {
+        "entrance_pin": "not_confirmed",
+        "parking_pin": "not_confirmed",
+        "parking_price": "not_confirmed",
+        "payment_methods": "not_confirmed",
+        "hours": "not_confirmed",
+        "walking_distance_surface": "not_confirmed",
+        "facilities": "not_confirmed",
+        "rentals": "not_confirmed",
+        "packing": "not_confirmed",
+        "backup": "candidate_only"
+      },
+      "packing_recommendation": {
+        "status": "editorial_advice",
+        "text": "Bring drinking water, sun protection and a rubbish bag. Confirm facilities and rentals before relying on them. This is packing advice, not evidence of absent services."
+      },
+      "unresolved_checks": [
+        "Exact entrance and parking coordinates/photos: not confirmed.",
+        "Payment methods and present-day prices: not confirmed.",
+        "Measured walking distance, stairs, ramps and usable restroom route: not confirmed.",
+        "Same-day staffing, closures, water quality and sea conditions: not verified."
+      ],
+      "field_verified": false,
+      "traffic_rank": null
+    },
+    {
+      "slug": "montones-beach",
+      "name": "Montones Beach",
+      "priority": "P1",
+      "page_url": "https://www.puertoricobeachfinder.com/beach/montones-beach",
+      "audit_date": "2026-09-14",
+      "audit_basis": "Public page text retrieved through web reader/search index; crawler age varies. Not a fresh browser session.",
+      "finding": "Road and short walk does not identify parking, length or surface. Amenities and practical pool access need precision.",
+      "checklist": [
+        "Identify public path independently of accommodation access.",
+        "Confirm lot price/payment and measured walk to pool.",
+        "Check toilets, showers and rental availability; distinguish ocean-facing shore from pool."
+      ],
+      "researched_facts": [
+        {
+          "field": "approach_context",
+          "value": "Official tourism gives PR-466, Isabela and describes a natural pool with direct access.",
+          "status": "source_listed",
+          "source_ids": [
+            "montones"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Road address does not establish exact entrance, parking or accessible route."
+        }
+      ],
+      "research_query": "Montones Isabela official access",
+      "backup_candidate": {
+        "name": "Balneario de Isabela (research suitability first)",
+        "status": "editorial_candidate_not_verified",
+        "note": "Check route, opening and suitability before recommending; not a same-day safety substitute."
+      },
+      "coverage": {
+        "entrance_pin": "not_confirmed",
+        "parking_pin": "not_confirmed",
+        "parking_price": "not_confirmed",
+        "payment_methods": "not_confirmed",
+        "hours": "not_confirmed",
+        "walking_distance_surface": "not_confirmed",
+        "facilities": "not_confirmed",
+        "rentals": "not_confirmed",
+        "packing": "not_confirmed",
+        "backup": "candidate_only"
+      },
+      "packing_recommendation": {
+        "status": "editorial_advice",
+        "text": "Bring drinking water, sun protection and a rubbish bag. Confirm facilities and rentals before relying on them. This is packing advice, not evidence of absent services."
+      },
+      "unresolved_checks": [
+        "Exact entrance and parking coordinates/photos: not confirmed.",
+        "Payment methods and present-day prices: not confirmed.",
+        "Measured walking distance, stairs, ramps and usable restroom route: not confirmed.",
+        "Same-day staffing, closures, water quality and sea conditions: not verified."
+      ],
+      "field_verified": false,
+      "traffic_rank": null
+    },
+    {
+      "slug": "black-eagle-beach",
+      "name": "Black Eagle Beach",
+      "priority": "P0",
+      "page_url": "https://www.puertoricobeachfinder.com/beach/black-eagle-beach",
+      "audit_date": "2026-09-14",
+      "audit_basis": "Public page text retrieved through web reader/search index; crawler age varies. Not a fresh browser session.",
+      "finding": "Fishing tag and packing recommendations conflict with copy stating no fishing in the reserve. Reserve boundary claim needs checking. Free 10-space parking is unsupported.",
+      "checklist": [
+        "Verify beach sector and reserve boundary before activity recommendations.",
+        "Resolve contradictory fishing guidance.",
+        "Confirm marina parking, boat launch separation, restroom and rental details."
+      ],
+      "researched_facts": [
+        {
+          "field": "rentals",
+          "value": "Rinconpaddleboards is listed at Playa Marina Black Eagle offering board, kayak and snorkel rentals, tours and lessons.",
+          "status": "source_listed",
+          "source_ids": [
+            "black"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Current on-site operation not verified."
+        },
+        {
+          "field": "contact",
+          "value": "787-546-9545.",
+          "status": "source_listed",
+          "source_ids": [
+            "black"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Current on-site operation not verified."
+        }
+      ],
+      "research_query": "Black Eagle Rincon official paddleboard rentals",
+      "backup_candidate": {
+        "name": "Doña Lala",
+        "status": "editorial_candidate_not_verified",
+        "note": "Check route, opening and suitability before recommending; not a same-day safety substitute."
+      },
+      "coverage": {
+        "entrance_pin": "not_confirmed",
+        "parking_pin": "not_confirmed",
+        "parking_price": "not_confirmed",
+        "payment_methods": "not_confirmed",
+        "hours": "not_confirmed",
+        "walking_distance_surface": "not_confirmed",
+        "facilities": "not_confirmed",
+        "rentals": "see_researched_facts",
+        "packing": "not_confirmed",
+        "backup": "candidate_only"
+      },
+      "packing_recommendation": {
+        "status": "editorial_advice",
+        "text": "Bring drinking water, sun protection and a rubbish bag. Confirm facilities and rentals before relying on them. This is packing advice, not evidence of absent services."
+      },
+      "unresolved_checks": [
+        "Exact entrance and parking coordinates/photos: not confirmed.",
+        "Payment methods and present-day prices: not confirmed.",
+        "Measured walking distance, stairs, ramps and usable restroom route: not confirmed.",
+        "Same-day staffing, closures, water quality and sea conditions: not verified."
+      ],
+      "field_verified": false,
+      "traffic_rank": null
+    },
+    {
+      "slug": "isla-verde-beach",
+      "name": "Isla Verde Beach",
+      "priority": "P1",
+      "page_url": "https://www.puertoricobeachfinder.com/beach/isla-verde-beach",
+      "audit_date": "2026-09-14",
+      "audit_basis": "Public page text retrieved through web reader/search index; crawler age varies. Not a fresh browser session.",
+      "finding": "Page mixes facilities across three sectors, claims free Carolina parking, and provides directional descriptions of sectors without a verified approach map.",
+      "checklist": [
+        "Map the three sectors separately.",
+        "Limit municipal amenities to the correct sector.",
+        "Resolve Carolina parking price and add seasonal facility hours with attribution."
+      ],
+      "researched_facts": [
+        {
+          "field": "sectors",
+          "value": "Official tourism distinguishes Pine Grove, Alambique and Balneario de Carolina; municipal parking/lifeguards are associated with the latter.",
+          "status": "source_listed",
+          "source_ids": [
+            "isla"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Current on-site operation not verified."
+        },
+        {
+          "field": "parking_price",
+          "value": "2023 municipal magazine lists $5 Carolina parking; site says free.",
+          "status": "conflicting",
+          "source_ids": [
+            "carolina-fee"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Do not replace with an unconfirmed current $5 tariff."
+        }
+      ],
+      "research_query": "Isla Verde Alambique Pine Grove Carolina official",
+      "backup_candidate": {
+        "name": "Balneario de Carolina",
+        "status": "editorial_candidate_not_verified",
+        "note": "Check route, opening and suitability before recommending; not a same-day safety substitute."
+      },
+      "coverage": {
+        "entrance_pin": "not_confirmed",
+        "parking_pin": "not_confirmed",
+        "parking_price": "see_researched_facts",
+        "payment_methods": "not_confirmed",
+        "hours": "not_confirmed",
+        "walking_distance_surface": "not_confirmed",
+        "facilities": "not_confirmed",
+        "rentals": "not_confirmed",
+        "packing": "not_confirmed",
+        "backup": "candidate_only"
+      },
+      "packing_recommendation": {
+        "status": "editorial_advice",
+        "text": "Bring drinking water, sun protection and a rubbish bag. Confirm facilities and rentals before relying on them. This is packing advice, not evidence of absent services."
+      },
+      "unresolved_checks": [
+        "Exact entrance and parking coordinates/photos: not confirmed.",
+        "Payment methods and present-day prices: not confirmed.",
+        "Measured walking distance, stairs, ramps and usable restroom route: not confirmed.",
+        "Same-day staffing, closures, water quality and sea conditions: not verified."
+      ],
+      "field_verified": false,
+      "traffic_rank": null
+    },
+    {
+      "slug": "playa-dona-lala-beach",
+      "name": "Playa Doña Lala",
+      "priority": "P2",
+      "page_url": "https://www.puertoricobeachfinder.com/beach/playa-dona-lala-beach",
+      "audit_date": "2026-09-14",
+      "audit_basis": "Public page text retrieved through web reader/search index; crawler age varies. Not a fresh browser session.",
+      "finding": "Free parking, fill times, pet access and beginner-surf recommendations are unsourced. Short path lacks exact entrance and facilities are vague.",
+      "checklist": [
+        "Verify public lot, fee, path surface and walking distance.",
+        "Check restroom/shower availability.",
+        "Confirm pet rules and named rental provider rather than generic surf-shop advice."
+      ],
+      "researched_facts": [
+        {
+          "field": "parking",
+          "value": "Secondary directory reports free parking and nearby kiosks.",
+          "status": "lead_only",
+          "source_ids": [
+            "dona"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Not sufficient to call fee or facilities verified."
+        }
+      ],
+      "research_query": "Playa Dona Lala Rincon parking access excluding our site",
+      "backup_candidate": {
+        "name": "Black Eagle (check boat activity and access)",
+        "status": "editorial_candidate_not_verified",
+        "note": "Check route, opening and suitability before recommending; not a same-day safety substitute."
+      },
+      "coverage": {
+        "entrance_pin": "not_confirmed",
+        "parking_pin": "not_confirmed",
+        "parking_price": "not_confirmed",
+        "payment_methods": "not_confirmed",
+        "hours": "not_confirmed",
+        "walking_distance_surface": "not_confirmed",
+        "facilities": "not_confirmed",
+        "rentals": "not_confirmed",
+        "packing": "not_confirmed",
+        "backup": "candidate_only"
+      },
+      "packing_recommendation": {
+        "status": "editorial_advice",
+        "text": "Bring drinking water, sun protection and a rubbish bag. Confirm facilities and rentals before relying on them. This is packing advice, not evidence of absent services."
+      },
+      "unresolved_checks": [
+        "Exact entrance and parking coordinates/photos: not confirmed.",
+        "Payment methods and present-day prices: not confirmed.",
+        "Measured walking distance, stairs, ramps and usable restroom route: not confirmed.",
+        "Same-day staffing, closures, water quality and sea conditions: not verified."
+      ],
+      "field_verified": false,
+      "traffic_rank": null
+    },
+    {
+      "slug": "cayo-matias-salinas",
+      "name": "Cayo Matías",
+      "priority": "P1",
+      "page_url": "https://www.puertoricobeachfinder.com/beach/cayo-matias-salinas",
+      "audit_date": "2026-09-14",
+      "audit_basis": "Public page text retrieved through web reader/search index; crawler age varies. Not a fresh browser session.",
+      "finding": "Boat-only guidance is useful but no current transport operator, departure dock, fare or return schedule is confirmed. Tour fallback shown is unrelated to reaching this cay.",
+      "checklist": [
+        "Confirm an actual passenger service and whether visitors land or only cruise past.",
+        "Verify departure pin, mainland parking, return plan and cancellation terms.",
+        "Confirm on-island facilities before making amenity promises."
+      ],
+      "researched_facts": [
+        {
+          "field": "transport_context",
+          "value": "Historical boating publication describes Cayo Matías as a boating anchorage and Marina de Salinas as a regional hub.",
+          "status": "historical_only",
+          "source_ids": [
+            "cayo"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "No current water taxi, departure or passenger fare verified."
+        }
+      ],
+      "research_query": "Cayo Matias Salinas boat operator marina",
+      "backup_candidate": {
+        "name": "Mainland Salinas waterfront outing (not a confirmed swimming substitute)",
+        "status": "editorial_candidate_not_verified",
+        "note": "Check route, opening and suitability before recommending; not a same-day safety substitute."
+      },
+      "coverage": {
+        "entrance_pin": "not_confirmed",
+        "parking_pin": "not_confirmed",
+        "parking_price": "not_confirmed",
+        "payment_methods": "not_confirmed",
+        "hours": "not_confirmed",
+        "walking_distance_surface": "not_confirmed",
+        "facilities": "not_confirmed",
+        "rentals": "not_confirmed",
+        "packing": "not_confirmed",
+        "backup": "candidate_only"
+      },
+      "packing_recommendation": {
+        "status": "editorial_advice",
+        "text": "Bring drinking water, sun protection and a rubbish bag. Confirm facilities and rentals before relying on them. This is packing advice, not evidence of absent services."
+      },
+      "unresolved_checks": [
+        "Exact entrance and parking coordinates/photos: not confirmed.",
+        "Payment methods and present-day prices: not confirmed.",
+        "Measured walking distance, stairs, ramps and usable restroom route: not confirmed.",
+        "Same-day staffing, closures, water quality and sea conditions: not verified."
+      ],
+      "field_verified": false,
+      "traffic_rank": null
+    },
+    {
+      "slug": "muelle-de-azucar-beach",
+      "name": "Muelle de Azúcar",
+      "priority": "P0",
+      "page_url": "https://www.puertoricobeachfinder.com/beach/muelle-de-azucar-beach",
+      "audit_date": "2026-09-14",
+      "audit_basis": "Public page text retrieved through web reader/search index; crawler age varies. Not a fresh browser session.",
+      "finding": "Page describes easy shore access, standard-car approach and free 10–12-space parking, while 2025 reporting relays a Ports Authority warning about the structure and surrounding debris.",
+      "checklist": [
+        "Review access and activity claims against Ports Authority information.",
+        "Do not encourage pier access or water entry based on the current copy.",
+        "Confirm permitted route and current restrictions before publishing parking directions."
+      ],
+      "researched_facts": [
+        {
+          "field": "access_warning",
+          "value": "March 2025 report relays Ports Authority warnings about unstable pier infrastructure and underwater debris; area was not prepared for visitors.",
+          "status": "historical_warning",
+          "source_ids": [
+            "muelle"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "Current closure/access status unresolved; do not infer reopening."
+        }
+      ],
+      "research_query": "Muelle de Azucar Aguadilla Autoridad Puertos advertencia",
+      "backup_candidate": {
+        "name": "Crash Boat (confirm current access and conditions)",
+        "status": "editorial_candidate_not_verified",
+        "note": "Check route, opening and suitability before recommending; not a same-day safety substitute."
+      },
+      "coverage": {
+        "entrance_pin": "not_confirmed",
+        "parking_pin": "not_confirmed",
+        "parking_price": "not_confirmed",
+        "payment_methods": "not_confirmed",
+        "hours": "not_confirmed",
+        "walking_distance_surface": "not_confirmed",
+        "facilities": "not_confirmed",
+        "rentals": "not_confirmed",
+        "packing": "not_confirmed",
+        "backup": "candidate_only"
+      },
+      "packing_recommendation": {
+        "status": "editorial_advice",
+        "text": "Bring drinking water, sun protection and a rubbish bag. Confirm facilities and rentals before relying on them. This is packing advice, not evidence of absent services."
+      },
+      "unresolved_checks": [
+        "Exact entrance and parking coordinates/photos: not confirmed.",
+        "Payment methods and present-day prices: not confirmed.",
+        "Measured walking distance, stairs, ramps and usable restroom route: not confirmed.",
+        "Same-day staffing, closures, water quality and sea conditions: not verified."
+      ],
+      "field_verified": false,
+      "traffic_rank": null
+    },
+    {
+      "slug": "punta-bandera-luquillo-pr",
+      "name": "Punta Bandera",
+      "priority": "P0",
+      "page_url": "https://www.puertoricobeachfinder.com/beach/punta-bandera-luquillo-pr",
+      "audit_date": "2026-09-14",
+      "audit_basis": "Public page text retrieved through web reader/search index; crawler age varies. Not a fresh browser session.",
+      "finding": "Page instructs walking east from Playa Azul and promises no strong currents. Route, direction, 10-minute duration and semi-private characterization are unsupported.",
+      "checklist": [
+        "Resolve exact shoreline sector and entrance before route advice.",
+        "Measure path and confirm parking permission; separate condominium access.",
+        "Remove unsupported universal current/safety claims from proposed replacement copy."
+      ],
+      "researched_facts": [
+        {
+          "field": "location_lead",
+          "value": "Apple Maps lists Punta Bandera on Luquillo Beach Blvd.",
+          "status": "lead_only",
+          "source_ids": [
+            "punta"
+          ],
+          "checked_on": "2026-09-14",
+          "observed_on": null,
+          "limitations": "No validated entrance, parking or walking route; map hours not accepted as operating evidence."
+        }
+      ],
+      "research_query": "Punta Bandera Luquillo acceso playa",
+      "backup_candidate": {
+        "name": "Balneario La Monserrate",
+        "status": "editorial_candidate_not_verified",
+        "note": "Check route, opening and suitability before recommending; not a same-day safety substitute."
+      },
+      "coverage": {
+        "entrance_pin": "not_confirmed",
+        "parking_pin": "not_confirmed",
+        "parking_price": "not_confirmed",
+        "payment_methods": "not_confirmed",
+        "hours": "not_confirmed",
+        "walking_distance_surface": "not_confirmed",
+        "facilities": "not_confirmed",
+        "rentals": "not_confirmed",
+        "packing": "not_confirmed",
+        "backup": "candidate_only"
+      },
+      "packing_recommendation": {
+        "status": "editorial_advice",
+        "text": "Bring drinking water, sun protection and a rubbish bag. Confirm facilities and rentals before relying on them. This is packing advice, not evidence of absent services."
+      },
+      "unresolved_checks": [
+        "Exact entrance and parking coordinates/photos: not confirmed.",
+        "Payment methods and present-day prices: not confirmed.",
+        "Measured walking distance, stairs, ramps and usable restroom route: not confirmed.",
+        "Same-day staffing, closures, water quality and sea conditions: not verified."
+      ],
+      "field_verified": false,
+      "traffic_rank": null
+    }
+  ]
+}

@@ -15,6 +15,10 @@ require_once APP_ROOT . '/inc/i18n.php';
 
 $redirectUrl = sanitizeInternalRedirect($_GET['redirect'] ?? '/');
 $canonicalUrl = localizePath('/login', getCurrentLanguage());
+$loginUrl = routeUrl('login', getCurrentLanguage());
+$loginRedirectQuery = $redirectUrl !== '/' ? 'redirect=' . urlencode($redirectUrl) : '';
+$googleLoginUrl = $loginUrl . ($loginRedirectQuery !== '' ? '?' . $loginRedirectQuery : '');
+$emailLoginUrl = $loginUrl . '?method=email' . ($loginRedirectQuery !== '' ? '&' . $loginRedirectQuery : '');
 
 // If already logged in, redirect
 if (isAuthenticated()) {
@@ -357,7 +361,7 @@ $loginManagedHero = pageHeroResolve('account');
                             <span class="px-4 bg-white text-warm-500"><?= h(__('login.or')) ?></span>
                         </div>
                     </div>
-                    <a href="?method=email<?= $redirectUrl !== '/' ? '&redirect=' . urlencode($redirectUrl) : '' ?>"
+                    <a href="<?= h($emailLoginUrl) ?>"
                        class="w-full flex items-center justify-center gap-3 bg-warm-50 hover:bg-warm-100 border border-warm-200 text-warm-900 py-3.5 px-4 rounded-xl font-medium transition-all">
                         <i data-lucide="mail" class="w-5 h-5"></i>
                         <span><?= h(__('login.continue_email')) ?></span>
@@ -372,7 +376,7 @@ $loginManagedHero = pageHeroResolve('account');
 
                 <?php else: ?>
                     <!-- Magic Link Form -->
-                    <form method="POST" action="" class="space-y-4">
+                    <form method="POST" action="<?= h($emailLoginUrl) ?>" class="space-y-4">
                         <?= csrfField() ?>
                         <input type="hidden" name="redirect" value="<?= h($redirectUrl) ?>">
                         <!-- Honeypot: must stay empty; positioned offscreen for real users -->
@@ -413,7 +417,7 @@ $loginManagedHero = pageHeroResolve('account');
                         </div>
                     </div>
 
-                    <a href="?<?= $redirectUrl !== '/' ? 'redirect=' . urlencode($redirectUrl) : '' ?>"
+                    <a href="<?= h($googleLoginUrl) ?>"
                        class="w-full flex items-center justify-center gap-3 bg-warm-50 hover:bg-warm-100 border border-warm-200 text-warm-900 py-3.5 px-4 rounded-xl font-medium transition-all">
                         <svg class="w-5 h-5" viewBox="0 0 24 24">
                             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -436,7 +440,7 @@ $loginManagedHero = pageHeroResolve('account');
                         </div>
                     </div>
 
-                    <form method="POST" action="" class="space-y-3">
+                    <form method="POST" action="<?= h($showMagicLinkForm ? $emailLoginUrl : $googleLoginUrl) ?>" class="space-y-3">
                         <?= csrfField() ?>
                         <input type="hidden" name="auth_action" value="dev_login">
                         <input type="hidden" name="redirect" value="<?= h($redirectUrl) ?>">

@@ -543,6 +543,9 @@ function toursRenderCard(array $campaign, array $meta, array $opts): string
  */
 function renderToursSection(array $beach, string $lang, string $variant = 'classic'): string
 {
+    // No confirmed access product for the cay, or approved activity at the abandoned pier.
+    if (!empty($beach['practical_reviewed_at']) && in_array($beach['slug'] ?? '', ['cayo-matias-salinas', 'muelle-de-azucar-beach'], true)) return '';
+
     // Up to two curated product placements plus one regional browse fallback.
     $campaigns = toursCampaignsForBeach($beach, 3);
     if ($campaigns === []) {

@@ -18,9 +18,9 @@ $content = loadGuideContent('snorkeling-guide');
 $pageTitle = __('guide_snorkeling.title');
 $pageDescription = __('guide_snorkeling.description');
 
-$snorkel_beaches = query("SELECT id, name, municipality, slug FROM beaches WHERE id IN (
-    SELECT beach_id FROM beach_tags WHERE tag = 'snorkeling' LIMIT 5
-)");
+$snorkel_beaches = query("SELECT id, name, municipality, slug FROM beaches WHERE publish_status = 'published' AND id IN (
+    SELECT beach_id FROM beach_tags WHERE tag = 'snorkeling'
+) LIMIT 5");
 $snorkelMapBeachIds = array_values(array_filter(array_map(static function ($id): string {
     if (!is_scalar($id)) {
         return '';
