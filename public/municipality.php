@@ -163,7 +163,7 @@ if ($redesignLayout) {
     // Top-5 tag quick-links → homepage filter URLs (same hrefs as classic)
     $rdTagLinks = [];
     foreach ($topTags as $tag) {
-        $rdTagLinks[] = [getTagLabel($tag), '/?municipality=' . urlencode($municipality) . '&tags[]=' . $tag . '#beaches', $tagCounts[$tag]];
+        $rdTagLinks[] = [getTagLabel($tag), routeUrl('home', $lang) . '?municipality=' . urlencode($municipality) . '&tags[]=' . urlencode($tag) . '#beaches', $tagCounts[$tag]];
     }
 
     // 5 nearest municipalities with beach counts (same query as classic)
@@ -299,7 +299,7 @@ if ($redesignLayout) {
         <div class="flex items-center gap-3 overflow-x-auto hide-scrollbar">
             <span class="text-sm text-white/60 whitespace-nowrap"><?= h(__('pages.municipality.popular')) ?></span>
             <?php foreach ($topTags as $tag): ?>
-            <a href="/?municipality=<?= urlencode($municipality) ?>&tags[]=<?= h($tag) ?>#beaches"
+            <a href="<?= h(routeUrl('home', $lang) . '?municipality=' . urlencode($municipality) . '&tags[]=' . urlencode($tag) . '#beaches') ?>"
                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-sunset-400/20 border border-warm-200 hover:border-sunset-400/30 text-white/80 hover:text-sunset-400 text-sm transition-colors whitespace-nowrap flex-shrink-0">
                 <?= h(getTagLabel($tag)) ?>
                 <span class="text-xs text-white/70"><?= $tagCounts[$tag] ?></span>

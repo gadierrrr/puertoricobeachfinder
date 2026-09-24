@@ -18,7 +18,7 @@ $content = loadGuideContent('surfing-guide');
 $pageTitle = __('guide_surfing.title');
 $pageDescription = __('guide_surfing.description');
 
-$surf_beaches = query("SELECT id, name, municipality, slug FROM beaches WHERE id IN (SELECT beach_id FROM beach_tags WHERE tag = 'surfing') LIMIT 5");
+$surf_beaches = query("SELECT id, name, municipality, slug FROM beaches WHERE publish_status = 'published' AND id IN (SELECT beach_id FROM beach_tags WHERE tag = 'surfing') LIMIT 5");
 $surfMapBeachIds = array_values(array_filter(array_map(static function ($id): string {
     if (!is_scalar($id)) {
         return '';
