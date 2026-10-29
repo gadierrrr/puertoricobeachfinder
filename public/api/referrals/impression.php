@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $userAgent = strtolower((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''));
-if ($userAgent !== '' && preg_match('/bot|crawl|spider|slurp|preview|validator|monitor|pingdom|uptime/i', $userAgent)) {
+if (referralIsAutomatedRequest($_SERVER) || isset($_GET['bf_analytics_probe'])) {
     echo json_encode(['ok' => true, 'ignored' => true]);
     exit;
 }

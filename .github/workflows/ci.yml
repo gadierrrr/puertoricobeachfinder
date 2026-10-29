@@ -96,6 +96,9 @@ jobs:
         run: |
           node --test scripts/test-analytics-events.js
           php scripts/test-analytics-outcomes.php
+          php scripts/test-beach-aliases.php
+          php scripts/test-referral-tracking.php
+          php scripts/test-referral-reporting.php
 
       - name: Verify published beach images
         run: php scripts/test-beach-images.php

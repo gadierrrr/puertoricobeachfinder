@@ -125,16 +125,34 @@ to `blocked`; rebuilds preserve blocked rows and never resurface them.
 - Viewport impressions land in `referral_impressions` with `match_type`
   (`curated_beach`, `curated_guide`, `auto_product`, `regional_browse`) and
   `api_hydrated`; clicks remain in `referral_clicks`.
-- Export campaign performance from Viator Performance Trends and upload it at
-  `/admin/referrals?tab=revenue`. Common header variants are normalized.
-  Aggregate imports should include:
+- Export the **Campaign** breakdown from Viator Performance Trends and upload
+  the original CSV at `/admin/referrals?tab=revenue`. Enter the exact start and
+  end dates selected in Viator when the file has no date column. Use the full,
+  unfiltered campaign export for the period. The current format is:
 
 ```text
-date,campaign,visitors,bookings,gross booking value,gross commission,currency,product code
+Campaign Name,Source Type,Page Views,Sessions,Unique Visitors,Bookings,Session Conversion Rate,Visitor Conversion Rate,Gross Booking Value (USD),Gross Commission (USD)
 ```
 
-Unknown campaign values are imported for reconciliation but flagged in the
-import job.
+`Unique Visitors` takes precedence over `Sessions`. Currency is read from the
+amount headers when present. API and link source rows remain separate, and
+reimporting the same campaign/source/product/currency/period updates that row.
+`referral_campaign_reports` preserves the period: a monthly total is never
+assigned to a single day. Existing daily imports are migrated as one-day
+periods; normalized dated CSVs and individual conversion CSVs remain supported.
+Unknown campaign values are retained but flagged for reconciliation.
+
+The comparison dashboard aligns local click/impression dates to the latest
+imported USD period. It selects that exact period, with dated daily rows as a
+fallback when a campaign has no complete-period snapshot. It never adds
+partially overlapping snapshots or adds daily rows on top of a complete-period
+snapshot. Gross commission is distinct from paid commission. Summing campaign
+visitors does not produce account-wide unique visitors because one visitor can
+appear in multiple campaigns. Report time zones and provider attribution can
+also differ from GA; these totals should not be forced to match.
+
+Raw exports stay outside Git and the public document root. Importing campaign
+aggregates does not manufacture individual bookings or GA purchase events.
 
 ## Health and alerting
 

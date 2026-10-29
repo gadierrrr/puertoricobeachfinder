@@ -1,6 +1,6 @@
 # Analytics integration (GA4)
 
-Updated 2026-09-10. The filename is retained for existing links; Umami is no longer configured. `GA_MEASUREMENT_ID` enables the GA4 tag in the shared header. `window.bfTrack(name, props)` sends custom events to GA4 and also PostHog when present. Blocking analytics must never prevent site actions.
+Updated 2026-10-28. The filename is retained for existing links; Umami is no longer configured. `GA_MEASUREMENT_ID` enables the GA4 tag in the shared header. `window.bfTrack(name, props)` sends custom events to GA4 and also PostHog when present. Blocking analytics must never prevent site actions.
 
 ## Outcomes and supporting actions
 
@@ -42,3 +42,34 @@ The local inquiry flow was also checked end to end: successful persistence produ
 The GA health endpoint and HTML checks verify configuration/tag presence, not guaranteed ingestion. Do not create fake production signups or inquiries to inflate key-event counts. Internal filtering can prevent labelled probes from appearing in normal reports.
 
 For server-side traffic triage, `scripts/traffic-log-summary.py` reads nginx combined logs and prints aggregate counts without client addresses or query strings. Non-asset requests include API calls and are not equivalent to GA sessions.
+
+## Referral measurement
+
+- `R1_referral_impression`: once per rendered tour element after at least 25%
+  is visible, including cards inserted by HTMX. Internal probes do not write
+  to the first-party impression ledger.
+- `R2_referral_click`: primary/keyboard and middle-click activation. Right-click
+  alone is not a referral. Delegated capture listeners also cover nested cards.
+- `ui_source` replaces the ambiguous custom `source` property in `bfTrack`.
+  `referral_campaign` replaces `campaign` on referral events. Neither describes
+  the incoming acquisition source. Register event-scoped custom dimensions for
+  the new parameters when using them in GA reports; historical events retain
+  their old parameter names.
+- The server redirect ledger excludes HEAD, known crawler/preview agents,
+  prefetch/prerender requests, explicit probes, and missing destinations.
+  API-generated Viator URLs remain unchanged byte-for-byte.
+- Guide scroll tracking includes the live `article.guide-article` markup.
+  Late-loading analytics initializes immediately; a PostHog context failure
+  cannot prevent the GA listeners from initializing.
+
+Client GA events, server redirects, Viator visitors, gross bookings, and paid
+commission are different measures. Blockers, consent, repeated clicks, source
+scope, provider attribution, reporting lag, and time zones can cause differences.
+No historical GA backfill or provider-side booking adjustment is implied.
+
+Additional regression checks (disposable dev DB):
+
+```bash
+php scripts/test-referral-tracking.php
+php scripts/test-referral-reporting.php
+```

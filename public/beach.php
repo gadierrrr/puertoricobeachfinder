@@ -23,13 +23,14 @@ $slug = $_GET['slug'] ?? '';
 
 if (!$slug) {
     http_response_code(404);
+    $robotsOverride = 'noindex, follow';
     $pageTitle = __('errors.beach_not_found');
     include APP_ROOT . '/components/header.php';
     echo '<div class="max-w-2xl mx-auto px-4 py-16 text-center">
             <div class="text-6xl mb-4">🏖️</div>
             <h1 class="text-2xl font-bold text-gray-900 mb-4">' . h(__('errors.beach_not_found')) . '</h1>
             <p class="text-gray-600 mb-6">' . h(__('errors.beach_not_found_message')) . '</p>
-            <a href="/" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium">
+            <a href="' . h(routeUrl('home', $lang)) . '" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium">
                 ' . h(__('errors.browse_all_beaches')) . '
             </a>
           </div>';
@@ -61,13 +62,14 @@ if (!$beach) {
     }
 
     http_response_code(404);
+    $robotsOverride = 'noindex, follow';
     $pageTitle = __('errors.beach_not_found');
     include APP_ROOT . '/components/header.php';
     echo '<div class="max-w-2xl mx-auto px-4 py-16 text-center">
             <div class="text-6xl mb-4">🏖️</div>
             <h1 class="text-2xl font-bold text-gray-900 mb-4">' . h(__('errors.beach_not_found')) . '</h1>
             <p class="text-gray-600 mb-6">' . h(__('errors.beach_not_found_message')) . '</p>
-            <a href="/" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium">
+            <a href="' . h(routeUrl('home', $lang)) . '" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium">
                 ' . h(__('errors.browse_all_beaches')) . '
             </a>
           </div>';

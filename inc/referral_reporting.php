@@ -80,7 +80,7 @@ function referralReportRawRow(array $header, array $row): array
  *
  * @return array{status:string,source_type:string,summary:array,error_log:?string}
  */
-function referralImportCampaignCsv(string $providerId, string $filePath): array
+function referralImportCampaignCsv(string $providerId, string $filePath, array $period = []): array
 {
     $fh = fopen($filePath, 'r');
     if (!$fh) {
@@ -103,9 +103,8 @@ function referralImportCampaignCsv(string $providerId, string $filePath): array
     $dateAliases = ['report_date', 'date', 'day', 'booking_date', 'booked_at'];
     $isConversion = referralReportHeaderIndex($map, $externalIdAliases) !== null;
     $isPerformance = referralReportHeaderIndex($map, $campaignAliases) !== null
-        && referralReportHeaderIndex($map, $dateAliases) !== null
         && (
-            referralReportHeaderIndex($map, ['visitors', 'sessions', 'bookings']) !== null
+            referralReportHeaderIndex($map, ['unique_visitors', 'visitors', 'sessions', 'bookings', 'gross_bookings']) !== null
             || referralReportHeaderIndex($map, ['gross_commission', 'commission', 'commission_value']) !== null
         );
 
@@ -115,6 +114,29 @@ function referralImportCampaignCsv(string $providerId, string $filePath): array
             'Unrecognized CSV. Include either external_conversion_id or campaign + date + performance metrics.'
         );
     }
+
+    $hasDate = referralReportHeaderIndex($map, $dateAliases) !== null;
+    $periodStart = referralReportDate((string) ($period['start'] ?? ''));
+    $periodEnd = referralReportDate((string) ($period['end'] ?? ''));
+    if (!$isConversion && !$hasDate && ($periodStart === '' || $periodEnd === '' || $periodStart > $periodEnd
+        || $periodStart !== ($period['start'] ?? '') || $periodEnd !== ($period['end'] ?? ''))) {
+        fclose($fh);
+        throw new RuntimeException('This export has no dates. Enter the exact start and end dates selected in Viator (YYYY-MM-DD).');
+    }
+    $headerCurrencies = [];
+    foreach (array_keys($map) as $column) {
+        if (preg_match('/^gross_(?:booking_value|commission)_([a-z]{3})$/', $column, $match)) {
+            $headerCurrencies[] = strtoupper($match[1]);
+        }
+    }
+    $headerCurrencies = array_values(array_unique($headerCurrencies));
+    if (count($headerCurrencies) > 1) {
+        fclose($fh);
+        throw new RuntimeException('Export one reporting currency at a time.');
+    }
+    $headerCurrency = $headerCurrencies[0] ?? 'USD';
+    $bookingValueAliases = ['booking_value', 'gross_booking_value', 'gross_booking_amount', 'gross_booking_value_' . strtolower($headerCurrency)];
+    $commissionAliases = ['commission_value', 'gross_commission', 'commission', 'gross_commission_' . strtolower($headerCurrency)];
 
     $processed = 0;
     $upserted = 0;
@@ -144,9 +166,9 @@ function referralImportCampaignCsv(string $providerId, string $filePath): array
                     $errors[] = 'Row ' . $processed . ': missing conversion/booking identifier';
                     continue;
                 }
-                $currency = strtoupper(referralReportCell($row, $map, ['currency', 'currency_code']) ?: 'USD');
-                $bookingValue = referralReportNumber(referralReportCell($row, $map, ['booking_value', 'gross_booking_value', 'gross_booking_amount']));
-                $commission = referralReportNumber(referralReportCell($row, $map, ['commission_value', 'gross_commission', 'commission']));
+                $currency = strtoupper(referralReportCell($row, $map, ['currency', 'currency_code']) ?: $headerCurrency);
+                $bookingValue = referralReportNumber(referralReportCell($row, $map, $bookingValueAliases));
+                $commission = referralReportNumber(referralReportCell($row, $map, $commissionAliases));
                 $bookedAt = referralReportCell($row, $map, ['booked_at', 'booking_date', 'date']);
 
                 execute(
@@ -178,7 +200,8 @@ function referralImportCampaignCsv(string $providerId, string $filePath): array
                 continue;
             }
 
-            $reportDate = referralReportDate(referralReportCell($row, $map, $dateAliases));
+            $reportDate = $hasDate ? referralReportDate(referralReportCell($row, $map, $dateAliases)) : $periodStart;
+            $reportEnd = $hasDate ? $reportDate : $periodEnd;
             if ($campaignValue === '' || $reportDate === '') {
                 $skipped++;
                 $errors[] = 'Row ' . $processed . ': campaign and valid report date are required';
@@ -189,40 +212,42 @@ function referralImportCampaignCsv(string $providerId, string $filePath): array
             }
 
             $productCode = strtoupper(referralReportCell($row, $map, ['product_code', 'experience_code', 'experience_product_code']));
-            $currency = strtoupper(referralReportCell($row, $map, ['currency', 'currency_code']) ?: 'USD');
-            $visitors = max(0, (int) round(referralReportNumber(referralReportCell($row, $map, ['visitors', 'sessions']))));
-            $bookings = max(0, (int) round(referralReportNumber(referralReportCell($row, $map, ['bookings', 'booking_count']))));
-            $bookingValue = referralReportNumber(referralReportCell($row, $map, ['booking_value', 'gross_booking_value', 'gross_booking_amount']));
-            $commission = referralReportNumber(referralReportCell($row, $map, ['commission_value', 'gross_commission', 'commission']));
+            $currency = strtoupper(referralReportCell($row, $map, ['currency', 'currency_code']) ?: $headerCurrency);
+            $visitors = max(0, (int) round(referralReportNumber(referralReportCell($row, $map, ['unique_visitors', 'visitors', 'sessions']))));
+            $bookings = max(0, (int) round(referralReportNumber(referralReportCell($row, $map, ['bookings', 'gross_bookings', 'booking_count']))));
+            $bookingValue = referralReportNumber(referralReportCell($row, $map, $bookingValueAliases));
+            $commission = referralReportNumber(referralReportCell($row, $map, $commissionAliases));
 
-            execute(
-                'INSERT INTO referral_campaign_daily
-                    (id, provider_id, campaign_id, report_date, source, campaign_value, product_code,
+            $sourceType = strtolower(referralReportCell($row, $map, ['source_type']));
+            if (!execute(
+                'INSERT INTO referral_campaign_reports
+                    (id, provider_id, campaign_id, period_start, period_end, source_type, campaign_value, product_code,
                      visitors, bookings, booking_value, commission_value, currency, raw_json,
-                     imported_at, created_at, updated_at)
+                     imported_at)
                  VALUES
-                    (:id, :provider_id, :campaign_id, :report_date, "viator_performance_csv", :campaign_value, :product_code,
+                    (:id, :provider_id, :campaign_id, :report_date, :report_end, :source_type, :campaign_value, :product_code,
                      :visitors, :bookings, :booking_value, :commission, :currency, :raw_json,
-                     CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-                 ON CONFLICT(provider_id, report_date, campaign_value, product_code, currency) DO UPDATE SET
+                     CURRENT_TIMESTAMP)
+                 ON CONFLICT(provider_id, period_start, period_end, source_type, campaign_value, product_code, currency) DO UPDATE SET
                     campaign_id = excluded.campaign_id,
                     visitors = excluded.visitors,
                     bookings = excluded.bookings,
                     booking_value = excluded.booking_value,
                     commission_value = excluded.commission_value,
                     raw_json = excluded.raw_json,
-                    imported_at = CURRENT_TIMESTAMP,
-                    updated_at = CURRENT_TIMESTAMP',
+                    imported_at = CURRENT_TIMESTAMP',
                 [
                     ':id' => uuid(), ':provider_id' => $providerId,
                     ':campaign_id' => $campaignId !== '' ? $campaignId : null,
-                    ':report_date' => $reportDate, ':campaign_value' => $campaignValue,
+                    ':report_date' => $reportDate, ':report_end' => $reportEnd, ':source_type' => $sourceType, ':campaign_value' => $campaignValue,
                     ':product_code' => $productCode, ':visitors' => $visitors,
                     ':bookings' => $bookings, ':booking_value' => $bookingValue,
                     ':commission' => $commission, ':currency' => $currency,
                     ':raw_json' => json_encode(referralReportRawRow($header, $row), JSON_UNESCAPED_SLASHES),
                 ]
-            );
+            )) {
+                throw new RuntimeException('Could not save campaign report row ' . $processed);
+            }
             $upserted++;
         }
         $db->exec('COMMIT');
@@ -235,6 +260,8 @@ function referralImportCampaignCsv(string $providerId, string $filePath): array
 
     $summary = [
         'format' => $isConversion ? 'conversion_rows' : 'viator_campaign_performance',
+        'period_start' => !$isConversion && !$hasDate ? $periodStart : null,
+        'period_end' => !$isConversion && !$hasDate ? $periodEnd : null,
         'processed' => $processed,
         'upserted' => $upserted,
         'skipped' => $skipped,
@@ -247,4 +274,45 @@ function referralImportCampaignCsv(string $providerId, string $filePath): array
         'summary' => $summary,
         'error_log' => $errors !== [] ? implode("\n", array_slice($errors, 0, 100)) : null,
     ];
+}
+
+/** Match a complete Viator period to first-party visits; never sum overlapping snapshots. */
+function referralViatorFunnelReport(string $periodStart, string $periodEnd, string $providerSlug = 'viator'): array
+{
+    return query(
+        'SELECT
+            CASE WHEN c.link_type = "tour_product" THEN "exact" ELSE "regional" END AS match_group,
+            SUM(COALESCE(i.impressions, 0)) AS impressions,
+            SUM(COALESCE(cl.clicks, 0)) AS clicks,
+            SUM(COALESCE(r.visitors, 0)) AS visitors,
+            SUM(COALESCE(r.bookings, 0)) AS bookings,
+            SUM(COALESCE(r.booking_value, 0)) AS booking_value,
+            SUM(COALESCE(r.commission, 0)) AS commission
+         FROM referral_campaigns c
+         JOIN referral_providers p ON p.id = c.provider_id
+         LEFT JOIN (
+            SELECT campaign_id, COUNT(*) AS impressions FROM referral_impressions
+            WHERE viewed_at >= :period_start AND viewed_at < date(:period_end, "+1 day") GROUP BY campaign_id
+         ) i ON i.campaign_id = c.id
+         LEFT JOIN (
+            SELECT campaign_id, COUNT(*) AS clicks FROM referral_clicks
+            WHERE clicked_at >= :period_start AND clicked_at < date(:period_end, "+1 day") GROUP BY campaign_id
+         ) cl ON cl.campaign_id = c.id
+         LEFT JOIN (
+            SELECT d.campaign_id, SUM(d.visitors) AS visitors, SUM(d.bookings) AS bookings,
+                   SUM(d.booking_value) AS booking_value, SUM(d.commission_value) AS commission
+            FROM referral_campaign_reports d
+            WHERE d.currency = "USD" AND (
+                (d.period_start = :period_start AND d.period_end = :period_end)
+                OR (d.period_start = d.period_end AND d.period_start BETWEEN :period_start AND :period_end
+                    AND NOT EXISTS (SELECT 1 FROM referral_campaign_reports whole
+                        WHERE whole.provider_id = d.provider_id AND whole.campaign_value = d.campaign_value
+                          AND whole.product_code = d.product_code AND whole.currency = d.currency
+                          AND whole.period_start = :period_start AND whole.period_end = :period_end))
+            ) GROUP BY d.campaign_id
+         ) r ON r.campaign_id = c.id
+         WHERE p.slug = :provider_slug AND c.link_type IN ("tour_product", "tour")
+         GROUP BY match_group ORDER BY match_group',
+        [':period_start' => $periodStart, ':period_end' => $periodEnd, ':provider_slug' => $providerSlug]
+    ) ?: [];
 }

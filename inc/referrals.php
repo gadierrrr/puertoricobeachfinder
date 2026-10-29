@@ -331,9 +331,19 @@ function referralNormalizeContext(array $context): array
     return $normalized;
 }
 
-function referralLogClick(array $campaign, array $context = []): string
+/** Shared exclusion for the click and impression ledgers. */
+function referralIsAutomatedRequest(array $server): bool
 {
-    $clickId = uuid();
+    $ua = (string) ($server['HTTP_USER_AGENT'] ?? '');
+    $purpose = ($server['HTTP_SEC_PURPOSE'] ?? '') . ' ' . ($server['HTTP_PURPOSE'] ?? '')
+        . ' ' . ($server['HTTP_X_PURPOSE'] ?? '') . ' ' . ($server['HTTP_X_MOZ'] ?? '');
+    return (bool) preg_match('/bot|crawl|spider|slurp|preview|validator|monitor|pingdom|uptime|headlesschrome/i', $ua)
+        || (bool) preg_match('/prefetch|prerender/i', $purpose);
+}
+
+function referralLogClick(array $campaign, array $context = [], ?string $clickId = null): string
+{
+    $clickId = $clickId ?? uuid();
     $providerId = (string) ($campaign['provider_id'] ?? '');
     $campaignId = (string) ($campaign['id'] ?? '');
 
@@ -419,7 +429,10 @@ function referralResolveRedirect(string $campaignSlug, array $context = []): arr
         ];
     }
 
-    $clickId = referralLogClick($campaign, $context);
+    $recordClick = ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET'
+        && !referralIsAutomatedRequest($_SERVER)
+        && !isset($_GET['bf_analytics_probe']);
+    $clickId = $recordClick ? uuid() : '';
     $target = '';
     $attributionMode = 'manual_link';
 
@@ -449,7 +462,7 @@ function referralResolveRedirect(string $campaignSlug, array $context = []): arr
     if ($target === '') {
         $target = referralBuildTargetUrl($campaign, array_merge(
             referralProviderTrackingParams($campaign),
-            ['bf_click_id' => $clickId]
+            $clickId !== '' ? ['bf_click_id' => $clickId] : []
         ));
     }
 
@@ -459,6 +472,12 @@ function referralResolveRedirect(string $campaignSlug, array $context = []): arr
             'status' => 422,
             'message' => 'Campaign has no target URL',
         ];
+    }
+
+    // A missing destination is not an outbound visit. HEAD/prefetch/bot
+    // requests may still resolve links, but must not inflate the ledger.
+    if ($recordClick) {
+        referralLogClick($campaign, $context, $clickId);
     }
 
     return [

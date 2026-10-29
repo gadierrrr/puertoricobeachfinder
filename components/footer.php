@@ -310,7 +310,7 @@ if (!function_exists('isGoogleOAuthEnabled')) {
     }
     <?php endif; ?>
     </script>
-    <script defer src="/assets/js/analytics.js?v=2.8" <?= cspNonceAttr() ?>></script>
+    <script defer src="/assets/js/analytics.js?v=2.9" <?= cspNonceAttr() ?>></script>
 
     <!-- Initialize Lucide Icons -->
     <script <?= cspNonceAttr() ?>>
