@@ -21,7 +21,9 @@ a non-fast-forward update or an advanced main branch stop the release.
 
 Each actual update takes one verified database backup before changing code.
 Pending migrations run once, PHP reloads, and four origin HTTP checks run.
-An already deployed revision skips backup, update and reload. The reported
+An already deployed revision skips backup and update, but still reloads PHP and
+checks health: a previous attempt may have updated the files without successfully
+reloading the service. All four HTTP probes require a 200 response. The reported
 elapsed time includes waiting for CI; an already green release does no builds.
 
 ## Recovery

@@ -194,7 +194,9 @@ generated files match Git, so production uses those same files without installin
 Node packages, rebuilding, or repeating the test suite. Each changed release
 creates and restore-tests one database backup, applies pending migrations,
 reloads PHP, and checks English, Spanish, a beach collection and analytics health
-directly against the origin. Releasing an already deployed commit only checks health.
+directly against the origin. Releasing an already deployed commit reloads PHP and
+checks health without another backup or code update, so interrupted releases can
+finish activating the code safely.
 
 No new GitHub secrets, SSH keys or permissions are needed. PR merges retain the
 existing independent-review rule; the command never uses an administrator override.

@@ -92,13 +92,15 @@ if name == "php":
             (root / "migrated").write_text("done")
 elif name == "curl":
     if scenario in ("smoke-failure", "migration-smoke-failure") and new_code: sys.exit(22)
-    print('{"ok":true}' if "health/" in args[-1] else "<html>OK</html>")
+    body = '{"ok":true}' if "health/" in args[-1] else "<html>OK</html>"
+    status = "301" if scenario == "redirect" and new_code else "200"
+    sys.stdout.write(body + ("\n" + status if "--write-out" in args else ""))
 elif name == "flock":
     if scenario == "locked": sys.exit(1)
 elif name == "id":
     print("0")
 elif name == "systemctl":
-    if scenario == "reload-failure" and new_code: sys.exit(1)
+    if scenario in ("reload-failure", "migration-reload-failure") and new_code: sys.exit(1)
 '''
 
 
@@ -155,6 +157,7 @@ class ServerReleaseTests(unittest.TestCase):
         second = self.deploy()
         self.assertEqual(second.returncode, 0, second.stdout + second.stderr)
         self.assertEqual(self.trace.read_text().count("php scripts/backup-db.php"), 1)
+        self.assertEqual(self.trace.read_text().count("systemctl reload php8.3-fpm"), 2)
         self.assertIn("Already deployed", second.stdout)
 
     def test_check_does_not_update_or_backup(self):
@@ -162,6 +165,24 @@ class ServerReleaseTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(self.head(), self.old)
         self.assertFalse((self.server / "backups").exists())
+
+    def test_retry_after_migration_failure_reloads_php(self):
+        first = self.deploy("migration-reload-failure")
+        self.assertNotEqual(first.returncode, 0)
+        self.assertEqual(self.head(), self.new)
+        # Simulate a retry after the service issue was resolved. The database
+        # migration completed, but the prior release never finished.
+        self.trace.write_text("")
+        retry = self.deploy()
+        self.assertEqual(retry.returncode, 0, retry.stdout + retry.stderr)
+        self.assertIn("systemctl reload php8.3-fpm", self.trace.read_text())
+        self.assertNotIn("php scripts/backup-db.php", self.trace.read_text())
+
+    def test_redirected_page_does_not_pass_smoke(self):
+        result = self.deploy("redirect")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(self.head(), self.old)
+        self.assertIn("Previous code restored", result.stderr)
 
     def test_dirty_tree_stops_before_backup(self):
         (self.server / "version").write_text("local work")

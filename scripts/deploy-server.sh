@@ -28,13 +28,15 @@ smoke() {
   for page in / /es /best-beaches; do
     curl --fail --silent --show-error --connect-timeout 5 --max-time 20 --retry 2 \
       --resolve www.puertoricobeachfinder.com:443:127.0.0.1 \
+      --write-out '\n%{http_code}' \
       "https://www.puertoricobeachfinder.com${page}" | \
-      php -r '$h=stream_get_contents(STDIN); if (stripos($h,"<html")===false) {fwrite(STDERR,"Expected an HTML page\n"); exit(1);}' || return
+      php -r '$r=stream_get_contents(STDIN); if (substr($r,-4)!=="\n200" || stripos(substr($r,0,-4),"<html")===false) {fwrite(STDERR,"Expected HTTP 200 and an HTML page\n"); exit(1);}' || return
   done
   curl --fail --silent --show-error --connect-timeout 5 --max-time 20 --retry 2 \
     --resolve www.puertoricobeachfinder.com:443:127.0.0.1 \
+    --write-out '\n%{http_code}' \
     'https://www.puertoricobeachfinder.com/api/health/analytics.php' | \
-    php -r '$d=json_decode(stream_get_contents(STDIN),true); if (($d["ok"]??false)!==true) {fwrite(STDERR,"Analytics health failed\n"); exit(1);}' || return
+    php -r '$r=stream_get_contents(STDIN); $d=json_decode(substr($r,0,-4),true); if (substr($r,-4)!=="\n200" || ($d["ok"]??false)!==true) {fwrite(STDERR,"Analytics health failed\n"); exit(1);}' || return
   echo 'Live English, Spanish, collection and analytics checks passed.'
 }
 
@@ -56,8 +58,11 @@ previous="$(git rev-parse HEAD)"
 git merge-base --is-ancestor "$previous" "$sha" || { echo 'Release must fast-forward the server.' >&2; exit 1; }
 if [[ "$previous" == "$sha" ]]; then
   php scripts/migrate.php --check
+  # HEAD can match after a migration succeeded but a prior reload failed.
+  # Refresh PHP even on retries; matching files alone do not prove it is serving them.
+  reload_php
   smoke
-  echo 'Already deployed; no update, backup or reload needed.'
+  echo 'Already deployed; PHP reloaded and health verified without another backup or update.'
   exit 0
 fi
 
