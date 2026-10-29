@@ -1,47 +1,27 @@
 <?php
-/**
- * Bioluminescent Bays Guide — English body content sections.
- * Returns an associative array of HTML fragments keyed by section name.
- */
+/** Bioluminescent Bays Guide — English body sections. */
 return [
-    'intro' => '<p class="lead text-xl text-gray-700 mb-8">Puerto Rico is home to three of the world\'s five bioluminescent bays—rare ecosystems where microscopic organisms create an ethereal blue-green glow when disturbed. This natural phenomenon offers one of the most memorable experiences available in Puerto Rico, with kayak tours through glowing waters creating trails of light with every paddle stroke.</p>',
-
+    'intro' => '<p class="lead text-xl text-gray-700 mb-8">Puerto Rico has three well-known bioluminescent bays: Mosquito Bay in Vieques, Laguna Grande in Fajardo, and La Parguera in Lajas. Choose your tour around where you are staying, transportation, and the activities permitted at each bay.</p>',
     'overview' => '
 <h2 id="overview" class="text-3xl font-bold text-gray-900 mt-12 mb-6">What Causes Bioluminescence?</h2>
-<p class="mb-4">The glow comes from <strong>dinoflagellates</strong>, single-celled organisms called Pyrodinium bahamense that emit light when agitated. Puerto Rico\'s bays provide perfect conditions: narrow entrances limiting water exchange, mangrove-lined shores providing nutrients, warm shallow water, and crucially, minimal light pollution. When you move through the water, millions of these organisms light up simultaneously, creating magical blue-green sparkles.</p>',
-
+<p class="mb-4">Microscopic organisms called dinoflagellates emit light when the water moves. The glow is a natural phenomenon: weather, water conditions, and surrounding light affect what you see. Darker nights can improve visibility, but no tour can guarantee a particular brightness.</p>',
     'mosquito_bay' => '
 <h2 id="mosquito-bay" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Mosquito Bay, Vieques</h2>
-<p class="mb-4"><strong>The World\'s Brightest Bioluminescent Bay.</strong> Mosquito Bay (Bahia Mosquito) holds the Guinness World Record for brightest bioluminescent bay, with concentrations reaching 720,000 dinoflagellates per gallon. Located on Vieques\' south coast, it offers the most intense glow of any bio bay globally.</p>
-<h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Getting There</h3>
-<p class="mb-4">Reach Vieques by ferry from Ceiba ($2-4) or flight from San Juan ($100-200 round-trip). Once on island, drive to Esperanza town. Most tours depart from the town pier.</p>
-<h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Tours and Costs</h3>
-<ul class="list-disc list-inside space-y-2 text-gray-700 mb-6"><li><strong>Kayak tours:</strong> $55-75 per person, 2 hours, more interactive</li><li><strong>Boat tours:</strong> $45-60 per person, easier for less active travelers</li><li><strong>Best operators:</strong> Bieque Eco Trips, Abe\'s Snorkeling, Jak Water Sports</li><li><strong>Swimming allowed:</strong> Yes! Incredible experience creating glowing outlines</li></ul>',
-
+<p class="mb-4">Visit Mosquito Bay with an authorized tour operator. <strong>Swimming is not permitted.</strong> Enjoy the bioluminescence from your kayak or other permitted tour craft.</p>
+<h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Plan Your Transport</h3>
+<p class="mb-4">Vieques requires separate island transportation. Confirm ferry or flight schedules, your meeting point, and transport on Vieques before booking. Do not assume you can return to the main island after a nighttime tour; check the actual timetable and arrange an overnight stay when needed.</p>',
     'laguna_grande' => '
 <h2 id="laguna-grande" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Laguna Grande, Fajardo</h2>
-<p class="mb-4"><strong>Most Accessible from San Juan.</strong> Located in Fajardo on Puerto Rico\'s northeast coast, Laguna Grande is just 45 minutes from San Juan, making it the easiest bio bay to visit as a day trip from the capital.</p>
-<h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Getting There</h3>
-<p class="mb-4">Drive or Uber from San Juan via Highway 3. Tours depart from Las Croabas area in Fajardo. Free parking at most tour operators.</p>
-<h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Tours and Costs</h3>
-<ul class="list-disc list-inside space-y-2 text-gray-700 mb-6"><li><strong>Kayak tours:</strong> $50-70 per person, includes mangrove channel paddle</li><li><strong>Best operators:</strong> Kayaking Puerto Rico, Pure Adventure, Eco Action Tours</li><li><strong>Swimming:</strong> Sometimes allowed depending on conditions</li><li><strong>Advantage:</strong> No inter-island travel required, easy logistics</li></ul>',
-
+<p class="mb-4">Laguna Grande is a mainland option for travelers staying near San Juan or the east coast. <strong>Swimming is not permitted.</strong> Many kayak excursions travel through a mangrove channel from Las Croabas.</p>
+<p class="mb-4">Allow for traffic, check the operator’s meeting point and parking instructions, and arrange your return trip. Confirm whether hotel transfers are included instead of assuming transport is part of the ticket.</p>',
     'la_parguera' => '
 <h2 id="la-parguera" class="text-3xl font-bold text-gray-900 mt-12 mb-6">La Parguera, Lajas</h2>
-<p class="mb-4"><strong>Most Accessible but Dimmest.</strong> La Parguera on the southwest coast is the easiest bio bay to visit logistically but has the dimmest glow due to boat traffic and development. Still worth visiting if on the west coast.</p>
-<h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Getting There</h3>
-<p class="mb-4">Drive to Lajas on Highway 116. Tours leave from La Parguera village waterfront. Many operators offer walk-up availability.</p>
-<h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Tours and Costs</h3>
-<ul class="list-disc list-inside space-y-2 text-gray-700 mb-6"><li><strong>Boat tours:</strong> $20-40 per person, 1 hour, budget-friendly</li><li><strong>Kayak tours:</strong> $45-60 per person, longer experience</li><li><strong>Swimming:</strong> Allowed, though glow is less intense</li><li><strong>Advantage:</strong> Cheapest option, no advance booking usually needed</li></ul>',
-
+<p class="mb-4">La Parguera is on the southwest coast. It is the only one of these three bays where <strong>some authorized tours may include swimming</strong>. Conservation restrictions, including full-moon swimming restrictions, can affect availability. Confirm current rules and the specific itinerary with your operator; a boat tour does not automatically include a swim.</p>',
     'comparison' => '
 <h2 id="comparison" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Which Bay Should You Visit?</h2>
-<div class="bg-gray-50 rounded-lg p-6 my-6">
-<h3 class="text-xl font-bold text-gray-900 mb-4">Quick Comparison</h3>
-<table class="w-full"><thead><tr class="border-b"><th class="text-left p-2">Bay</th><th class="text-left p-2">Brightness</th><th class="text-left p-2">Access</th><th class="text-left p-2">Cost</th></tr></thead><tbody><tr class="border-b"><td class="p-2"><strong>Mosquito Bay</strong></td><td class="p-2">&#9733;&#9733;&#9733;&#9733;&#9733;</td><td class="p-2">Difficult</td><td class="p-2">$$$</td></tr><tr class="border-b"><td class="p-2"><strong>Laguna Grande</strong></td><td class="p-2">&#9733;&#9733;&#9733;&#9733;&#9734;</td><td class="p-2">Easy</td><td class="p-2">$$</td></tr><tr><td class="p-2"><strong>La Parguera</strong></td><td class="p-2">&#9733;&#9733;&#9733;&#9734;&#9734;</td><td class="p-2">Very Easy</td><td class="p-2">$</td></tr></tbody></table>
-</div>',
-
+<div class="overflow-x-auto my-6"><table class="w-full"><thead><tr class="border-b"><th scope="col" class="text-left p-2">Bay</th><th scope="col" class="text-left p-2">Trip planning</th><th scope="col" class="text-left p-2">Swimming</th></tr></thead><tbody><tr class="border-b"><td class="p-2">Mosquito Bay</td><td class="p-2">Vieques transport and possible overnight stay</td><td class="p-2">Not permitted</td></tr><tr class="border-b"><td class="p-2">Laguna Grande</td><td class="p-2">Mainland trip to Fajardo</td><td class="p-2">Not permitted</td></tr><tr><td class="p-2">La Parguera</td><td class="p-2">Southwest coast trip to Lajas</td><td class="p-2">Selected authorized tours, subject to restrictions</td></tr></tbody></table></div>',
     'tips' => '
-<h2 id="tips" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Tips for Best Experience</h2>
-<ul class="list-disc list-inside space-y-3 text-gray-700 mb-6"><li><strong>Visit during new moon</strong> for darkest skies and brightest glow</li><li><strong>Book 1-2 weeks ahead</strong> during peak season</li><li><strong>Wear dark clothing</strong> to reduce light reflection</li><li><strong>Use reef-safe/biodegradable sunscreen only</strong> to protect ecosystem</li><li><strong>Bring waterproof phone case</strong> for photos (difficult to capture glow)</li><li><strong>Listen to your guide</strong> about environmental protection</li><li><strong>Don\'t use flash photography</strong> or bright lights</li></ul>',
+<h2 id="tips" class="text-3xl font-bold text-gray-900 mt-12 mb-6">Before You Book</h2>
+<ul class="list-disc list-inside space-y-3 text-gray-700 mb-6"><li>Check the price for your date, taxes, duration, cancellation policy, age limits, and included transport.</li><li>Reserve ahead and confirm availability around your travel dates and the moon phase.</li><li>Follow your guide’s conservation instructions and avoid flash photography or bright lights.</li><li>Use the tour listings below to compare current offers; prices and availability can change.</li></ul>
+<p class="text-sm text-gray-600">Reviewed October 28, 2026. Sources: <a href="https://www.discoverpuertorico.com/protecting-puerto-ricos-bioluminescent-bays">Discover Puerto Rico’s conservation guidance</a> and <a href="https://www.discoverpuertorico.com/bio-bays">bio bay visitor information</a>.</p>',
 ];

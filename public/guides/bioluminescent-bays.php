@@ -37,7 +37,7 @@ $guidesUrl = routeUrl('guides_index', $lang);
 $homeUrl = routeUrl('home', $lang);
 
 $extraHead = $extraHead ?? "";
-$extraHead .= articleSchema($pageTitle, $pageDescription, $guideUrl, null, '2024-01-15');
+$extraHead .= articleSchema($pageTitle, $pageDescription, $guideUrl, null, '2024-01-15', '2026-10-28');
 $extraHead .= faqSchema($faqs);
 $extraHead .= breadcrumbSchema([
     ['name' => __('guide_common.breadcrumb_home'),   'url' => $homeUrl],

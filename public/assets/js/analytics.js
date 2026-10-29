@@ -178,6 +178,15 @@
       if (!eventName) return;
       setInteracted();
       const payload = baseProps(props);
+      // UI origins and affiliate campaigns are not acquisition sources.
+      if (payload.source) {
+        payload.ui_source = payload.source;
+        delete payload.source;
+      }
+      if (eventName === "R1_referral_impression" || eventName === "R2_referral_click") {
+        payload.referral_campaign = payload.campaign;
+        delete payload.campaign;
+      }
       // Primary analytics: Google Analytics 4 (gtag). Loaded site-wide in the header
       // when GA_MEASUREMENT_ID is configured; guarded so it no-ops when absent.
       if (typeof window.gtag === "function") {
@@ -253,11 +262,13 @@
   }
 
   function initDelegatedClickTracking() {
-    document.addEventListener("click", function (event) {
+    function trackClick(event) {
       const target = event.target && event.target.closest ? event.target.closest("[data-bf-track]") : null;
       if (!target) return;
 
       const kind = (target.getAttribute("data-bf-track") || "").trim();
+      // Middle-click opens a new tab via auxclick; right-click is not a visit.
+      if (event.type === "auxclick" && (event.button !== 1 || kind !== "referral-click")) return;
       const props = beachPropsFromEl(target);
 
       if (kind === "directions") {
@@ -281,6 +292,16 @@
       }
 
       if (kind === "referral-click") {
+        if (window.BF_ANALYTICS_INTERNAL === true) {
+          // Keep automated browser checks out of the server click ledger too.
+          try {
+            var testLink = new URL(target.getAttribute("href"), window.location.origin);
+            if (testLink.origin === window.location.origin && testLink.pathname === "/go") {
+              testLink.searchParams.set("bf_analytics_probe", "1");
+              target.setAttribute("href", testLink.pathname + testLink.search);
+            }
+          } catch (e) {}
+        }
         const referralProps = referralPropsFromEl(target);
         window.bfTrack("R2_referral_click", Object.assign({}, props, referralProps));
         return;
@@ -297,7 +318,9 @@
         window.bfTrack("AD2_ad_click", Object.assign({}, props, adPropsFromEl(target)));
         return;
       }
-    });
+    }
+    document.addEventListener("click", trackClick, { capture: true });
+    document.addEventListener("auxclick", trackClick, { capture: true });
   }
 
   function adPropsFromEl(el) {
@@ -402,7 +425,7 @@
     const observer = new IntersectionObserver(
       function (entries) {
         entries.forEach(function (entry) {
-          if (!entry.isIntersecting) return;
+          if (!entry.isIntersecting || entry.intersectionRatio < 0.25) return;
           const el = entry.target;
           if (seen.has(el)) return;
           seen.add(el);
@@ -429,6 +452,7 @@
   }
 
   function sendReferralImpression(props) {
+    if (window.BF_ANALYTICS_INTERNAL === true) return;
     const payload = Object.assign({ event_id: uuidLike() }, props || {});
     const body = JSON.stringify(payload);
     try {
@@ -546,7 +570,7 @@
   /* ===== Guide Scroll Depth Tracking ===== */
   function initGuideScrollDepth() {
     // Only run on guide pages
-    var guideContent = document.querySelector(".guide-content, article.guide");
+    var guideContent = document.querySelector(".guide-content, article.guide, article.guide-article");
     if (!guideContent) return;
     // Also check URL
     var path = window.location.pathname;
@@ -732,9 +756,12 @@
     }
   }
 
-  document.addEventListener("DOMContentLoaded", function () {
+  var initialized = false;
+  function initialize() {
+    if (initialized) return;
+    initialized = true;
     ensureAnonId();
-    initPostHogPageContext();
+    try { initPostHogPageContext(); } catch (e) {}
     trackVerifiedOutcomes();
     initDelegatedClickTracking();
     initReferralImpressionTracking();
@@ -751,5 +778,10 @@
     initDrawerEngagementTracking();
     initGeolocationTracking();
     initCompareTracking();
-  });
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initialize, { once: true });
+  } else {
+    initialize();
+  }
 })();

@@ -475,7 +475,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $result = referralImportCampaignCsv(
                 $providerId,
-                (string) $_FILES['csv_file']['tmp_name']
+                (string) $_FILES['csv_file']['tmp_name'],
+                ['start' => trim((string) ($_POST['period_start'] ?? '')), 'end' => trim((string) ($_POST['period_end'] ?? ''))]
             );
             execute(
                 'UPDATE referral_import_jobs
@@ -586,38 +587,14 @@ $providerPerformance = query(
 );
 $providerPerformance = is_array($providerPerformance) ? $providerPerformance : [];
 
-$viatorMatchPerformance = query(
-    'SELECT
-        match_group,
-        SUM(impressions) AS impressions,
-        SUM(clicks) AS clicks,
-        SUM(visitors) AS visitors,
-        SUM(bookings) AS bookings,
-        SUM(booking_value) AS booking_value,
-        SUM(commission) AS commission
-     FROM (
-        SELECT
-            c.id,
-            CASE WHEN c.link_type = "tour_product" THEN "exact" ELSE "regional" END AS match_group,
-            COALESCE((SELECT COUNT(*) FROM referral_impressions i
-                      WHERE i.campaign_id = c.id AND i.viewed_at >= datetime("now", "-30 day")), 0) AS impressions,
-            COALESCE((SELECT COUNT(*) FROM referral_clicks cl
-                      WHERE cl.campaign_id = c.id AND cl.clicked_at >= datetime("now", "-30 day")), 0) AS clicks,
-            COALESCE((SELECT SUM(d.visitors) FROM referral_campaign_daily d
-                      WHERE d.campaign_id = c.id AND d.report_date >= date("now", "-30 day")), 0) AS visitors,
-            COALESCE((SELECT SUM(d.bookings) FROM referral_campaign_daily d
-                      WHERE d.campaign_id = c.id AND d.report_date >= date("now", "-30 day")), 0) AS bookings,
-            COALESCE((SELECT SUM(d.booking_value) FROM referral_campaign_daily d
-                      WHERE d.campaign_id = c.id AND d.report_date >= date("now", "-30 day")), 0) AS booking_value,
-            COALESCE((SELECT SUM(d.commission_value) FROM referral_campaign_daily d
-                      WHERE d.campaign_id = c.id AND d.report_date >= date("now", "-30 day")), 0) AS commission
-        FROM referral_campaigns c
-        INNER JOIN referral_providers p ON p.id = c.provider_id
-        WHERE p.slug = "viator" AND c.link_type IN ("tour_product", "tour")
-     ) campaign_metrics
-     GROUP BY match_group
-     ORDER BY CASE match_group WHEN "exact" THEN 0 ELSE 1 END'
-);
+// Align the first-party funnel to the latest imported Viator reporting period.
+$viatorReportPeriod = queryOne('SELECT r.period_start, r.period_end
+    FROM referral_campaign_reports r JOIN referral_providers p ON p.id = r.provider_id
+    WHERE p.slug = "viator" AND r.currency = "USD"
+    ORDER BY r.imported_at DESC, r.period_end DESC, r.period_start ASC LIMIT 1');
+$viatorReportFrom = $viatorReportPeriod['period_start'] ?? date('Y-m-d', strtotime('-30 days'));
+$viatorReportTo = $viatorReportPeriod['period_end'] ?? date('Y-m-d', strtotime('-1 day'));
+$viatorMatchPerformance = referralViatorFunnelReport($viatorReportFrom, $viatorReportTo);
 $viatorMatchPerformance = is_array($viatorMatchPerformance) ? $viatorMatchPerformance : [];
 $viatorProofRows = [];
 foreach ($viatorMatchPerformance as $row) {
@@ -632,7 +609,7 @@ $regionalCtr = $regionalImpressions > 0 ? (int) ($regionalProof['clicks'] ?? 0) 
 $exactRpm = $exactImpressions > 0 ? (float) ($exactProof['commission'] ?? 0) / $exactImpressions * 1000 : 0;
 $regionalRpm = $regionalImpressions > 0 ? (float) ($regionalProof['commission'] ?? 0) / $regionalImpressions * 1000 : 0;
 $viatorProofStatus = 'collecting';
-if ($exactImpressions >= 1000) {
+if ($viatorReportPeriod && $exactImpressions >= 1000) {
     $viatorProofStatus = (
         (int) ($exactProof['bookings'] ?? 0) > 0
         && $exactCtr > $regionalCtr
@@ -719,7 +696,7 @@ $tabs = [
 <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
     <div class="px-4 py-3 border-b border-gray-100">
         <div class="flex flex-wrap items-center justify-between gap-2">
-            <h2 class="font-semibold text-gray-900">Viator exact match vs regional fallback — last 30 days</h2>
+            <h2 class="font-semibold text-gray-900">Viator exact match vs regional fallback — <?= h($viatorReportFrom) ?> to <?= h($viatorReportTo) ?></h2>
             <?php if ($viatorProofStatus === 'proven'): ?>
                 <span class="rounded-full bg-green-100 px-2.5 py-1 text-xs font-bold text-green-800">Exact-match conversion proven</span>
             <?php elseif ($viatorProofStatus === 'not_proven'): ?>
@@ -728,7 +705,7 @@ $tabs = [
                 <span class="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-800">Collecting evidence: <?= number_format($exactImpressions) ?> / 1,000 exact impressions</span>
             <?php endif; ?>
         </div>
-        <p class="text-xs text-gray-500 mt-1">Impressions and clicks are first-party; visitors, bookings and commission come from imported Viator campaign reports.</p>
+        <p class="text-xs text-gray-500 mt-1">Impressions and clicks are first-party. Viator metrics use the same reporting dates and USD; gross commission is not a paid-out amount. Campaign visitors can overlap and are not account-wide unique visitors. Re-import the full period to refresh cancellations or adjustments.</p>
     </div>
     <div class="overflow-x-auto">
         <table class="w-full text-sm">
@@ -1095,12 +1072,16 @@ $tabs = [
 <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
     <div class="bg-white rounded-xl shadow-sm p-4">
         <h2 class="text-lg font-semibold text-gray-900 mb-3">Import Revenue CSV</h2>
-        <p class="text-sm text-gray-600 mb-3">Accepts Viator Performance Trends campaign exports (<code>campaign, date, visitors, bookings, gross booking value, gross commission</code>) and the existing normalized conversion format.</p>
+        <p class="text-sm text-gray-600 mb-3">Accepts the original Viator Performance Trends campaign CSV and normalized conversion CSVs. For Viator exports without a date column, enter the exact dates selected when exporting. Period totals stay separate from individual booking records.</p>
         <form method="POST" enctype="multipart/form-data" class="space-y-3">
             <?= csrfField() ?>
             <input type="hidden" name="action" value="import_revenue_csv">
             <div><label class="block text-sm text-gray-600 mb-1">Provider</label><select name="provider_id" class="w-full border rounded-lg px-3 py-2" required><?php foreach ($providers as $provider): ?><option value="<?= h($provider['id']) ?>"><?= h($provider['name']) ?></option><?php endforeach; ?></select></div>
             <div><label class="block text-sm text-gray-600 mb-1">CSV file</label><input type="file" name="csv_file" accept=".csv,text/csv" class="w-full border rounded-lg px-3 py-2 bg-white" required></div>
+            <div class="grid grid-cols-2 gap-3">
+                <label class="block text-sm text-gray-600">Report start date<input type="date" name="period_start" class="w-full border rounded-lg px-3 py-2"></label>
+                <label class="block text-sm text-gray-600">Report end date<input type="date" name="period_end" class="w-full border rounded-lg px-3 py-2"></label>
+            </div>
             <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium">Import</button>
         </form>
     </div>

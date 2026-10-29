@@ -5,6 +5,12 @@ require_once APP_ROOT . '/inc/session.php';
 require_once APP_ROOT . '/inc/helpers.php';
 require_once APP_ROOT . '/inc/referrals.php';
 
+if (!in_array($_SERVER['REQUEST_METHOD'] ?? '', ['GET', 'HEAD'], true)) {
+    header('Allow: GET, HEAD');
+    http_response_code(405);
+    exit;
+}
+
 if (session_status() !== PHP_SESSION_ACTIVE) {
     try {
         @session_start();
