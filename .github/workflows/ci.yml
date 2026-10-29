@@ -2,7 +2,13 @@ name: CI
 
 on:
   push:
+    branches: [main]
   pull_request:
+
+# Superseded PR runs add waiting time without testing the revision we will ship.
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build-and-validate:
@@ -57,6 +63,11 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Verify release safeguards
+        run: |
+          bash -n deploy.sh scripts/deploy-server.sh
+          python3 -m unittest discover -s scripts -p 'test_release.py'
 
       - name: Build assets
         run: npm run build

@@ -107,6 +107,16 @@ php -S localhost:8082 -t public scripts/dev-router.php
 
 ## Agent guardrails
 
+- For an authorized routine release, run `./deploy.sh` from the workstation, or
+  `./deploy.sh --pr NUMBER` to merge a reviewed PR and deploy it. Let the command
+  handle CI, backup, migrations, reload and live checks; do not repeat these
+  manually or rerun the full suite on production.
+- Existing user authorization carries through the routine release steps. Do not
+  ask again for each step. GitHub's independent-review requirement still applies;
+  do not infer permission to change repository protections or use an admin override.
+- Data imports and new external data transfers are separate from a code release.
+  Follow the user's existing authorization for the specific data and destination.
+
 - Never put secrets into `public/` (or any committed file). CI runs secret scanning.
 - Treat `data/`, `uploads/`, `logs/`, and `backups/` as runtime or sensitive areas, not normal source directories.
 - Edit CSS source in `public/assets/css/partials/`, then rebuild generated assets with `npm run build:css` or `npm run build`.

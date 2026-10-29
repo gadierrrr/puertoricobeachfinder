@@ -175,24 +175,48 @@ php scripts/migrate.php --include-manual
 
 ## Deploy command
 
-Use the unified deploy script:
+Run from your workstation with your existing `gh` login and `beach-prod` SSH
+access (Python 3 is also required):
 
 ```bash
 ./deploy.sh
+
+# Optional: wait for an approved PR's checks, merge it, then deploy
+./deploy.sh --pr NUMBER
+
+# Check CI, server state and live health without updating production
+./deploy.sh --check
 ```
 
-It runs PHP syntax lint, installs Node dependencies, builds frontend assets, verifies committed generated assets, applies migrations, and performs migration and secret-scan smoke checks.
+The command verifies successful CI for the **exact main commit**, then fetches
+that commit on the server. CI already builds the frontend and checks that the
+generated files match Git, so production uses those same files without installing
+Node packages, rebuilding, or repeating the test suite. Each changed release
+creates and restore-tests one database backup, applies pending migrations,
+reloads PHP, and checks English, Spanish, a beach collection and analytics health
+directly against the origin. Releasing an already deployed commit reloads PHP and
+checks health without another backup or code update, so interrupted releases can
+finish activating the code safely.
+
+No new GitHub secrets, SSH keys or permissions are needed. PR merges retain the
+existing independent-review rule; the command never uses an administrator override.
+If main advances while CI is running, the command stops instead of shipping an
+untested revision. See [the release runbook](docs/releases.md) for recovery.
 
 ## Rollback and backups
 
-Create and verify a backup before deploying risky application or schema changes:
+The release command creates and verifies its own backup. Do not create a second
+manual backup for the same release. For a separate database operation:
 
 ```bash
 php scripts/backup-db.php
 php scripts/restore-smoke-test.php
 ```
 
-If a deploy fails after a migration, roll application code back to the previous commit, restore the matching database backup, and run `php scripts/migrate.php --check`.
+If a deployment fails before any migration is attempted, the command restores the
+previous code and rechecks health. After a migration attempt, it stops for manual
+recovery so it cannot overwrite newer database writes. The previous commit and
+exact backup path are recorded under `backups/releases/` on the server.
 
 Suggested daily automation:
 
